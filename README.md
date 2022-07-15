@@ -30,4 +30,5 @@ An application to simplify the handling and customizing of the .ecf configuratio
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - TechTree Preview
 - Deprecated specification helper view
+- Refinement of visual controls appearance
 

@@ -1,5 +1,5 @@
 # EgsEcfEditorApp
-An application to simplify the handling and customizing of the .ecf configuration files of Empyrion Galactic Survival [Empyrion Galactic Survival](https://empyriongame.com/)
+An application to simplify the handling and customizing of the .ecf configuration files of [Empyrion Galactic Survival](https://empyriongame.com/)
 
 
 

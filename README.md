@@ -20,6 +20,7 @@ An application to simplify the handling and customizing of the .ecf configuratio
 - GUI support for english and german language
 
 ## Planned Major Features
+- Support for all .ecf files
 - SaveAs with taking applied filter into account
 - File merging with logic selector
 - Compare files view

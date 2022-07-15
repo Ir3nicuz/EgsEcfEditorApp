@@ -1,0 +1,5 @@
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfParser\bin\Debug\EgsEcfParser.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfParser\bin\Debug\EgsEcfParser.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfParser\obj\Debug\EgsEcfParser.csproj.CoreCompileInputs.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfParser\obj\Debug\EgsEcfParser.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfParser\obj\Debug\EgsEcfParser.pdb

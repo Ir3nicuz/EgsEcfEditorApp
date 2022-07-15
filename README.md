@@ -15,10 +15,10 @@ An application to simplify the handling and customizing of the .ecf configuratio
 - Classification of .ecf file content
 - Viewing .ecf file content (browsing, filtering, sorting)
 - .ecf file content syntax checks and error listing
-- Display of inheritance dependency
+- Display and supervision of inheritance dependencies
 - File Operations (new, load, save, close)
 
-## Planned Features
+## Planned Major Features
 - SaveAs with taking applied filter into account
 - File merging with logic selector
 - Compare files view

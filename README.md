@@ -17,6 +17,7 @@ An application to simplify the handling and customizing of the .ecf configuratio
 - .ecf file content syntax checks and error listing
 - Display and supervision of inheritance dependencies
 - File Operations (new, load, save, close)
+- GUI support for english and german language
 
 ## Planned Major Features
 - SaveAs with taking applied filter into account

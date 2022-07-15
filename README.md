@@ -2,7 +2,7 @@
 An application to simplify the handling and customizing of the .ecf configuration files of Empyrion Galactic Survival 
 
 
-#Under Heavy Construction
+# Under Heavy Construction
 
 
 
@@ -17,6 +17,11 @@ An application to simplify the handling and customizing of the .ecf configuratio
   - [Resetting Persistent Data](#resetting-persistent-data)
   - [Item Recognition](#item-recognition)
   - [Device Recognition](#device-recognition)
+
+
+
+
+
 
 ## Script Functions Overview
 - `CpuInfDev` draws device damage states

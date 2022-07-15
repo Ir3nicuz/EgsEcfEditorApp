@@ -1,0 +1,13 @@
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\bin\Release\EgsEcfEditorApp.exe.config
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\bin\Release\EgsEcfEditorApp.exe
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\bin\Release\EgsEcfEditorApp.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\bin\Release\EgsEcfParser.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\bin\Release\EgsEcfParser.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.csproj.AssemblyReference.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.GuiMainForm.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.Properties.Resources.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.csproj.GenerateResource.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.csproj.CoreCompileInputs.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.csproj.CopyComplete
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.exe
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Release\EgsEcfEditorApp.pdb

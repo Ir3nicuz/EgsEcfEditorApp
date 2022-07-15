@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorView_Header" xml:space="preserve">
+    <value>Ladefehler beim Datenlesen</value>
+  </data>
+  <data name="ErrorView_Header_Errors" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="GenericAttention" xml:space="preserve">
+    <value>Achtung</value>
+  </data>
+  <data name="InfoView_AddData" xml:space="preserve">
+    <value>Zusatzdaten</value>
+  </data>
+  <data name="InfoView_ElementAttributes" xml:space="preserve">
+    <value>Element Attribute</value>
+  </data>
+  <data name="InfoView_ElementChildBlockCount" xml:space="preserve">
+    <value>Unterblock Anzahl</value>
+  </data>
+  <data name="InfoView_ElementChildCount" xml:space="preserve">
+    <value>Unterelement Anzahl</value>
+  </data>
+  <data name="InfoView_ElementComment" xml:space="preserve">
+    <value>Element Kommentar</value>
+  </data>
+  <data name="InfoView_ElementPreSign" xml:space="preserve">
+    <value>Element Vorzeichen</value>
+  </data>
+  <data name="InfoView_ElementType" xml:space="preserve">
+    <value>Element Typ</value>
+  </data>
+  <data name="InfoView_Header" xml:space="preserve">
+    <value>Zusatzdaten</value>
+  </data>
+  <data name="InfoView_ParameterAttributes" xml:space="preserve">
+    <value>Parameter Attribute</value>
+  </data>
+  <data name="InfoView_ParameterComment" xml:space="preserve">
+    <value>Parameter Kommentar</value>
+  </data>
+  <data name="ParameterView_FilterSelector_Parameters" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="ParameterView_Header" xml:space="preserve">
+    <value>Parameteransicht</value>
+  </data>
+  <data name="ParameterView_Header_InheritedParameters" xml:space="preserve">
+    <value>vererbte</value>
+  </data>
+  <data name="ParameterView_Header_OverallParameters" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="ParameterView_Header_OverwritingParameters" xml:space="preserve">
+    <value>überschrieben</value>
+  </data>
+  <data name="ParameterView_ParameterCommentColumn" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="ParameterView_ParameterInheritedColumn" xml:space="preserve">
+    <value>Vererbt</value>
+  </data>
+  <data name="ParameterView_ParameterNameColumn" xml:space="preserve">
+    <value>Parameter Name</value>
+  </data>
+  <data name="ParameterView_ParameterNumberColumn" xml:space="preserve">
+    <value>Nr.</value>
+  </data>
+  <data name="ParameterView_ParameterOverwritingColumn" xml:space="preserve">
+    <value>Übers.</value>
+  </data>
+  <data name="ParameterView_ParameterParentColumn" xml:space="preserve">
+    <value>Baum Element</value>
+  </data>
+  <data name="ParameterView_ParameterValueColumn" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="ParameterView_UnnamedParent" xml:space="preserve">
+    <value>Namenlos</value>
+  </data>
+  <data name="ParameterView_ValueGroup" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="TreeView_CommentNodeName" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="TreeView_FilterSelector_Attributes" xml:space="preserve">
+    <value>Baumattribute</value>
+  </data>
+  <data name="TreeView_FilterSelector_Elements" xml:space="preserve">
+    <value>Baumelemente</value>
+  </data>
+  <data name="TreeView_Header" xml:space="preserve">
+    <value>Baumansicht</value>
+  </data>
+  <data name="TreeView_Header_RootElements" xml:space="preserve">
+    <value>Basiselemente</value>
+  </data>
+  <data name="TreeView_Header_SubElements" xml:space="preserve">
+    <value>Unterlemente</value>
+  </data>
+  <data name="TreeView_SelectableElements_Comments" xml:space="preserve">
+    <value>Kommentare</value>
+  </data>
+  <data name="TreeView_SelectableElements_DataBlocks" xml:space="preserve">
+    <value>Datenblöcke</value>
+  </data>
+  <data name="TreeView_UnnamedNodeName" xml:space="preserve">
+    <value>Namenloser Knoten</value>
+  </data>
+</root>

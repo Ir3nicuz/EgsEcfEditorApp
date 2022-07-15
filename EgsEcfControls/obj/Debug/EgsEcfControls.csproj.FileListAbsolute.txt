@@ -1,0 +1,16 @@
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\bin\Debug\EgsEcfControls.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\bin\Debug\EgsEcfControls.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\bin\Debug\de\EgsEcfControls.resources.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\bin\Debug\EgsEcfParser.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\bin\Debug\EgsEcfParser.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.csproj.AssemblyReference.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.texts.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.titles.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.texts.de.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.titles.de.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.csproj.GenerateResource.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.csproj.CoreCompileInputs.cache
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\de\EgsEcfControls.resources.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.csproj.CopyComplete
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.dll
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.pdb

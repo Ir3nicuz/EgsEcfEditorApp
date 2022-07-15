@@ -1,0 +1,69 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EgsEcfEditorApp.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Filter_EgsEcfFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EgsEcfFile|*.ecf</Value>
+    </Setting>
+    <Setting Name="Extension_EgsConfigFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ecf</Value>
+    </Setting>
+    <Setting Name="Directory_FileDialog_Last" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Directory_EgsConfig" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Content\Configuration</Value>
+    </Setting>
+    <Setting Name="SteamAppId_Egs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">383120</Value>
+    </Setting>
+    <Setting Name="FolderName_SteamApps" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SteamApps</Value>
+    </Setting>
+    <Setting Name="RegistryValue_InstallPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">InstallPath</Value>
+    </Setting>
+    <Setting Name="RegistryKey32_Steam" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Valve\Steam</Value>
+    </Setting>
+    <Setting Name="RegistryKey64_Steam" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam</Value>
+    </Setting>
+    <Setting Name="Extension_SteamAppManifestFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">acf</Value>
+    </Setting>
+    <Setting Name="FileName_SteamLibraryConfig" Type="System.String" Scope="User">
+      <Value Profile="(Default)">libraryfolders.vdf</Value>
+    </Setting>
+    <Setting Name="SteamConfigKey_AppRootPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">path</Value>
+    </Setting>
+    <Setting Name="SteamConfigKey_AppPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">installdir</Value>
+    </Setting>
+    <Setting Name="FolderName_SteamCommon" Type="System.String" Scope="User">
+      <Value Profile="(Default)">common</Value>
+    </Setting>
+    <Setting Name="Size_View_Tree_Width" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="Size_View_Info_Width" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="Size_View_Error_Height" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">150</Value>
+    </Setting>
+    <Setting Name="Size_App_Width" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1500</Value>
+    </Setting>
+    <Setting Name="Size_App_Height" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">800</Value>
+    </Setting>
+    <Setting Name="Location_App_X" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="Location_App_Y" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

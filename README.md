@@ -18,18 +18,16 @@ An application to simplify the handling and customizing of the .ecf configuratio
 - Display and supervision of inheritance dependencies
 - File Operations (new, load, save, close)
 - GUI support for english and german language
+- Deprecated specification helper view
+- Element, Parameter, Attribute, Comment changing, adding, deleting
 
 ## Planned Major Features
 - Support for all .ecf files
 - SaveAs with taking applied filter into account
-- File merging with logic selector
+- File merging with logic
 - Compare files view
-- Element, Parameter, Attribute, Comment changing
-- Element, Parameter, Attribute, Comment adding
-- Element, Parameter, Attribute, Comment deleting
-- Element, Parameter, Attribute, Comment copy/pasting
+- Element, Parameter, Comment moving
+- Element, Parameter, Comment copy/pasting
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - TechTree Preview
-- Deprecated specification helper view
-- Refinement of visual controls appearance
 

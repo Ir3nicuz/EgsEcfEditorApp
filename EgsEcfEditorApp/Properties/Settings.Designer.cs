@@ -217,7 +217,7 @@ namespace EgsEcfEditorApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
         public int Size_View_Error_Height {
             get {
                 return ((int)(this["Size_View_Error_Height"]));

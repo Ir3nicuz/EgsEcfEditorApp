@@ -21,3 +21,4 @@ F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Debug\EgsEcfEditorApp.csproj.CopyComplete
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Debug\EgsEcfEditorApp.exe
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Debug\EgsEcfEditorApp.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfEditorApp\obj\Debug\EgsEcfEditorApp.EcfFileLoaderDialog.resources

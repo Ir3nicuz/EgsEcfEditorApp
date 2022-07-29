@@ -117,19 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FileOpen" xml:space="preserve">
-    <value>Datei öffnen</value>
+  <data name="EcfFileLoadingDialog_BarText" xml:space="preserve">
+    <value>Zeile</value>
   </data>
-  <data name="FileSaveAs" xml:space="preserve">
-    <value>Datei speichern unter</value>
+  <data name="EcfFileLoadingDialog_Header" xml:space="preserve">
+    <value>Lade Datei Inhalt</value>
   </data>
-  <data name="GenericAttention" xml:space="preserve">
+  <data name="Generic_Abort" xml:space="preserve">
+    <value>Abbruch</value>
+  </data>
+  <data name="Generic_Attention" xml:space="preserve">
     <value>Achtung</value>
   </data>
-  <data name="GenericInfo" xml:space="preserve">
+  <data name="Generic_Info" xml:space="preserve">
     <value>Information</value>
   </data>
-  <data name="GenericWarning" xml:space="preserve">
+  <data name="Generic_Warning" xml:space="preserve">
     <value>Warnung</value>
   </data>
 </root>

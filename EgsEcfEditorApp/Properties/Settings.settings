@@ -51,7 +51,7 @@
       <Value Profile="(Default)">300</Value>
     </Setting>
     <Setting Name="Size_View_Error_Height" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">150</Value>
+      <Value Profile="(Default)">200</Value>
     </Setting>
     <Setting Name="Size_App_Width" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1500</Value>

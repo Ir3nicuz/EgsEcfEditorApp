@@ -88,6 +88,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File could not be created!.
+        /// </summary>
+        internal static string CreateEcfFileFailed {
+            get {
+                return ResourceManager.GetString("CreateEcfFileFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No valid file tab selected!.
         /// </summary>
         internal static string NoTabSelected {
@@ -120,6 +129,24 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ReloadEcfFileFailed {
             get {
                 return ResourceManager.GetString("ReloadEcfFileFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Config file definition reloading failed!.
+        /// </summary>
+        internal static string ReloadFileDefinitionsFailed {
+            get {
+                return ResourceManager.GetString("ReloadFileDefinitionsFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Config file definitions reloaded successfully!.
+        /// </summary>
+        internal static string ReloadFileDefinitionsSuccess {
+            get {
+                return ResourceManager.GetString("ReloadFileDefinitionsSuccess", resourceCulture);
             }
         }
         

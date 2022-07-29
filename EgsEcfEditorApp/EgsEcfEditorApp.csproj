@@ -53,6 +53,12 @@
       <DependentUpon>GuiMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="EcfFileLoaderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfFileLoaderDialog.Designer.cs">
+      <DependentUpon>EcfFileLoaderDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\icons.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -76,6 +82,9 @@
     </Compile>
     <EmbeddedResource Include="GuiMainForm.resx">
       <DependentUpon>GuiMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfFileLoaderDialog.resx">
+      <DependentUpon>EcfFileLoaderDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\icons.resx">
       <Generator>ResXFileCodeGenerator</Generator>

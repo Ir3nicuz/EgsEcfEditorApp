@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <!--Copy Config struct to define new file types if needed-->
+  <Config type="Factions">
+    <!--Ecf Syntax Format Settings-->
+    <Formatting>
+      <!--Copy Parameters if more needed-->
+      <MultiLineCommentPair opener="/*" closer="*/" />
+      <OuterTrimmingChar value=" " />
+      <OuterTrimmingChar value="\t" />
+      <OuterTrimmingChar value="\v" />
+      <OuterTrimmingChar value="\r" />
+      <OuterTrimmingChar value="\n" />
+      <!--Specific Parameters-->
+      <ItemSeperator value="," />
+      <ItemValueSeperator value=":" />
+      <ValueSeperator value="," />
+      <ValueGroupSeperator value=";" />
+      <ValueFractionalSeperator value="." />
+      <MagicSpacer value=" " />
+      <BlockIdentificationAttribute value="Id" />
+      <BlockReferenceSourceAttribute value="Ref" />
+      <BlockReferenceTargetAttribute value="Name" />
+      <!--Copy Parameter if more needed, First is used at file write-->
+      <SingleLineCommentStart value="#" />
+      <BlockIdentifierPair opener="{" closer="}" />
+      <EscapeIdentifierPair opener="&quot;" closer="&quot;" />
+    </Formatting>
+    <!--File Specific Syntax Settings, Add more child-params if needed-->
+    <BlockTypePreMarks>
+    </BlockTypePreMarks>
+    <BlockTypePostMarks>
+      <Param value=" " optional="false" />
+    </BlockTypePostMarks>
+    <RootBlockTypes>
+      <Param name="Faction" optional="false" />
+    </RootBlockTypes>
+    <RootBlockAttributes>
+      <Param name="Id" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Name" optional="false" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+    </RootBlockAttributes>
+    <ChildBlockTypes>
+    </ChildBlockTypes>
+    <ChildBlockAttributes>
+    </ChildBlockAttributes>
+    <BlockParameters>
+      <Param name="Abbrev" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Color" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OmitMapLegend" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HideAbbrev" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="NPC" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ClaimTerritory" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Reputation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AttackNPC" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Discovery" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Friendly" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Unfriendly" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </BlockParameters>
+    <ParameterAttributes>
+    </ParameterAttributes>
+  </Config>
+</Settings>

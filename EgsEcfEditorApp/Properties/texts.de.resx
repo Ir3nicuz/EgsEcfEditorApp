@@ -126,6 +126,9 @@
   <data name="CloseTabWithUnsaved" xml:space="preserve">
     <value>In dem gewählten Tab befinden sich ungesicherte Daten. Diesen Tab wirklich schließen?</value>
   </data>
+  <data name="CreateEcfFileFailed" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet erstellt!</value>
+  </data>
   <data name="NoTabSelected" xml:space="preserve">
     <value>Kein gültiger Dateireiter ausgewählt!</value>
   </data>
@@ -137,6 +140,12 @@
   </data>
   <data name="ReloadEcfFileFailed" xml:space="preserve">
     <value>Dateiinhalt konnte nicht neu geladen werden!</value>
+  </data>
+  <data name="ReloadFileDefinitionsFailed" xml:space="preserve">
+    <value>Konfigurations Datei Definitionen konnten nicht geladen werden!</value>
+  </data>
+  <data name="ReloadFileDefinitionsSuccess" xml:space="preserve">
+    <value>Konfigurations Datei Definitionen erfolgreich neu geladen!</value>
   </data>
   <data name="SaveEcfFileFailed" xml:space="preserve">
     <value>Datei konnte nicht gespeichert werden!</value>

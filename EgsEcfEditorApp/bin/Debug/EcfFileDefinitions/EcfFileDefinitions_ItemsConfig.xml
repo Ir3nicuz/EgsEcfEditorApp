@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <!--Copy Config struct to define new file types if needed-->
+  <Config type="ItemsConfig">
+    <!--Ecf Syntax Format Settings-->
+    <Formatting>
+      <!--Copy Parameters if more needed-->
+      <MultiLineCommentPair opener="/*" closer="*/" />
+      <OuterTrimmingChar value=" " />
+      <OuterTrimmingChar value="\t" />
+      <OuterTrimmingChar value="\v" />
+      <OuterTrimmingChar value="\r" />
+      <OuterTrimmingChar value="\n" />
+      <!--Specific Parameters-->
+      <ItemSeperator value="," />
+      <ItemValueSeperator value=":" />
+      <ValueSeperator value="," />
+      <ValueGroupSeperator value=";" />
+      <ValueFractionalSeperator value="." />
+      <MagicSpacer value=" " />
+      <BlockIdentificationAttribute value="Id" />
+      <BlockReferenceSourceAttribute value="Ref" />
+      <BlockReferenceTargetAttribute value="Name" />
+      <!--Copy Parameter if more needed, First is used at file write-->
+      <SingleLineCommentStart value="#" />
+      <BlockIdentifierPair opener="{" closer="}" />
+      <EscapeIdentifierPair opener="&quot;" closer="&quot;" />
+    </Formatting>
+    <!--File Specific Syntax Settings, Add more child-params if needed-->
+    <BlockTypePreMarks>
+      <Param value="+" optional="true" />
+    </BlockTypePreMarks>
+    <BlockTypePostMarks>
+      <Param value=" " optional="false" />
+    </BlockTypePostMarks>
+    <RootBlockTypes>
+      <Param name="Item" optional="false" />
+    </RootBlockTypes>
+    <RootBlockAttributes>
+      <Param name="Id" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Name" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Ref" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </RootBlockAttributes>
+    <ChildBlockTypes>
+      <Param name="Child" optional="false" />
+    </ChildBlockTypes>
+    <ChildBlockAttributes>
+      <Param name="0" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="1" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="2" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="3" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="4" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="5" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+    </ChildBlockAttributes>
+    <BlockParameters>
+      <Param name="Material" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Canhold" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HoldType" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="StackSize" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Candrop" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShowUser" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Meshfile" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="LifetimeOnDrop" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MarketPrice" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PickupToToolbar" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Category" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CreatesLight" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mass" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Volume" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="VolumeCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UnlockLevel" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UnlockCost" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TechTreeNames" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="TechTreeParent" optional="true" hasValue="true" allowBlank= "true" forceEscape="true" info="" />
+      <Param name="Durability" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DegradationProb" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DegradationFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxJammed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Class" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowRemote" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ROF" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Range" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="NoiseStrength" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CameraShake" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Automatic" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BulletSpread" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Recoil" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Damage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AmmoCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AmmoType" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AmmoUnlimited" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AutoReload" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ReloadDelay" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxBegin" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxNoAmmo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxReload" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PfxMuzzle" optional="true" hasValue="true" allowBlank= "true" forceEscape="false" info="" />
+      <Param name="SfxLoop" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxStop" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxUpgrade" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxUpgradeErr" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxDowngrade" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Tracer" optional="true" hasValue="true" allowBlank= "true" forceEscape="false" info="" />
+      <Param name="TracerPerBullet" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TracerSpeed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_3" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_4" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_5" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_6" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_7" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_8" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DamageMultiplier_9" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_3" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_4" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_5" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamageMultiplier_6" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ZoomOut" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ZoomIn" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ZoomOverlay" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RedDot" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BulletsPerShot" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RaySpread" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Info" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DrillMode" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DecoMode" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="InfoPopup" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OpenPopup" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TerrainMode" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HarvestSupport" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowAt" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="AllowUpgrade" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowDowngrade" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowPlacingAt" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowSpace" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Radius" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IgnoreAtmo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UseSingleMagazine" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Particles" optional="true" hasValue="true" allowBlank= "true" forceEscape="false" info="" />
+      <Param name="ParticleTransform" optional="true" hasValue="true" allowBlank= "true" forceEscape="false" info="" />
+      <Param name="RadialText" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="RadialDesc" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="RadialIcon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RadialMenu" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastRadius" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastParticleIndex" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ReturnFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RepairPoints" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Demolish" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TerrainFillerBlock" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FlattenTerrain" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropMeshfile" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MiningEnabled" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OverrideTradingConstraints" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RepairDisabled" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Buff" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="Buff_chance" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BuffMod" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Debuff" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="ForceMuzzleAiming" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Speed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SpeedSpace" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Ballistic" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AutoFill" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FuelValue" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HomingSpeed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CustomIcon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="O2Value" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddHealth" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddStamina" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddFood" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddOxygen" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddTemperature" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AddRadiation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PrefabEntity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ForceSpawnOnGround" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsShootThroughCrosshair" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RangeSpace" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CheckObstructed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Model" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="XpFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="NoRepairInputItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Credits" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MapIcon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Entity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="EntityName" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FoodDecayTime" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FoodDecayedItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropOnDeath" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Sphere" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RecipeName" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Oxygen" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Armor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Heat" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Cold" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Radiation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FallDamageFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PowerFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SpeedFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="JumpFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="JetpackFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FoodFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="StaminaFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DiscoveryFac" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="NrSlots" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SlotItems" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsNightVisionItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsOreScannerItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsRadarItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShowObjectTime" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PropHead" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DecalMode" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DecalGroup" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsEquippableWithoutLocker" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsBoostEquippableWithoutLocker" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <!--strange unmatched spelling duplicates-->
+      <Param name="Bullet_use_per_shot" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <!--strange incremented parameter keys-->
+      <Param name="Focused_blockname_1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_3" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_4" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_5" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_6" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_7" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_8" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_9" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_10" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_11" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_12" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_13" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_14" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_15" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_16" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_17" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_18" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_19" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_20" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_21" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_22" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_23" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_24" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_25" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_26" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_27" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_28" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_29" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_30" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_31" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_32" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_33" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_34" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_35" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_36" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_37" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_38" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_39" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_40" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_41" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_42" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_43" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_44" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_45" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_46" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_47" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_48" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_49" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_50" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_51" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_52" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_53" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_54" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_55" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_56" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_57" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_58" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_59" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_60" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_61" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_62" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_63" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_64" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_65" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_66" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_67" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_68" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_69" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_70" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_71" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_72" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_73" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_74" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_75" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_76" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_77" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_78" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_79" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_80" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_81" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_82" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_83" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_84" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_85" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_86" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_87" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_88" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_89" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_90" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_91" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_92" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_93" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_94" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_95" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_96" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_97" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_98" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Focused_blockname_99" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </BlockParameters>
+    <ParameterAttributes>
+      <Param name="display" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="type" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="formatter" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="param1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="data" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </ParameterAttributes>
+  </Config>
+</Settings>

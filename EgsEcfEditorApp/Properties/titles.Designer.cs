@@ -61,47 +61,56 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open file.
+        ///   Looks up a localized string similar to Lines.
         /// </summary>
-        internal static string FileOpen {
+        internal static string EcfFileLoadingDialog_BarText {
             get {
-                return ResourceManager.GetString("FileOpen", resourceCulture);
+                return ResourceManager.GetString("EcfFileLoadingDialog_BarText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save file as.
+        ///   Looks up a localized string similar to Loading file content.
         /// </summary>
-        internal static string FileSaveAs {
+        internal static string EcfFileLoadingDialog_Header {
             get {
-                return ResourceManager.GetString("FileSaveAs", resourceCulture);
+                return ResourceManager.GetString("EcfFileLoadingDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abort.
+        /// </summary>
+        internal static string Generic_Abort {
+            get {
+                return ResourceManager.GetString("Generic_Abort", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Attention.
         /// </summary>
-        internal static string GenericAttention {
+        internal static string Generic_Attention {
             get {
-                return ResourceManager.GetString("GenericAttention", resourceCulture);
+                return ResourceManager.GetString("Generic_Attention", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Information.
         /// </summary>
-        internal static string GenericInfo {
+        internal static string Generic_Info {
             get {
-                return ResourceManager.GetString("GenericInfo", resourceCulture);
+                return ResourceManager.GetString("Generic_Info", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
-        internal static string GenericWarning {
+        internal static string Generic_Warning {
             get {
-                return ResourceManager.GetString("GenericWarning", resourceCulture);
+                return ResourceManager.GetString("Generic_Warning", resourceCulture);
             }
         }
     }

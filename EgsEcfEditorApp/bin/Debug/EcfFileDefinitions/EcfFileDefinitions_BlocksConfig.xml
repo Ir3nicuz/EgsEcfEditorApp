@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <!--Copy Config struct to define new file types if needed-->
+  <Config type="BlocksConfig">
+    <!--Ecf Syntax Format Settings-->
+    <Formatting>
+      <!--Copy Parameters if more needed-->
+      <MultiLineCommentPair opener="/*" closer="*/" />
+      <OuterTrimmingChar value=" " />
+      <OuterTrimmingChar value="\t" />
+      <OuterTrimmingChar value="\v" />
+      <OuterTrimmingChar value="\r" />
+      <OuterTrimmingChar value="\n" />
+      <!--Specific Parameters-->
+      <ItemSeperator value="," />
+      <ItemValueSeperator value=":" />
+      <ValueSeperator value="," />
+      <ValueGroupSeperator value=";" />
+      <ValueFractionalSeperator value="." />
+      <MagicSpacer value=" " />
+      <BlockIdentificationAttribute value="Id" />
+      <BlockReferenceSourceAttribute value="Ref" />
+      <BlockReferenceTargetAttribute value="Name" />
+      <!--Copy Parameter if more needed, First is used at file write-->
+      <SingleLineCommentStart value="#" />
+      <BlockIdentifierPair opener="{" closer="}" />
+      <EscapeIdentifierPair opener="&quot;" closer="&quot;" />
+    </Formatting>
+    <!--File Specific Syntax Settings, Add more child-params if needed-->
+    <BlockTypePreMarks>
+      <Param value="+" optional="true" />
+    </BlockTypePreMarks>
+    <BlockTypePostMarks>
+      <Param value=" " optional="false" />
+    </BlockTypePostMarks>
+    <RootBlockTypes>
+      <Param name="Block" optional="false" />
+    </RootBlockTypes>
+    <RootBlockAttributes>
+      <Param name="Id" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Name" optional="false" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Ref" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </RootBlockAttributes>
+    <ChildBlockTypes>
+      <Param name="Child" optional="false" />
+    </ChildBlockTypes>
+    <ChildBlockAttributes>
+      <Param name="DropOnDestroy" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Map" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropOnHarvest" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CropsGrown" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropOnDestroy_1" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PlantGrowing" optional="true" hasValue="false" allowBlank= "false" forceEscape="false" info="" />
+    </ChildBlockAttributes>
+    <BlockParameters>
+      <Param name="Material" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Shape" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mesh" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Texture" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShowUser" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Group" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Item" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Count" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Prob" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="XpFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Temperature" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AutoMinerFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Radiation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShowBlockName" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Model" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mesh-Damage-1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mesh-Damage-2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mesh-Damage-3" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mesh-Damage-4" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropMeshfile" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Place" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsAccessible" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowPlacingAt" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Info" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SizeInBlocks" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SymType" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="StackSize" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlockColor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TemplateRoot" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Mass" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="EnergyIn" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Category" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastParticleIndex" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastRadius" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastDamage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Class" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IndexName" optional="true" hasValue="true" allowBlank= "true" forceEscape="false" info="" />
+      <Param name="EssentialCategory" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SizeInBlocksLocked" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HitPoints" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Volume" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsLockable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsIgnoreLC" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="YawRotation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="NPCModelRotation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsOxygenTight" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MarketPrice" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DropInventoryEntity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsActivateableInCP" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CPUIn" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FuelAccept" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FuelCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UnlockCost" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UnlockLevel" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TechTreeNames" optional="true" hasValue="true" allowBlank= "true" forceEscape="true" info="" />
+      <Param name="TechTreeParent" optional="true" hasValue="true" allowBlank= "true" forceEscape="true" info="" />
+      <Param name="O2Capacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="O2Accept" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowedInBlueprint" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsActivateable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="EnergyDynamicGroup" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UpgradeTo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DontDecayFood" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CustomIcon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BuffNameActivate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BuffNamesActivate" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="DebuffNamesActivate" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="Torque" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="LootList" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="VolumeCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Collide" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AllowWander" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CanSetColor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RemoveOnSI" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="StabilitySupport" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsDuplicateable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ModelScaleLocked" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SoundOpen" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SoundClose" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SoundOnEnter" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SoundRotate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="WeaponItem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsRetractable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RotSpeed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Zoom" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsTextureable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsGPUInstance" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Homing" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MaxCount" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxActivate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CanPlayersSpawnOn" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="WindSpeed" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Transparent" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Turbidity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="WaterColor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TurbidityColor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Color" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Specular" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Color2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ElevMinMax" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Emissive" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsTerrainDecoration" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsDeco" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsPlant" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OnHarvest" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Dead" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OnDeath" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="EnergyInIdle" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="AboveTerrainCheck" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ChildBlocks" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ParentBlocks" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="ForceMaxCount" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="OccupySizeInBlocks" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="WarpAccept" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PickupToToolbar" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CanPickup" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CanDecorateOnSlopes" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlockSizeScale" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ChildShapes" optional="true" hasValue="true" allowBlank= "false" forceEscape="true" info="" />
+      <Param name="DowngradeTo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PickupTarget" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TextureTable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsPhysicsColliders" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Hardness" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="EnergyOut" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ParticleOffset" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ThrusterForce" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Next" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="GrowthRate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="FertileLevel" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DecoParticle" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CropType" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CropYield" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="GrowthTimeInfo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsUsingCPUSystem" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsColorable" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ForceNoPvEDamage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MapIcon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MapName" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Faction" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsKeepContainers" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ConsumeFuelO2" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Tag" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TurretTargetIgnore" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsAntiInfantryWeapon" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SfxBuffActivate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SpawnClass" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="SpawnCount" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MirrorTo" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ThrusterBoosterFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ItemPerAU" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CostPerAU" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CostPerLY" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RangeAU" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RangeLY" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="DoorClosesOnPower" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HideShapesWindow" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsBlocksThrusters" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PlayerTriggersOpen" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="UseCockpitCamera" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BigDecorationRadius" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ItemsPerHour" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ItemStorageLimit" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RepairPerSecond" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Repairs" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HVEngineForce" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HVEngineDampCoef" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="HVEngineDampPow" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Accept" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Sound" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsRepairToBlueprint" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Damage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsTrapDoor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="WeaponItemRotation" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Range" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RangeSpace" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TraderEntity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TraderType" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsDestructible" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="GridSize" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ReturnFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="TemperatureGain" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="PanelAngle" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" />
+      <Param name="SolarPanelEfficiency" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsSolarPanel" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="BlastShieldDamage" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RpFactor" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="RepairToTemplate" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="MaxVolumeCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="Voxelize" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="IsActivatedOnPlace" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShieldCapacity" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShieldRecharge" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShieldCooldown" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="ShieldPerCrystal" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="CPUExtenderLevel" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="LifetimeOnDrop" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </BlockParameters>
+    <ParameterAttributes>
+      <Param name="type" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="display" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="formatter" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+      <Param name="param1" optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info="" />
+    </ParameterAttributes>
+  </Config>
+</Settings>

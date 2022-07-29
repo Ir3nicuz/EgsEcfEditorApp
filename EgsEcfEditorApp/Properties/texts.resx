@@ -126,6 +126,9 @@
   <data name="CloseTabWithUnsaved" xml:space="preserve">
     <value>There are unsaved changes in the selected tab. Really close this tab?</value>
   </data>
+  <data name="CreateEcfFileFailed" xml:space="preserve">
+    <value>File could not be created!</value>
+  </data>
   <data name="NoTabSelected" xml:space="preserve">
     <value>No valid file tab selected!</value>
   </data>
@@ -137,6 +140,12 @@
   </data>
   <data name="ReloadEcfFileFailed" xml:space="preserve">
     <value>File content could not be reloaded!</value>
+  </data>
+  <data name="ReloadFileDefinitionsFailed" xml:space="preserve">
+    <value>Config file definition reloading failed!</value>
+  </data>
+  <data name="ReloadFileDefinitionsSuccess" xml:space="preserve">
+    <value>Config file definitions reloaded successfully!</value>
   </data>
   <data name="SaveEcfFileFailed" xml:space="preserve">
     <value>File could not be saved!</value>

@@ -43,10 +43,50 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeprecatedDefinitionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeprecatedDefinitionsDialog.Designer.cs">
+      <DependentUpon>DeprecatedDefinitionsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EcfFileOpenDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfFileOpenDialog.Designer.cs">
+      <DependentUpon>EcfFileOpenDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EcfFileSaveDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfFileSaveDialog.Designer.cs">
+      <DependentUpon>EcfFileSaveDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EcfItemEditingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfItemEditingDialog.Designer.cs">
+      <DependentUpon>EcfItemEditingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EcfItemSelectorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfItemSelectorDialog.Designer.cs">
+      <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="EgsEcfControls.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>icons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\texts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -65,6 +105,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DeprecatedDefinitionsDialog.resx">
+      <DependentUpon>DeprecatedDefinitionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfFileOpenDialog.resx">
+      <DependentUpon>EcfFileOpenDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfItemEditingDialog.resx">
+      <DependentUpon>EcfItemEditingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfItemSelectorDialog.resx">
+      <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\icons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\texts.de.resx" />
     <EmbeddedResource Include="Properties\texts.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -75,6 +135,120 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>titles.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_NewFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_OpenFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ReloadFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_SaveAllFiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_SaveAsFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_SaveFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_CloseAllFiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_CloseFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ReloadDefinitions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_CheckDefinition.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ApplyFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ClearFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_MoveDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_MoveUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Redo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ChangeComplex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ChangeSimple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ChangeSortDirection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_AlphabeticSorting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_NumericSorting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_BuildTechTreePreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Compare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_Merge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_AddValue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_AddValueGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_RemoveValue .png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_RemoveValueGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ShowAllItems.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ShowOnlyFaultyItems.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ShowOnlyNonFaultyItems.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_SaveAsFilteredFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ShowInEditor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon_ShowInFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

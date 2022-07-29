@@ -14,3 +14,9 @@ F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.csproj.CopyComplete
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.dll
 F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.pdb
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.icons.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.DeprecatedDefinitionsDialog.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.EcfItemEditingDialog.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.Properties.Resources.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.EcfItemSelectorDialog.resources
+F:\Projekte\Projekt_EgsEcfEditorApp\Software\EgsEcfEditorApp\EgsEcfControls\obj\Debug\EgsEcfControls.EcfFileOpenDialog.resources

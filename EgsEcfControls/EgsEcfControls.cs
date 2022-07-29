@@ -12,47 +12,50 @@ using System.Text;
 using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using static EgsEcfControls.CheckComboBox;
+using static EgsEcfControls.ToolBarCheckComboBox;
 using static EgsEcfControls.EcfBaseView;
 using static EgsEcfControls.EcfSorter;
-using static EgsEcfControls.ProgressIndicator;
+using static EgsEcfControls.EcfItemEditingDialog;
+using static EgsEcfControls.EcfTreeFilter;
+using static EgsEcfControls.EcfTabPage.CopyPasteClickedEventArgs;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace EgsEcfControls
 {
     public class EcfTabPage : TabPage
     {
         public event EventHandler AnyViewResized;
+        public event EventHandler<CopyPasteClickedEventArgs> CopyClicked;
+        public event EventHandler<CopyPasteClickedEventArgs> PasteClicked;
 
         public EgsEcfFile File { get; }
+        private EcfItemEditingDialog ItemEditor { get; }
 
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
+        private EcfFilterControl FilterControl { get; }
+        private EcfTreeFilter TreeFilter { get; }
+        private EcfParameterFilter ParameterFilter { get; }
+        private EcfContentOperations ContentOperations { get; }
 
-        private EcfDataIndicator Indicator { get; } = null;
-        private EcfFilterControl FilterControl { get; } = null;
-        private EcfTreeFilter TreeFilter { get; } = null;
-        private EcfParameterFilter ParameterFilter { get; } = null;
-
-        private EcfFileContainer FileViewPanel { get; } = null;
-        private EcfTreeView TreeView { get; } = null;
-        private EcfParameterView ParameterView { get; } = null;
-        private EcfErrorView ErrorView { get; } = null;
-        private EcfInfoView InfoView { get; } = null;
-
-        private BackgroundWorker UpdateAllViewsWorker { get; } = new BackgroundWorker();
-        private BackgroundWorker UpdateErrorViewWorker { get; } = new BackgroundWorker();
+        private EcfFileContainer FileViewPanel { get; } = new EcfFileContainer();
+        private EcfTreeView TreeView { get; }
+        private EcfParameterView ParameterView { get; }
+        private EcfErrorView ErrorView { get; }
+        private EcfInfoView InfoView { get; }
 
         public bool IsUpdating { get; private set; } = false;
-        public bool IsAnyViewUpdating { get; private set; } = false;
+        private EcfBaseView LastFocusedView { get; set; } = null;
 
-        public EcfTabPage(EgsEcfFile file) : base()
+        public EcfTabPage(Icon appIcon, EgsEcfFile file) : base()
         {
             File = file;
+            ItemEditor = new EcfItemEditingDialog(appIcon, file);
 
-            Indicator = new EcfDataIndicator(File.Definition.FileType);
-            FilterControl = new EcfFilterControl();
-            TreeFilter = new EcfTreeFilter(File.Definition.RootBlockAttributes.Select(item => item.Name).Concat(
-                File.Definition.ChildBlockAttributes.Select(item => item.Name)).ToList());
+            FilterControl = new EcfFilterControl(File.Definition.FileType);
+            TreeFilter = new EcfTreeFilter();
             ParameterFilter = new EcfParameterFilter(File.Definition.BlockParameters.Select(item => item.Name).ToList());
+            ContentOperations = new EcfContentOperations();
 
             FileViewPanel = new EcfFileContainer();
             TreeView = new EcfTreeView(Properties.titles.TreeView_Header, File, ResizeableBorders.RightBorder);
@@ -60,12 +63,802 @@ namespace EgsEcfControls
             ErrorView = new EcfErrorView(Properties.titles.ErrorView_Header, File, ResizeableBorders.TopBorder);
             InfoView = new EcfInfoView(Properties.titles.InfoView_Header, File, ResizeableBorders.LeftBorder);
 
+            AddControls();
+            SetEventHandlers();
+            UpdateAllViews();
+        }
+
+        // events
+        private void TreeView_ItemsSelected(object sender, EventArgs evt)
+        {
+            LastFocusedView = TreeView;
+            UpdateParameterView();
+        }
+        private void TreeView_DisplayedDataChanged(object sender, EventArgs evt)
+        {
+            ReselectTreeView();
+            UpdateParameterView();
+        }
+        private void ParameterView_ParametersSelected(object sender, EventArgs evt)
+        {
+            LastFocusedView = ParameterView;
+            UpdateInfoView();
+        }
+        private void ParameterView_DisplayedDataChanged(object sender, EventArgs evt)
+        {
+            ReselectParameterView();
+            UpdateInfoView();
+        }
+        private void ContentOperations_UndoClicked(object sender, EventArgs e)
+        {
+            MessageBox.Show(this, "not implemented yet! :)");
+        }
+        private void ContentOperations_RedoClicked(object sender, EventArgs e)
+        {
+            MessageBox.Show(this, "not implemented yet! :)");
+        }
+        private void ContentOperations_AddClicked(object sender, EventArgs evt)
+        {
+            if (LastFocusedView is EcfTreeView treeView)
+            {
+                if (treeView.SelectedItems.LastOrDefault() is EcfStructureItem preceedingItem)
+                {
+                    AddTreeItemTo(preceedingItem);
+                    return;
+                }
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                if (parameterView.SelectedParameters.LastOrDefault()?.Parent is EcfBlock parentBlock)
+                {
+                    AddParameterItem(parentBlock, null);
+                    return;
+                }
+            }
+            AddTreeItemTo(null);
+        }
+        private void ContentOperations_RemoveClicked(object sender, EventArgs evt)
+        {
+            if (LastFocusedView is EcfTreeView treeView)
+            {
+                List<EcfStructureItem> items = treeView.SelectedItems;
+                if (items.Count > 0)
+                {
+                    RemoveTreeItem(items);
+                    return;
+                }
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                List<EcfParameter> parameters = parameterView.SelectedParameters;
+                if (parameters.Count > 0)
+                {
+                    RemoveParameterItem(parameters);
+                    return;
+                }
+            }
+            MessageBox.Show(this, Properties.texts.Generic_NoSuitableSelection, Properties.titles.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void ContentOperations_ChangeSingleClicked(object sender, EventArgs evt)
+        {
+            if (LastFocusedView is EcfTreeView treeView)
+            {
+                EcfStructureItem item = treeView.SelectedItems.FirstOrDefault();
+                if (ChangeTreeItem(item)) { return; }
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                if(parameterView.SelectedParameters.FirstOrDefault() is EcfParameter parameter)
+                {
+                    ChangeParameterItem(parameter);
+                    return;
+                }
+            }
+            MessageBox.Show(this, Properties.texts.Generic_NoSuitableSelection, Properties.titles.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void ContentOperations_ChangeMultiClicked(object sender, EventArgs evt)
+        {
+            MessageBox.Show(this, "not implemented yet! :)");
+        }
+        private void ContentOperations_MoveUpClicked(object sender, EventArgs evt)
+        {
+            MessageBox.Show(this, "not implemented yet! :)");
+        }
+        private void ContentOperations_MoveDownClicked(object sender, EventArgs evt)
+        {
+            MessageBox.Show(this, "not implemented yet! :)");
+        }
+        private void ContentOperations_CopyClicked(object sender, EventArgs evt)
+        {
+            CopyItems();
+        }
+        private void ContentOperations_PasteClicked(object sender, EventArgs evt)
+        {
+            PasteItems();
+        }
+        private void AnyView_ViewResized(object sender, EventArgs evt)
+        {
+            AnyViewResized?.Invoke(sender, evt);
+        }
+        private void AnyFilterControl_ApplyFilterFired(object sender, EventArgs evt)
+        {
+            UpdateAllViews();
+        }
+        private void FilterControl_ClearFilterClicked(object sender, EventArgs evt)
+        {
+            UpdateAllViews();
+        }
+        private void TreeView_NodeDoubleClicked(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            ChangeTreeItem(TreeView.SelectedItems.FirstOrDefault());
+        }
+        private void TreeView_ChangeItemClicked(object sender, EventArgs evt)
+        {
+            ChangeTreeItem(TreeView.SelectedItems.FirstOrDefault());
+        }
+        private void TreeView_AddToItemClicked(object sender, EventArgs evt)
+        {
+            AddTreeItemTo(TreeView.SelectedItems.FirstOrDefault());
+        }
+        private void TreeView_AddAfterItemClicked(object sender, EventArgs evt)
+        {
+            AddTreeItemAfter(TreeView.SelectedItems.FirstOrDefault());
+        }
+        private void TreeView_CopyItemClicked(object sender, EventArgs evt)
+        {
+            CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, TreeView.SelectedItems));
+        }
+        private void TreeView_PasteToItemClicked(object sender, EventArgs evt)
+        {
+            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, TreeView.SelectedItems));
+        }
+        private void TreeView_PasteAfterItemClicked(object sender, EventArgs evt)
+        {
+            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, TreeView.SelectedItems));
+        }
+        private void TreeView_RemoveItemClicked(object sender, EventArgs evt)
+        {
+            RemoveTreeItem(TreeView.SelectedItems);
+        }
+        private void TreeView_DelKeyPressed(object sender, EventArgs evt)
+        {
+            RemoveTreeItem(TreeView.SelectedItems);
+        }
+        private void TreeView_CopyKeyPressed(object sender, EventArgs evt)
+        {
+            CopyItems();
+        }
+        private void TreeView_PasteKeyPressed(object sender, EventArgs evt)
+        {
+            PasteItems();
+        }
+        private void ParameterView_CellDoubleClicked(object sender, DataGridViewCellEventArgs evt)
+        {
+            ChangeParameterItem(ParameterView.SelectedParameters.FirstOrDefault());
+        }
+        private void ParameterView_ChangeItemClicked(object sender, EventArgs evt)
+        {
+            ChangeParameterItem(ParameterView.SelectedParameters.FirstOrDefault());
+        }
+        private void ParameterView_AddToItemClicked(object sender, EventArgs evt)
+        {
+            EcfBlock parentBlock = ParameterView.SelectedParameters.LastOrDefault()?.Parent as EcfBlock;
+            AddParameterItem(parentBlock, null);
+        }
+        private void ParameterView_AddAfterItemClicked(object sender, EventArgs evt)
+        {
+            EcfParameter preceedingParameter = ParameterView.SelectedParameters.LastOrDefault();
+            EcfBlock parentBlock = preceedingParameter?.Parent as EcfBlock;
+            AddParameterItem(parentBlock, preceedingParameter);
+        }
+        private void ParameterView_CopyItemClicked(object sender, EventArgs evt)
+        {
+            CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, ParameterView.SelectedParameters));
+        }
+        private void ParameterView_PasteToItemClicked(object sender, EventArgs evt)
+        {
+            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, ParameterView.SelectedParameters));
+        }
+        private void ParameterView_PasteAfterItemClicked(object sender, EventArgs evt)
+        {
+            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, ParameterView.SelectedParameters));
+        }
+        private void ParameterView_RemoveItemClicked(object sender, EventArgs evt)
+        {
+            RemoveParameterItem(ParameterView.SelectedParameters);
+        }
+        private void ParameterView_DelKeyPressed(object sender, EventArgs evt)
+        {
+            RemoveParameterItem(ParameterView.SelectedParameters);
+        }
+        private void ParameterView_CopyKeyPressed(object sender, EventArgs evt)
+        {
+            CopyItems();
+        }
+        private void ParameterView_PasteKeyPressed(object sender, EventArgs evt)
+        {
+            PasteItems();
+        }
+        private void ErrorView_ShowInEditorClicked(object sender, EventArgs evt)
+        {
+            TreeFilter.Reset();
+            ParameterFilter.Reset();
+            ShowSpecificItem(ErrorView.SelectedError.Item);
+        }
+        private void ErrorView_ShowInFileClicked(object sender, EventArgs evt)
+        {
+            string filePathAndName = string.Format("\"{0}\"", Path.Combine(File.FilePath, File.FileName));
+            StringBuilder result = new StringBuilder(1024);
+            try
+            {
+                FindExecutable(filePathAndName, string.Empty, result);
+                string assocApp = result?.ToString();
+                if (string.IsNullOrEmpty(assocApp))
+                {
+                    Process.Start(filePathAndName);
+                }
+                else
+                {
+                    string arguments = string.Format("{0} -n{1}", filePathAndName, ErrorView.SelectedError.LineInFile);
+                    assocApp = string.Format("\"{0}\"", assocApp);
+                    Process.Start(assocApp, arguments);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("{0}{1}{1}{2}", Properties.texts.Generic_FileCouldNotBeOpened, Environment.NewLine, ex.Message), 
+                    Properties.titles.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        // public
+        public void ShowSpecificItem(EcfStructureItem item)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    ShowSpecificItemInvoked(item);
+                });
+            }
+            else
+            {
+                ShowSpecificItemInvoked(item);
+            }
+        }
+        public void UpdateAllViews()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateAllViewsInvoked();
+                });
+            }
+            else
+            {
+                UpdateAllViewsInvoked();
+            }
+        }
+        public void UpdateParameterView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateParameterViewInvoked();
+                });
+            }
+            else
+            {
+                UpdateParameterViewInvoked();
+            }
+        }
+        public void UpdateInfoView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateInfoViewInvoked();
+                });
+            }
+            else
+            {
+                UpdateInfoViewInvoked();
+            }
+        }
+        public void UpdateErrorView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateErrorViewInvoked();
+                });
+            }
+            else
+            {
+                UpdateErrorViewInvoked();
+            }
+        }
+        public void UpdateTabDescription()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateTabDescriptionInvoked();
+                });
+            }
+            else
+            {
+                UpdateTabDescriptionInvoked();
+            }
+        }
+        public void ReselectTreeView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    ReselectTreeViewInvoked();
+                });
+            }
+            else
+            {
+                ReselectTreeViewInvoked();
+            }
+        }
+        public void ReselectParameterView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    ReselectParameterViewInvoked();
+                });
+            }
+            else
+            {
+                ReselectParameterViewInvoked();
+            }
+        }
+        public void InitViewSizes(int treeViewWidth, int errorViewHeight, int infoViewWidth)
+        {
+            TreeView.Width = treeViewWidth;
+            ErrorView.Height = errorViewHeight;
+            InfoView.Width = infoViewWidth;
+        }
+        public int PasteTo(EcfStructureItem target, List<EcfStructureItem> source)
+        {
+            int pasteCount = 0;
+            if (target != null && source != null && source.Count > 0)
+            {
+                if (target is EcfBlock block)
+                {
+                    pasteCount = PasteChildItems(block, null, source);
+                }
+                else
+                {
+                    PasteAfter(target, source);
+                }
+            }
+            return pasteCount;
+        }
+        public int PasteAfter(EcfStructureItem target, List<EcfStructureItem> source)
+        {
+            int pasteCount = 0;
+            if (target != null && source != null && source.Count > 0)
+            {
+                if (target.Parent is EcfBlock block)
+                {
+                    pasteCount = PasteChildItems(block, target, source);
+                }
+                else
+                {
+                    pasteCount = PasteRootItems(target, source);
+                }
+            }
+            return pasteCount;
+        }
+
+        // view updating
+        private void ShowSpecificItemInvoked(EcfStructureItem item)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                FilterControl.SetSpecificItem(item);
+                if (EcfBaseItem.GetRootItem(item) is EcfBlock block) { item = block; }
+                TreeView.ShowSpecificItem(item);
+                ParameterView.ShowSpecificItem(item);
+                InfoView.ShowSpecificItem(item);
+                IsUpdating = false;
+            }
+        }
+        private void UpdateAllViewsInvoked()
+        {
+            if (FilterControl.SpecificItem != null)
+            {
+                ShowSpecificItemInvoked(FilterControl.SpecificItem);
+            }
+            else if (!IsUpdating)
+            {
+                IsUpdating = true;
+                TreeView.UpdateView(TreeFilter, ParameterFilter);
+                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
+                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
+                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
+                ErrorView.UpdateView();
+                UpdateTabDescriptionInvoked();
+                IsUpdating = false;
+            }
+        }
+        private void UpdateParameterViewInvoked()
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
+                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
+                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
+                IsUpdating = false;
+            }
+        }
+        private void UpdateInfoViewInvoked()
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                InfoView.UpdateView(ParameterView.SelectedParameters.FirstOrDefault());
+                IsUpdating = false;
+            }
+        }
+        private void UpdateErrorViewInvoked()
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                ErrorView.UpdateView();
+                IsUpdating = false;
+            }
+        }
+        private void UpdateTabDescriptionInvoked()
+        {
+            Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
+            ToolTipText = Path.Combine(File.FilePath, File.FileName);
+        }
+
+        // Reselecting 
+        private void ReselectTreeViewInvoked()
+        {
+            TreeView.TryReselect();
+        }
+        private void ReselectParameterViewInvoked()
+        {
+            ParameterView.TryReselect();
+        }
+
+        // content operation
+        private void RemoveTreeItem(List<EcfStructureItem> items)
+        {
+            List<string> problems = new List<string>();
+            List<EcfBlock> allBlocks = File.GetDeepItemList<EcfBlock>();
+
+            List<EcfParameter> parametersToRemove = items.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
+            problems.AddRange(CheckMandatoryParameters(parametersToRemove));
+
+            List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
+            problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
+
+            if (OperationSafetyQuestion(problems) == DialogResult.Yes)
+            {
+                HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
+                changedParents.ToList().ForEach(block => block.RevalidateParameters());
+                if (blocksToRemove.Count > 0)
+                {
+                    allBlocks = allBlocks.Except(blocksToRemove).ToList();
+                    inheritingBlocks.ToList().ForEach(block => block.RevalidateReferenceHighLevel(allBlocks));
+                    allBlocks.ForEach(block => block.RevalidateUniqueness(allBlocks));
+                }
+                UpdateAllViews();
+            }
+        }
+        private void RemoveParameterItem(List<EcfParameter> parameters)
+        {
+            List<string> problems = CheckMandatoryParameters(parameters);
+            if (OperationSafetyQuestion(problems) == DialogResult.Yes)
+            {
+                HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
+                changedParents.ToList().ForEach(block => block.RevalidateParameters());
+                UpdateAllViews();
+            }
+        }
+        private List<string> CheckMandatoryParameters(List<EcfParameter> parameters)
+        {
+            List<string> mandatoryParameters = File.Definition.BlockParameters.Where(parameter => !parameter.IsOptional).Select(parameter => parameter.Name).ToList();
+            return parameters.Where(parameter => mandatoryParameters.Contains(parameter.Key))
+                .Select(parameter => string.Format("{0} {1}", parameter.BuildIdentification(), Properties.texts.Generic_IsNotOptional)).ToList();
+        }
+        private List<string> CheckBlockReferences(List<EcfBlock> blockToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
+        {
+            List<string> problems = new List<string>();
+            HashSet<EcfBlock> foundBlocks = new HashSet<EcfBlock>();
+            blockToCheck.ForEach(block =>
+            {
+                List<EcfBlock> inheritors = completeBlockList.Where(listedBlock => block.Equals(listedBlock.Inheritor)).ToList();
+                inheritors.ForEach(inheritor =>
+                {
+                    foundBlocks.Add(inheritor);
+                    problems.Add(string.Format("{0} {1} {2}", block.BuildIdentification(), Properties.texts.Generic_IsReferencedBy, inheritor.BuildIdentification()));
+                });
+            });
+            inheritingBlocks = foundBlocks;
+            return problems;
+        }
+        private DialogResult OperationSafetyQuestion(List<string> problems)
+        {
+            if (problems.Count < 1) { return DialogResult.Yes; }
+
+            StringBuilder message = new StringBuilder(Properties.texts.Generic_ContinueOperationWithErrorsQuestion);
+            message.Append(Environment.NewLine);
+            problems.ForEach(problem =>
+            {
+                message.Append(Environment.NewLine);
+                message.Append(problem);
+            });
+
+            return MessageBox.Show(this, message.ToString(), Properties.titles.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+        }
+        private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
+        {
+            HashSet<EcfBlock> changedParents = new HashSet<EcfBlock>();
+            items.ForEach(item =>
+            {
+                if (item.IsRoot())
+                {
+                    File.RemoveItem(item);
+                }
+                else if (item.Parent is EcfBlock block)
+                {
+                    block.RemoveChild(item);
+                    if (item is EcfParameter)
+                    {
+                        changedParents.Add(block);
+                    }
+                }
+            });
+            return changedParents;
+        }
+        private void AddTreeItemTo(EcfStructureItem item)
+        {
+            CreateableItems addable;
+            if (item == null)
+            {
+                addable = CreateableItems.Comment | CreateableItems.RootBlock;
+            }
+            else if (item is EcfBlock)
+            {
+                addable = CreateableItems.Comment | CreateableItems.ChildBlock | CreateableItems.Parameter;
+            }
+            else
+            {
+                AddTreeItemAfter(item);
+                return;
+            }
+            EcfBlock parent = item as EcfBlock;
+            if (ItemEditor.ShowDialog(this, File, addable, parent) == DialogResult.OK)
+            {
+                EcfStructureItem createdItem = ItemEditor.ResultItem;
+                if (item == null)
+                {
+                    File.AddItem(createdItem, null);
+                }
+                else
+                {
+                    parent?.AddChild(createdItem, null);
+                }
+                if (createdItem is EcfBlock)
+                {
+                    List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
+                    completeBlockList.ForEach(block => block.RevalidateReferenceRepairing(completeBlockList));
+                }
+                UpdateAllViews();
+            }
+        }
+        private void AddTreeItemAfter(EcfStructureItem item)
+        {
+            CreateableItems addable;
+            if (item == null || item.IsRoot())
+            {
+                addable = CreateableItems.Comment | CreateableItems.RootBlock;
+            }
+            else
+            {
+                addable = CreateableItems.Comment | CreateableItems.Parameter | CreateableItems.ChildBlock;
+            }
+            EcfBlock parent = item?.Parent as EcfBlock;
+            if (ItemEditor.ShowDialog(this, File, addable, parent) == DialogResult.OK)
+            {
+                EcfStructureItem createdItem = ItemEditor.ResultItem;
+                if (item == null || parent == null)
+                {
+                    File.AddItem(createdItem, item);
+                }
+                else
+                {
+                    parent.AddChild(createdItem, item);
+                }
+                if (createdItem is EcfBlock)
+                {
+                    List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
+                    completeBlockList.ForEach(block => block.RevalidateReferenceRepairing(completeBlockList));
+                }
+                UpdateAllViews();
+            }
+        }
+        private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
+        {
+            if (ItemEditor.ShowDialog(this, File, CreateableItems.Parameter, parentBlock) == DialogResult.OK)
+            {
+                EcfStructureItem createdItem = ItemEditor.ResultItem;
+                parentBlock.AddChild(createdItem, preceedingItem);
+                parentBlock.RevalidateParameters();
+                UpdateAllViews();
+            }
+        }
+        private bool ChangeTreeItem(EcfStructureItem item)
+        {
+            if (item is EcfComment comment)
+            {
+                if (ItemEditor.ShowDialog(this, File, comment) == DialogResult.OK)
+                {
+                    UpdateAllViews();
+                }
+                return true;
+            }
+            else if (item is EcfParameter parameter)
+            {
+                if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
+                {
+                    if (parameter.Parent is EcfBlock block)
+                    {
+                        block.RevalidateParameters();
+                    }
+                    UpdateAllViews();
+                }
+                return true;
+            }
+            else if (item is EcfBlock block)
+            {
+                if (ItemEditor.ShowDialog(this, File, block) == DialogResult.OK)
+                {
+                    List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
+                    completeBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(completeBlockList));
+                    completeBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(completeBlockList));
+                    UpdateAllViews();
+                }
+                return true;
+            }
+            return false;
+        }
+        private void ChangeParameterItem(EcfParameter parameter)
+        {
+            if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
+            {
+                if (parameter.Parent is EcfBlock block)
+                {
+                    block.RevalidateParameters();
+                }
+                UpdateAllViews();
+            }
+        }
+        private void CopyItems()
+        {
+            if (LastFocusedView is EcfTreeView treeView)
+            {
+                CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, treeView.SelectedItems));
+                return;
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, parameterView.SelectedParameters));
+                return;
+            }
+            MessageBox.Show(this, Properties.texts.Generic_NoSuitableSelection, Properties.titles.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void PasteItems()
+        {
+            if (LastFocusedView is EcfTreeView treeView)
+            {
+                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, treeView.SelectedItems));
+                return;
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, parameterView.SelectedParameters));
+                return;
+            }
+            MessageBox.Show(this, Properties.texts.Generic_NoSuitableSelection, Properties.titles.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private int PasteRootItems(EcfStructureItem target, List<EcfStructureItem> source)
+        {
+            int itemCount = 0;
+            int blockCount = 0;
+            foreach (EcfStructureItem item in source)
+            {
+                // parameter ignorieren, da als root nicht zulässig
+                if (item is EcfParameter) { continue; }
+
+                EcfStructureItem newItem = item.BuildDeepCopy();
+                File.AddItem(newItem, target);
+
+                itemCount++;
+                if (newItem is EcfBlock block)
+                {
+                    blockCount++;
+                    block.Revalidate();
+                }
+            }
+            if (blockCount > 0)
+            {
+                List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
+                completeBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(completeBlockList));
+                completeBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(completeBlockList));
+            }
+            if (itemCount > 0) 
+            { 
+                UpdateAllViews(); 
+            }
+            return itemCount;
+        }
+        private int PasteChildItems(EcfBlock parent, EcfStructureItem after, List<EcfStructureItem> source)
+        {
+            
+            int itemCount = 0;
+            int parameterCount = 0;
+            int blockCount = 0;
+            foreach (EcfStructureItem item in source)
+            {
+                EcfStructureItem newItem = item.BuildDeepCopy();
+                parent.AddChild(newItem, after);
+
+                itemCount++;
+                if (newItem is EcfParameter parameter)
+                {
+                    parameterCount++;
+                    parameter.Revalidate();
+                }
+                else if (newItem is EcfBlock block)
+                {
+                    blockCount++;
+                    block.Revalidate();
+                }
+            }
+            if (parameterCount > 0)
+            {
+                parent.RevalidateParameters();
+            }
+            if (blockCount > 0)
+            {
+                List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
+                completeBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(completeBlockList));
+                completeBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(completeBlockList));
+            }
+            UpdateAllViews();
+            return itemCount;
+        }
+
+        // helper
+        private void AddControls()
+        {
             ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             TreeView.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             ParameterView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             InfoView.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
             ErrorView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            
+
             ToolContainer.Dock = DockStyle.Top;
             TreeView.Dock = DockStyle.Left;
             ParameterView.Dock = DockStyle.Fill;
@@ -79,186 +872,107 @@ namespace EgsEcfControls
             FileViewPanel.Add(TreeView);
 
             FileViewPanel.Add(ToolContainer);
-            ToolContainer.Add(Indicator);
             ToolContainer.Add(FilterControl);
             ToolContainer.Add(TreeFilter);
             ToolContainer.Add(ParameterFilter);
+            ToolContainer.Add(ContentOperations);
 
-            FilterControl.ApplyFilter += OnApplyFilter;
-            FilterControl.ResetFilter += OnResetFilter;
-            TreeFilter.ApplyFilter += OnApplyFilter;
-            ParameterFilter.ApplyFilter += OnApplyFilter;
+            FilterControl.Add(TreeFilter);
+            FilterControl.Add(ParameterFilter);
+        }
+        private void SetEventHandlers()
+        {
+            FilterControl.ApplyFilterClicked += AnyFilterControl_ApplyFilterFired;
+            FilterControl.ClearFilterClicked += FilterControl_ClearFilterClicked;
 
-            TreeView.ViewResized += OnAnyViewResized;
-            ParameterView.ViewResized += OnAnyViewResized;
-            ErrorView.ViewResized += OnAnyViewResized;
-            InfoView.ViewResized += OnAnyViewResized;
+            TreeFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
 
-            FileViewPanel.ViewUpdateStateChanged += FileViewPanel_ViewUpdateStateChanged;
-            TreeView.EcfItemSelected += TreeView_EcfItemSelected;
-            ParameterView.EcfParameterSelected += ParameterView_EcfParameterSelected;
+            ParameterFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
 
-            UpdateAllViewsWorker.DoWork += UpdateAllViewsWorker_DoWork;
-            UpdateAllViewsWorker.RunWorkerCompleted += UpdateAllViewsWorker_RunWorkerCompleted;
-            UpdateErrorViewWorker.DoWork += UpdateErrorViewWorker_DoWork;
-            UpdateErrorViewWorker.RunWorkerCompleted += UpdateErrorViewWorker_RunWorkerCompleted;
+            ContentOperations.UndoClicked += ContentOperations_UndoClicked;
+            ContentOperations.RedoClicked += ContentOperations_RedoClicked;
+            ContentOperations.AddClicked += ContentOperations_AddClicked;
+            ContentOperations.RemoveClicked += ContentOperations_RemoveClicked;
+            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSingleClicked;
+            ContentOperations.ChangeComplexClicked += ContentOperations_ChangeMultiClicked;
+            ContentOperations.MoveUpClicked += ContentOperations_MoveUpClicked;
+            ContentOperations.MoveDownClicked += ContentOperations_MoveDownClicked;
+            ContentOperations.CopyClicked += ContentOperations_CopyClicked;
+            ContentOperations.PasteClicked += ContentOperations_PasteClicked;
 
-            UpdateTabDescription();
-            UpdateAllViewsAsync();
-        }
+            TreeView.ViewResized += AnyView_ViewResized;
+            ParameterView.ViewResized += AnyView_ViewResized;
+            ErrorView.ViewResized += AnyView_ViewResized;
+            InfoView.ViewResized += AnyView_ViewResized;
 
-        public void UpdateAllViewsAsync()
-        {
-            if (IsUpdating)
-            {
-                throw new InvalidOperationException("Update already running");
-            }
-            UpdateAllViewsWorker.RunWorkerAsync();
-        }
-        public void UpdateTabDescription()
-        {
-            Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
-            ToolTipText = Path.Combine(File.FilePath, File.FileName);
-        }
-        public void UpdateErrorViewAsync()
-        {
-            if (IsUpdating)
-            {
-                throw new InvalidOperationException("Update already running");
-            }
-            UpdateErrorViewWorker.RunWorkerAsync();
-        }
-        public void InitViewSizes(int treeViewWidth, int errorViewHeight, int infoViewWidth)
-        {
-            TreeView.Width = treeViewWidth;
-            ErrorView.Height = errorViewHeight;
-            InfoView.Width = infoViewWidth;
-        }
+            TreeView.ItemsSelected += TreeView_ItemsSelected;
+            TreeView.DisplayedDataChanged += TreeView_DisplayedDataChanged;
+            ParameterView.ParametersSelected += ParameterView_ParametersSelected;
+            ParameterView.DisplayedDataChanged += ParameterView_DisplayedDataChanged;
 
-        private void UpdateAllViewsWorker_DoWork(object sender, DoWorkEventArgs evt)
-        {
-            UpdateAllViews();
-        }
-        private void UpdateAllViewsWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs evt)
-        {
-            if (evt.Error != null)
-            {
-                SetContainerUpdateState(false);
-                MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", Properties.texts.BackgrounfWorker_Failed, Environment.NewLine, evt.Error.ToString()), 
-                    Properties.titles.GenericAttention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-        private void TreeView_EcfItemSelected(object sender, EventArgs e)
-        {
-            UpdateParameterView();
-        }
-        private void ParameterView_EcfParameterSelected(object sender, EventArgs e)
-        {
-            UpdateInfoView();
-        }
-        private void UpdateErrorViewWorker_DoWork(object sender, DoWorkEventArgs evt)
-        {
-            UpdateErrorView();
-        }
-        private void UpdateErrorViewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs evt)
-        {
-            if (evt.Error != null)
-            {
-                SetContainerUpdateState(false);
-                MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", Properties.texts.BackgrounfWorker_Failed, Environment.NewLine, evt.Error.ToString()),
-                    Properties.titles.GenericAttention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-        private void FileViewPanel_ViewUpdateStateChanged(object sender, EventArgs evt)
-        {
-            TryUpdateStateInvoke();
-        }
+            TreeView.NodeDoubleClicked += TreeView_NodeDoubleClicked;
+            TreeView.ChangeItemClicked += TreeView_ChangeItemClicked;
+            TreeView.AddToItemClicked += TreeView_AddToItemClicked;
+            TreeView.AddAfterItemClicked += TreeView_AddAfterItemClicked;
+            TreeView.CopyItemClicked += TreeView_CopyItemClicked;
+            TreeView.PasteToItemClicked += TreeView_PasteToItemClicked;
+            TreeView.PasteAfterItemClicked += TreeView_PasteAfterItemClicked;
+            TreeView.RemoveItemClicked += TreeView_RemoveItemClicked;
+            TreeView.DelKeyPressed += TreeView_DelKeyPressed;
+            TreeView.CopyKeyPressed += TreeView_CopyKeyPressed;
+            TreeView.PasteKeyPressed += TreeView_PasteKeyPressed;
 
-        private void UpdateAllViews()
-        {
-            SetContainerUpdateState(true);
-            TreeView.UpdateView(TreeFilter, ParameterFilter);
-            ParameterView.UpdateView(ParameterFilter, TreeView.SelectedEcfItem);
-            InfoView.UpdateView(TreeView.SelectedEcfItem, ParameterView.SelectedEcfParameter);
-            ErrorView.UpdateView();
-            SetContainerUpdateState(false);
+            ParameterView.CellDoubleClicked += ParameterView_CellDoubleClicked;
+            ParameterView.ChangeItemClicked += ParameterView_ChangeItemClicked;
+            ParameterView.AddToItemClicked += ParameterView_AddToItemClicked;
+            ParameterView.AddAfterItemClicked += ParameterView_AddAfterItemClicked;
+            ParameterView.CopyItemClicked += ParameterView_CopyItemClicked;
+            ParameterView.PasteToItemClicked += ParameterView_PasteToItemClicked;
+            ParameterView.PasteAfterItemClicked += ParameterView_PasteAfterItemClicked;
+            ParameterView.RemoveItemClicked += ParameterView_RemoveItemClicked;
+            ParameterView.DelKeyPressed += ParameterView_DelKeyPressed;
+            ParameterView.CopyKeyPressed += ParameterView_CopyKeyPressed;
+            ParameterView.PasteKeyPressed += ParameterView_PasteKeyPressed;
+
+            ErrorView.ShowInEditorClicked += ErrorView_ShowInEditorClicked;
+            ErrorView.ShowInFileClicked += ErrorView_ShowInFileClicked;
         }
-        private void UpdateParameterView()
+        [DllImport("shell32.dll", EntryPoint = "FindExecutable")]
+        private static extern long FindExecutable(string lpFile, string lpDirectory, StringBuilder lpResult);
+
+        public class CopyPasteClickedEventArgs : EventArgs
         {
-            SetContainerUpdateState(true);
-            ParameterView.UpdateView(ParameterFilter, TreeView.SelectedEcfItem);
-            InfoView.UpdateView(TreeView.SelectedEcfItem, ParameterView.SelectedEcfParameter);
-            SetContainerUpdateState(false);
-        }
-        private void UpdateInfoView()
-        {
-            SetContainerUpdateState(true);
-            InfoView.UpdateView(ParameterView.SelectedEcfParameter);
-            SetContainerUpdateState(false);
-        }
-        private void UpdateErrorView()
-        {
-            SetContainerUpdateState(true);
-            ErrorView.UpdateView();
-            SetContainerUpdateState(false);
-        }
-        private void OnApplyFilter(object sender, EventArgs evt)
-        {
-            UpdateAllViewsAsync();
-        }
-        private void OnResetFilter(object sender, EventArgs evt)
-        {
-            TreeFilter.Reset();
-            ParameterFilter.Reset();
-            UpdateAllViewsAsync();
-        }
-        private void OnAnyViewResized(object sender, EventArgs evt)
-        {
-            AnyViewResized?.Invoke(sender, evt);
-        }
-        private void SetContainerUpdateState(bool state)
-        {
-            IsUpdating = state;
-            ShowUpdateState(state);
-        }
-        private void ShowUpdateState(bool state)
-        {
-            if (state)
+            public CopyPasteModes Mode { get; }
+            public EcfTabPage Source { get; }
+            public List<EcfStructureItem> SelectedItems { get; }
+            public List<EcfStructureItem> CopiedItems { get; }
+
+            public enum CopyPasteModes
             {
-                Indicator.Activate();
+                Copy,
+                PasteTo,
+                PasteAfter,
             }
-            else
+
+            public CopyPasteClickedEventArgs(CopyPasteModes mode, EcfTabPage source, List<EcfStructureItem> selectedItems) : 
+                base()
             {
-                Indicator.Deactivate();
+                Mode = mode;
+                Source = source;
+                SelectedItems = selectedItems;
+                CopiedItems = mode == CopyPasteModes.Copy ? SelectedItems.Select(item => item.BuildDeepCopy()).ToList() : null;
             }
-        }
-        private void TryUpdateStateInvoke()
-        {
-            if (InvokeRequired)
+            public CopyPasteClickedEventArgs(CopyPasteModes mode, EcfTabPage source, List<EcfParameter> selectedItems) : 
+                this(mode, source, selectedItems.Cast<EcfStructureItem>().ToList())
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    TryUpdateState();
-                });
-            }
-            else
-            {
-                TryUpdateState();
-            }
-        }
-        private void TryUpdateState()
-        {
-            if (!IsUpdating)
-            {
-                ShowUpdateState(FileViewPanel.IsAnyViewUpdating());
+                
             }
         }
     }
     
+    // main gui display views
     public class EcfFileContainer : Panel
     {
-        public event EventHandler ViewUpdateStateChanged;
-
         public EcfFileContainer() : base()
         {
             Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
@@ -269,26 +983,28 @@ namespace EgsEcfControls
         {
             Controls.Add(view);
         }
-        public bool IsAnyViewUpdating()
-        {
-            return Controls.Cast<Control>().Where(control => control is EcfBaseView).Cast<EcfBaseView>().Any(view => view.IsUpdating);
-        }
-        public void OnViewUpdateStateChanged(EcfBaseView sender)
-        {
-            ViewUpdateStateChanged?.Invoke(sender, null);
-        }
     }
     public abstract class EcfBaseView : GroupBox
     {
         public event EventHandler ViewResized;
+
+        public string ViewName { get; } = string.Empty;
+        public bool IsUpdating { get; protected set; } = false;
 
         protected EgsEcfFile File { get; } = null;
         private ResizeableBorders ResizeableBorder { get; } = ResizeableBorders.None;
         private ResizeableBorders DraggedBorder { get; set; } = ResizeableBorders.None;
         private int GrapSize { get; } = 0;
         protected bool IsDragged { get; private set; } = false;
-        public string ViewName { get; } = string.Empty;
-        public bool IsUpdating { get; private set; } = false;
+
+        public enum ResizeableBorders
+        {
+            None,
+            LeftBorder,
+            RightBorder,
+            TopBorder,
+            BottomBorder,
+        }
 
         protected EcfBaseView(string headline, EgsEcfFile file, ResizeableBorders borderMode)
         {
@@ -299,6 +1015,50 @@ namespace EgsEcfControls
             GrapSize = Width - DisplayRectangle.Width;
         }
 
+        // events
+        protected override void OnMouseDown(MouseEventArgs evt)
+        {
+            if (evt.Button == MouseButtons.Left)
+            {
+                DraggedBorder = IsInDragArea(evt);
+                if (DraggedBorder != ResizeableBorders.None)
+                {
+                    IsDragged = true;
+                }
+            }
+        }
+        protected override void OnMouseMove(MouseEventArgs evt)
+        {
+            if (IsDragged)
+            {
+                ResizeBounds(evt);
+            }
+            else
+            {
+                UpdateCursor(evt);
+            }
+        }
+        protected override void OnMouseUp(MouseEventArgs evt)
+        {
+            if (IsDragged)
+            {
+                ViewResized?.Invoke(this, null);
+            }
+            IsDragged = false;
+        }
+        protected override void OnMouseLeave(EventArgs evt)
+        {
+            if (IsDragged)
+            {
+                ViewResized?.Invoke(this, null);
+            }
+            IsDragged = false;
+            RefreshCursor(DefaultCursor);
+        }
+
+        // public
+
+        // privates
         private ResizeableBorders IsInDragArea(MouseEventArgs evt)
         {
             switch (ResizeableBorder)
@@ -361,87 +1121,37 @@ namespace EgsEcfControls
                 Cursor = cursor;
             }
         }
-
-        protected override void OnMouseDown(MouseEventArgs evt)
-        {
-            if (evt.Button == MouseButtons.Left)
-            {
-                DraggedBorder = IsInDragArea(evt);
-                if (DraggedBorder != ResizeableBorders.None)
-                {
-                    IsDragged = true;
-                }
-            }
-        }
-        protected override void OnMouseMove(MouseEventArgs evt)
-        {
-            if (IsDragged)
-            {
-                ResizeBounds(evt);
-            }
-            else
-            {
-                UpdateCursor(evt);
-            }
-        }
-        protected override void OnMouseUp(MouseEventArgs evt)
-        {
-            if (IsDragged)
-            {
-                ViewResized?.Invoke(this, null);
-            }
-            IsDragged = false;
-        }
-        protected override void OnMouseLeave(EventArgs evt)
-        {
-            if (IsDragged)
-            {
-                ViewResized?.Invoke(this, null);
-            }
-            IsDragged = false;
-            RefreshCursor(DefaultCursor);
-        }
-        protected void ChangeViewUpdateState(bool state)
-        {
-            IsUpdating = state;
-            if (Parent is EcfFileContainer container)
-            {
-                container.OnViewUpdateStateChanged(this);
-            }
-        }
-
-        protected bool IsTreeNodeLike(string treeNodeName, string isLike)
-        {
-            if (string.IsNullOrEmpty(isLike)) { return true; }
-            if (string.IsNullOrEmpty(treeNodeName)) { return false; }
-            return treeNodeName.Contains(isLike);
-        }
-        protected bool IsParameterValueLike(ReadOnlyCollection<string> values, string isLike)
-        {
-            if (string.IsNullOrEmpty(isLike) || values.Count < 1) { return true; }
-            return values.Any(value => value.Contains(isLike));
-        }
-
-        public enum ResizeableBorders
-        {
-            None,
-            LeftBorder,
-            RightBorder,
-            TopBorder,
-            BottomBorder,
-        }
     }
     public class EcfTreeView : EcfBaseView
     {
-        public event EventHandler EcfItemSelected;
+        public event EventHandler DisplayedDataChanged;
+        public event EventHandler ItemsSelected;
+        
+        public event EventHandler<TreeNodeMouseClickEventArgs> NodeDoubleClicked;
+        public event EventHandler ChangeItemClicked;
+        public event EventHandler AddToItemClicked;
+        public event EventHandler AddAfterItemClicked;
+        public event EventHandler CopyItemClicked;
+        public event EventHandler PasteToItemClicked;
+        public event EventHandler PasteAfterItemClicked;
+        public event EventHandler RemoveItemClicked;
 
-        public EcfItem SelectedEcfItem { get; private set; } = null;
+        public event EventHandler DelKeyPressed;
+        public event EventHandler CopyKeyPressed;
+        public event EventHandler PasteKeyPressed;
+
+        public List<EcfStructureItem> SelectedItems { get; } = new List<EcfStructureItem>();
 
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter StructureSorter { get; } 
         private TreeView Tree { get; } = new TreeView();
-        private List<EcfTreeNode> TreeNodes { get; set; }
+        private ContextMenuStrip TreeMenu { get; } = new ContextMenuStrip();
+        private List<EcfTreeNode> RootTreeNodes { get; } = new List<EcfTreeNode>();
+        private List<EcfTreeNode> AllTreeNodes { get; } = new List<EcfTreeNode>();
+        private List<EcfTreeNode> SelectedNodes { get; } = new List<EcfTreeNode>();
+
+        private bool IsSelectionUpdating { get; set; } = false;
 
         public EcfTreeView(string headline, EgsEcfFile file, ResizeableBorders mode) : base(headline, file, mode)
         {
@@ -450,8 +1160,9 @@ namespace EgsEcfControls
                 Properties.texts.ToolTip_TreeItemGroupSelector,
                 Properties.texts.ToolTip_TreeSorterDirection,
                 Properties.texts.ToolTip_TreeSorterOriginOrder,
-                Properties.texts.ToolTip_TreeSorterAlphabeticOrder);
-            StructureSorter.SortingChanged += StructureSorter_SortingChanged;
+                Properties.texts.ToolTip_TreeSorterAlphabeticOrder,
+                VisibleItemCount.TwentyFive);
+            StructureSorter.SortingUserChanged += StructureSorter_SortingUserChanged;
 
             View.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             View.Dock = DockStyle.Fill;
@@ -461,126 +1172,253 @@ namespace EgsEcfControls
 
             Tree.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Tree.Dock = DockStyle.Fill;
+            Tree.CheckBoxes = true;
             Tree.HideSelection = false;
             Tree.TreeViewNodeSorter = new EcfStructureComparer(StructureSorter, file);
 
-            Tree.AfterSelect += Tree_AfterSelect;
+            Tree.NodeMouseClick += Tree_NodeMouseClick;
+            Tree.NodeMouseDoubleClick += Tree_NodeMouseDoubleClick;
+            Tree.KeyPress += Tree_KeyPress;
+            Tree.KeyUp += Tree_KeyUp;
+            Tree.BeforeExpand += Tree_BeforeExpand;
+            Tree.BeforeCollapse += Tree_BeforeCollapse;
 
             ToolContainer.Add(StructureSorter);
             View.Controls.Add(Tree);
             View.Controls.Add(ToolContainer);
             Controls.Add(View);
+
+            TreeMenu.Items.Add(Properties.titles.Generic_Change, Properties.icons.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_AddTo, Properties.icons.Icon_Add, (sender, evt) => AddToItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_AddAfter, Properties.icons.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_Copy, Properties.icons.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_PasteTo, Properties.icons.Icon_Paste, (sender, evt) => PasteToItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_PasteAfter, Properties.icons.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(Properties.titles.Generic_Remove, Properties.icons.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
         }
 
+        // publics
         public void UpdateView(EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             if (!IsUpdating)
             {
-                ChangeViewUpdateState(true);
-                TreeNodes = BuildNodesTree(treeFilter, parameterFilter);
+                IsUpdating = true;
+                BuildNodesTree(treeFilter, parameterFilter);
                 UpdateSorterInvoke();
                 RefreshViewInvoke();
-                ChangeViewUpdateState(false);
-            }
-            else
-            {
-                TryFindSelectedEcfItem();
+                IsUpdating = false;
+                DisplayedDataChanged?.Invoke(this, null);
             }
         }
-
-        private void Tree_AfterSelect(object sender, TreeViewEventArgs evt)
+        public void TryReselect()
         {
             if (!IsUpdating)
             {
-                TryFindSelectedEcfItem();
-                EcfItemSelected?.Invoke(SelectedEcfItem, null);
-            }
-        }
-        private void StructureSorter_SortingChanged(object sender, EventArgs evt)
-        {
-            if (!IsUpdating)
-            {
-                ChangeViewUpdateState(true);
-                RefreshView();
-                ChangeViewUpdateState(false);
-                EcfItemSelected?.Invoke(SelectedEcfItem, null);
-            }
-        }
-
-        private List<EcfTreeNode> BuildNodesTree(EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
-        {
-            List<EcfTreeNode> nodes = new List<EcfTreeNode>();
-
-            bool commentsActive = treeFilter.IsCommentsActive();
-            bool blocksActive = treeFilter.IsDataBlocksActive();
-            string treeLikeText = treeFilter.GetLikeInputText();
-            List<string> activeAttributes = treeFilter.GetCheckedAttributes();
-            string parameterLikeText = parameterFilter.GetLikeInputText();
-            List<string> activeParameters = parameterFilter.GetCheckedItems();
-
-            foreach (EcfItem item in File.ItemList)
-            {
-                if (TryBuildNode(out EcfTreeNode rootNode, item, commentsActive, blocksActive, activeAttributes, parameterLikeText, activeParameters))
+                IsUpdating = true;
+                List<EcfTreeNode> newRootNodes = Tree.Nodes.Cast<EcfTreeNode>().ToList();
+                List<EcfTreeNode> newSubNodes = newRootNodes.SelectMany(rootNode => GetSubNodes(rootNode)).ToList();
+                List<EcfTreeNode> completeNodes = newRootNodes.Concat(newSubNodes).ToList();
+                SelectedNodes.ForEach(oldNode =>
                 {
-                    if (rootNode.ParameterFilterPassed || rootNode.Nodes.Cast<EcfTreeNode>().Any(node => node.ParameterFilterPassed))
-                    {
-                        if (IsTreeNodeLike(rootNode.Text, treeLikeText))
-                        {
-                            nodes.Add(rootNode);
-                        }
-                        else
-                        {
-                            EcfTreeNode[] validSubNodes = rootNode.Nodes.Cast<EcfTreeNode>().Where(node => IsTreeNodeLike(node.Text, treeLikeText)).ToArray();
-                            if (validSubNodes.Length > 0)
-                            {
-                                rootNode.Nodes.Clear();
-                                rootNode.Nodes.AddRange(validSubNodes);
-                                nodes.Add(rootNode);
-                            }
-                        }
-                    }
+                    TrySelectSimilarNode(oldNode, completeNodes);
+                });        
+                FindSelectedItems();
+                IsUpdating = false;
+            }
+        }
+        public void ShowSpecificItem(EcfStructureItem item)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                BuildNodesTree(item);
+                UpdateSorterInvoke();
+                RefreshViewInvoke();
+                IsUpdating = false;
+                DisplayedDataChanged?.Invoke(this, null);
+            }
+        }
+
+        // events
+        private void Tree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            UpdateCheckedNotes(evt.Node as EcfTreeNode);
+            NodeDoubleClicked?.Invoke(sender, evt);
+        }
+        private void Tree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            UpdateCheckedNotes(evt.Node as EcfTreeNode);
+            if (evt.Button == MouseButtons.Right)
+            {
+                TreeMenu.Show(Tree, evt.Location);
+            }
+        }
+        private void Tree_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
+        {
+            // hack für urst langsames treeview (painted auch collapsed nodes @.@)
+            if (evt.Node is EcfTreeNode node)
+            {
+                node.Nodes.Clear();
+                node.Nodes.AddRange(node.PreparedNodes.AsEnumerable().Reverse().ToArray());
+            }
+        }
+        private void Tree_BeforeCollapse(object sender, TreeViewCancelEventArgs evt)
+        {
+            // hack für urst langsames treeview (painted auch collapsed nodes @.@)
+            if (evt.Node is EcfTreeNode node)
+            {
+                node.Nodes.Clear();
+                node.Nodes.Add(new EcfTreeNode(""));
+            }
+        }
+        private void Tree_KeyUp(object sender, KeyEventArgs evt)
+        {
+            if (evt.KeyCode == Keys.Delete){ DelKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+            else if (evt.Control && evt.KeyCode == Keys.C) { CopyKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+            else if (evt.Control && evt.KeyCode == Keys.V) { PasteKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+        }
+        private void Tree_KeyPress(object sender, KeyPressEventArgs evt)
+        {
+            // hack for sqirky "ding"
+            evt.Handled = true;
+        }
+        private void StructureSorter_SortingUserChanged(object sender, EventArgs evt)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                RefreshView();
+                IsUpdating = false;
+                DisplayedDataChanged?.Invoke(this, null);
+            }
+        }
+
+        // privates
+        private void TrySelectSimilarNode(EcfTreeNode oldNode, List<EcfTreeNode> newNodes)
+        {
+            EcfTreeNode newNode = newNodes.FirstOrDefault(node => node.Item?.Equals(oldNode.Item) ?? false);
+            if (newNode != null)
+            {
+                newNode.Checked = true;
+                EnsureTreeVisiblity(newNode);
+            }
+            else if (oldNode.Parent != null)
+            {
+                TrySelectSimilarNode(oldNode.Parent as EcfTreeNode, newNodes);
+            }
+        }
+        private void EnsureTreeVisiblity(EcfTreeNode node)
+        {
+            List<EcfTreeNode> parents = new List<EcfTreeNode>();
+            while (node.PreparedParent != null)
+            {
+                node.EnsureVisible();
+                node = node.PreparedParent;
+                parents.Add(node);
+            }
+            parents.Reverse();
+            parents.ForEach(parent => parent.Expand());
+        }
+        private void UpdateCheckedNotes(EcfTreeNode clickedNode)
+        {
+            if (!IsUpdating && !IsSelectionUpdating)
+            {
+                IsSelectionUpdating = true;
+
+                if (ModifierKeys == Keys.Control || ModifierKeys == Keys.Shift)
+                {
+                    clickedNode.Checked = true;
+                }
+                else
+                {
+                    CheckOnlySingleNode(clickedNode);
+                }
+                if (ModifierKeys == Keys.Shift)
+                {
+                    CheckNodeRange(RootTreeNodes.FirstOrDefault(node => node.Checked), RootTreeNodes.LastOrDefault(node => node.Checked));
+                }
+                Tree.SelectedNode = clickedNode;
+
+                FindSelectedItems();
+                ItemsSelected?.Invoke(this, null);
+
+                IsSelectionUpdating = false;
+            }
+        }
+        private void BuildNodesTree(EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        {
+            RootTreeNodes.Clear();
+            AllTreeNodes.Clear();
+
+            foreach (EcfStructureItem item in File.ItemList)
+            {
+                BuildNodesTree(item, treeFilter, parameterFilter);
+            }
+        }
+        private void BuildNodesTree(EcfStructureItem item)
+        {
+            RootTreeNodes.Clear();
+            AllTreeNodes.Clear();
+            BuildNodesTree(item, null, null);
+        }
+        private void BuildNodesTree(EcfStructureItem item, EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        {
+            if (TryBuildNode(out EcfTreeNode rootNode, item, treeFilter, parameterFilter))
+            {
+                if (treeFilter != null && treeFilter.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyFaultyItems && !rootNode.HasError)
+                {
+                    return;
+                }
+                if (treeFilter != null && treeFilter.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyNonFaultyItems && rootNode.HasError)
+                {
+                    return;
+                }
+                if (treeFilter?.IsLike(rootNode.Text) ?? true)
+                {
+                    RootTreeNodes.Add(rootNode);
+                    AllTreeNodes.Add(rootNode);
+                    AllTreeNodes.AddRange(GetSubNodes(rootNode));
+                    // hack für urst langsames treeview (painted auch collapsed nodes @.@)
+                    if (rootNode.PreparedNodes.Count > 0) { rootNode.Nodes.Add(new EcfTreeNode("")); }
                 }
             }
-            return nodes;
         }
-        private bool TryBuildNode(out EcfTreeNode node, EcfItem item, 
-            bool commentsActive, bool blocksActive, List<string> activeAttributes, 
-            string parameterLikeText, List<string> activeParameters)
+        private bool TryBuildNode(out EcfTreeNode node, EcfStructureItem item, EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             node = null;
             if (item is EcfComment comment)
             {
-                if (commentsActive)
+                if (treeFilter?.IsCommentsActive ?? true)
                 {
-                    node = new EcfTreeNode(comment, string.Format("{0}: {1}", Properties.titles.TreeView_CommentNodeName, string.Join(" / ", comment.Comments)));
+                    node = new EcfTreeNode(comment, string.Format("{0}: {1}", Properties.titles.Generic_Comment, string.Join(" / ", comment.Comments)));
+                }
+            }
+            else if (item is EcfParameter parameter)
+            {
+                if ((treeFilter?.IsParametersActive ?? true) && (parameterFilter?.IsParameterVisible(parameter) ?? true))
+                {
+                    node = new EcfTreeNode(parameter, parameter.BuildIdentification());
                 }
             }
             else if (item is EcfBlock block)
             {
-                if (blocksActive)
+                if (treeFilter?.IsDataBlocksActive ?? true)
                 {
-                    node = new EcfTreeNode(block, BuildBlockName(block, activeAttributes));
-                }
-                else if (commentsActive && block.ChildItems.Any(child => child is EcfComment))
-                {
-                    node = new EcfTreeNode(Properties.titles.TreeView_UnnamedNodeName);
-                }
-                if (node != null)
-                {
-                    foreach (EcfItem childItem in block.ChildItems)
+                    node = new EcfTreeNode(block, block.BuildIdentification());
+                    foreach (EcfStructureItem childItem in block.ChildItems)
                     {
-                        if (childItem is EcfComment || childItem is EcfBlock)
+                        if (TryBuildNode(out EcfTreeNode childNode, childItem, treeFilter, parameterFilter))
                         {
-                            if (TryBuildNode(out EcfTreeNode childNode, childItem, commentsActive, blocksActive, activeAttributes, parameterLikeText, activeParameters))
-                            {
-                                node.Nodes.Add(childNode);
-                            }
-                        }
-                        else if (!node.ParameterFilterPassed && childItem is EcfParameter parameter)
-                        {
-                            node.ParameterFilterPassed = activeParameters.Contains(parameter.Key) && IsParameterValueLike(parameter.GetAllValues(), parameterLikeText);
+                            childNode.PreparedParent = node;
+                            node.PreparedNodes.Add(childNode);
                         }
                     }
+                    if (node.PreparedNodes.Count == 0 && !(parameterFilter?.IsLikeText.Equals(string.Empty) ?? true))
+                    {
+                        return false;
+                    }
+                    // hack für urst langsames treeview (painted auch collapsed nodes @.@)
+                    if (node.PreparedNodes.Count > 0) { node.Nodes.Add(new EcfTreeNode("")); }
                 }
             }
             else
@@ -589,44 +1427,18 @@ namespace EgsEcfControls
             }
             return node != null;
         }
-        private string BuildBlockName(EcfBlock block, List<string> visibleAttributes)
-        {
-            StringBuilder blockNameBuilder = new StringBuilder();
-            if (block.BlockDataType != null)
-            {
-                blockNameBuilder.Append(block.BlockDataType);
-            }
-            foreach(EcfAttribute attr in block.Attributes)
-            {
-                if (visibleAttributes.Contains(attr.Key))
-                {
-                    if (blockNameBuilder.Length > 0) 
-                    { 
-                        blockNameBuilder.Append(" / ");
-                    }
-                    blockNameBuilder.Append(attr.Key);
-                    if (attr.HasValue())
-                    {
-                        blockNameBuilder.Append(": ");
-                        blockNameBuilder.Append(attr.GetFirstValue());
-                    }
-                }
-            }
-            if (blockNameBuilder.Length < 1) { blockNameBuilder.Append(Properties.titles.TreeView_UnnamedNodeName); }
-            return blockNameBuilder.ToString();
-        }
         private void UpdateSorterInvoke()
         {
             if (InvokeRequired)
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    StructureSorter.SetOverallItemCount(TreeNodes.Count);
+                    StructureSorter.SetOverallItemCount(RootTreeNodes.Count);
                 });
             }
             else
             {
-                StructureSorter.SetOverallItemCount(TreeNodes.Count);
+                StructureSorter.SetOverallItemCount(RootTreeNodes.Count);
             }
         }
         private void RefreshViewInvoke()
@@ -645,53 +1457,57 @@ namespace EgsEcfControls
         }
         private void RefreshView()
         {
-            int? selectedIndex = Tree.SelectedNode?.Index;
             Tree.BeginUpdate();
             Tree.Nodes.Clear();
-            Tree.Nodes.AddRange(TreeNodes.Skip(StructureSorter.ItemCount * (StructureSorter.ItemGroup - 1)).Take(StructureSorter.ItemCount).ToArray());
+            Tree.Nodes.AddRange(RootTreeNodes.Skip(StructureSorter.ItemCount * (StructureSorter.ItemGroup - 1)).Take(StructureSorter.ItemCount).ToArray());
             Tree.Sort();
+            AllTreeNodes.ForEach(node => node.Checked = false);
             Tree.EndUpdate();
-            Text = string.Format("{0} - {1} {3} - {2} {4}", ViewName, TreeNodes.Count, 
-                TreeNodes.Sum(node => CountEcfSubItems(node)),
-                Properties.titles.TreeView_Header_RootElements, 
-                Properties.titles.TreeView_Header_SubElements);
-            TrySelectNode(selectedIndex);
+            Text = string.Format("{0} - {1} {3} - {2} {4}", ViewName, RootTreeNodes.Count, 
+                RootTreeNodes.Sum(node => GetSubNodes(node).Count),
+                Properties.titles.Generic_RootElements, 
+                Properties.titles.Generic_ChildElements);
         }
-        private void TrySelectNode(int? index)
+        private void CheckOnlySingleNode(EcfTreeNode node)
         {
-            EcfTreeNode selectedNode = null;
-            if (index != null)
+            AllTreeNodes.ForEach(treeNode =>
             {
-                selectedNode = Tree.Nodes.Cast<EcfTreeNode>().FirstOrDefault(node => node.Index.Equals(index));
-                if (selectedNode == null)
+                treeNode.Checked = treeNode.Equals(node);
+            });
+        }
+        private void CheckNodeRange(EcfTreeNode first, EcfTreeNode last)
+        {
+            if (first != null && last != null)
+            {
+                for (int index = first.Index; index <= last.Index; index++)
                 {
-                    selectedNode = Tree.Nodes.Cast<EcfTreeNode>().Last();
+                    if (Tree.Nodes[index] is EcfTreeNode node)
+                    {
+                        node.Checked = true;
+                        GetSubNodes(node).ForEach(subNode =>
+                        {
+                            subNode.Checked = false;
+                        });
+                    }
                 }
-            } 
-            else if (Tree.Nodes.Count > 0)
-            {
-                selectedNode = Tree.Nodes.Cast<EcfTreeNode>().First();
             }
-            if (selectedNode != null)
-            {
-                Tree.SelectedNode = selectedNode;
-                Tree.Focus();
-            }
-            TryFindSelectedEcfItem();
         }
-        private void TryFindSelectedEcfItem()
+        private void FindSelectedItems()
         {
-            SelectedEcfItem = (Tree.SelectedNode as EcfTreeNode)?.Item;
+            SelectedNodes.Clear();
+            SelectedNodes.AddRange(AllTreeNodes.Where(node => node.IsSelected || node.Checked));
+            SelectedItems.Clear();
+            SelectedItems.AddRange(SelectedNodes.Select(node => node.Item));
         }
-        private int CountEcfSubItems(EcfTreeNode node)
+        private List<EcfTreeNode> GetSubNodes(EcfTreeNode node)
         {
-            int count = 0;
-            foreach (EcfTreeNode subNode in node.Nodes)
+            List<EcfTreeNode> nodes = new List<EcfTreeNode>();
+            nodes.AddRange(node.PreparedNodes.Cast<EcfTreeNode>());
+            foreach (EcfTreeNode subNode in node.PreparedNodes)
             {
-                count++;
-                count += CountEcfSubItems(subNode);
+                nodes.AddRange(GetSubNodes(subNode));;
             }
-            return count;
+            return nodes;
         }
 
         private class EcfStructureComparer : IComparer
@@ -722,14 +1538,21 @@ namespace EgsEcfControls
         }
         private class EcfTreeNode : TreeNode
         {
-            public EcfItem Item { get; } = null;
-            public bool ParameterFilterPassed { get; set; } = false;
+            public EcfStructureItem Item { get; } = null;
+            public bool HasError { get; } = false;
 
-            public EcfTreeNode(EcfItem item, string name) : base()
+            public EcfTreeNode PreparedParent { get; set; } = null;
+            public List<EcfTreeNode> PreparedNodes { get; } = new List<EcfTreeNode>();
+
+            public EcfTreeNode(EcfStructureItem item, string name) : base()
             {
                 Item = item;
                 Text = name;
-                ParameterFilterPassed = !(Item is EcfBlock);
+                HasError = item is EcfStructureItem structureItem && structureItem.GetDeepErrorList().Count > 0;
+                if (HasError)
+                {
+                    ForeColor = Color.Red;
+                }
             }
             public EcfTreeNode(string name) : this(null, name)
             {
@@ -739,15 +1562,31 @@ namespace EgsEcfControls
     }
     public class EcfParameterView : EcfBaseView
     {
-        public event EventHandler EcfParameterSelected;
+        public event EventHandler DisplayedDataChanged;
+        public event EventHandler ParametersSelected;
 
-        public EcfParameter SelectedEcfParameter { get; private set; } = null;
+        public event EventHandler<DataGridViewCellEventArgs> CellDoubleClicked;
+        public event EventHandler ChangeItemClicked;
+        public event EventHandler AddToItemClicked;
+        public event EventHandler AddAfterItemClicked;
+        public event EventHandler CopyItemClicked;
+        public event EventHandler PasteToItemClicked;
+        public event EventHandler PasteAfterItemClicked;
+        public event EventHandler RemoveItemClicked;
+
+        public event EventHandler DelKeyPressed;
+        public event EventHandler CopyKeyPressed;
+        public event EventHandler PasteKeyPressed;
+
+        public List<EcfParameter> SelectedParameters { get; } = new List<EcfParameter>();
 
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter ParameterSorter { get; }
         private DataGridView Grid { get; } = new DataGridView();
-        private List<EcfParameterRow> ParameterRows { get; set; }
+        private ContextMenuStrip GridMenu { get; } = new ContextMenuStrip();
+        private List<EcfParameterRow> ParameterRows { get; } = new List<EcfParameterRow>();
+        private List<EcfParameterRow> SelectedRows { get; } = new List<EcfParameterRow>();
 
         private DataGridViewTextBoxColumn ParameterNumberColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewCheckBoxColumn ParameterInheritedColumn { get; } = new DataGridViewCheckBoxColumn();
@@ -757,6 +1596,8 @@ namespace EgsEcfControls
         private DataGridViewTextBoxColumn ParameterValueColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn ParameterCommentColumn { get; } = new DataGridViewTextBoxColumn();
 
+        private bool IsSelectionUpdating { get; set; } = false;
+
         public EcfParameterView(string headline, EgsEcfFile file, ResizeableBorders mode) : base(headline, file, mode)
         {
             ParameterSorter = new EcfSorter(
@@ -764,8 +1605,9 @@ namespace EgsEcfControls
                 Properties.texts.ToolTip_ParameterGroupSelector,
                 Properties.texts.ToolTip_ParameterSorterDirection,
                 Properties.texts.ToolTip_ParameterSorterOriginOrder,
-                Properties.texts.ToolTip_ParameterSorterAlphabeticOrder);
-            ParameterSorter.SortingChanged += ParameterSorter_SortingChanged;
+                Properties.texts.ToolTip_ParameterSorterAlphabeticOrder,
+                VisibleItemCount.OneHundred);
+            ParameterSorter.SortingUserChanged += ParameterSorter_SortingUserChanged;
 
             View.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             View.Dock = DockStyle.Fill;
@@ -773,24 +1615,120 @@ namespace EgsEcfControls
             ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             ToolContainer.Dock = DockStyle.Top;
 
-            Grid.AllowUserToAddRows = false;
-            Grid.AllowUserToDeleteRows = false;
-            Grid.AllowDrop = false;
-            Grid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            Grid.Dock = DockStyle.Fill;
-            Grid.EditMode = DataGridViewEditMode.EditProgrammatically;
+            InitGridViewColumns();
+            InitGridView();
 
-            Grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
-            Grid.RowHeaderMouseClick += Grid_RowHeaderMouseClick;
-            Grid.SelectionChanged += Grid_SelectionChanged;
+            GridMenu.Items.Add(Properties.titles.Generic_Change, Properties.icons.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_AddTo, Properties.icons.Icon_Add, (sender, evt) => AddToItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_AddAfter, Properties.icons.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_Copy, Properties.icons.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_PasteTo, Properties.icons.Icon_Paste, (sender, evt) => PasteToItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_PasteAfter, Properties.icons.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(Properties.titles.Generic_Remove, Properties.icons.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
 
+            ToolContainer.Add(ParameterSorter);
+            View.Controls.Add(Grid);
+            View.Controls.Add(ToolContainer);
+            Controls.Add(View);
+        }
+
+        // events
+        private void Grid_CellDoubleClick(object sender, DataGridViewCellEventArgs evt)
+        {
+            if (evt.RowIndex > -1 && evt.ColumnIndex > -1)
+            {
+                UpdateSelectedCells(evt.RowIndex);
+                CellDoubleClicked?.Invoke(sender, evt);
+            }
+        }
+        private void Grid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs evt)
+        {
+            if (evt.RowIndex > -1 && evt.ColumnIndex > -1)
+            {
+                UpdateSelectedCells(evt.RowIndex);
+                if (evt.Button == MouseButtons.Right)
+                {
+                    Point cellLocation = Grid.GetCellDisplayRectangle(evt.ColumnIndex, evt.RowIndex, false).Location;
+                    GridMenu.Show(Grid, new Point(cellLocation.X + evt.X, cellLocation.Y + evt.Y));
+                }
+            }
+        }
+        private void Grid_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs evt)
+        {
+            UpdateSelectedCells(evt.RowIndex);
+        }
+        private void Grid_KeyUp(object sender, KeyEventArgs evt)
+        {
+            if (evt.KeyCode == Keys.Delete) { DelKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+            else if (evt.Control && evt.KeyCode == Keys.C) { CopyKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+            else if (evt.Control && evt.KeyCode == Keys.V) { PasteKeyPressed?.Invoke(sender, evt); evt.Handled = true; }
+        }
+        private void ParameterSorter_SortingUserChanged(object sender, EventArgs evt)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                RefreshViewInvoke();
+                IsUpdating = false;
+                DisplayedDataChanged?.Invoke(this, null);
+            }
+        }
+
+        // publics
+        public void UpdateView(EcfParameterFilter filter, EcfStructureItem item)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                BuildGridViewRows(filter, item);
+                UpdateSorterInvoke();
+                RefreshViewInvoke();
+                IsUpdating = false;
+                DisplayedDataChanged?.Invoke(this, null);
+            }
+        }
+        public void TryReselect()
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                SelectedRows.ForEach(oldRow =>
+                {
+                    EcfParameterRow row = Grid.Rows.Cast<EcfParameterRow>().FirstOrDefault(newRow => newRow.Parameter.Equals(oldRow.Parameter));
+                    if (row != null)
+                    {
+                        row.Selected = true;
+                    }
+                });
+                FindSelectedParameters();
+                EcfParameterRow firstRow = SelectedRows.FirstOrDefault();
+                if (firstRow != null)
+                {
+                    Grid.FirstDisplayedScrollingRowIndex = firstRow.Index;
+                }
+                IsUpdating = false;
+            }
+        }
+        public void ShowSpecificItem(EcfStructureItem item)
+        {
+            IsUpdating = true;
+            BuildGridViewRows(null, item);
+            UpdateSorterInvoke();
+            RefreshViewInvoke();
+            IsUpdating = false;
+            DisplayedDataChanged?.Invoke(this, null);
+        }
+
+        // privates
+        private void InitGridViewColumns()
+        {
             ParameterNumberColumn.HeaderText = Properties.titles.ParameterView_ParameterNumberColumn;
-            ParameterInheritedColumn.HeaderText = Properties.titles.ParameterView_ParameterInheritedColumn;
+            ParameterInheritedColumn.HeaderText = Properties.titles.Generic_Inherited;
             ParameterOverwritingColumn.HeaderText = Properties.titles.ParameterView_ParameterOverwritingColumn;
             ParameterParentColumn.HeaderText = Properties.titles.ParameterView_ParameterParentColumn;
             ParameterNameColumn.HeaderText = Properties.titles.ParameterView_ParameterNameColumn;
-            ParameterValueColumn.HeaderText = Properties.titles.ParameterView_ParameterValueColumn;
-            ParameterCommentColumn.HeaderText = Properties.titles.ParameterView_ParameterCommentColumn;
+            ParameterValueColumn.HeaderText = Properties.titles.Generic_Value;
+            ParameterCommentColumn.HeaderText = Properties.titles.Generic_Comment;
 
             ParameterNumberColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
             ParameterInheritedColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
@@ -803,6 +1741,23 @@ namespace EgsEcfControls
             ParameterInheritedColumn.ToolTipText = Properties.texts.ToolTip_ParameterView_InheritedColumn;
             ParameterOverwritingColumn.ToolTipText = Properties.texts.ToolTip_ParameterView_OverwritingColumn;
             ParameterValueColumn.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+        }
+        private void InitGridView()
+        {
+            Grid.AllowUserToAddRows = false;
+            Grid.AllowUserToDeleteRows = false;
+            Grid.AllowDrop = false;
+            Grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            Grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            Grid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            Grid.Dock = DockStyle.Fill;
+            Grid.EditMode = DataGridViewEditMode.EditProgrammatically;
+            Grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            Grid.RowHeaderMouseClick += Grid_RowHeaderMouseClick;
+            Grid.CellMouseClick += Grid_CellMouseClick;
+            Grid.CellDoubleClick += Grid_CellDoubleClick;
+            Grid.KeyUp += Grid_KeyUp;
 
             Grid.Columns.Add(ParameterNumberColumn);
             Grid.Columns.Add(ParameterInheritedColumn);
@@ -811,126 +1766,81 @@ namespace EgsEcfControls
             Grid.Columns.Add(ParameterNameColumn);
             Grid.Columns.Add(ParameterValueColumn);
             Grid.Columns.Add(ParameterCommentColumn);
-
-            ToolContainer.Add(ParameterSorter);
-            View.Controls.Add(Grid);
-            View.Controls.Add(ToolContainer);
-            Controls.Add(View);
         }
-
-        public void UpdateView(EcfParameterFilter filter, EcfItem item)
+        private void UpdateSelectedCells(int clickedRow)
         {
-            if (!IsUpdating)
+            if (!IsUpdating && !IsSelectionUpdating)
             {
-                ChangeViewUpdateState(true);
-                ParameterRows = BuildGridViewRows(filter, item);
-                UpdateSorterInvoke();
-                RefreshViewInvoke();
-                ChangeViewUpdateState(false);
-            }
-            else
-            {
-                TryFindSelectedEcfParameter();
-            }
-        }
-
-        private void Grid_SelectionChanged(object sender, EventArgs evt)
-        {
-            if (!IsUpdating)
-            {
-                if (Grid.SelectedCells.Count > 0)
+                IsSelectionUpdating = true;
+                if (ModifierKeys == Keys.Control || ModifierKeys == Keys.Shift)
                 {
-                    SelectedEcfParameter = (Grid.SelectedCells[0].OwningRow as EcfParameterRow)?.Parameter;
+                    Grid.Rows[clickedRow].Selected = true;
                 }
                 else
                 {
-                    SelectedEcfParameter = null;
+                    Grid.ClearSelection();
+                    Grid.Rows[clickedRow].Selected = true;
                 }
-                EcfParameterSelected?.Invoke(SelectedEcfParameter, null);
-            }
-        }
-        private void Grid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs evt)
-        {
-            {
-                if (Grid.SelectionMode != DataGridViewSelectionMode.ColumnHeaderSelect)
+                if (ModifierKeys == Keys.Shift)
                 {
-                    Grid.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
-                    Grid.Columns[evt.ColumnIndex].Selected = true;
+                    IEnumerable<DataGridViewCell> selectedCells = Grid.Rows.Cast<DataGridViewRow>().SelectMany(row => row.Cells.Cast<DataGridViewCell>().Where(cell => cell.Selected));
+                    int firstRow = selectedCells.Min(cell => cell.RowIndex);
+                    int lastRow = selectedCells.Max(cell => cell.RowIndex);
+                    for (int row = firstRow; row <= lastRow; row++)
+                    {
+                        Grid.Rows[row].Selected = true;
+                    }
                 }
-            }
-        }
-        private void Grid_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs evt)
-        {
-            {
-                if (Grid.SelectionMode != DataGridViewSelectionMode.RowHeaderSelect)
-                {
-                    Grid.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-                    Grid.Rows[evt.RowIndex].Selected = true;
-                }
-            }
-        }
-        private void ParameterSorter_SortingChanged(object sender, EventArgs evt)
-        {
-            if (!IsUpdating)
-            {
-                ChangeViewUpdateState(true);
-                RefreshView();
-                ChangeViewUpdateState(false);
-                EcfParameterSelected?.Invoke(SelectedEcfParameter, null);
-            }
-        }
+                FindSelectedParameters();
+                ParametersSelected?.Invoke(this, null);
 
-        private List<EcfParameterRow> BuildGridViewRows(EcfParameterFilter filter, EcfItem item)
+                IsSelectionUpdating = false;
+            }
+        }
+        private void BuildGridViewRows(EcfParameterFilter filter, EcfStructureItem item)
         {
-            List<EcfParameterRow> rows = new List<EcfParameterRow>();
-
-            string parameterLikeText = filter.GetLikeInputText();
-            List<string> activeParameters = filter.GetCheckedItems();
-            string refSourceTag = File.Definition.BlockReferenceSourceAttribute;
-            string refTargetTag = File.Definition.BlockReferenceTargetAttribute;
+            ParameterRows.Clear();
 
             if (item is EcfBlock block)
             {
-                if (!string.IsNullOrEmpty(refSourceTag) && !string.IsNullOrEmpty(refTargetTag))
-                {
-                    BuildParentBlockRows(rows, block, parameterLikeText, activeParameters, refSourceTag, refTargetTag);
-                }
-                BuildDataBlockRowGroup(rows, block, parameterLikeText, activeParameters, false);
+                BuildParentBlockRows(block, filter);
+                BuildDataBlockRowGroup(block, filter, false);
             }
-
-            return rows;
-        }
-        private void BuildParentBlockRows(List<EcfParameterRow> rows, EcfBlock block, string parameterLikeText, List<string> activeParameters, string refSourceTag, string refTargetTag)
-        {
-            string reference = block.GetAttributeFirstValue(refSourceTag);
-            if (reference != null)
+            else if (item is EcfParameter parameter)
             {
-                EcfBlock inheritedBlock = File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()
-                    .FirstOrDefault(parentBlock => parentBlock.GetAttributeFirstValue(refTargetTag).Equals(reference));
-                if (inheritedBlock != null)
-                {
-                    BuildParentBlockRows(rows, inheritedBlock, parameterLikeText, activeParameters, refSourceTag, refTargetTag);
-                    BuildDataBlockRowGroup(rows, inheritedBlock, parameterLikeText, activeParameters, true);
-                }
+                BuildParameterRow(parameter, false, null);
             }
         }
-        private void BuildDataBlockRowGroup(List<EcfParameterRow> rows, EcfBlock block, string parameterLikeText, List<string> activeParameters, bool isInherited)
+        private void BuildParentBlockRows(EcfBlock block, EcfParameterFilter filter)
         {
-            foreach (EcfItem subItem in block.ChildItems)
+            EcfBlock inheritedBlock = block.Inheritor;
+            if (inheritedBlock != null)
+            {
+                BuildParentBlockRows(inheritedBlock, filter);
+                BuildDataBlockRowGroup(inheritedBlock, filter, true);
+            }
+        }
+        private void BuildDataBlockRowGroup(EcfBlock block, EcfParameterFilter filter, bool isInherited)
+        {
+            foreach (EcfStructureItem subItem in block.ChildItems)
             {
                 if (subItem is EcfParameter parameter)
                 {
-                    if (activeParameters.Contains(parameter.Key) && IsParameterValueLike(parameter.GetAllValues(), parameterLikeText))
+                    if (filter?.IsParameterVisible(parameter) ?? true)
                     {
-                        EcfParameterRow overwrittenRow = rows.LastOrDefault(row => row.Parameter.Key.Equals(parameter.Key) && row.IsInherited());
-                        rows.Add(new EcfParameterRow(rows.Count + 1, block.BuildIdentification(), parameter, isInherited, overwrittenRow)); 
+                        EcfParameterRow overwrittenRow = ParameterRows.LastOrDefault(row => row.Parameter.Key.Equals(parameter.Key) && row.IsInherited());
+                        BuildParameterRow(parameter, isInherited, overwrittenRow);
                     }
                 }
                 else if (subItem is EcfBlock subBlock) 
                 {
-                    BuildDataBlockRowGroup(rows, subBlock, parameterLikeText, activeParameters, isInherited);
+                    BuildDataBlockRowGroup(subBlock, filter, isInherited);
                 }
             }
+        }
+        private void BuildParameterRow(EcfParameter parameter, bool isInherited, EcfParameterRow overwrittenRow)
+        {
+            ParameterRows.Add(new EcfParameterRow(ParameterRows.Count + 1, parameter.Parent?.BuildIdentification(), parameter, isInherited, overwrittenRow));
         }
         private void UpdateSorterInvoke()
         {
@@ -962,19 +1872,18 @@ namespace EgsEcfControls
         }
         private void RefreshView()
         {
-            List<KeyValuePair<int, int>> selectedCells = Grid.SelectedCells.Cast<DataGridViewCell>().Select(cell => new KeyValuePair<int, int>(cell.RowIndex, cell.ColumnIndex)).ToList();
             Grid.SuspendLayout();
             Grid.Rows.Clear();
             Grid.Rows.AddRange(ParameterRows.Skip(ParameterSorter.ItemCount * (ParameterSorter.ItemGroup - 1)).Take(ParameterSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ParameterSorter), ParameterSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
             Grid.AutoResizeColumns();
             Grid.AutoResizeRows();
+            Grid.ClearSelection();
             Grid.ResumeLayout();
-            TrySelectCells(selectedCells);
-            Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName, Grid.RowCount,
-                Grid.Rows.Cast<DataGridViewRow>().Select(row => row.Cells[ParameterInheritedColumn.Index]).Cast<DataGridViewCheckBoxCell>().Count(cell => Convert.ToBoolean(cell.Value)),
-                Grid.Rows.Cast<DataGridViewRow>().Select(row => row.Cells[ParameterOverwritingColumn.Index]).Cast<DataGridViewCheckBoxCell>().Count(cell => Convert.ToBoolean(cell.Value)),
-                Properties.titles.ParameterView_Header_OverallParameters,
+            Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName, ParameterRows.Count,
+                ParameterRows.Count(row => row.IsInherited()),
+                ParameterRows.Count(row => row.IsOverwriting()),
+                Properties.titles.Generic_Parameters,
                 Properties.titles.ParameterView_Header_InheritedParameters,
                 Properties.titles.ParameterView_Header_OverwritingParameters);
         }
@@ -986,28 +1895,19 @@ namespace EgsEcfControls
                 default: return ParameterNumberColumn;
             }
         }
-        private void TrySelectCells(List<KeyValuePair<int, int>> selectedCells)
+        private void FindSelectedParameters()
         {
-            Grid.ClearSelection();
-            int rowCount = Grid.RowCount;
-            foreach (KeyValuePair<int, int> cell in selectedCells)
-            {
-                if (cell.Key < rowCount)
-                {
-                    Grid.Rows[cell.Key].Cells[cell.Value].Selected = true;
-                }
-            }
-            TryFindSelectedEcfParameter();
-        }
-        private void TryFindSelectedEcfParameter()
-        {
-            SelectedEcfParameter =  Grid.SelectedCells.Count > 0 ? (Grid.SelectedCells[0].OwningRow as EcfParameterRow)?.Parameter : null;
+            SelectedRows.Clear();
+            SelectedRows.AddRange(Grid.Rows.Cast<EcfParameterRow>().Where(row => row.Cells.Cast<DataGridViewCell>().Any(cell => cell.Selected)));
+            SelectedParameters.Clear();
+            SelectedParameters.AddRange(SelectedRows.Select(row => row.Parameter));
         }
 
         private class EcfParameterRow : DataGridViewRow
         {
             public EcfParameter Parameter { get; }
             public EcfParameterRow OverwrittenRow { get; }
+            public bool HasError { get; }
 
             private DataGridViewTextBoxCell NumberCell { get; }
             private DataGridViewCheckBoxCell IsInheritedCell { get; }
@@ -1021,6 +1921,8 @@ namespace EgsEcfControls
             {
                 Parameter = parameter;
                 OverwrittenRow = overwrittenRow;
+                HasError = parameter.GetDeepErrorList().Count > 0;
+                
 
                 NumberCell = new DataGridViewTextBoxCell() { Value = number };
                 IsInheritedCell = new DataGridViewCheckBoxCell() { Value = isInherited };
@@ -1029,6 +1931,11 @@ namespace EgsEcfControls
                 ParameterNameCell = new DataGridViewTextBoxCell() { Value = parameter.Key };
                 ValueCell = new DataGridViewTextBoxCell() { Value = BuildValueText() };
                 CommentsCell = new DataGridViewTextBoxCell() { Value = string.Join(", ", parameter.Comments) };
+
+                if (HasError)
+                {
+                    DefaultCellStyle.BackColor = Color.Red;
+                }
 
                 Cells.Add(NumberCell);
                 Cells.Add(IsInheritedCell);
@@ -1073,7 +1980,7 @@ namespace EgsEcfControls
                 {
                     valueGroup.Clear();
                     
-                    valueGroup.Append(Properties.titles.ParameterView_ValueGroup);
+                    valueGroup.Append(Properties.titles.Generic_Group);
                     valueGroup.Append(" ");
                     valueGroup.Append(Parameter.IndexOf(group) + 1);
                     valueGroup.Append(Properties.texts.ParameterView_GroupSeperator);
@@ -1088,60 +1995,71 @@ namespace EgsEcfControls
     }
     public class EcfInfoView : EcfBaseView
     {
-        private FlowLayoutPanel View { get; } = new FlowLayoutPanel();
-        private EcfTableLayoutPanel AddDataView { get; } = new EcfTableLayoutPanel(Properties.titles.InfoView_AddData, 120);
-        private EcfTableLayoutPanel BlockAttributeView { get; } = new EcfTableLayoutPanel(Properties.titles.InfoView_ElementAttributes, 120);
-        private EcfTableLayoutPanel ParameterAttributeView { get; } = new EcfTableLayoutPanel(Properties.titles.InfoView_ParameterAttributes, 120);
+        private TableLayoutPanel View { get; } = new TableLayoutPanel();
+        private InfoViewGroupBox<EcfBlock> ElementView { get; } = new InfoViewGroupBox<EcfBlock>(Properties.titles.InfoView_ElementData);
+        private InfoViewGroupBox<EcfParameter> ParameterView { get; } = new InfoViewGroupBox<EcfParameter>(Properties.titles.InfoView_ParameterData);
 
         public EcfInfoView(string headline, EgsEcfFile file, ResizeableBorders mode) : base(headline, file, mode)
         {
-            View.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            View.AutoSize = true;
             View.Dock = DockStyle.Fill;
-            View.AutoScroll = true;
-            View.FlowDirection = FlowDirection.TopDown;
-            
-            AddDataView.AddRow(Properties.titles.InfoView_ElementPreSign, null);
-            AddDataView.AddRow(Properties.titles.InfoView_ElementType, null);
-            AddDataView.AddRow(Properties.titles.InfoView_ElementChildCount, null);
-            AddDataView.AddRow(Properties.titles.InfoView_ElementChildBlockCount, null);
-            AddDataView.AddRow(Properties.titles.InfoView_ElementComment, null);
-            AddDataView.AddRow(Properties.titles.InfoView_ParameterComment, null);
+            View.ColumnStyles.Clear();
+            View.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.0f));
+            View.RowStyles.Clear();
+            View.RowStyles.Add(new RowStyle(SizeType.Percent, 0.5f));
+            View.RowStyles.Add(new RowStyle(SizeType.Percent, 0.5f));
 
-            View.Controls.Add(AddDataView);
-            View.Controls.Add(BlockAttributeView);
-            View.Controls.Add(ParameterAttributeView);
+            ElementView.AutoSize = true;
+            ElementView.Dock = DockStyle.Fill;
+
+            ParameterView.AutoSize = true;
+            ParameterView.Dock = DockStyle.Fill;
+
+            View.Controls.Add(ElementView, 0, 0);
+            View.Controls.Add(ParameterView, 0, 1);
             Controls.Add(View);
         }
 
-        public void UpdateView(EcfItem item)
+        // publics
+        public void UpdateView(EcfStructureItem item)
         {
             if (!IsUpdating)
             {
-                ChangeViewUpdateState(true);
-                RefreshViewInvoke(item as EcfBlock);
-                ChangeViewUpdateState(false);
+                IsUpdating = true;
+                if (item is EcfBlock block)
+                {
+                    RefreshViewInvoke(block);
+                } 
+                else if (item is EcfParameter parameter)
+                {
+                    RefreshViewInvoke(parameter);
+                }
+                IsUpdating = false;
             }
         }
-        public void UpdateView(EcfParameter parameter)
+        public void UpdateView(EcfStructureItem item, EcfParameter parameter)
         {
             if (!IsUpdating)
             {
-                ChangeViewUpdateState(true);
-                RefreshViewInvoke(parameter);
-                ChangeViewUpdateState(false);
-            }
-        }
-        public void UpdateView(EcfItem item, EcfParameter parameter)
-        {
-            if (!IsUpdating)
-            {
-                ChangeViewUpdateState(true);
+                IsUpdating = true;
                 RefreshViewInvoke(item as EcfBlock);
                 RefreshViewInvoke(parameter);
-                ChangeViewUpdateState(false);
+                IsUpdating = false;
+            }
+        }
+        public void ShowSpecificItem(EcfStructureItem item)
+        {
+            if(item?.Parent is EcfBlock block && item is EcfParameter parameter)
+            {
+                UpdateView(block, parameter);
+            }
+            else
+            {
+                UpdateView(item);
             }
         }
 
+        // privares
         private void RefreshViewInvoke(EcfBlock block)
         {
             if (InvokeRequired)
@@ -1173,188 +2091,372 @@ namespace EgsEcfControls
         private void RefreshView(EcfBlock block)
         {
             View.SuspendLayout();
-            RefreshAddDataView(block);
-            RefreshBlockAttributeView(block);
+            ElementView.Refresh(block);
             View.ResumeLayout();
         }
         private void RefreshView(EcfParameter parameter)
         {
             View.SuspendLayout();
-            RefreshAddDataView(parameter);
-            RefreshParameterAttributeView(parameter);
+            ParameterView.Refresh(parameter);
             View.ResumeLayout();
         }
-        private void RefreshAddDataView(EcfBlock block)
-        {
-            AddDataView.SuspendLayout();
-            if (block != null)
-            {
-                AddDataView.UpdateRowValue(0, block.TypePreMark ?? string.Empty);
-                AddDataView.UpdateRowValue(1, block.BlockDataType ?? string.Empty);
-                AddDataView.UpdateRowValue(2, block.ChildItems.Count().ToString());
-                AddDataView.UpdateRowValue(3, block.ChildItems.Count(item => item is EcfBlock).ToString());
-                AddDataView.UpdateRowValue(4, string.Join(", ", block.Comments));
-            }
-            else
-            {
-                AddDataView.UpdateRowValue(0, "");
-                AddDataView.UpdateRowValue(1, "");
-                AddDataView.UpdateRowValue(2, "");
-                AddDataView.UpdateRowValue(3, "");
-                AddDataView.UpdateRowValue(4, "");
-            }
-            AddDataView.ResumeLayout();
-        }
-        private void RefreshAddDataView(EcfParameter parameter)
-        {
-            AddDataView.SuspendLayout();
-            if (parameter != null)
-            {
-                AddDataView.UpdateRowValue(5, string.Join(", ", parameter.Comments));
-            }
-            else
-            {
-                AddDataView.UpdateRowValue(5, "");
-            }
-            AddDataView.ResumeLayout();
-        }
-        private void RefreshBlockAttributeView(EcfBlock block)
-        {
-            BlockAttributeView.SuspendLayout();
-            BlockAttributeView.Clear();
-            BlockAttributeView.AddRows(block?.Attributes.Select(attr => new KeyValuePair<string, string>(attr.Key, string.Join(", ", attr.GetAllValues()))).ToList());
-            BlockAttributeView.ResumeLayout();
-        }
-        private void RefreshParameterAttributeView(EcfParameter parameter)
-        {
-            ParameterAttributeView.SuspendLayout();
-            ParameterAttributeView.Clear();
-            ParameterAttributeView.AddRows(parameter?.Attributes.Select(attr => new KeyValuePair<string, string>(attr.Key, string.Join(", ", attr.GetAllValues()))).ToList());
-            ParameterAttributeView.ResumeLayout();
-        }
 
-        private class EcfTableLayoutPanel : TableLayoutPanel
+        private class InfoViewGroupBox<T> : GroupBox where T : EcfStructureItem
         {
-            public int MinColumnWidth { get; }
-            
-            public EcfTableLayoutPanel(string headerText, int minColumnWidth) : base()
-            {
-                MinColumnWidth = minColumnWidth;
+            private TreeView InfoList { get; } = new TreeView();
 
-                AutoSize = true;
-                AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                ColumnCount = 2;
-                RowCount = 1;
+            private TreeNode ElementProperties { get; } = new TreeNode(Properties.titles.Generic_Properties);
+            private TreeNode ParameterDefinitions { get; } = new TreeNode(Properties.titles.Generic_Definitions);
 
-                Label header = new Label() { Text = headerText ?? "null" };
-                header.AutoSize = true;
-                header.Margin = new Padding(0, 3, 0, 3);
-                Controls.Add(header, 0, 0);
-                SetColumnSpan(header, 2);
-            }
-            public EcfTableLayoutPanel(string headerText) : this(headerText, 50)
-            {
-                
-            }
-            public EcfTableLayoutPanel() : this("Header", 50)
-            {
+            private TreeNode AttributesNode { get; } = new TreeNode(Properties.titles.Generic_Attributes);
+            private TreeNode CommentsNode { get; } = new TreeNode(Properties.titles.Generic_Comments);
+            private TreeNode ErrorsNode { get; } = new TreeNode(Properties.titles.Generic_Errors);
 
-            }
-
-            public void Clear()
+            public InfoViewGroupBox(string header) : base()
             {
-                Controls.Cast<Control>().Where(control => GetRow(control) > 0).ToList().ForEach(control =>
+                Text = header;
+
+                InfoList.Dock = DockStyle.Fill;
+                InfoList.FullRowSelect = false;
+                InfoList.HideSelection = true;
+                InfoList.LabelEdit = false;
+                InfoList.Scrollable = true;
+
+                if (typeof(EcfBlock).IsAssignableFrom(typeof(T)))
                 {
-                    Controls.Remove(control);
-                });
-                RowCount = 1;
-            }
-            public void AddRow(string nameText, string valueText)
-            {
-                Label name = new Label() { Text = nameText ?? "null" };
-                Label value = new Label() { Text = valueText ?? "null" };
-
-                name.AutoSize = true;
-                value.AutoSize = true;
-                name.Margin = new Padding(5, 1, 0, 1);
-                name.MinimumSize = new Size(MinColumnWidth, 0);
-                value.MinimumSize = new Size(MinColumnWidth, 0);
-
-                RowCount++;
-                Controls.Add(name, 0, RowCount);
-                Controls.Add(value, 1, RowCount);
-            }
-            public void AddRows(List<KeyValuePair<string, string>> rows)
-            {
-                rows?.ForEach(row =>
-                {
-                    AddRow(row.Key, row.Value);
-                });
-            }
-            public void UpdateRowValue(int valueRowIndex, string newValue)
-            {
-                try
-                {
-                    Control value = GetControlFromPosition(1, valueRowIndex + 2);
-                    if (value != null)
-                    {
-                        value.Text = newValue ?? "null";
-                    }
+                    InfoList.Nodes.Add(ElementProperties);
                 }
-                catch (Exception) { }
+                else if (typeof(EcfParameter).IsAssignableFrom(typeof(T)))
+                {
+                    InfoList.Nodes.Add(ParameterDefinitions);
+                }
+
+                InfoList.Nodes.Add(AttributesNode);
+                InfoList.Nodes.Add(CommentsNode);
+                InfoList.Nodes.Add(ErrorsNode);
+
+                Controls.Add(InfoList);
+            }
+
+            // publics
+            public void Refresh(EcfBlock block)
+            {
+                InfoList.BeginUpdate();
+                Clear();
+                if (block != null)
+                {
+                    BuildElementPropertiesNode(block);
+                    AttributesNode.Nodes.AddRange(block.Attributes.Select(attribute => new TreeNode(BuildAttributeEntry(attribute))).ToArray());
+                    CommentsNode.Nodes.AddRange(block.Comments.Select(comment => new TreeNode(comment)).ToArray());
+                    ErrorsNode.Nodes.AddRange(block.Errors.Select(error => new TreeNode(error.ToString())).ToArray());
+                    InfoList.ExpandAll();
+                }
+                InfoList.EndUpdate();
+            }
+            public void Refresh(EcfParameter parameter)
+            {
+                InfoList.BeginUpdate();
+                Clear();
+                if (parameter != null)
+                {
+                    BuildParameterDefinitionNode(parameter);
+                    AttributesNode.Nodes.AddRange(parameter.Attributes.Select(attribute => new TreeNode(BuildAttributeEntry(attribute))).ToArray());
+                    CommentsNode.Nodes.AddRange(parameter.Comments.Select(comment => new TreeNode(comment)).ToArray());
+                    ErrorsNode.Nodes.AddRange(parameter.GetDeepErrorList().Select(error => new TreeNode(error.ToString())).ToArray());
+                    InfoList.ExpandAll();
+                }
+                InfoList.EndUpdate();
+            }
+
+            // privates
+            private void Clear()
+            {
+                if (typeof(EcfBlock).IsAssignableFrom(typeof(T)))
+                {
+                    ElementProperties.Nodes.Clear();
+                }
+                else if (typeof(EcfParameter).IsAssignableFrom(typeof(T)))
+                {
+                    ParameterDefinitions.Nodes.Clear();
+                }
+
+                AttributesNode.Nodes.Clear();
+                CommentsNode.Nodes.Clear();
+                ErrorsNode.Nodes.Clear();
+            }
+            private void BuildElementPropertiesNode(EcfBlock block)
+            {
+                ElementProperties.Nodes.Add(BuildValueNode(Properties.titles.Generic_PreMark, block.PreMark, true));
+                ElementProperties.Nodes.Add(BuildValueNode(Properties.titles.Generic_DataType, block.DataType, false));
+                ElementProperties.Nodes.Add(BuildValueNode(Properties.titles.Generic_PostMark, block.PostMark, true));
+                ElementProperties.Nodes.Add(BuildValueNode(Properties.titles.Generic_Inherited,
+                    block.Inheritor != null ? block.Inheritor.BuildIdentification() : Properties.titles.Generic_No, false));
+            }
+            private void BuildParameterDefinitionNode(EcfParameter parameter)
+            {
+                if (parameter.Definition != null)
+                {
+                    ParameterDefinitions.Nodes.Add(BuildStateNode(Properties.titles.Generic_IsOptional, parameter.Definition?.IsOptional ?? false));
+                    ParameterDefinitions.Nodes.Add(BuildValueNode(Properties.titles.Generic_Info, parameter.Definition?.Info ?? string.Empty, false));
+                }
+                else
+                {
+                    ParameterDefinitions.Nodes.Add(new TreeNode(Properties.texts.InfoView_NoDefinition));
+                }
+            }
+            private TreeNode BuildStateNode(string key, bool state)
+            {
+                StringBuilder entry = new StringBuilder(key);
+                entry.Append(": ");
+                entry.Append(state ? Properties.titles.Generic_Yes : Properties.titles.Generic_No);
+                return new TreeNode(entry.ToString());
+            }
+            private TreeNode BuildValueNode(string key, string value, bool valueEscaped)
+            {
+                StringBuilder entry = new StringBuilder(key);
+                entry.Append(": ");
+                if (valueEscaped) { entry.Append("\""); }
+                entry.Append(value ?? Properties.titles.Generic_Replacement_Empty);
+                if (valueEscaped) { entry.Append("\""); }
+                return new TreeNode(entry.ToString());
+            } 
+            private string BuildAttributeEntry(EcfAttribute attribute)
+            {
+                StringBuilder entry = new StringBuilder(attribute.Key);
+                if (attribute.HasValue())
+                {
+                    entry.Append(": ");
+                    entry.Append(string.Join(", ", attribute.GetAllValues()));
+                }
+                return entry.ToString();
             }
         }
     }
     public class EcfErrorView : EcfBaseView
     {
-        private ListBox Errors { get; } = new ListBox();
+        public event EventHandler ShowInEditorClicked;
+        public event EventHandler ShowInFileClicked;
+
+        public EcfError SelectedError { get; private set; } = null;
+
+        private Panel View { get; } = new Panel();
+        private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
+        private EcfSorter ErrorSorter { get; }
+        private DataGridView Grid { get; } = new DataGridView();
+        private ContextMenuStrip GridMenu { get; } = new ContextMenuStrip();
+        private ToolStripMenuItem GridMenuItemShowInEditor { get; } = new ToolStripMenuItem();
+        private ToolStripMenuItem GridMenuItemShowInFile { get; } = new ToolStripMenuItem();
+        private List<EcfErrorRow> ErrorRows { get; } = new List<EcfErrorRow>();
+
+        private DataGridViewTextBoxColumn ErrorNumberColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ErrorGroupColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn LineNumberColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ElementNameColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ErrorTypeColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ErrorInfoColumn { get; } = new DataGridViewTextBoxColumn();
 
         public EcfErrorView(string headline, EgsEcfFile file, ResizeableBorders mode) : base(headline, file, mode)
         {
-            Errors.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            Errors.Dock = DockStyle.Fill;
-            Errors.HorizontalScrollbar = true;
-            Errors.IntegralHeight = false;
-            Errors.SelectionMode = SelectionMode.MultiExtended;
+            ErrorSorter = new EcfSorter(
+                Properties.texts.ToolTip_ErrorCountSelector,
+                Properties.texts.ToolTip_ErrorGroupSelector,
+                Properties.texts.ToolTip_ErrorSorterDirection,
+                Properties.texts.ToolTip_ErrorSorterOriginOrder,
+                Properties.texts.ToolTip_ErrorSorterAlphabeticOrder,
+                VisibleItemCount.Ten);
+            ErrorSorter.SortingUserChanged += ErrorSorter_SortingUserChanged;
 
-            Controls.Add(Errors);
+            View.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            View.Dock = DockStyle.Fill;
+
+            ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            ToolContainer.Dock = DockStyle.Top;
+
+            InitGridView();
+
+            GridMenuItemShowInEditor.Text = Properties.titles.ErrorView_ShowInEditor;
+            GridMenuItemShowInEditor.Image = Properties.icons.Icon_ShowInEditor;
+            GridMenuItemShowInEditor.Click += (sender, evt) => ShowInEditorClicked?.Invoke(sender, evt);
+
+            GridMenuItemShowInFile.Text = Properties.titles.ErrorView_ShowInFile;
+            GridMenuItemShowInFile.Image = Properties.icons.Icon_ShowInFile;
+            GridMenuItemShowInFile.Click += (sender, evt) => ShowInFileClicked?.Invoke(sender, evt);
+
+            GridMenu.Items.Add(GridMenuItemShowInEditor);
+            GridMenu.Items.Add(GridMenuItemShowInFile);
+
+            ToolContainer.Add(ErrorSorter);
+            View.Controls.Add(Grid);
+            View.Controls.Add(ToolContainer);
+            Controls.Add(View);
         }
 
+        // events
+        private void ErrorSorter_SortingUserChanged(object sender, EventArgs evt)
+        {
+            if (!IsUpdating)
+            {
+                IsUpdating = true;
+                RefreshViewInvoke();
+                IsUpdating = false;
+            }
+        }
+        private void Grid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs evt)
+        {
+            if (evt.RowIndex > -1 && evt.ColumnIndex > -1)
+            {
+                Grid.ClearSelection();
+                if (Grid.Rows[evt.RowIndex] is EcfErrorRow row)
+                {
+                    row.Cells[evt.ColumnIndex].Selected = true;
+                    SelectedError = row.Error;
+                    if (evt.Button == MouseButtons.Right)
+                    {
+                        GridMenuItemShowInFile.Visible = row.Error.IsFromParsing;
+                        Point cellLocation = Grid.GetCellDisplayRectangle(evt.ColumnIndex, evt.RowIndex, false).Location;
+                        GridMenu.Show(Grid, new Point(cellLocation.X + evt.X, cellLocation.Y + evt.Y));
+                    }
+                }
+                
+            }
+        }
+
+        // publics
         public void UpdateView()
         {
             if (!IsUpdating)
             {
-                ChangeViewUpdateState(true);
-                List<string> list = File.ErrorList.Select(error => error.ToString()).ToList();
-                RefreshViewInvoke(list);
-                ChangeViewUpdateState(false);
+                IsUpdating = true;
+                BuildGridViewRows();
+                UpdateSorterInvoke();
+                RefreshViewInvoke();
+                IsUpdating = false;
             }
         }
 
-        private void RefreshViewInvoke(List<string> list)
+        // privates
+        private void InitGridView()
+        {
+            Grid.AllowUserToAddRows = false;
+            Grid.AllowUserToDeleteRows = false;
+            Grid.AllowDrop = false;
+            Grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            Grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            Grid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            Grid.Dock = DockStyle.Fill;
+            Grid.EditMode = DataGridViewEditMode.EditProgrammatically;
+
+            ErrorNumberColumn.HeaderText = Properties.titles.ErrorView_ErrorNumberColumn;
+            ErrorGroupColumn.HeaderText = Properties.titles.ErrorView_ErrorGroupColumn;
+            LineNumberColumn.HeaderText = Properties.titles.Generic_LineNumber;
+            ElementNameColumn.HeaderText = Properties.titles.Generic_Name;
+            ErrorTypeColumn.HeaderText = Properties.titles.Generic_Type;
+            ErrorInfoColumn.HeaderText = Properties.titles.Generic_Info;
+
+            Grid.CellMouseClick += Grid_CellMouseClick;
+
+            Grid.Columns.Add(ErrorNumberColumn);
+            Grid.Columns.Add(ErrorGroupColumn);
+            Grid.Columns.Add(LineNumberColumn);
+            Grid.Columns.Add(ElementNameColumn);
+            Grid.Columns.Add(ErrorTypeColumn);
+            Grid.Columns.Add(ErrorInfoColumn);
+        }
+        private void BuildGridViewRows()
+        {
+            ErrorRows.Clear();
+            List<EcfError> preSortedErrors = File.GetErrorList().OrderBy(error => !error.IsFromParsing).ThenBy(error => error.LineInFile).ToList();
+            foreach (EcfError error in preSortedErrors)
+            {
+                ErrorRows.Add(new EcfErrorRow(preSortedErrors.IndexOf(error) + 1, error));
+            }
+        }
+        private void UpdateSorterInvoke()
         {
             if (InvokeRequired)
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    RefreshView(list);
+                    ErrorSorter.SetOverallItemCount(ErrorRows.Count);
                 });
             }
             else
             {
-                RefreshView(list);
+                ErrorSorter.SetOverallItemCount(ErrorRows.Count);
             }
         }
-        private void RefreshView(List<string> list)
+        private void RefreshViewInvoke()
         {
-            Errors.BeginUpdate();
-            Errors.Items.Clear();
-            Errors.Items.AddRange(list.ToArray());
-            Errors.EndUpdate();
-            Text = string.Format("{0} - {1} {2}", ViewName, list.Count, Properties.titles.ErrorView_Header_Errors);
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    RefreshView();
+                });
+            }
+            else
+            {
+                RefreshView();
+            }
+        }
+        private void RefreshView()
+        {
+            Grid.SuspendLayout();
+            Grid.Rows.Clear();
+            Grid.Rows.AddRange(ErrorRows.Skip(ErrorSorter.ItemCount * (ErrorSorter.ItemGroup - 1)).Take(ErrorSorter.ItemCount).ToArray());
+            Grid.Sort(GetSortingColumn(ErrorSorter), ErrorSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
+            Grid.AutoResizeColumns();
+            Grid.AutoResizeRows();
+            Grid.ClearSelection();
+            Grid.ResumeLayout();
+            Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName,
+                ErrorRows.Count, ErrorRows.Count(error => error.Error.IsFromParsing), ErrorRows.Count(error => !error.Error.IsFromParsing),
+                Properties.titles.Generic_Errors,
+                Properties.titles.ErrorView_ParsingErrors,
+                Properties.titles.ErrorView_EditingErrors);
+        }
+        private DataGridViewColumn GetSortingColumn(EcfSorter sorter)
+        {
+            switch (sorter.SortingType)
+            {
+                case SortingTypes.Alphabetical: return ElementNameColumn;
+                default: return ErrorNumberColumn;
+            }
+        }
+
+        private class EcfErrorRow : DataGridViewRow
+        {
+            public EcfError Error { get; } = null;
+
+            private DataGridViewTextBoxCell ErrorNumberCell { get; }
+            private DataGridViewTextBoxCell ErrorGroupCell { get; }
+            private DataGridViewTextBoxCell LineNumberCell { get; }
+            private DataGridViewTextBoxCell ElementNameCell { get; }
+            private DataGridViewTextBoxCell ErrorTypeCell { get; }
+            private DataGridViewTextBoxCell ErrorInfoCell { get; }
+            
+            public EcfErrorRow(int number, EcfError error) : base()
+            {
+                Error = error;
+
+                ErrorNumberCell = new DataGridViewTextBoxCell() { Value = number };
+                ErrorGroupCell = new DataGridViewTextBoxCell() { Value = error.IsFromParsing ? Properties.titles.ErrorView_ParsingError : Properties.titles.ErrorView_EditingError };
+                LineNumberCell = new DataGridViewTextBoxCell() { Value = error.IsFromParsing ? error.LineInFile.ToString() : string.Empty };
+                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullName() ?? string.Empty };
+                ErrorTypeCell = new DataGridViewTextBoxCell() { Value = error.Type.ToString() };
+                ErrorInfoCell = new DataGridViewTextBoxCell() { Value = error.Info };
+
+                Cells.Add(ErrorNumberCell);
+                Cells.Add(ErrorGroupCell);
+                Cells.Add(LineNumberCell);
+                Cells.Add(ElementNameCell);
+                Cells.Add(ErrorTypeCell);
+                Cells.Add(ErrorInfoCell);
+            }
         }
     }
 
+    // specific tool controls
     public class EcfToolContainer : FlowLayoutPanel
     {
         public EcfToolContainer()
@@ -1364,148 +2466,228 @@ namespace EgsEcfControls
             Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
         }
 
-        public void Add(EcfToolGroup toolGroup)
+        public void Add(EcfToolBox toolGroup)
         {
             Controls.Add(toolGroup);
         }
     }
-    public abstract class EcfToolGroup : FlowLayoutPanel
+    public abstract class EcfToolBox : FlowLayoutPanel
     {
-        public EcfToolGroup() : base()
+        public EcfToolBox() : base()
         {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
         }
-        public void Add(Control control)
+        protected Control Add(Control control)
         {
+            control.AutoSize = true;
+            control.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            control.Dock = DockStyle.Fill;
             Controls.Add(control);
+            return control;
         }
     }
-    public class EcfFilterControl : EcfToolGroup
+    public class EcfBasicFileOperations : EcfToolBox
     {
-        public event EventHandler ApplyFilter;
-        public event EventHandler ResetFilter;
+        public event EventHandler NewFileClicked;
+        public event EventHandler OpenFileClicked;
+        public event EventHandler ReloadFileClicked;
+        public event EventHandler SaveFileClicked;
+        public event EventHandler SaveAsFileClicked;
+        public event EventHandler SaveAsFilteredFileClicked;
+        public event EventHandler SaveAllFilesClicked;
+        public event EventHandler CloseFileClicked;
+        public event EventHandler CloseAllFilesClicked;
 
-        private Button RefreshButton { get; } = new Button() { Text = "R", Size = new Size(20,20) };
-        private Button ClearButton { get; } = new Button() { Text = "C", Size = new Size(20, 20) };
-
-        public EcfFilterControl() : base()
+        public EcfBasicFileOperations() : base()
         {
-            RefreshButton.Click += OnApplyFilter;
-            ClearButton.Click += OnResetFilter;
-
-            new ToolTip().SetToolTip(RefreshButton, Properties.texts.ToolTip_FilterApplyButton);
-            new ToolTip().SetToolTip(ClearButton, Properties.texts.ToolTip_FilterClearButton);
-
-            Add(RefreshButton);
-            Add(ClearButton);
-        }
-
-        private void OnApplyFilter(object sender, EventArgs evt)
-        {
-            ApplyFilter.Invoke(sender, evt);
-        }
-        private void OnResetFilter(object sender, EventArgs evt)
-        {
-            ResetFilter.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_New, Properties.icons.Icon_NewFile, null))
+                .Click += (sender, evt) => NewFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_Open, Properties.icons.Icon_OpenFile, null))
+                .Click += (sender, evt) => OpenFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_Reload, Properties.icons.Icon_ReloadFile, null))
+                .Click += (sender, evt) => ReloadFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_Save, Properties.icons.Icon_SaveFile, null))
+                .Click += (sender, evt) => SaveFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_SaveAs, Properties.icons.Icon_SaveAsFile, null))
+                .Click += (sender, evt) => SaveAsFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_SaveAsFiltered, Properties.icons.Icon_SaveAsFilteredFile, null))
+                .Click += (sender, evt) => SaveAsFilteredFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_SaveAll, Properties.icons.Icon_SaveAllFiles, null))
+                .Click += (sender, evt) => SaveAllFilesClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_Close, Properties.icons.Icon_CloseFile, null))
+                .Click += (sender, evt) => CloseFileClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_BasicFileOperations_CloseAll, Properties.icons.Icon_CloseAllFiles, null))
+                .Click += (sender, evt) => CloseAllFilesClicked?.Invoke(sender, evt);
         }
     }
-    public abstract class EcfBaseFilter : EcfToolGroup
+    public class EcfExtendedFileOperations : EcfToolBox
     {
-        public event EventHandler ApplyFilter;
+        public event EventHandler ReloadDefinitionsClicked;
+        public event EventHandler CheckDefinitionClicked;
+        public event EventHandler CompareFilesClicked;
+        public event EventHandler MergeFilesClicked;
         
-        private ToolTip LikeToolTip { get; } = new ToolTip();
-        private TextBox LikeInput { get; } = new TextBox();
-        protected CheckComboBox ItemSelector { get; set; } = null;
+        public event EventHandler BuildTechTreePreviewClicked;
 
-        private string LikeToolTipText { get; }
-
-        public EcfBaseFilter(List<CheckableNameItem> items, string likeToolTip, string itemTypeName, string itemSelectorTooltip) : base()
+        public EcfExtendedFileOperations() : base()
         {
-            LikeToolTipText = likeToolTip;
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_CompareFiles, Properties.icons.Icon_Compare, null))
+                .Click += (sender, evt) => CompareFilesClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_MergeFiles, Properties.icons.Icon_Merge, null))
+                .Click += (sender, evt) => MergeFilesClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_BuildTechTreePreview, Properties.icons.Icon_BuildTechTreePreview, null))
+                .Click += (sender, evt) => BuildTechTreePreviewClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_ReloadDefinitions, Properties.icons.Icon_ReloadDefinitions, null))
+                .Click += (sender, evt) => ReloadDefinitionsClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_CheckDefinition, Properties.icons.Icon_CheckDefinition, null))
+                .Click += (sender, evt) => CheckDefinitionClicked?.Invoke(sender, evt);
+        }
+    }
+    public class EcfContentOperations : EcfToolBox
+    {
+        public event EventHandler UndoClicked;
+        public event EventHandler RedoClicked;
+        public event EventHandler AddClicked;
+        public event EventHandler RemoveClicked;
+        public event EventHandler ChangeSimpleClicked;
+        public event EventHandler ChangeComplexClicked;
+        public event EventHandler MoveUpClicked;
+        public event EventHandler MoveDownClicked;
+        public event EventHandler CopyClicked;
+        public event EventHandler PasteClicked;
 
-            ItemSelector = new CheckComboBox(itemTypeName, itemSelectorTooltip)
-            {
-                MaxDropDownItems = 10
-            };
+        public EcfContentOperations() : base()
+        {
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_Undo, Properties.icons.Icon_Undo, null))
+                .Click += (sender, evt) => UndoClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_Redo, Properties.icons.Icon_Redo, null))
+                .Click += (sender, evt) => RedoClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_Add, Properties.icons.Icon_Add, null))
+                .Click += (sender, evt) => AddClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_Remove, Properties.icons.Icon_Remove, null))
+                .Click += (sender, evt) => RemoveClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_ChangeSimple, Properties.icons.Icon_ChangeSimple, null))
+                .Click += (sender, evt) => ChangeSimpleClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_ChangeComplex, Properties.icons.Icon_ChangeComplex, null))
+                .Click += (sender, evt) => ChangeComplexClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_MoveUp, Properties.icons.Icon_MoveUp, null))
+                .Click += (sender, evt) => MoveUpClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ContentOperations_MoveDown, Properties.icons.Icon_MoveDown, null))
+                .Click += (sender, evt) => MoveDownClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_CopyElements, Properties.icons.Icon_Copy, null))
+                .Click += (sender, evt) => CopyClicked?.Invoke(sender, evt);
+            Add(new ToolBarButton(Properties.texts.ToolTip_ExtendedFileOperations_PasteElements, Properties.icons.Icon_Paste, null))
+                .Click += (sender, evt) => PasteClicked?.Invoke(sender, evt);
+        }
+    }
+    public class EcfFilterControl : EcfToolBox
+    {
+        public event EventHandler ApplyFilterClicked;
+        public event EventHandler ClearFilterClicked;
+
+        public EcfStructureItem SpecificItem { get; private set; } = null;
+
+        private List<EcfBaseFilter> AttachedFilters { get; } = new List<EcfBaseFilter>();
+
+        private ToolBarButton ApplyFilterButton { get; } = new ToolBarButton(Properties.texts.ToolTip_FilterApplyButton, Properties.icons.Icon_ApplyFilter, null);
+        private ToolBarButton ClearFilterButton { get; } = new ToolBarButton(Properties.texts.ToolTip_FilterClearButton, Properties.icons.Icon_ClearFilter, null);
+
+        public EcfFilterControl(string configType) : base()
+        {
+            Add(new ToolBarLabel(configType, true));
+
+            Add(ApplyFilterButton).Click += ApplyFilterButton_Click;
+            Add(ClearFilterButton).Click += ClearFilterButton_Click;
+        }
+
+        // events
+        public void ApplyFilterButton_Click(object sender, EventArgs evt)
+        {
+            ApplyFilterClicked?.Invoke(sender, evt);
+        }
+        public void ClearFilterButton_Click(object sender, EventArgs evt)
+        {
+            SetSpecificItem(null);
+            AttachedFilters.ForEach(filter => filter.Reset());
+            ClearFilterClicked?.Invoke(sender, evt);
+        }
+
+        // publics
+        public void Add(EcfBaseFilter filter)
+        {
+            AttachedFilters.Add(filter);
+        }
+        public void Remove(EcfBaseFilter filter)
+        {
+            AttachedFilters.Remove(filter);
+        }
+        public void SetSpecificItem(EcfStructureItem item)
+        {
+            SpecificItem = item;
+            if (SpecificItem != null) { Disable(); } else { Enable(); }
+        }
+        public void Disable()
+        {
+            ApplyFilterButton.Enabled = false;
+            AttachedFilters.ForEach(filter => filter.Disable());
+        }
+        public void Enable()
+        {
+            ApplyFilterButton.Enabled = true;
+            AttachedFilters.ForEach(filter => filter.Enable());
+        }
+    }
+    public abstract class EcfBaseFilter : EcfToolBox
+    {
+        public event EventHandler ApplyFilterRequested;
+        
+        private ToolBarTextBox LikeInput { get; }
+        protected ToolBarCheckComboBox ItemSelector { get; }
+
+        public string IsLikeText { get; private set; }
+        public ReadOnlyCollection<string> CheckedItems { get; }
+        public ReadOnlyCollection<string> UncheckedItems { get; }
+
+        private List<string> InternalCheckedItems { get; } = new List<string>();
+        private List<string> InternalUncheckedItems { get; } = new List<string>();
+
+        public EcfBaseFilter(List<CheckableNameItem> items, string likeToolTip, string typeName, string itemSelectorTooltip) : base()
+        {
+            CheckedItems = InternalCheckedItems.AsReadOnly();
+            UncheckedItems = InternalUncheckedItems.AsReadOnly();
+
+            LikeInput = (ToolBarTextBox)Add(new ToolBarTextBox(likeToolTip));
+            ItemSelector = (ToolBarCheckComboBox)Add(new ToolBarCheckComboBox(typeName, itemSelectorTooltip));
+
             ItemSelector.SetItems(items);
+            
+            LikeInput.KeyPress += LikeInput_KeyPress;
+            LikeInput.TextChanged += LikeInput_TextChanged;
+            ItemSelector.SelectionChangeCommitted += ItemSelector_SelectionChangeCommitted;
 
-            LikeInput.MouseHover += LikeInput_MouseHover;
-            LikeInput.KeyUp += LikeInput_KeyUp;
-
-            Add(LikeInput);
-            Add(ItemSelector);
-        }
-
-        private void LikeInput_MouseHover(object sender, EventArgs evt)
-        {
-            LikeToolTip.SetToolTip(LikeInput, LikeToolTipText); 
-        }
-        private void LikeInput_KeyUp(object sender, KeyEventArgs evt)
-        {
-            if (evt.KeyCode == Keys.Enter)
-            {
-                ApplyFilter?.Invoke(this, null);
-            }
+            Reset();
         }
 
-        public string GetLikeInputText()
+        // events
+        private void LikeInput_KeyPress(object sender, KeyPressEventArgs evt)
         {
-            if (InvokeRequired)
+            if (evt.KeyChar == (char)Keys.Enter)
             {
-                return (string)Invoke((Func<string>)delegate
-                {
-                    return GetLikeInputTextInvoked();
-                });
-            }
-            else
-            {
-                return GetLikeInputTextInvoked();
+                ApplyFilterRequested?.Invoke(sender, evt);
+                evt.Handled = true;
             }
         }
-        public bool IsLike(string text)
+        private void LikeInput_TextChanged(object sender, EventArgs evt)
         {
-            if (InvokeRequired)
-            {
-                return (bool)Invoke((Func<bool>)delegate
-                {
-                    return IsLikeInvoked(text);
-                });
-            }
-            else
-            {
-                return IsLikeInvoked(text);
-            }
+            IsLikeText = LikeInput.Text;
         }
-        public List<string> GetCheckedItems()
+        private void ItemSelector_SelectionChangeCommitted(object sender, EventArgs evt)
         {
-            if (InvokeRequired)
-            {
-                return (List<string>)Invoke((Func<List<string>>)delegate
-                {
-                    return GetCheckedItemsInvoked();
-                });
-            }
-            else
-            {
-                return GetCheckedItemsInvoked();
-            }
+            LoadItems();
         }
-        public List<string> GetUncheckedItems()
-        {
-            if (InvokeRequired)
-            {
-                return (List<string>)Invoke((Func<List<string>>)delegate
-                {
-                    return GetUncheckedItemsInvoked();
-                });
-            }
-            else
-            {
-                return GetUncheckedItemsInvoked();
-            }
-        }
+
         public void Reset()
         {
             if (InvokeRequired)
@@ -1520,165 +2702,188 @@ namespace EgsEcfControls
                 ResetInvoked();
             }
         }
-
-        private string GetLikeInputTextInvoked()
+        public void Enable()
         {
-            return LikeInput.Text;
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    EnableInvoked();
+                });
+            }
+            else
+            {
+                EnableInvoked();
+            }
         }
-        private bool IsLikeInvoked(string text)
+        public void Disable()
         {
-            if (string.IsNullOrEmpty(LikeInput.Text)) { return true; }
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    DisableInvoked();
+                });
+            }
+            else
+            {
+                DisableInvoked();
+            }
+        }
+        public bool IsLike(string text)
+        {
+            if (string.IsNullOrEmpty(IsLikeText)) { return true; }
             if (string.IsNullOrEmpty(text)) { return false; }
-            return text.Contains(LikeInput.Text);
+            return text.Contains(IsLikeText);
         }
-        private List<string> GetCheckedItemsInvoked()
-        {
-            return ItemSelector.GetCheckedItems().Select(item => item.Id).ToList();
-        }
-        private List<string> GetUncheckedItemsInvoked()
-        {
-            return ItemSelector.GetUncheckedItems().Select(item => item.Id).ToList();
-        }
+
         protected virtual void ResetInvoked()
         {
             LikeInput.Clear();
+            IsLikeText = string.Empty;
             ItemSelector.Reset();
+            LoadItems();
+        }
+        protected virtual void EnableInvoked()
+        {
+            LikeInput.Enabled = true;
+            ItemSelector.Enabled = true;
+        }
+        protected virtual void DisableInvoked()
+        {
+            LikeInput.Enabled = false;
+            ItemSelector.Enabled = false;
+        }
+
+        private void LoadItems()
+        {
+            InternalCheckedItems.Clear();
+            InternalUncheckedItems.Clear();
+            InternalCheckedItems.AddRange(ItemSelector.GetCheckedItems().Select(item => item.Id));
+            InternalUncheckedItems.AddRange(ItemSelector.GetUncheckedItems().Select(item => item.Id));
         }
     }
     public class EcfTreeFilter : EcfBaseFilter
     {
-        private CheckComboBox AttributeSelector { get; set; } = null;
+        public bool IsCommentsActive { get; private set; } = false;
+        public bool IsParametersActive { get; private set; } = false;
+        public bool IsDataBlocksActive { get; private set; } = false;
+        public ErrorDisplayModes ErrorDisplayMode { get; private set; } = ErrorDisplayModes.ShowAllItems;
 
+        private ToolBarTreeStateCheckBox ErrorDisplaySelector { get; } = new ToolBarTreeStateCheckBox(
+            Properties.texts.ToolTip_TreeErrorDisplayModeSelector, Properties.icons.Icon_ShowAllItems,
+            Properties.icons.Icon_ShowOnlyFaultyItems, Properties.icons.Icon_ShowOnlyNonFaultyItems);
+
+        public enum ErrorDisplayModes
+        {
+            ShowAllItems,
+            ShowOnlyFaultyItems,
+            ShowOnlyNonFaultyItems,
+        }
         private enum SelectableItems
         {
             Comments,
+            Parameters,
             DataBlocks,
         }
 
-        public EcfTreeFilter(List<string> attributes) : base(
-            Enum.GetValues(typeof(SelectableItems)).Cast<SelectableItems>().Select(item => new CheckableNameItem(item.ToString(), GetSelectableItemsDisplayName(item))).ToList(),
+        public EcfTreeFilter() : base(
+            Enum.GetValues(typeof(SelectableItems)).Cast<SelectableItems>()
+                .Select(item => new CheckableNameItem(item.ToString(), GetSelectableItemsDisplayName(item))).OrderBy(item => item.Display).ToList(),
             Properties.texts.ToolTip_TreeLikeInput,
             Properties.titles.TreeView_FilterSelector_Elements,
             Properties.texts.ToolTip_TreeItemTypeSelector)
         {
-            AttributeSelector = new CheckComboBox(Properties.titles.TreeView_FilterSelector_Attributes, Properties.texts.ToolTip_TreeAttributeSelector)
-            {
-                MaxDropDownItems = 10
-            };
-            AttributeSelector.SetItems(attributes.Select(attr => new CheckableNameItem(attr)).ToList());
+            ItemSelector.SelectionChangeCommitted += ItemSelector_SelectionChangeCommitted;
 
-            Add(AttributeSelector);
+            Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
+        }
+
+        // events
+        private void ItemSelector_SelectionChangeCommitted(object sender, EventArgs evt)
+        {
+            LoadItemSelectionStates();
+        }
+        private void ChangeErrorDisplayButton_Click(object sender, EventArgs evt)
+        {
+            LoadErrrorDisplayState((sender as ToolBarTreeStateCheckBox).CheckState);
         }
 
         private static string GetSelectableItemsDisplayName(SelectableItems item)
         {
             switch (item)
             {
-                case SelectableItems.Comments: return Properties.titles.TreeView_SelectableElements_Comments;
-                case SelectableItems.DataBlocks: return Properties.titles.TreeView_SelectableElements_DataBlocks;
+                case SelectableItems.Comments: return Properties.titles.Generic_Comments;
+                case SelectableItems.Parameters: return Properties.titles.Generic_Parameters;
+                case SelectableItems.DataBlocks: return Properties.titles.Generic_DataElements;
                 default: throw new ArgumentException(item.ToString());
             }
         }
-
-        public bool IsCommentsActive()
+        private void LoadItemSelectionStates()
         {
-            if (InvokeRequired)
-            {
-                return (bool)Invoke((Func<bool>)delegate
-                {
-                    return IsCommentsActiveInvoked();
-                });
-            }
-            else
-            {
-                return IsCommentsActiveInvoked();
-            }
+            IsCommentsActive = ItemSelector.IsItemChecked(SelectableItems.Comments.ToString());
+            IsParametersActive = ItemSelector.IsItemChecked(SelectableItems.Parameters.ToString());
+            IsDataBlocksActive = ItemSelector.IsItemChecked(SelectableItems.DataBlocks.ToString());
         }
-        public bool IsDataBlocksActive()
+        private void LoadErrrorDisplayState(CheckState state)
         {
-            if (InvokeRequired)
+            switch (state)
             {
-                return (bool)Invoke((Func<bool>)delegate
-                {
-                    return IsDataBlocksActiveInvoked();
-                });
+                case CheckState.Checked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyFaultyItems; break;
+                case CheckState.Unchecked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyNonFaultyItems; break;
+                default: ErrorDisplayMode = ErrorDisplayModes.ShowAllItems; break;
             }
-            else
-            {
-                return IsDataBlocksActiveInvoked();
-            }
-        }
-        public List<string> GetCheckedAttributes()
-        {
-            if (InvokeRequired)
-            {
-                return (List<string>)Invoke((Func<List<string>>)delegate
-                {
-                    return GetCheckedAttributesInvoked();
-                });
-            }
-            else
-            {
-                return GetCheckedAttributesInvoked();
-            }
-        }
-        public List<string> GetUncheckedAttributes()
-        {
-            if (InvokeRequired)
-            {
-                return (List<string>)Invoke((Func<List<string>>)delegate
-                {
-                    return GetUncheckedAttributesInvoked();
-                });
-            }
-            else
-            {
-                return GetUncheckedAttributesInvoked();
-            }
-        }
-
-        private bool IsCommentsActiveInvoked()
-        {
-            return ItemSelector.IsItemChecked(SelectableItems.Comments.ToString());
-        }
-        private bool IsDataBlocksActiveInvoked()
-        {
-            return ItemSelector.IsItemChecked(SelectableItems.DataBlocks.ToString());
-        }
-        private List<string> GetCheckedAttributesInvoked()
-        {
-            return AttributeSelector.GetCheckedItems().Select(param => param.Id).ToList();
-        }
-        private List<string> GetUncheckedAttributesInvoked()
-        {
-            return AttributeSelector.GetUncheckedItems().Select(param => param.Id).ToList();
         }
         protected override void ResetInvoked()
         {
             base.ResetInvoked();
-            AttributeSelector.Reset();
+            LoadItemSelectionStates();
+            ErrorDisplaySelector.Reset();
+            LoadErrrorDisplayState(ErrorDisplaySelector.CheckState);
+        }
+        protected override void EnableInvoked()
+        {
+            base.EnableInvoked();
+            ErrorDisplaySelector.Enabled = true;
+        }
+        protected override void DisableInvoked()
+        {
+            base.DisableInvoked();
+            ErrorDisplaySelector.Enabled = false;
         }
     }
     public class EcfParameterFilter : EcfBaseFilter
     {
         public EcfParameterFilter(List<string> items) : base(
-            items.Select(item => new CheckableNameItem(item)).ToList(),
+            items.OrderBy(item => item).Select(item => new CheckableNameItem(item)).ToList(),
             Properties.texts.ToolTip_ParameterLikeInput,
-            Properties.titles.ParameterView_FilterSelector_Parameters,
+            Properties.titles.Generic_Parameters,
             Properties.texts.ToolTip_ParameterSelector)
         {
 
         }
-    }
-    public class EcfSorter : EcfToolGroup
-    {
-        public event EventHandler SortingChanged;
 
-        private ComboBox ItemCountSelector { get; } = new ComboBox();
-        private NumericUpDown ItemGroupSelector { get; } = new NumericUpDown();
-        private CheckBox DirectionSelector { get; } = new CheckBox();
-        private RadioButton OriginOrderSelector { get; } = new RadioButton();
-        private RadioButton AlphabeticOrderSelector { get; } = new RadioButton();
+        public bool IsParameterVisible(EcfParameter parameter)
+        {
+            return (parameter.ContainsError(EcfErrors.ParameterUnknown) || CheckedItems.Contains(parameter.Key))
+                && IsParameterValueLike(parameter.GetAllValues(), IsLikeText);
+        }
+
+        private bool IsParameterValueLike(ReadOnlyCollection<string> values, string isLike)
+        {
+            if (string.IsNullOrEmpty(isLike) || values.Count < 1) { return true; }
+            return values.Any(value => value.Contains(isLike));
+        }
+    }
+    public class EcfSorter : EcfToolBox
+    {
+        public event EventHandler SortingUserChanged;
+
+        private ComboBox ItemCountSelector { get; }
+        private NumericUpDown ItemGroupSelector { get; }
+        private CheckBox DirectionSelector { get; }
+        private RadioButton OriginOrderSelector { get; }
+        private RadioButton AlphabeticOrderSelector { get; }
 
         public int ItemCount { get; private set; } = 100;
         public int ItemGroup { get; private set; } = 1;
@@ -1686,56 +2891,41 @@ namespace EgsEcfControls
         public SortingTypes SortingType { get; private set; } = SortingTypes.Original;
 
         private int OverallItemCount { get; set; } = 100;
-        private bool IsItemGroupSelectorUpdating { get; set; } = false;
+        private bool IsUpdating { get; set; } = false;
 
         public enum SortingTypes
         {
             Original,
             Alphabetical,
         }
-
-        public EcfSorter(string itemCountSelectorTooltip, string itemGroupSelectorTooltip, string directionToolTip, string originToolTip, string aplhabeticToolTip) : base()
+        public enum VisibleItemCount
         {
-            DirectionSelector.Text = "D";
-            OriginOrderSelector.Text = "O";
-            AlphabeticOrderSelector.Text = "A";
-            DirectionSelector.Size = new Size(20, 20);
-            OriginOrderSelector.Size = new Size(20, 20);
-            AlphabeticOrderSelector.Size = new Size(20, 20);
+            Ten = 10,
+            TwentyFive = 25,
+            Fifty = 50,
+            OneHundred = 100,
+            TwoHundredAndFifty = 250,
+            FiveHundred = 500,
+        }
 
+        public EcfSorter(string itemCountSelectorTooltip, string itemGroupSelectorTooltip, 
+            string directionToolTip, string originToolTip, string aplhabeticToolTip,
+            VisibleItemCount count) : base()
+        {
+            ItemCountSelector = (ToolBarComboBox)Add(new ToolBarComboBox(itemCountSelectorTooltip));
+            ItemGroupSelector = (ToolBarNumericUpDown)Add(new ToolBarNumericUpDown(itemGroupSelectorTooltip));
+            DirectionSelector = (ToolBarCheckBox)Add(new ToolBarCheckBox(directionToolTip, Properties.icons.Icon_ChangeSortDirection, null));
+            OriginOrderSelector = (ToolBarRadioButton)Add(new ToolBarRadioButton(originToolTip, Properties.icons.Icon_NumericSorting, null));
+            AlphabeticOrderSelector = (ToolBarRadioButton)Add(new ToolBarRadioButton(aplhabeticToolTip, Properties.icons.Icon_AlphabeticSorting, null));
 
-
-
-
-            
-
-
-
-            ItemCountSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-            ItemCountSelector.Items.AddRange(new object[] { "10", "25", "50", "100", "250", "500" });
-            ItemCountSelector.Width = ItemCountSelector.Items.Cast<string>().Max(x => TextRenderer.MeasureText(x, ItemCountSelector.Font).Width) + SystemInformation.VerticalScrollBarWidth;
+            ItemCountSelector.Items.AddRange(Enum.GetValues(typeof(VisibleItemCount)).Cast<VisibleItemCount>().Select(value => Convert.ToInt32(value).ToString()).ToArray());
+            ItemCount = Convert.ToInt32(count);
             ItemCountSelector.SelectedItem = ItemCount.ToString();
-            new ToolTip().SetToolTip(ItemCountSelector, itemCountSelectorTooltip);
 
+            ItemCountSelector.Width = ItemCountSelector.Items.Cast<string>().Max(x => TextRenderer.MeasureText(x, ItemCountSelector.Font).Width) + SystemInformation.VerticalScrollBarWidth;
             ItemGroupSelector.Minimum = ItemGroup;
             UpdateItemGroupSelector();
-            new ToolTip().SetToolTip(ItemGroupSelector, itemGroupSelectorTooltip);
-
             OriginOrderSelector.Checked = true;
-
-            DirectionSelector.Appearance = Appearance.Button;
-            OriginOrderSelector.Appearance = Appearance.Button;
-            AlphabeticOrderSelector.Appearance = Appearance.Button;
-
-            new ToolTip().SetToolTip(DirectionSelector, directionToolTip);
-            new ToolTip().SetToolTip(OriginOrderSelector, originToolTip);
-            new ToolTip().SetToolTip(AlphabeticOrderSelector, aplhabeticToolTip);
-
-            Add(ItemCountSelector);
-            Add(ItemGroupSelector);
-            Add(DirectionSelector);
-            Add(OriginOrderSelector);
-            Add(AlphabeticOrderSelector);
 
             ItemCountSelector.SelectionChangeCommitted += ItemCountSelector_SelectionChangeCommitted;
             ItemGroupSelector.ValueChanged += ItemGroupSelector_ValueChanged;
@@ -1744,142 +2934,161 @@ namespace EgsEcfControls
             AlphabeticOrderSelector.CheckedChanged += AlphabeticOrderSelector_CheckedChanged;
         }
 
-        public void SetOverallItemCount(int overallItemCount)
-        {
-            OverallItemCount = overallItemCount;
-            UpdateItemGroupSelector();
-        }
-        private void UpdateItemGroupSelector()
-        {
-            IsItemGroupSelectorUpdating = true;
-            ItemGroupSelector.Maximum = Math.Max((int)Math.Ceiling(OverallItemCount / (double)ItemCount), 1);
-            int biggestGroup = OverallItemCount / Convert.ToInt32(ItemCountSelector.Items[0]);
-            ItemGroupSelector.Width = TextRenderer.MeasureText(biggestGroup.ToString(), ItemGroupSelector.Font).Width + SystemInformation.VerticalScrollBarWidth;
-            ItemGroupSelector.Value = ItemGroupSelector.Minimum;
-            IsItemGroupSelectorUpdating = false;
-        }
-
+        // events
         private void ItemCountSelector_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             ItemCount = Convert.ToInt32(ItemCountSelector.SelectedItem);
             UpdateItemGroupSelector();
-            SortingChanged?.Invoke(this, null);
+            if (!IsUpdating)
+            {
+                SortingUserChanged?.Invoke(sender, evt);
+            }
         }
         private void ItemGroupSelector_ValueChanged(object sender, EventArgs evt)
         {
             ItemGroup = Convert.ToInt32(ItemGroupSelector.Value);
-            if (!IsItemGroupSelectorUpdating)
+            if (!IsUpdating)
             {
-                SortingChanged?.Invoke(this, null);
+                SortingUserChanged?.Invoke(sender, evt);
             }
         }
         private void DirectionSelector_Click(object sender, EventArgs evt)
         {
             IsAscending = !DirectionSelector.Checked;
-            SortingChanged?.Invoke(this, null);
+            SortingUserChanged?.Invoke(sender, evt);
         }
         private void OriginOrderSelector_CheckedChanged(object sender, EventArgs evt)
         {
-            if (OriginOrderSelector.Checked)
+            if (!IsUpdating)
             {
-                SortingType = SortingTypes.Original;
-                SortingChanged?.Invoke(this, null);
+                if (OriginOrderSelector.Checked)
+                {
+                    SortingType = SortingTypes.Original;
+                    SortingUserChanged?.Invoke(sender, evt);
+                }
             }
         }
         private void AlphabeticOrderSelector_CheckedChanged(object sender, EventArgs evt)
         {
-            if (AlphabeticOrderSelector.Checked)
+            if (!IsUpdating)
             {
-                SortingType = SortingTypes.Alphabetical;
-                SortingChanged?.Invoke(this, null);
+                if (AlphabeticOrderSelector.Checked)
+                {
+                    SortingType = SortingTypes.Alphabetical;
+                    SortingUserChanged?.Invoke(sender, evt);
+                }
             }
         }
+
+        // public
+        public void SetOverallItemCount(int overallItemCount)
+        {
+            OverallItemCount = overallItemCount;
+            UpdateItemGroupSelector();
+        }
+        public void SetItemCount(VisibleItemCount count)
+        {
+            ItemCount = Convert.ToInt32(count);
+            ItemCountSelector.SelectedItem = ItemCount.ToString();
+            UpdateItemGroupSelector();
+        }
+
+        // privates
+        private void UpdateItemGroupSelector()
+        {
+            IsUpdating = true;
+            int selectedValue = (int)ItemGroupSelector.Value;
+            ItemGroupSelector.Maximum = Math.Max((int)Math.Ceiling(OverallItemCount / (double)ItemCount), 1);
+            int biggestGroup = OverallItemCount / Convert.ToInt32(ItemCountSelector.Items[0]);
+            ItemGroupSelector.Width = TextRenderer.MeasureText(biggestGroup.ToString(), ItemGroupSelector.Font).Width + SystemInformation.VerticalScrollBarWidth;
+
+            if (selectedValue < ItemGroupSelector.Minimum)
+            {
+                ItemGroupSelector.Value = ItemGroupSelector.Minimum;
+            } 
+            else if (selectedValue > ItemGroupSelector.Maximum)
+            {
+                ItemGroupSelector.Value = ItemGroupSelector.Maximum;
+            }
+            else
+            {
+                ItemGroupSelector.Value = selectedValue;
+            }
+            IsUpdating = false;
+        }
     }
-    public class EcfDataIndicator : EcfToolGroup
-    {
-        private Label ConfigType { get; } = new Label();
-        private ProgressIndicator Indicator { get; } = new ProgressIndicator();
 
-        public EcfDataIndicator(string configType)
-        {
-            ConfigType.AutoSize = true;
-            ConfigType.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            ConfigType.Dock = DockStyle.Fill;
-            ConfigType.Text = configType;
-            ConfigType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
-            Indicator.Size = new Size(ConfigType.Height, ConfigType.Height);
-            Indicator.SetParameter(VisualModes.Circle);
-
-            Add(ConfigType);
-            Add(Indicator);
-        }
-
-        public void Activate()
-        {
-            Indicator.Activate();
-        }
-        public void Deactivate()
-        {
-            Indicator.Deactivate();
-        }
-    }
-
-    public class CheckComboBox : Panel
+    // generic tool controls
+    public class ToolBarCheckComboBox : Panel
     {
         public event EventHandler SelectionChangeCommitted;
 
-        private int InitWidth { get; } = 100;
-        private int InitHeight { get; } = 20;
+        private bool IsResultBoxUnderCursor { get; set; } = false;
 
         private ToolTip BoxToolTip { get; } = new ToolTip();
         private TextBox ResultBox { get; } = new TextBox();
-        private DropDownButton DropButton { get; } = new DropDownButton();
+        private DropDownButton DropButton { get; }
         private DropDownList ItemList { get; }
 
         public string ToolTipText { get; }
         public string LocalisedOf { get; }
         public string LocalisedName { get; }
-        public int MaxDropDownItems { get; set; } = 5;
+        public int MaxDropDownItems { get; set; } = 10;
 
-        public CheckComboBox(string TypeText, string toolTip)
+        public ToolBarCheckComboBox(string TypeText, string toolTip)
         {
             ToolTipText = toolTip;
             LocalisedOf = Properties.texts.FilterSelector_Of;
             LocalisedName = TypeText;
 
-            Size = new Size(InitWidth, InitHeight);
-
             ResultBox.ReadOnly = true;
             ResultBox.Margin = new Padding(0);
             ResultBox.Location = new Point(0, 0);
 
-            DropButton.Margin = new Padding(0);
-            DropButton.DropStateChanged += OnDropStateChanged;
+            DropButton = new DropDownButton(ResultBox.Height);
 
-            ItemList = new DropDownList(Properties.texts.FilterSelector_ChangeAll);
-            ItemList.SetParent(this);
+            ItemList = new DropDownList(Properties.texts.FilterSelector_ChangeAll)
+            {
+                AnchorControl = this
+            };
 
-            ResultBox.MouseHover += OnResultBoxMouseHover;
-            ItemList.ItemStateChanged += OnItemStateChanged;
-            ItemList.DropDownFocusLost += OnDropDownFocusLost;
+            ResultBox.MouseHover += ResultBox_MouseHover;
+            ResultBox.Click += ResultBox_Click;
+            ResultBox.MouseEnter += ResultBox_MouseEnter;
+            ResultBox.MouseLeave += ResultBox_MouseLeave;
+            DropButton.DropStateChanged += DropButton_DropStateChanged;
+            ItemList.ItemStateChanged += ItemList_ItemStateChanged;
+            ItemList.DropDownFocusLost += ItemList_DropDownFocusLost;
 
             Controls.Add(ResultBox);
             Controls.Add(DropButton);
         }
 
-        private void OnResultBoxMouseHover(object sender, EventArgs e)
+        // events
+        private void ResultBox_MouseHover(object sender, EventArgs evt)
         {
             BoxToolTip.SetToolTip(ResultBox, ToolTipText);
         }
-        private void OnDropDownFocusLost(object sender, EventArgs evt)
+        private void ResultBox_Click(object sender, EventArgs evt)
         {
-            if (!DropButton.IsUnderCursor)
+            DropButton.Switch();
+        }
+        private void ResultBox_MouseEnter(object sender, EventArgs evt)
+        {
+            IsResultBoxUnderCursor = true;
+        }
+        private void ResultBox_MouseLeave(object sender, EventArgs evt)
+        {
+            IsResultBoxUnderCursor = false;
+        }
+        private void ItemList_DropDownFocusLost(object sender, EventArgs evt)
+        {
+            if (!DropButton.IsUnderCursor && !IsResultBoxUnderCursor)
             {
                 DropButton.Reset();
             }
         }
-        private void OnDropStateChanged(object sender, EventArgs evt)
+        private void DropButton_DropStateChanged(object sender, EventArgs evt)
         {
             if (DropButton.State == ComboBoxState.Pressed)
             {
@@ -1891,31 +3100,27 @@ namespace EgsEcfControls
                 SelectionChangeCommitted?.Invoke(this, null);
             }
         }
-        private void OnItemStateChanged(object sender, ItemCheckEventArgs evt)
+        private void ItemList_ItemStateChanged(object sender, ItemCheckEventArgs evt)
         {
             UpdateResult();
         }
-        protected override void OnResize(EventArgs evt)
-        {
-            ResultBox.Size = new Size(Width - Height, Height);
-            DropButton.Location = new Point(ResultBox.Width, 0);
-            DropButton.Size = new Size(Height, Height);
-            base.OnResize(evt);
-        }
+
+        // private
         private void UpdateResult()
         {
             ResultBox.Text = ToString();
-            using (Graphics gfx = ResultBox.CreateGraphics())
+            int width = TextRenderer.MeasureText(ResultBox.Text, ResultBox.Font).Width;
+            if (width > ResultBox.Width)
             {
-                gfx.PageUnit = GraphicsUnit.Pixel;
-                float width = gfx.MeasureString(ResultBox.Text, ResultBox.Font).Width;
-                if (width > ResultBox.Width)
-                {
-                    Width = (int)width + DropButton.Width;
-                }
+                ResultBox.Width = width;
+                DropButton.Location = new Point(width, 0);
+                Size = new Size(width + DropButton.Width, ResultBox.Height);
+                MinimumSize = Size;
+                MaximumSize = Size;
             }
         }
 
+        // public
         public void Reset()
         {
             ItemList.Reset();
@@ -1944,7 +3149,6 @@ namespace EgsEcfControls
         {
             if (items != null)
             {
-                items.Sort();
                 ItemList.SetItems(items);
                 UpdateResult();
             }
@@ -1959,13 +3163,15 @@ namespace EgsEcfControls
             public event ItemCheckEventHandler ItemStateChanged;
             public event EventHandler DropDownFocusLost;
 
-            private Control ParentControl { get; set; } = null;
-            private CheckedListBox ItemList { get; } = new CheckedListBox();
-
+            public Control AnchorControl { get; set; } = null;
             public string LocalisedChangeAll { get; }
+
+            private CheckedListBox ItemList { get; } = new CheckedListBox();
 
             public DropDownList(string changAllText) : base()
             {
+                AnchorControl = this;
+
                 AutoSize = true;
                 AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 FormBorderStyle = FormBorderStyle.None;
@@ -1976,17 +3182,18 @@ namespace EgsEcfControls
                 ItemList.IntegralHeight = true;
                 ItemList.CheckOnClick = true;
                 ItemList.Margin = new Padding(0);
-                ItemList.ItemCheck += OnItemStateChanged;
-                ItemList.LostFocus += OnLostFocus;
+                ItemList.ItemCheck += ItemList_ItemCheck;
+                ItemList.LostFocus += ItemList_LostFocus; ;
 
                 Controls.Add(ItemList);
             }
 
-            private void OnLostFocus(object sender, EventArgs evt)
+            // events
+            private void ItemList_LostFocus(object sender, EventArgs evt)
             {
                 DropDownFocusLost?.Invoke(this, null);
             }
-            private void OnItemStateChanged(object sender, ItemCheckEventArgs evt)
+            private void ItemList_ItemCheck(object sender, ItemCheckEventArgs evt)
             {
                 if (ItemList.Items[evt.Index] is CheckableItem item)
                 {
@@ -1998,15 +3205,56 @@ namespace EgsEcfControls
                     ItemStateChanged?.Invoke(item, evt);
                 }
             }
+            
+            // publics
+            public void Reset()
+            {
+                ItemList.SetItemChecked(0, true);
+                ChangeAllStates(true);
+            }
+            public void SetItems(List<CheckableNameItem> items)
+            {
+                ItemList.BeginUpdate();
+                ItemList.Items.Clear();
+                ItemList.Items.Add(new CheckableItem(string.Format("#{0}", LocalisedChangeAll), true));
+                ItemList.Items.AddRange(items.Select(item => new CheckableItem(item, true)).ToArray());
+                Reset();
+                ResizeDropDown();
+                ItemList.EndUpdate();
+            }
+            public void ShowPopup(IWin32Window parent)
+            {
+                if (AnchorControl is ToolBarCheckComboBox box)
+                {
+                    Location = box.PointToScreen(new Point(0, box.Height));
+                    Width = Math.Max(Width, box.Width);
+                }
+                Show(parent);
+            }
+            public List<CheckableNameItem> GetItems()
+            {
+                return ItemList.Items.Cast<CheckableItem>().Skip(1).Select(item => item.Name).ToList();
+            }
+            public List<CheckableNameItem> GetCheckedItems()
+            {
+                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == true).Select(item => item.Name).ToList();
+            }
+            public List<CheckableNameItem> GetUncheckedItems()
+            {
+                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == false).Select(item => item.Name).ToList();
+            }
+
+            // privates
             private void ChangeAllStates(bool state)
             {
-                for (int i = 1; i < ItemList.Items.Count; i++) {
+                for (int i = 1; i < ItemList.Items.Count; i++)
+                {
                     ItemList.SetItemChecked(i, state);
                 }
             }
             private void ResizeDropDown()
             {
-                if (ParentControl is CheckComboBox box && ItemList.Items.Count > 0)
+                if (AnchorControl is ToolBarCheckComboBox box && ItemList.Items.Count > 0)
                 {
                     int itemCount = Math.Min(ItemList.Items.Count, box.MaxDropDownItems);
                     int height = (ItemList.GetItemHeight(0) + 5) * itemCount;
@@ -2030,52 +3278,12 @@ namespace EgsEcfControls
                     ItemList.Size = new Size(width, height);
                 }
             }
-
-            public void Reset()
-            {
-                ItemList.SetItemChecked(0, true);
-                ChangeAllStates(true);
-            }
-            public void SetParent(Control parent)
-            {
-                ParentControl = parent;
-            }
-            public void SetItems(List<CheckableNameItem> items)
-            {
-                ItemList.BeginUpdate();
-                ItemList.Items.Clear();
-                ItemList.Items.Add(new CheckableItem(string.Format("#{0}", LocalisedChangeAll), true));
-                ItemList.Items.AddRange(items.Select(item => new CheckableItem(item, true)).ToArray());
-                Reset();
-                ResizeDropDown();
-                ItemList.EndUpdate();
-            }
-            public void ShowPopup(IWin32Window parent)
-            {
-                if (ParentControl is CheckComboBox box)
-                {
-                    Location = box.PointToScreen(new Point(0, box.Height));
-                    Width = Math.Max(Width, box.Width);
-                }
-                Show(parent);
-            }
-            public List<CheckableNameItem> GetItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).Select(item => item.Name).ToList();
-            }
-            public List<CheckableNameItem> GetCheckedItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == true).Select(item => item.Name).ToList();
-            }
-            public List<CheckableNameItem> GetUncheckedItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == false).Select(item => item.Name).ToList();
-            }
         }
-        public class CheckableNameItem : IComparable
+        public class CheckableNameItem
         {
             public string Id { get; }
             public string Display { get; }
+
             public CheckableNameItem(string id, string display)
             {
                 Id = id;
@@ -2084,15 +3292,6 @@ namespace EgsEcfControls
             public CheckableNameItem(string display) : this(display, display)
             {
 
-            }
-
-            public int CompareTo(object obj)
-            {
-                if (obj is CheckableNameItem nameItem)
-                {
-                    return Id.CompareTo(nameItem.Id);
-                }
-                return 1;
             }
         }
         public class CheckableItem
@@ -2124,12 +3323,12 @@ namespace EgsEcfControls
             public event EventHandler DropStateChanged;
 
             public bool IsUnderCursor { get; private set; } = false;
-
             public ComboBoxState State { get; private set; } = ComboBoxState.Normal;
 
-            protected override void OnPaint(PaintEventArgs evt)
+            public DropDownButton(int height) : base()
             {
-                ComboBoxRenderer.DrawDropDownButton(evt.Graphics, evt.ClipRectangle, State);
+                Margin = new Padding(0);
+                Size = new Size(height, height);
             }
 
             public void Reset()
@@ -2140,6 +3339,26 @@ namespace EgsEcfControls
                     DropStateChanged?.Invoke(this, null);
                     Invalidate();
                 }
+            }
+            public void Drop()
+            {
+                if (!State.Equals(ComboBoxState.Pressed))
+                {
+                    State = ComboBoxState.Pressed;
+                    DropStateChanged?.Invoke(this, null);
+                    Invalidate();
+                }
+            }
+            public void Switch()
+            {
+                State = State.Equals(ComboBoxState.Normal) ? ComboBoxState.Pressed : ComboBoxState.Normal;
+                DropStateChanged?.Invoke(this, null);
+                Invalidate();
+            }
+
+            protected override void OnPaint(PaintEventArgs evt)
+            {
+                ComboBoxRenderer.DrawDropDownButton(evt.Graphics, evt.ClipRectangle, State);
             }
             protected override void OnClick(EventArgs evt)
             {
@@ -2155,17 +3374,17 @@ namespace EgsEcfControls
                     Invalidate();
                 }
             }
-            protected override void OnMouseEnter(EventArgs e)
+            protected override void OnMouseEnter(EventArgs evt)
             {
                 IsUnderCursor = true;
             }
-            protected override void OnMouseLeave(EventArgs e)
+            protected override void OnMouseLeave(EventArgs evt)
             {
                 IsUnderCursor = false;
             }
         }
     }
-    public class ProgressIndicator : Control
+    public class ToolBarProgressIndicator : Control
     {
         public bool IsActive { get; private set; } = false;
         public bool IsAutomaticCounting { get; private set; } = true;
@@ -2197,7 +3416,7 @@ namespace EgsEcfControls
             DotArray,
         }
 
-        public ProgressIndicator() : base()
+        public ToolBarProgressIndicator() : base()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.Selectable | ControlStyles.ContainerControl | ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, false);
@@ -2367,6 +3586,162 @@ namespace EgsEcfControls
                 case VisualModes.DotArray: VisualMode_DotArray(gfx); return;
                 case VisualModes.Circle: VisualMode_Circle(gfx); return;
                 default: VisualMode_Default(gfx); return;
+            }
+        }
+    }
+    public class ToolBarTextBox : TextBox
+    {
+        private string ToolTipText { get; }
+        private ToolTip Tip { get; } = new ToolTip();
+
+        public ToolBarTextBox(string toolTip) : base()
+        {
+            ToolTipText = toolTip;
+
+            MouseHover += ToolTipTextBox_MouseHover;
+        }
+
+        private void ToolTipTextBox_MouseHover(object sender, EventArgs evt)
+        {
+            Tip.SetToolTip(this, ToolTipText);
+        }
+    }
+    public class ToolBarButton : Button
+    {
+        public ToolBarButton(string toolTip, Image image, string text) : base()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+            new ToolTip().SetToolTip(this, toolTip);
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            
+            if (image != null)
+            {
+                FlatStyle = FlatStyle.Flat;
+                FlatAppearance.BorderSize = 0;
+                Image = image;
+            } 
+            else if (text != null)
+            {
+                Text = text;
+            }
+        }
+    }
+    public class ToolBarRadioButton : RadioButton
+    {
+        public ToolBarRadioButton(string toolTip, Image image, string text) : base()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+            new ToolTip().SetToolTip(this, toolTip);
+
+            Appearance = Appearance.Button;
+            if (image != null)
+            {
+                FlatStyle = FlatStyle.Flat;
+                FlatAppearance.BorderSize = 0;
+                Image = image;
+            }
+            else if (text != null)
+            {
+                Text = text;
+            }
+        }
+    }
+    public class ToolBarCheckBox : CheckBox
+    {
+        public ToolBarCheckBox(string toolTip, Image image, string text) : base()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+            new ToolTip().SetToolTip(this, toolTip);
+
+            Appearance = Appearance.Button;
+            if (image != null)
+            {
+                FlatStyle = FlatStyle.Flat;
+                FlatAppearance.BorderSize = 0;
+                Image = image;
+            }
+            else if (text != null)
+            {
+                Text = text;
+            }
+        }
+    }
+    public class ToolBarTreeStateCheckBox : ToolBarCheckBox
+    {
+        private Image IndeterminateImage { get; }
+        private Image CheckedImage { get; }
+        private Image UncheckedImage { get; }
+
+        public ToolBarTreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage) 
+            : base(toolTip, indeterminateImage, null)
+        {
+            IndeterminateImage = indeterminateImage;
+            CheckedImage = checkedImage;
+            UncheckedImage = uncheckedImage;
+
+            ThreeState = true;
+            AutoCheck = true;
+
+            CheckStateChanged += ToolBarTreeStateCheckBox_CheckStateChanged;
+
+            Reset();
+        }
+
+        private void ToolBarTreeStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
+        {
+            switch (CheckState)
+            {
+                case CheckState.Checked: Image = CheckedImage; break;
+                case CheckState.Unchecked: Image = UncheckedImage; break;
+                default: Image = IndeterminateImage; break;
+            }
+        }
+
+        public void Reset()
+        {
+            CheckState = CheckState.Indeterminate;
+        }
+    }
+    public class ToolBarNumericUpDown : NumericUpDown
+    {
+        public ToolBarNumericUpDown(string toolTip) : base()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+            new ToolTip().SetToolTip(this, toolTip);
+        }
+    }
+    public class ToolBarComboBox : ComboBox
+    {
+        public ToolBarComboBox(string toolTip) : base()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+            new ToolTip().SetToolTip(this, toolTip);
+
+            DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+    }
+    public class ToolBarLabel : Label
+    {
+        public bool IsForcingBoldStyle { get; }
+
+        public ToolBarLabel(string text, bool forceBold) : base()
+        {
+            Text = text;
+            IsForcingBoldStyle = forceBold;
+
+            SetStyle(ControlStyles.Selectable, false);
+            TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            FontChanged += ToolBarLabel_FontChanged;
+
+            OnFontChanged(null);
+        }
+
+        private void ToolBarLabel_FontChanged(object sender, EventArgs evt)
+        {
+            if (IsForcingBoldStyle)
+            {
+                Font = new Font(Font, FontStyle.Bold);
             }
         }
     }

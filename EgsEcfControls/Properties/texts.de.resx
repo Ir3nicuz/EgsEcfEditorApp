@@ -117,8 +117,80 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackgrounfWorker_Failed" xml:space="preserve">
+  <data name="BackgroundWorker_Failed" xml:space="preserve">
     <value>Der Hintergrunddienst hat ein Problem festgestellt</value>
+  </data>
+  <data name="BackgroundWorker_Running" xml:space="preserve">
+    <value>Es läuft bereits ein Daten Update welches erst beendet werden muss</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_EmptyDataText" xml:space="preserve">
+    <value>Keine veralteten Elemente gefunden</value>
+  </data>
+  <data name="EcfFilePropertiesDialog_PropertiesIncomplete" xml:space="preserve">
+    <value>Mindestens eine Eigenschaft ist nicht korrekt eingestellt. Bitte die Eingaben prüfen!</value>
+  </data>
+  <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
+    <value>Kommentar Element ohne Inhalt is nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_CouldNotBeFoundInTheItemList" xml:space="preserve">
+    <value>konnte in der Element Liste nicht gefunden werden</value>
+  </data>
+  <data name="EcfItemEditingDialog_IsAlreadyUsedBy" xml:space="preserve">
+    <value>wird bereits verwendet von</value>
+  </data>
+  <data name="EcfItemEditingDialog_IsStillReferencedBy" xml:space="preserve">
+    <value>wird immer noch referenziert von</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
+    <value>Es ist kein hinzufügbarer Parameter vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
+    <value>Für Parameter ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisDataType" xml:space="preserve">
+    <value>Für den Datentyp dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisPostMark" xml:space="preserve">
+    <value>Für das Nachzeichen dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisPreMark" xml:space="preserve">
+    <value>Für das Vorzeichen dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
+    <value>Kein editierbares Element ausgewählt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditWithoutParameter" xml:space="preserve">
+    <value>Parameter Bearbeitung ohne eine Parameter Definition nicht möglich</value>
+  </data>
+  <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
+    <value>nicht ausgewählt</value>
+  </data>
+  <data name="EcfItemEditingDialog_ParameterNotDefined" xml:space="preserve">
+    <value>Für diesen Parameter ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheIdAttributeValue" xml:space="preserve">
+    <value>Der Wert des Id Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheNameAttributeValue" xml:space="preserve">
+    <value>Der Wert des Name Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheOldNameAttributeValue" xml:space="preserve">
+    <value>Der alte Wert des Name Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheReferencedItem" xml:space="preserve">
+    <value>Das referenzierte Element</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_AddValue" xml:space="preserve">
+    <value>Fügt eine Wert Zelle hinter der selektierten Zelle ein</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_AddValueGroup" xml:space="preserve">
+    <value>Fügt eine Wert Gruppe hinter der selektierten Zelle ein</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_RemoveValue" xml:space="preserve">
+    <value>Entfernt die selektierte Wert Zelle</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
+    <value>Entfernt die selektierte Wert Gruppe</value>
   </data>
   <data name="FilterSelector_ChangeAll" xml:space="preserve">
     <value>Alle ändern</value>
@@ -126,11 +198,137 @@
   <data name="FilterSelector_Of" xml:space="preserve">
     <value>von</value>
   </data>
+  <data name="Generic_ContinueImpossibleWithErrors" xml:space="preserve">
+    <value>Das Fortsetzen ist nicht möglich aufgrund von Fehlern</value>
+  </data>
+  <data name="Generic_ContinueOperationWithErrorsQuestion" xml:space="preserve">
+    <value>Das Fortsetzen des aktuellen Vorgangs führt zu Fehlern. Dennoch fortfahren?</value>
+  </data>
+  <data name="Generic_FileCouldNotBeOpened" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet werden</value>
+  </data>
+  <data name="Generic_HasError" xml:space="preserve">
+    <value>hat Fehler</value>
+  </data>
+  <data name="Generic_HasNoValue" xml:space="preserve">
+    <value>hat keinen Wert</value>
+  </data>
+  <data name="Generic_IsNotOptional" xml:space="preserve">
+    <value>ist nicht optional</value>
+  </data>
+  <data name="Generic_IsReferencedBy" xml:space="preserve">
+    <value>wird referenziert von</value>
+  </data>
+  <data name="Generic_NoSuitableSelection" xml:space="preserve">
+    <value>Kein geeignetes Element ausgewählt</value>
+  </data>
+  <data name="InfoView_NoDefinition" xml:space="preserve">
+    <value>Keine Definition gefunden</value>
+  </data>
   <data name="ParameterView_GroupSeperator" xml:space="preserve">
     <value>:</value>
   </data>
   <data name="ParameterView_ValueSeperator" xml:space="preserve">
     <value>,</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_Close" xml:space="preserve">
+    <value>Schließt die selektierte Datei</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_CloseAll" xml:space="preserve">
+    <value>Schließt alle Dateien</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_New" xml:space="preserve">
+    <value>Erzeugt eine neue Datei</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_Open" xml:space="preserve">
+    <value>Öffnet eine existierende Datei</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_Reload" xml:space="preserve">
+    <value>Lädt die Dateiinhalte neu</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_Save" xml:space="preserve">
+    <value>Speichert die selektierte Datei</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_SaveAll" xml:space="preserve">
+    <value>Speichert alle Dateien</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_SaveAs" xml:space="preserve">
+    <value>Speichert die selektierte Datei unter einem anderen Namen</value>
+  </data>
+  <data name="ToolTip_BasicFileOperations_SaveAsFiltered" xml:space="preserve">
+    <value>Speichert das Filterergebnis der selektierten Datei unter einem anderen Namen</value>
+  </data>
+  <data name="ToolTip_ContentOperations_Add" xml:space="preserve">
+    <value>Fügt ein Element des selektierten Typs hinzu</value>
+  </data>
+  <data name="ToolTip_ContentOperations_ChangeComplex" xml:space="preserve">
+    <value>Ändern von mehreren Elementen</value>
+  </data>
+  <data name="ToolTip_ContentOperations_ChangeSimple" xml:space="preserve">
+    <value>Ändert das erste selektierte Element</value>
+  </data>
+  <data name="ToolTip_ContentOperations_MoveDown" xml:space="preserve">
+    <value>Bewegt die selektierten Elemente abwärts</value>
+  </data>
+  <data name="ToolTip_ContentOperations_MoveUp" xml:space="preserve">
+    <value>Bewegt die selektierten Elemente aufwärts</value>
+  </data>
+  <data name="ToolTip_ContentOperations_Redo" xml:space="preserve">
+    <value>Wiederholen</value>
+  </data>
+  <data name="ToolTip_ContentOperations_Remove" xml:space="preserve">
+    <value>Entfernt die selektierten Elemente</value>
+  </data>
+  <data name="ToolTip_ContentOperations_Undo" xml:space="preserve">
+    <value>Rückgängig</value>
+  </data>
+  <data name="ToolTip_EcfFilePropertiesDialog_Encoding" xml:space="preserve">
+    <value>Für eine neu erstellte Datei muss das Encoding festgelegt werden. Das vorausgewählte Encoding sollte in den meisten Fällen geeignet sein.</value>
+  </data>
+  <data name="ToolTip_EcfFilePropertiesDialog_FormatDefinition" xml:space="preserve">
+    <value>Anhand des Dateinamens wird versucht das Format zu ermitteln. Wenn das fehlschlägt oder falsch ist, muss das Format manuell festgelegt werden.</value>
+  </data>
+  <data name="ToolTip_EcfFilePropertiesDialog_NewLineSymbol" xml:space="preserve">
+    <value>Für eine neu erstellte Datei muss das Zeilenumbruch Symbol festgelegt werden. Das vorausgewählte Symbol sollte in den meisten Fällen geeignet sein.</value>
+  </data>
+  <data name="ToolTip_EcfItemSelectorDialog_SearchInfo" xml:space="preserve">
+    <value>Like-suche zum Einschränken der Dropdown Liste</value>
+  </data>
+  <data name="ToolTip_ErrorCountSelector" xml:space="preserve">
+    <value>Anzahl der gleichzeitig angezeigter Fehler</value>
+  </data>
+  <data name="ToolTip_ErrorGroupSelector" xml:space="preserve">
+    <value>Gruppe der angezeigten Fehler</value>
+  </data>
+  <data name="ToolTip_ErrorSorterAlphabeticOrder" xml:space="preserve">
+    <value>Aktiviert die alphabetische Reihenfolge</value>
+  </data>
+  <data name="ToolTip_ErrorSorterDirection" xml:space="preserve">
+    <value>Ändert die Sortierrichtung</value>
+  </data>
+  <data name="ToolTip_ErrorSorterOriginOrder" xml:space="preserve">
+    <value>Aktiviert die Auftrittsreihenfolge</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_BuildTechTreePreview" xml:space="preserve">
+    <value>Erzeugt eine Vorschauansicht für den TechTree basierend auf den geöffneten Dateien</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_CheckDefinition" xml:space="preserve">
+    <value>Prüft die Format Definition der gewählten Datei auf veraltete Vorgaben</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_CompareFiles" xml:space="preserve">
+    <value>Vergleicht zwei Dateien und zeigt die Unterschiede an</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_CopyElements" xml:space="preserve">
+    <value>Kopiert die gewählten Elements in den Zwischenspeicher</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_MergeFiles" xml:space="preserve">
+    <value>Fügt zwei Dateien zu einer Datei zusammen</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_PasteElements" xml:space="preserve">
+    <value>Fügt die kopierten Elemente aus dem Zwischenspeicher in die gewählte Datei an der gewählt Position ein</value>
+  </data>
+  <data name="ToolTip_ExtendedFileOperations_ReloadDefinitions" xml:space="preserve">
+    <value>Lädt die Format Definitionen neu</value>
   </data>
   <data name="ToolTip_FilterApplyButton" xml:space="preserve">
     <value>Wendet den Filter auf die Ansichten an</value>
@@ -145,7 +343,7 @@
     <value>Gruppe der angezeigten Parameter</value>
   </data>
   <data name="ToolTip_ParameterLikeInput" xml:space="preserve">
-    <value>Textbasierter Parameter Suchfilter innerhalb der Werte (Case sensitive Like)</value>
+    <value>Textbasierter Parameter Suchfilter innerhalb der Parameter Werte (Case sensitive Like)</value>
   </data>
   <data name="ToolTip_ParameterSelector" xml:space="preserve">
     <value>Auswahl der angezeigten Parameter</value>
@@ -157,7 +355,7 @@
     <value>Ändert die Sortierrichtung</value>
   </data>
   <data name="ToolTip_ParameterSorterOriginOrder" xml:space="preserve">
-    <value>Aktiviert hierarchische Reihenfolge</value>
+    <value>Aktiviert die hierarchische Reihenfolge</value>
   </data>
   <data name="ToolTip_ParameterView_InheritedColumn" xml:space="preserve">
     <value>Markierte Parameter werden in das gewählte Baumelement vererbt</value>
@@ -165,8 +363,8 @@
   <data name="ToolTip_ParameterView_OverwritingColumn" xml:space="preserve">
     <value>Markierte Parameter überschreiben einen vererbten Parameter</value>
   </data>
-  <data name="ToolTip_TreeAttributeSelector" xml:space="preserve">
-    <value>Auswahl der angezeigten Baum Element Attribute</value>
+  <data name="ToolTip_TreeErrorDisplayModeSelector" xml:space="preserve">
+    <value>Wählt zwischen "Zeige alle", "Zeige nur fehlerhafte" und "Zeige nur fehlerfreie"</value>
   </data>
   <data name="ToolTip_TreeItemCountSelector" xml:space="preserve">
     <value>Anzahl der gleichzeitig angezeigten Baum Elemente</value>

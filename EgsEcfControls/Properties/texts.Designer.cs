@@ -63,9 +63,225 @@ namespace EgsEcfControls.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The background worker task identified a problem.
         /// </summary>
-        internal static string BackgrounfWorker_Failed {
+        internal static string BackgroundWorker_Failed {
             get {
-                return ResourceManager.GetString("BackgrounfWorker_Failed", resourceCulture);
+                return ResourceManager.GetString("BackgroundWorker_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data update is still running and must be finsihed before starting a new one.
+        /// </summary>
+        internal static string BackgroundWorker_Running {
+            get {
+                return ResourceManager.GetString("BackgroundWorker_Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No deprecated items found.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_EmptyDataText {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_EmptyDataText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least one property is not selected properly. Please check the inputs!.
+        /// </summary>
+        internal static string EcfFilePropertiesDialog_PropertiesIncomplete {
+            get {
+                return ResourceManager.GetString("EcfFilePropertiesDialog_PropertiesIncomplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment item with empty comment is not allowed.
+        /// </summary>
+        internal static string EcfItemEditingDialog_CommentItemError_Empty {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_CommentItemError_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to could not be found in the item list.
+        /// </summary>
+        internal static string EcfItemEditingDialog_CouldNotBeFoundInTheItemList {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_CouldNotBeFoundInTheItemList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is already used by.
+        /// </summary>
+        internal static string EcfItemEditingDialog_IsAlreadyUsedBy {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_IsAlreadyUsedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is still referenced by.
+        /// </summary>
+        internal static string EcfItemEditingDialog_IsStillReferencedBy {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_IsStillReferencedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No addable parameter available.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoAddableParameter {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoAddableParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition could be found for parameters.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoDefinitionForParameters {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition could be found for the data type of this element.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoDefinitionForThisDataType {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisDataType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition could be found for the post mark of this element.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoDefinitionForThisPostMark {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisPostMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition could be found for the pre mark of this element.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoDefinitionForThisPreMark {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisPreMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No editable item type selected.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoEditableItemSelected {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoEditableItemSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter editing not possible without parameter definition.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoEditWithoutParameter {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoEditWithoutParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to not selected.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NotSelected {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition could be found for this parameter.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ParameterNotDefined {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The attribute id value.
+        /// </summary>
+        internal static string EcfItemEditingDialog_TheIdAttributeValue {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_TheIdAttributeValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The attribute name value.
+        /// </summary>
+        internal static string EcfItemEditingDialog_TheNameAttributeValue {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_TheNameAttributeValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The old attribute name value.
+        /// </summary>
+        internal static string EcfItemEditingDialog_TheOldNameAttributeValue {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_TheOldNameAttributeValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The referenced item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_TheReferencedItem {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_TheReferencedItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds a value cell after the selected cell.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ToolTip_AddValue {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ToolTip_AddValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds a value group row after the selected cell.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ToolTip_AddValueGroup {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ToolTip_AddValueGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes the selected value slot.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ToolTip_RemoveValue {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ToolTip_RemoveValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes the selected value group row.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ToolTip_RemoveValueGroup {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ToolTip_RemoveValueGroup", resourceCulture);
             }
         }
         
@@ -88,6 +304,87 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Continuing is not possible due to errors.
+        /// </summary>
+        internal static string Generic_ContinueImpossibleWithErrors {
+            get {
+                return ResourceManager.GetString("Generic_ContinueImpossibleWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continuing the current operation will result in errors. Still continue?.
+        /// </summary>
+        internal static string Generic_ContinueOperationWithErrorsQuestion {
+            get {
+                return ResourceManager.GetString("Generic_ContinueOperationWithErrorsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File could not be opened.
+        /// </summary>
+        internal static string Generic_FileCouldNotBeOpened {
+            get {
+                return ResourceManager.GetString("Generic_FileCouldNotBeOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to has error.
+        /// </summary>
+        internal static string Generic_HasError {
+            get {
+                return ResourceManager.GetString("Generic_HasError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to has no value.
+        /// </summary>
+        internal static string Generic_HasNoValue {
+            get {
+                return ResourceManager.GetString("Generic_HasNoValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is not optional.
+        /// </summary>
+        internal static string Generic_IsNotOptional {
+            get {
+                return ResourceManager.GetString("Generic_IsNotOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is referenced by.
+        /// </summary>
+        internal static string Generic_IsReferencedBy {
+            get {
+                return ResourceManager.GetString("Generic_IsReferencedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No suitable item selected.
+        /// </summary>
+        internal static string Generic_NoSuitableSelection {
+            get {
+                return ResourceManager.GetString("Generic_NoSuitableSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No definition found.
+        /// </summary>
+        internal static string InfoView_NoDefinition {
+            get {
+                return ResourceManager.GetString("InfoView_NoDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :.
         /// </summary>
         internal static string ParameterView_GroupSeperator {
@@ -102,6 +399,303 @@ namespace EgsEcfControls.Properties {
         internal static string ParameterView_ValueSeperator {
             get {
                 return ResourceManager.GetString("ParameterView_ValueSeperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closes the selected file.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_Close {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closes all files.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_CloseAll {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_CloseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creates a new file.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_New {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens an existing file.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_Open {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reloads the content from the file.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_Reload {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves the selected file.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_Save {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves all files.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_SaveAll {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_SaveAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves the selected file with new name.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_SaveAs {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves the filter result of the selected file with new name.
+        /// </summary>
+        internal static string ToolTip_BasicFileOperations_SaveAsFiltered {
+            get {
+                return ResourceManager.GetString("ToolTip_BasicFileOperations_SaveAsFiltered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds an element of the selected type.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_Add {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change of several elements.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_ChangeComplex {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_ChangeComplex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the first selected element.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_ChangeSimple {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_ChangeSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moves the selected elements downwards.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_MoveDown {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moves the selected elements upwards.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_MoveUp {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redo last undo.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_Redo {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_Redo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes the selected elements.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_Remove {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo last change.
+        /// </summary>
+        internal static string ToolTip_ContentOperations_Undo {
+            get {
+                return ResourceManager.GetString("ToolTip_ContentOperations_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For a new file the encoding has to be selected. The already selected default encoding should be suitable in most cases..
+        /// </summary>
+        internal static string ToolTip_EcfFilePropertiesDialog_Encoding {
+            get {
+                return ResourceManager.GetString("ToolTip_EcfFilePropertiesDialog_Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on the file name the format is guessed. When guessing fails or is not correct, select the desired format definition manually..
+        /// </summary>
+        internal static string ToolTip_EcfFilePropertiesDialog_FormatDefinition {
+            get {
+                return ResourceManager.GetString("ToolTip_EcfFilePropertiesDialog_FormatDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For a new file the new line symbol has to be selected. The already selected default symbol should be suitable in most cases..
+        /// </summary>
+        internal static string ToolTip_EcfFilePropertiesDialog_NewLineSymbol {
+            get {
+                return ResourceManager.GetString("ToolTip_EcfFilePropertiesDialog_NewLineSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like wise search to reduce the dropdown list.
+        /// </summary>
+        internal static string ToolTip_EcfItemSelectorDialog_SearchInfo {
+            get {
+                return ResourceManager.GetString("ToolTip_EcfItemSelectorDialog_SearchInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count of errors shown at once.
+        /// </summary>
+        internal static string ToolTip_ErrorCountSelector {
+            get {
+                return ResourceManager.GetString("ToolTip_ErrorCountSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group of errors shown.
+        /// </summary>
+        internal static string ToolTip_ErrorGroupSelector {
+            get {
+                return ResourceManager.GetString("ToolTip_ErrorGroupSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets alphabetical sorting order.
+        /// </summary>
+        internal static string ToolTip_ErrorSorterAlphabeticOrder {
+            get {
+                return ResourceManager.GetString("ToolTip_ErrorSorterAlphabeticOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the sorting direction.
+        /// </summary>
+        internal static string ToolTip_ErrorSorterDirection {
+            get {
+                return ResourceManager.GetString("ToolTip_ErrorSorterDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets order of occurance.
+        /// </summary>
+        internal static string ToolTip_ErrorSorterOriginOrder {
+            get {
+                return ResourceManager.GetString("ToolTip_ErrorSorterOriginOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creates a preview for the TechTree based on the open files.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_BuildTechTreePreview {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_BuildTechTreePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checks the format definition of the selected file on deprecated specifications.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_CheckDefinition {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_CheckDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compares two files and lists the differences.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_CompareFiles {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_CompareFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copies the selected elements to the clipboard.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_CopyElements {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_CopyElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merges two files to one file.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_MergeFiles {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_MergeFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pastes the copied elements from the clipboard to the selected file and location.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_PasteElements {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_PasteElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reloads the format definition data.
+        /// </summary>
+        internal static string ToolTip_ExtendedFileOperations_ReloadDefinitions {
+            get {
+                return ResourceManager.GetString("ToolTip_ExtendedFileOperations_ReloadDefinitions", resourceCulture);
             }
         }
         
@@ -142,7 +736,7 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Textual parameter search filter on values (Case sensitive Like).
+        ///   Looks up a localized string similar to Textual parameter search filter on parameter values (Case sensitive Like).
         /// </summary>
         internal static string ToolTip_ParameterLikeInput {
             get {
@@ -205,11 +799,11 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selects the visible tree item attributes.
+        ///   Looks up a localized string similar to Cycles between &quot;Show all&quot;, &quot;Show faulty only&quot; and &quot;Show non faulty only&quot;.
         /// </summary>
-        internal static string ToolTip_TreeAttributeSelector {
+        internal static string ToolTip_TreeErrorDisplayModeSelector {
             get {
-                return ResourceManager.GetString("ToolTip_TreeAttributeSelector", resourceCulture);
+                return ResourceManager.GetString("ToolTip_TreeErrorDisplayModeSelector", resourceCulture);
             }
         }
         

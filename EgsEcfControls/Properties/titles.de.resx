@@ -117,47 +117,260 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DeprecatedDefinitionsDialog_ColumnHeaderHasValue" xml:space="preserve">
+    <value>Hat Wert</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_ColumnHeaderIsForceEscaped" xml:space="preserve">
+    <value>Hat Escapes</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_CompareFile" xml:space="preserve">
+    <value>Vergleichsdatei</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_DefinitionFile" xml:space="preserve">
+    <value>Definitionsdatei</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_Header" xml:space="preserve">
+    <value>Veraltete Definitionen</value>
+  </data>
+  <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">
+    <value>Neue Datei erstellen</value>
+  </data>
+  <data name="EcfFileDialog_CreateFileName" xml:space="preserve">
+    <value>NeueDatei</value>
+  </data>
+  <data name="EcfFileOpenDialog_EncodingBox" xml:space="preserve">
+    <value>Datei Encoding</value>
+  </data>
+  <data name="EcfFileOpenDialog_FilePathAndNameBox" xml:space="preserve">
+    <value>Datei Pfad und Name</value>
+  </data>
+  <data name="EcfFileOpenDialog_FindFileDialog" xml:space="preserve">
+    <value>Datei finden</value>
+  </data>
+  <data name="EcfFileOpenDialog_FormatDefinitionBox" xml:space="preserve">
+    <value>Format Definition</value>
+  </data>
+  <data name="EcfFileOpenDialog_NewFileDialog" xml:space="preserve">
+    <value>Neue Datei definieren</value>
+  </data>
+  <data name="EcfFileOpenDialog_NewLineSymbolBox" xml:space="preserve">
+    <value>Zeilenumbruch Symbol</value>
+  </data>
+  <data name="EcfFileOpenDialog_OpenFileDialog" xml:space="preserve">
+    <value>Bestehende Datei öffnen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddChildBlock" xml:space="preserve">
+    <value>Unterelement hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddComment" xml:space="preserve">
+    <value>Kommentar hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddParameter" xml:space="preserve">
+    <value>Parameter hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddRootBlock" xml:space="preserve">
+    <value>Basiselement hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditChildBlock" xml:space="preserve">
+    <value>Unterelement bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditComment" xml:space="preserve">
+    <value>Kommentar Element bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditParameter" xml:space="preserve">
+    <value>Parameter Element bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
+    <value>Basiselement bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_SelectItem" xml:space="preserve">
+    <value>Wähle den Element Typ der erzeugt werden soll</value>
+  </data>
+  <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
+    <value>Werte / Gruppen</value>
+  </data>
+  <data name="ErrorView_EditingError" xml:space="preserve">
+    <value>Editierfehler</value>
+  </data>
+  <data name="ErrorView_EditingErrors" xml:space="preserve">
+    <value>Editierfehler</value>
+  </data>
+  <data name="ErrorView_ErrorGroupColumn" xml:space="preserve">
+    <value>Fehlergruppe</value>
+  </data>
+  <data name="ErrorView_ErrorNumberColumn" xml:space="preserve">
+    <value>Nr</value>
+  </data>
   <data name="ErrorView_Header" xml:space="preserve">
-    <value>Ladefehler beim Datenlesen</value>
+    <value>Daten Fehler</value>
   </data>
-  <data name="ErrorView_Header_Errors" xml:space="preserve">
-    <value>Fehler</value>
+  <data name="ErrorView_ParsingError" xml:space="preserve">
+    <value>Lesefehler</value>
   </data>
-  <data name="GenericAttention" xml:space="preserve">
+  <data name="ErrorView_ParsingErrors" xml:space="preserve">
+    <value>Lesefehler</value>
+  </data>
+  <data name="ErrorView_ShowInEditor" xml:space="preserve">
+    <value>Zeige in Editor</value>
+  </data>
+  <data name="ErrorView_ShowInFile" xml:space="preserve">
+    <value>Zeige in Datei</value>
+  </data>
+  <data name="Generic_Abort" xml:space="preserve">
+    <value>Abbruch</value>
+  </data>
+  <data name="Generic_Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="Generic_AddAfter" xml:space="preserve">
+    <value>Hinzufügen nach</value>
+  </data>
+  <data name="Generic_AddTo" xml:space="preserve">
+    <value>Hinzufügen zu</value>
+  </data>
+  <data name="Generic_Attention" xml:space="preserve">
     <value>Achtung</value>
   </data>
-  <data name="InfoView_AddData" xml:space="preserve">
-    <value>Zusatzdaten</value>
+  <data name="Generic_Attribute" xml:space="preserve">
+    <value>Attribut</value>
   </data>
-  <data name="InfoView_ElementAttributes" xml:space="preserve">
-    <value>Element Attribute</value>
+  <data name="Generic_Attributes" xml:space="preserve">
+    <value>Attribute</value>
   </data>
-  <data name="InfoView_ElementChildBlockCount" xml:space="preserve">
-    <value>Unterblock Anzahl</value>
+  <data name="Generic_BackButton" xml:space="preserve">
+    <value>Zurück</value>
   </data>
-  <data name="InfoView_ElementChildCount" xml:space="preserve">
-    <value>Unterelement Anzahl</value>
+  <data name="Generic_Change" xml:space="preserve">
+    <value>Ändern</value>
   </data>
-  <data name="InfoView_ElementComment" xml:space="preserve">
-    <value>Element Kommentar</value>
+  <data name="Generic_ChildElement" xml:space="preserve">
+    <value>Unterelement</value>
   </data>
-  <data name="InfoView_ElementPreSign" xml:space="preserve">
-    <value>Element Vorzeichen</value>
+  <data name="Generic_ChildElements" xml:space="preserve">
+    <value>Unterelemente</value>
   </data>
-  <data name="InfoView_ElementType" xml:space="preserve">
-    <value>Element Typ</value>
+  <data name="Generic_Comment" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="Generic_Comments" xml:space="preserve">
+    <value>Kommentare</value>
+  </data>
+  <data name="Generic_Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="Generic_DataElement" xml:space="preserve">
+    <value>Daten Element</value>
+  </data>
+  <data name="Generic_DataElements" xml:space="preserve">
+    <value>Daten Elemente</value>
+  </data>
+  <data name="Generic_DataType" xml:space="preserve">
+    <value>Daten Typ</value>
+  </data>
+  <data name="Generic_Definitions" xml:space="preserve">
+    <value>Definitionen</value>
+  </data>
+  <data name="Generic_Element" xml:space="preserve">
+    <value>Element</value>
+  </data>
+  <data name="Generic_Elements" xml:space="preserve">
+    <value>Elementw</value>
+  </data>
+  <data name="Generic_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Generic_Errors" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Generic_Group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Generic_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Generic_Inherited" xml:space="preserve">
+    <value>Vererbt</value>
+  </data>
+  <data name="Generic_IsOptional" xml:space="preserve">
+    <value>Ist optional</value>
+  </data>
+  <data name="Generic_LineNumber" xml:space="preserve">
+    <value>Zeilennummer</value>
+  </data>
+  <data name="Generic_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Generic_Names" xml:space="preserve">
+    <value>Namen</value>
+  </data>
+  <data name="Generic_No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Generic_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Generic_Parameter" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="Generic_Parameters" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="Generic_PasteAfter" xml:space="preserve">
+    <value>Einfügen nach</value>
+  </data>
+  <data name="Generic_PasteTo" xml:space="preserve">
+    <value>Einfügen in</value>
+  </data>
+  <data name="Generic_PickItem" xml:space="preserve">
+    <value>Wähle Element</value>
+  </data>
+  <data name="Generic_PostMark" xml:space="preserve">
+    <value>Nachzeichen</value>
+  </data>
+  <data name="Generic_PreMark" xml:space="preserve">
+    <value>Vorzeichen</value>
+  </data>
+  <data name="Generic_Properties" xml:space="preserve">
+    <value>Eigenschaften</value>
+  </data>
+  <data name="Generic_Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="Generic_Replacement_Empty" xml:space="preserve">
+    <value>&lt;leer&gt;</value>
+  </data>
+  <data name="Generic_Reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="Generic_RootElement" xml:space="preserve">
+    <value>Basiselement</value>
+  </data>
+  <data name="Generic_RootElements" xml:space="preserve">
+    <value>Basiselemente</value>
+  </data>
+  <data name="Generic_Search" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="Generic_Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Generic_Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="Generic_Values" xml:space="preserve">
+    <value>Werte</value>
+  </data>
+  <data name="Generic_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="InfoView_ElementData" xml:space="preserve">
+    <value>Elementdaten</value>
   </data>
   <data name="InfoView_Header" xml:space="preserve">
     <value>Zusatzdaten</value>
   </data>
-  <data name="InfoView_ParameterAttributes" xml:space="preserve">
-    <value>Parameter Attribute</value>
-  </data>
-  <data name="InfoView_ParameterComment" xml:space="preserve">
-    <value>Parameter Kommentar</value>
-  </data>
-  <data name="ParameterView_FilterSelector_Parameters" xml:space="preserve">
-    <value>Parameter</value>
+  <data name="InfoView_ParameterData" xml:space="preserve">
+    <value>Parameterdaten</value>
   </data>
   <data name="ParameterView_Header" xml:space="preserve">
     <value>Parameteransicht</value>
@@ -165,23 +378,14 @@
   <data name="ParameterView_Header_InheritedParameters" xml:space="preserve">
     <value>vererbte</value>
   </data>
-  <data name="ParameterView_Header_OverallParameters" xml:space="preserve">
-    <value>Parameter</value>
-  </data>
   <data name="ParameterView_Header_OverwritingParameters" xml:space="preserve">
     <value>überschrieben</value>
-  </data>
-  <data name="ParameterView_ParameterCommentColumn" xml:space="preserve">
-    <value>Kommentar</value>
-  </data>
-  <data name="ParameterView_ParameterInheritedColumn" xml:space="preserve">
-    <value>Vererbt</value>
   </data>
   <data name="ParameterView_ParameterNameColumn" xml:space="preserve">
     <value>Parameter Name</value>
   </data>
   <data name="ParameterView_ParameterNumberColumn" xml:space="preserve">
-    <value>Nr.</value>
+    <value>Nr</value>
   </data>
   <data name="ParameterView_ParameterOverwritingColumn" xml:space="preserve">
     <value>Übers.</value>
@@ -189,40 +393,13 @@
   <data name="ParameterView_ParameterParentColumn" xml:space="preserve">
     <value>Baum Element</value>
   </data>
-  <data name="ParameterView_ParameterValueColumn" xml:space="preserve">
-    <value>Wert</value>
-  </data>
   <data name="ParameterView_UnnamedParent" xml:space="preserve">
     <value>Namenlos</value>
-  </data>
-  <data name="ParameterView_ValueGroup" xml:space="preserve">
-    <value>Gruppe</value>
-  </data>
-  <data name="TreeView_CommentNodeName" xml:space="preserve">
-    <value>Kommentar</value>
-  </data>
-  <data name="TreeView_FilterSelector_Attributes" xml:space="preserve">
-    <value>Baumattribute</value>
   </data>
   <data name="TreeView_FilterSelector_Elements" xml:space="preserve">
     <value>Baumelemente</value>
   </data>
   <data name="TreeView_Header" xml:space="preserve">
     <value>Baumansicht</value>
-  </data>
-  <data name="TreeView_Header_RootElements" xml:space="preserve">
-    <value>Basiselemente</value>
-  </data>
-  <data name="TreeView_Header_SubElements" xml:space="preserve">
-    <value>Unterlemente</value>
-  </data>
-  <data name="TreeView_SelectableElements_Comments" xml:space="preserve">
-    <value>Kommentare</value>
-  </data>
-  <data name="TreeView_SelectableElements_DataBlocks" xml:space="preserve">
-    <value>Datenblöcke</value>
-  </data>
-  <data name="TreeView_UnnamedNodeName" xml:space="preserve">
-    <value>Namenloser Knoten</value>
   </data>
 </root>

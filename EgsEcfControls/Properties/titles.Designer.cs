@@ -61,7 +61,259 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content loading errors.
+        ///   Looks up a localized string similar to Has value.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_ColumnHeaderHasValue {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_ColumnHeaderHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is force escaped.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_ColumnHeaderIsForceEscaped {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_ColumnHeaderIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compare file.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_CompareFile {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_CompareFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Definition file.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_DefinitionFile {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_DefinitionFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deprecated definitions.
+        /// </summary>
+        internal static string DeprecatedDefinitionsDialog_Header {
+            get {
+                return ResourceManager.GetString("DeprecatedDefinitionsDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create file.
+        /// </summary>
+        internal static string EcfFileDialog_CreateFileDialog {
+            get {
+                return ResourceManager.GetString("EcfFileDialog_CreateFileDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Newfile.
+        /// </summary>
+        internal static string EcfFileDialog_CreateFileName {
+            get {
+                return ResourceManager.GetString("EcfFileDialog_CreateFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File encoding.
+        /// </summary>
+        internal static string EcfFileOpenDialog_EncodingBox {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_EncodingBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File path and name.
+        /// </summary>
+        internal static string EcfFileOpenDialog_FilePathAndNameBox {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_FilePathAndNameBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find file.
+        /// </summary>
+        internal static string EcfFileOpenDialog_FindFileDialog {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_FindFileDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format definition.
+        /// </summary>
+        internal static string EcfFileOpenDialog_FormatDefinitionBox {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_FormatDefinitionBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Define new file.
+        /// </summary>
+        internal static string EcfFileOpenDialog_NewFileDialog {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_NewFileDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New line symbol.
+        /// </summary>
+        internal static string EcfFileOpenDialog_NewLineSymbolBox {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_NewLineSymbolBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open existing file.
+        /// </summary>
+        internal static string EcfFileOpenDialog_OpenFileDialog {
+            get {
+                return ResourceManager.GetString("EcfFileOpenDialog_OpenFileDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add child block item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_AddChildBlock {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_AddChildBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add comment item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_AddComment {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_AddComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add parameter item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_AddParameter {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_AddParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add root block item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_AddRootBlock {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_AddRootBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit child block item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_EditChildBlock {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_EditChildBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit comment item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_EditComment {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_EditComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit parameter item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_EditParameter {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_EditParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit root block item.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_EditRootBlock {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_EditRootBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the item type to be added.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_SelectItem {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_SelectItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values / Groups.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ParameterItem_ValuesLabel {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterItem_ValuesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editing error.
+        /// </summary>
+        internal static string ErrorView_EditingError {
+            get {
+                return ResourceManager.GetString("ErrorView_EditingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editing errors.
+        /// </summary>
+        internal static string ErrorView_EditingErrors {
+            get {
+                return ResourceManager.GetString("ErrorView_EditingErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error group.
+        /// </summary>
+        internal static string ErrorView_ErrorGroupColumn {
+            get {
+                return ResourceManager.GetString("ErrorView_ErrorGroupColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string ErrorView_ErrorNumberColumn {
+            get {
+                return ResourceManager.GetString("ErrorView_ErrorNumberColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content errors.
         /// </summary>
         internal static string ErrorView_Header {
             get {
@@ -70,83 +322,488 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to errors.
+        ///   Looks up a localized string similar to Parsing error.
         /// </summary>
-        internal static string ErrorView_Header_Errors {
+        internal static string ErrorView_ParsingError {
             get {
-                return ResourceManager.GetString("ErrorView_Header_Errors", resourceCulture);
+                return ResourceManager.GetString("ErrorView_ParsingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parsing errors.
+        /// </summary>
+        internal static string ErrorView_ParsingErrors {
+            get {
+                return ResourceManager.GetString("ErrorView_ParsingErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in editor.
+        /// </summary>
+        internal static string ErrorView_ShowInEditor {
+            get {
+                return ResourceManager.GetString("ErrorView_ShowInEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in file.
+        /// </summary>
+        internal static string ErrorView_ShowInFile {
+            get {
+                return ResourceManager.GetString("ErrorView_ShowInFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abort.
+        /// </summary>
+        internal static string Generic_Abort {
+            get {
+                return ResourceManager.GetString("Generic_Abort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        internal static string Generic_Active {
+            get {
+                return ResourceManager.GetString("Generic_Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add after.
+        /// </summary>
+        internal static string Generic_AddAfter {
+            get {
+                return ResourceManager.GetString("Generic_AddAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to.
+        /// </summary>
+        internal static string Generic_AddTo {
+            get {
+                return ResourceManager.GetString("Generic_AddTo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Attention.
         /// </summary>
-        internal static string GenericAttention {
+        internal static string Generic_Attention {
             get {
-                return ResourceManager.GetString("GenericAttention", resourceCulture);
+                return ResourceManager.GetString("Generic_Attention", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additional data.
+        ///   Looks up a localized string similar to Attribute.
         /// </summary>
-        internal static string InfoView_AddData {
+        internal static string Generic_Attribute {
             get {
-                return ResourceManager.GetString("InfoView_AddData", resourceCulture);
+                return ResourceManager.GetString("Generic_Attribute", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Element attributes.
+        ///   Looks up a localized string similar to Attributes.
         /// </summary>
-        internal static string InfoView_ElementAttributes {
+        internal static string Generic_Attributes {
             get {
-                return ResourceManager.GetString("InfoView_ElementAttributes", resourceCulture);
+                return ResourceManager.GetString("Generic_Attributes", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child block count.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
-        internal static string InfoView_ElementChildBlockCount {
+        internal static string Generic_BackButton {
             get {
-                return ResourceManager.GetString("InfoView_ElementChildBlockCount", resourceCulture);
+                return ResourceManager.GetString("Generic_BackButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child count.
+        ///   Looks up a localized string similar to Change.
         /// </summary>
-        internal static string InfoView_ElementChildCount {
+        internal static string Generic_Change {
             get {
-                return ResourceManager.GetString("InfoView_ElementChildCount", resourceCulture);
+                return ResourceManager.GetString("Generic_Change", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Element comment.
+        ///   Looks up a localized string similar to Child item.
         /// </summary>
-        internal static string InfoView_ElementComment {
+        internal static string Generic_ChildElement {
             get {
-                return ResourceManager.GetString("InfoView_ElementComment", resourceCulture);
+                return ResourceManager.GetString("Generic_ChildElement", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Element pre sign.
+        ///   Looks up a localized string similar to Child items.
         /// </summary>
-        internal static string InfoView_ElementPreSign {
+        internal static string Generic_ChildElements {
             get {
-                return ResourceManager.GetString("InfoView_ElementPreSign", resourceCulture);
+                return ResourceManager.GetString("Generic_ChildElements", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Element type.
+        ///   Looks up a localized string similar to Comment.
         /// </summary>
-        internal static string InfoView_ElementType {
+        internal static string Generic_Comment {
             get {
-                return ResourceManager.GetString("InfoView_ElementType", resourceCulture);
+                return ResourceManager.GetString("Generic_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        internal static string Generic_Comments {
+            get {
+                return ResourceManager.GetString("Generic_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        internal static string Generic_Copy {
+            get {
+                return ResourceManager.GetString("Generic_Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data item.
+        /// </summary>
+        internal static string Generic_DataElement {
+            get {
+                return ResourceManager.GetString("Generic_DataElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data items.
+        /// </summary>
+        internal static string Generic_DataElements {
+            get {
+                return ResourceManager.GetString("Generic_DataElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data type.
+        /// </summary>
+        internal static string Generic_DataType {
+            get {
+                return ResourceManager.GetString("Generic_DataType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Definitions.
+        /// </summary>
+        internal static string Generic_Definitions {
+            get {
+                return ResourceManager.GetString("Generic_Definitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        internal static string Generic_Element {
+            get {
+                return ResourceManager.GetString("Generic_Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        internal static string Generic_Elements {
+            get {
+                return ResourceManager.GetString("Generic_Elements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Generic_Error {
+            get {
+                return ResourceManager.GetString("Generic_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        internal static string Generic_Errors {
+            get {
+                return ResourceManager.GetString("Generic_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        internal static string Generic_Group {
+            get {
+                return ResourceManager.GetString("Generic_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string Generic_Info {
+            get {
+                return ResourceManager.GetString("Generic_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inherited.
+        /// </summary>
+        internal static string Generic_Inherited {
+            get {
+                return ResourceManager.GetString("Generic_Inherited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is optional.
+        /// </summary>
+        internal static string Generic_IsOptional {
+            get {
+                return ResourceManager.GetString("Generic_IsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line number.
+        /// </summary>
+        internal static string Generic_LineNumber {
+            get {
+                return ResourceManager.GetString("Generic_LineNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string Generic_Name {
+            get {
+                return ResourceManager.GetString("Generic_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names.
+        /// </summary>
+        internal static string Generic_Names {
+            get {
+                return ResourceManager.GetString("Generic_Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string Generic_No {
+            get {
+                return ResourceManager.GetString("Generic_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        internal static string Generic_Ok {
+            get {
+                return ResourceManager.GetString("Generic_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter.
+        /// </summary>
+        internal static string Generic_Parameter {
+            get {
+                return ResourceManager.GetString("Generic_Parameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters.
+        /// </summary>
+        internal static string Generic_Parameters {
+            get {
+                return ResourceManager.GetString("Generic_Parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste after.
+        /// </summary>
+        internal static string Generic_PasteAfter {
+            get {
+                return ResourceManager.GetString("Generic_PasteAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste to.
+        /// </summary>
+        internal static string Generic_PasteTo {
+            get {
+                return ResourceManager.GetString("Generic_PasteTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick item.
+        /// </summary>
+        internal static string Generic_PickItem {
+            get {
+                return ResourceManager.GetString("Generic_PickItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post mark.
+        /// </summary>
+        internal static string Generic_PostMark {
+            get {
+                return ResourceManager.GetString("Generic_PostMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre mark.
+        /// </summary>
+        internal static string Generic_PreMark {
+            get {
+                return ResourceManager.GetString("Generic_PreMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        internal static string Generic_Properties {
+            get {
+                return ResourceManager.GetString("Generic_Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string Generic_Remove {
+            get {
+                return ResourceManager.GetString("Generic_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;empty&gt;.
+        /// </summary>
+        internal static string Generic_Replacement_Empty {
+            get {
+                return ResourceManager.GetString("Generic_Replacement_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string Generic_Reset {
+            get {
+                return ResourceManager.GetString("Generic_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root item.
+        /// </summary>
+        internal static string Generic_RootElement {
+            get {
+                return ResourceManager.GetString("Generic_RootElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root items.
+        /// </summary>
+        internal static string Generic_RootElements {
+            get {
+                return ResourceManager.GetString("Generic_RootElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        internal static string Generic_Search {
+            get {
+                return ResourceManager.GetString("Generic_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        internal static string Generic_Type {
+            get {
+                return ResourceManager.GetString("Generic_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        internal static string Generic_Value {
+            get {
+                return ResourceManager.GetString("Generic_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values.
+        /// </summary>
+        internal static string Generic_Values {
+            get {
+                return ResourceManager.GetString("Generic_Values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Generic_Yes {
+            get {
+                return ResourceManager.GetString("Generic_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element data.
+        /// </summary>
+        internal static string InfoView_ElementData {
+            get {
+                return ResourceManager.GetString("InfoView_ElementData", resourceCulture);
             }
         }
         
@@ -160,29 +817,11 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter attributes.
+        ///   Looks up a localized string similar to Parameter data.
         /// </summary>
-        internal static string InfoView_ParameterAttributes {
+        internal static string InfoView_ParameterData {
             get {
-                return ResourceManager.GetString("InfoView_ParameterAttributes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter comment.
-        /// </summary>
-        internal static string InfoView_ParameterComment {
-            get {
-                return ResourceManager.GetString("InfoView_ParameterComment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to parameters.
-        /// </summary>
-        internal static string ParameterView_FilterSelector_Parameters {
-            get {
-                return ResourceManager.GetString("ParameterView_FilterSelector_Parameters", resourceCulture);
+                return ResourceManager.GetString("InfoView_ParameterData", resourceCulture);
             }
         }
         
@@ -205,38 +844,11 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to parameters.
-        /// </summary>
-        internal static string ParameterView_Header_OverallParameters {
-            get {
-                return ResourceManager.GetString("ParameterView_Header_OverallParameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to overwriting.
         /// </summary>
         internal static string ParameterView_Header_OverwritingParameters {
             get {
                 return ResourceManager.GetString("ParameterView_Header_OverwritingParameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comment.
-        /// </summary>
-        internal static string ParameterView_ParameterCommentColumn {
-            get {
-                return ResourceManager.GetString("ParameterView_ParameterCommentColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Inher..
-        /// </summary>
-        internal static string ParameterView_ParameterInheritedColumn {
-            get {
-                return ResourceManager.GetString("ParameterView_ParameterInheritedColumn", resourceCulture);
             }
         }
         
@@ -250,7 +862,7 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No..
+        ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string ParameterView_ParameterNumberColumn {
             get {
@@ -277,47 +889,11 @@ namespace EgsEcfControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value.
-        /// </summary>
-        internal static string ParameterView_ParameterValueColumn {
-            get {
-                return ResourceManager.GetString("ParameterView_ParameterValueColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unnamed.
         /// </summary>
         internal static string ParameterView_UnnamedParent {
             get {
                 return ResourceManager.GetString("ParameterView_UnnamedParent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Group.
-        /// </summary>
-        internal static string ParameterView_ValueGroup {
-            get {
-                return ResourceManager.GetString("ParameterView_ValueGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comment.
-        /// </summary>
-        internal static string TreeView_CommentNodeName {
-            get {
-                return ResourceManager.GetString("TreeView_CommentNodeName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to tree attributes.
-        /// </summary>
-        internal static string TreeView_FilterSelector_Attributes {
-            get {
-                return ResourceManager.GetString("TreeView_FilterSelector_Attributes", resourceCulture);
             }
         }
         
@@ -336,51 +912,6 @@ namespace EgsEcfControls.Properties {
         internal static string TreeView_Header {
             get {
                 return ResourceManager.GetString("TreeView_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to root items.
-        /// </summary>
-        internal static string TreeView_Header_RootElements {
-            get {
-                return ResourceManager.GetString("TreeView_Header_RootElements", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to sub items.
-        /// </summary>
-        internal static string TreeView_Header_SubElements {
-            get {
-                return ResourceManager.GetString("TreeView_Header_SubElements", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comments.
-        /// </summary>
-        internal static string TreeView_SelectableElements_Comments {
-            get {
-                return ResourceManager.GetString("TreeView_SelectableElements_Comments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Data blocks.
-        /// </summary>
-        internal static string TreeView_SelectableElements_DataBlocks {
-            get {
-                return ResourceManager.GetString("TreeView_SelectableElements_DataBlocks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unnamed node.
-        /// </summary>
-        internal static string TreeView_UnnamedNodeName {
-            get {
-                return ResourceManager.GetString("TreeView_UnnamedNodeName", resourceCulture);
             }
         }
     }

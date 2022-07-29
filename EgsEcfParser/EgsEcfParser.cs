@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using static EgsEcfParser.EcfFormatting;
+using static EgsEcfParser.EcfKeyValueItem;
 
 namespace EgsEcfParser
 {
@@ -15,34 +15,16 @@ namespace EgsEcfParser
         private static List<FormatDefinition> Definitions { get; } = new List<FormatDefinition>();
         private static bool DefinitionsLoaded { get; set; } = false;
 
-        /// <summary>
-        /// <para><returns>Reloads <see cref="FormatDefinition" /> from xml</returns></para> 
-        /// <para>Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// </para>
-        /// </summary>
         public static void ReloadDefinitions()
         {
             DefinitionsLoaded = false;
             XmlLoading.LoadDefinitions();
         }
-        /// <summary>
-        /// <para><returns>Returns a list of supported Egs Ecf file types defined by xml</returns></para> 
-        /// <para>Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// </para>
-        /// </summary>
         public static ReadOnlyCollection<string> GetSupportedFileTypes()
         {
             XmlLoading.LoadDefinitions();
             return Definitions.Select(def => def.FileType).ToList().AsReadOnly();
         }
-        /// <summary>
-        /// <para><returns>Tries to find a suitable <see cref="FormatDefinition" /> for <paramref name="filePathAndName" /></returns></para> 
-        /// <para>Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// </para>
-        /// </summary>
         public static bool TryGetDefinition(string filePathAndName, out FormatDefinition definition)
         {
             XmlLoading.LoadDefinitions();
@@ -50,13 +32,6 @@ namespace EgsEcfParser
             definition = Definitions.FirstOrDefault(def => fileName.Contains(def.FileType));
             return definition != null;
         }
-        /// <summary>
-        /// <para><returns>Returns a <see cref="FormatDefinition" /> for <paramref name="fileType" /></returns></para> 
-        /// <para>Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// <see cref="ArgumentException" /><br/>
-        /// </para>
-        /// </summary>
         public static FormatDefinition GetDefinition(string fileType)
         {
             XmlLoading.LoadDefinitions();
@@ -64,98 +39,290 @@ namespace EgsEcfParser
             if (definition == null) { throw new ArgumentException(string.Format("FileType '{0}' is not supported", fileType)); }
             return definition;
         }
-
-        /// <summary>
-        /// <para><returns>Test <paramref name="key" /> to be valid</returns></para> 
-        /// </summary>
+        public static Encoding GetFileEncoding(string filePathAndName)
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(filePathAndName, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] bom = new byte[4];
+                    stream.Read(bom, 0, 4);
+                    try
+                    {
+                        if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
+                        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
+                        if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32; //UTF-32LE
+                        if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
+                        if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
+                        if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);  //UTF-32BE
+                    }
+                    catch (Exception) { }
+                    return new UTF8Encoding(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new IOException(string.Format("File {0} encoding could not be loaded: {1}", filePathAndName, ex.Message));
+            }
+        }
+        public static EcfFileNewLineSymbols GetNewLineSymbol(string filePathAndName)
+        {
+            try
+            {
+                StringBuilder charBuffer = new StringBuilder();
+                using (StreamReader reader = new StreamReader(File.Open(filePathAndName, FileMode.Open, FileAccess.Read)))
+                {
+                    do
+                    {
+                        if (ReadChar(reader, out char buffer) != -1)
+                        {
+                            if (buffer == '\n')
+                            {
+                                return EcfFileNewLineSymbols.Lf;
+                            }
+                            else if (buffer == '\r')
+                            {
+                                if (ReadChar(reader, out buffer) != -1 && buffer == '\n')
+                                {
+                                    return EcfFileNewLineSymbols.CrLf;
+                                }
+                                else
+                                {
+                                    return EcfFileNewLineSymbols.Cr;
+                                }
+                            }
+                        }
+                    } while (!reader.EndOfStream);
+                }
+                return EcfFileNewLineSymbols.CrLf;
+            }
+            catch (Exception ex)
+            {
+                throw new IOException(string.Format("File {0} newline character could not be determined: {1}", filePathAndName, ex.Message));
+            }
+        }
+        public static string GetNewLineChar(EcfFileNewLineSymbols newLineSymbol)
+        {
+            switch (newLineSymbol)
+            {
+                case EcfFileNewLineSymbols.Lf: return "\n";
+                case EcfFileNewLineSymbols.Cr: return "\r";
+                default: return "\r\n";
+            }
+        }
+        public static List<ItemDefinition> FindDeprecatedItemDefinitions(EgsEcfFile file)
+        {
+            List<ItemDefinition> deprecatedItems = new List<ItemDefinition>();
+            try
+            {
+                FormatDefinition definition = GetDefinition(file.Definition.FileType);
+                List<ItemDefinition> rootBlockAttributes = definition.RootBlockAttributes.ToList();
+                List<ItemDefinition> childBlockAttributes = definition.ChildBlockAttributes.ToList();
+                List<ItemDefinition> blockParameters = definition.BlockParameters.ToList();
+                List<ItemDefinition> parameterAttributes = definition.ParameterAttributes.ToList();
+                foreach (EcfStructureItem item in file.GetDeepItemList<EcfStructureItem>())
+                {
+                    RemoveDeprecatedItemDefinitions(item, rootBlockAttributes, childBlockAttributes, blockParameters, parameterAttributes);
+                    if (rootBlockAttributes.Count == 0 && childBlockAttributes.Count == 0 && blockParameters.Count == 0 && parameterAttributes.Count == 0)
+                    {
+                        break;
+                    }
+                }
+                deprecatedItems.AddRange(rootBlockAttributes);
+                deprecatedItems.AddRange(childBlockAttributes);
+                deprecatedItems.AddRange(blockParameters);
+                deprecatedItems.AddRange(parameterAttributes);
+            }
+            catch (Exception) { }
+            return deprecatedItems;
+        }
+        
         public static bool IsKeyValid(string key)
         {
             return !string.IsNullOrEmpty(key);
         }
-        /// <summary>
-        /// <para><returns>Test <paramref name="value" /> to be valid</returns></para> 
-        /// </summary>
-        public static bool IsValueValid(string value)
+        public static List<EcfError> CheckBlockPreMark(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes)
         {
-            return value != null;
+            return CheckBlockDataType(dataType, definedDataTypes, EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown);
         }
-        /// <summary>
-        /// <para><returns>Throws exception if <paramref name="blockType" /> is not a valid block type of <paramref name="definedBlockTypes" /></returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public static void CheckBlockType(string blockType, ReadOnlyCollection<BlockTypeDefinition> definedBlockTypes)
+        public static List<EcfError> CheckBlockDataType(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes)
         {
-            List<BlockTypeDefinition> mandatoryBlockTypes = definedBlockTypes.Where(type => !type.IsOptional).ToList();
-            if (mandatoryBlockTypes.Count > 0 && !mandatoryBlockTypes.Any(type => type.Name.Equals(blockType)))
-            {
-                throw new EcfFormatException(EcfErrors.BlockTypeMissing, string.Format("found '{0}', expected: '{1}'", blockType, 
-                    string.Join(", ", mandatoryBlockTypes.Select(type => type.Name).ToArray())));
-            }
-            if (!definedBlockTypes.Any(type => type.Name.Equals(blockType)))
-            {
-                throw new EcfFormatException(EcfErrors.BlockTypeUnknown, blockType);
-            }
+            return CheckBlockDataType(dataType, definedDataTypes, EcfErrors.BlockDataTypeMissing , EcfErrors.BlockDataTypeUnknown);
         }
-        /// <summary>
-        /// <para><returns>Throws exception if <paramref name="attributes" /> is not complete to <paramref name="definedAttributes" /></returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public static void CheckAttributes(List<EcfAttribute> attributes, ReadOnlyCollection<ItemDefinition> definedAttributes)
+        public static List<EcfError> CheckBlockPostMark(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes)
         {
-            List<ItemDefinition> missingAttributes = definedAttributes.Where(defAttr => !defAttr.IsOptional && !attributes.Any(attr => attr.Key.Equals(defAttr.Name))).ToList();
-            if (missingAttributes.Count > 0)
-            {
-                throw new EcfFormatException(EcfErrors.AttributeMissing, string.Join(", ", missingAttributes.Select(attr => attr.Name).ToArray()));
-            }
-            List<EcfAttribute> doubledAttributes = attributes.Except(attributes.Distinct(KeyItemComparer)).Cast<EcfAttribute>().ToList();
-            if (doubledAttributes.Count > 0)
-            {
-                throw new EcfFormatException(EcfErrors.AttributeNotUnique, string.Join(", ", doubledAttributes.Select(param => param.Key).ToArray()));
-            }
+            return CheckBlockDataType(dataType, definedDataTypes, EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown);
         }
-        /// <summary>
-        /// <para><returns>Throws exception if <paramref name="parameters" /> is not complete to <paramref name="definedParameters" /></returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public static void CheckParameters(List<EcfParameter> parameters, ReadOnlyCollection<ItemDefinition> definedParameters)
+        public static List<EcfError> CheckBlockDataType(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes, EcfErrors missingError, EcfErrors unknownError)
         {
-            List<ItemDefinition> missingParameters = definedParameters.Where(defParam => !defParam.IsOptional && !parameters.Any(param => param.Key.Equals(defParam.Name))).ToList();
-            if (missingParameters.Count > 0)
+            List<EcfError> errors = new List<EcfError>();
+            List<BlockValueDefinition> mandatoryDataTypes = definedDataTypes.Where(type => !type.IsOptional).ToList();
+            if (mandatoryDataTypes.Count > 0 && !mandatoryDataTypes.Any(type => type.Value.Equals(dataType)))
             {
-                throw new EcfFormatException(EcfErrors.ParameterMissing, string.Join(", ", missingParameters.Select(param => param.Name).ToArray()));
+                errors.Add(new EcfError(missingError, string.Format("found '{0}', expected: '{1}'", dataType,
+                    string.Join(", ", mandatoryDataTypes.Select(type => type.Value).ToArray()))));
             }
-            List<EcfParameter> doubledParameters = parameters.Except(parameters.Distinct(KeyItemComparer)).Cast<EcfParameter>().ToList();
-            if (doubledParameters.Count > 0)
+            else if (dataType != null && !definedDataTypes.Any(type => type.Value.Equals(dataType)))
             {
-                throw new EcfFormatException(EcfErrors.ParameterNotUnique, string.Join(", ", doubledParameters.Select(param => param.Key).ToArray()));
+                errors.Add(new EcfError(unknownError, dataType));
+            }
+            return errors;
+        }
+        public static EcfError CheckBlockReferenceValid(EcfBlock block, List<EcfBlock> blockList, out EcfBlock inheriter)
+        {
+            string reference = block.RefSource;
+            if (reference == null) {
+                inheriter = null;
+                return null; 
+            }
+            inheriter = blockList.FirstOrDefault(parentBlock => parentBlock.RefTarget?.Equals(reference) ?? false);
+            if (inheriter == null)
+            {
+                return new EcfError(EcfErrors.BlockInheritorMissing, reference);
+            }
+            return null;
+        }
+        public static List<ItemDefinition> CheckItemsMissing<T>(List<T> parameters, ReadOnlyCollection<ItemDefinition> definedParameters) where T : EcfKeyValueItem
+        {
+            return definedParameters?.Where(defParam => !defParam.IsOptional && !parameters.Any(param => param.Key.Equals(defParam.Name))).ToList();
+        }
+        public static List<T> CheckItemsDoubled<T>(List<T> items) where T : EcfKeyValueItem
+        {
+            return items.Except(items.Distinct(KeyItemComparer)).Cast<T>().ToList();
+        }
+        public static EcfError CheckItemUnknown(ReadOnlyCollection<ItemDefinition> definition, string key, KeyValueItemTypes itemType, out ItemDefinition itemDefinition)
+        {
+            itemDefinition = definition?.FirstOrDefault(defParam => defParam.Name.Equals(key));
+            if (itemDefinition != null) { return null; }
+
+            switch (itemType)
+            {
+                case KeyValueItemTypes.Parameter: return new EcfError(EcfErrors.ParameterUnknown, key);
+                case KeyValueItemTypes.Attribute: return new EcfError(EcfErrors.AttributeUnknown, key);
+                default: return new EcfError(EcfErrors.Unknown, key);
             }
         }
-        /// <summary>
-        /// <para><returns>Throws exception if <paramref name="value" /> contains prohibited phrases from <paramref name="definition" /></returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public static void CheckValue(string value, FormatDefinition definition)
+        public static List<EcfError> CheckParametersValid(List<EcfParameter> parameters, ReadOnlyCollection<ItemDefinition> definedParameters)
         {
-            if (!IsValueValid(value)) { throw new EcfFormatException(EcfErrors.ValueInvalid, value); }
-            List<string> prohibitedPhrases = definition.ProhibitedValuePhrases.Where(phrase => value.Contains(phrase)).ToList();
-            if (prohibitedPhrases.Count > 0)
+            List<EcfError> errors = new List<EcfError>();
+            CheckItemsMissing(parameters, definedParameters).ForEach(missingParam =>
             {
-                throw new EcfFormatException(EcfErrors.ValueContainsProhibitedPhrases, string.Join(", ", prohibitedPhrases));
+                errors.Add(new EcfError(EcfErrors.ParameterMissing, missingParam.Name));
+            });
+            CheckItemsDoubled(parameters).ForEach(doubledParam =>
+            {
+                errors.Add(new EcfError(EcfErrors.ParameterDoubled, doubledParam.Key));
+            });
+            return errors;
+        }
+        public static List<EcfError> CheckAttributesValid(List<EcfAttribute> attributes, ReadOnlyCollection<ItemDefinition> definedAttributes)
+        {
+            List<EcfError> errors = new List<EcfError>();
+            CheckItemsMissing(attributes, definedAttributes)?.ForEach(missingAttr =>
+            {
+                errors.Add(new EcfError(EcfErrors.AttributeMissing, missingAttr.Name));
+            });
+            CheckItemsDoubled(attributes).ForEach(doubledAttr =>
+            {
+                errors.Add(new EcfError(EcfErrors.AttributeDoubled, doubledAttr.Key));
+            });
+            return errors;
+        }
+        public static List<EcfError> CheckValuesValid(List<EcfValueGroup> groups, ItemDefinition itemDef, FormatDefinition formatDef)
+        {
+            List<EcfError> errors = new List<EcfError>();
+            if (groups == null || !groups.Any(group => group.Values.Count > 0))
+            {
+                if (itemDef?.HasValue ?? true)
+                {
+                    errors.Add(new EcfError(EcfErrors.ValueGroupEmpty, "Not at least one value present"));
+                }
             }
+            else
+            {
+                int groupCount = 1;
+                int valueCount = 1;
+                foreach (EcfValueGroup group in groups)
+                {
+                    foreach (string value in group.Values)
+                    {
+                        errors.AddRange(CheckValueValid(value, itemDef, formatDef, string.Format("group: {0}, value: {1}", groupCount, valueCount)));
+                        valueCount++;
+                    }
+                    groupCount++;
+                    valueCount = 1;
+                }
+            }
+            return errors;
+        }
+        public static List<EcfError> CheckValueValid(string value, ItemDefinition itemDef, FormatDefinition formatDef, string errorInfo)
+        {
+            List<EcfError> errors = new List<EcfError>();
+            if (value == null) 
+            {
+                errors.Add(new EcfError(EcfErrors.ValueNull, errorInfo ?? "Value null"));
+            }
+            else if (!(itemDef?.AllowBlank ?? false) && value.Equals(string.Empty))
+            {
+                errors.Add(new EcfError(EcfErrors.ValueEmpty, errorInfo ?? "Value empty"));
+            }
+            else
+            {
+                List<string> foundProhibitedPhrases = formatDef?.ProhibitedValuePhrases.Where(phrase => value.Contains(phrase)).ToList();
+                foundProhibitedPhrases?.ForEach(phrase =>
+                {
+                    errors.Add(new EcfError(EcfErrors.ValueContainsProhibitedPhrases, phrase));
+                });
+            }
+            return errors;
         }
 
+        private static void RemoveDeprecatedItemDefinitions(EcfStructureItem item,
+            List<ItemDefinition> rootBlockAttributes, List<ItemDefinition> childBlockAttributes,
+            List<ItemDefinition> blockParameters, List<ItemDefinition> parameterAttributes)
+        {
+            if (item is EcfParameter parameter)
+            {
+                if (parameterAttributes.Count > 0)
+                {
+                    parameterAttributes.RemoveAll(defAttr => parameter.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
+                }
+                if (blockParameters.Count > 0)
+                {
+                    blockParameters.RemoveAll(defParam => defParam.Name.Equals(parameter.Key));
+                }
+            }
+            else if (item is EcfBlock block)
+            {
+                if (block.IsRoot())
+                {
+                    if (rootBlockAttributes.Count > 0)
+                    {
+                        rootBlockAttributes.RemoveAll(defAttr => block.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
+                    }
+                }
+                else
+                {
+                    if (childBlockAttributes.Count > 0)
+                    {
+                        childBlockAttributes.RemoveAll(defAttr => block.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
+                    }
+                }
+            }
+        }
+        private static int ReadChar(StreamReader reader, out char c)
+        {
+            int i = reader.Read();
+            if (i >= 0)
+            {
+                c = (char)i;
+            }
+            else
+            {
+                c = (char)0;
+            }
+            return i;
+        }
         private static IKeyItemComparer KeyItemComparer { get; } = new IKeyItemComparer();
         private class IKeyItemComparer : IEqualityComparer<EcfKeyValueItem>
         {
@@ -171,12 +338,20 @@ namespace EgsEcfParser
             }
         }
 
+        public enum EcfFileNewLineSymbols
+        {
+            Unknown,
+            Lf,
+            Cr,
+            CrLf,
+        }
+
         private static class XmlLoading
         {
             private static class XmlSettings
             {
-                public static string FolderName { get; } = "EcfParserSettings";
-                public static string TemplateFileName { get; } = "EcfParserSettings_BlocksConfig.xml";
+                public static string FolderName { get; } = "EcfFileDefinitions";
+                public static string TemplateFileName { get; } = "EcfFileDefinitions_BlocksConfig.xml";
                 public static string FileNamePattern { get; } = "*.xml";
 
                 public static string XChapterRoot { get; } = "Settings";
@@ -202,6 +377,7 @@ namespace EgsEcfParser
                 public static string XElementValueGroupSeperator { get; } = "ValueGroupSeperator";
                 public static string XElementValueFractionalSeperator { get; } = "ValueFractionalSeperator";
                 public static string XElementMagicSpacer { get; } = "MagicSpacer";
+                public static string XElementBlockIdentificationAttribute { get; } = "BlockIdentificationAttribute";
                 public static string XElementBlockReferenceSourceAttribute { get; } = "BlockReferenceSourceAttribute";
                 public static string XElementBlockReferenceTargetAttribute { get; } = "BlockReferenceTargetAttribute";
                 public static string XElementEscapeIdentifierPair { get; } = "EscapeIdentifierPair";
@@ -214,6 +390,7 @@ namespace EgsEcfParser
                 public static string XAttributeName { get; } = "name";
                 public static string XAttributeOptional { get; } = "optional";
                 public static string XAttributeHasValue { get; } = "hasValue";
+                public static string XAttributeAllowBlank { get; } = "allowBlank";
                 public static string XAttributeForceEscape { get; } = "forceEscape";
                 public static string XAttributeInfo { get; } = "info";
             }
@@ -269,11 +446,11 @@ namespace EgsEcfParser
                     string fileType = configNode.Attributes?.GetNamedItem(XmlSettings.XAttributeType)?.Value;
                     if (IsKeyValid(fileType) && Definitions.All(def => !def.FileType.Equals(fileType)))
                     {
-                        Definitions.Add(BuildFormatDefinition(configNode));
+                        Definitions.Add(BuildFormatDefinition(filePathAndName, configNode));
                     }
                 }
             }
-            private static FormatDefinition BuildFormatDefinition(XmlNode configNode)
+            private static FormatDefinition BuildFormatDefinition(string filePathAndName, XmlNode configNode)
             {
                 string fileType = configNode?.Attributes.GetNamedItem(XmlSettings.XAttributeType)?.Value;
                 if (fileType == null) { throw new ArgumentException(string.Format("Attribute {0} not found", XmlSettings.XAttributeType)); }
@@ -290,14 +467,24 @@ namespace EgsEcfParser
                 if (escapeIdentifierPairs.Count < 1) { throw new ArgumentException(string.Format("No valid {0} found", XmlSettings.XElementEscapeIdentifierPair)); }
                 List<string> outerTrimmingPhrases = BuildStringList(formatterNode, XmlSettings.XElementOuterTrimmingChar);
 
-                string itemSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementItemSeperator)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string itemValueSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementItemValueSeperator)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string valueSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueSeperator)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string valueGroupSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueGroupSeperator)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string valueFractionalSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueFractionalSeperator)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string magicSpacer = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementMagicSpacer)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceSourceAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceTargetAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string itemSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementItemSeperator)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string itemValueSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementItemValueSeperator)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string valueSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueSeperator)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string valueGroupSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueGroupSeperator)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string valueFractionalSeperator = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementValueFractionalSeperator)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string magicSpacer = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementMagicSpacer)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockIdentificationAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockIdentificationAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceSourceAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceTargetAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 
                 if (!IsKeyValid(itemSeperator)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementItemSeperator)); }
                 if (!IsKeyValid(itemValueSeperator)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementItemValueSeperator)); }
@@ -306,21 +493,21 @@ namespace EgsEcfParser
                 if (!IsKeyValid(valueFractionalSeperator)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementValueFractionalSeperator)); }
                 if (!IsKeyValid(magicSpacer)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementMagicSpacer)); }
 
-                List<MarkDefinition> blockTypePreMarks = BuildMarkList(configNode, XmlSettings.XChapterBlockTypePreMarks);
-                List<MarkDefinition> blockTypePostMarks = BuildMarkList(configNode, XmlSettings.XChapterBlockTypePostMarks);
-                List<BlockTypeDefinition> rootBlockTypes = BuildBlockTypeList(configNode, XmlSettings.XChapterRootBlockTypes);
+                List<BlockValueDefinition> blockTypePreMarks = BuildMarkList(configNode, XmlSettings.XChapterBlockTypePreMarks);
+                List<BlockValueDefinition> blockTypePostMarks = BuildMarkList(configNode, XmlSettings.XChapterBlockTypePostMarks);
+                List<BlockValueDefinition> rootBlockTypes = BuildBlockTypeList(configNode, XmlSettings.XChapterRootBlockTypes);
                 List<ItemDefinition> rootBlockAttributes = BuildItemList(configNode, XmlSettings.XChapterRootBlockAttributes);
-                List<BlockTypeDefinition> childBlockTypes = BuildBlockTypeList(configNode, XmlSettings.XChapterChildBlockTypes);
+                List<BlockValueDefinition> childBlockTypes = BuildBlockTypeList(configNode, XmlSettings.XChapterChildBlockTypes);
                 List<ItemDefinition> childBlockAttributes = BuildItemList(configNode, XmlSettings.XChapterChildBlockAttributes);
                 List<ItemDefinition> blockParameters = BuildItemList(configNode, XmlSettings.XChapterBlockParameters);
                 List<ItemDefinition> parameterAttributes = BuildItemList(configNode, XmlSettings.XChapterParameterAttributes);
 
-                return new FormatDefinition(fileType,
+                return new FormatDefinition(filePathAndName, fileType,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator, 
                     valueGroupSeperator, valueFractionalSeperator, magicSpacer,
-                    blockReferenceSourceAttribute, blockReferenceTargetAttribute,
+                    blockIdentificationAttribute, blockReferenceSourceAttribute, blockReferenceTargetAttribute,
                     blockTypePreMarks, blockTypePostMarks,
                     rootBlockTypes, rootBlockAttributes,
                     childBlockTypes, childBlockAttributes,
@@ -362,6 +549,7 @@ namespace EgsEcfParser
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementValueGroupSeperator, ";");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementValueFractionalSeperator, ".");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementMagicSpacer, " ");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockIdentificationAttribute, "Id");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceSourceAttribute, "Ref");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
                         writer.WriteComment("Copy Parameter if more needed, First is used at file write");
@@ -389,37 +577,37 @@ namespace EgsEcfParser
                     // root block Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterRootBlockAttributes);;
-                        CreateXmlParameterItem(writer, "Id", true, true, false);
-                        CreateXmlParameterItem(writer, "Name", false, true, false);
-                        CreateXmlParameterItem(writer, "Ref", true, true, false);
+                        CreateXmlParameterItem(writer, "Id", true, true, false, false);
+                        CreateXmlParameterItem(writer, "Name", false, true, false, false);
+                        CreateXmlParameterItem(writer, "Ref", true, true, false, false);
                         writer.WriteEndElement();
                     }
                     // Child block types
                     {
                         writer.WriteStartElement(XmlSettings.XChapterChildBlockTypes);
-                        CreateXmlTypeItem(writer, "Child", true);
+                        CreateXmlTypeItem(writer, "Child", false);
                         writer.WriteEndElement();
                     }
                     // child block Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterChildBlockAttributes);
-                        CreateXmlParameterItem(writer, "DropOnDestroy", true, false, false);
+                        CreateXmlParameterItem(writer, "DropOnDestroy", true, false, false, false);
                         writer.WriteEndElement();
                     }
                     // block parameters
                     {
                         writer.WriteStartElement(XmlSettings.XChapterBlockParameters);
-                        CreateXmlParameterItem(writer, "Material", true, true, false);
-                        CreateXmlParameterItem(writer, "Shape", true, true, false);
-                        CreateXmlParameterItem(writer, "Mesh", true, true, false);
+                        CreateXmlParameterItem(writer, "Material", true, true, false, false);
+                        CreateXmlParameterItem(writer, "Shape", true, true, false, false);
+                        CreateXmlParameterItem(writer, "Mesh", true, true, false, false);
                         writer.WriteEndElement();
                     }
                     // parameter Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterParameterAttributes);
-                        CreateXmlParameterItem(writer, "type", true, true, false);
-                        CreateXmlParameterItem(writer, "display", true, true, false);
-                        CreateXmlParameterItem(writer, "formatter", true, true, false);
+                        CreateXmlParameterItem(writer, "type", true, true, false, false);
+                        CreateXmlParameterItem(writer, "display", true, true, false, false);
+                        CreateXmlParameterItem(writer, "formatter", true, true, false, false);
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();
@@ -453,12 +641,13 @@ namespace EgsEcfParser
                 writer.WriteAttributeString(XmlSettings.XAttributeOptional, isOptional.ToString().ToLower());
                 writer.WriteEndElement();
             }
-            private static void CreateXmlParameterItem(XmlWriter writer, string name, bool isOptional, bool hasValue, bool isFordeEcaped)
+            private static void CreateXmlParameterItem(XmlWriter writer, string name, bool isOptional, bool hasValue, bool canBlank, bool isFordeEcaped)
             {
                 writer.WriteStartElement(XmlSettings.XElementParamter);
                 writer.WriteAttributeString(XmlSettings.XAttributeName, name);
                 writer.WriteAttributeString(XmlSettings.XAttributeOptional, isOptional.ToString().ToLower());
                 writer.WriteAttributeString(XmlSettings.XAttributeHasValue, hasValue.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeAllowBlank, canBlank.ToString().ToLower());
                 writer.WriteAttributeString(XmlSettings.XAttributeForceEscape, isFordeEcaped.ToString().ToLower());
                 writer.WriteAttributeString(XmlSettings.XAttributeInfo, "");
                 writer.WriteEndElement();
@@ -466,85 +655,65 @@ namespace EgsEcfParser
 
             private static List<string> BuildStringList(XmlNode formatterNode, string xElement)
             {
-                return formatterNode.SelectNodes(xElement).Cast<XmlNode>().Select(node =>
-                    RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value)
-                    ).Where(data => IsKeyValid(data)).ToList();
+                List<string> strings = new List<string>();
+                foreach(XmlNode node in formatterNode.SelectNodes(xElement))
+                {
+                    string data = RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                    if (!IsKeyValid(data)) { throw new ArgumentException(string.Format("'{0}' is not a valid string parameter", data)); }
+                    strings.Add(data);
+                }
+                return strings;
             }
             private static List<StringPairDefinition> BuildStringPairList(XmlNode formatterNode, string xElement)
             {
-                return formatterNode.SelectNodes(xElement).Cast<XmlNode>().Select(node =>
-                    new StringPairDefinition(
+                List<StringPairDefinition> pairs = new List<StringPairDefinition>();
+                foreach(XmlNode node in formatterNode.SelectNodes(xElement))
+                {
+                    pairs.Add(new StringPairDefinition(
                         RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeOpener)?.Value),
                         RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeCloser)?.Value)
-                    )
-                ).Where(pair => pair.IsValid()).ToList();
+                        ));
+                }
+                return pairs;
             }
-            private static List<MarkDefinition> BuildMarkList(XmlNode fileNode, string xChapter)
+            private static List<BlockValueDefinition> BuildMarkList(XmlNode fileNode, string xChapter)
             {
-                List<MarkDefinition> preMarks = fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter)?.Cast<XmlNode>().Select(node =>
+                List<BlockValueDefinition> preMarks = new List<BlockValueDefinition>();
+                foreach(XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
                 {
-                    try
-                    {
-                        return new MarkDefinition(
+                    preMarks.Add(
+                        new BlockValueDefinition(
                             RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value),
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value
-                            );
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                }).Where(preMark => preMark != null).ToList();
-                if (preMarks == null)
-                {
-                    preMarks = new List<MarkDefinition>();
+                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value,
+                            false));
                 }
                 return preMarks;
             }
-            private static List<BlockTypeDefinition> BuildBlockTypeList(XmlNode fileNode, string xChapter)
+            private static List<BlockValueDefinition> BuildBlockTypeList(XmlNode fileNode, string xChapter)
             {
-                List<BlockTypeDefinition> blockTypes = fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter)?.Cast<XmlNode>().Select(node =>
+                List<BlockValueDefinition> blockTypes = new List<BlockValueDefinition>();
+                foreach(XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
                 {
-                    try
-                    {
-                        return new BlockTypeDefinition(
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value
-                            );
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                }).Where(blockType => blockType != null).ToList();
-                if (blockTypes == null)
-                {
-                    blockTypes = new List<BlockTypeDefinition>();
+                    blockTypes.Add(new BlockValueDefinition(
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value
+                        ));
                 }
                 return blockTypes;
             }
             private static List<ItemDefinition> BuildItemList(XmlNode fileNode, string xChapter)
             {
-                List<ItemDefinition> parameters = fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter)?.Cast<XmlNode>().Select(node =>
+                List<ItemDefinition> parameters = new List<ItemDefinition>();
+                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
                 {
-                    try
-                    {
-                        return new ItemDefinition(
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value,
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeHasValue)?.Value,
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeForceEscape)?.Value,
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeInfo)?.Value
-                            );
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                }).Where(param => param != null).ToList();
-                if (parameters == null)
-                {
-                    parameters = new List<ItemDefinition>();
+                    parameters.Add(new ItemDefinition(
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeHasValue)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeAllowBlank)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeForceEscape)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeInfo)?.Value
+                        ));
                 }
                 return parameters;
             }
@@ -555,107 +724,79 @@ namespace EgsEcfParser
     {
         public string FilePath { get; private set; } = null;
         public string FileName { get; private set; } = null;
+        public int LineCount { get; private set; } = 0;
+        public bool LoadAbortPending { get; set; } = false;
+        public bool HasUnsavedData { get; private set; } = true;
+
         public Encoding FileEncoding { get; private set; } = null;
-        public string NewLineCharacter { get; private set; } = null;
-        public bool HasUnsavedData { get; private set; } = false;
+        public EcfFileNewLineSymbols NewLineSymbol { get; private set; } = EcfFileNewLineSymbols.Unknown;
         public FormatDefinition Definition { get; private set; } = null;
 
-        /// <summary>
-        /// <para><returns>Returns a list of ecf items with multiple sub-items.</returns><br/>
-        /// <see cref="EcfComment" /><br/>
-        /// <see cref="EcfBlock" /><br/>
-        /// <see cref="EcfParameter" /><br/>
-        /// </para> 
-        /// </summary>
-        public ReadOnlyCollection<EcfItem> ItemList { get; }
-        /// <summary>
-        /// <para>
-        /// <returns>Returns a list of <see cref="EcfError" /> occured at content load, clears at save.</returns><br/>
-        /// </para> 
-        /// </summary>
-        public ReadOnlyCollection<EcfError> ErrorList { get; }
+        public ReadOnlyCollection<EcfStructureItem> ItemList { get; }
 
-        private List<EcfItem> InternalItemList { get; } = new List<EcfItem>();
-        private List<EcfError> InternalErrorList { get; } = new List<EcfError>();
-        private List<StackItem> Stack { get; } = new List<StackItem>();
+        private List<EcfStructureItem> InternalItemList { get; } = new List<EcfStructureItem>();
         private StringBuilder EcfLineBuilder { get; } = new StringBuilder();
+        private List<EcfError> FatalFormatErrors { get; } = new List<EcfError>();
 
-        /// <summary>
-        /// <para><returns>Constructs a new <see cref="EgsEcfParser" /> and imports its content. <br/>
-        /// Needs <see cref="FormatDefinition" /> from <see cref="GetDefinition" /> / <see cref="GetSupportedFileTypes" />.</returns></para>
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public EgsEcfFile(string filePathAndName, FormatDefinition definition)
+        public EgsEcfFile(string filePathAndName, FormatDefinition definition, Encoding encoding, EcfFileNewLineSymbols newLineSymbol)
         {
             ItemList = InternalItemList.AsReadOnly();
-            ErrorList = InternalErrorList.AsReadOnly();
             FileName = Path.GetFileName(filePathAndName);
             FilePath = Path.GetDirectoryName(filePathAndName);
+            LineCount = File.ReadLines(filePathAndName).Count();
             Definition = new FormatDefinition(definition);
-            Reload();
+            FileEncoding = encoding;
+            NewLineSymbol = newLineSymbol;
         }
-        /// <summary>
-        /// <para><returns>Constructs a new <see cref="EgsEcfParser" /> and imports its content. <br/>
-        /// Trying to guess the needed <see cref="FormatDefinition" /> from the file name.</returns></para>
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
+        public EgsEcfFile(string filePathAndName, FormatDefinition definition) : this(filePathAndName, definition, GetFileEncoding(filePathAndName), GetNewLineSymbol(filePathAndName))
+        {
+            
+        }
         public EgsEcfFile(string filePathAndName) : this(filePathAndName, GetDefinition(Path.GetFileNameWithoutExtension(filePathAndName)))
         {
             
         }
 
-        /// <summary>
-        /// <para><returns>Reloads the content data from the associated ecf file.</returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// <see cref="EcfFormatException" /><br/>
-        /// </para>
-        /// </summary>
-        public void Reload()
+        // file handling
+        public List<EcfError> GetErrorList()
+        {
+            List<EcfError> errors = new List<EcfError>(FatalFormatErrors);
+            errors.AddRange(ItemList.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList()));
+            return errors;
+        }
+        public List<T> GetDeepItemList<T>() where T : EcfStructureItem
+        {
+            return GetDeepItemList<T>(InternalItemList);
+        }
+        public static List<T> GetDeepItemList<T>(List<EcfStructureItem> itemList) where T : EcfStructureItem
+        {
+            List<T> list = new List<T>(itemList.Where(item => item is T).Cast<T>());
+            list.AddRange(itemList.Where(item => item is EcfBlock).Cast<EcfBlock>().SelectMany(block => block.GetDeepChildList<T>()).ToList());
+            return list;
+        }
+        public void Load()
+        {
+            Load(null);
+        }
+        public void Load(IProgress<int> lineProgress)
         {
             string filePathAndName = Path.Combine(FilePath, FileName);
             try
             {
-                FileEncoding = GetFileEncoding(filePathAndName);
-                NewLineCharacter = GetNewLineChar(filePathAndName);
                 using (StreamReader reader = new StreamReader(File.Open(filePathAndName, FileMode.Open, FileAccess.Read), FileEncoding))
                 {
-                    ParseEcfContent(reader);
-                    HasUnsavedData = InternalErrorList.Count != 0;
+                    ParseEcfContent(this, lineProgress, reader, out List<EcfStructureItem> rootItems, out List<EcfError> fatalErrors);
                 }
             }
             catch (Exception ex)
             {
-                throw new IOException(string.Format("File {0} could not be loaded: {1}", filePathAndName, ex.Message));
+                throw new IOException(string.Format("File {0} content could not be loaded: {1}", filePathAndName, ex.Message));
             }
         }
-        /// <summary>
-        /// <para><returns>Saves the content data to the file.</returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// </para>
-        /// </summary>
         public void Save()
         {
             Save(Path.Combine(FilePath, FileName));
         }
-        /// <summary>
-        /// <para><returns>Saves the content data to the file using a new path and name.</returns></para> 
-        /// <para>
-        /// Exceptions:<br/>
-        /// <see cref="IOException" /><br/>
-        /// </para>
-        /// </summary>
         public void Save(string filePathAndName)
         {
             if (HasUnsavedData)
@@ -664,15 +805,17 @@ namespace EgsEcfParser
                 {
                     string path = Path.GetDirectoryName(filePathAndName);
                     Directory.CreateDirectory(path);
+                    RemoveInvalidItems();
+                    FatalFormatErrors.Clear();
                     using (StreamWriter writer = new StreamWriter(File.Open(filePathAndName, FileMode.Create, FileAccess.Write), FileEncoding))
                     {
-                        writer.NewLine = NewLineCharacter;
+                        writer.NewLine = GetNewLineChar(NewLineSymbol);
                         CreateEcfContent(writer);
                     }
                     FileName = Path.GetFileName(filePathAndName);
                     FilePath = path;
+                    LineCount = File.ReadLines(filePathAndName).Count();
                     HasUnsavedData = false;
-                    InternalErrorList.Clear();
                 }
                 catch (Exception ex)
                 {
@@ -680,37 +823,6 @@ namespace EgsEcfParser
                 }
             }
         }
-        /// <summary>
-        /// <para><returns>Checks the definition against the file content and returns item definitions for items which are not present in the file content.</returns></para> 
-        /// </summary>
-        public ReadOnlyCollection<ItemDefinition> GetDeprecatedItemDefinitions()
-        {
-            List<ItemDefinition> deprecatedItems = new List<ItemDefinition>();
-            List<ItemDefinition> definedRootBlockAttributes = Definition.RootBlockAttributes.ToList();
-            List<ItemDefinition> definedChildBlockAttributes = Definition.ChildBlockAttributes.ToList();
-            List<ItemDefinition> definedBlockParameters = Definition.BlockParameters.ToList();
-            List<ItemDefinition> definedParameterAttributes = Definition.ParameterAttributes.ToList();
-            foreach (EcfItem item in ItemList)
-            {
-                if (item is EcfBlock block)
-                {
-                    CheckDeprecatedItemDefinitions(block, definedRootBlockAttributes, definedChildBlockAttributes, definedBlockParameters, definedParameterAttributes);
-                }
-                if (definedRootBlockAttributes.Count == 0 && definedChildBlockAttributes.Count == 0 && 
-                    definedBlockParameters.Count == 0 && definedParameterAttributes.Count == 0)
-                {
-                    break;
-                }
-            }
-            deprecatedItems.AddRange(definedRootBlockAttributes);
-            deprecatedItems.AddRange(definedChildBlockAttributes);
-            deprecatedItems.AddRange(definedBlockParameters);
-            deprecatedItems.AddRange(definedParameterAttributes);
-            return deprecatedItems.AsReadOnly();
-        }
-        /// <summary>
-        /// <para>Sets the <see cref="HasUnsavedData" /> flag for file change handling.</para> 
-        /// </summary>
         public void SetUnsavedDataFlag()
         {
             if (!HasUnsavedData)
@@ -718,25 +830,18 @@ namespace EgsEcfParser
                 HasUnsavedData = true;
             }
         }
-        /// <summary>
-        /// <para>Adds a <see cref="EcfItem" /> to <see cref="ItemList" />.</para> 
-        /// <para><returns>Returns true if <see cref="EcfItem" /> is not null.</returns></para> 
-        /// </summary>
-        public bool AddItem(EcfItem item)
+        public bool AddItem(EcfStructureItem item)
         {
             if (item != null)
             {
-                item.SetFile(this);
+                item.UpdateStructureData(this, null, -1);
                 InternalItemList.Add(item);
+                SetUnsavedDataFlag();
                 return true;
             }
             return false;
         }
-        /// <summary>
-        /// <para>Adds a List of <see cref="EcfItem" /> to <see cref="ItemList" />.</para> 
-        /// <para><returns>Returns count of added items if List nor item are null.</returns></para> 
-        /// </summary>
-        public int AddItems(List<EcfItem> items)
+        public int AddItems(List<EcfStructureItem> items)
         {
             int count = 0;
             items?.ForEach(item =>
@@ -748,75 +853,71 @@ namespace EgsEcfParser
             });
             return count;
         }
-
-        // file formatting
-        private Encoding GetFileEncoding(string filePathAndName)
+        public bool AddItem(EcfStructureItem item, EcfStructureItem precedingItem)
         {
-            using (FileStream stream = new FileStream(filePathAndName, FileMode.Open, FileAccess.Read))
+            if (item != null)
             {
-                byte[] bom = new byte[4];
-                stream.Read(bom, 0, 4);
-                try
+                item.UpdateStructureData(this, null, -1);
+                int index = InternalItemList.IndexOf(precedingItem);
+                if (index < 0)
                 {
-                    if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
-                    if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
-                    if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32; //UTF-32LE
-                    if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
-                    if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
-                    if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);  //UTF-32BE
+                    InternalItemList.Add(item);
                 }
-                catch (Exception) { }
-                return new UTF8Encoding(false);
-            }
-        }
-        private string GetNewLineChar(string filePathAndName)
-        {
-            StringBuilder charBuffer = new StringBuilder();
-            using (StreamReader reader = new StreamReader(File.Open(filePathAndName, FileMode.Open, FileAccess.Read)))
-            {
-                do
+                else
                 {
-                    if (ReadChar(reader, out char buffer) != -1)
-                    {
-                        if (buffer == '\n')
-                        {
-                            charBuffer.Append(buffer);
-                        }
-                        else if (buffer == '\r')
-                        {
-                            charBuffer.Append(buffer);
-                            if (ReadChar(reader, out buffer) != -1)
-                            {
-                                if (buffer == '\n')
-                                {
-                                    charBuffer.Append(buffer);
-                                }
-                            }
-                        }
-                    }
-                } while (!reader.EndOfStream && charBuffer.Length == 0);
+                    InternalItemList.Insert(index + 1, item);
+                }
+                SetUnsavedDataFlag();
+                return true;
             }
-            return charBuffer.Length == 0 ? Environment.NewLine : charBuffer.ToString();
+            return false;
         }
-        private int ReadChar(StreamReader reader, out char c)
+        public int AddItems(List<EcfStructureItem> items, EcfStructureItem precedingItem)
         {
-            int i = reader.Read();
-            if (i >= 0)
+            int count = 0;
+            EcfStructureItem preItem = precedingItem;
+            items?.ForEach(item =>
             {
-                c = (char)i;
-            }
-            else
+                if (AddItem(item, preItem))
+                {
+                    count++;
+                }
+                preItem = item;
+            });
+            return count;
+        }
+        public bool RemoveItem(EcfStructureItem item)
+        {
+            if (item != null)
             {
-                c = (char)0;
+                InternalItemList.Remove(item);
+                SetUnsavedDataFlag();
+                return true;
             }
-            return i;
+            return false;
+        }
+        public int RemoveItems(List<EcfStructureItem> items)
+        {
+            int count = 0;
+            items?.ForEach(item =>
+            {
+                if (RemoveItem(item))
+                {
+                    count++;
+                }
+            });
+            return count;
         }
 
         // ecf creating
+        private void RemoveInvalidItems()
+        {
+            InternalItemList.RemoveAll(item => item is EcfStructureItem comment && comment.GetDeepErrorList().Count > 0);
+        }
         private void CreateEcfContent(StreamWriter writer)
         {
             int indent = 0;
-            foreach (EcfItem item in ItemList)
+            foreach (EcfBaseItem item in ItemList)
             {
                 if (item is EcfComment comment)
                 {
@@ -840,7 +941,7 @@ namespace EgsEcfParser
         {
             CreateBlockStartLine(writer, block, indent);
             indent++;
-            foreach (EcfItem item in block.ChildItems)
+            foreach (EcfBaseItem item in block.ChildItems)
             {
                 if (item is EcfComment comment)
                 {
@@ -903,12 +1004,9 @@ namespace EgsEcfParser
         {
             lineBuilder.Append(Definition.WritingBlockIdentifierPair.Opener);
             lineBuilder.Append(Definition.MagicSpacer);
-            lineBuilder.Append(block.TypePreMark ?? "");
-            lineBuilder.Append(block.BlockDataType ?? "");
-            if (block.Attributes.Count > 0)
-            {
-                lineBuilder.Append(block.TypePostMark ?? "");
-            }
+            lineBuilder.Append(block.PreMark ?? string.Empty);
+            lineBuilder.Append(block.DataType ?? string.Empty);
+            lineBuilder.Append(block.PostMark ?? string.Empty);
         }
         private void AppendAttributes(StringBuilder lineBuilder, ReadOnlyCollection<EcfAttribute> attributes)
         {
@@ -933,7 +1031,7 @@ namespace EgsEcfParser
                 item.Append(Definition.MagicSpacer);
                 bool escaped = false;
 
-                if (keyValueItem.IsForceEscaped || keyValueItem.IsUsingGroups() || keyValueItem.HasMultiValue())
+                if ((keyValueItem.Definition?.IsForceEscaped ?? false) || keyValueItem.IsUsingGroups() || keyValueItem.HasMultiValue())
                 {
                     item.Append(Definition.WritingEscapeIdentifiersPair.Opener);
                     escaped = true;
@@ -949,39 +1047,44 @@ namespace EgsEcfParser
         }
 
         // ecf parsing
-        private void ParseEcfContent(StreamReader reader)
+        private void ParseEcfContent(EgsEcfFile file, IProgress<int> lineProgress, StreamReader reader, out List<EcfStructureItem> rootItems, out List<EcfError> fatalErrors)
         {
+            rootItems = new List<EcfStructureItem>();
+            fatalErrors = new List<EcfError>();  
+
+            List<StackItem> stack = new List<StackItem>();
             string lineData;
             int lineCount = 0;
             int level = 0;
-
-            Stack.Clear();
-            InternalItemList.Clear();
-            InternalErrorList.Clear();
             List<string> comments = new List<string>();
             bool parameterLine;
             StringPairDefinition inCommentBlockPair = null;
 
+            // parse content
+            LoadAbortPending = false;
             while (!reader.EndOfStream)
             {
                 // interprete next line
+                if (LoadAbortPending) { break; }
                 lineCount++;
-                lineData = TrimOuterPhrases(reader.ReadLine());
+                lineProgress?.Report(lineCount);
+                lineData = TrimOuterPhrases(Definition, reader.ReadLine());
                 if (!lineData.Equals(string.Empty))
                 {
                     // comments
                     comments.Clear();
-                    comments.AddRange(ParseComments(lineData, out lineData, inCommentBlockPair, out inCommentBlockPair));
+                    comments.AddRange(ParseComments(Definition, lineData, out lineData, inCommentBlockPair, out inCommentBlockPair));
                     if (lineData.Equals(string.Empty))
                     {
                         EcfComment comment = new EcfComment(comments);
                         if (level > 0)
                         {
-                            GetStackItem(level).Block.AddChild(comment);
+                            stack[level - 1].Block.AddChild(comment);
                         }
                         else
                         {
-                            AddItem(comment);
+                            comment.UpdateStructureData(file, null, -1);
+                            rootItems.Add(comment);
                         }
                         continue;
                     }
@@ -989,121 +1092,115 @@ namespace EgsEcfParser
                     StringPairDefinition blockIdPair = Definition.BlockIdentifierPairs.FirstOrDefault(pair => lineData.StartsWith(pair.Opener));
                     if (blockIdPair != null)
                     {
-                        // IsRoot Block
-                        if (level < 1)
+                        EcfBlock block = ParseBlockElement(Definition, level < 1, lineData, lineCount);
+                        block.AddComments(comments);
+                        level++;
+                        if (stack.Count < level)
                         {
-                            try
-                            {
-                                EcfBlock block = ParseRootBlock(lineData);
-                                block.AddComments(comments);
-                                level++;
-                                AddStackItem(level, block, lineCount, lineData, blockIdPair);
-                            }
-                            catch (EcfFormatException ex)
-                            {
-                                InternalErrorList.Add(new EcfError(ex.EcfError, ex.TextData, null, lineCount.ToString()));
-                            }
+                            stack.Add(new StackItem(block, lineCount, lineData, blockIdPair));
                         }
-                        // IsChild Block
                         else
                         {
-                            try
-                            {
-                                EcfBlock block = ParseChildBlock(lineData);
-                                block.AddComments(comments);
-                                level++;
-                                AddStackItem(level, block, lineCount, lineData, blockIdPair);
-                            }
-                            catch (EcfFormatException ex)
-                            {
-                                InternalErrorList.Add(new EcfError(ex.EcfError, ex.TextData, null, lineCount.ToString()));
-                            }
+                            stack[level - 1] = new StackItem(block, lineCount, lineData, blockIdPair);
                         }
                     }
                     // parameter or block closer
                     else if (level > 0)
                     {
-                        StackItem item = GetStackItem(level);
+                        StackItem stackItem = stack[level - 1];
                         parameterLine = false;
                         // parameter
-                        if (!item.BlockSymbolPair.Closer.Equals(lineData))
+                        if (!stackItem.BlockSymbolPair.Closer.Equals(lineData))
                         {
                             parameterLine = true;
-                            EcfBlock block = item.Block;
+                            EcfBlock block = stackItem.Block;
                             try
                             {
-                                EcfParameter parameter = ParseParameter(lineData);
+                                EcfParameter parameter = ParseParameter(Definition, lineData, block, lineCount);
                                 parameter.AddComments(comments);
-                                block.AddChild(parameter);
                             }
-                            catch (EcfFormatException ex)
+                            catch (EcfException ex)
                             {
-                                InternalErrorList.Add(new EcfError(ex.EcfError, ex.TextData, block.BuildIdentification(), lineCount.ToString()));
+                                fatalErrors.Add(new EcfError(ex.EcfError, string.Format("{0} / {1}", block.GetFullName(), ex.TextData), lineCount));
                             }
                         }
                         // block closer
-                        if (lineData.EndsWith(item.BlockSymbolPair.Closer))
+                        if (lineData.EndsWith(stackItem.BlockSymbolPair.Closer))
                         {
                             level--;
-                            EcfBlock block = item.Block;
-                            try
+                            EcfBlock block = stackItem.Block;
+                            // completeness
+                            List<EcfError> errors = CheckParametersValid(block.ChildItems.Where(child => child is EcfParameter)
+                                .Cast<EcfParameter>().ToList(), Definition.BlockParameters);
+                            errors.ForEach(error => error?.SetLineInFile(stackItem.LineNumber));
+                            block.AddErrors(errors);
+                            // comments
+                            if (!parameterLine) { block.AddComments(comments); }
+                            // append block to parent
+                            if (level > 0)
                             {
-                                CheckParameters(block.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList(), Definition.BlockParameters);
-                                // comments
-                                if (!parameterLine) { block.AddComments(comments); }
-                                // append block to parent
-                                if (level > 0)
-                                {
-                                    StackItem parent = GetStackItem(level);
-                                    parent.Block.AddChild(block);
-                                }
-                                // append block to root list
-                                else
-                                {
-                                    AddItem(block);
-                                }
+                                StackItem parent = stack[level - 1];
+                                parent.Block.AddChild(block);
                             }
-                            catch (EcfFormatException ex)
+                            // append block to root list
+                            else
                             {
-                                InternalErrorList.Add(new EcfError(ex.EcfError, ex.TextData, block.BuildIdentification(), item.LineNumber.ToString()));
+                                block.UpdateStructureData(file, null, -1);
+                                rootItems.Add(block);
                             }
                         }
                     }
                     // reporting unassigned line or unopend block
                     else
                     {
-                        if (Definition.BlockIdentifierPairs.Any(pair => lineData.EndsWith(pair.Closer)))
+                        if (Definition.BlockIdentifierPairs.Any(pair => lineData.StartsWith(pair.Closer) || lineData.EndsWith(pair.Closer)))
                         {
-                            InternalErrorList.Add(new EcfError(EcfErrors.BlockCloserWithoutOpener, lineData, null, lineCount.ToString()));
+                            fatalErrors.Add(new EcfError(EcfErrors.BlockCloserWithoutOpener, lineData, lineCount));
                         }
                         else
                         {
-                            InternalErrorList.Add(new EcfError(EcfErrors.ParameterWithoutParent, lineData, null, lineCount.ToString()));
+                            fatalErrors.Add(new EcfError(EcfErrors.ParameterWithoutParent, lineData, lineCount));
                         }
 
                     }
                 }
             }
-            // reporting unclosed blocks 
-            while (level > 0)
+            if (!LoadAbortPending)
             {
-                StackItem item = GetStackItem(level);
-                InternalErrorList.Add(new EcfError(EcfErrors.BlockOpenerWithoutCloser, item.LineData, item.Block.BuildIdentification(), item.LineNumber.ToString()));
-                level--;
+                // reporting unclosed blocks 
+                while (level > 0)
+                {
+                    StackItem item = stack[level - 1];
+                    fatalErrors.Add(new EcfError(EcfErrors.BlockOpenerWithoutCloser, string.Format("{0} / {1}", item.Block.GetFullName(), item.LineData), item.LineNumber));
+                    level--;
+                }
+
+                // global error checks
+                List<EcfBlock> completeBlockList = GetDeepItemList<EcfBlock>(rootItems);
+                completeBlockList.ForEach(block => block.RevalidateUniqueness(completeBlockList));
+                ParseReferenceInheritance(completeBlockList);
+
+                // update der daten
+                InternalItemList.Clear();
+                FatalFormatErrors.Clear();
+                AddItems(rootItems);
+                FatalFormatErrors.AddRange(fatalErrors);
             }
         }
-        private List<string> ParseComments(string inLineData, out string outLineData, StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
+        private static List<string> ParseComments(FormatDefinition definition, string inLineData, out string outLineData, 
+            StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
         {
             List<string> comments = new List<string>();
-            comments.AddRange(ParseBlockComment(inLineData, out inLineData, inCommentBlockPair, out inCommentBlockPair));
-            comments.AddRange(ParseSingleLineComment(inLineData, out inLineData));
-            comments.AddRange(ParseInLineComment(inLineData, out inLineData));
-            comments.AddRange(ParseMultiLineComment(inLineData, out inLineData, inCommentBlockPair, out inCommentBlockPair));
+            comments.AddRange(ParseBlockComment(definition, inLineData, out inLineData, inCommentBlockPair, out inCommentBlockPair));
+            comments.AddRange(ParseSingleLineComment(definition, inLineData, out inLineData));
+            comments.AddRange(ParseInLineComment(definition, inLineData, out inLineData));
+            comments.AddRange(ParseMultiLineComment(definition, inLineData, out inLineData, inCommentBlockPair, out inCommentBlockPair));
             outLineData = inLineData;
             outCommentBlockPair = inCommentBlockPair;
             return comments;
         }
-        private List<string> ParseBlockComment(string inLineData, out string outLineData, StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
+        private static List<string> ParseBlockComment(FormatDefinition definition, string inLineData, out string outLineData, 
+            StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
         {
             List<string> comments = new List<string>();
             if (inCommentBlockPair != null)
@@ -1111,13 +1208,13 @@ namespace EgsEcfParser
                 int end = inLineData.IndexOf(inCommentBlockPair.Closer);
                 if (end >= 0)
                 {
-                    comments.Add(TrimComment(inLineData.Substring(0, end)));
+                    comments.Add(TrimComment(definition, inLineData.Substring(0, end)));
                     inLineData = inLineData.Remove(0, end + inCommentBlockPair.Closer.Length).Trim();
                     inCommentBlockPair = null;
                 }
                 else
                 {
-                    comments.Add(TrimComment(inLineData));
+                    comments.Add(TrimComment(definition, inLineData));
                     inLineData = "";
                 }
             }
@@ -1125,33 +1222,33 @@ namespace EgsEcfParser
             outCommentBlockPair = inCommentBlockPair;
             return comments;
         }
-        private List<string> ParseSingleLineComment(string inLineData, out string outLineData)
+        private static List<string> ParseSingleLineComment(FormatDefinition definition, string inLineData, out string outLineData)
         {
             List<string> comments = new List<string>();
-            string singleLineMark = Definition.SingleLineCommentStarts.Where(mark => inLineData.IndexOf(mark) >= 0).OrderByDescending(mark => inLineData.IndexOf(mark)).FirstOrDefault();
+            string singleLineMark = definition.SingleLineCommentStarts.Where(mark => inLineData.IndexOf(mark) >= 0).OrderByDescending(mark => inLineData.IndexOf(mark)).FirstOrDefault();
             if (singleLineMark != null)
             {
                 int start = inLineData.IndexOf(singleLineMark);
-                comments.Add(TrimComment(inLineData.Substring(start).Remove(0, singleLineMark.Length)));
+                comments.Add(TrimComment(definition, inLineData.Substring(start).Remove(0, singleLineMark.Length)));
                 inLineData = inLineData.Remove(start).Trim();
             }
             outLineData = inLineData;
             return comments;
         }
-        private List<string> ParseInLineComment(string inLineData, out string outLineData)
+        private static List<string> ParseInLineComment(FormatDefinition definition, string inLineData, out string outLineData)
         {
             List<string> comments = new List<string>();
             StringPairDefinition inLineMark = null;
             do
             {
-                inLineMark = Definition.MultiLineCommentPairs.FirstOrDefault(pair => {
+                inLineMark = definition.MultiLineCommentPairs.FirstOrDefault(pair => {
                     int start = inLineData.IndexOf(pair.Opener);
                     if (start >= 0)
                     {
                         int end = inLineData.IndexOf(pair.Closer, start);
                         if (end >= 0)
                         {
-                            comments.Add(TrimComment(inLineData.Substring(start + pair.Opener.Length, end - start - pair.Opener.Length)));
+                            comments.Add(TrimComment(definition, inLineData.Substring(start + pair.Opener.Length, end - start - pair.Opener.Length)));
                             inLineData = inLineData.Remove(start, end - start + pair.Closer.Length).Trim();
                             return true;
                         }
@@ -1162,30 +1259,31 @@ namespace EgsEcfParser
             outLineData = inLineData;
             return comments;
         }
-        private List<string> ParseMultiLineComment(string inLineData, out string outLineData, StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
+        private static List<string> ParseMultiLineComment(FormatDefinition definition, string inLineData, out string outLineData, 
+            StringPairDefinition inCommentBlockPair, out StringPairDefinition outCommentBlockPair)
         {
             List<string> comments = new List<string>();
             StringPairDefinition multiLineMark;
-            multiLineMark = Definition.MultiLineCommentPairs.Where(pair => inLineData.IndexOf(pair.Closer) >= 0)
+            multiLineMark = definition.MultiLineCommentPairs.Where(pair => inLineData.IndexOf(pair.Closer) >= 0)
                 .OrderByDescending(pair => inLineData.IndexOf(pair.Closer)).LastOrDefault();
             if (multiLineMark != null)
             {
                 int end = inLineData.IndexOf(multiLineMark.Closer);
                 if (end >= 0)
                 {
-                    comments.Add(TrimComment(inLineData.Substring(0, end)));
+                    comments.Add(TrimComment(definition, inLineData.Substring(0, end)));
                     inLineData = inLineData.Remove(0, end + multiLineMark.Closer.Length).Trim();
                     inCommentBlockPair = null;
                 }
             }
-            multiLineMark = Definition.MultiLineCommentPairs.Where(pair => inLineData.IndexOf(pair.Opener) >= 0)
+            multiLineMark = definition.MultiLineCommentPairs.Where(pair => inLineData.IndexOf(pair.Opener) >= 0)
                 .OrderByDescending(pair => inLineData.IndexOf(pair.Opener)).FirstOrDefault();
             if (multiLineMark != null)
             {
                 int start = inLineData.IndexOf(multiLineMark.Opener);
                 if (start >= 0)
                 {
-                    comments.Add(TrimComment(inLineData.Substring(start + multiLineMark.Opener.Length)));
+                    comments.Add(TrimComment(definition, inLineData.Substring(start + multiLineMark.Opener.Length)));
                     inLineData = inLineData.Remove(start).Trim();
                     inCommentBlockPair = multiLineMark;
                 }
@@ -1194,50 +1292,45 @@ namespace EgsEcfParser
             outCommentBlockPair = inCommentBlockPair;
             return comments;
         }
-        private EcfBlock ParseRootBlock(string lineData)
+        private static EcfBlock ParseBlockElement(FormatDefinition definition, bool isRoot, string lineData, int lineInFile)
         {
-            lineData = TrimPairs(lineData, Definition.BlockIdentifierPairs);
-            string preMark = ParseBlockPreMark(lineData);
-            string blockType = ParseBlockType(lineData, preMark, out string postMark);
-            CheckBlockType(blockType, Definition.RootBlockTypes);
+            ReadOnlyCollection<ItemDefinition> attributeDefinitions = isRoot ? definition.RootBlockAttributes : definition.ChildBlockAttributes;
+            ReadOnlyCollection<BlockValueDefinition> dataTypeDefinitions = isRoot ? definition.RootBlockTypes : definition.ChildBlockTypes;
+
+            lineData = TrimPairs(lineData, definition.BlockIdentifierPairs);
+            string preMark = ParseBlockPreMark(definition, lineData);
+            string blockType = ParseBlockType(definition, lineData, preMark, out string postMark);
             lineData = RemoveBlockType(lineData, preMark, blockType, postMark);
-            Queue<string> splittedItems = SplitEcfItems(lineData);
-            List<EcfAttribute> attributes = ParseAttributes(splittedItems, Definition.RootBlockAttributes);
-            return new EcfBlock(preMark, blockType, postMark, true, attributes, null);
+            Queue<string> splittedItems = SplitEcfItems(definition, lineData);
+            EcfBlock block = new EcfBlock(preMark, blockType, postMark);
+            List<EcfAttribute> attributes = ParseAttributes(definition, splittedItems, attributeDefinitions, lineInFile);
+            block.AddAttributes(attributes);
+            List<EcfError> errors = new List<EcfError>();
+            errors.AddRange(CheckBlockPostMark(preMark, definition.BlockTypePreMarks));
+            errors.AddRange(CheckBlockDataType(blockType, dataTypeDefinitions));
+            errors.AddRange(CheckBlockPostMark(postMark, definition.BlockTypePostMarks));
+            errors.AddRange(CheckAttributesValid(attributes, attributeDefinitions));
+            errors.ForEach(error => error?.SetLineInFile(lineInFile));
+            block.AddErrors(errors);
+            return block;
         }
-        private EcfBlock ParseChildBlock(string lineData)
+        private static EcfParameter ParseParameter(FormatDefinition definition, string lineData, EcfBlock block, int lineInFile)
         {
-            lineData = TrimPairs(lineData, Definition.BlockIdentifierPairs);
-            string blockType = ParseBlockType(lineData, null, out string postMark);
-            if (blockType != null)
-            {
-                CheckBlockType(blockType, Definition.ChildBlockTypes);
-                lineData = RemoveBlockType(lineData, null, blockType, postMark);
-            }
-            Queue<string> splittedlineData = SplitEcfItems(lineData);
-            List<EcfAttribute> attributes = ParseAttributes(splittedlineData, Definition.ChildBlockAttributes);
-            return new EcfBlock(null, blockType, postMark, false, attributes, null);
+            lineData = TrimPairs(lineData, definition.BlockIdentifierPairs);
+            Queue<string> splittedItems = SplitEcfItems(definition, lineData);
+            EcfParameter parameter = ParseParameterBase(definition, splittedItems, block, lineInFile);
+            List<EcfAttribute> attributes = ParseAttributes(definition, splittedItems, definition.ParameterAttributes, lineInFile);
+            parameter.AddAttributes(attributes);
+            List<EcfError> errors = CheckAttributesValid(attributes, definition.ParameterAttributes);
+            errors.ForEach(error => error?.SetLineInFile(lineInFile));
+            parameter.AddErrors(errors);
+            return parameter;
         }
-        private EcfParameter ParseParameter(string lineData)
+        private static string ParseBlockPreMark(FormatDefinition definition, string lineData)
         {
-            lineData = TrimPairs(lineData, Definition.BlockIdentifierPairs);
-            Queue<string> splittedItems = SplitEcfItems(lineData);
-            KeyValuePair<string, string> parameter = ParseParameterKeyValue(splittedItems, out bool isForceEscaped);
-            List<EcfValueGroup> groups = ParseValues(parameter.Value);
-            List<EcfAttribute> attributes = ParseAttributes(splittedItems, Definition.ParameterAttributes);
-            return new EcfParameter(parameter.Key, groups, isForceEscaped, attributes);
+            return definition.BlockTypePreMarks.Where(mark => !string.IsNullOrEmpty(mark.Value)).FirstOrDefault(mark => lineData.StartsWith(mark.Value))?.Value;
         }
-        private string ParseBlockPreMark(string lineData)
-        {
-            string preMark = Definition.BlockTypePreMarks.FirstOrDefault(mark => lineData.StartsWith(mark.Value))?.Value;
-            List<MarkDefinition> mandatoryPreMarks = Definition.BlockTypePreMarks.Where(defPreMark => !defPreMark.IsOptional).ToList();
-            if (mandatoryPreMarks.Count > 0 && !mandatoryPreMarks.Any(mark => mark.Value.Equals(preMark)))
-            {
-                throw new EcfFormatException(EcfErrors.BlockPreMarkMissing, string.Join(", ", mandatoryPreMarks.Select(marks => marks.Value).ToArray()));
-            }
-            return preMark;
-        }
-        private string ParseBlockType(string lineData, string preMark, out string postMark)
+        private static string ParseBlockType(FormatDefinition definition, string lineData, string preMark, out string postMark)
         {
             postMark = null;
             if (preMark != null) { lineData = lineData.Remove(0, preMark.Length); }
@@ -1249,8 +1342,8 @@ namespace EgsEcfParser
                 buffer = lineData[index].ToString();
                 if (escapePair == null)
                 {
-                    escapePair = Definition.EscapeIdentifiersPairs.FirstOrDefault(pair => pair.Opener.Equals(buffer));
-                    if (escapePair == null && Definition.BlockTypePostMarks.Any(mark => mark.Value.Equals(buffer)))
+                    escapePair = definition.EscapeIdentifiersPairs.FirstOrDefault(pair => pair.Opener.Equals(buffer));
+                    if (escapePair == null && definition.BlockTypePostMarks.Where(mark => !string.IsNullOrEmpty(mark.Value)).Any(mark => mark.Value.Equals(buffer)))
                     {
                         postMark = buffer;
                         break;
@@ -1264,137 +1357,156 @@ namespace EgsEcfParser
             }
             return blockTypeItem.Length > 0 ? blockTypeItem.ToString() : null;
         }
-        private List<EcfAttribute> ParseAttributes(Queue<string> splittedItems, ReadOnlyCollection<ItemDefinition> definedAttributes)
+        private static  List<EcfAttribute> ParseAttributes(FormatDefinition definition, Queue<string> splittedItems, ReadOnlyCollection<ItemDefinition> definedAttributes, int lineInFile)
         {
+            List<EcfError> errors = new List<EcfError>();
             List<EcfAttribute> attributes = new List<EcfAttribute>();
             while (splittedItems.Count > 0)
             {
                 string key = splittedItems.Dequeue();
+                errors.Clear();
                 List<EcfValueGroup> groups = null;
-                ItemDefinition definedAttribute = definedAttributes.FirstOrDefault(attribute => attribute.Name.Equals(key));
-                if (definedAttribute == null)
-                {
-                    throw new EcfFormatException(EcfErrors.AttributeUnknown, key);
-                }
-                if (definedAttribute.HasValue)
+                errors.Add(CheckItemUnknown(definedAttributes, key, KeyValueItemTypes.Attribute, out ItemDefinition itemDefinition));
+                if (itemDefinition != null && itemDefinition.HasValue)
                 {
                     if (splittedItems.Count > 0)
                     {
-                        groups = ParseValues(splittedItems.Dequeue());
+                        groups = ParseValues(definition, splittedItems.Dequeue());
                     }
-                    else
-                    {
-                        throw new EcfFormatException(EcfErrors.ValueMissing, key);
-                    }
+                    errors.AddRange(CheckValuesValid(groups, itemDefinition, definition));
                 }
-                attributes.Add(new EcfAttribute(key, groups, definedAttribute.IsForceEscaped));
+                EcfAttribute attr = new EcfAttribute(key);
+                attributes.Add(attr);
+                attr.AddValues(groups);
+                errors.ForEach(error => error?.SetLineInFile(lineInFile));
+                attr.AddErrors(errors);
             }
-            CheckAttributes(attributes, definedAttributes);
             return attributes;
         }
-        private KeyValuePair<string, string> ParseParameterKeyValue(Queue<string> splittedItems, out bool isForceEscaped)
+        private static EcfParameter ParseParameterBase(FormatDefinition definition, Queue<string> splittedItems, EcfBlock block, int lineInFile)
         {
             string key = null;
-            string value = null;
-            isForceEscaped = false;
+            List<EcfValueGroup> groups = null;
+            List<EcfError> errors = new List<EcfError>();
+            ItemDefinition itemDefinition = null;
             if (splittedItems.Count > 0)
             {
                 key = splittedItems.Dequeue();
-                ItemDefinition definedParameter = Definition.BlockParameters.FirstOrDefault(parameter => parameter.Name.Equals(key));
-                if (definedParameter == null)
+                errors.Add(CheckItemUnknown(definition.BlockParameters, key, KeyValueItemTypes.Parameter, out itemDefinition));
+                if (itemDefinition != null && itemDefinition.HasValue)
                 {
-                    throw new EcfFormatException(EcfErrors.ParameterUnknown, key);
-                }
-                if (definedParameter.HasValue)
-                {
-                    isForceEscaped = definedParameter.IsForceEscaped;
                     if (splittedItems.Count > 0)
                     {
-                        value = splittedItems.Dequeue();
+                        groups = ParseValues(definition, splittedItems.Dequeue());
                     }
-                    else
-                    {
-                        throw new EcfFormatException(EcfErrors.ValueMissing, key);
-                    }
+                    errors.AddRange(CheckValuesValid(groups, itemDefinition, definition));
                 }
             }
-            return new KeyValuePair<string, string>(key, value);
+            EcfParameter parameter = new EcfParameter(key, groups, null);
+            block.AddChild(parameter);
+            errors.ForEach(error => error?.SetLineInFile(lineInFile));
+            parameter.AddErrors(errors);
+            return parameter;
         }
-        private List<EcfValueGroup> ParseValues(string itemValue)
+        private static List<EcfValueGroup> ParseValues(FormatDefinition definition, string itemValue)
         {
             List<EcfValueGroup> groups = new List<EcfValueGroup>();
-            foreach (string groupValues in TrimPairs(itemValue, Definition.EscapeIdentifiersPairs).Split(Definition.ValueGroupSeperator.ToArray()))
+            string[] valueGroups = TrimPairs(itemValue, definition.EscapeIdentifiersPairs)?.Split(definition.ValueGroupSeperator.ToArray());
+            if (valueGroups != null)
             {
-                groups.Add(new EcfValueGroup(groupValues.Trim().Split(Definition.ValueSeperator.ToArray()).Select(value => value.Trim()).ToList()));
+                foreach (string groupValues in valueGroups)
+                {
+                    groups.Add(new EcfValueGroup(groupValues.Trim().Split(definition.ValueSeperator.ToArray()).Select(value => value.Trim()).ToList()));
+                }
             }
             return groups;
         }
-        private string TrimStarts(string lineData, ReadOnlyCollection<string> definedStarts)
+        private static void ParseReferenceInheritance(List<EcfBlock> blockList)
+        {
+            blockList.ForEach(block => 
+            {
+                block.AddError(CheckBlockReferenceValid(block, blockList, out EcfBlock inheriter));
+                block.Inheritor = inheriter;
+            });
+        }
+        private static string TrimStarts(string lineData, ReadOnlyCollection<string> definedStarts)
         {
             string startMark = null;
-            do
+            if (lineData != null)
             {
-                startMark = definedStarts.FirstOrDefault(start => lineData.StartsWith(start));
-                if (startMark != null)
+                do
                 {
-                    lineData = lineData.Remove(0, startMark.Length).Trim();
-                }
-            } while (startMark != null);
-            return lineData.Trim();
+                    startMark = definedStarts.FirstOrDefault(start => lineData.StartsWith(start));
+                    if (startMark != null)
+                    {
+                        lineData = lineData.Remove(0, startMark.Length).Trim();
+                    }
+                } while (startMark != null);
+            }
+            return lineData?.Trim();
         }
-        private string TrimPairs(string lineData, ReadOnlyCollection<StringPairDefinition> definedIdentifiers)
+        private static string TrimPairs(string lineData, ReadOnlyCollection<StringPairDefinition> definedIdentifiers)
         {
             StringPairDefinition blockPair = null;
-            do
+            if (lineData != null)
             {
-                blockPair = definedIdentifiers.FirstOrDefault(pair => lineData.StartsWith(pair.Opener));
-                if (blockPair != null)
+                do
                 {
-                    lineData = lineData.Remove(0, blockPair.Opener.Length).Trim();
-                }
-            } while (blockPair != null);
-            do
-            {
-                blockPair = definedIdentifiers.FirstOrDefault(pair => lineData.EndsWith(pair.Closer));
-                if (blockPair != null)
+                    blockPair = definedIdentifiers.FirstOrDefault(pair => lineData.StartsWith(pair.Opener));
+                    if (blockPair != null)
+                    {
+                        lineData = lineData.Remove(0, blockPair.Opener.Length).Trim();
+                    }
+                } while (blockPair != null);
+                do
                 {
-                    lineData = lineData.Remove(lineData.Length - blockPair.Closer.Length, blockPair.Closer.Length).Trim();
-                }
-            } while (blockPair != null);
-            return lineData.Trim();
+                    blockPair = definedIdentifiers.FirstOrDefault(pair => lineData.EndsWith(pair.Closer));
+                    if (blockPair != null)
+                    {
+                        lineData = lineData.Remove(lineData.Length - blockPair.Closer.Length, blockPair.Closer.Length).Trim();
+                    }
+                } while (blockPair != null);
+            }
+            return lineData?.Trim();
         }
-        private string TrimComment(string comment)
+        private static string TrimComment(FormatDefinition definition, string comment)
         {
-            comment = TrimStarts(comment.Trim(), Definition.SingleLineCommentStarts).Trim();
-            comment = TrimPairs(comment, Definition.MultiLineCommentPairs).Trim();
+            if (comment != null)
+            {
+                comment = TrimStarts(comment.Trim(), definition.SingleLineCommentStarts).Trim();
+                comment = TrimPairs(comment, definition.MultiLineCommentPairs).Trim();
+            }
             return comment;
         }
-        private string TrimOuterPhrases(string lineData)
+        private static string TrimOuterPhrases(FormatDefinition definition, string lineData)
         {
             string foundPhrase;
-            do
+            if (lineData != null)
             {
-                foundPhrase = Definition.OuterTrimmingPhrases.FirstOrDefault(phrase => lineData.StartsWith(phrase));
-                if (foundPhrase != null)
+                do
                 {
-                    lineData = lineData.Remove(0, foundPhrase.Length).Trim();
-                }
-            } while (foundPhrase != null);
-            do
-            {
-                foundPhrase = Definition.OuterTrimmingPhrases.FirstOrDefault(phrase => lineData.EndsWith(phrase));
-                if (foundPhrase != null)
+                    foundPhrase = definition.OuterTrimmingPhrases.FirstOrDefault(phrase => lineData.StartsWith(phrase));
+                    if (foundPhrase != null)
+                    {
+                        lineData = lineData.Remove(0, foundPhrase.Length).Trim();
+                    }
+                } while (foundPhrase != null);
+                do
                 {
-                    lineData = lineData.Remove(lineData.Length - foundPhrase.Length, foundPhrase.Length).Trim();
-                }
-            } while (foundPhrase != null);
-            return lineData.Trim();
+                    foundPhrase = definition.OuterTrimmingPhrases.FirstOrDefault(phrase => lineData.EndsWith(phrase));
+                    if (foundPhrase != null)
+                    {
+                        lineData = lineData.Remove(lineData.Length - foundPhrase.Length, foundPhrase.Length).Trim();
+                    }
+                } while (foundPhrase != null);
+            }
+            return lineData?.Trim();
         }
-        private string RemoveBlockType(string lineData, string preMark, string blockType, string postMark)
+        private static string RemoveBlockType(string lineData, string preMark, string blockType, string postMark)
         {
             return lineData.Remove(0, (preMark?.Length ?? 0) + (blockType?.Length ?? 0) + (postMark?.Length ?? 0)).Trim();
         }
-        private Queue<string> SplitEcfItems(string lineData)
+        private static Queue<string> SplitEcfItems(FormatDefinition definition, string lineData)
         {
             Queue<string> splittedData = new Queue<string>();
             StringBuilder dataPart = new StringBuilder();
@@ -1409,10 +1521,10 @@ namespace EgsEcfParser
                 split = false;
                 if (escapePair == null)
                 {
-                    escapePair = Definition.EscapeIdentifiersPairs.FirstOrDefault(pair => pair.Opener.Equals(buffer));
+                    escapePair = definition.EscapeIdentifiersPairs.FirstOrDefault(pair => pair.Opener.Equals(buffer));
                     if (escapePair == null)
                     {
-                        split = ((buffer == Definition.ItemSeperator) || (buffer == Definition.ItemValueSeperator));
+                        split = ((buffer == definition.ItemSeperator) || (buffer == definition.ItemValueSeperator));
                     }
                 }
                 else if (escapePair.Closer.Equals(buffer))
@@ -1435,49 +1547,7 @@ namespace EgsEcfParser
             }
             return splittedData;
         }
-        private void CheckDeprecatedItemDefinitions(EcfBlock block, List<ItemDefinition> definedRootBlockAttributes, List<ItemDefinition> definedChildBlockAttributes,
-            List<ItemDefinition> definedBlockParameters, List<ItemDefinition> definedParameterAttributes)
-        {
-            if (block.IsRoot())
-            {
-                if (definedRootBlockAttributes.Count > 0)
-                {
-                    definedRootBlockAttributes.RemoveAll(defAttr => block.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
-                }
-            }
-            else
-            {
-                if (definedChildBlockAttributes.Count > 0)
-                {
-                    definedChildBlockAttributes.RemoveAll(defAttr => block.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
-                }
-            }
-            foreach (EcfItem subItem in block.ChildItems)
-            {
-                if (subItem is EcfBlock subBlock)
-                {
-                    CheckDeprecatedItemDefinitions(subBlock, definedRootBlockAttributes, definedChildBlockAttributes, definedBlockParameters, definedParameterAttributes);
-                }
-                else if (subItem is EcfParameter parameter)
-                {
-                    if (definedBlockParameters.Count > 0)
-                    {
-                        definedBlockParameters.RemoveAll(defParam => defParam.Name.Equals(parameter.Key));
-                    }
-                    if (definedParameterAttributes.Count > 0)
-                    {
-                        definedParameterAttributes.RemoveAll(defAttr => parameter.Attributes.Any(attr => defAttr.Name.Equals(attr.Key)));
-                    }
-                }
-                if (definedRootBlockAttributes.Count == 0 && definedChildBlockAttributes.Count == 0 &&
-                    definedBlockParameters.Count == 0 && definedParameterAttributes.Count == 0)
-                {
-                    break;
-                }
-            }
-        }
 
-        // stack data handling
         private class StackItem
         {
             public EcfBlock Block { get; }
@@ -1492,21 +1562,6 @@ namespace EgsEcfParser
                 BlockSymbolPair = blockSymbolPair;
             }
         }
-        private void AddStackItem(int level, EcfBlock blockNode, int lineNumber, string lineData, StringPairDefinition blockSymbolPair)
-        {
-            if (Stack.Count < level)
-            {
-                Stack.Add(new StackItem(blockNode, lineNumber, lineData, blockSymbolPair));
-            }
-            else
-            {
-                Stack[level - 1] = new StackItem(blockNode, lineNumber, lineData, blockSymbolPair);
-            }
-        }
-        private StackItem GetStackItem(int level)
-        {
-            return Stack[level - 1];
-        }
     }
 
     // Ecf Error Handling
@@ -1514,73 +1569,115 @@ namespace EgsEcfParser
     {
         Unknown,
         KeyNullOrEmpty,
-        GroupIndexInvalid,
-
+        
+        BlockIdNotUnique,
+        BlockInheritorMissing,
         BlockOpenerWithoutCloser,
         BlockCloserWithoutOpener,
-        BlockTypeUnknown,
+        BlockDataTypeMissing,
+        BlockDataTypeUnknown,
         BlockPreMarkMissing,
-        BlockTypeMissing,
+        BlockPreMarkUnknown,
+        BlockPostMarkMissing,
+        BlockPostMarkUnknown,
 
         ParameterUnknown,
         ParameterWithoutParent,
         ParameterMissing,
-        ParameterNotUnique,
+        ParameterDoubled,
 
         AttributeUnknown,
         AttributeMissing,
-        AttributeNotUnique,
+        AttributeDoubled,
 
-        ValueMissing,
-        ValueInvalid,
+        ValueGroupEmpty,
+        ValueGroupIndexInvalid,
+
+        ValueNull,
+        ValueEmpty,
         ValueIndexInvalid,
         ValueContainsProhibitedPhrases,
     }
     public class EcfError
     {
-        public string BlockName { get; }
-        public string LineInFile { get; }
-        public EcfErrors Error { get; }
-        public string Data { get; }
+        public EcfErrors Type { get; }
+        public string Info { get; }
+        public bool IsFromParsing { get; private set; }
 
-        public EcfError(EcfErrors error, string data, string blockName, string lineInFile)
+        public EcfStructureItem Item { get; set; } = null;
+        public int LineInFile { get; private set; } = 0;
+
+        public EcfError(EcfErrors type, string info)
         {
-            Error = error;
-            Data = data;
-            BlockName = blockName;
-            LineInFile = lineInFile;
+            Type = type;
+            Info = info ?? "null";
+        }
+        public EcfError(EcfErrors type, string info, int lineInFile) : this(type, info)
+        {
+            SetLineInFile(lineInFile);
         }
 
+        // copyconstructor
+        public EcfError(EcfError template, EcfStructureItem reference)
+        {
+            Type = template.Type;
+            Info = template.Info;
+            SetLineInFile(template.LineInFile);
+            Item = reference;
+        }
+
+        public void SetLineInFile(int lineInFile)
+        {
+            LineInFile = lineInFile;
+            IsFromParsing = lineInFile > 0;
+        }
         public override string ToString()
         {
-            return string.Format("Error '{0}' in Line '{1}' at '{2}', parsed content: '{3}'", Error, LineInFile ?? "unknown", BlockName ?? "unknown", Data ?? "unknown");
+            StringBuilder errorText = new StringBuilder();
+            if (IsFromParsing)
+            {
+                errorText.Append("In Line ");
+                errorText.Append(LineInFile.ToString());
+                errorText.Append(" at '");
+            }
+            else
+            {
+                errorText.Append("At '");
+            }
+            errorText.Append(Item != null ? Item.GetFullName() : "unknown");
+            errorText.Append("' occured error ");
+            errorText.Append(Type.ToString());
+            errorText.Append(", additional info: '");
+            errorText.Append(Info);
+            errorText.Append("'");
+            return errorText.ToString();
         }
     }
-    public class EcfFormatException : Exception
+    public class EcfException : Exception
     {
         public EcfErrors EcfError { get; }
         public string TextData { get; }
 
 
-        public EcfFormatException() : base(ToString(EcfErrors.Unknown, ""))
+        public EcfException() : base(ToString(EcfErrors.Unknown, ""))
         {
             EcfError = EcfErrors.Unknown;
             TextData = "";
         }
 
-        public EcfFormatException(EcfErrors ecfError) : base(ToString(ecfError, ""))
+        public EcfException(EcfErrors ecfError) : base(ToString(ecfError, ""))
         {
             EcfError = ecfError;
             TextData = "";
         }
 
-        public EcfFormatException(EcfErrors ecfError, string textData) : base(ToString(ecfError, textData))
+        public EcfException(EcfErrors ecfError, string textData) : base(ToString(ecfError, textData))
         {
             EcfError = ecfError;
             TextData = textData ?? "null";
         }
 
-        public EcfFormatException(EcfErrors ecfError, string textData, Exception inner) : base(ToString(ecfError, textData), inner)
+        public EcfException(EcfErrors ecfError, string textData, Exception inner) : base(ToString(ecfError, textData), inner)
         {
             EcfError = ecfError;
             TextData = textData ?? "null";
@@ -1597,41 +1694,96 @@ namespace EgsEcfParser
     }
 
     // ecf data Structure Classes
-    public abstract class EcfItem
+    public abstract class EcfBaseItem
     {
-        private EgsEcfFile EcfFile { get; set; } = null;
-        public EcfItem Parent { get; private set; } = null;
+        protected EgsEcfFile EcfFile { get; private set; } = null;
+        public EcfStructureItem Parent { get; private set; } = null;
         public int StructureLevel { get; private set; } = -1;
 
-        public EcfItem()
+        public EcfBaseItem()
         {
             
         }
 
+        // copy constructor
+        public EcfBaseItem(EcfBaseItem template)
+        {
+            EcfFile = template.EcfFile;
+            Parent = template.Parent;
+            StructureLevel = template.StructureLevel;
+        }
+
+        // publics
         public abstract override string ToString();
         public bool IsRoot()
         {
             return Parent == null;
         }
-        public EgsEcfFile FindFile()
+        public void UpdateStructureData(EgsEcfFile file, EcfStructureItem parent, int level)
         {
-            if (IsRoot())
+            EcfFile = file;
+            Parent = parent;
+            StructureLevel = level + 1;
+            OnStructureDataUpdate();
+        }
+        public static EcfBaseItem GetRootItem(EcfBaseItem item)
+        {
+            EcfBaseItem parent;
+            if (item?.IsRoot() ?? true)
             {
-                return EcfFile;
+                parent = item;
             }
             else
             {
-                return Parent.FindFile();
+                parent = GetRootItem(item?.Parent);
             }
+            return parent;
         }
-        public void SetFile(EgsEcfFile file)
+
+        // private
+        protected abstract void OnStructureDataUpdate();
+    }
+    public abstract class EcfStructureItem : EcfBaseItem
+    {
+        protected string DefaultName { get; }
+        private List<EcfError> InternalErrors { get; } = new List<EcfError>();
+        public ReadOnlyCollection<EcfError> Errors { get; }
+        private List<string> InternalComments { get; } = new List<string>();
+        public ReadOnlyCollection<string> Comments { get; }
+
+        public EcfStructureItem(string defaultName) : base()
         {
-            EcfFile = file;
+            DefaultName = defaultName;
+            Errors = InternalErrors.AsReadOnly();
+            Comments = InternalComments.AsReadOnly();
         }
-        public void UpdateStructureData(EcfItem parent, int level)
+
+        // copy constructor
+        public EcfStructureItem(EcfStructureItem template) : base(template)
         {
-            Parent = parent;
-            StructureLevel = level;
+            DefaultName = template.DefaultName;
+            Errors = InternalErrors.AsReadOnly();
+            Comments = InternalComments.AsReadOnly();
+
+            AddErrors(template.Errors.Cast<EcfError>().Select(error => new EcfError(error, this)).ToList());
+            AddComments(template.InternalComments);
+        }
+
+        public abstract List<EcfError> GetDeepErrorList();
+        public abstract string GetFullName();
+        public abstract string BuildIdentification();
+        public abstract int Revalidate();
+
+        public EcfStructureItem BuildDeepCopy()
+        {
+            switch (this)
+            {
+                case EcfComment comment: return new EcfComment(comment);
+                case EcfAttribute attribute: return new EcfAttribute(attribute);
+                case EcfParameter parameter: return new EcfParameter(parameter);
+                case EcfBlock block: return new EcfBlock(block);
+                default: throw new NotImplementedException(string.Format("DeepCopy not implemented for {0}", GetType().ToString()));
+            }
         }
         public int GetIndexInStructureLevel()
         {
@@ -1644,37 +1796,83 @@ namespace EgsEcfParser
                 return (Parent as EcfBlock)?.ChildItems.IndexOf(this) ?? -1;
             }
         }
-        public int GetIndexInStructureLevel<T>() where T : EcfItem
+        public int GetIndexInStructureLevel<T>() where T : EcfStructureItem
         {
-            ReadOnlyCollection<EcfItem> items;
+            List<EcfStructureItem> items;
             if (IsRoot())
             {
-                items = EcfFile.ItemList;
+                items = EcfFile.ItemList.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().ToList();
             }
             else
             {
-                items =(Parent as EcfBlock)?.ChildItems;
+                items = (Parent as EcfBlock)?.ChildItems.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().ToList();
             }
             return items?.Where(child => child is T).Cast<T>().ToList().IndexOf((T)this) ?? -1;
         }
-    }
-    public abstract class EcfCommentItem : EcfItem
-    {
-        private List<string> InternalComments { get; } = new List<string>();
-        public ReadOnlyCollection<string> Comments { get; }
-
-        public EcfCommentItem() : base()
+        public bool AddError(EcfError error)
         {
-            Comments = InternalComments.AsReadOnly();
+            if (error != null)
+            {
+                error.Item = this;
+                InternalErrors.Add(error);
+                return true;
+            }
+            return false;
         }
-
-        public abstract override string ToString();
+        public int AddErrors(List<EcfError> errors)
+        {
+            int count = 0;
+            errors?.ForEach(error => {
+                if (AddError(error))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        protected bool RemoveError(EcfError error)
+        {
+            if (error != null)
+            {
+                InternalErrors.Remove(error);
+                return true;
+            }
+            return false;
+        }
+        protected int RemoveErrors(List<EcfError> errors)
+        {
+            int count = 0;
+            errors?.ForEach(error => {
+                if (RemoveError(error))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveErrors(EcfErrors error)
+        {
+            return RemoveErrors(Errors.Where(err => err.Type.Equals(error)).ToList());
+        }
+        public int RemoveErrors(params EcfErrors[] errors)
+        {
+            int count = 0;
+            foreach (EcfErrors error in errors)
+            {
+                count += RemoveErrors(error);
+            }
+            return count;
+        }
+        public bool ContainsError(EcfErrors error)
+        {
+            return InternalErrors.Any(err => err.Type.Equals(error));
+        }
         public bool AddComment(string text)
         {
             if (IsKeyValid(text))
             {
                 InternalComments.Add(text);
-                FindFile()?.SetUnsavedDataFlag();
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
@@ -1690,23 +1888,84 @@ namespace EgsEcfParser
             });
             return count;
         }
+        public void ClearComments()
+        {
+            InternalComments.Clear();
+        }
     }
-    public abstract class EcfKeyValueItem : EcfCommentItem
+    public abstract class EcfKeyValueItem : EcfStructureItem
     {
-        public string Key { get; }
-        public bool IsForceEscaped { get; }
+        public string Key { get; private set; }
+        public ReadOnlyCollection<ItemDefinition> DefinitionGroup { get; private set; } = null;
+        public ItemDefinition Definition { get; private set; } = null;
+
         private List<EcfValueGroup> InternalValueGroups { get; } = new List<EcfValueGroup>();
         public ReadOnlyCollection<EcfValueGroup> ValueGroups { get; }
 
-        public EcfKeyValueItem(string key, bool isForceEscaped) : base()
+        private KeyValueItemTypes ItemType { get; set; } = KeyValueItemTypes.Unknown;
+
+        public enum KeyValueItemTypes
         {
-            if (!IsKeyValid(key)) { throw new EcfFormatException(EcfErrors.KeyNullOrEmpty, GetType().Name); }
-            Key = key;
-            IsForceEscaped = isForceEscaped;
+            Unknown,
+            Parameter,
+            Attribute,
+        }
+
+        public EcfKeyValueItem(string key, KeyValueItemTypes itemType, string defaultName) : base(defaultName)
+        {
+            UpdateKey(key);
+            ItemType = itemType;
             ValueGroups = InternalValueGroups.AsReadOnly();
         }
 
-        public abstract override string ToString();
+        // copy constructor
+        public EcfKeyValueItem(EcfKeyValueItem template) : base (template)
+        {
+            Key = template.Key;
+            Definition = Definition == null ? null : new ItemDefinition(template.Definition);
+            DefinitionGroup = template.DefinitionGroup.Select(def => new ItemDefinition(def)).ToList().AsReadOnly();
+            ValueGroups = InternalValueGroups.AsReadOnly();
+            ItemType = template.ItemType;
+            AddValues(template.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
+        }
+
+        public override string BuildIdentification()
+        {
+            return string.Format("{0} {1}", DefaultName, Key);
+        }
+        public void UpdateKey(string key)
+        {
+            CheckKey(key);
+            Key = key;
+        }
+        public void UpdateDefinition(ReadOnlyCollection<ItemDefinition> definitionGroup)
+        {
+            DefinitionGroup = definitionGroup;
+            if (DefinitionGroup == null) { Definition = null; return; }
+            CheckItemUnknown(definitionGroup, Key, ItemType, out ItemDefinition itemDefinition);
+            Definition = itemDefinition;
+        }
+        protected int RevalidateKeyValue()
+        {
+            if (DefinitionGroup == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            int errorCount = 0;
+            errorCount += RevalidateKey() ? 1 : 0;
+            if (Definition != null) { errorCount += RevalidateValues(); }
+            return errorCount;
+        }
+        private bool RevalidateKey()
+        {
+            RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeUnknown);
+            bool result = AddError(CheckItemUnknown(DefinitionGroup, Key, ItemType, out ItemDefinition itemDefinition));
+            Definition = itemDefinition;
+            return result;
+        }
+        private int RevalidateValues()
+        {
+            RemoveErrors(EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
+            return AddErrors(CheckValuesValid(InternalValueGroups, Definition, EcfFile?.Definition));
+        }
         public bool IsUsingGroups()
         {
             return InternalValueGroups.Count(group => group.Values.Count > 0) > 1;
@@ -1721,39 +1980,50 @@ namespace EgsEcfParser
         }
         public bool AddValue(string value)
         {
-            if (InternalValueGroups.Count == 0) { InternalValueGroups.Add(new EcfValueGroup()); }
+            if (InternalValueGroups.Count == 0)
+            {
+                EcfValueGroup group = new EcfValueGroup();
+                group.UpdateStructureData(EcfFile, this, StructureLevel);
+                InternalValueGroups.Add(group);
+            }
             return AddValue(value, 0);
         }
         public bool AddValue(string value, int groupIndex)
         {
-            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfFormatException(EcfErrors.GroupIndexInvalid, groupIndex.ToString()); }
+            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfException(EcfErrors.ValueGroupIndexInvalid, groupIndex.ToString()); }
             return InternalValueGroups[groupIndex].AddValue(value);
         }
         public int AddValues(List<string> values)
         {
-            if (InternalValueGroups.Count == 0) { InternalValueGroups.Add(new EcfValueGroup()); }
-            return AddValues(values, 0);
+            int count = 0;
+            values?.ForEach(value => {
+                if (AddValue(value))
+                {
+                    count++;
+                }
+            });
+            return count;
         }
         public int AddValues(List<string> values, int groupIndex)
         {
-            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfFormatException(EcfErrors.GroupIndexInvalid, groupIndex.ToString()); }
+            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfException(EcfErrors.ValueGroupIndexInvalid, groupIndex.ToString()); }
             return InternalValueGroups[groupIndex].AddValues(values);
         }
-        public bool AddValueGroup(EcfValueGroup valueGroup)
+        public bool AddValues(EcfValueGroup valueGroup)
         {
             if (valueGroup != null) {
-                valueGroup.UpdateStructureData(this, StructureLevel);
+                valueGroup.UpdateStructureData(EcfFile, this, StructureLevel);
                 InternalValueGroups.Add(valueGroup);
-                FindFile()?.SetUnsavedDataFlag();
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
         }
-        public int AddValueGroups(List<EcfValueGroup> valueGroups)
+        public int AddValues(List<EcfValueGroup> valueGroups)
         {
             int count = 0;
             valueGroups?.ForEach(group => {
-                if (AddValueGroup(group))
+                if (AddValues(group))
                 {
                     count++;
                 }
@@ -1787,76 +2057,76 @@ namespace EgsEcfParser
 }
         public string GetValue(int valueIndex, int groupIndex)
         {
-            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfFormatException(EcfErrors.GroupIndexInvalid, groupIndex.ToString()); }
-            if (valueIndex < 0 || valueIndex >= InternalValueGroups[groupIndex].Values.Count) { throw new EcfFormatException(EcfErrors.ValueIndexInvalid, valueIndex.ToString()); }
+            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfException(EcfErrors.ValueGroupIndexInvalid, groupIndex.ToString()); }
+            if (valueIndex < 0 || valueIndex >= InternalValueGroups[groupIndex].Values.Count) { throw new EcfException(EcfErrors.ValueIndexInvalid, valueIndex.ToString()); }
             return InternalValueGroups[groupIndex].Values[valueIndex];
         }
-        public int ReplaceAllValues(string oldValue, string newValue)
+        public void ClearValues()
         {
-            int count = 0;
-            InternalValueGroups.ForEach(group =>
-            {
-                count += group.ReplaceAllValues(oldValue, newValue);
-            });
-            count += CleanUpGroups();
-            return count;
-        }
-        public bool ReplaceFirstValue(string oldValue, string newValue)
-        {
-            bool anyChange = InternalValueGroups.FirstOrDefault(group => group.Values.Contains(oldValue))?.ReplaceFirstValue(oldValue, newValue) ?? false;
-            if (CleanUpGroups() > 0)
-            {
-                anyChange = true;
-            }
-            return anyChange;
-        }
-        public bool ReplaceValue(int valueIndex, int groupIndex, string newValue)
-        {
-            if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfFormatException(EcfErrors.GroupIndexInvalid, groupIndex.ToString()); }
-            bool anyChange = InternalValueGroups[groupIndex].ReplaceValue(valueIndex, newValue);
-            if (CleanUpGroups() > 0)
-            {
-                anyChange = true;
-            }
-            return anyChange;
+            InternalValueGroups.Clear();
         }
         public int IndexOf(EcfValueGroup group)
         {
             return InternalValueGroups.IndexOf(group);
         }
 
-        private int CleanUpGroups()
+        private void CheckKey(string key)
         {
-            int count = InternalValueGroups.RemoveAll(group => group.Values.Count == 0);
-            if (count > 0)
-            {
-                FindFile()?.SetUnsavedDataFlag();
-            }
-            return count;
+            if (!IsKeyValid(key)) { throw new EcfException(EcfErrors.KeyNullOrEmpty, GetType().Name); }
         }
     }
     public class EcfAttribute : EcfKeyValueItem
     {
-        private EcfAttribute(string key, bool isForceEscaped) : base(key, isForceEscaped)
+        public EcfAttribute(string key) : base(key, KeyValueItemTypes.Attribute, "Attribute")
         {
             
         }
-        public EcfAttribute(string key, string value, bool isForceEscaped) : this(key, isForceEscaped)
+        public EcfAttribute(string key, string value) : this(key)
         {
             AddValue(value);
         }
-        public EcfAttribute(string key, List<string> values, bool isForceEscaped) : this(key, isForceEscaped)
+        public EcfAttribute(string key, List<string> values) : this(key)
         {
             AddValues(values);
         }
-        public EcfAttribute(string key, List<EcfValueGroup> valueGroups, bool isForceEscaped) : this(key, isForceEscaped)
+        public EcfAttribute(string key, List<EcfValueGroup> valueGroups) : this(key)
         {
-            AddValueGroups(valueGroups);
+            AddValues(valueGroups);
         }
 
+        // copyconstructor
+        public EcfAttribute(EcfAttribute template) : base(template)
+        {
+
+        }
+
+        public override int Revalidate()
+        {
+            return RevalidateKeyValue();
+        }
         public override string ToString()
         {
-            return string.Format("Attribute with key: '{0}' and values: '{1}'", Key, ValueGroups.Sum(group => group.Values.Count).ToString());
+            return string.Format("{0}, values: '{1}'", BuildIdentification(), ValueGroups.Sum(group => group.Values.Count).ToString());
+        }
+        public override List<EcfError> GetDeepErrorList()
+        {
+            return Errors.ToList();
+        }
+        public override string GetFullName()
+        {
+            StringBuilder name = new StringBuilder();
+            if (!IsRoot())
+            {
+                name.Append(Parent.GetFullName());
+                name.Append(" / ");
+            }
+            name.Append(BuildIdentification());
+            return name.ToString();
+        }
+
+        protected override void OnStructureDataUpdate()
+        {
+            UpdateDefinition(EcfFile?.Definition.BlockParameters);
         }
     }
     public class EcfParameter : EcfKeyValueItem
@@ -1864,36 +2134,71 @@ namespace EgsEcfParser
         private List<EcfAttribute> InternalAttributes { get; } = new List<EcfAttribute>();
         public ReadOnlyCollection<EcfAttribute> Attributes { get; }
 
-        private EcfParameter(string key, bool isForceEscaped) : base(key, isForceEscaped)
+        public EcfParameter(string key) : base(key, KeyValueItemTypes.Parameter, "Parameter")
         {
             Attributes = InternalAttributes.AsReadOnly();
         }
-        public EcfParameter(string key, string value, bool isForceEscaped) : this(key, isForceEscaped)
-        {
-            AddValue(value);
-        }
-        public EcfParameter(string key, List<string> values, bool isForceEscaped, List<EcfAttribute> attributes) : this(key, isForceEscaped)
+        public EcfParameter(string key, List<string> values, List<EcfAttribute> attributes) : this(key)
         {
             AddValues(values);
             AddAttributes(attributes);
         }
-        public EcfParameter(string key, List<EcfValueGroup> valueGroups, bool isForceEscaped, List<EcfAttribute> attributes) : this(key, isForceEscaped)
+        public EcfParameter(string key, List<EcfValueGroup> valueGroups, List<EcfAttribute> attributes) : this(key)
         {
-            AddValueGroups(valueGroups);
+            AddValues(valueGroups);
             AddAttributes(attributes);
         }
         
+        // copy constructor
+        public EcfParameter(EcfParameter template) : base(template)
+        {
+            Attributes = InternalAttributes.AsReadOnly();
+
+            AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
+        }
+
         public override string ToString()
         {
-            return string.Format("Parameter with key: '{0}', values: '{1}' and attributes: '{2}'", Key, ValueGroups.Sum(group => group.Values.Count).ToString(), Attributes.Count);
+            return string.Format("{0}, values: '{1}' and attributes: '{2}'", BuildIdentification(), ValueGroups.Sum(group => group.Values.Count).ToString(), Attributes.Count);
+        }
+        public override string GetFullName()
+        {
+            StringBuilder name = new StringBuilder();
+            if (!IsRoot())
+            {
+                name.Append(Parent.GetFullName());
+                name.Append(" / ");
+            }
+            name.Append(BuildIdentification());
+            return name.ToString();
+        }
+        public override List<EcfError> GetDeepErrorList()
+        {
+            List<EcfError> errors = new List<EcfError>(Errors);
+            errors.AddRange(InternalAttributes.SelectMany(attribute => attribute.GetDeepErrorList()));
+            return errors;
+        }
+        public override int Revalidate()
+        {
+            int errorCount = RevalidateKeyValue();
+            errorCount += RevalidateAttributes();
+            errorCount += InternalAttributes.Sum(attr => attr.Revalidate());
+            return errorCount;
+        }
+        public int RevalidateAttributes()
+        {
+            if (DefinitionGroup == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            RemoveErrors(EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
+            return AddErrors(CheckAttributesValid(InternalAttributes, DefinitionGroup));
         }
         public bool AddAttribute(EcfAttribute attribute)
         {
             if (attribute != null)
             {
-                attribute.UpdateStructureData(this, StructureLevel);
+                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
                 InternalAttributes.Add(attribute);
-                FindFile()?.SetUnsavedDataFlag();
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
@@ -1901,8 +2206,8 @@ namespace EgsEcfParser
         public int AddAttributes(List<EcfAttribute> attributes)
         {
             int count = 0;
-            attributes?.ForEach(attribute => 
-            { 
+            attributes?.ForEach(attribute =>
+            {
                 if (AddAttribute(attribute))
                 {
                     count++;
@@ -1910,62 +2215,285 @@ namespace EgsEcfParser
             });
             return count;
         }
+        public void ClearAttributes()
+        {
+            InternalAttributes.Clear();
+        }
+
+        protected override void OnStructureDataUpdate()
+        {
+            UpdateDefinition(EcfFile?.Definition.BlockParameters);
+            InternalAttributes.ForEach(attribute => {
+                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
+                attribute.UpdateDefinition(EcfFile?.Definition.ParameterAttributes);
+            });
+        }
     }
-    public class EcfBlock : EcfCommentItem
+    public class EcfBlock : EcfStructureItem
     {
-        public string TypePreMark { get; }
-        public string BlockDataType { get; }
-        public string TypePostMark { get; }
+        public string PreMark { get; private set; }
+        public string DataType { get; private set; }
+        public string PostMark { get; private set; }
+
+        public string Id { get; private set; } = null;
+        public string RefTarget { get; private set; } = null;
+        public string RefSource { get; private set; } = null;
+        public EcfBlock Inheritor { get; set; } = null;
 
         private List<EcfAttribute> InternalAttributes { get; } = new List<EcfAttribute>();
         public ReadOnlyCollection<EcfAttribute> Attributes { get; }
-        private List<EcfItem> InternalChildItems { get; } = new List<EcfItem>();
-        public ReadOnlyCollection<EcfItem> ChildItems { get; }
+        private List<EcfStructureItem> InternalChildItems { get; } = new List<EcfStructureItem>();
+        public ReadOnlyCollection<EcfStructureItem> ChildItems { get; }
 
-        public EcfBlock(string preMark, string blockDataType, string postMark, bool isRoot) : base()
+        public EcfBlock(string preMark, string blockType, string postMark) : base("Block")
         {
-            if (isRoot) {
-                if (!IsKeyValid(blockDataType)) { throw new EcfFormatException(EcfErrors.KeyNullOrEmpty, "RootBlock DataType"); }
-                if (!IsKeyValid(postMark)) { throw new EcfFormatException(EcfErrors.KeyNullOrEmpty, "RootBlock TypePostMark"); }
-            }
             Attributes = InternalAttributes.AsReadOnly();
             ChildItems = InternalChildItems.AsReadOnly();
 
-            TypePreMark = preMark;
-            BlockDataType = blockDataType;
-            TypePostMark = postMark;
+            PreMark = preMark;
+            DataType = blockType;
+            PostMark = postMark;
         }
-        public EcfBlock(string preMark, string blockType, string postMark, bool isRoot, List<EcfAttribute> attributes, List<EcfItem> childItems)
-            : this(preMark, blockType, postMark, isRoot)
+        public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfStructureItem> childItems)
+            : this(preMark, blockType, postMark)
         {
             AddAttributes(attributes);
             AddChilds(childItems);
         }
+        public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfParameter> parameters)
+            : this(preMark, blockType, postMark)
+        {
+            AddAttributes(attributes);
+            AddChilds(parameters);
+        }
+        public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfBlock> blocks)
+            : this(preMark, blockType, postMark)
+        {
+            AddAttributes(attributes);
+            AddChilds(blocks);
+        }
 
+        // copyconstructor
+        public EcfBlock(EcfBlock template) : base(template)
+        {
+            Attributes = InternalAttributes.AsReadOnly();
+            ChildItems = InternalChildItems.AsReadOnly();
+
+            PreMark = template.PreMark;
+            DataType = template.DataType;
+            PostMark = template.PostMark;
+            Id = template.Id;
+            RefTarget = template.RefTarget;
+            RefSource = template.RefSource;
+            Inheritor = template.Inheritor;
+
+            AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
+            List<EcfStructureItem> childs = new List<EcfStructureItem>();
+            template.ChildItems.ToList().ForEach(child => {
+                switch (child)
+                {
+                    case EcfComment comment: childs.Add(new EcfComment(comment)); return;
+                    case EcfAttribute attribute: childs.Add(new EcfAttribute(attribute)); return;
+                    case EcfParameter parameter: childs.Add(new EcfParameter(parameter)); return;
+                    case EcfBlock block: childs.Add(new EcfBlock(block)); return;
+                    default: return;
+                }
+            });
+            AddChilds(childs);
+        }
+
+        // publics
+        public void UpdateTypeData(string preMark, string blockType, string postMark)
+        {
+            PreMark = preMark;
+            DataType = blockType;
+            PostMark = postMark;
+        }
         public override string ToString()
         {
             return string.Format("Block with preMark: '{0}', blockDataType: '{1}', name: '{4}', items: '{2}', attributes: '{3}'",
-                TypePreMark, BlockDataType, ChildItems.Count, Attributes.Count, GetAttributeFirstValue("Name"));
+                PreMark, DataType, ChildItems.Count, Attributes.Count, GetAttributeFirstValue("Name"));
         }
-        public bool AddChild(EcfItem childItem)
+        public override List<EcfError> GetDeepErrorList()
         {
-            if (childItem != null)
+            List<EcfError> errors = new List<EcfError>(Errors);
+            errors.AddRange(Attributes.SelectMany(attribute => attribute.GetDeepErrorList()));
+            errors.AddRange(ChildItems.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList()));
+            return errors;
+        }
+        public override string GetFullName()
+        {
+            StringBuilder name = new StringBuilder();
+            EcfBlock item = this;
+            while (item != null)
             {
-                childItem.UpdateStructureData(this, StructureLevel + 1);
-                InternalChildItems.Add(childItem);
-                FindFile()?.SetUnsavedDataFlag();
+                if (name.Length > 0)
+                {
+                    name.Insert(0, " / ");
+                }
+                name.Insert(0, item.BuildIdentification());
+                item = item.Parent as EcfBlock;
+            }
+            return name.ToString();
+        }
+        public override int Revalidate()
+        {
+            FormatDefinition definition = EcfFile?.Definition;
+            if (definition == null) { throw new InvalidOperationException("Validation is only possible for added elements"); }
+
+            int errorCount = RevalidateDataType();
+            errorCount += RevalidateParameters();
+            errorCount += InternalChildItems.Sum(item => item.Revalidate());
+            errorCount += RevalidateAttributes();
+            errorCount += InternalAttributes.Sum(attr => attr.Revalidate());
+            return errorCount;
+        }
+        public int RevalidateDataType()
+        {
+            FormatDefinition definition = EcfFile?.Definition;
+            if (definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            int errorCount = 0;
+
+            RemoveErrors(EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown, 
+                EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown,
+                EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown);
+            
+            errorCount += AddErrors(CheckBlockPreMark(PreMark, definition.BlockTypePreMarks));
+            errorCount += AddErrors(CheckBlockPreMark(DataType, IsRoot() ? definition.RootBlockTypes : definition.ChildBlockTypes));
+            errorCount += AddErrors(CheckBlockPostMark(PostMark, definition.BlockTypePostMarks));
+            return errorCount;
+        }
+        public int RevalidateUniqueness(List<EcfBlock> blockList)
+        {
+            if (EcfFile?.Definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            RemoveErrors(EcfErrors.BlockIdNotUnique);
+            
+            List<EcfBlock> doubledBlocks = blockList.Where(block => !block.Equals(this) &&
+                ((Id?.Equals(block.Id) ?? false) || (RefTarget?.Equals(block.RefTarget) ?? false))).ToList();
+            
+            return AddErrors(doubledBlocks.Select(block => new EcfError(EcfErrors.BlockIdNotUnique, block.BuildIdentification())).ToList());
+        }
+        public bool RevalidateReferenceHighLevel(List<EcfBlock> blockList)
+        {
+            RemoveErrors(EcfErrors.BlockInheritorMissing);
+            if (Inheritor != null && !blockList.Contains(Inheritor))
+            {
+                return AddError(new EcfError(EcfErrors.BlockInheritorMissing, RefSource));
+            }
+            return true;
+        }
+        public bool RevalidateReferenceRepairing(List<EcfBlock> blockList)
+        {
+            if (EcfFile?.Definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            RemoveErrors(EcfErrors.BlockInheritorMissing);
+
+            bool result = AddError(CheckBlockReferenceValid(this, blockList, out EcfBlock inheriter));
+            Inheritor = inheriter;
+            return result;
+        }
+        public int RevalidateParameters()
+        {
+            FormatDefinition definition = EcfFile?.Definition;
+            if (definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            RemoveErrors(EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled);
+            List<EcfParameter> parameters = ChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
+            return AddErrors(CheckParametersValid(parameters, definition.BlockParameters));
+        }
+        public int RevalidateAttributes()
+        {
+            FormatDefinition definition = EcfFile?.Definition;
+            if (definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            RemoveErrors(EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
+            return AddErrors(CheckAttributesValid(InternalAttributes, IsRoot() ? definition.RootBlockAttributes : definition.ChildBlockAttributes));
+        }
+        public List<T> GetDeepChildList<T>() where T : EcfBaseItem
+        {
+            List<T> childs = new List<T>(ChildItems.Where(child => child is T).Cast<T>());
+            foreach (EcfBlock subBlock in ChildItems.Where(item => item is EcfBlock).Cast<EcfBlock>())
+            {
+                childs.AddRange(subBlock.GetDeepChildList<T>());
+            }
+            return childs;
+        }
+        public bool AddChild(EcfStructureItem child)
+        {
+            if (child != null)
+            {
+                child.UpdateStructureData(EcfFile, this, StructureLevel);
+                InternalChildItems.Add(child);
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
         }
-        public int AddChilds(List<EcfItem> childItems)
+        public int AddChilds(List<EcfStructureItem> childs)
         {
             int count = 0;
-            childItems?.ForEach(item => { 
-                if (AddChild(item))
+            childs?.ForEach(child => { 
+                if (AddChild(child))
                 {
                     count++;
                 } 
+            });
+            return count;
+        }
+        public int AddChilds(List<EcfParameter> parameters)
+        {
+            int count = 0;
+            parameters?.ForEach(parameter => {
+                if (AddChild(parameter))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int AddChilds(List<EcfBlock> blocks)
+        {
+            int count = 0;
+            blocks?.ForEach(block => {
+                if (AddChild(block))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public bool AddChild(EcfStructureItem child, EcfStructureItem precedingChild)
+        {
+            if (child != null)
+            {
+                child.UpdateStructureData(EcfFile, this, StructureLevel);
+                int index = InternalChildItems.IndexOf(precedingChild);
+                if (index < 0)
+                {
+                    InternalChildItems.Add(child);
+                }
+                else
+                {
+                    InternalChildItems.Insert(index + 1, child);
+                }
+                EcfFile?.SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public int AddChilds(List<EcfStructureItem> childs, EcfStructureItem precedingChild)
+        {
+            int count = 0;
+            EcfStructureItem preItem = precedingChild;
+            childs?.ForEach(child =>
+            {
+                if (AddChild(child, preItem))
+                {
+                    count++;
+                }
+                preItem = child;
             });
             return count;
         }
@@ -1973,9 +2501,10 @@ namespace EgsEcfParser
         {
             if (attribute != null)
             {
-                attribute.UpdateStructureData(this, StructureLevel);
+                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
+                SetIdentification(attribute);
                 InternalAttributes.Add(attribute);
-                FindFile()?.SetUnsavedDataFlag();
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
@@ -2004,52 +2533,171 @@ namespace EgsEcfParser
         {
             return InternalAttributes.Any(attr => attr.ValueGroups.Any(group => group.Values.Any(value => value.Equals(attrValue))));
         }
-        public string BuildIdentification()
+        public bool HasParameter(string paramName)
         {
-            StringBuilder identification = new StringBuilder(BlockDataType);
-            if (IsRoot())
-            {
-                string id = GetAttributeFirstValue("Id");
-                if (id != null) {
-                    identification.Append(", Id: ");
-                    identification.Append(id);
-                }
-                string name = GetAttributeFirstValue("Name");
-                if (name != null) {
-                    identification.Append(", Name: ");
-                    identification.Append(name);
-                }
+            return InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().Any(param => param.Key.Equals(paramName));
+        }
+        public override string BuildIdentification()
+        {
+            StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
+            if (Id != null) {
+                identification.Append(", Id: ");
+                identification.Append(Id);
             }
-            else
+            if (RefTarget != null)
             {
+                identification.Append(", Name: ");
+                identification.Append(RefTarget);
+            }
+            if (!IsRoot())
+            {
+                identification.Append(", Index: ");
                 identification.Append(GetIndexInStructureLevel<EcfBlock>());
                 if (Attributes.Count > 0)
                 {
                     identification.Append(", ");
                     identification.Append(string.Join(", ", Attributes.Select(attr => attr.Key)));
                 }
-                
+
             }
             return identification.ToString();
         }
+        public bool RemoveChild(EcfStructureItem childItem)
+        {
+            if (childItem != null)
+            {
+                InternalChildItems.Remove(childItem);
+                EcfFile?.SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public int RemoveChilds(List<EcfStructureItem> childItems)
+        {
+            int count = 0;
+            childItems?.ForEach(child => {
+                if (RemoveChild(child))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveChilds(List<EcfParameter> parameters)
+        {
+            int count = 0;
+            parameters?.ForEach(parameter => {
+                if (RemoveChild(parameter))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveChilds(List<EcfBlock> blocks)
+        {
+            int count = 0;
+            blocks?.ForEach(block => {
+                if (RemoveChild(block))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public void ClearAttributes()
+        {
+            InternalAttributes.Clear();
+            UpdateIdentification();
+        }
+
+        // private
+        private void SetIdentification(EcfAttribute attribute)
+        {
+            FormatDefinition definition = EcfFile?.Definition;
+            if (definition != null)
+            {
+                if (attribute.Key.Equals(definition.BlockIdentificationAttribute))
+                {
+                    Id = attribute.GetFirstValue();
+                }
+                else if (attribute.Key.Equals(definition.BlockReferenceTargetAttribute))
+                {
+                    RefTarget = attribute.GetFirstValue();
+                }
+                else if (attribute.Key.Equals(definition.BlockReferenceSourceAttribute))
+                {
+                    RefSource = attribute.GetFirstValue();
+                }
+            }
+        }
+        private void UpdateIdentification()
+        {
+            Id = GetAttributeFirstValue(EcfFile?.Definition.BlockIdentificationAttribute);
+            RefTarget = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceTargetAttribute);
+            RefSource = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceSourceAttribute);
+        }
+        protected override void OnStructureDataUpdate()
+        {
+            InternalAttributes.ForEach(attribute => {
+                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
+                attribute.UpdateDefinition(IsRoot() ? EcfFile?.Definition.RootBlockAttributes : EcfFile?.Definition.ChildBlockAttributes);
+            });
+            InternalChildItems.ForEach(child => child.UpdateStructureData(EcfFile, this, StructureLevel));
+            UpdateIdentification();
+        }
     }
-    public class EcfComment : EcfCommentItem
+    public class EcfComment : EcfStructureItem
     {
-        public EcfComment(string comment) : base()
+        public EcfComment(string comment) : base("Comment")
         {
             AddComment(comment);
         }
-        public EcfComment(List<string> comments) : base()
+        public EcfComment(List<string> comments) : base("Comment")
         {
             AddComments(comments);
         }
 
+        // copy constructor
+        public EcfComment(EcfComment template) : base(template)
+        {
+
+        }
+
+        public override List<EcfError> GetDeepErrorList()
+        {
+            return Errors.ToList();
+        }
+        public override string GetFullName()
+        {
+            StringBuilder name = new StringBuilder();
+            if (!IsRoot())
+            {
+                name.Append(Parent.GetFullName());
+                name.Append(" / ");
+            }
+            name.Append(DefaultName);
+            return name.ToString();
+        }
         public override string ToString()
         {
-            return string.Format("Comment with '{0}'", string.Join(" / ", Comments));
+            return string.Format("{0}: '{1}'", DefaultName, string.Join(" / ", Comments));
+        }
+        public override string BuildIdentification()
+        {
+            return string.Format("{0} {1}", DefaultName, GetHashCode());
+        }
+        public override int Revalidate()
+        {
+            return 0;
+        }
+
+        protected override void OnStructureDataUpdate()
+        {
+            
         }
     }
-    public class EcfValueGroup : EcfItem
+    public class EcfValueGroup : EcfBaseItem
     {
         private List<string> InternalValues { get; } = new List<string>();
         public ReadOnlyCollection<string> Values { get; }
@@ -2067,15 +2715,22 @@ namespace EgsEcfParser
             AddValues(values);
         }
 
+        // copy constructor
+        public EcfValueGroup(EcfValueGroup template) : base(template)
+        {
+            Values = InternalValues.AsReadOnly();
+            AddValues(template.InternalValues);
+        }
+
         public override string ToString()
         {
             return string.Format("ValueGroup with '{0}'", string.Join(" / ", InternalValues));
         }
         public bool AddValue(string value)
         {
-            if (IsValueValid(value)) { 
+            if (value != null) {
                 InternalValues.Add(value);
-                FindFile()?.SetUnsavedDataFlag();
+                EcfFile?.SetUnsavedDataFlag();
                 return true;
             }
             return false;
@@ -2092,51 +2747,17 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public bool ReplaceValue(int valueIndex, string newValue)
+
+        protected override void OnStructureDataUpdate()
         {
-            if (valueIndex < 0 || valueIndex >= InternalValues.Count) { throw new EcfFormatException(EcfErrors.ValueIndexInvalid, valueIndex.ToString()); }
-            if (newValue != null)
-            {
-                InternalValues[valueIndex] = newValue;
-            }
-            else
-            {
-                InternalValues.RemoveAt(valueIndex);
-            }
-            FindFile()?.SetUnsavedDataFlag();
-            return true;
-        }
-        public bool ReplaceFirstValue(string oldValue, string newValue)
-        {
-            int index = InternalValues.IndexOf(oldValue);
-            if (index >= 0)
-            {
-                ReplaceValue(index, newValue);
-                return true;
-            }
-            return false;
-        }
-        public int ReplaceAllValues(string oldValue, string newValue)
-        {
-            int count = 0;
-            int index;
-            do
-            {
-                index = InternalValues.IndexOf(oldValue);
-                if (index >= 0)
-                {
-                    ReplaceValue(index, newValue);
-                    count++;
-                }
-            }
-            while (index >= 0);
-            return count;
+            
         }
     }
 
     // definition data structures
     public class FormatDefinition
     {
+        public string FilePathAndName { get; }
         public string FileType { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
@@ -2151,16 +2772,17 @@ namespace EgsEcfParser
         public string ValueGroupSeperator { get; }
         public string ValueFractionalSeperator { get; }
         public string MagicSpacer { get; }
+        public string BlockIdentificationAttribute { get; }
         public string BlockReferenceSourceAttribute { get; }
         public string BlockReferenceTargetAttribute { get; }
 
         public ReadOnlyCollection<string> ProhibitedValuePhrases { get; }
 
-        public ReadOnlyCollection<MarkDefinition> BlockTypePreMarks { get; }
-        public ReadOnlyCollection<MarkDefinition> BlockTypePostMarks { get; }
-        public ReadOnlyCollection<BlockTypeDefinition> RootBlockTypes { get; }
+        public ReadOnlyCollection<BlockValueDefinition> BlockTypePreMarks { get; }
+        public ReadOnlyCollection<BlockValueDefinition> BlockTypePostMarks { get; }
+        public ReadOnlyCollection<BlockValueDefinition> RootBlockTypes { get; }
         public ReadOnlyCollection<ItemDefinition> RootBlockAttributes { get; }
-        public ReadOnlyCollection<BlockTypeDefinition> ChildBlockTypes { get; }
+        public ReadOnlyCollection<BlockValueDefinition> ChildBlockTypes { get; }
         public ReadOnlyCollection<ItemDefinition> ChildBlockAttributes { get; }
         public ReadOnlyCollection<ItemDefinition> BlockParameters { get; }
         public ReadOnlyCollection<ItemDefinition> ParameterAttributes { get; }
@@ -2169,17 +2791,18 @@ namespace EgsEcfParser
         public StringPairDefinition WritingBlockIdentifierPair { get;}
         public StringPairDefinition WritingEscapeIdentifiersPair { get; }
 
-        public FormatDefinition(string fileType,
+        public FormatDefinition(string filePathAndName, string fileType,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
             string valueGroupSeperator, string valueFractionalSeperator, string magicSpacer,
-            string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
-            List<MarkDefinition> blockTypePreMarks, List<MarkDefinition> blockTypePostMarks,
-            List<BlockTypeDefinition> rootBlockTypes, List<ItemDefinition> rootBlockAttributes,
-            List<BlockTypeDefinition> childBlockTypes, List<ItemDefinition> childBlockAttributes,
+            string blockIdentificationAttribute, string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
+            List<BlockValueDefinition> blockTypePreMarks, List<BlockValueDefinition> blockTypePostMarks,
+            List<BlockValueDefinition> rootBlockTypes, List<ItemDefinition> rootBlockAttributes,
+            List<BlockValueDefinition> childBlockTypes, List<ItemDefinition> childBlockAttributes,
             List<ItemDefinition> blockParameters, List<ItemDefinition> parameterAttributes)
         {
+            FilePathAndName = filePathAndName;
             FileType = fileType;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
@@ -2194,6 +2817,7 @@ namespace EgsEcfParser
             ValueGroupSeperator = valueGroupSeperator;
             ValueFractionalSeperator = valueFractionalSeperator;
             MagicSpacer = magicSpacer;
+            BlockIdentificationAttribute = blockIdentificationAttribute;
             BlockReferenceSourceAttribute = blockReferenceSourceAttribute;
             BlockReferenceTargetAttribute = blockReferenceTargetAttribute;
 
@@ -2223,6 +2847,7 @@ namespace EgsEcfParser
         }
         public FormatDefinition(FormatDefinition template)
         {
+            FilePathAndName = template.FilePathAndName;
             FileType = template.FileType;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
@@ -2237,16 +2862,17 @@ namespace EgsEcfParser
             ValueGroupSeperator = template.ValueGroupSeperator;
             ValueFractionalSeperator = template.ValueFractionalSeperator;
             MagicSpacer = template.MagicSpacer;
+            BlockIdentificationAttribute = template.BlockIdentificationAttribute;
             BlockReferenceSourceAttribute = template.BlockReferenceSourceAttribute;
             BlockReferenceTargetAttribute = template.BlockReferenceTargetAttribute;
 
             ProhibitedValuePhrases = template.ProhibitedValuePhrases.ToList().AsReadOnly();
 
-            BlockTypePreMarks = template.BlockTypePreMarks.Select(mark => new MarkDefinition(mark)).ToList().AsReadOnly();
-            BlockTypePostMarks = template.BlockTypePostMarks.Select(mark => new MarkDefinition(mark)).ToList().AsReadOnly();
-            RootBlockTypes = template.RootBlockTypes.Select(type => new BlockTypeDefinition(type)).ToList().AsReadOnly();
+            BlockTypePreMarks = template.BlockTypePreMarks.Select(mark => new BlockValueDefinition(mark)).ToList().AsReadOnly();
+            BlockTypePostMarks = template.BlockTypePostMarks.Select(mark => new BlockValueDefinition(mark)).ToList().AsReadOnly();
+            RootBlockTypes = template.RootBlockTypes.Select(type => new BlockValueDefinition(type)).ToList().AsReadOnly();
             RootBlockAttributes = template.RootBlockAttributes.Select(item => new ItemDefinition(item)).ToList().AsReadOnly();
-            ChildBlockTypes = template.ChildBlockTypes.Select(type => new BlockTypeDefinition(type)).ToList().AsReadOnly();
+            ChildBlockTypes = template.ChildBlockTypes.Select(type => new BlockValueDefinition(type)).ToList().AsReadOnly();
             ChildBlockAttributes = template.ChildBlockAttributes.Select(item => new ItemDefinition(item)).ToList().AsReadOnly();
             BlockParameters = template.BlockParameters.Select(item => new ItemDefinition(item)).ToList().AsReadOnly();
             ParameterAttributes = template.ParameterAttributes.Select(item => new ItemDefinition(item)).ToList().AsReadOnly();
@@ -2256,39 +2882,26 @@ namespace EgsEcfParser
             WritingEscapeIdentifiersPair = template.WritingEscapeIdentifiersPair;
         }
     }
-    public class MarkDefinition
+    public class BlockValueDefinition
     {
         public string Value { get; }
         public bool IsOptional { get; }
 
-        public MarkDefinition(string value, string isOptional)
+        public BlockValueDefinition(string value, string isOptional, bool valueCheck)
         {
-            if (!IsKeyValid(value)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'value' parameter", value)); }
+            if (valueCheck && !IsKeyValid(value)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'value' parameter", value)); }
+            if (!valueCheck && value == null) { throw new ArgumentException("Null is not a valid 'value' parameter"); }
             if (!bool.TryParse(isOptional, out bool optional)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'isOptional' parameter", isOptional)); }
             Value = value;
             IsOptional = optional;
         }
-        public MarkDefinition(MarkDefinition template)
+        public BlockValueDefinition(string value, string isOptional) : this(value, isOptional, true)
+        {
+            
+        }
+        public BlockValueDefinition(BlockValueDefinition template)
         {
             Value = template.Value;
-            IsOptional = template.IsOptional;
-        }
-    }
-    public class BlockTypeDefinition
-    {
-        public string Name { get; }
-        public bool IsOptional { get; }
-
-        public BlockTypeDefinition(string name, string isOptional)
-        {
-            if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }
-            if (!bool.TryParse(isOptional, out bool optional)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'isOptional' parameter", isOptional)); }
-            Name = name;
-            IsOptional = optional;
-        }
-        public BlockTypeDefinition(BlockTypeDefinition template)
-        {
-            Name = template.Name;
             IsOptional = template.IsOptional;
         }
     }
@@ -2297,18 +2910,21 @@ namespace EgsEcfParser
         public string Name { get; }
         public bool IsOptional { get; }
         public bool HasValue { get; }
+        public bool AllowBlank { get; }
         public bool IsForceEscaped { get; }
         public string Info { get; }
 
-        public ItemDefinition(string name, string isOptional, string hasValue, string isForceEscaped, string info)
+        public ItemDefinition(string name, string isOptional, string hasValue, string allowBlank, string isForceEscaped, string info)
         {
             if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }
             if (!bool.TryParse(isOptional, out bool optional)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'isOptional' parameter", isOptional)); }
             if (!bool.TryParse(hasValue, out bool value)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'hasValue' parameter", hasValue)); }
+            if (!bool.TryParse(allowBlank, out bool blank)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'canBlank' parameter", allowBlank)); }
             if (!bool.TryParse(isForceEscaped, out bool forceEscaped)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'forceEscape' parameter", isForceEscaped)); }
             Name = name;
             IsOptional = optional;
             HasValue = value;
+            AllowBlank = blank;
             IsForceEscaped = forceEscaped;
             Info = info ?? "";
         }
@@ -2317,13 +2933,14 @@ namespace EgsEcfParser
             Name = template.Name;
             IsOptional = template.IsOptional;
             HasValue = template.HasValue;
+            AllowBlank = template.AllowBlank;
             IsForceEscaped = template.IsForceEscaped;
             Info = template.Info;
         }
 
         public override string ToString()
         {
-            return string.Format("ItemDefinition: name: {0}, isOptional: {1}, hasValue: {2}, forceEscaped: {3}", Name, IsOptional, HasValue, IsForceEscaped);
+            return string.Format("ItemDefinition: {0}, info: {1}", Name, Info);
         }
     }
     public class StringPairDefinition
@@ -2332,6 +2949,8 @@ namespace EgsEcfParser
         public string Closer { get; }
         public StringPairDefinition(string opener, string closer)
         {
+            if (!IsKeyValid(opener)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'opener' parameter", opener)); }
+            if (!IsKeyValid(closer)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'closer' parameter", closer)); }
             Opener = opener;
             Closer = closer;
         }
@@ -2339,10 +2958,6 @@ namespace EgsEcfParser
         {
             Opener = template.Opener;
             Closer = template.Closer;
-        }
-        public bool IsValid()
-        {
-            return IsKeyValid(Opener) && IsKeyValid(Closer);
         }
     }
 }

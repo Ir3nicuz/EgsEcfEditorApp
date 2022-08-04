@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DeprecatedDefinitionsDialog_EmptyDataText" xml:space="preserve">
+    <value>Keine veralteten Elemente gefunden</value>
+  </data>
+  <data name="EcfErrorView_ToolTip_ErrorCountSelector" xml:space="preserve">
+    <value>Anzahl der gleichzeitig angezeigter Fehler</value>
+  </data>
+  <data name="EcfErrorView_ToolTip_ErrorGroupSelector" xml:space="preserve">
+    <value>Gruppe der angezeigten Fehler</value>
+  </data>
+  <data name="EcfErrorView_ToolTip_ErrorSorterAlphabeticOrder" xml:space="preserve">
+    <value>Aktiviert die alphabetische Reihenfolge</value>
+  </data>
+  <data name="EcfErrorView_ToolTip_ErrorSorterDirection" xml:space="preserve">
+    <value>Ändert die Sortierrichtung</value>
+  </data>
+  <data name="EcfErrorView_ToolTip_ErrorSorterOriginOrder" xml:space="preserve">
+    <value>Aktiviert die Auftrittsreihenfolge</value>
+  </data>
+  <data name="EcfFileOpenDialog_ToolTip_Encoding" xml:space="preserve">
+    <value>Für eine neu erstellte Datei muss das Encoding festgelegt werden. Das vorausgewählte Encoding sollte in den meisten Fällen geeignet sein.</value>
+  </data>
+  <data name="EcfFileOpenDialog_ToolTip_FormatDefinition" xml:space="preserve">
+    <value>Anhand des Dateinamens wird versucht das Format zu ermitteln. Wenn das fehlschlägt oder falsch ist, muss das Format manuell festgelegt werden.</value>
+  </data>
+  <data name="EcfFileOpenDialog_ToolTip_NewLineSymbol" xml:space="preserve">
+    <value>Für eine neu erstellte Datei muss das Zeilenumbruch Symbol festgelegt werden. Das vorausgewählte Symbol sollte in den meisten Fällen geeignet sein.</value>
+  </data>
+  <data name="EcfFilePropertiesDialog_PropertiesIncomplete" xml:space="preserve">
+    <value>Mindestens eine Eigenschaft ist nicht korrekt eingestellt. Bitte die Eingaben prüfen!</value>
+  </data>
+  <data name="EcfInfoView_NoDefinition" xml:space="preserve">
+    <value>Keine Definition gefunden</value>
+  </data>
+  <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
+    <value>Kommentar Element ohne Inhalt is nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_CouldNotBeFoundInTheItemList" xml:space="preserve">
+    <value>konnte in der Element Liste nicht gefunden werden</value>
+  </data>
+  <data name="EcfItemEditingDialog_IsAlreadyUsedBy" xml:space="preserve">
+    <value>wird bereits verwendet von</value>
+  </data>
+  <data name="EcfItemEditingDialog_IsStillReferencedBy" xml:space="preserve">
+    <value>wird immer noch referenziert von</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
+    <value>Es ist kein hinzufügbarer Parameter vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
+    <value>Für Parameter ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisDataType" xml:space="preserve">
+    <value>Für den Datentyp dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisPostMark" xml:space="preserve">
+    <value>Für das Nachzeichen dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoDefinitionForThisPreMark" xml:space="preserve">
+    <value>Für das Vorzeichen dieses Elementes ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
+    <value>Kein editierbares Element ausgewählt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditWithoutParameter" xml:space="preserve">
+    <value>Parameter Bearbeitung ohne eine Parameter Definition nicht möglich</value>
+  </data>
+  <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
+    <value>nicht ausgewählt</value>
+  </data>
+  <data name="EcfItemEditingDialog_ParameterNotDefined" xml:space="preserve">
+    <value>Für diesen Parameter ist keine Definition vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheIdAttributeValue" xml:space="preserve">
+    <value>Der Wert des Id Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheNameAttributeValue" xml:space="preserve">
+    <value>Der Wert des Name Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheOldNameAttributeValue" xml:space="preserve">
+    <value>Der alte Wert des Name Attribut</value>
+  </data>
+  <data name="EcfItemEditingDialog_TheReferencedItem" xml:space="preserve">
+    <value>Das referenzierte Element</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_AddValue" xml:space="preserve">
+    <value>Fügt eine Wert Zelle hinter der selektierten Zelle ein</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_AddValueGroup" xml:space="preserve">
+    <value>Fügt eine Wert Gruppe hinter der selektierten Zelle ein</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_RemoveValue" xml:space="preserve">
+    <value>Entfernt die selektierte Wert Zelle</value>
+  </data>
+  <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
+    <value>Entfernt die selektierte Wert Gruppe</value>
+  </data>
+  <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
+    <value>Like-suche zum Einschränken der Dropdown Liste</value>
+  </data>
+  <data name="EcfParameterView_GroupSeperator" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
+    <value>Markierte Parameter werden in das gewählte Baumelement vererbt</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_OverwritingColumn" xml:space="preserve">
+    <value>Markierte Parameter überschreiben einen vererbten Parameter</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_ParameterCountSelector" xml:space="preserve">
+    <value>Anzahl der gleichzeitig angezeigten Parameter</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_ParameterGroupSelector" xml:space="preserve">
+    <value>Gruppe der angezeigten Parameter</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_ParameterSorterAlphabeticOrder" xml:space="preserve">
+    <value>Aktiviert die alphabetische Reihenfolge nach Parameternamen</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_ParameterSorterDirection" xml:space="preserve">
+    <value>Ändert die Sortierrichtung</value>
+  </data>
+  <data name="EcfParameterView_ToolTip_ParameterSorterOriginOrder" xml:space="preserve">
+    <value>Aktiviert die hierarchische Reihenfolge</value>
+  </data>
+  <data name="EcfParameterView_ValueSeperator" xml:space="preserve">
+    <value>,</value>
+  </data>
+  <data name="EcfSettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
+    <value>Alle Einstellungen wirklich auf Standard zurücksetzen?</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Fehleransicht fest</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_GameVersionFolder" xml:space="preserve">
+    <value>Legt die Spiel Version fest, dessen Definitionen verwendet werden sollen </value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
+    <value>Wenn aktiviert, werden auch Elemente die mindestens ein fehlerhaftes Unterelement beinhalten nicht gespeichert</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Parameteransicht fest</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>Wenn aktiviert, wird der Anfangszustand für die Filter Einstellung für Kommentare auf anzeigen gesetzt</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>Wenn aktiviert, wird der Anfangszustand für die Filter Einstellung für Datenblöcke auf anzeigen gesetzt</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>Wenn aktiviert, wird der Anfangszustand für die Filter Einstellung für Parameter auf anzeigen gesetzt</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_TreeViewSorterInitCount" xml:space="preserve">
+    <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Baumansicht fest</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_WriteOnlyValidItems" xml:space="preserve">
+    <value>Wenn aktiviert, werden beim Speichern nur Elemente ohne Fehler beibehalten</value>
+  </data>
+  <data name="EcfSettingsDialog_UnsavedReallyCloseQuestion" xml:space="preserve">
+    <value>Es sind ungesichte Einstellungen vorhanden. Sollen die Änderungen wirklich verworfen werden?</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_Add" xml:space="preserve">
+    <value>Fügt ein Element des selektierten Typs hinzu</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_ChangeComplex" xml:space="preserve">
+    <value>Ändern von mehreren Elementen</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_ChangeSimple" xml:space="preserve">
+    <value>Ändert das erste selektierte Element</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_CopyElements" xml:space="preserve">
+    <value>Kopiert die gewählten Elements in den Zwischenspeicher</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_FilterApplyButton" xml:space="preserve">
+    <value>Wendet den Filter auf die Ansichten an</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_FilterClearButton" xml:space="preserve">
+    <value>Setzt die Filter zurück und aktualisiert die Ansichten</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_MoveDown" xml:space="preserve">
+    <value>Bewegt die selektierten Elemente abwärts</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_MoveUp" xml:space="preserve">
+    <value>Bewegt die selektierten Elemente aufwärts</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_ParameterLikeInput" xml:space="preserve">
+    <value>Textbasierter Parameter Suchfilter innerhalb der Parameter Werte (Case sensitive Like)</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_ParameterSelector" xml:space="preserve">
+    <value>Auswahl der angezeigten Parameter</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_PasteElements" xml:space="preserve">
+    <value>Fügt die kopierten Elemente aus dem Zwischenspeicher in die gewählte Datei an der gewählt Position ein</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_Redo" xml:space="preserve">
+    <value>Wiederholen</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_Remove" xml:space="preserve">
+    <value>Entfernt die selektierten Elemente</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_TreeErrorDisplayModeSelector" xml:space="preserve">
+    <value>Wählt zwischen "Zeige alle", "Zeige nur fehlerhafte" und "Zeige nur fehlerfreie"</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_TreeItemTypeSelector" xml:space="preserve">
+    <value>Auswahl der angezeigten Baum Element Typen</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_TreeLikeInput" xml:space="preserve">
+    <value>Textbasierter Baum Element Suchfilter auf dem angezeigten Knotennamen (Case sensitive Like)</value>
+  </data>
+  <data name="EcfTabPage_ToolTip_Undo" xml:space="preserve">
+    <value>Rückgängig</value>
+  </data>
+  <data name="EcfTreeView_ToolTip_TreeItemCountSelector" xml:space="preserve">
+    <value>Anzahl der gleichzeitig angezeigten Baum Elemente</value>
+  </data>
+  <data name="EcfTreeView_ToolTip_TreeItemGroupSelector" xml:space="preserve">
+    <value>Gruppe der angezeigten Baum Elemente</value>
+  </data>
+  <data name="EcfTreeView_ToolTip_TreeSorterAlphabeticOrder" xml:space="preserve">
+    <value>Aktiviert die alphabetische Reihenfolge nach Elementnamen</value>
+  </data>
+  <data name="EcfTreeView_ToolTip_TreeSorterDirection" xml:space="preserve">
+    <value>Ändert die Sortierrichtung</value>
+  </data>
+  <data name="EcfTreeView_ToolTip_TreeSorterOriginOrder" xml:space="preserve">
+    <value>Aktiviert die original Reihenfolge (aus der Datei)</value>
+  </data>
+  <data name="EgsEcfEditorApp_CloseAllTabsWithUnsaved" xml:space="preserve">
+    <value>In mindestens einem Tab befinden sich ungesicherte Daten. Wirklich alle Tabs schließen?</value>
+  </data>
+  <data name="EgsEcfEditorApp_CloseAppWithUnsaved" xml:space="preserve">
+    <value>In mindestens einem Tab befinden sich ungesicherte Daten. Programm wirklich schließen?</value>
+  </data>
+  <data name="EgsEcfEditorApp_CloseTabWithUnsaved" xml:space="preserve">
+    <value>In dem gewählten Tab befinden sich ungesicherte Daten. Diesen Tab wirklich schließen?</value>
+  </data>
+  <data name="EgsEcfEditorApp_CreateEcfFileFailed" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet erstellt!</value>
+  </data>
+  <data name="EgsEcfEditorApp_NoTabSelected" xml:space="preserve">
+    <value>Kein gültiger Dateireiter ausgewählt!</value>
+  </data>
+  <data name="EgsEcfEditorApp_OpenEcfFileFailed" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet werden!</value>
+  </data>
+  <data name="EgsEcfEditorApp_OverrideTabWithUnsaved" xml:space="preserve">
+    <value>In dem gewählten Tab befinden sich ungesicherte Daten. Diesen Tab wirklich neu laden?</value>
+  </data>
+  <data name="EgsEcfEditorApp_ReloadEcfFileFailed" xml:space="preserve">
+    <value>Dateiinhalt konnte nicht neu geladen werden!</value>
+  </data>
+  <data name="EgsEcfEditorApp_ReloadFileDefinitionsFailed" xml:space="preserve">
+    <value>Definitionen konnten nicht geladen werden!</value>
+  </data>
+  <data name="EgsEcfEditorApp_ReloadFileDefinitionsSuccess" xml:space="preserve">
+    <value>Definitionen erfolgreich neu geladen!</value>
+  </data>
+  <data name="EgsEcfEditorApp_SaveEcfFileFailed" xml:space="preserve">
+    <value>Datei konnte nicht gespeichert werden!</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_BuildTechTreePreview" xml:space="preserve">
+    <value>Erzeugt eine Vorschauansicht für den TechTree basierend auf den geöffneten Dateien</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_CheckDefinition" xml:space="preserve">
+    <value>Prüft die Format Definition der gewählten Datei auf veraltete Vorgaben</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_Close" xml:space="preserve">
+    <value>Schließt die selektierte Datei</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_CloseAll" xml:space="preserve">
+    <value>Schließt alle Dateien</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_CompareFiles" xml:space="preserve">
+    <value>Vergleicht zwei Dateien und zeigt die Unterschiede an</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_MergeFiles" xml:space="preserve">
+    <value>Fügt zwei Dateien zu einer Datei zusammen</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_New" xml:space="preserve">
+    <value>Erzeugt eine neue Datei</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_Open" xml:space="preserve">
+    <value>Öffnet eine existierende Datei</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_OpenSettingsDialog" xml:space="preserve">
+    <value>Öffnet das Einstellungs-Fenster</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_Reload" xml:space="preserve">
+    <value>Lädt die Dateiinhalte neu</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_ReloadDefinitions" xml:space="preserve">
+    <value>Lädt die Format Definitionen neu</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_Save" xml:space="preserve">
+    <value>Speichert die selektierte Datei</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_SaveAll" xml:space="preserve">
+    <value>Speichert alle Dateien</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_SaveAs" xml:space="preserve">
+    <value>Speichert die selektierte Datei unter einem anderen Namen</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_SaveAsFiltered" xml:space="preserve">
+    <value>Speichert das Filterergebnis der selektierten Datei unter einem anderen Namen</value>
+  </data>
+  <data name="Generic_ChangeAll" xml:space="preserve">
+    <value>Alle ändern</value>
+  </data>
+  <data name="Generic_ContinueImpossibleWithErrors" xml:space="preserve">
+    <value>Das Fortsetzen ist nicht möglich aufgrund von Fehlern</value>
+  </data>
+  <data name="Generic_ContinueOperationWithErrorsQuestion" xml:space="preserve">
+    <value>Das Fortsetzen des aktuellen Vorgangs führt zu Fehlern. Dennoch fortfahren?</value>
+  </data>
+  <data name="Generic_FileCouldNotBeOpened" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet werden</value>
+  </data>
+  <data name="Generic_HasError" xml:space="preserve">
+    <value>hat Fehler</value>
+  </data>
+  <data name="Generic_HasNoValue" xml:space="preserve">
+    <value>hat keinen Wert</value>
+  </data>
+  <data name="Generic_IsNotOptional" xml:space="preserve">
+    <value>ist nicht optional</value>
+  </data>
+  <data name="Generic_IsReferencedBy" xml:space="preserve">
+    <value>wird referenziert von</value>
+  </data>
+  <data name="Generic_NoSuitableSelection" xml:space="preserve">
+    <value>Kein geeignetes Element ausgewählt</value>
+  </data>
+  <data name="Generic_Of" xml:space="preserve">
+    <value>von</value>
+  </data>
+</root>

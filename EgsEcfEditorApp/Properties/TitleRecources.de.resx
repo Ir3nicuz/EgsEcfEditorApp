@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DeprecatedDefinitionsDialog_ColumnHeaderAllowBlank" xml:space="preserve">
+    <value>Erlaubt leer</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_ColumnHeaderHasValue" xml:space="preserve">
+    <value>Hat Wert</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_ColumnHeaderIsForceEscaped" xml:space="preserve">
+    <value>Erzwingt Escapes</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_CompareFile" xml:space="preserve">
+    <value>Vergleichsdatei</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_DefinitionFile" xml:space="preserve">
+    <value>Definitionsdatei</value>
+  </data>
+  <data name="DeprecatedDefinitionsDialog_Header" xml:space="preserve">
+    <value>Veraltete Definitionen</value>
+  </data>
+  <data name="EcfErrorView_EditingErrors" xml:space="preserve">
+    <value>Editierfehler</value>
+  </data>
+  <data name="EcfErrorView_ErrorGroupColumn" xml:space="preserve">
+    <value>Fehlergruppe</value>
+  </data>
+  <data name="EcfErrorView_ErrorNumberColumn" xml:space="preserve">
+    <value>Nr</value>
+  </data>
+  <data name="EcfErrorView_FatalErrors" xml:space="preserve">
+    <value>Schwere Fehler</value>
+  </data>
+  <data name="EcfErrorView_Header" xml:space="preserve">
+    <value>Daten Fehler Übersicht</value>
+  </data>
+  <data name="EcfErrorView_ParsingErrors" xml:space="preserve">
+    <value>Lesefehler</value>
+  </data>
+  <data name="EcfErrorView_ShowInEditor" xml:space="preserve">
+    <value>Zeige in Editor</value>
+  </data>
+  <data name="EcfErrorView_ShowInFile" xml:space="preserve">
+    <value>Zeige in Datei</value>
+  </data>
+  <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">
+    <value>Neue Datei erstellen</value>
+  </data>
+  <data name="EcfFileDialog_CreateFileName" xml:space="preserve">
+    <value>NeueDatei</value>
+  </data>
+  <data name="EcfFileLoadingDialog_BarText" xml:space="preserve">
+    <value>Zeile</value>
+  </data>
+  <data name="EcfFileLoadingDialog_Header" xml:space="preserve">
+    <value>Lade Datei Inhalt</value>
+  </data>
+  <data name="EcfFileOpenDialog_EncodingBox" xml:space="preserve">
+    <value>Datei Encoding</value>
+  </data>
+  <data name="EcfFileOpenDialog_FilePathAndNameBox" xml:space="preserve">
+    <value>Datei Pfad und Name</value>
+  </data>
+  <data name="EcfFileOpenDialog_FindFileDialog" xml:space="preserve">
+    <value>Datei finden</value>
+  </data>
+  <data name="EcfFileOpenDialog_FormatDefinitionBox" xml:space="preserve">
+    <value>Format Definition</value>
+  </data>
+  <data name="EcfFileOpenDialog_NewFileDialog" xml:space="preserve">
+    <value>Neue Datei definieren</value>
+  </data>
+  <data name="EcfFileOpenDialog_NewLineSymbolBox" xml:space="preserve">
+    <value>Zeilenumbruch Symbol</value>
+  </data>
+  <data name="EcfFileOpenDialog_OpenFileDialog" xml:space="preserve">
+    <value>Bestehende Datei öffnen</value>
+  </data>
+  <data name="EcfInfoView_ElementData" xml:space="preserve">
+    <value>Elementdaten</value>
+  </data>
+  <data name="EcfInfoView_Header" xml:space="preserve">
+    <value>Zusatzdaten</value>
+  </data>
+  <data name="EcfInfoView_ParameterData" xml:space="preserve">
+    <value>Parameterdaten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddChildBlock" xml:space="preserve">
+    <value>Unterelement hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddComment" xml:space="preserve">
+    <value>Kommentar hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddParameter" xml:space="preserve">
+    <value>Parameter hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_AddRootBlock" xml:space="preserve">
+    <value>Basiselement hinzufügen</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditChildBlock" xml:space="preserve">
+    <value>Unterelement bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditComment" xml:space="preserve">
+    <value>Kommentar Element bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditParameter" xml:space="preserve">
+    <value>Parameter Element bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
+    <value>Basiselement bearbeiten</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_SelectItem" xml:space="preserve">
+    <value>Wähle den Element Typ der erzeugt werden soll</value>
+  </data>
+  <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
+    <value>Werte / Gruppen</value>
+  </data>
+  <data name="EcfParameterView_Header" xml:space="preserve">
+    <value>Parameteransicht</value>
+  </data>
+  <data name="EcfParameterView_Header_InheritedParameters" xml:space="preserve">
+    <value>vererbte</value>
+  </data>
+  <data name="EcfParameterView_Header_OverwritingParameters" xml:space="preserve">
+    <value>überschrieben</value>
+  </data>
+  <data name="EcfParameterView_ParameterNameColumn" xml:space="preserve">
+    <value>Parameter Name</value>
+  </data>
+  <data name="EcfParameterView_ParameterNumberColumn" xml:space="preserve">
+    <value>Nr</value>
+  </data>
+  <data name="EcfParameterView_ParameterOverwritingColumn" xml:space="preserve">
+    <value>Übers.</value>
+  </data>
+  <data name="EcfParameterView_ParameterParentColumn" xml:space="preserve">
+    <value>Baum Element</value>
+  </data>
+  <data name="EcfParameterView_UnnamedParent" xml:space="preserve">
+    <value>Namenlos</value>
+  </data>
+  <data name="EcfSettingsDialog_CreationSettingsChapterHeader" xml:space="preserve">
+    <value>Dateierstellung</value>
+  </data>
+  <data name="EcfSettingsDialog_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Fehleransicht Elementanzahl Vorauswahl</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterSettingsChapterHeader" xml:space="preserve">
+    <value>Filterung</value>
+  </data>
+  <data name="EcfSettingsDialog_GameVersionFolder" xml:space="preserve">
+    <value>Spiel Version</value>
+  </data>
+  <data name="EcfSettingsDialog_GeneralSettingsChapterHeader" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="EcfSettingsDialog_Header" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="EcfSettingsDialog_InvalidateParentOnError" xml:space="preserve">
+    <value>Vererbe Fehler an übergeordnetes Element</value>
+  </data>
+  <data name="EcfSettingsDialog_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Parameteransicht Elementanzahl Vorauswahl</value>
+  </data>
+  <data name="EcfSettingsDialog_SorterSettingsChapterHeader" xml:space="preserve">
+    <value>Sortierung</value>
+  </data>
+  <data name="EcfSettingsDialog_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>Baumansicht 'Kommentare' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>Baumansicht 'Datenblöcke' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>Baumansicht 'Parameter' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_TreeViewSorterInitCount" xml:space="preserve">
+    <value>Baumansicht Elementanzahl Vorauswahl</value>
+  </data>
+  <data name="EcfSettingsDialog_WriteOnlyValidItems" xml:space="preserve">
+    <value>Schreibe nur valide Elemente in Datei</value>
+  </data>
+  <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
+    <value>Baumelemente</value>
+  </data>
+  <data name="EcfTreeView_Header" xml:space="preserve">
+    <value>Baumansicht</value>
+  </data>
+  <data name="EgsEcfEditorApp_AppName" xml:space="preserve">
+    <value>Empyrion Configuration Editor</value>
+  </data>
+  <data name="Generic_Abort" xml:space="preserve">
+    <value>Abbruch</value>
+  </data>
+  <data name="Generic_Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="Generic_AddAfter" xml:space="preserve">
+    <value>Hinzufügen nach</value>
+  </data>
+  <data name="Generic_AddTo" xml:space="preserve">
+    <value>Hinzufügen zu</value>
+  </data>
+  <data name="Generic_Attention" xml:space="preserve">
+    <value>Achtung</value>
+  </data>
+  <data name="Generic_Attribute" xml:space="preserve">
+    <value>Attribut</value>
+  </data>
+  <data name="Generic_Attributes" xml:space="preserve">
+    <value>Attribute</value>
+  </data>
+  <data name="Generic_BackButton" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Generic_Change" xml:space="preserve">
+    <value>Ändern</value>
+  </data>
+  <data name="Generic_ChildElement" xml:space="preserve">
+    <value>Unterelement</value>
+  </data>
+  <data name="Generic_ChildElements" xml:space="preserve">
+    <value>Unterelemente</value>
+  </data>
+  <data name="Generic_Comment" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="Generic_Comments" xml:space="preserve">
+    <value>Kommentare</value>
+  </data>
+  <data name="Generic_Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="Generic_DataElement" xml:space="preserve">
+    <value>Daten Element</value>
+  </data>
+  <data name="Generic_DataElements" xml:space="preserve">
+    <value>Daten Elemente</value>
+  </data>
+  <data name="Generic_DataType" xml:space="preserve">
+    <value>Daten Typ</value>
+  </data>
+  <data name="Generic_Definitions" xml:space="preserve">
+    <value>Definitionen</value>
+  </data>
+  <data name="Generic_Element" xml:space="preserve">
+    <value>Element</value>
+  </data>
+  <data name="Generic_Elements" xml:space="preserve">
+    <value>Elementw</value>
+  </data>
+  <data name="Generic_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Generic_Errors" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Generic_Group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Generic_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Generic_Inherited" xml:space="preserve">
+    <value>Vererbt</value>
+  </data>
+  <data name="Generic_IsOptional" xml:space="preserve">
+    <value>Ist optional</value>
+  </data>
+  <data name="Generic_LineNumber" xml:space="preserve">
+    <value>Zeilennummer</value>
+  </data>
+  <data name="Generic_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Generic_Names" xml:space="preserve">
+    <value>Namen</value>
+  </data>
+  <data name="Generic_No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Generic_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Generic_Parameter" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="Generic_Parameters" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="Generic_ParentElement" xml:space="preserve">
+    <value>Überg. Element</value>
+  </data>
+  <data name="Generic_PasteAfter" xml:space="preserve">
+    <value>Einfügen nach</value>
+  </data>
+  <data name="Generic_PasteTo" xml:space="preserve">
+    <value>Einfügen in</value>
+  </data>
+  <data name="Generic_PickItem" xml:space="preserve">
+    <value>Wähle Element</value>
+  </data>
+  <data name="Generic_PostMark" xml:space="preserve">
+    <value>Nachzeichen</value>
+  </data>
+  <data name="Generic_PreMark" xml:space="preserve">
+    <value>Vorzeichen</value>
+  </data>
+  <data name="Generic_Properties" xml:space="preserve">
+    <value>Eigenschaften</value>
+  </data>
+  <data name="Generic_Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="Generic_Replacement_Empty" xml:space="preserve">
+    <value>&lt;leer&gt;</value>
+  </data>
+  <data name="Generic_Reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="Generic_RootElement" xml:space="preserve">
+    <value>Basiselement</value>
+  </data>
+  <data name="Generic_RootElements" xml:space="preserve">
+    <value>Basiselemente</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Generic_Search" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="Generic_Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Generic_Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="Generic_Values" xml:space="preserve">
+    <value>Werte</value>
+  </data>
+  <data name="Generic_Warning" xml:space="preserve">
+    <value>Warnung</value>
+  </data>
+  <data name="Generic_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+</root>

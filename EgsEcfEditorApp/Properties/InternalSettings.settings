@@ -1,0 +1,51 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EgsEcfEditorApp.Properties" GeneratedClassName="InternalSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="EgsEcfEditorApp_FileDialogFilter" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EgsEcfFile|*.ecf</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_FileDialogExtension" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ecf</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_EgsConfigDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Content\Configuration</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_EgsSteamAppId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">383120</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamAppsFolderName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SteamApps</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_InstallPathRegistryValue" Type="System.String" Scope="User">
+      <Value Profile="(Default)">InstallPath</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamRegistryKey32" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Valve\Steam</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamRegistryKey64" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamAppManifestFileExtension" Type="System.String" Scope="User">
+      <Value Profile="(Default)">acf</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamLibraryConfigFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">libraryfolders.vdf</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_AppRootPathSteamConfigKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">path</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_AppPathSteamConfigKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">installdir</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_SteamCommonFolderName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">common</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_DefinitionDefaultBaseFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EcfFileDefinitions</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_DefinitionTemplateFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">VanillaEcfDefinition_BlocksConfig.xml</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

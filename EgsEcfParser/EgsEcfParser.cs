@@ -1389,7 +1389,7 @@ namespace EgsEcfParser
             List<EcfAttribute> attributes = ParseAttributes(definition, splittedItems, attributeDefinitions, lineInFile);
             block.AddAttributes(attributes);
             List<EcfError> errors = new List<EcfError>();
-            errors.AddRange(CheckBlockPostMark(preMark, definition.BlockTypePreMarks, EcfErrorGroups.Parsing));
+            errors.AddRange(CheckBlockPreMark(preMark, definition.BlockTypePreMarks, EcfErrorGroups.Parsing));
             errors.AddRange(CheckBlockDataType(blockType, dataTypeDefinitions, EcfErrorGroups.Parsing));
             errors.AddRange(CheckBlockPostMark(postMark, definition.BlockTypePostMarks, EcfErrorGroups.Parsing));
             errors.AddRange(CheckAttributesValid(attributes, attributeDefinitions, EcfErrorGroups.Parsing));
@@ -2490,7 +2490,7 @@ namespace EgsEcfParser
                 EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown);
             
             errorCount += AddErrors(CheckBlockPreMark(PreMark, definition.BlockTypePreMarks, EcfErrorGroups.Editing));
-            errorCount += AddErrors(CheckBlockPreMark(DataType, IsRoot() ? definition.RootBlockTypes : definition.ChildBlockTypes, EcfErrorGroups.Editing));
+            errorCount += AddErrors(CheckBlockDataType(DataType, IsRoot() ? definition.RootBlockTypes : definition.ChildBlockTypes, EcfErrorGroups.Editing));
             errorCount += AddErrors(CheckBlockPostMark(PostMark, definition.BlockTypePostMarks, EcfErrorGroups.Editing));
             return errorCount;
         }

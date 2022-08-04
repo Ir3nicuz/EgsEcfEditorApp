@@ -1,4 +1,5 @@
-﻿using EgsEcfEditorApp.Properties;
+﻿using EcfFileViewTools;
+using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
 using System.IO;
@@ -10,6 +11,7 @@ namespace EcfFileViews
     public partial class DeprecatedDefinitionsDialog : Form
     {
         private string EmptyDataText { get; set;  }
+        private EcfDataGridView Grid = new EcfDataGridView();
 
         public DeprecatedDefinitionsDialog()
         {
@@ -26,38 +28,45 @@ namespace EcfFileViews
 
             OkButton.Text = TitleRecources.Generic_Ok;
 
-            DefinitionsGrid.Paint += DefinitionsGrid_Paint;
+            Grid.AllowUserToOrderColumns = true;
+            Grid.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            Grid.Dock = DockStyle.Fill;
+            Grid.ReadOnly = true;
 
-            DefinitionsGrid.Columns.Add(new DataGridViewTextBoxColumn() 
+            Grid.Paint += DefinitionsGrid_Paint;
+
+            Grid.Columns.Add(new DataGridViewTextBoxColumn() 
             { 
                 HeaderText = TitleRecources.Generic_Name, 
                 SortMode = DataGridViewColumnSortMode.Automatic 
             });
-            DefinitionsGrid.Columns.Add(new DataGridViewTextBoxColumn() 
+            Grid.Columns.Add(new DataGridViewTextBoxColumn() 
             { 
                 HeaderText = TitleRecources.Generic_Info, 
                 SortMode = DataGridViewColumnSortMode.Automatic 
             });
-            DefinitionsGrid.Columns.Add(new DataGridViewCheckBoxColumn()
+            Grid.Columns.Add(new DataGridViewCheckBoxColumn()
             { 
                 HeaderText = TitleRecources.Generic_IsOptional, 
                 SortMode = DataGridViewColumnSortMode.Automatic 
             });
-            DefinitionsGrid.Columns.Add(new DataGridViewCheckBoxColumn()
+            Grid.Columns.Add(new DataGridViewCheckBoxColumn()
             { 
                 HeaderText = TitleRecources.DeprecatedDefinitionsDialog_ColumnHeaderHasValue, 
                 SortMode = DataGridViewColumnSortMode.Automatic 
             });
-            DefinitionsGrid.Columns.Add(new DataGridViewCheckBoxColumn()
+            Grid.Columns.Add(new DataGridViewCheckBoxColumn()
             {
                 HeaderText = TitleRecources.DeprecatedDefinitionsDialog_ColumnHeaderAllowBlank,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DefinitionsGrid.Columns.Add(new DataGridViewCheckBoxColumn() 
+            Grid.Columns.Add(new DataGridViewCheckBoxColumn() 
             { 
                 HeaderText = TitleRecources.DeprecatedDefinitionsDialog_ColumnHeaderIsForceEscaped, 
                 SortMode = DataGridViewColumnSortMode.Automatic 
             });
+
+            Controls.Add(Grid);
         }
         private void OkButton_Click(object sender, EventArgs evt)
         {
@@ -65,10 +74,10 @@ namespace EcfFileViews
         }
         private void DefinitionsGrid_Paint(object sender, PaintEventArgs evt)
         {
-            if (DefinitionsGrid.Rows.Count == 0)
+            if (Grid.Rows.Count == 0)
             {
                 TextRenderer.DrawText(evt.Graphics, EmptyDataText,
-                    DefinitionsGrid.Font, DefinitionsGrid.ClientRectangle, DefinitionsGrid.ForeColor, DefinitionsGrid.BackgroundColor,
+                    Grid.Font, Grid.ClientRectangle, Grid.ForeColor, Grid.BackgroundColor,
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
             }
         }
@@ -78,7 +87,8 @@ namespace EcfFileViews
             DefinitionFileLabel.Text = string.Format("{0}: {1}", TitleRecources.DeprecatedDefinitionsDialog_DefinitionFile, Path.GetFileName(file.Definition.FilePathAndName));
             CompareFileLabel.Text = string.Format("{0}: {1}", TitleRecources.DeprecatedDefinitionsDialog_CompareFile, file.FileName);
 
-            DefinitionsGrid.Rows.Clear();
+            Grid.SuspendLayout();
+            Grid.Rows.Clear();
             FindDeprecatedItemDefinitions(file).ForEach(definition =>
             {
                 DataGridViewRow row = new DataGridViewRow();
@@ -88,9 +98,11 @@ namespace EcfFileViews
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.HasValue });
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.AllowBlank });
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.IsForceEscaped });
-                DefinitionsGrid.Rows.Add(row);
+                Grid.Rows.Add(row);
             });
-            DefinitionsGrid.ClearSelection();
+            Grid.ClearSelection();
+            Grid.AutoResizeColumns();
+            Grid.ResumeLayout();
 
             OkButton.Focus();
             ShowDialog(parent);

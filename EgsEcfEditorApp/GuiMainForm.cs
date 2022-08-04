@@ -163,7 +163,6 @@ namespace EgsEcfEditorApp
         private void SettingOperations_GameVersionClicked(object sender, EventArgs evt)
         {
             UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = Convert.ToString(sender);
-            MessageBox.Show("test");
         }
         private void SettingOperations_OpenSettingsDialogClicked(object sender, EventArgs evt)
         {
@@ -2177,7 +2176,7 @@ namespace EcfFileViews
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter ParameterSorter { get; }
-        private DataGridView Grid { get; } = new DataGridView();
+        private EcfDataGridView Grid { get; } = new EcfDataGridView();
         private ContextMenuStrip GridMenu { get; } = new ContextMenuStrip();
         private List<EcfParameterRow> ParameterRows { get; } = new List<EcfParameterRow>();
         private List<EcfParameterRow> SelectedRows { get; } = new List<EcfParameterRow>();
@@ -2336,14 +2335,7 @@ namespace EcfFileViews
         }
         private void InitGridView()
         {
-            Grid.AllowUserToAddRows = false;
-            Grid.AllowUserToDeleteRows = false;
-            Grid.AllowDrop = false;
-            Grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            Grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            Grid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Grid.Dock = DockStyle.Fill;
-            Grid.EditMode = DataGridViewEditMode.EditProgrammatically;
             Grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             Grid.RowHeaderMouseClick += Grid_RowHeaderMouseClick;
@@ -2468,8 +2460,8 @@ namespace EcfFileViews
             Grid.Rows.Clear();
             Grid.Rows.AddRange(ParameterRows.Skip(ParameterSorter.ItemCount * (ParameterSorter.ItemGroup - 1)).Take(ParameterSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ParameterSorter), ParameterSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
-            Grid.AutoResizeColumns();
             Grid.AutoResizeRows();
+            Grid.AutoResizeColumns();
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName, ParameterRows.Count,
@@ -2846,7 +2838,7 @@ namespace EcfFileViews
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter ErrorSorter { get; }
-        private DataGridView Grid { get; } = new DataGridView();
+        private EcfDataGridView Grid { get; } = new EcfDataGridView();
         private ContextMenuStrip GridMenu { get; } = new ContextMenuStrip();
         private ToolStripMenuItem GridMenuItemShowInEditor { get; } = new ToolStripMenuItem();
         private ToolStripMenuItem GridMenuItemShowInFile { get; } = new ToolStripMenuItem();
@@ -2941,14 +2933,7 @@ namespace EcfFileViews
         // privates
         private void InitGridView()
         {
-            Grid.AllowUserToAddRows = false;
-            Grid.AllowUserToDeleteRows = false;
-            Grid.AllowDrop = false;
-            Grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            Grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            Grid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Grid.Dock = DockStyle.Fill;
-            Grid.EditMode = DataGridViewEditMode.EditProgrammatically;
 
             ErrorNumberColumn.HeaderText = TitleRecources.EcfErrorView_ErrorNumberColumn;
             ErrorGroupColumn.HeaderText = TitleRecources.EcfErrorView_ErrorGroupColumn;
@@ -3010,7 +2995,6 @@ namespace EcfFileViews
             Grid.Rows.AddRange(ErrorRows.Skip(ErrorSorter.ItemCount * (ErrorSorter.ItemGroup - 1)).Take(ErrorSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ErrorSorter), ErrorSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
             Grid.AutoResizeColumns();
-            Grid.AutoResizeRows();
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {2} - {3} {4} - {5} {6} - {7} {8}", ViewName,
@@ -3680,6 +3664,21 @@ namespace EcfFileViewTools
                 ItemGroupSelector.Value = selectedValue;
             }
             IsUpdating = false;
+        }
+    }
+    public class EcfDataGridView : DataGridView
+    {
+        public EcfDataGridView() : base()
+        {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+
+            AllowUserToAddRows = false;
+            AllowUserToDeleteRows = false;
+            AllowDrop = false;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            EditMode = DataGridViewEditMode.EditProgrammatically;
+            ShowEditingIcon = false;
         }
     }
 }

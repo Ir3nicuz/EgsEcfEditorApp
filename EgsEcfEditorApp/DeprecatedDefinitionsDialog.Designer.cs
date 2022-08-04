@@ -29,14 +29,11 @@ namespace EcfFileViews
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.OkButton = new System.Windows.Forms.Button();
             this.CompareFileLabel = new System.Windows.Forms.Label();
             this.DefinitionFileLabel = new System.Windows.Forms.Label();
-            this.DefinitionsGrid = new System.Windows.Forms.DataGridView();
             this.ButtonPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DefinitionsGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -85,36 +82,11 @@ namespace EcfFileViews
             this.DefinitionFileLabel.Text = "label1";
             this.DefinitionFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // DefinitionsGrid
-            // 
-            this.DefinitionsGrid.AllowUserToAddRows = false;
-            this.DefinitionsGrid.AllowUserToDeleteRows = false;
-            this.DefinitionsGrid.AllowUserToOrderColumns = true;
-            this.DefinitionsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.DefinitionsGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.DefinitionsGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.DefinitionsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DefinitionsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DefinitionsGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.DefinitionsGrid.Location = new System.Drawing.Point(0, 0);
-            this.DefinitionsGrid.Name = "DefinitionsGrid";
-            this.DefinitionsGrid.ReadOnly = true;
-            this.DefinitionsGrid.ShowEditingIcon = false;
-            this.DefinitionsGrid.Size = new System.Drawing.Size(784, 332);
-            this.DefinitionsGrid.TabIndex = 1;
-            // 
             // DeprecatedDefinitionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 361);
-            this.Controls.Add(this.DefinitionsGrid);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -125,7 +97,6 @@ namespace EcfFileViews
             this.Text = "DeprecatedFormatDialog";
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DefinitionsGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,7 +106,6 @@ namespace EcfFileViews
 
         private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
         private System.Windows.Forms.Button OkButton;
-        private System.Windows.Forms.DataGridView DefinitionsGrid;
         private System.Windows.Forms.Label CompareFileLabel;
         private System.Windows.Forms.Label DefinitionFileLabel;
     }

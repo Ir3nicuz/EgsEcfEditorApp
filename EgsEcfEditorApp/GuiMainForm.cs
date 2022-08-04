@@ -163,6 +163,7 @@ namespace EgsEcfEditorApp
         private void SettingOperations_GameVersionClicked(object sender, EventArgs evt)
         {
             UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = Convert.ToString(sender);
+            MessageBox.Show("test");
         }
         private void SettingOperations_OpenSettingsDialogClicked(object sender, EventArgs evt)
         {

@@ -29,11 +29,20 @@ namespace EcfFileViews
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.OkButton = new System.Windows.Forms.Button();
             this.CompareFileLabel = new System.Windows.Forms.Label();
             this.DefinitionFileLabel = new System.Windows.Forms.Label();
+            this.Grid = new EcfFileViewTools.EcfDataGridView();
+            this.NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsOptionalColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.HasValueColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.AllowBlankColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.IsForceEscapedColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ButtonPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -82,11 +91,89 @@ namespace EcfFileViews
             this.DefinitionFileLabel.Text = "label1";
             this.DefinitionFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // Grid
+            // 
+            this.Grid.AllowUserToAddRows = false;
+            this.Grid.AllowUserToDeleteRows = false;
+            this.Grid.AllowUserToOrderColumns = true;
+            this.Grid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.Grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NameColumn,
+            this.InfoColumn,
+            this.IsOptionalColumn,
+            this.HasValueColumn,
+            this.AllowBlankColumn,
+            this.IsForceEscapedColumn});
+            this.Grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.Grid.Location = new System.Drawing.Point(0, 0);
+            this.Grid.Name = "Grid";
+            this.Grid.ReadOnly = true;
+            this.Grid.ShowEditingIcon = false;
+            this.Grid.Size = new System.Drawing.Size(784, 332);
+            this.Grid.TabIndex = 1;
+            // 
+            // NameColumn
+            // 
+            this.NameColumn.HeaderText = "name";
+            this.NameColumn.Name = "NameColumn";
+            this.NameColumn.ReadOnly = true;
+            this.NameColumn.Width = 58;
+            // 
+            // InfoColumn
+            // 
+            this.InfoColumn.HeaderText = "info";
+            this.InfoColumn.Name = "InfoColumn";
+            this.InfoColumn.ReadOnly = true;
+            this.InfoColumn.Width = 49;
+            // 
+            // IsOptionalColumn
+            // 
+            this.IsOptionalColumn.HeaderText = "isOpt";
+            this.IsOptionalColumn.Name = "IsOptionalColumn";
+            this.IsOptionalColumn.ReadOnly = true;
+            this.IsOptionalColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.IsOptionalColumn.Width = 56;
+            // 
+            // HasValueColumn
+            // 
+            this.HasValueColumn.HeaderText = "hasVal";
+            this.HasValueColumn.Name = "HasValueColumn";
+            this.HasValueColumn.ReadOnly = true;
+            this.HasValueColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.HasValueColumn.Width = 64;
+            // 
+            // AllowBlankColumn
+            // 
+            this.AllowBlankColumn.HeaderText = "allowBlank";
+            this.AllowBlankColumn.Name = "AllowBlankColumn";
+            this.AllowBlankColumn.ReadOnly = true;
+            this.AllowBlankColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.AllowBlankColumn.Width = 83;
+            // 
+            // IsForceEscapedColumn
+            // 
+            this.IsForceEscapedColumn.HeaderText = "forced";
+            this.IsForceEscapedColumn.Name = "IsForceEscapedColumn";
+            this.IsForceEscapedColumn.ReadOnly = true;
+            this.IsForceEscapedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.IsForceEscapedColumn.Width = 62;
+            // 
             // DeprecatedDefinitionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 361);
+            this.Controls.Add(this.Grid);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -97,6 +184,7 @@ namespace EcfFileViews
             this.Text = "DeprecatedFormatDialog";
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,5 +196,12 @@ namespace EcfFileViews
         private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.Label CompareFileLabel;
         private System.Windows.Forms.Label DefinitionFileLabel;
+        private EcfFileViewTools.EcfDataGridView Grid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn InfoColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsOptionalColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn HasValueColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn AllowBlankColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsForceEscapedColumn;
     }
 }

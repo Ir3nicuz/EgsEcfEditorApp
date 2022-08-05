@@ -51,7 +51,7 @@ namespace EcfFileViews
             this.FilePathAndNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FilePathAndNameLabel.Location = new System.Drawing.Point(3, 0);
             this.FilePathAndNameLabel.Name = "FilePathAndNameLabel";
-            this.FilePathAndNameLabel.Size = new System.Drawing.Size(152, 26);
+            this.FilePathAndNameLabel.Size = new System.Drawing.Size(150, 26);
             this.FilePathAndNameLabel.TabIndex = 1;
             this.FilePathAndNameLabel.Text = "path";
             this.FilePathAndNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -59,10 +59,10 @@ namespace EcfFileViews
             // FilePathAndNameTextBox
             // 
             this.FilePathAndNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FilePathAndNameTextBox.Location = new System.Drawing.Point(161, 3);
+            this.FilePathAndNameTextBox.Location = new System.Drawing.Point(159, 3);
             this.FilePathAndNameTextBox.Name = "FilePathAndNameTextBox";
             this.FilePathAndNameTextBox.ReadOnly = true;
-            this.FilePathAndNameTextBox.Size = new System.Drawing.Size(365, 20);
+            this.FilePathAndNameTextBox.Size = new System.Drawing.Size(622, 20);
             this.FilePathAndNameTextBox.TabIndex = 1;
             // 
             // FormatDefinitionLabel
@@ -71,7 +71,7 @@ namespace EcfFileViews
             this.FormatDefinitionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormatDefinitionLabel.Location = new System.Drawing.Point(3, 26);
             this.FormatDefinitionLabel.Name = "FormatDefinitionLabel";
-            this.FormatDefinitionLabel.Size = new System.Drawing.Size(152, 26);
+            this.FormatDefinitionLabel.Size = new System.Drawing.Size(150, 26);
             this.FormatDefinitionLabel.TabIndex = 2;
             this.FormatDefinitionLabel.Text = "type";
             this.FormatDefinitionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -81,10 +81,10 @@ namespace EcfFileViews
             this.FormatDefinitionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormatDefinitionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.FormatDefinitionComboBox.FormattingEnabled = true;
-            this.FormatDefinitionComboBox.Location = new System.Drawing.Point(161, 29);
+            this.FormatDefinitionComboBox.Location = new System.Drawing.Point(159, 29);
             this.FormatDefinitionComboBox.MaxDropDownItems = 10;
             this.FormatDefinitionComboBox.Name = "FormatDefinitionComboBox";
-            this.FormatDefinitionComboBox.Size = new System.Drawing.Size(365, 21);
+            this.FormatDefinitionComboBox.Size = new System.Drawing.Size(622, 21);
             this.FormatDefinitionComboBox.Sorted = true;
             this.FormatDefinitionComboBox.TabIndex = 2;
             this.FormatDefinitionComboBox.SelectionChangeCommitted += new System.EventHandler(this.FormatDefinitionComboBox_SelectionChangeCommitted);
@@ -95,7 +95,7 @@ namespace EcfFileViews
             this.EncodingLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncodingLabel.Location = new System.Drawing.Point(3, 52);
             this.EncodingLabel.Name = "EncodingLabel";
-            this.EncodingLabel.Size = new System.Drawing.Size(152, 26);
+            this.EncodingLabel.Size = new System.Drawing.Size(150, 26);
             this.EncodingLabel.TabIndex = 3;
             this.EncodingLabel.Text = "encoding";
             this.EncodingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -105,10 +105,10 @@ namespace EcfFileViews
             this.EncodingComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EncodingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.EncodingComboBox.FormattingEnabled = true;
-            this.EncodingComboBox.Location = new System.Drawing.Point(161, 55);
+            this.EncodingComboBox.Location = new System.Drawing.Point(159, 55);
             this.EncodingComboBox.MaxDropDownItems = 10;
             this.EncodingComboBox.Name = "EncodingComboBox";
-            this.EncodingComboBox.Size = new System.Drawing.Size(365, 21);
+            this.EncodingComboBox.Size = new System.Drawing.Size(622, 21);
             this.EncodingComboBox.Sorted = true;
             this.EncodingComboBox.TabIndex = 3;
             this.EncodingComboBox.SelectedIndexChanged += new System.EventHandler(this.EncodingComboBox_SelectedIndexChanged);
@@ -119,7 +119,7 @@ namespace EcfFileViews
             this.NewLineSymbolLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NewLineSymbolLabel.Location = new System.Drawing.Point(3, 78);
             this.NewLineSymbolLabel.Name = "NewLineSymbolLabel";
-            this.NewLineSymbolLabel.Size = new System.Drawing.Size(152, 29);
+            this.NewLineSymbolLabel.Size = new System.Drawing.Size(150, 29);
             this.NewLineSymbolLabel.TabIndex = 3;
             this.NewLineSymbolLabel.Text = "newline";
             this.NewLineSymbolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -129,9 +129,9 @@ namespace EcfFileViews
             this.NewLineSymbolComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NewLineSymbolComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.NewLineSymbolComboBox.FormattingEnabled = true;
-            this.NewLineSymbolComboBox.Location = new System.Drawing.Point(161, 81);
+            this.NewLineSymbolComboBox.Location = new System.Drawing.Point(159, 81);
             this.NewLineSymbolComboBox.Name = "NewLineSymbolComboBox";
-            this.NewLineSymbolComboBox.Size = new System.Drawing.Size(365, 21);
+            this.NewLineSymbolComboBox.Size = new System.Drawing.Size(622, 21);
             this.NewLineSymbolComboBox.Sorted = true;
             this.NewLineSymbolComboBox.TabIndex = 4;
             this.NewLineSymbolComboBox.SelectedIndexChanged += new System.EventHandler(this.NewLineSymbolComboBox_SelectedIndexChanged);
@@ -145,13 +145,13 @@ namespace EcfFileViews
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.ButtonPanel.Location = new System.Drawing.Point(0, 107);
             this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(529, 29);
+            this.ButtonPanel.Size = new System.Drawing.Size(784, 29);
             this.ButtonPanel.TabIndex = 4;
             // 
             // AbortButton
             // 
             this.AbortButton.AutoSize = true;
-            this.AbortButton.Location = new System.Drawing.Point(451, 3);
+            this.AbortButton.Location = new System.Drawing.Point(706, 3);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 6;
@@ -162,7 +162,7 @@ namespace EcfFileViews
             // OkButton
             // 
             this.OkButton.AutoSize = true;
-            this.OkButton.Location = new System.Drawing.Point(370, 3);
+            this.OkButton.Location = new System.Drawing.Point(625, 3);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 5;
@@ -174,8 +174,8 @@ namespace EcfFileViews
             // 
             this.SettingsPanel.AutoSize = true;
             this.SettingsPanel.ColumnCount = 2;
-            this.SettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.SettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.SettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.SettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
             this.SettingsPanel.Controls.Add(this.NewLineSymbolComboBox, 1, 3);
             this.SettingsPanel.Controls.Add(this.EncodingComboBox, 1, 2);
             this.SettingsPanel.Controls.Add(this.FormatDefinitionComboBox, 1, 1);
@@ -193,14 +193,14 @@ namespace EcfFileViews
             this.SettingsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.SettingsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.SettingsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.SettingsPanel.Size = new System.Drawing.Size(529, 107);
+            this.SettingsPanel.Size = new System.Drawing.Size(784, 107);
             this.SettingsPanel.TabIndex = 5;
             // 
             // EcfFileOpenDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(529, 136);
+            this.ClientSize = new System.Drawing.Size(784, 136);
             this.Controls.Add(this.SettingsPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

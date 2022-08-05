@@ -57,7 +57,7 @@ namespace EcfFileViews
             this.ParameterItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemAttributesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemAttributesLabel = new System.Windows.Forms.Label();
-            this.ParameterItemAttributesGrid = new System.Windows.Forms.DataGridView();
+            this.ParameterItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
             this.ParameterItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ParameterItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParameterItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,10 +67,12 @@ namespace EcfFileViews
             this.ParameterItemIsOptionalCheckBox = new System.Windows.Forms.CheckBox();
             this.ParameterItemKeyComboBox = new System.Windows.Forms.ComboBox();
             this.ParameterItemInfoPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ParameterItemInfoLabel = new System.Windows.Forms.Label();
             this.ParameterItemCommentLabel = new System.Windows.Forms.Label();
-            this.ParameterItemInfoTextBox = new System.Windows.Forms.TextBox();
             this.ParameterItemCommentTextBox = new System.Windows.Forms.TextBox();
+            this.ParameterItemInfoLabel = new System.Windows.Forms.Label();
+            this.ParameterItemInfoTextBox = new System.Windows.Forms.TextBox();
+            this.ParameterItemParentLabel = new System.Windows.Forms.Label();
+            this.ParameterItemParentTextBox = new System.Windows.Forms.TextBox();
             this.ParameterItemValuesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemValuesLabel = new System.Windows.Forms.Label();
             this.ParameterItemValueButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -78,19 +80,19 @@ namespace EcfFileViews
             this.ParameterItemAddGroupButton = new System.Windows.Forms.Button();
             this.ParameterItemRemoveValueButton = new System.Windows.Forms.Button();
             this.ParameterItemAddValueButton = new System.Windows.Forms.Button();
-            this.ParameterItemValuesGrid = new System.Windows.Forms.DataGridView();
+            this.ParameterItemValuesGrid = new EcfFileViewTools.EcfDataGridView();
             this.BlockItemView = new System.Windows.Forms.TabPage();
             this.BlockItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemAttributesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemAttributesLabel = new System.Windows.Forms.Label();
-            this.BlockItemAttributesGrid = new System.Windows.Forms.DataGridView();
+            this.BlockItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
             this.BlockItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.BlockItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BlockItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BlockItem_AttributesGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BlockItemParametersPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemParametersLabel = new System.Windows.Forms.Label();
-            this.BlockItemParametersGrid = new System.Windows.Forms.DataGridView();
+            this.BlockItemParametersGrid = new EcfFileViewTools.EcfDataGridView();
             this.BlockItem_ParametersGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.BlockItem_ParametersGrid_InheritColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.BlockItem_ParametersGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -104,13 +106,11 @@ namespace EcfFileViews
             this.BlockItemPostMarkLabel = new System.Windows.Forms.Label();
             this.BlockItemPostMarkComboBox = new System.Windows.Forms.ComboBox();
             this.BlockItemAddDataPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.BlockItemCommentLabel = new System.Windows.Forms.Label();
-            this.BlockItemCommentTextBox = new System.Windows.Forms.TextBox();
             this.BlockItemInheritorLabel = new System.Windows.Forms.Label();
             this.BlockItemInheritorTextBox = new System.Windows.Forms.TextBox();
+            this.BlockItemCommentLabel = new System.Windows.Forms.Label();
+            this.BlockItemCommentTextBox = new System.Windows.Forms.TextBox();
             this.MessagePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.ParameterItemParentLabel = new System.Windows.Forms.Label();
-            this.ParameterItemParentTextBox = new System.Windows.Forms.TextBox();
             this.ButtonPanel.SuspendLayout();
             this.ViewPanel.SuspendLayout();
             this.SelectItemView.SuspendLayout();
@@ -372,7 +372,6 @@ namespace EcfFileViews
             this.ParameterItemAttributesGrid.AllowUserToAddRows = false;
             this.ParameterItemAttributesGrid.AllowUserToDeleteRows = false;
             this.ParameterItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ParameterItemAttributesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.ParameterItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ParameterItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ParameterItem_AttributesGrid_ActivateColumn,
@@ -449,7 +448,7 @@ namespace EcfFileViews
             this.ParameterItemKeyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemKeyLabel.Location = new System.Drawing.Point(3, 0);
             this.ParameterItemKeyLabel.Name = "ParameterItemKeyLabel";
-            this.ParameterItemKeyLabel.Size = new System.Drawing.Size(107, 27);
+            this.ParameterItemKeyLabel.Size = new System.Drawing.Size(107, 28);
             this.ParameterItemKeyLabel.TabIndex = 1;
             this.ParameterItemKeyLabel.Text = "key";
             this.ParameterItemKeyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -461,7 +460,7 @@ namespace EcfFileViews
             this.ParameterItemIsOptionalCheckBox.Enabled = false;
             this.ParameterItemIsOptionalCheckBox.Location = new System.Drawing.Point(116, 3);
             this.ParameterItemIsOptionalCheckBox.Name = "ParameterItemIsOptionalCheckBox";
-            this.ParameterItemIsOptionalCheckBox.Size = new System.Drawing.Size(107, 21);
+            this.ParameterItemIsOptionalCheckBox.Size = new System.Drawing.Size(107, 22);
             this.ParameterItemIsOptionalCheckBox.TabIndex = 2;
             this.ParameterItemIsOptionalCheckBox.Text = "isOpt";
             this.ParameterItemIsOptionalCheckBox.UseVisualStyleBackColor = true;
@@ -472,7 +471,7 @@ namespace EcfFileViews
             this.ParameterItemKeyComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemKeyComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ParameterItemKeyComboBox.FormattingEnabled = true;
-            this.ParameterItemKeyComboBox.Location = new System.Drawing.Point(3, 30);
+            this.ParameterItemKeyComboBox.Location = new System.Drawing.Point(3, 31);
             this.ParameterItemKeyComboBox.Name = "ParameterItemKeyComboBox";
             this.ParameterItemKeyComboBox.Size = new System.Drawing.Size(220, 21);
             this.ParameterItemKeyComboBox.Sorted = true;
@@ -502,44 +501,64 @@ namespace EcfFileViews
             this.ParameterItemInfoPanel.Size = new System.Drawing.Size(538, 84);
             this.ParameterItemInfoPanel.TabIndex = 1;
             // 
-            // ParameterItemInfoLabel
-            // 
-            this.ParameterItemInfoLabel.AutoSize = true;
-            this.ParameterItemInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemInfoLabel.Location = new System.Drawing.Point(3, 27);
-            this.ParameterItemInfoLabel.Name = "ParameterItemInfoLabel";
-            this.ParameterItemInfoLabel.Size = new System.Drawing.Size(101, 27);
-            this.ParameterItemInfoLabel.TabIndex = 0;
-            this.ParameterItemInfoLabel.Text = "info";
-            this.ParameterItemInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // ParameterItemCommentLabel
             // 
             this.ParameterItemCommentLabel.AutoSize = true;
             this.ParameterItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemCommentLabel.Location = new System.Drawing.Point(3, 54);
+            this.ParameterItemCommentLabel.Location = new System.Drawing.Point(3, 56);
             this.ParameterItemCommentLabel.Name = "ParameterItemCommentLabel";
-            this.ParameterItemCommentLabel.Size = new System.Drawing.Size(101, 30);
+            this.ParameterItemCommentLabel.Size = new System.Drawing.Size(101, 28);
             this.ParameterItemCommentLabel.TabIndex = 1;
             this.ParameterItemCommentLabel.Text = "comment";
             this.ParameterItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // ParameterItemCommentTextBox
+            // 
+            this.ParameterItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemCommentTextBox.Location = new System.Drawing.Point(110, 59);
+            this.ParameterItemCommentTextBox.Name = "ParameterItemCommentTextBox";
+            this.ParameterItemCommentTextBox.Size = new System.Drawing.Size(425, 20);
+            this.ParameterItemCommentTextBox.TabIndex = 3;
+            // 
+            // ParameterItemInfoLabel
+            // 
+            this.ParameterItemInfoLabel.AutoSize = true;
+            this.ParameterItemInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemInfoLabel.Location = new System.Drawing.Point(3, 28);
+            this.ParameterItemInfoLabel.Name = "ParameterItemInfoLabel";
+            this.ParameterItemInfoLabel.Size = new System.Drawing.Size(101, 28);
+            this.ParameterItemInfoLabel.TabIndex = 0;
+            this.ParameterItemInfoLabel.Text = "info";
+            this.ParameterItemInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // ParameterItemInfoTextBox
             // 
             this.ParameterItemInfoTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemInfoTextBox.Location = new System.Drawing.Point(110, 30);
+            this.ParameterItemInfoTextBox.Location = new System.Drawing.Point(110, 31);
             this.ParameterItemInfoTextBox.Name = "ParameterItemInfoTextBox";
             this.ParameterItemInfoTextBox.ReadOnly = true;
             this.ParameterItemInfoTextBox.Size = new System.Drawing.Size(425, 20);
             this.ParameterItemInfoTextBox.TabIndex = 2;
             // 
-            // ParameterItemCommentTextBox
+            // ParameterItemParentLabel
             // 
-            this.ParameterItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemCommentTextBox.Location = new System.Drawing.Point(110, 57);
-            this.ParameterItemCommentTextBox.Name = "ParameterItemCommentTextBox";
-            this.ParameterItemCommentTextBox.Size = new System.Drawing.Size(425, 20);
-            this.ParameterItemCommentTextBox.TabIndex = 3;
+            this.ParameterItemParentLabel.AutoSize = true;
+            this.ParameterItemParentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemParentLabel.Location = new System.Drawing.Point(3, 0);
+            this.ParameterItemParentLabel.Name = "ParameterItemParentLabel";
+            this.ParameterItemParentLabel.Size = new System.Drawing.Size(101, 28);
+            this.ParameterItemParentLabel.TabIndex = 4;
+            this.ParameterItemParentLabel.Text = "parent";
+            this.ParameterItemParentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ParameterItemParentTextBox
+            // 
+            this.ParameterItemParentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemParentTextBox.Location = new System.Drawing.Point(110, 3);
+            this.ParameterItemParentTextBox.Name = "ParameterItemParentTextBox";
+            this.ParameterItemParentTextBox.ReadOnly = true;
+            this.ParameterItemParentTextBox.Size = new System.Drawing.Size(425, 20);
+            this.ParameterItemParentTextBox.TabIndex = 5;
             // 
             // ParameterItemValuesPanel
             // 
@@ -734,7 +753,6 @@ namespace EcfFileViews
             this.BlockItemAttributesGrid.AllowUserToAddRows = false;
             this.BlockItemAttributesGrid.AllowUserToDeleteRows = false;
             this.BlockItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.BlockItemAttributesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.BlockItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.BlockItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BlockItem_AttributesGrid_ActivateColumn,
@@ -821,7 +839,6 @@ namespace EcfFileViews
             this.BlockItemParametersGrid.AllowUserToAddRows = false;
             this.BlockItemParametersGrid.AllowUserToDeleteRows = false;
             this.BlockItemParametersGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.BlockItemParametersGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.BlockItemParametersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.BlockItemParametersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BlockItem_ParametersGrid_ActivateColumn,
@@ -830,6 +847,7 @@ namespace EcfFileViews
             this.BlockItem_ParametersGrid_InfoColumn,
             this.BlockItem_ParametersGrid_CommentColumn});
             this.BlockItemParametersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlockItemParametersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.BlockItemParametersGrid.Location = new System.Drawing.Point(3, 38);
             this.BlockItemParametersGrid.MultiSelect = false;
             this.BlockItemParametersGrid.Name = "BlockItemParametersGrid";
@@ -992,32 +1010,13 @@ namespace EcfFileViews
             this.BlockItemAddDataPanel.Size = new System.Drawing.Size(538, 84);
             this.BlockItemAddDataPanel.TabIndex = 3;
             // 
-            // BlockItemCommentLabel
-            // 
-            this.BlockItemCommentLabel.AutoSize = true;
-            this.BlockItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemCommentLabel.Location = new System.Drawing.Point(3, 54);
-            this.BlockItemCommentLabel.Name = "BlockItemCommentLabel";
-            this.BlockItemCommentLabel.Size = new System.Drawing.Size(101, 30);
-            this.BlockItemCommentLabel.TabIndex = 1;
-            this.BlockItemCommentLabel.Text = "comment";
-            this.BlockItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // BlockItemCommentTextBox
-            // 
-            this.BlockItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(110, 57);
-            this.BlockItemCommentTextBox.Name = "BlockItemCommentTextBox";
-            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(425, 20);
-            this.BlockItemCommentTextBox.TabIndex = 3;
-            // 
             // BlockItemInheritorLabel
             // 
             this.BlockItemInheritorLabel.AutoSize = true;
             this.BlockItemInheritorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemInheritorLabel.Location = new System.Drawing.Point(3, 0);
             this.BlockItemInheritorLabel.Name = "BlockItemInheritorLabel";
-            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(101, 27);
+            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(101, 28);
             this.BlockItemInheritorLabel.TabIndex = 4;
             this.BlockItemInheritorLabel.Text = "inher";
             this.BlockItemInheritorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1031,6 +1030,25 @@ namespace EcfFileViews
             this.BlockItemInheritorTextBox.Size = new System.Drawing.Size(425, 20);
             this.BlockItemInheritorTextBox.TabIndex = 5;
             // 
+            // BlockItemCommentLabel
+            // 
+            this.BlockItemCommentLabel.AutoSize = true;
+            this.BlockItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlockItemCommentLabel.Location = new System.Drawing.Point(3, 56);
+            this.BlockItemCommentLabel.Name = "BlockItemCommentLabel";
+            this.BlockItemCommentLabel.Size = new System.Drawing.Size(101, 28);
+            this.BlockItemCommentLabel.TabIndex = 1;
+            this.BlockItemCommentLabel.Text = "comment";
+            this.BlockItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BlockItemCommentTextBox
+            // 
+            this.BlockItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(110, 59);
+            this.BlockItemCommentTextBox.Name = "BlockItemCommentTextBox";
+            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(425, 20);
+            this.BlockItemCommentTextBox.TabIndex = 3;
+            // 
             // MessagePanel
             // 
             this.MessagePanel.AutoSize = true;
@@ -1039,26 +1057,6 @@ namespace EcfFileViews
             this.MessagePanel.Name = "MessagePanel";
             this.MessagePanel.Size = new System.Drawing.Size(784, 0);
             this.MessagePanel.TabIndex = 1;
-            // 
-            // ParameterItemParentLabel
-            // 
-            this.ParameterItemParentLabel.AutoSize = true;
-            this.ParameterItemParentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemParentLabel.Location = new System.Drawing.Point(3, 0);
-            this.ParameterItemParentLabel.Name = "ParameterItemParentLabel";
-            this.ParameterItemParentLabel.Size = new System.Drawing.Size(101, 27);
-            this.ParameterItemParentLabel.TabIndex = 4;
-            this.ParameterItemParentLabel.Text = "parent";
-            this.ParameterItemParentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ParameterItemParentTextBox
-            // 
-            this.ParameterItemParentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemParentTextBox.Location = new System.Drawing.Point(110, 3);
-            this.ParameterItemParentTextBox.Name = "ParameterItemParentTextBox";
-            this.ParameterItemParentTextBox.ReadOnly = true;
-            this.ParameterItemParentTextBox.Size = new System.Drawing.Size(425, 20);
-            this.ParameterItemParentTextBox.TabIndex = 5;
             // 
             // EcfItemEditingDialog
             // 
@@ -1153,10 +1151,10 @@ namespace EcfFileViews
         private System.Windows.Forms.TextBox ParameterItemCommentTextBox;
         private System.Windows.Forms.TableLayoutPanel ParameterItemValuesPanel;
         private System.Windows.Forms.Label ParameterItemValuesLabel;
-        private System.Windows.Forms.DataGridView ParameterItemAttributesGrid;
+        private EcfFileViewTools.EcfDataGridView ParameterItemAttributesGrid;
         private System.Windows.Forms.FlowLayoutPanel ParameterItemValueButtonPanel;
         private System.Windows.Forms.Button ParameterItemRemoveGroupButton;
-        private System.Windows.Forms.DataGridView ParameterItemValuesGrid;
+        private EcfFileViewTools.EcfDataGridView ParameterItemValuesGrid;
         private System.Windows.Forms.Button ParameterItemAddGroupButton;
         private System.Windows.Forms.Button ParameterItemRemoveValueButton;
         private System.Windows.Forms.Button ParameterItemAddValueButton;
@@ -1164,13 +1162,13 @@ namespace EcfFileViews
         private System.Windows.Forms.TableLayoutPanel BlockItemAttributesPanel;
         private System.Windows.Forms.TableLayoutPanel BlockItemParametersPanel;
         private System.Windows.Forms.Label BlockItemAttributesLabel;
-        private System.Windows.Forms.DataGridView BlockItemAttributesGrid;
+        private EcfFileViewTools.EcfDataGridView BlockItemAttributesGrid;
         private System.Windows.Forms.Label BlockItemParametersLabel;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ParameterItem_AttributesGrid_ActivateColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ParameterItem_AttributesGrid_NameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ParameterItem_AttributesGrid_ValueColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ParameterItem_AttributesGrid_InfoColumn;
-        private System.Windows.Forms.DataGridView BlockItemParametersGrid;
+        private EcfFileViewTools.EcfDataGridView BlockItemParametersGrid;
         private System.Windows.Forms.TableLayoutPanel BlockItemTypePanel;
         private System.Windows.Forms.TableLayoutPanel BlockItemAddDataPanel;
         private System.Windows.Forms.Label BlockItemDataTypeLabel;

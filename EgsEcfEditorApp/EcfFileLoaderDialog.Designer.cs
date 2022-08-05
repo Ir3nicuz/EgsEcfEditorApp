@@ -40,7 +40,7 @@ namespace EgsEcfEditorApp
             this.AbortButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.AbortButton.AutoSize = true;
             this.ProgressPanel.SetColumnSpan(this.AbortButton, 2);
-            this.AbortButton.Location = new System.Drawing.Point(204, 85);
+            this.AbortButton.Location = new System.Drawing.Point(354, 85);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 1;
@@ -55,7 +55,7 @@ namespace EgsEcfEditorApp
             this.FilePathAndNameTextBox.Location = new System.Drawing.Point(3, 3);
             this.FilePathAndNameTextBox.Name = "FilePathAndNameTextBox";
             this.FilePathAndNameTextBox.ReadOnly = true;
-            this.FilePathAndNameTextBox.Size = new System.Drawing.Size(478, 20);
+            this.FilePathAndNameTextBox.Size = new System.Drawing.Size(778, 20);
             this.FilePathAndNameTextBox.TabIndex = 2;
             // 
             // ProgressPanel
@@ -74,14 +74,14 @@ namespace EgsEcfEditorApp
             this.ProgressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.ProgressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ProgressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.ProgressPanel.Size = new System.Drawing.Size(484, 111);
+            this.ProgressPanel.Size = new System.Drawing.Size(784, 111);
             this.ProgressPanel.TabIndex = 3;
             // 
             // EcfFileLoaderDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 111);
+            this.ClientSize = new System.Drawing.Size(784, 111);
             this.Controls.Add(this.ProgressPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;

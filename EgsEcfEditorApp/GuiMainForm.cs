@@ -2847,8 +2847,8 @@ namespace EcfFileViews
         private DataGridViewTextBoxColumn ErrorNumberColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn ErrorGroupColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn ErrorTypeColumn { get; } = new DataGridViewTextBoxColumn();
-        private DataGridViewTextBoxColumn ElementNameColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn LineNumberColumn { get; } = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ElementNameColumn { get; } = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn ErrorInfoColumn { get; } = new DataGridViewTextBoxColumn();
 
         public EcfErrorView(string headline, EgsEcfFile file, ResizeableBorders mode, VisibleItemCount sorterItemCount) : base(headline, file, mode)
@@ -2938,8 +2938,8 @@ namespace EcfFileViews
             ErrorNumberColumn.HeaderText = TitleRecources.EcfErrorView_ErrorNumberColumn;
             ErrorGroupColumn.HeaderText = TitleRecources.EcfErrorView_ErrorGroupColumn;
             ErrorTypeColumn.HeaderText = TitleRecources.Generic_Type;
-            ElementNameColumn.HeaderText = TitleRecources.Generic_Name;
             LineNumberColumn.HeaderText = TitleRecources.Generic_LineNumber;
+            ElementNameColumn.HeaderText = TitleRecources.Generic_Name;
             ErrorInfoColumn.HeaderText = TitleRecources.Generic_Info;
 
             Grid.CellMouseClick += Grid_CellMouseClick;
@@ -2947,8 +2947,8 @@ namespace EcfFileViews
             Grid.Columns.Add(ErrorNumberColumn);
             Grid.Columns.Add(ErrorGroupColumn);
             Grid.Columns.Add(ErrorTypeColumn);
-            Grid.Columns.Add(ElementNameColumn);
             Grid.Columns.Add(LineNumberColumn);
+            Grid.Columns.Add(ElementNameColumn);
             Grid.Columns.Add(ErrorInfoColumn);
         }
         private void BuildGridViewRows()
@@ -3018,9 +3018,9 @@ namespace EcfFileViews
 
             private DataGridViewTextBoxCell ErrorNumberCell { get; }
             private DataGridViewTextBoxCell ErrorGroupCell { get; }
+            private DataGridViewTextBoxCell ErrorTypeCell { get; }
             private DataGridViewTextBoxCell LineNumberCell { get; }
             private DataGridViewTextBoxCell ElementNameCell { get; }
-            private DataGridViewTextBoxCell ErrorTypeCell { get; }
             private DataGridViewTextBoxCell ErrorInfoCell { get; }
 
             public EcfErrorRow(int number, EcfError error) : base()
@@ -3030,15 +3030,15 @@ namespace EcfFileViews
                 ErrorNumberCell = new DataGridViewTextBoxCell() { Value = number };
                 ErrorGroupCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Group) };
                 ErrorTypeCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Type) };
-                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullName() ?? string.Empty };
                 LineNumberCell = new DataGridViewTextBoxCell() { Value = error.IsFromParsing() ? error.LineInFile.ToString() : string.Empty };
+                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullName() ?? string.Empty };
                 ErrorInfoCell = new DataGridViewTextBoxCell() { Value = error.Info };
 
                 Cells.Add(ErrorNumberCell);
                 Cells.Add(ErrorGroupCell);
                 Cells.Add(ErrorTypeCell);
-                Cells.Add(ElementNameCell);
                 Cells.Add(LineNumberCell);
+                Cells.Add(ElementNameCell);
                 Cells.Add(ErrorInfoCell);
             }
         }

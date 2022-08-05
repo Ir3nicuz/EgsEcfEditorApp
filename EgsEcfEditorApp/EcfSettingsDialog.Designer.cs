@@ -29,10 +29,10 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("general");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("creation");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("filter");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("sorter");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -40,18 +40,16 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView = new System.Windows.Forms.TreeView();
             this.SettingPanelsTabControl = new System.Windows.Forms.TabControl();
             this.GeneralTabPage = new System.Windows.Forms.TabPage();
-            this.CreationTabPage = new System.Windows.Forms.TabPage();
-            this.FilterTabPage = new System.Windows.Forms.TabPage();
-            this.SorterTabPage = new System.Windows.Forms.TabPage();
-            this.SettingsBorderPanel = new System.Windows.Forms.Panel();
             this.GeneralSettingsPanel = new System.Windows.Forms.TableLayoutPanel();
             this.GameVersionFolderLabel = new System.Windows.Forms.Label();
             this.GameVersionFolderComboBox = new System.Windows.Forms.ComboBox();
+            this.CreationTabPage = new System.Windows.Forms.TabPage();
             this.CreationPanel = new System.Windows.Forms.TableLayoutPanel();
             this.WriteOnlyValidItemsCheckBox = new System.Windows.Forms.CheckBox();
             this.InvalidateParentsOnErrorCheckBox = new System.Windows.Forms.CheckBox();
             this.WriteOnlyValidItemsLabel = new System.Windows.Forms.Label();
             this.InvalidateParentsOnErrorLabel = new System.Windows.Forms.Label();
+            this.FilterTabPage = new System.Windows.Forms.TabPage();
             this.FilterPanel = new System.Windows.Forms.TableLayoutPanel();
             this.TreeViewFilterCommentsInitActiveLabel = new System.Windows.Forms.Label();
             this.TreeViewFilterParametersInitActiveLabel = new System.Windows.Forms.Label();
@@ -59,6 +57,7 @@ namespace EgsEcfEditorApp
             this.TreeViewFilterCommentsInitActiveCheckBox = new System.Windows.Forms.CheckBox();
             this.TreeViewFilterParametersInitActiveCheckBox = new System.Windows.Forms.CheckBox();
             this.TreeViewFilterDataBlocksInitActiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.SorterTabPage = new System.Windows.Forms.TabPage();
             this.SorterPanel = new System.Windows.Forms.TableLayoutPanel();
             this.TreeViewSorterInitCountLabel = new System.Windows.Forms.Label();
             this.ParameterViewSorterInitCountLabel = new System.Windows.Forms.Label();
@@ -66,17 +65,20 @@ namespace EgsEcfEditorApp
             this.TreeViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ParameterViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ErrorViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
+            this.SettingsBorderPanel = new System.Windows.Forms.Panel();
+            this.AllowFallbackToParsedDataLabel = new System.Windows.Forms.Label();
+            this.AllowFallbackToParsedDataCheckBox = new System.Windows.Forms.CheckBox();
             this.ButtonPanel.SuspendLayout();
             this.SettingPanelsTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
-            this.CreationTabPage.SuspendLayout();
-            this.FilterTabPage.SuspendLayout();
-            this.SorterTabPage.SuspendLayout();
-            this.SettingsBorderPanel.SuspendLayout();
             this.GeneralSettingsPanel.SuspendLayout();
+            this.CreationTabPage.SuspendLayout();
             this.CreationPanel.SuspendLayout();
+            this.FilterTabPage.SuspendLayout();
             this.FilterPanel.SuspendLayout();
+            this.SorterTabPage.SuspendLayout();
             this.SorterPanel.SuspendLayout();
+            this.SettingsBorderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -132,19 +134,19 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode45.Name = "GeneralNode";
-            treeNode45.Text = "general";
-            treeNode46.Name = "CreationNode";
-            treeNode46.Text = "creation";
-            treeNode47.Name = "FilterNode";
-            treeNode47.Text = "filter";
-            treeNode48.Name = "SorterNode";
-            treeNode48.Text = "sorter";
+            treeNode5.Name = "GeneralNode";
+            treeNode5.Text = "general";
+            treeNode6.Name = "CreationNode";
+            treeNode6.Text = "creation";
+            treeNode7.Name = "FilterNode";
+            treeNode7.Text = "filter";
+            treeNode8.Name = "SorterNode";
+            treeNode8.Text = "sorter";
             this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode45,
-            treeNode46,
-            treeNode47,
-            treeNode48});
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
@@ -172,48 +174,6 @@ namespace EgsEcfEditorApp
             this.GeneralTabPage.TabIndex = 0;
             this.GeneralTabPage.Text = "general";
             this.GeneralTabPage.UseVisualStyleBackColor = true;
-            // 
-            // CreationTabPage
-            // 
-            this.CreationTabPage.Controls.Add(this.CreationPanel);
-            this.CreationTabPage.Location = new System.Drawing.Point(4, 22);
-            this.CreationTabPage.Name = "CreationTabPage";
-            this.CreationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.CreationTabPage.Size = new System.Drawing.Size(552, 336);
-            this.CreationTabPage.TabIndex = 1;
-            this.CreationTabPage.Text = "creation";
-            this.CreationTabPage.UseVisualStyleBackColor = true;
-            // 
-            // FilterTabPage
-            // 
-            this.FilterTabPage.Controls.Add(this.FilterPanel);
-            this.FilterTabPage.Location = new System.Drawing.Point(4, 22);
-            this.FilterTabPage.Name = "FilterTabPage";
-            this.FilterTabPage.Size = new System.Drawing.Size(552, 336);
-            this.FilterTabPage.TabIndex = 2;
-            this.FilterTabPage.Text = "filter";
-            this.FilterTabPage.UseVisualStyleBackColor = true;
-            // 
-            // SorterTabPage
-            // 
-            this.SorterTabPage.Controls.Add(this.SorterPanel);
-            this.SorterTabPage.Location = new System.Drawing.Point(4, 22);
-            this.SorterTabPage.Name = "SorterTabPage";
-            this.SorterTabPage.Size = new System.Drawing.Size(552, 336);
-            this.SorterTabPage.TabIndex = 3;
-            this.SorterTabPage.Text = "sorter";
-            this.SorterTabPage.UseVisualStyleBackColor = true;
-            // 
-            // SettingsBorderPanel
-            // 
-            this.SettingsBorderPanel.AutoSize = true;
-            this.SettingsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsBorderPanel.Controls.Add(this.SettingPanelsTabControl);
-            this.SettingsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsBorderPanel.Location = new System.Drawing.Point(150, 0);
-            this.SettingsBorderPanel.Name = "SettingsBorderPanel";
-            this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
-            this.SettingsBorderPanel.TabIndex = 3;
             // 
             // GeneralSettingsPanel
             // 
@@ -256,6 +216,17 @@ namespace EgsEcfEditorApp
             this.GameVersionFolderComboBox.TabIndex = 1;
             this.GameVersionFolderComboBox.SelectionChangeCommitted += new System.EventHandler(this.GameVersionFolderComboBox_SelectionChangeCommitted);
             // 
+            // CreationTabPage
+            // 
+            this.CreationTabPage.Controls.Add(this.CreationPanel);
+            this.CreationTabPage.Location = new System.Drawing.Point(4, 22);
+            this.CreationTabPage.Name = "CreationTabPage";
+            this.CreationTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.CreationTabPage.Size = new System.Drawing.Size(552, 336);
+            this.CreationTabPage.TabIndex = 1;
+            this.CreationTabPage.Text = "creation";
+            this.CreationTabPage.UseVisualStyleBackColor = true;
+            // 
             // CreationPanel
             // 
             this.CreationPanel.AutoSize = true;
@@ -266,11 +237,14 @@ namespace EgsEcfEditorApp
             this.CreationPanel.Controls.Add(this.InvalidateParentsOnErrorCheckBox, 1, 1);
             this.CreationPanel.Controls.Add(this.WriteOnlyValidItemsLabel, 0, 0);
             this.CreationPanel.Controls.Add(this.InvalidateParentsOnErrorLabel, 0, 1);
+            this.CreationPanel.Controls.Add(this.AllowFallbackToParsedDataLabel, 0, 2);
+            this.CreationPanel.Controls.Add(this.AllowFallbackToParsedDataCheckBox, 1, 2);
             this.CreationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CreationPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.CreationPanel.Location = new System.Drawing.Point(3, 3);
             this.CreationPanel.Name = "CreationPanel";
-            this.CreationPanel.RowCount = 3;
+            this.CreationPanel.RowCount = 4;
+            this.CreationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CreationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CreationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CreationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -288,12 +262,12 @@ namespace EgsEcfEditorApp
             this.WriteOnlyValidItemsCheckBox.UseVisualStyleBackColor = true;
             this.WriteOnlyValidItemsCheckBox.Click += new System.EventHandler(this.WriteOnlyValidItemsCheckBox_Click);
             // 
-            // InvalidateParentOnErrorCheckBox
+            // InvalidateParentsOnErrorCheckBox
             // 
             this.InvalidateParentsOnErrorCheckBox.AutoSize = true;
             this.InvalidateParentsOnErrorCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InvalidateParentsOnErrorCheckBox.Location = new System.Drawing.Point(276, 23);
-            this.InvalidateParentsOnErrorCheckBox.Name = "InvalidateParentOnErrorCheckBox";
+            this.InvalidateParentsOnErrorCheckBox.Name = "InvalidateParentsOnErrorCheckBox";
             this.InvalidateParentsOnErrorCheckBox.Size = new System.Drawing.Size(267, 14);
             this.InvalidateParentsOnErrorCheckBox.TabIndex = 1;
             this.InvalidateParentsOnErrorCheckBox.UseVisualStyleBackColor = true;
@@ -310,16 +284,26 @@ namespace EgsEcfEditorApp
             this.WriteOnlyValidItemsLabel.Text = "writeonlyvalid";
             this.WriteOnlyValidItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // InvalidateParentOnErrorLabel
+            // InvalidateParentsOnErrorLabel
             // 
             this.InvalidateParentsOnErrorLabel.AutoSize = true;
             this.InvalidateParentsOnErrorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InvalidateParentsOnErrorLabel.Location = new System.Drawing.Point(3, 20);
-            this.InvalidateParentsOnErrorLabel.Name = "InvalidateParentOnErrorLabel";
+            this.InvalidateParentsOnErrorLabel.Name = "InvalidateParentsOnErrorLabel";
             this.InvalidateParentsOnErrorLabel.Size = new System.Drawing.Size(267, 20);
             this.InvalidateParentsOnErrorLabel.TabIndex = 3;
             this.InvalidateParentsOnErrorLabel.Text = "invalidate parent";
             this.InvalidateParentsOnErrorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // FilterTabPage
+            // 
+            this.FilterTabPage.Controls.Add(this.FilterPanel);
+            this.FilterTabPage.Location = new System.Drawing.Point(4, 22);
+            this.FilterTabPage.Name = "FilterTabPage";
+            this.FilterTabPage.Size = new System.Drawing.Size(552, 336);
+            this.FilterTabPage.TabIndex = 2;
+            this.FilterTabPage.Text = "filter";
+            this.FilterTabPage.UseVisualStyleBackColor = true;
             // 
             // FilterPanel
             // 
@@ -411,6 +395,16 @@ namespace EgsEcfEditorApp
             this.TreeViewFilterDataBlocksInitActiveCheckBox.UseVisualStyleBackColor = true;
             this.TreeViewFilterDataBlocksInitActiveCheckBox.Click += new System.EventHandler(this.TreeViewFilterDataBlocksInitActiveCheckBox_Click);
             // 
+            // SorterTabPage
+            // 
+            this.SorterTabPage.Controls.Add(this.SorterPanel);
+            this.SorterTabPage.Location = new System.Drawing.Point(4, 22);
+            this.SorterTabPage.Name = "SorterTabPage";
+            this.SorterTabPage.Size = new System.Drawing.Size(552, 336);
+            this.SorterTabPage.TabIndex = 3;
+            this.SorterTabPage.Text = "sorter";
+            this.SorterTabPage.UseVisualStyleBackColor = true;
+            // 
             // SorterPanel
             // 
             this.SorterPanel.AutoSize = true;
@@ -501,6 +495,39 @@ namespace EgsEcfEditorApp
             this.ErrorViewSorterInitCountComboBox.TabIndex = 5;
             this.ErrorViewSorterInitCountComboBox.SelectionChangeCommitted += new System.EventHandler(this.ErrorViewSorterInitCountComboBox_SelectionChangeCommitted);
             // 
+            // SettingsBorderPanel
+            // 
+            this.SettingsBorderPanel.AutoSize = true;
+            this.SettingsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsBorderPanel.Controls.Add(this.SettingPanelsTabControl);
+            this.SettingsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SettingsBorderPanel.Location = new System.Drawing.Point(150, 0);
+            this.SettingsBorderPanel.Name = "SettingsBorderPanel";
+            this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
+            this.SettingsBorderPanel.TabIndex = 3;
+            // 
+            // AllowFallbackToParsedDataLabel
+            // 
+            this.AllowFallbackToParsedDataLabel.AutoSize = true;
+            this.AllowFallbackToParsedDataLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AllowFallbackToParsedDataLabel.Location = new System.Drawing.Point(3, 40);
+            this.AllowFallbackToParsedDataLabel.Name = "AllowFallbackToParsedDataLabel";
+            this.AllowFallbackToParsedDataLabel.Size = new System.Drawing.Size(267, 20);
+            this.AllowFallbackToParsedDataLabel.TabIndex = 4;
+            this.AllowFallbackToParsedDataLabel.Text = "allow falback";
+            this.AllowFallbackToParsedDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // AllowFallbackToParsedDataCheckBox
+            // 
+            this.AllowFallbackToParsedDataCheckBox.AutoSize = true;
+            this.AllowFallbackToParsedDataCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AllowFallbackToParsedDataCheckBox.Location = new System.Drawing.Point(276, 43);
+            this.AllowFallbackToParsedDataCheckBox.Name = "AllowFallbackToParsedDataCheckBox";
+            this.AllowFallbackToParsedDataCheckBox.Size = new System.Drawing.Size(267, 14);
+            this.AllowFallbackToParsedDataCheckBox.TabIndex = 5;
+            this.AllowFallbackToParsedDataCheckBox.UseVisualStyleBackColor = true;
+            this.AllowFallbackToParsedDataCheckBox.Click += new System.EventHandler(this.AllowFallbackToParsedDataCheckBox_Click);
+            // 
             // EcfSettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -523,21 +550,21 @@ namespace EgsEcfEditorApp
             this.SettingPanelsTabControl.ResumeLayout(false);
             this.GeneralTabPage.ResumeLayout(false);
             this.GeneralTabPage.PerformLayout();
-            this.CreationTabPage.ResumeLayout(false);
-            this.CreationTabPage.PerformLayout();
-            this.FilterTabPage.ResumeLayout(false);
-            this.FilterTabPage.PerformLayout();
-            this.SorterTabPage.ResumeLayout(false);
-            this.SorterTabPage.PerformLayout();
-            this.SettingsBorderPanel.ResumeLayout(false);
             this.GeneralSettingsPanel.ResumeLayout(false);
             this.GeneralSettingsPanel.PerformLayout();
+            this.CreationTabPage.ResumeLayout(false);
+            this.CreationTabPage.PerformLayout();
             this.CreationPanel.ResumeLayout(false);
             this.CreationPanel.PerformLayout();
+            this.FilterTabPage.ResumeLayout(false);
+            this.FilterTabPage.PerformLayout();
             this.FilterPanel.ResumeLayout(false);
             this.FilterPanel.PerformLayout();
+            this.SorterTabPage.ResumeLayout(false);
+            this.SorterTabPage.PerformLayout();
             this.SorterPanel.ResumeLayout(false);
             this.SorterPanel.PerformLayout();
+            this.SettingsBorderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -578,5 +605,7 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.ComboBox TreeViewSorterInitCountComboBox;
         private System.Windows.Forms.ComboBox ParameterViewSorterInitCountComboBox;
         private System.Windows.Forms.ComboBox ErrorViewSorterInitCountComboBox;
+        private System.Windows.Forms.Label AllowFallbackToParsedDataLabel;
+        private System.Windows.Forms.CheckBox AllowFallbackToParsedDataCheckBox;
     }
 }

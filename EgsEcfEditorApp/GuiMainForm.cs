@@ -407,8 +407,9 @@ namespace EgsEcfEditorApp
                 try
                 {
                     ecf.File.Save(
-                        UserSettings.Default.EgsEcfEditorApp_WriteOnlyValidItems, 
-                        UserSettings.Default.EgsEcfEditorApp_InvalidateParentsOnError);
+                        UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
+                        UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
+                        UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
                     ecf.UpdateTabDescription();
                     ecf.UpdateErrorView();
                 }
@@ -430,8 +431,9 @@ namespace EgsEcfEditorApp
                     try
                     {
                         ecf.File.Save(SaveDialog.FilePathAndName, 
-                            UserSettings.Default.EgsEcfEditorApp_WriteOnlyValidItems, 
-                            UserSettings.Default.EgsEcfEditorApp_InvalidateParentsOnError);
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
                         ecf.UpdateTabDescription();
                         ecf.UpdateErrorView();
                     }
@@ -455,8 +457,9 @@ namespace EgsEcfEditorApp
                     if (tab is EcfTabPage ecf && ecf.File.HasUnsavedData)
                     {
                         ecf.File.Save(
-                            UserSettings.Default.EgsEcfEditorApp_WriteOnlyValidItems, 
-                            UserSettings.Default.EgsEcfEditorApp_InvalidateParentsOnError);
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
+                            UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
                         ecf.UpdateTabDescription();
                         ecf.UpdateErrorView();
                     }
@@ -1564,7 +1567,6 @@ namespace EcfFileViews
             }
         }
     }
-
     public class EcfFileContainer : Panel
     {
         public EcfFileContainer() : base()
@@ -2016,7 +2018,7 @@ namespace EcfFileViews
                     if (node.PreparedNodes.Count > 0) { node.Nodes.Add(new EcfTreeNode("")); }
                 }
             }
-            else
+            else if(item != null)
             {
                 node = new EcfTreeNode(item.ToString());
             }
@@ -2533,6 +2535,7 @@ namespace EcfFileViews
                 Cells.Add(CommentsCell);
             }
 
+            // publics
             public bool IsInherited()
             {
                 return Convert.ToBoolean(IsInheritedCell.Value);
@@ -2546,6 +2549,7 @@ namespace EcfFileViews
                 return Convert.ToString(ParentNameCell.Value);
             }
 
+            // privates
             private string BuildValueText()
             {
                 string valueSeperator = string.Format("{0} ", TextRecources.EcfParameterView_ValueSeperator);
@@ -2908,7 +2912,9 @@ namespace EcfFileViews
                     SelectedError = row.Error;
                     if (evt.Button == MouseButtons.Right)
                     {
+                        GridMenuItemShowInEditor.Visible = row.Error.Group != EcfErrorGroups.Structural;
                         GridMenuItemShowInFile.Visible = row.Error.IsFromParsing();
+                        
                         Point cellLocation = Grid.GetCellDisplayRectangle(evt.ColumnIndex, evt.RowIndex, false).Location;
                         GridMenu.Show(Grid, new Point(cellLocation.X + evt.X, cellLocation.Y + evt.Y));
                     }
@@ -2997,11 +3003,12 @@ namespace EcfFileViews
             Grid.AutoResizeColumns();
             Grid.ClearSelection();
             Grid.ResumeLayout();
-            Text = string.Format("{0} - {1} {2} - {3} {4} - {5} {6} - {7} {8}", ViewName,
+            Text = string.Format("{0} - {1} {2} - {3} {4} - {5} {6} - {7} {8} - {9} {10}", ViewName,
                 ErrorRows.Count, TitleRecources.Generic_Errors,
-                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Fatal), TitleRecources.EcfErrorView_FatalErrors,
-                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Parsing), TitleRecources.EcfErrorView_ParsingErrors,
-                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Editing), TitleRecources.EcfErrorView_EditingErrors);
+                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Structural), TitleRecources.EcfErrorView_StructuralErrors,
+                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Interpretation), TitleRecources.EcfErrorView_InterpretationErrors,
+                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Editing), TitleRecources.EcfErrorView_EditingErrors,
+                ErrorRows.Count(error => error.Error.Group == EcfErrorGroups.Creating), TitleRecources.EcfErrorView_CreationErrors);
         }
         private DataGridViewColumn GetSortingColumn(EcfSorter sorter)
         {

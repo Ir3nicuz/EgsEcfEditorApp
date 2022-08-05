@@ -135,6 +135,9 @@
   <data name="DeprecatedDefinitionsDialog_Header" xml:space="preserve">
     <value>Deprecated definitions</value>
   </data>
+  <data name="EcfErrorView_CreationErrors" xml:space="preserve">
+    <value>Creation errors</value>
+  </data>
   <data name="EcfErrorView_EditingErrors" xml:space="preserve">
     <value>Editing errors</value>
   </data>
@@ -144,20 +147,20 @@
   <data name="EcfErrorView_ErrorNumberColumn" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="EcfErrorView_FatalErrors" xml:space="preserve">
-    <value>Fatal errors</value>
-  </data>
   <data name="EcfErrorView_Header" xml:space="preserve">
     <value>Content error overview</value>
   </data>
-  <data name="EcfErrorView_ParsingErrors" xml:space="preserve">
-    <value>Parsing errors</value>
+  <data name="EcfErrorView_InterpretationErrors" xml:space="preserve">
+    <value>Interpretation errors</value>
   </data>
   <data name="EcfErrorView_ShowInEditor" xml:space="preserve">
     <value>Show in editor</value>
   </data>
   <data name="EcfErrorView_ShowInFile" xml:space="preserve">
     <value>Show in file</value>
+  </data>
+  <data name="EcfErrorView_StructuralErrors" xml:space="preserve">
+    <value>Structural errors</value>
   </data>
   <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">
     <value>Create file</value>
@@ -255,47 +258,50 @@
   <data name="EcfParameterView_UnnamedParent" xml:space="preserve">
     <value>Unnamed</value>
   </data>
-  <data name="EcfSettingsDialog_CreationSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData" xml:space="preserve">
+    <value>Allow fallback to original data</value>
+  </data>
+  <data name="EcfSettingsDialog_CreationPanel_Header" xml:space="preserve">
     <value>File Creation</value>
   </data>
-  <data name="EcfSettingsDialog_ErrorViewSorterInitCount" xml:space="preserve">
-    <value>Error view item count preset</value>
+  <data name="EcfSettingsDialog_CreationPanel_InvalidateParentOnError" xml:space="preserve">
+    <value>Invalidate parent of invalid item</value>
   </data>
-  <data name="EcfSettingsDialog_FilterSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_CreationPanel_WriteOnlyValidItems" xml:space="preserve">
+    <value>Write only valid items to file</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_Header" xml:space="preserve">
     <value>Filtering</value>
   </data>
-  <data name="EcfSettingsDialog_GameVersionFolder" xml:space="preserve">
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>Tree view 'comments' initially visible</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>Tree view 'data blocks' initially visible</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>Tree view 'parameters' initially visible</value>
+  </data>
+  <data name="EcfSettingsDialog_GeneralPanel_GameVersion" xml:space="preserve">
     <value>Game version</value>
   </data>
-  <data name="EcfSettingsDialog_GeneralSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_GeneralPanel_Header" xml:space="preserve">
     <value>General</value>
   </data>
   <data name="EcfSettingsDialog_Header" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="EcfSettingsDialog_InvalidateParentOnError" xml:space="preserve">
-    <value>Invalidate parent of invalid item</value>
+  <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Error view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_ParameterViewSorterInitCount" xml:space="preserve">
-    <value>Parameter view item count preset</value>
-  </data>
-  <data name="EcfSettingsDialog_SorterSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_SorterPanel_Header" xml:space="preserve">
     <value>Sorting</value>
   </data>
-  <data name="EcfSettingsDialog_TreeViewFilterCommentsInitActive" xml:space="preserve">
-    <value>Tree view 'comments' initially visible</value>
+  <data name="EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Parameter view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
-    <value>Tree view 'data blocks' initially visible</value>
-  </data>
-  <data name="EcfSettingsDialog_TreeViewFilterParametersInitActive" xml:space="preserve">
-    <value>Tree view 'parameters' initially visible</value>
-  </data>
-  <data name="EcfSettingsDialog_TreeViewSorterInitCount" xml:space="preserve">
+  <data name="EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount" xml:space="preserve">
     <value>Tree view item count preset</value>
-  </data>
-  <data name="EcfSettingsDialog_WriteOnlyValidItems" xml:space="preserve">
-    <value>Write only valid items to file</value>
   </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>tree items</value>

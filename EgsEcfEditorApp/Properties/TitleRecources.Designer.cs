@@ -115,6 +115,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creation errors.
+        /// </summary>
+        internal static string EcfErrorView_CreationErrors {
+            get {
+                return ResourceManager.GetString("EcfErrorView_CreationErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Editing errors.
         /// </summary>
         internal static string EcfErrorView_EditingErrors {
@@ -142,15 +151,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fatal errors.
-        /// </summary>
-        internal static string EcfErrorView_FatalErrors {
-            get {
-                return ResourceManager.GetString("EcfErrorView_FatalErrors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Content error overview.
         /// </summary>
         internal static string EcfErrorView_Header {
@@ -160,11 +160,11 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parsing errors.
+        ///   Looks up a localized string similar to Interpretation errors.
         /// </summary>
-        internal static string EcfErrorView_ParsingErrors {
+        internal static string EcfErrorView_InterpretationErrors {
             get {
-                return ResourceManager.GetString("EcfErrorView_ParsingErrors", resourceCulture);
+                return ResourceManager.GetString("EcfErrorView_InterpretationErrors", resourceCulture);
             }
         }
         
@@ -183,6 +183,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfErrorView_ShowInFile {
             get {
                 return ResourceManager.GetString("EcfErrorView_ShowInFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Structural errors.
+        /// </summary>
+        internal static string EcfErrorView_StructuralErrors {
+            get {
+                return ResourceManager.GetString("EcfErrorView_StructuralErrors", resourceCulture);
             }
         }
         
@@ -475,47 +484,92 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File Creation.
+        ///   Looks up a localized string similar to Allow fallback to original data.
         /// </summary>
-        internal static string EcfSettingsDialog_CreationSettingsChapterHeader {
+        internal static string EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_CreationSettingsChapterHeader", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error view item count preset.
+        ///   Looks up a localized string similar to File Creation.
         /// </summary>
-        internal static string EcfSettingsDialog_ErrorViewSorterInitCount {
+        internal static string EcfSettingsDialog_CreationPanel_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ErrorViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalidate parent of invalid item.
+        /// </summary>
+        internal static string EcfSettingsDialog_CreationPanel_InvalidateParentOnError {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_InvalidateParentOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write only valid items to file.
+        /// </summary>
+        internal static string EcfSettingsDialog_CreationPanel_WriteOnlyValidItems {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_WriteOnlyValidItems", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filtering.
         /// </summary>
-        internal static string EcfSettingsDialog_FilterSettingsChapterHeader {
+        internal static string EcfSettingsDialog_FilterPanel_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_FilterSettingsChapterHeader", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;comments&apos; initially visible.
+        /// </summary>
+        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;data blocks&apos; initially visible.
+        /// </summary>
+        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;parameters&apos; initially visible.
+        /// </summary>
+        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Game version.
         /// </summary>
-        internal static string EcfSettingsDialog_GameVersionFolder {
+        internal static string EcfSettingsDialog_GeneralPanel_GameVersion {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_GameVersionFolder", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_GameVersion", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        internal static string EcfSettingsDialog_GeneralSettingsChapterHeader {
+        internal static string EcfSettingsDialog_GeneralPanel_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_GeneralSettingsChapterHeader", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_Header", resourceCulture);
             }
         }
         
@@ -529,74 +583,38 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalidate parent of invalid item.
+        ///   Looks up a localized string similar to Error view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_InvalidateParentOnError {
+        internal static string EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_InvalidateParentOnError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter view item count preset.
-        /// </summary>
-        internal static string EcfSettingsDialog_ParameterViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ParameterViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sorting.
         /// </summary>
-        internal static string EcfSettingsDialog_SorterSettingsChapterHeader {
+        internal static string EcfSettingsDialog_SorterPanel_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_SorterSettingsChapterHeader", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_Header", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;comments&apos; initially visible.
+        ///   Looks up a localized string similar to Parameter view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_TreeViewFilterCommentsInitActive {
+        internal static string EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TreeViewFilterCommentsInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;data blocks&apos; initially visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_TreeViewFilterDataBlocksInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TreeViewFilterDataBlocksInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;parameters&apos; initially visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_TreeViewFilterParametersInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TreeViewFilterParametersInitActive", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tree view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_TreeViewSorterInitCount {
+        internal static string EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TreeViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Write only valid items to file.
-        /// </summary>
-        internal static string EcfSettingsDialog_WriteOnlyValidItems {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_WriteOnlyValidItems", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount", resourceCulture);
             }
         }
         

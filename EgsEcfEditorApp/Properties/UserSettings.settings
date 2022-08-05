@@ -11,10 +11,10 @@
     <Setting Name="EgsEcfControls_ErrorViewSorterInitCount" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_InvalidateParentsOnError" Type="System.Boolean" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileCreation_InvalidateParentsOnError" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_WriteOnlyValidItems" Type="System.Boolean" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileCreation_WriteOnlyValidItems" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="EgsEcfControls_TreeViewFilterCommentsInitActive" Type="System.Boolean" Scope="User">
@@ -28,6 +28,9 @@
     </Setting>
     <Setting Name="EgsEcfEditorApp_ActiveGameVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">Vanilla</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -57,11 +57,6 @@ namespace EcfFileViews
             this.ParameterItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemAttributesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemAttributesLabel = new System.Windows.Forms.Label();
-            this.ParameterItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
-            this.ParameterItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ParameterItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParameterItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParameterItem_AttributesGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParameterItemKeyPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ParameterItemKeyLabel = new System.Windows.Forms.Label();
             this.ParameterItemIsOptionalCheckBox = new System.Windows.Forms.CheckBox();
@@ -80,24 +75,12 @@ namespace EcfFileViews
             this.ParameterItemAddGroupButton = new System.Windows.Forms.Button();
             this.ParameterItemRemoveValueButton = new System.Windows.Forms.Button();
             this.ParameterItemAddValueButton = new System.Windows.Forms.Button();
-            this.ParameterItemValuesGrid = new EcfFileViewTools.EcfDataGridView();
             this.BlockItemView = new System.Windows.Forms.TabPage();
             this.BlockItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemAttributesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemAttributesLabel = new System.Windows.Forms.Label();
-            this.BlockItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
-            this.BlockItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.BlockItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_AttributesGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BlockItemParametersPanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemParametersLabel = new System.Windows.Forms.Label();
-            this.BlockItemParametersGrid = new EcfFileViewTools.EcfDataGridView();
-            this.BlockItem_ParametersGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.BlockItem_ParametersGrid_InheritColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.BlockItem_ParametersGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_ParametersGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_ParametersGrid_CommentColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BlockItemTypePanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemDataTypeLabel = new System.Windows.Forms.Label();
             this.BlockItemDataTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -111,6 +94,23 @@ namespace EcfFileViews
             this.BlockItemCommentLabel = new System.Windows.Forms.Label();
             this.BlockItemCommentTextBox = new System.Windows.Forms.TextBox();
             this.MessagePanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.ParameterItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
+            this.ParameterItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ParameterItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParameterItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParameterItem_AttributesGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParameterItemValuesGrid = new EcfFileViewTools.EcfDataGridView();
+            this.BlockItemAttributesGrid = new EcfFileViewTools.EcfDataGridView();
+            this.BlockItem_AttributesGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.BlockItem_AttributesGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BlockItem_AttributesGrid_ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BlockItem_AttributesGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BlockItemParametersGrid = new EcfFileViewTools.EcfDataGridView();
+            this.BlockItem_ParametersGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.BlockItem_ParametersGrid_InheritColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.BlockItem_ParametersGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BlockItem_ParametersGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BlockItem_ParametersGrid_CommentColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonPanel.SuspendLayout();
             this.ViewPanel.SuspendLayout();
             this.SelectItemView.SuspendLayout();
@@ -120,20 +120,20 @@ namespace EcfFileViews
             this.ParameterItemView.SuspendLayout();
             this.ParameterItemViewPanel.SuspendLayout();
             this.ParameterItemAttributesPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemAttributesGrid)).BeginInit();
             this.ParameterItemKeyPanel.SuspendLayout();
             this.ParameterItemInfoPanel.SuspendLayout();
             this.ParameterItemValuesPanel.SuspendLayout();
             this.ParameterItemValueButtonPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).BeginInit();
             this.BlockItemView.SuspendLayout();
             this.BlockItemViewPanel.SuspendLayout();
             this.BlockItemAttributesPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemAttributesGrid)).BeginInit();
             this.BlockItemParametersPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).BeginInit();
             this.BlockItemTypePanel.SuspendLayout();
             this.BlockItemAddDataPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemAttributesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BlockItemAttributesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -366,61 +366,6 @@ namespace EcfFileViews
             this.ParameterItemAttributesLabel.TabIndex = 0;
             this.ParameterItemAttributesLabel.Text = "attributes";
             this.ParameterItemAttributesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ParameterItemAttributesGrid
-            // 
-            this.ParameterItemAttributesGrid.AllowUserToAddRows = false;
-            this.ParameterItemAttributesGrid.AllowUserToDeleteRows = false;
-            this.ParameterItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ParameterItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ParameterItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ParameterItem_AttributesGrid_ActivateColumn,
-            this.ParameterItem_AttributesGrid_NameColumn,
-            this.ParameterItem_AttributesGrid_ValueColumn,
-            this.ParameterItem_AttributesGrid_InfoColumn});
-            this.ParameterItemAttributesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemAttributesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.ParameterItemAttributesGrid.Location = new System.Drawing.Point(3, 38);
-            this.ParameterItemAttributesGrid.MultiSelect = false;
-            this.ParameterItemAttributesGrid.Name = "ParameterItemAttributesGrid";
-            this.ParameterItemAttributesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.ParameterItemAttributesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.ParameterItemAttributesGrid.ShowEditingIcon = false;
-            this.ParameterItemAttributesGrid.Size = new System.Drawing.Size(764, 136);
-            this.ParameterItemAttributesGrid.TabIndex = 1;
-            // 
-            // ParameterItem_AttributesGrid_ActivateColumn
-            // 
-            this.ParameterItem_AttributesGrid_ActivateColumn.HeaderText = "active";
-            this.ParameterItem_AttributesGrid_ActivateColumn.Name = "ParameterItem_AttributesGrid_ActivateColumn";
-            this.ParameterItem_AttributesGrid_ActivateColumn.Width = 42;
-            // 
-            // ParameterItem_AttributesGrid_NameColumn
-            // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            this.ParameterItem_AttributesGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle1;
-            this.ParameterItem_AttributesGrid_NameColumn.HeaderText = "name";
-            this.ParameterItem_AttributesGrid_NameColumn.Name = "ParameterItem_AttributesGrid_NameColumn";
-            this.ParameterItem_AttributesGrid_NameColumn.ReadOnly = true;
-            this.ParameterItem_AttributesGrid_NameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ParameterItem_AttributesGrid_NameColumn.Width = 39;
-            // 
-            // ParameterItem_AttributesGrid_ValueColumn
-            // 
-            this.ParameterItem_AttributesGrid_ValueColumn.HeaderText = "value";
-            this.ParameterItem_AttributesGrid_ValueColumn.Name = "ParameterItem_AttributesGrid_ValueColumn";
-            this.ParameterItem_AttributesGrid_ValueColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ParameterItem_AttributesGrid_ValueColumn.Width = 39;
-            // 
-            // ParameterItem_AttributesGrid_InfoColumn
-            // 
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightGray;
-            this.ParameterItem_AttributesGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ParameterItem_AttributesGrid_InfoColumn.HeaderText = "info";
-            this.ParameterItem_AttributesGrid_InfoColumn.Name = "ParameterItem_AttributesGrid_InfoColumn";
-            this.ParameterItem_AttributesGrid_InfoColumn.ReadOnly = true;
-            this.ParameterItem_AttributesGrid_InfoColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ParameterItem_AttributesGrid_InfoColumn.Width = 30;
             // 
             // ParameterItemKeyPanel
             // 
@@ -661,33 +606,6 @@ namespace EcfFileViews
             this.ParameterItemAddValueButton.UseVisualStyleBackColor = true;
             this.ParameterItemAddValueButton.Click += new System.EventHandler(this.ParameterItemAddValueButton_Click);
             // 
-            // ParameterItemValuesGrid
-            // 
-            this.ParameterItemValuesGrid.AllowUserToAddRows = false;
-            this.ParameterItemValuesGrid.AllowUserToDeleteRows = false;
-            this.ParameterItemValuesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ParameterItemValuesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.ParameterItemValuesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ParameterItemValuesPanel.SetColumnSpan(this.ParameterItemValuesGrid, 2);
-            this.ParameterItemValuesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemValuesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.ParameterItemValuesGrid.Location = new System.Drawing.Point(3, 38);
-            this.ParameterItemValuesGrid.MultiSelect = false;
-            this.ParameterItemValuesGrid.Name = "ParameterItemValuesGrid";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ParameterItemValuesGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.ParameterItemValuesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.ParameterItemValuesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.ParameterItemValuesGrid.ShowEditingIcon = false;
-            this.ParameterItemValuesGrid.Size = new System.Drawing.Size(764, 134);
-            this.ParameterItemValuesGrid.TabIndex = 2;
-            // 
             // BlockItemView
             // 
             this.BlockItemView.Controls.Add(this.BlockItemViewPanel);
@@ -748,63 +666,6 @@ namespace EcfFileViews
             this.BlockItemAttributesLabel.Text = "attributes";
             this.BlockItemAttributesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // BlockItemAttributesGrid
-            // 
-            this.BlockItemAttributesGrid.AllowUserToAddRows = false;
-            this.BlockItemAttributesGrid.AllowUserToDeleteRows = false;
-            this.BlockItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.BlockItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.BlockItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BlockItem_AttributesGrid_ActivateColumn,
-            this.BlockItem_AttributesGrid_NameColumn,
-            this.BlockItem_AttributesGrid_ValueColumn,
-            this.BlockItem_AttributesGrid_InfoColumn});
-            this.BlockItemAttributesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemAttributesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.BlockItemAttributesGrid.Location = new System.Drawing.Point(3, 38);
-            this.BlockItemAttributesGrid.MultiSelect = false;
-            this.BlockItemAttributesGrid.Name = "BlockItemAttributesGrid";
-            this.BlockItemAttributesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.BlockItemAttributesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.BlockItemAttributesGrid.ShowEditingIcon = false;
-            this.BlockItemAttributesGrid.Size = new System.Drawing.Size(764, 136);
-            this.BlockItemAttributesGrid.TabIndex = 1;
-            this.BlockItemAttributesGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BlockItemAttributesGrid_CellClick);
-            this.BlockItemAttributesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BlockItemAttributesGrid_CellContentClick);
-            // 
-            // BlockItem_AttributesGrid_ActivateColumn
-            // 
-            this.BlockItem_AttributesGrid_ActivateColumn.HeaderText = "active";
-            this.BlockItem_AttributesGrid_ActivateColumn.Name = "BlockItem_AttributesGrid_ActivateColumn";
-            this.BlockItem_AttributesGrid_ActivateColumn.Width = 42;
-            // 
-            // BlockItem_AttributesGrid_NameColumn
-            // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_AttributesGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle4;
-            this.BlockItem_AttributesGrid_NameColumn.HeaderText = "name";
-            this.BlockItem_AttributesGrid_NameColumn.Name = "BlockItem_AttributesGrid_NameColumn";
-            this.BlockItem_AttributesGrid_NameColumn.ReadOnly = true;
-            this.BlockItem_AttributesGrid_NameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BlockItem_AttributesGrid_NameColumn.Width = 39;
-            // 
-            // BlockItem_AttributesGrid_ValueColumn
-            // 
-            this.BlockItem_AttributesGrid_ValueColumn.HeaderText = "value";
-            this.BlockItem_AttributesGrid_ValueColumn.Name = "BlockItem_AttributesGrid_ValueColumn";
-            this.BlockItem_AttributesGrid_ValueColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BlockItem_AttributesGrid_ValueColumn.Width = 39;
-            // 
-            // BlockItem_AttributesGrid_InfoColumn
-            // 
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_AttributesGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle5;
-            this.BlockItem_AttributesGrid_InfoColumn.HeaderText = "info";
-            this.BlockItem_AttributesGrid_InfoColumn.Name = "BlockItem_AttributesGrid_InfoColumn";
-            this.BlockItem_AttributesGrid_InfoColumn.ReadOnly = true;
-            this.BlockItem_AttributesGrid_InfoColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BlockItem_AttributesGrid_InfoColumn.Width = 30;
-            // 
             // BlockItemParametersPanel
             // 
             this.BlockItemParametersPanel.AutoSize = true;
@@ -833,75 +694,6 @@ namespace EcfFileViews
             this.BlockItemParametersLabel.TabIndex = 0;
             this.BlockItemParametersLabel.Text = "parameters";
             this.BlockItemParametersLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // BlockItemParametersGrid
-            // 
-            this.BlockItemParametersGrid.AllowUserToAddRows = false;
-            this.BlockItemParametersGrid.AllowUserToDeleteRows = false;
-            this.BlockItemParametersGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.BlockItemParametersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.BlockItemParametersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BlockItem_ParametersGrid_ActivateColumn,
-            this.BlockItem_ParametersGrid_InheritColumn,
-            this.BlockItem_ParametersGrid_NameColumn,
-            this.BlockItem_ParametersGrid_InfoColumn,
-            this.BlockItem_ParametersGrid_CommentColumn});
-            this.BlockItemParametersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParametersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.BlockItemParametersGrid.Location = new System.Drawing.Point(3, 38);
-            this.BlockItemParametersGrid.MultiSelect = false;
-            this.BlockItemParametersGrid.Name = "BlockItemParametersGrid";
-            this.BlockItemParametersGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.BlockItemParametersGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.BlockItemParametersGrid.ShowEditingIcon = false;
-            this.BlockItemParametersGrid.Size = new System.Drawing.Size(764, 134);
-            this.BlockItemParametersGrid.TabIndex = 1;
-            // 
-            // BlockItem_ParametersGrid_ActivateColumn
-            // 
-            this.BlockItem_ParametersGrid_ActivateColumn.HeaderText = "active";
-            this.BlockItem_ParametersGrid_ActivateColumn.Name = "BlockItem_ParametersGrid_ActivateColumn";
-            this.BlockItem_ParametersGrid_ActivateColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.BlockItem_ParametersGrid_ActivateColumn.Width = 61;
-            // 
-            // BlockItem_ParametersGrid_InheritColumn
-            // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle6.NullValue = false;
-            this.BlockItem_ParametersGrid_InheritColumn.DefaultCellStyle = dataGridViewCellStyle6;
-            this.BlockItem_ParametersGrid_InheritColumn.HeaderText = "inh.";
-            this.BlockItem_ParametersGrid_InheritColumn.Name = "BlockItem_ParametersGrid_InheritColumn";
-            this.BlockItem_ParametersGrid_InheritColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_InheritColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.BlockItem_ParametersGrid_InheritColumn.Width = 49;
-            // 
-            // BlockItem_ParametersGrid_NameColumn
-            // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle7;
-            this.BlockItem_ParametersGrid_NameColumn.HeaderText = "name";
-            this.BlockItem_ParametersGrid_NameColumn.Name = "BlockItem_ParametersGrid_NameColumn";
-            this.BlockItem_ParametersGrid_NameColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_NameColumn.Width = 58;
-            // 
-            // BlockItem_ParametersGrid_InfoColumn
-            // 
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle8;
-            this.BlockItem_ParametersGrid_InfoColumn.HeaderText = "info";
-            this.BlockItem_ParametersGrid_InfoColumn.Name = "BlockItem_ParametersGrid_InfoColumn";
-            this.BlockItem_ParametersGrid_InfoColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_InfoColumn.Width = 49;
-            // 
-            // BlockItem_ParametersGrid_CommentColumn
-            // 
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_CommentColumn.DefaultCellStyle = dataGridViewCellStyle9;
-            this.BlockItem_ParametersGrid_CommentColumn.HeaderText = "comment";
-            this.BlockItem_ParametersGrid_CommentColumn.Name = "BlockItem_ParametersGrid_CommentColumn";
-            this.BlockItem_ParametersGrid_CommentColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_CommentColumn.Width = 75;
             // 
             // BlockItemTypePanel
             // 
@@ -1058,6 +850,214 @@ namespace EcfFileViews
             this.MessagePanel.Size = new System.Drawing.Size(784, 0);
             this.MessagePanel.TabIndex = 1;
             // 
+            // ParameterItemAttributesGrid
+            // 
+            this.ParameterItemAttributesGrid.AllowUserToAddRows = false;
+            this.ParameterItemAttributesGrid.AllowUserToDeleteRows = false;
+            this.ParameterItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.ParameterItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ParameterItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ParameterItem_AttributesGrid_ActivateColumn,
+            this.ParameterItem_AttributesGrid_NameColumn,
+            this.ParameterItem_AttributesGrid_ValueColumn,
+            this.ParameterItem_AttributesGrid_InfoColumn});
+            this.ParameterItemAttributesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemAttributesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.ParameterItemAttributesGrid.Location = new System.Drawing.Point(3, 38);
+            this.ParameterItemAttributesGrid.MultiSelect = false;
+            this.ParameterItemAttributesGrid.Name = "ParameterItemAttributesGrid";
+            this.ParameterItemAttributesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.ParameterItemAttributesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.ParameterItemAttributesGrid.ShowEditingIcon = false;
+            this.ParameterItemAttributesGrid.Size = new System.Drawing.Size(764, 136);
+            this.ParameterItemAttributesGrid.TabIndex = 1;
+            // 
+            // ParameterItem_AttributesGrid_ActivateColumn
+            // 
+            this.ParameterItem_AttributesGrid_ActivateColumn.HeaderText = "active";
+            this.ParameterItem_AttributesGrid_ActivateColumn.Name = "ParameterItem_AttributesGrid_ActivateColumn";
+            this.ParameterItem_AttributesGrid_ActivateColumn.Width = 42;
+            // 
+            // ParameterItem_AttributesGrid_NameColumn
+            // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+            this.ParameterItem_AttributesGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ParameterItem_AttributesGrid_NameColumn.HeaderText = "name";
+            this.ParameterItem_AttributesGrid_NameColumn.Name = "ParameterItem_AttributesGrid_NameColumn";
+            this.ParameterItem_AttributesGrid_NameColumn.ReadOnly = true;
+            this.ParameterItem_AttributesGrid_NameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ParameterItem_AttributesGrid_NameColumn.Width = 39;
+            // 
+            // ParameterItem_AttributesGrid_ValueColumn
+            // 
+            this.ParameterItem_AttributesGrid_ValueColumn.HeaderText = "value";
+            this.ParameterItem_AttributesGrid_ValueColumn.Name = "ParameterItem_AttributesGrid_ValueColumn";
+            this.ParameterItem_AttributesGrid_ValueColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ParameterItem_AttributesGrid_ValueColumn.Width = 39;
+            // 
+            // ParameterItem_AttributesGrid_InfoColumn
+            // 
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightGray;
+            this.ParameterItem_AttributesGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ParameterItem_AttributesGrid_InfoColumn.HeaderText = "info";
+            this.ParameterItem_AttributesGrid_InfoColumn.Name = "ParameterItem_AttributesGrid_InfoColumn";
+            this.ParameterItem_AttributesGrid_InfoColumn.ReadOnly = true;
+            this.ParameterItem_AttributesGrid_InfoColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ParameterItem_AttributesGrid_InfoColumn.Width = 30;
+            // 
+            // ParameterItemValuesGrid
+            // 
+            this.ParameterItemValuesGrid.AllowUserToAddRows = false;
+            this.ParameterItemValuesGrid.AllowUserToDeleteRows = false;
+            this.ParameterItemValuesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.ParameterItemValuesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.ParameterItemValuesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ParameterItemValuesPanel.SetColumnSpan(this.ParameterItemValuesGrid, 2);
+            this.ParameterItemValuesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ParameterItemValuesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.ParameterItemValuesGrid.Location = new System.Drawing.Point(3, 38);
+            this.ParameterItemValuesGrid.MultiSelect = false;
+            this.ParameterItemValuesGrid.Name = "ParameterItemValuesGrid";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ParameterItemValuesGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.ParameterItemValuesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.ParameterItemValuesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.ParameterItemValuesGrid.ShowEditingIcon = false;
+            this.ParameterItemValuesGrid.Size = new System.Drawing.Size(764, 134);
+            this.ParameterItemValuesGrid.TabIndex = 2;
+            // 
+            // BlockItemAttributesGrid
+            // 
+            this.BlockItemAttributesGrid.AllowUserToAddRows = false;
+            this.BlockItemAttributesGrid.AllowUserToDeleteRows = false;
+            this.BlockItemAttributesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.BlockItemAttributesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.BlockItemAttributesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.BlockItem_AttributesGrid_ActivateColumn,
+            this.BlockItem_AttributesGrid_NameColumn,
+            this.BlockItem_AttributesGrid_ValueColumn,
+            this.BlockItem_AttributesGrid_InfoColumn});
+            this.BlockItemAttributesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlockItemAttributesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.BlockItemAttributesGrid.Location = new System.Drawing.Point(3, 38);
+            this.BlockItemAttributesGrid.MultiSelect = false;
+            this.BlockItemAttributesGrid.Name = "BlockItemAttributesGrid";
+            this.BlockItemAttributesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.BlockItemAttributesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.BlockItemAttributesGrid.ShowEditingIcon = false;
+            this.BlockItemAttributesGrid.Size = new System.Drawing.Size(764, 136);
+            this.BlockItemAttributesGrid.TabIndex = 1;
+            this.BlockItemAttributesGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BlockItemAttributesGrid_CellClick);
+            this.BlockItemAttributesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BlockItemAttributesGrid_CellContentClick);
+            // 
+            // BlockItem_AttributesGrid_ActivateColumn
+            // 
+            this.BlockItem_AttributesGrid_ActivateColumn.HeaderText = "active";
+            this.BlockItem_AttributesGrid_ActivateColumn.Name = "BlockItem_AttributesGrid_ActivateColumn";
+            this.BlockItem_AttributesGrid_ActivateColumn.Width = 42;
+            // 
+            // BlockItem_AttributesGrid_NameColumn
+            // 
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray;
+            this.BlockItem_AttributesGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle4;
+            this.BlockItem_AttributesGrid_NameColumn.HeaderText = "name";
+            this.BlockItem_AttributesGrid_NameColumn.Name = "BlockItem_AttributesGrid_NameColumn";
+            this.BlockItem_AttributesGrid_NameColumn.ReadOnly = true;
+            this.BlockItem_AttributesGrid_NameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BlockItem_AttributesGrid_NameColumn.Width = 39;
+            // 
+            // BlockItem_AttributesGrid_ValueColumn
+            // 
+            this.BlockItem_AttributesGrid_ValueColumn.HeaderText = "value";
+            this.BlockItem_AttributesGrid_ValueColumn.Name = "BlockItem_AttributesGrid_ValueColumn";
+            this.BlockItem_AttributesGrid_ValueColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BlockItem_AttributesGrid_ValueColumn.Width = 39;
+            // 
+            // BlockItem_AttributesGrid_InfoColumn
+            // 
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray;
+            this.BlockItem_AttributesGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle5;
+            this.BlockItem_AttributesGrid_InfoColumn.HeaderText = "info";
+            this.BlockItem_AttributesGrid_InfoColumn.Name = "BlockItem_AttributesGrid_InfoColumn";
+            this.BlockItem_AttributesGrid_InfoColumn.ReadOnly = true;
+            this.BlockItem_AttributesGrid_InfoColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BlockItem_AttributesGrid_InfoColumn.Width = 30;
+            // 
+            // BlockItemParametersGrid
+            // 
+            this.BlockItemParametersGrid.AllowUserToAddRows = false;
+            this.BlockItemParametersGrid.AllowUserToDeleteRows = false;
+            this.BlockItemParametersGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.BlockItemParametersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.BlockItemParametersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.BlockItem_ParametersGrid_ActivateColumn,
+            this.BlockItem_ParametersGrid_InheritColumn,
+            this.BlockItem_ParametersGrid_NameColumn,
+            this.BlockItem_ParametersGrid_InfoColumn,
+            this.BlockItem_ParametersGrid_CommentColumn});
+            this.BlockItemParametersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BlockItemParametersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.BlockItemParametersGrid.Location = new System.Drawing.Point(3, 38);
+            this.BlockItemParametersGrid.MultiSelect = false;
+            this.BlockItemParametersGrid.Name = "BlockItemParametersGrid";
+            this.BlockItemParametersGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.BlockItemParametersGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.BlockItemParametersGrid.ShowEditingIcon = false;
+            this.BlockItemParametersGrid.Size = new System.Drawing.Size(764, 134);
+            this.BlockItemParametersGrid.TabIndex = 1;
+            // 
+            // BlockItem_ParametersGrid_ActivateColumn
+            // 
+            this.BlockItem_ParametersGrid_ActivateColumn.HeaderText = "active";
+            this.BlockItem_ParametersGrid_ActivateColumn.Name = "BlockItem_ParametersGrid_ActivateColumn";
+            this.BlockItem_ParametersGrid_ActivateColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.BlockItem_ParametersGrid_ActivateColumn.Width = 61;
+            // 
+            // BlockItem_ParametersGrid_InheritColumn
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle6.NullValue = false;
+            this.BlockItem_ParametersGrid_InheritColumn.DefaultCellStyle = dataGridViewCellStyle6;
+            this.BlockItem_ParametersGrid_InheritColumn.HeaderText = "inh.";
+            this.BlockItem_ParametersGrid_InheritColumn.Name = "BlockItem_ParametersGrid_InheritColumn";
+            this.BlockItem_ParametersGrid_InheritColumn.ReadOnly = true;
+            this.BlockItem_ParametersGrid_InheritColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.BlockItem_ParametersGrid_InheritColumn.Width = 49;
+            // 
+            // BlockItem_ParametersGrid_NameColumn
+            // 
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.LightGray;
+            this.BlockItem_ParametersGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle7;
+            this.BlockItem_ParametersGrid_NameColumn.HeaderText = "name";
+            this.BlockItem_ParametersGrid_NameColumn.Name = "BlockItem_ParametersGrid_NameColumn";
+            this.BlockItem_ParametersGrid_NameColumn.ReadOnly = true;
+            this.BlockItem_ParametersGrid_NameColumn.Width = 58;
+            // 
+            // BlockItem_ParametersGrid_InfoColumn
+            // 
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.LightGray;
+            this.BlockItem_ParametersGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle8;
+            this.BlockItem_ParametersGrid_InfoColumn.HeaderText = "info";
+            this.BlockItem_ParametersGrid_InfoColumn.Name = "BlockItem_ParametersGrid_InfoColumn";
+            this.BlockItem_ParametersGrid_InfoColumn.ReadOnly = true;
+            this.BlockItem_ParametersGrid_InfoColumn.Width = 49;
+            // 
+            // BlockItem_ParametersGrid_CommentColumn
+            // 
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.LightGray;
+            this.BlockItem_ParametersGrid_CommentColumn.DefaultCellStyle = dataGridViewCellStyle9;
+            this.BlockItem_ParametersGrid_CommentColumn.HeaderText = "comment";
+            this.BlockItem_ParametersGrid_CommentColumn.Name = "BlockItem_ParametersGrid_CommentColumn";
+            this.BlockItem_ParametersGrid_CommentColumn.ReadOnly = true;
+            this.BlockItem_ParametersGrid_CommentColumn.Width = 75;
+            // 
             // EcfItemEditingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1089,7 +1089,6 @@ namespace EcfFileViews
             this.ParameterItemViewPanel.PerformLayout();
             this.ParameterItemAttributesPanel.ResumeLayout(false);
             this.ParameterItemAttributesPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemAttributesGrid)).EndInit();
             this.ParameterItemKeyPanel.ResumeLayout(false);
             this.ParameterItemKeyPanel.PerformLayout();
             this.ParameterItemInfoPanel.ResumeLayout(false);
@@ -1098,21 +1097,22 @@ namespace EcfFileViews
             this.ParameterItemValuesPanel.PerformLayout();
             this.ParameterItemValueButtonPanel.ResumeLayout(false);
             this.ParameterItemValueButtonPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).EndInit();
             this.BlockItemView.ResumeLayout(false);
             this.BlockItemView.PerformLayout();
             this.BlockItemViewPanel.ResumeLayout(false);
             this.BlockItemViewPanel.PerformLayout();
             this.BlockItemAttributesPanel.ResumeLayout(false);
             this.BlockItemAttributesPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemAttributesGrid)).EndInit();
             this.BlockItemParametersPanel.ResumeLayout(false);
             this.BlockItemParametersPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).EndInit();
             this.BlockItemTypePanel.ResumeLayout(false);
             this.BlockItemTypePanel.PerformLayout();
             this.BlockItemAddDataPanel.ResumeLayout(false);
             this.BlockItemAddDataPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemAttributesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BlockItemAttributesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

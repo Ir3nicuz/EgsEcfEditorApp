@@ -132,11 +132,11 @@
   <data name="EgsEcfParser.EcfErrorGroups.Editing" xml:space="preserve">
     <value>Editierfehler</value>
   </data>
-  <data name="EgsEcfParser.EcfErrorGroups.Fatal" xml:space="preserve">
-    <value>Schwerer Fehler</value>
-  </data>
-  <data name="EgsEcfParser.EcfErrorGroups.Parsing" xml:space="preserve">
+  <data name="EgsEcfParser.EcfErrorGroups.Interpretation" xml:space="preserve">
     <value>Lesefehler</value>
+  </data>
+  <data name="EgsEcfParser.EcfErrorGroups.Structural" xml:space="preserve">
+    <value>Strukturfehler</value>
   </data>
   <data name="EgsEcfParser.EcfErrors.AttributeDoubled" xml:space="preserve">
     <value>Attribut gedoppelt</value>

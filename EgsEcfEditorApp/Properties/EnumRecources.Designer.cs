@@ -106,20 +106,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fatal error.
+        ///   Looks up a localized string similar to Interpretation error.
         /// </summary>
-        internal static string EgsEcfParser_EcfErrorGroups_Fatal {
+        internal static string EgsEcfParser_EcfErrorGroups_Interpretation {
             get {
-                return ResourceManager.GetString("EgsEcfParser.EcfErrorGroups.Fatal", resourceCulture);
+                return ResourceManager.GetString("EgsEcfParser.EcfErrorGroups.Interpretation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parsing error.
+        ///   Looks up a localized string similar to Structural error.
         /// </summary>
-        internal static string EgsEcfParser_EcfErrorGroups_Parsing {
+        internal static string EgsEcfParser_EcfErrorGroups_Structural {
             get {
-                return ResourceManager.GetString("EgsEcfParser.EcfErrorGroups.Parsing", resourceCulture);
+                return ResourceManager.GetString("EgsEcfParser.EcfErrorGroups.Structural", resourceCulture);
             }
         }
         

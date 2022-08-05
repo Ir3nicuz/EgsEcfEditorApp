@@ -62,24 +62,24 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EgsEcfEditorApp_InvalidateParentsOnError {
+        public bool EgsEcfEditorApp_FileCreation_InvalidateParentsOnError {
             get {
-                return ((bool)(this["EgsEcfEditorApp_InvalidateParentsOnError"]));
+                return ((bool)(this["EgsEcfEditorApp_FileCreation_InvalidateParentsOnError"]));
             }
             set {
-                this["EgsEcfEditorApp_InvalidateParentsOnError"] = value;
+                this["EgsEcfEditorApp_FileCreation_InvalidateParentsOnError"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool EgsEcfEditorApp_WriteOnlyValidItems {
+        public bool EgsEcfEditorApp_FileCreation_WriteOnlyValidItems {
             get {
-                return ((bool)(this["EgsEcfEditorApp_WriteOnlyValidItems"]));
+                return ((bool)(this["EgsEcfEditorApp_FileCreation_WriteOnlyValidItems"]));
             }
             set {
-                this["EgsEcfEditorApp_WriteOnlyValidItems"] = value;
+                this["EgsEcfEditorApp_FileCreation_WriteOnlyValidItems"] = value;
             }
         }
         
@@ -128,6 +128,18 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["EgsEcfEditorApp_ActiveGameVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData {
+            get {
+                return ((bool)(this["EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData"]));
+            }
+            set {
+                this["EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData"] = value;
             }
         }
     }

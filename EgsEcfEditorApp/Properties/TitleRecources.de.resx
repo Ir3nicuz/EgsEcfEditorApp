@@ -135,6 +135,9 @@
   <data name="DeprecatedDefinitionsDialog_Header" xml:space="preserve">
     <value>Veraltete Definitionen</value>
   </data>
+  <data name="EcfErrorView_CreationErrors" xml:space="preserve">
+    <value>Schreibfehler</value>
+  </data>
   <data name="EcfErrorView_EditingErrors" xml:space="preserve">
     <value>Editierfehler</value>
   </data>
@@ -144,13 +147,10 @@
   <data name="EcfErrorView_ErrorNumberColumn" xml:space="preserve">
     <value>Nr</value>
   </data>
-  <data name="EcfErrorView_FatalErrors" xml:space="preserve">
-    <value>Schwere Fehler</value>
-  </data>
   <data name="EcfErrorView_Header" xml:space="preserve">
     <value>Daten Fehler Übersicht</value>
   </data>
-  <data name="EcfErrorView_ParsingErrors" xml:space="preserve">
+  <data name="EcfErrorView_InterpretationErrors" xml:space="preserve">
     <value>Lesefehler</value>
   </data>
   <data name="EcfErrorView_ShowInEditor" xml:space="preserve">
@@ -158,6 +158,9 @@
   </data>
   <data name="EcfErrorView_ShowInFile" xml:space="preserve">
     <value>Zeige in Datei</value>
+  </data>
+  <data name="EcfErrorView_StructuralErrors" xml:space="preserve">
+    <value>Strukturfehler</value>
   </data>
   <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">
     <value>Neue Datei erstellen</value>
@@ -255,47 +258,50 @@
   <data name="EcfParameterView_UnnamedParent" xml:space="preserve">
     <value>Namenlos</value>
   </data>
-  <data name="EcfSettingsDialog_CreationSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData" xml:space="preserve">
+    <value>Erlaube Verwendung von Originaldaten</value>
+  </data>
+  <data name="EcfSettingsDialog_CreationPanel_Header" xml:space="preserve">
     <value>Dateierstellung</value>
   </data>
-  <data name="EcfSettingsDialog_ErrorViewSorterInitCount" xml:space="preserve">
-    <value>Fehleransicht Elementanzahl Vorauswahl</value>
+  <data name="EcfSettingsDialog_CreationPanel_InvalidateParentOnError" xml:space="preserve">
+    <value>Vererbe Fehler an übergeordnetes Element</value>
   </data>
-  <data name="EcfSettingsDialog_FilterSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_CreationPanel_WriteOnlyValidItems" xml:space="preserve">
+    <value>Schreibe nur valide Elemente in Datei</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_Header" xml:space="preserve">
     <value>Filterung</value>
   </data>
-  <data name="EcfSettingsDialog_GameVersionFolder" xml:space="preserve">
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>Baumansicht 'Kommentare' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>Baumansicht 'Datenblöcke' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>Baumansicht 'Parameter' initial aktiv</value>
+  </data>
+  <data name="EcfSettingsDialog_GeneralPanel_GameVersion" xml:space="preserve">
     <value>Spiel Version</value>
   </data>
-  <data name="EcfSettingsDialog_GeneralSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_GeneralPanel_Header" xml:space="preserve">
     <value>Allgemein</value>
   </data>
   <data name="EcfSettingsDialog_Header" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
-  <data name="EcfSettingsDialog_InvalidateParentOnError" xml:space="preserve">
-    <value>Vererbe Fehler an übergeordnetes Element</value>
+  <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Fehleransicht Elementanzahl Vorauswahl</value>
   </data>
-  <data name="EcfSettingsDialog_ParameterViewSorterInitCount" xml:space="preserve">
-    <value>Parameteransicht Elementanzahl Vorauswahl</value>
-  </data>
-  <data name="EcfSettingsDialog_SorterSettingsChapterHeader" xml:space="preserve">
+  <data name="EcfSettingsDialog_SorterPanel_Header" xml:space="preserve">
     <value>Sortierung</value>
   </data>
-  <data name="EcfSettingsDialog_TreeViewFilterCommentsInitActive" xml:space="preserve">
-    <value>Baumansicht 'Kommentare' initial aktiv</value>
+  <data name="EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Parameteransicht Elementanzahl Vorauswahl</value>
   </data>
-  <data name="EcfSettingsDialog_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
-    <value>Baumansicht 'Datenblöcke' initial aktiv</value>
-  </data>
-  <data name="EcfSettingsDialog_TreeViewFilterParametersInitActive" xml:space="preserve">
-    <value>Baumansicht 'Parameter' initial aktiv</value>
-  </data>
-  <data name="EcfSettingsDialog_TreeViewSorterInitCount" xml:space="preserve">
+  <data name="EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount" xml:space="preserve">
     <value>Baumansicht Elementanzahl Vorauswahl</value>
-  </data>
-  <data name="EcfSettingsDialog_WriteOnlyValidItems" xml:space="preserve">
-    <value>Schreibe nur valide Elemente in Datei</value>
   </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>Baumelemente</value>

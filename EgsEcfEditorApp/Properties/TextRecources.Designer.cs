@@ -448,6 +448,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If activated, a item will try to use the original parsed data if the data from the editor are invalid.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_AllowFallbackToParsedData {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_AllowFallbackToParsedData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the error view.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount {
@@ -520,7 +529,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If activated, at saving the file only valid items will be kept.
+        ///   Looks up a localized string similar to If activated, at saving the file only valid items will be written.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_WriteOnlyValidItems {
             get {

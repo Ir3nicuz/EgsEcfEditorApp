@@ -246,6 +246,9 @@
   <data name="EcfSettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
     <value>Alle Einstellungen wirklich auf Standard zurücksetzen?</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
+    <value>Wenn aktiviert, werden Elemente versuchen die Originaldaten zu verwenden wenn die Editordaten fehlerhaft sind</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Fehleransicht fest</value>
   </data>
@@ -253,7 +256,7 @@
     <value>Legt die Spiel Version fest, dessen Definitionen verwendet werden sollen </value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
-    <value>Wenn aktiviert, werden auch Elemente die mindestens ein fehlerhaftes Unterelement beinhalten nicht gespeichert</value>
+    <value>Wenn aktiviert, werden auch Elemente mit mindestens einem fehlerhaften Unterelement nicht gespeichert</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Parameteransicht fest</value>
@@ -271,7 +274,7 @@
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Baumansicht fest</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_WriteOnlyValidItems" xml:space="preserve">
-    <value>Wenn aktiviert, werden beim Speichern nur Elemente ohne Fehler beibehalten</value>
+    <value>Wenn aktiviert, werden beim Speichern nur Elemente ohne Fehler ausgegeben</value>
   </data>
   <data name="EcfSettingsDialog_UnsavedReallyCloseQuestion" xml:space="preserve">
     <value>Es sind ungesichte Einstellungen vorhanden. Sollen die Änderungen wirklich verworfen werden?</value>

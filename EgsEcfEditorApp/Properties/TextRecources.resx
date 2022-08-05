@@ -246,6 +246,9 @@
   <data name="EcfSettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
     <value>Really reset all settings to default?</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
+    <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the error view</value>
   </data>
@@ -271,7 +274,7 @@
     <value>Defines the initial value for the visible item count setting of the tree view</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_WriteOnlyValidItems" xml:space="preserve">
-    <value>If activated, at saving the file only valid items will be kept</value>
+    <value>If activated, at saving the file only valid items will be written</value>
   </data>
   <data name="EcfSettingsDialog_UnsavedReallyCloseQuestion" xml:space="preserve">
     <value>There are unsaved setting changes. Really close and discards changes?</value>

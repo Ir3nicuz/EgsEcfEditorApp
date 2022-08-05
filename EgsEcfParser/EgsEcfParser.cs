@@ -2633,12 +2633,12 @@ namespace EgsEcfParser
         {
             StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
             if (Id != null) {
-                identification.Append(", Id: ");
+                identification.Append(", ");
                 identification.Append(Id);
             }
-            if (RefTarget != null)
+            if (RefTarget != null && !RefTarget.Equals(Id))
             {
-                identification.Append(", Name: ");
+                identification.Append(", ");
                 identification.Append(RefTarget);
             }
             if (!IsRoot())
@@ -2651,6 +2651,19 @@ namespace EgsEcfParser
                     identification.Append(string.Join(", ", Attributes.Select(attr => attr.Key)));
                 }
 
+            }
+            else if (Id == null && RefTarget == null)
+            {
+                foreach (EcfAttribute attr in Attributes)
+                {
+                    identification.Append(", ");
+                    identification.Append(attr.Key);
+                    if (attr.HasValue())
+                    {
+                        identification.Append(": ");
+                        identification.Append(attr.GetFirstValue());
+                    }
+                }
             }
             return identification.ToString();
         }

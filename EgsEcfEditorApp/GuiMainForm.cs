@@ -2515,7 +2515,7 @@ namespace EcfFileViews
                 ParentNameCell = new DataGridViewTextBoxCell() { Value = parentName };
                 ParameterNameCell = new DataGridViewTextBoxCell() { Value = parameter.Key };
                 ValueCell = new DataGridViewTextBoxCell() { Value = BuildValueText() };
-                CommentsCell = new DataGridViewTextBoxCell() { Value = string.Join(", ", parameter.Comments) };
+                CommentsCell = new DataGridViewTextBoxCell() { Value = BuildValueLine(parameter.Comments) };
 
                 if (HasError)
                 {
@@ -2552,35 +2552,41 @@ namespace EcfFileViews
             // privates
             private string BuildValueText()
             {
-                string valueSeperator = string.Format("{0} ", TextRecources.EcfParameterView_ValueSeperator);
-                if (!Parameter.IsUsingGroups())
+                StringBuilder valueGroups = new StringBuilder();
+                if (Parameter.ValueGroups.Count > 0)
                 {
-                    return string.Join(valueSeperator, Parameter.GetAllValues());
+                    if (Parameter.ValueGroups.Count > 1)
+                    {
+                        valueGroups.Append(BuildGroupPrefix(0));
+                    }
+                    valueGroups.Append(BuildValueLine(Parameter.ValueGroups[0].Values));
+                    int maxCount = InternalSettings.Default.EgsEcfEditorApp_GroupMaxCount;
+                    for (int groupIndex = 1; groupIndex < Parameter.ValueGroups.Count; groupIndex++)
+                    {
+                        if (groupIndex >= maxCount) { break; }
+                        valueGroups.Append(Environment.NewLine);
+                        valueGroups.Append(BuildGroupPrefix(groupIndex));
+                        valueGroups.Append(BuildValueLine(Parameter.ValueGroups[groupIndex].Values));
+                    }
+                    if (Parameter.ValueGroups.Count > maxCount)
+                    {
+                        valueGroups.Append(Environment.NewLine);
+                        valueGroups.Append(InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
+                    }
                 }
-                else
-                {
-                    return BuildValueGroupText(valueSeperator);
-                }
+                return valueGroups.ToString();
             }
-            private string BuildValueGroupText(string valueSeperator)
+            private string BuildGroupPrefix(int groupIndex)
             {
-                List<string> valueGroups = new List<string>();
-                StringBuilder valueGroup = new StringBuilder();
-
-                foreach (EcfValueGroup group in Parameter.ValueGroups)
-                {
-                    valueGroup.Clear();
-
-                    valueGroup.Append(TitleRecources.Generic_Group);
-                    valueGroup.Append(" ");
-                    valueGroup.Append(Parameter.IndexOf(group) + 1);
-                    valueGroup.Append(TextRecources.EcfParameterView_GroupSeperator);
-                    valueGroup.Append(" ");
-                    valueGroup.Append(string.Join(valueSeperator, group.Values));
-
-                    valueGroups.Add(valueGroup.ToString());
-                }
-                return string.Join(Environment.NewLine, valueGroups);
+                return string.Format("{0} {1}{2}", TitleRecources.Generic_Group, groupIndex + 1, InternalSettings.Default.EgsEcfEditorApp_GroupSeperator);
+            }
+            private string BuildValueLine(ReadOnlyCollection<string> values)
+            {
+                int maxCount = InternalSettings.Default.EgsEcfEditorApp_ValueMaxCount;
+                string valueSeperator = InternalSettings.Default.EgsEcfEditorApp_ValueSeperator;
+                string line = string.Join(valueSeperator, values.ToArray(), 0, Math.Min(values.Count, maxCount));
+                if (values.Count <= maxCount) { return line; }
+                return string.Format("{0}{1}{2}", line, valueSeperator, InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
             }
         }
     }

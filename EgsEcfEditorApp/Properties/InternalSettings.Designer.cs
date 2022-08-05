@@ -202,5 +202,65 @@ namespace EgsEcfEditorApp.Properties {
                 this["EgsEcfEditorApp_DefinitionTemplateFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(", ")]
+        public string EgsEcfEditorApp_ValueSeperator {
+            get {
+                return ((string)(this["EgsEcfEditorApp_ValueSeperator"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ValueSeperator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(": ")]
+        public string EgsEcfEditorApp_GroupSeperator {
+            get {
+                return ((string)(this["EgsEcfEditorApp_GroupSeperator"]));
+            }
+            set {
+                this["EgsEcfEditorApp_GroupSeperator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("...")]
+        public string EgsEcfEditorApp_ValuesPendingIndicator {
+            get {
+                return ((string)(this["EgsEcfEditorApp_ValuesPendingIndicator"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ValuesPendingIndicator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int EgsEcfEditorApp_ValueMaxCount {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ValueMaxCount"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ValueMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int EgsEcfEditorApp_GroupMaxCount {
+            get {
+                return ((int)(this["EgsEcfEditorApp_GroupMaxCount"]));
+            }
+            set {
+                this["EgsEcfEditorApp_GroupMaxCount"] = value;
+            }
+        }
     }
 }

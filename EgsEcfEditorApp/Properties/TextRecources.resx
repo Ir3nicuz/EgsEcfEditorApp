@@ -216,9 +216,6 @@
   <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like wise search to reduce the dropdown list</value>
   </data>
-  <data name="EcfParameterView_GroupSeperator" xml:space="preserve">
-    <value>:</value>
-  </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Marked Parameters are inherited to the selected tree element</value>
   </data>
@@ -239,9 +236,6 @@
   </data>
   <data name="EcfParameterView_ToolTip_ParameterSorterOriginOrder" xml:space="preserve">
     <value>Sets hierarchical sorting order</value>
-  </data>
-  <data name="EcfParameterView_ValueSeperator" xml:space="preserve">
-    <value>,</value>
   </data>
   <data name="EcfSettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
     <value>Really reset all settings to default?</value>

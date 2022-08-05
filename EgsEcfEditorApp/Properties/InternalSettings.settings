@@ -47,5 +47,20 @@
     <Setting Name="EgsEcfEditorApp_DefinitionTemplateFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">VanillaEcfDefinition_BlocksConfig.xml</Value>
     </Setting>
+    <Setting Name="EgsEcfEditorApp_ValueSeperator" Type="System.String" Scope="User">
+      <Value Profile="(Default)">, </Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_GroupSeperator" Type="System.String" Scope="User">
+      <Value Profile="(Default)">: </Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ValuesPendingIndicator" Type="System.String" Scope="User">
+      <Value Profile="(Default)">...</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ValueMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_GroupMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

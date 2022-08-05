@@ -358,15 +358,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to :.
-        /// </summary>
-        internal static string EcfParameterView_GroupSeperator {
-            get {
-                return ResourceManager.GetString("EcfParameterView_GroupSeperator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Marked Parameters are inherited to the selected tree element.
         /// </summary>
         internal static string EcfParameterView_ToolTip_InheritedColumn {
@@ -426,15 +417,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfParameterView_ToolTip_ParameterSorterOriginOrder {
             get {
                 return ResourceManager.GetString("EcfParameterView_ToolTip_ParameterSorterOriginOrder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ,.
-        /// </summary>
-        internal static string EcfParameterView_ValueSeperator {
-            get {
-                return ResourceManager.GetString("EcfParameterView_ValueSeperator", resourceCulture);
             }
         }
         

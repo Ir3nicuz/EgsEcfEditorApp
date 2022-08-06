@@ -1586,21 +1586,19 @@ namespace EcfFileViews
                     return Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).Where(cell => cell.Tag != null)
                         .Select(cell => Convert.ToString(cell.Value)).ToList();
                 }
-                [Obsolete("needs work")]
                 public bool ActivateNextFreeCell()
                 {
-
-
-
-                    return false;
+                    DataGridViewCell nextCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).FirstOrDefault(cell => cell.Tag == null);
+                    if (nextCell == null) { return false; }
+                    ActivateCell(nextCell);
+                    return true;
                 }
-                [Obsolete("needs work")]
                 public bool DeactivateLastUsedCell()
                 {
-
-
-
-                    return false;
+                    DataGridViewCell lastCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).LastOrDefault(cell => cell.Tag != null);
+                    if (lastCell == null) { return false; }
+                    DeactivateCell(lastCell);
+                    return true;
                 }
 
                 // privates
@@ -1623,18 +1621,26 @@ namespace EcfFileViews
                         if (index < values.Length)
                         {
                             valueCell.Value = values[index];
-                            valueCell.Style.BackColor = Color.Empty;
-                            valueCell.ReadOnly = IsReferenceSource;
-                            valueCell.Tag = true;
+                            ActivateCell(valueCell);
                         }
                         else
                         {
                             valueCell.Value = string.Empty;
-                            valueCell.Style.BackColor = Color.LightGray;
-                            valueCell.ReadOnly = true;
-                            valueCell.Tag = null;
+                            DeactivateCell(valueCell);
                         }
                     }
+                }
+                private void ActivateCell(DataGridViewCell cell)
+                {
+                    cell.Style.BackColor = Color.Empty;
+                    cell.ReadOnly = IsReferenceSource;
+                    cell.Tag = true;
+                }
+                private void DeactivateCell(DataGridViewCell cell)
+                {
+                    cell.Style.BackColor = Color.LightGray;
+                    cell.ReadOnly = true;
+                    cell.Tag = null;
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using EgsEcfEditorApp.Properties;
+﻿using EcfFileViewTools;
+using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,10 @@ namespace EcfFileViews
         private List<EcfBlock> IdentifyingBlockList { get; set; } = null;
         private List<EcfBlock> ReferencedBlockList { get; set; } = null;
         private List<EcfBlock> ReferencingBlockList { get; set; } = null;
-        private EcfItemSelectorDialog ItemSelector { get; set; } = null;
+        private EcfItemSelectorDialog ItemSelector { get; set; } = new EcfItemSelectorDialog();
+
+        private AttributesPanel ParameterItemAttributesPanel { get; } = new AttributesPanel();
+        private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
 
         public EcfItemEditingDialog(EgsEcfFile file)
         {
@@ -58,8 +62,6 @@ namespace EcfFileViews
         {
             Icon = IconRecources.Icon_App;
             File = file;
-
-            ItemSelector = new EcfItemSelectorDialog();
 
             // Hack to hide tabs
             ViewPanel.SizeMode = TabSizeMode.Fixed;
@@ -191,41 +193,9 @@ namespace EcfFileViews
             }
         }
         // block
-        private void BlockItemAttributesGrid_CellClick(object sender, DataGridViewCellEventArgs evt)
+        private void BlockItemAttributesPanel_InheritorChanged(object sender, EventArgs evt)
         {
-            if (evt.RowIndex > -1 && BlockItemAttributesGrid.Rows[evt.RowIndex] is AttributeRow row 
-                && row.IsReferenceSource && evt.ColumnIndex != BlockItem_AttributesGrid_ActivateColumn.Index)
-            {
-                if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
-                {
-                    EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
-                    row.SetInheritor(inheritor);
-                    BlockItem_UpdateParametersInheritance(inheritor);
-                    row.SetActive(true);
-                }
-            }
-        }
-        private void BlockItemAttributesGrid_CellContentClick(object sender, DataGridViewCellEventArgs evt)
-        {
-            if (evt.RowIndex > -1 && BlockItemAttributesGrid.Rows[evt.RowIndex] is AttributeRow row
-                && row.IsReferenceSource && evt.ColumnIndex == BlockItem_AttributesGrid_ActivateColumn.Index)
-            {
-                BlockItemAttributesGrid.EndEdit();
-                if (row.IsActive())
-                {
-                    if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
-                    {
-                        EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
-                        row.SetInheritor(inheritor);
-                        BlockItem_UpdateParametersInheritance(inheritor);
-                    }
-                }
-                else
-                {
-                    row.SetInheritor(null);
-                    BlockItem_UpdateParametersInheritance(null);
-                }
-            }
+            BlockItem_UpdateParametersInheritance(sender as EcfBlock);
         }
 
         // publics
@@ -317,6 +287,7 @@ namespace EcfFileViews
             IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockIdentificationAttribute)).ToList();
             ReferencingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceSourceAttribute)).ToList();
             ReferencedBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceTargetAttribute)).ToList();
+            BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
         }
         private void Generic_PreActivationChecks_AddingMulti()
         {
@@ -335,42 +306,6 @@ namespace EcfFileViews
                 default: SelectItem_ActivateView(); break;
             }
         }
-        private void Generic_ActivateAttributesView(DataGridView view, AttributeRow[] rows)
-        {
-            view.SuspendLayout();
-            view.Rows.Clear();
-            view.Rows.AddRange(rows);
-            view.ResumeLayout();
-        }
-        private void Generic_UpdateAttributesView(DataGridView view, EcfStructureItem presetItem)
-        {
-            List<EcfAttribute> presentAttributes = null;
-            if (presetItem is EcfParameter param)
-            {
-                presentAttributes = param.Attributes.ToList();
-            }
-            else if (presetItem is EcfBlock block)
-            {
-                presentAttributes = block.Attributes.ToList();
-            }
-            view.SuspendLayout();
-            foreach (DataGridViewRow row in view.Rows)
-            {
-                if (row is AttributeRow attrRow)
-                {
-                    EcfAttribute attribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.Definition.Name));
-                    if (attribute == null)
-                    {
-                        attrRow.InitRow(false, "");
-                    }
-                    else
-                    {
-                        attrRow.InitRow(true, attribute.GetFirstValue());
-                    }
-                }
-            }
-            view.ResumeLayout();
-        }
         private List<string> Generic_ValidateInputs()
         {
             switch (SelectedItemType)
@@ -381,22 +316,6 @@ namespace EcfFileViews
                 case CreateableItems.ChildBlock: return BlockItem_ValidateInputs();
                 default: throw new ArgumentException(string.Format("No creator defined for item type {0}...that shouldn't happen", SelectedItemType.ToString()));
             }
-        }
-        private List<string> Generic_ValidateAttributeValues(DataGridView view)
-        {
-            List<string> errors = new List<string>();
-            foreach (DataGridViewRow row in view.Rows)
-            {
-                if (row is AttributeRow attr && attr.IsActive() && attr.Definition.HasValue)
-                {
-                    foreach (EcfError error in CheckValueValid(attr.GetValue(), attr.Definition, File.Definition, null, EcfErrorGroups.Editing))
-                    {
-                        errors.Add(string.Format("{0} '{1}' {2} '{3}': {4}", TitleRecources.Generic_Attribute, attr.Definition.Name,
-                            TextRecources.Generic_HasError, GetLocalizedEnum(error.Type), error.Info));
-                    }
-                }
-            }
-            return errors;
         }
         private void Generic_ShowValidationErrors(List<string> errors)
         {
@@ -420,18 +339,6 @@ namespace EcfFileViews
                 case CreateableItems.ChildBlock: return BlockItem_PrepareResultItem();
                 default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen", SelectedItemType.ToString()));
             }
-        }
-        private List<EcfAttribute> Generic_PrepareResultAttributes(DataGridView view)
-        {
-            List<EcfAttribute> attributes = new List<EcfAttribute>();
-            foreach (DataGridViewRow row in view.Rows)
-            {
-                if (row is AttributeRow attr && attr.IsActive())
-                {
-                    attributes.Add(new EcfAttribute(attr.Definition.Name, attr.GetValue()));
-                }
-            }
-            return attributes;
         }
 
         // comment section
@@ -517,12 +424,9 @@ namespace EcfFileViews
             ParameterItemInfoLabel.Text = TitleRecources.Generic_Info;
             ParameterItemCommentLabel.Text = TitleRecources.Generic_Comment;
             ParameterItemValuesLabel.Text = TitleRecources.Generic_Values;
-            ParameterItemAttributesLabel.Text = TitleRecources.Generic_Attributes;
 
-            ParameterItem_AttributesGrid_ActivateColumn.HeaderText = TitleRecources.Generic_Active;
-            ParameterItem_AttributesGrid_NameColumn.HeaderText = TitleRecources.Generic_Name;
-            ParameterItem_AttributesGrid_ValueColumn.HeaderText = TitleRecources.Generic_Value;
-            ParameterItem_AttributesGrid_InfoColumn.HeaderText = TitleRecources.Generic_Info;
+            ParameterItemViewPanel.Controls.Add(ParameterItemAttributesPanel, 0, 2);
+            ParameterItemViewPanel.SetColumnSpan(ParameterItemAttributesPanel, 2);
         }
         private void ParameterItem_PreActivationChecks_Editing()
         {
@@ -583,8 +487,7 @@ namespace EcfFileViews
 
             ParameterItemParentTextBox.Text = ParentBlock?.BuildIdentification();
 
-            Generic_ActivateAttributesView(ParameterItemAttributesGrid, 
-                File.Definition.ParameterAttributes.Select(attr => new AttributeRow(attr, File.Definition)).ToArray());
+            ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
 
             ParameterItem_UpdateView();
 
@@ -614,7 +517,7 @@ namespace EcfFileViews
             ParameterItem_UpdateValuesGrid();
 
             // attributes
-            Generic_UpdateAttributesView(ParameterItemAttributesGrid, PresetParameter);
+            ParameterItemAttributesPanel.UpdateAttributes(PresetParameter, null);
         }
         private void ParameterItem_ActivateKeyComboBox()
         {
@@ -744,7 +647,7 @@ namespace EcfFileViews
         {
             List<string> errors = new List<string>();
             errors.AddRange(ParameterItem_ValidateValuesGrid());
-            errors.AddRange(Generic_ValidateAttributeValues(ParameterItemAttributesGrid));
+            errors.AddRange(ParameterItemAttributesPanel.ValidateAttributeValues());
             return errors;
         }
         private List<string> ParameterItem_ValidateValuesGrid()
@@ -767,7 +670,7 @@ namespace EcfFileViews
         private EcfParameter ParameterItem_PrepareResultItem()
         {
             List<EcfValueGroup> valueGroups = ParameterItem_PrepareResultValues();
-            List<EcfAttribute> attributes = Generic_PrepareResultAttributes(ParameterItemAttributesGrid);
+            List<EcfAttribute> attributes = ParameterItemAttributesPanel.PrepareResultAttributes();
             if (PresetParameter == null)
             {
                 PresetParameter = new EcfParameter(Convert.ToString(ParameterItemKeyComboBox.SelectedItem), valueGroups, attributes);
@@ -803,6 +706,7 @@ namespace EcfFileViews
         }
 
         // block section
+        [Obsolete("attributes panel in ursprünglicher reihe bis parameter panel überarbeitung")]
         private void BlockItem_InitView()
         {
             BlockItemPreMarkLabel.Text = TitleRecources.Generic_PreMark;
@@ -811,7 +715,6 @@ namespace EcfFileViews
             BlockItemInheritorLabel.Text = TitleRecources.Generic_Inherited;
             BlockItemCommentLabel.Text = TitleRecources.Generic_Comment;
             BlockItemParametersLabel.Text = TitleRecources.Generic_Parameters;
-            BlockItemAttributesLabel.Text = TitleRecources.Generic_Attributes;
 
             BlockItem_ParametersGrid_ActivateColumn.HeaderText = TitleRecources.Generic_Active;
             BlockItem_ParametersGrid_InheritColumn.HeaderText = TitleRecources.Generic_Inherited;
@@ -819,13 +722,12 @@ namespace EcfFileViews
             BlockItem_ParametersGrid_InfoColumn.HeaderText = TitleRecources.Generic_Info;
             BlockItem_ParametersGrid_CommentColumn.HeaderText = TitleRecources.Generic_Comment;
 
-            BlockItem_AttributesGrid_ActivateColumn.HeaderText = TitleRecources.Generic_Active;
-            BlockItem_AttributesGrid_NameColumn.HeaderText = TitleRecources.Generic_Name;
-            BlockItem_AttributesGrid_ValueColumn.HeaderText = TitleRecources.Generic_Value;
-            BlockItem_AttributesGrid_InfoColumn.HeaderText = TitleRecources.Generic_Info;
-
             BlockItem_PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
             BlockItem_PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
+
+            BlockItemViewPanel.Controls.Add(BlockItemAttributesPanel, 0, 2);
+            BlockItemViewPanel.SetColumnSpan(BlockItemAttributesPanel, 2);
+            BlockItemAttributesPanel.InheritorChanged += BlockItemAttributesPanel_InheritorChanged;
 
             BlockItemParametersGrid.SuspendLayout();
             BlockItemParametersGrid.Rows.Clear();
@@ -984,9 +886,8 @@ namespace EcfFileViews
             EcfBlock inheritorBlock = PresetBlock?.Inheritor;
 
             // attributes
-            Generic_ActivateAttributesView(BlockItemAttributesGrid,
-                BlockAttributeDefinitions.Select(attr => new AttributeRow(attr, File.Definition, inheritorBlock)).ToArray());
-            Generic_UpdateAttributesView(BlockItemAttributesGrid, PresetBlock);
+            BlockItemAttributesPanel.GenerateAttributes(File.Definition, BlockAttributeDefinitions.AsReadOnly());
+            BlockItemAttributesPanel.UpdateAttributes(PresetBlock, inheritorBlock);
 
             // parameter
             BlockItem_UpdateParametersGrid();
@@ -1030,10 +931,10 @@ namespace EcfFileViews
         {
             List<string> errors = new List<string>();
             errors.AddRange(BlockItem_ValidateTypeData());
-            errors.AddRange(BlockItem_ValidateIdName());
-            errors.AddRange(BlockItem_ValidateRefTarget());
-            errors.AddRange(BlockItem_ValidateRefSource());
-            errors.AddRange(Generic_ValidateAttributeValues(BlockItemAttributesGrid));
+            errors.AddRange(BlockItemAttributesPanel.ValidateIdName(IdentifyingBlockList, ReferencedBlockList, PresetBlock));
+            errors.AddRange(BlockItemAttributesPanel.ValidateRefTarget(ReferencingBlockList, PresetBlock));
+            errors.AddRange(BlockItemAttributesPanel.ValidateRefSource(ReferencedBlockList));
+            errors.AddRange(BlockItemAttributesPanel.ValidateAttributeValues());
             return errors;
         }
         private List<string> BlockItem_ValidateTypeData()
@@ -1053,81 +954,10 @@ namespace EcfFileViews
             }
             return errors;
         }
-        private List<string> BlockItem_ValidateIdName()
-        {
-            List<string> errors = new List<string>();
-            if (IdentifyingBlockList != null)
-            {
-                AttributeRow idRow = BlockItemAttributesGrid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsIdentification);
-                if (idRow != null)
-                {
-                    string value = idRow.GetValue();
-                    foreach (EcfBlock block in IdentifyingBlockList.Where(block => !(PresetBlock?.Equals(block) ?? false)
-                        && value.Equals(block.GetAttributeFirstValue(idRow.Definition.Name))))
-                    {
-                        errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
-                            value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
-                    }
-                }
-            }
-            if (ReferencedBlockList != null)
-            {
-                AttributeRow nameRow = BlockItemAttributesGrid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
-                if (nameRow != null)
-                {
-                    string value = nameRow.GetValue();
-                    foreach (EcfBlock block in ReferencedBlockList.Where(block => !(PresetBlock?.Equals(block) ?? false)
-                         && value.Equals(block.GetAttributeFirstValue(nameRow.Definition.Name))))
-                    {
-                        errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
-                            value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
-                    }
-                }
-            }
-            return errors;
-        }
-        private List<string> BlockItem_ValidateRefTarget()
-        {
-            List<string> errors = new List<string>();
-            if (ReferencingBlockList != null && PresetBlock != null)
-            {
-                AttributeRow targetRefRow = BlockItemAttributesGrid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
-                if (targetRefRow != null)
-                {
-                    string oldTargetValue = PresetBlock.GetAttributeFirstValue(File.Definition.BlockReferenceTargetAttribute);
-                    if (oldTargetValue != null && !oldTargetValue.Equals(targetRefRow.GetValue()))
-                    {
-                        foreach (EcfBlock block in ReferencingBlockList.Where(block => block.GetAttributeFirstValue(File.Definition.BlockReferenceSourceAttribute).Equals(oldTargetValue)))
-                        {
-                            errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheOldNameAttributeValue,
-                                oldTargetValue, TextRecources.EcfItemEditingDialog_IsStillReferencedBy, block.BuildIdentification()));
-                        }
-                    }
-                }
-            }
-            return errors;
-        }
-        private List<string> BlockItem_ValidateRefSource()
-        {
-            List<string> errors = new List<string>();
-            if (ReferencedBlockList != null)
-            {
-                AttributeRow sourceRefRow = BlockItemAttributesGrid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource);
-                if (sourceRefRow != null && sourceRefRow.IsActive())
-                {
-                    if (!ReferencedBlockList.Any(block => block.Equals(sourceRefRow.Inheritor)))
-                    {
-                        errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
-                            BlockItemInheritorTextBox.Text, TextRecources.EcfItemEditingDialog_CouldNotBeFoundInTheItemList));
-                    }
-                }
-            }
-            return errors;
-        }
         private EcfBlock BlockItem_PrepareResultItem()
         {
             List<EcfParameter> activeParameters = BlockItem_PrepareActiveParameters();
-            List<EcfAttribute> attributes = Generic_PrepareResultAttributes(BlockItemAttributesGrid);
+            List<EcfAttribute> attributes = BlockItemAttributesPanel.PrepareResultAttributes();
             if (PresetBlock == null)
             {
                 PresetBlock = new EcfBlock(
@@ -1158,7 +988,7 @@ namespace EcfFileViews
                     EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled, 
                     EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
             }
-            PresetBlock.Inheritor = BlockItemAttributesGrid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource)?.Inheritor;
+            PresetBlock.Inheritor = BlockItemAttributesPanel.GetInheritor();
             if (!string.Empty.Equals(BlockItemCommentTextBox.Text))
             {
                 PresetBlock.AddComment(BlockItemCommentTextBox.Text);
@@ -1231,101 +1061,12 @@ namespace EcfFileViews
         }
 
         // subclasses
+        [Obsolete("useless struct for just one property")]
         private class ParameterItem_ValueColumn : DataGridViewTextBoxColumn
         {
             public ParameterItem_ValueColumn() : base()
             {
                 SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-        }
-        private class AttributeRow : DataGridViewRow
-        {
-            public ItemDefinition Definition { get; }
-
-            public bool IsIdentification { get; } = false;
-            public bool IsReferenceSource { get; } = false;
-            public bool IsReferenceTarget { get; } = false;
-            public EcfBlock Inheritor { get; private set; } = null;
-
-            private string ReferenceTargetAttribute { get; } = string.Empty;
-
-            private DataGridViewCheckBoxCell ActiveCell { get; } = new DataGridViewCheckBoxCell();
-            private DataGridViewTextBoxCell NameCell { get; } = new DataGridViewTextBoxCell();
-            private DataGridViewTextBoxCell ValueCell { get; } = new DataGridViewTextBoxCell();
-            private DataGridViewTextBoxCell InfoCell { get; } = new DataGridViewTextBoxCell();
-
-            public AttributeRow(ItemDefinition definition, FormatDefinition format) : base()
-            {
-                Cells.Add(ActiveCell);
-                Cells.Add(NameCell);
-                Cells.Add(ValueCell);
-                Cells.Add(InfoCell);
-
-                Definition = definition;
-
-                IsIdentification = definition.Name.Equals(format.BlockIdentificationAttribute);
-                IsReferenceSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
-                IsReferenceTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
-
-                ActiveCell.ReadOnly = !definition.IsOptional;
-                if (ActiveCell.ReadOnly) { ActiveCell.Style.BackColor = Color.LightGray; }
-                ValueCell.ReadOnly = !definition.HasValue;
-                if (ValueCell.ReadOnly) { ValueCell.Style.BackColor = Color.LightGray; }
-
-                NameCell.Value = definition.Name;
-                InfoCell.Value = definition.Info;
-            }
-            public AttributeRow(ItemDefinition definition, FormatDefinition format, EcfBlock inheritor) : this(definition, format)
-            {
-                ReferenceTargetAttribute = format.BlockReferenceTargetAttribute;
-
-                if (IsReferenceSource)
-                {
-                    SetInheritor(inheritor);
-                }
-            }
-
-            public void InitRow(bool active, string value)
-            {
-                SetActiveState(active);
-                if (!IsReferenceSource)
-                {
-                    ValueCell.Value = value;
-                }
-            }
-            public void InitRow(bool active, EcfBlock inheritor)
-            {
-                SetActiveState(active);
-                SetInheritor(inheritor);
-            }
-            public bool IsActive()
-            {
-                return Convert.ToBoolean(ActiveCell.Value);
-            }
-            public void SetActive(bool state)
-            {
-                ActiveCell.Value = state;
-            }
-            public string GetValue()
-            {
-                return Convert.ToString(ValueCell.Value);
-            }
-            public void SetInheritor(EcfBlock inheritor)
-            {
-                Inheritor = inheritor;
-                ValueCell.Value = inheritor?.GetAttributeFirstValue(ReferenceTargetAttribute) ?? string.Empty;
-            }
-
-            private void SetActiveState(bool state)
-            {
-                if (Definition.IsOptional)
-                {
-                    ActiveCell.Value = state;
-                }
-                else
-                {
-                    ActiveCell.Value = true;
-                }
             }
         }
         private class ParameterRow : DataGridViewRow
@@ -1414,6 +1155,487 @@ namespace EcfFileViews
             {
                 if (DisplayText == null || other.DisplayText == null) { return 0; }
                 return DisplayText.CompareTo(other.DisplayText);
+            }
+        }
+
+
+
+
+        private class AttributesPanel : TableLayoutPanel
+        {
+            public event EventHandler InheritorChanged;
+            
+            private Label TableLabel { get; } = new Label();
+            private FlowLayoutPanel ButtonPanel { get; } = new FlowLayoutPanel();
+            private Button AddValueButton { get; } = new Button();
+            private Button RemoveValueButton { get; } = new Button();
+            private EcfDataGridView Grid { get; } = new EcfDataGridView();
+
+            private EcfItemSelectorDialog ItemSelector { get; set; } = new EcfItemSelectorDialog();
+            public List<EcfBlock> ReferencedBlockList { get; set; } = null;
+
+            private int PrefixColumnCount { get; } = 3;
+            private DataGridViewCheckBoxColumn ActivationColumn { get; } = new DataGridViewCheckBoxColumn();
+            private DataGridViewTextBoxColumn InfoColumn { get; } = new DataGridViewTextBoxColumn();
+            private DataGridViewTextBoxColumn NameColumn { get; } = new DataGridViewTextBoxColumn();
+
+            public AttributesPanel() : base()
+            {
+                InitPanel();
+            }
+
+            // events
+            private void InitPanel()
+            {
+                AutoSize = true;
+                ColumnCount = 2;
+                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+                Dock = DockStyle.Fill;
+                RowCount = 2;
+                RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+                GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+
+                InitHeader();
+
+                InitGrid();
+                
+                Controls.Add(TableLabel, 0, 0); 
+                Controls.Add(ButtonPanel, 1, 0);
+                Controls.Add(Grid, 0, 1);
+
+                SetColumnSpan(Grid, 2);
+            }
+            private void Grid_CellClick(object sender, DataGridViewCellEventArgs evt)
+            {
+                if (ReferencedBlockList != null && evt.RowIndex > -1 && Grid.Rows[evt.RowIndex] is AttributeRow row
+                    && row.IsReferenceSource && evt.ColumnIndex != ActivationColumn.Index)
+                {
+                    if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                    {
+                        EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
+                        row.SetActive(true);
+                        row.SetInheritor(inheritor);
+                        InheritorChanged?.Invoke(inheritor, null);
+                    }
+                }
+            }
+            private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs evt)
+            {
+                if (ReferencedBlockList != null && evt.RowIndex > -1 && Grid.Rows[evt.RowIndex] is AttributeRow row
+                    && row.IsReferenceSource && evt.ColumnIndex == ActivationColumn.Index)
+                {
+                    Grid.EndEdit();
+                    if (row.IsActive())
+                    {
+                        if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                        {
+                            EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
+                            row.SetInheritor(inheritor);
+                            InheritorChanged?.Invoke(inheritor, null);
+                        }
+                    }
+                    else
+                    {
+                        row.SetInheritor(null);
+                        InheritorChanged?.Invoke(null, null);
+                    }
+                }
+            }
+            [Obsolete("needs work")]
+            private void AddValueButton_Click(object sender, EventArgs evt)
+            {
+                if (TryFindSelectedRow(out AttributeRow row))
+                {
+                    if (row.ActivateNextFreeCell())
+                    {
+                        // add new column
+                    }
+                }
+
+            }
+            private void RemoveValueButton_Click(object sender, EventArgs evt)
+            {
+                if (TryFindSelectedRow(out AttributeRow row))
+                {
+                    row.DeactivateLastUsedCell();
+                }
+            }
+
+            // publics
+            public void GenerateAttributes(FormatDefinition definition, ReadOnlyCollection<ItemDefinition> attributes)
+            {
+                AttributeRow[] rows = attributes.Select(attr => new AttributeRow(attr, definition)).ToArray();
+                Grid.SuspendLayout();
+                Grid.Rows.Clear();
+                Grid.Columns.Clear();
+                Grid.Columns.Add(ActivationColumn);
+                Grid.Columns.Add(InfoColumn);
+                Grid.Columns.Add(NameColumn);
+                Grid.Rows.AddRange(rows);
+                Grid.ResumeLayout();
+            }
+            public void UpdateAttributes(EcfStructureItem presetItem, EcfBlock inheritorBlock)
+            {
+                List<EcfAttribute> presentAttributes = null;
+                if (presetItem is EcfParameter param)
+                {
+                    presentAttributes = param.Attributes.ToList();
+                }
+                else if (presetItem is EcfBlock block)
+                {
+                    presentAttributes = block.Attributes.ToList();
+                }
+                Grid.SuspendLayout();
+                UpdateValueColumns(presentAttributes);
+                foreach (DataGridViewRow row in Grid.Rows)
+                {
+                    if (row is AttributeRow attrRow)
+                    {
+                        EcfAttribute attribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.ItemDef.Name));
+                        if (attribute == null)
+                        {
+                            attrRow.InitRow(false);
+                        }
+                        else if (attrRow.IsReferenceSource)
+                        {
+                            attrRow.InitRow(true, inheritorBlock);
+                        }
+                        else
+                        {
+                            attrRow.InitRow(true, attribute.GetAllValues().ToArray());
+                        }
+                    }
+                }
+                Grid.ResumeLayout();
+            }
+            public List<string> ValidateAttributeValues()
+            {
+                List<string> errors = new List<string>();
+                foreach (DataGridViewRow row in Grid.Rows)
+                {
+                    if (row is AttributeRow attr && attr.IsActive() && attr.ItemDef.HasValue)
+                    {
+                        List<EcfValueGroup> values = new List<EcfValueGroup>() { new EcfValueGroup(attr.GetValues()) };
+                        foreach (EcfError error in CheckValuesValid(values, attr.ItemDef, attr.FormDef, EcfErrorGroups.Editing))
+                        {
+                            errors.Add(string.Format("{0} '{1}' {2} '{3}': {4}", TitleRecources.Generic_Attribute, attr.ItemDef.Name,
+                                TextRecources.Generic_HasError, GetLocalizedEnum(error.Type), error.Info));
+                        }
+                    }
+                }
+                return errors;
+            }
+            public List<string> ValidateIdName(List<EcfBlock> identifyingBlockList, List<EcfBlock> referencedBlockList, EcfBlock presetBlock)
+            {
+                List<string> errors = new List<string>();
+                if (identifyingBlockList != null)
+                {
+                    AttributeRow idRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsIdentification);
+                    if (idRow != null)
+                    {
+                        string value = idRow.GetValues().FirstOrDefault();
+                        foreach (EcfBlock block in identifyingBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
+                            && value.Equals(block.GetAttributeFirstValue(idRow.ItemDef.Name))))
+                        {
+                            errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
+                                value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                        }
+                    }
+                }
+                if (referencedBlockList != null)
+                {
+                    AttributeRow nameRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
+                    if (nameRow != null)
+                    {
+                        string value = nameRow.GetValues().FirstOrDefault();
+                        foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
+                             && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                        {
+                            errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
+                                value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                        }
+                    }
+                }
+                return errors;
+            }
+            public List<string> ValidateRefTarget(List<EcfBlock> referencingBlockList, EcfBlock presetBlock)
+            {
+                List<string> errors = new List<string>();
+                if (referencingBlockList != null && presetBlock != null)
+                {
+                    AttributeRow targetRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
+                    if (targetRefRow != null)
+                    {
+                        string oldTargetValue = presetBlock.GetAttributeFirstValue(targetRefRow.FormDef.BlockReferenceTargetAttribute);
+                        if (oldTargetValue != null && !oldTargetValue.Equals(targetRefRow.GetValues().FirstOrDefault()))
+                        {
+                            foreach (EcfBlock block in referencingBlockList.Where(block => 
+                                block.GetAttributeFirstValue(targetRefRow.FormDef.BlockReferenceSourceAttribute).Equals(oldTargetValue)))
+                            {
+                                errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheOldNameAttributeValue,
+                                    oldTargetValue, TextRecources.EcfItemEditingDialog_IsStillReferencedBy, block.BuildIdentification()));
+                            }
+                        }
+                    }
+                }
+                return errors;
+            }
+            public List<string> ValidateRefSource(List<EcfBlock> referencedBlockList)
+            {
+                List<string> errors = new List<string>();
+                if (referencedBlockList != null)
+                {
+                    AttributeRow sourceRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource);
+                    if (sourceRefRow != null && sourceRefRow.IsActive())
+                    {
+                        if (!referencedBlockList.Any(block => block.Equals(sourceRefRow.Inheritor)))
+                        {
+                            errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
+                                sourceRefRow.Inheritor?.BuildIdentification(), TextRecources.EcfItemEditingDialog_CouldNotBeFoundInTheItemList));
+                        }
+                    }
+                }
+                return errors;
+            }
+            public List<EcfAttribute> PrepareResultAttributes()
+            {
+                List<EcfAttribute> attributes = new List<EcfAttribute>();
+                foreach (DataGridViewRow row in Grid.Rows)
+                {
+                    if (row is AttributeRow attr && attr.IsActive())
+                    {
+                        attributes.Add(new EcfAttribute(attr.ItemDef.Name, attr.GetValues()));
+                    }
+                }
+                return attributes;
+            }
+            public EcfBlock GetInheritor()
+            {
+                return Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource)?.Inheritor;
+            }
+
+            // privates
+            private void InitHeader()
+            {
+                TableLabel.AutoSize = true;
+                TableLabel.Dock = DockStyle.Fill;
+                TableLabel.Text = TitleRecources.Generic_Attributes;
+                TableLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                ButtonPanel.AutoSize = true;
+                ButtonPanel.Dock = DockStyle.Fill;
+                ButtonPanel.FlowDirection = FlowDirection.RightToLeft;
+
+                AddValueButton.AutoSize = true;
+                AddValueButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                AddValueButton.FlatAppearance.BorderSize = 0;
+                AddValueButton.FlatStyle = FlatStyle.Flat;
+                AddValueButton.Image = IconRecources.Icon_AddValue;
+                AddValueButton.UseVisualStyleBackColor = true;
+
+                RemoveValueButton.AutoSize = true;
+                RemoveValueButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                RemoveValueButton.FlatAppearance.BorderSize = 0;
+                RemoveValueButton.FlatStyle = FlatStyle.Flat;
+                RemoveValueButton.Image = IconRecources.Icon_RemoveValue;
+                RemoveValueButton.UseVisualStyleBackColor = true;
+
+                new ToolTip().SetToolTip(AddValueButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValue);
+                new ToolTip().SetToolTip(RemoveValueButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValue);
+
+                AddValueButton.Click += AddValueButton_Click;
+                RemoveValueButton.Click += RemoveValueButton_Click;
+
+                ButtonPanel.Controls.Add(RemoveValueButton);
+                ButtonPanel.Controls.Add(AddValueButton);
+            }
+            private void InitGrid()
+            {
+                Grid.Dock = DockStyle.Fill;
+                Grid.EditMode = DataGridViewEditMode.EditOnKeystroke;
+                Grid.MultiSelect = false;
+                Grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+                Grid.SelectionMode = DataGridViewSelectionMode.CellSelect;
+
+                ActivationColumn.HeaderText = TitleRecources.Generic_Active;
+                ActivationColumn.Name = TitleRecources.Generic_Active;
+
+                InfoColumn.DefaultCellStyle.BackColor = Color.LightGray;
+                InfoColumn.HeaderText = TitleRecources.Generic_Info;
+                InfoColumn.Name = TitleRecources.Generic_Active;
+                InfoColumn.ReadOnly = true;
+                InfoColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                NameColumn.DefaultCellStyle.BackColor = Color.LightGray;
+                NameColumn.HeaderText = TitleRecources.Generic_Name;
+                NameColumn.Name = TitleRecources.Generic_Active;
+                NameColumn.ReadOnly = true;
+                NameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                Grid.CellClick += Grid_CellClick;
+                Grid.CellContentClick += Grid_CellContentClick;
+            }
+            private void UpdateValueColumnHeaders()
+            {
+                foreach (DataGridViewColumn column in Grid.Columns.Cast<DataGridViewColumn>().Skip(PrefixColumnCount))
+                {
+                    column.HeaderText = string.Format("{0} {1}", TitleRecources.Generic_Value, Grid.Columns.IndexOf(column) - PrefixColumnCount + 1);
+                }
+            }
+            private void UpdateValueColumns(List<EcfAttribute> presentAttributes)
+            {
+                int maxCount = 0;
+                if (presentAttributes != null && presentAttributes.Count > 0)
+                {
+                    maxCount = presentAttributes.Max(attr => attr.GetAllValues().Count);
+                }
+                while (Grid.Columns.Count - PrefixColumnCount < maxCount)
+                {
+                    Grid.Columns.Add(new DataGridViewTextBoxColumn()
+                    {
+                        SortMode = DataGridViewColumnSortMode.NotSortable,
+                    });
+                }
+                UpdateValueColumnHeaders();
+            }
+            private void AddValueColumn(int index)
+            {
+
+
+
+
+
+
+                UpdateValueColumnHeaders();
+            }
+            private bool TryFindSelectedRow(out AttributeRow row)
+            {
+                DataGridViewCell cell = Grid.SelectedCells.Cast<DataGridViewCell>().FirstOrDefault();
+                row = cell == null ? null : Grid.Rows[cell.RowIndex] as AttributeRow;
+                return cell != null;
+            }
+
+            //sub classes
+            private class AttributeRow : DataGridViewRow
+            {
+                public FormatDefinition FormDef { get; }
+                public ItemDefinition ItemDef { get; }
+
+                public bool IsIdentification { get; } = false;
+                public bool IsReferenceSource { get; } = false;
+                public bool IsReferenceTarget { get; } = false;
+                public EcfBlock Inheritor { get; private set; } = null;
+
+                private string ReferenceTargetAttribute { get; } = string.Empty;
+
+                private int PrefixColumnCount { get; } = 3;
+                private DataGridViewCheckBoxCell ActivationCell { get; } = new DataGridViewCheckBoxCell();
+                private DataGridViewTextBoxCell InfoCell { get; } = new DataGridViewTextBoxCell();
+                private DataGridViewTextBoxCell NameCell { get; } = new DataGridViewTextBoxCell();
+
+                public AttributeRow(ItemDefinition definition, FormatDefinition format) : base()
+                {
+                    Cells.Add(ActivationCell);
+                    Cells.Add(InfoCell);
+                    Cells.Add(NameCell);
+
+                    ItemDef = definition;
+                    FormDef = format;
+
+                    IsIdentification = definition.Name.Equals(format.BlockIdentificationAttribute);
+                    IsReferenceSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
+                    IsReferenceTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
+
+                    ReferenceTargetAttribute = format.BlockReferenceTargetAttribute;
+
+                    ActivationCell.ReadOnly = !definition.IsOptional;
+                    if (ActivationCell.ReadOnly) { ActivationCell.Style.BackColor = Color.LightGray; }
+
+                    NameCell.Value = definition.Name;
+                    InfoCell.Value = definition.Info;
+                }
+
+                // publics
+                public void InitRow(bool active, params string[] values)
+                {
+                    SetActiveState(active);
+                    SetValues(values);
+                }
+                public void InitRow(bool active, EcfBlock inheritor)
+                {
+                    SetActiveState(active);
+                    SetInheritor(inheritor);
+                }
+                public void SetInheritor(EcfBlock inheritor)
+                {
+                    Inheritor = inheritor;
+                    SetValues(inheritor?.GetAttributeFirstValue(ReferenceTargetAttribute) ?? string.Empty);
+                }
+                public bool IsActive()
+                {
+                    return Convert.ToBoolean(ActivationCell.Value);
+                }
+                public void SetActive(bool state)
+                {
+                    ActivationCell.Value = state;
+                }
+                public List<string> GetValues()
+                {
+                    return Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).Where(cell => cell.Tag != null)
+                        .Select(cell => Convert.ToString(cell.Value)).ToList();
+                }
+                [Obsolete("needs work")]
+                public bool ActivateNextFreeCell()
+                {
+
+
+
+                    return false;
+                }
+                [Obsolete("needs work")]
+                public bool DeactivateLastUsedCell()
+                {
+
+
+
+                    return false;
+                }
+
+                // privates
+                private void SetActiveState(bool state)
+                {
+                    if (ItemDef.IsOptional)
+                    {
+                        ActivationCell.Value = state;
+                    }
+                    else
+                    {
+                        ActivationCell.Value = true;
+                    }
+                }
+                private void SetValues(params string[] values)
+                {
+                    foreach (DataGridViewCell valueCell in Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount))
+                    {
+                        int index = valueCell.ColumnIndex - PrefixColumnCount;
+                        if (index < values.Length)
+                        {
+                            valueCell.Value = values[index];
+                            valueCell.Style.BackColor = Color.Empty;
+                            valueCell.ReadOnly = IsReferenceSource;
+                            valueCell.Tag = true;
+                        }
+                        else
+                        {
+                            valueCell.Value = string.Empty;
+                            valueCell.Style.BackColor = Color.LightGray;
+                            valueCell.ReadOnly = true;
+                            valueCell.Tag = null;
+                        }
+                    }
+                }
             }
         }
     }

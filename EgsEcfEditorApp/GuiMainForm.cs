@@ -3687,6 +3687,7 @@ namespace EcfFileViewTools
 
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
+            AllowUserToOrderColumns = false;
             AllowDrop = false;
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;

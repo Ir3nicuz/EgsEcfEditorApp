@@ -1223,43 +1223,56 @@ namespace EcfFileViews
             }
             private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs evt)
             {
-                if (ReferencedBlockList != null && evt.RowIndex > -1 && Grid.Rows[evt.RowIndex] is AttributeRow row
-                    && row.IsReferenceSource && evt.ColumnIndex == ActivationColumn.Index)
+                if (evt.RowIndex > -1 && evt.ColumnIndex == ActivationColumn.Index && Grid.Rows[evt.RowIndex] is AttributeRow row)
                 {
                     Grid.EndEdit();
-                    if (row.IsActive())
+                    bool activ = row.IsActive();
+                    if (ReferencedBlockList != null && row.IsReferenceSource)
                     {
-                        if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                        if (activ)
                         {
-                            EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
-                            row.SetInheritor(inheritor);
-                            InheritorChanged?.Invoke(inheritor, null);
+                            if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                            {
+                                EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
+                                row.SetInheritor(inheritor);
+                                InheritorChanged?.Invoke(inheritor, null);
+                            }
+                        }
+                        else
+                        {
+                            row.SetInheritor(null);
+                            InheritorChanged?.Invoke(null, null);
                         }
                     }
                     else
                     {
-                        row.SetInheritor(null);
-                        InheritorChanged?.Invoke(null, null);
+                        if (activ)
+                        {
+                            ActivateNewValue(row);
+                        }
+                        else
+                        {
+                            InactivateRow(row);
+                        }
                     }
                 }
             }
-            [Obsolete("needs work")]
             private void AddValueButton_Click(object sender, EventArgs evt)
             {
-                if (TryFindSelectedRow(out AttributeRow row))
+                if (TryFindSelectedRow(out AttributeRow row) && row.ItemDef.HasValue)
                 {
-                    if (row.ActivateNextFreeCell())
-                    {
-                        // add new column
-                    }
+                    row.SetActive(true);
+                    ActivateNewValue(row);
                 }
-
             }
             private void RemoveValueButton_Click(object sender, EventArgs evt)
             {
                 if (TryFindSelectedRow(out AttributeRow row))
                 {
-                    row.DeactivateLastUsedCell();
+                    if (!row.DeactivateLastUsedCell())
+                    {
+                        row.SetActive(false);
+                    }
                 }
             }
 
@@ -1477,13 +1490,6 @@ namespace EcfFileViews
                 Grid.CellClick += Grid_CellClick;
                 Grid.CellContentClick += Grid_CellContentClick;
             }
-            private void UpdateValueColumnHeaders()
-            {
-                foreach (DataGridViewColumn column in Grid.Columns.Cast<DataGridViewColumn>().Skip(PrefixColumnCount))
-                {
-                    column.HeaderText = string.Format("{0} {1}", TitleRecources.Generic_Value, Grid.Columns.IndexOf(column) - PrefixColumnCount + 1);
-                }
-            }
             private void UpdateValueColumns(List<EcfAttribute> presentAttributes)
             {
                 int maxCount = 0;
@@ -1493,22 +1499,27 @@ namespace EcfFileViews
                 }
                 while (Grid.Columns.Count - PrefixColumnCount < maxCount)
                 {
-                    Grid.Columns.Add(new DataGridViewTextBoxColumn()
-                    {
-                        SortMode = DataGridViewColumnSortMode.NotSortable,
-                    });
+                    AddValueColumn();
                 }
-                UpdateValueColumnHeaders();
             }
-            private void AddValueColumn(int index)
+            private void ActivateNewValue(AttributeRow row)
             {
-
-
-
-
-
-
-                UpdateValueColumnHeaders();
+                if (!row.ActivateNextFreeCell())
+                {
+                    AddValueColumn();
+                    row.ActivateNextFreeCell();
+                }
+            }
+            private void AddValueColumn()
+            {
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn()
+                {
+                    HeaderText = string.Format("{0} {1}", TitleRecources.Generic_Value, Grid.Columns.Count - PrefixColumnCount + 1),
+                    ReadOnly = true,
+                    SortMode = DataGridViewColumnSortMode.NotSortable,
+                };
+                column.DefaultCellStyle.BackColor = Color.LightGray;
+                Grid.Columns.Add(column);
             }
             private bool TryFindSelectedRow(out AttributeRow row)
             {
@@ -1632,7 +1643,7 @@ namespace EcfFileViews
                 }
                 private void ActivateCell(DataGridViewCell cell)
                 {
-                    cell.Style.BackColor = Color.Empty;
+                    cell.Style.BackColor = Color.White;
                     cell.ReadOnly = IsReferenceSource;
                     cell.Tag = true;
                 }

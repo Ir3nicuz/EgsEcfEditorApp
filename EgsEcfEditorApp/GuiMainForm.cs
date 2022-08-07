@@ -356,7 +356,7 @@ namespace EgsEcfEditorApp
         }
         private void OpenEcfFile()
         {
-            //try
+            try
             {
                 OpenDialog.SetInitDirectory(FindFileDialogInitDirectory());
                 if (OpenDialog.ShowDialogOpenFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) != DialogResult.OK) { 
@@ -369,9 +369,9 @@ namespace EgsEcfEditorApp
 
                 FileViewPanel.SelectedTab = FileViewPanel.Add(file);
             }
-            //catch (Exception ex)
+            catch (Exception ex)
             {
-                //ShowExceptionMessage(ex, TextRecources.EgsEcfEditorApp_OpenEcfFileFailed);
+                ShowExceptionMessage(ex, TextRecources.EgsEcfEditorApp_OpenEcfFileFailed);
             }
         }
         private void ReloadEcfFile()

@@ -1157,10 +1157,6 @@ namespace EcfFileViews
                 return DisplayText.CompareTo(other.DisplayText);
             }
         }
-
-
-
-
         private class AttributesPanel : TableLayoutPanel
         {
             public event EventHandler InheritorChanged;
@@ -1227,7 +1223,7 @@ namespace EcfFileViews
                 {
                     Grid.EndEdit();
                     bool activ = row.IsActive();
-                    if (ReferencedBlockList != null && row.IsReferenceSource)
+                    if (row.IsReferenceSource && ReferencedBlockList != null)
                     {
                         if (activ)
                         {
@@ -1241,6 +1237,7 @@ namespace EcfFileViews
                         else
                         {
                             row.SetInheritor(null);
+                            row.Inactivate();
                             InheritorChanged?.Invoke(null, null);
                         }
                     }
@@ -1248,11 +1245,14 @@ namespace EcfFileViews
                     {
                         if (activ)
                         {
-                            ActivateNewValue(row);
+                            if (row.ItemDef.HasValue)
+                            {
+                                ActivateNewValue(row);
+                            }
                         }
                         else
                         {
-                            InactivateRow(row);
+                            row.Inactivate();
                         }
                     }
                 }
@@ -1610,6 +1610,13 @@ namespace EcfFileViews
                     if (lastCell == null) { return false; }
                     DeactivateCell(lastCell);
                     return true;
+                }
+                public void Inactivate()
+                {
+                    foreach(DataGridViewCell cell in Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount))
+                    {
+                        DeactivateCell(cell);
+                    }
                 }
 
                 // privates

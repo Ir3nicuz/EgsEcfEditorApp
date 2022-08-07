@@ -29,11 +29,6 @@ namespace EcfFileViews
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
@@ -62,17 +57,8 @@ namespace EcfFileViews
             this.ParameterItemInfoTextBox = new System.Windows.Forms.TextBox();
             this.ParameterItemParentLabel = new System.Windows.Forms.Label();
             this.ParameterItemParentTextBox = new System.Windows.Forms.TextBox();
-            this.ParameterItemValuesPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ParameterItemValuesLabel = new System.Windows.Forms.Label();
-            this.ParameterItemValueButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.ParameterItemRemoveGroupButton = new System.Windows.Forms.Button();
-            this.ParameterItemAddGroupButton = new System.Windows.Forms.Button();
-            this.ParameterItemRemoveValueButton = new System.Windows.Forms.Button();
-            this.ParameterItemAddValueButton = new System.Windows.Forms.Button();
             this.BlockItemView = new System.Windows.Forms.TabPage();
             this.BlockItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.BlockItemParametersPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.BlockItemParametersLabel = new System.Windows.Forms.Label();
             this.BlockItemTypePanel = new System.Windows.Forms.TableLayoutPanel();
             this.BlockItemDataTypeLabel = new System.Windows.Forms.Label();
             this.BlockItemDataTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -86,13 +72,6 @@ namespace EcfFileViews
             this.BlockItemCommentLabel = new System.Windows.Forms.Label();
             this.BlockItemCommentTextBox = new System.Windows.Forms.TextBox();
             this.MessagePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.ParameterItemValuesGrid = new EcfFileViewTools.EcfDataGridView();
-            this.BlockItemParametersGrid = new EcfFileViewTools.EcfDataGridView();
-            this.BlockItem_ParametersGrid_ActivateColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.BlockItem_ParametersGrid_InheritColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.BlockItem_ParametersGrid_NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_ParametersGrid_InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BlockItem_ParametersGrid_CommentColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonPanel.SuspendLayout();
             this.ViewPanel.SuspendLayout();
             this.SelectItemView.SuspendLayout();
@@ -103,15 +82,10 @@ namespace EcfFileViews
             this.ParameterItemViewPanel.SuspendLayout();
             this.ParameterItemKeyPanel.SuspendLayout();
             this.ParameterItemInfoPanel.SuspendLayout();
-            this.ParameterItemValuesPanel.SuspendLayout();
-            this.ParameterItemValueButtonPanel.SuspendLayout();
             this.BlockItemView.SuspendLayout();
             this.BlockItemViewPanel.SuspendLayout();
-            this.BlockItemParametersPanel.SuspendLayout();
             this.BlockItemTypePanel.SuspendLayout();
             this.BlockItemAddDataPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -303,7 +277,6 @@ namespace EcfFileViews
             this.ParameterItemViewPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.ParameterItemViewPanel.Controls.Add(this.ParameterItemKeyPanel, 0, 0);
             this.ParameterItemViewPanel.Controls.Add(this.ParameterItemInfoPanel, 1, 0);
-            this.ParameterItemViewPanel.Controls.Add(this.ParameterItemValuesPanel, 0, 1);
             this.ParameterItemViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemViewPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.ParameterItemViewPanel.Location = new System.Drawing.Point(0, 0);
@@ -453,107 +426,6 @@ namespace EcfFileViews
             this.ParameterItemParentTextBox.Size = new System.Drawing.Size(425, 20);
             this.ParameterItemParentTextBox.TabIndex = 5;
             // 
-            // ParameterItemValuesPanel
-            // 
-            this.ParameterItemValuesPanel.AutoSize = true;
-            this.ParameterItemValuesPanel.ColumnCount = 2;
-            this.ParameterItemViewPanel.SetColumnSpan(this.ParameterItemValuesPanel, 2);
-            this.ParameterItemValuesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.ParameterItemValuesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.ParameterItemValuesPanel.Controls.Add(this.ParameterItemValuesLabel, 0, 0);
-            this.ParameterItemValuesPanel.Controls.Add(this.ParameterItemValueButtonPanel, 1, 0);
-            this.ParameterItemValuesPanel.Controls.Add(this.ParameterItemValuesGrid, 0, 1);
-            this.ParameterItemValuesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemValuesPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.ParameterItemValuesPanel.Location = new System.Drawing.Point(3, 93);
-            this.ParameterItemValuesPanel.Name = "ParameterItemValuesPanel";
-            this.ParameterItemValuesPanel.RowCount = 2;
-            this.ParameterItemValuesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.ParameterItemValuesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.ParameterItemValuesPanel.Size = new System.Drawing.Size(770, 175);
-            this.ParameterItemValuesPanel.TabIndex = 2;
-            // 
-            // ParameterItemValuesLabel
-            // 
-            this.ParameterItemValuesLabel.AutoSize = true;
-            this.ParameterItemValuesLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemValuesLabel.Location = new System.Drawing.Point(3, 0);
-            this.ParameterItemValuesLabel.Name = "ParameterItemValuesLabel";
-            this.ParameterItemValuesLabel.Size = new System.Drawing.Size(225, 35);
-            this.ParameterItemValuesLabel.TabIndex = 0;
-            this.ParameterItemValuesLabel.Text = "values";
-            this.ParameterItemValuesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ParameterItemValueButtonPanel
-            // 
-            this.ParameterItemValueButtonPanel.AutoSize = true;
-            this.ParameterItemValueButtonPanel.Controls.Add(this.ParameterItemRemoveGroupButton);
-            this.ParameterItemValueButtonPanel.Controls.Add(this.ParameterItemAddGroupButton);
-            this.ParameterItemValueButtonPanel.Controls.Add(this.ParameterItemRemoveValueButton);
-            this.ParameterItemValueButtonPanel.Controls.Add(this.ParameterItemAddValueButton);
-            this.ParameterItemValueButtonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemValueButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ParameterItemValueButtonPanel.Location = new System.Drawing.Point(234, 3);
-            this.ParameterItemValueButtonPanel.Name = "ParameterItemValueButtonPanel";
-            this.ParameterItemValueButtonPanel.Size = new System.Drawing.Size(533, 29);
-            this.ParameterItemValueButtonPanel.TabIndex = 1;
-            // 
-            // ParameterItemRemoveGroupButton
-            // 
-            this.ParameterItemRemoveGroupButton.AutoSize = true;
-            this.ParameterItemRemoveGroupButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ParameterItemRemoveGroupButton.FlatAppearance.BorderSize = 0;
-            this.ParameterItemRemoveGroupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ParameterItemRemoveGroupButton.Location = new System.Drawing.Point(466, 3);
-            this.ParameterItemRemoveGroupButton.Name = "ParameterItemRemoveGroupButton";
-            this.ParameterItemRemoveGroupButton.Size = new System.Drawing.Size(64, 23);
-            this.ParameterItemRemoveGroupButton.TabIndex = 0;
-            this.ParameterItemRemoveGroupButton.Text = "g_remove";
-            this.ParameterItemRemoveGroupButton.UseVisualStyleBackColor = true;
-            this.ParameterItemRemoveGroupButton.Click += new System.EventHandler(this.ParameterItemRemoveGroupButton_Click);
-            // 
-            // ParameterItemAddGroupButton
-            // 
-            this.ParameterItemAddGroupButton.AutoSize = true;
-            this.ParameterItemAddGroupButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ParameterItemAddGroupButton.FlatAppearance.BorderSize = 0;
-            this.ParameterItemAddGroupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ParameterItemAddGroupButton.Location = new System.Drawing.Point(413, 3);
-            this.ParameterItemAddGroupButton.Name = "ParameterItemAddGroupButton";
-            this.ParameterItemAddGroupButton.Size = new System.Drawing.Size(47, 23);
-            this.ParameterItemAddGroupButton.TabIndex = 1;
-            this.ParameterItemAddGroupButton.Text = "g_add";
-            this.ParameterItemAddGroupButton.UseVisualStyleBackColor = true;
-            this.ParameterItemAddGroupButton.Click += new System.EventHandler(this.ParameterItemAddGroupButton_Click);
-            // 
-            // ParameterItemRemoveValueButton
-            // 
-            this.ParameterItemRemoveValueButton.AutoSize = true;
-            this.ParameterItemRemoveValueButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ParameterItemRemoveValueButton.FlatAppearance.BorderSize = 0;
-            this.ParameterItemRemoveValueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ParameterItemRemoveValueButton.Location = new System.Drawing.Point(343, 3);
-            this.ParameterItemRemoveValueButton.Name = "ParameterItemRemoveValueButton";
-            this.ParameterItemRemoveValueButton.Size = new System.Drawing.Size(64, 23);
-            this.ParameterItemRemoveValueButton.TabIndex = 2;
-            this.ParameterItemRemoveValueButton.Text = "v_remove";
-            this.ParameterItemRemoveValueButton.UseVisualStyleBackColor = true;
-            this.ParameterItemRemoveValueButton.Click += new System.EventHandler(this.ParameterItemRemoveValueButton_Click);
-            // 
-            // ParameterItemAddValueButton
-            // 
-            this.ParameterItemAddValueButton.AutoSize = true;
-            this.ParameterItemAddValueButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ParameterItemAddValueButton.FlatAppearance.BorderSize = 0;
-            this.ParameterItemAddValueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ParameterItemAddValueButton.Location = new System.Drawing.Point(290, 3);
-            this.ParameterItemAddValueButton.Name = "ParameterItemAddValueButton";
-            this.ParameterItemAddValueButton.Size = new System.Drawing.Size(47, 23);
-            this.ParameterItemAddValueButton.TabIndex = 3;
-            this.ParameterItemAddValueButton.Text = "v_add";
-            this.ParameterItemAddValueButton.UseVisualStyleBackColor = true;
-            this.ParameterItemAddValueButton.Click += new System.EventHandler(this.ParameterItemAddValueButton_Click);
-            // 
             // BlockItemView
             // 
             this.BlockItemView.Controls.Add(this.BlockItemViewPanel);
@@ -570,7 +442,6 @@ namespace EcfFileViews
             this.BlockItemViewPanel.ColumnCount = 2;
             this.BlockItemViewPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.BlockItemViewPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.BlockItemViewPanel.Controls.Add(this.BlockItemParametersPanel, 0, 1);
             this.BlockItemViewPanel.Controls.Add(this.BlockItemTypePanel, 0, 0);
             this.BlockItemViewPanel.Controls.Add(this.BlockItemAddDataPanel, 1, 0);
             this.BlockItemViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -583,35 +454,6 @@ namespace EcfFileViews
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.BlockItemViewPanel.Size = new System.Drawing.Size(776, 454);
             this.BlockItemViewPanel.TabIndex = 0;
-            // 
-            // BlockItemParametersPanel
-            // 
-            this.BlockItemParametersPanel.AutoSize = true;
-            this.BlockItemParametersPanel.ColumnCount = 1;
-            this.BlockItemViewPanel.SetColumnSpan(this.BlockItemParametersPanel, 2);
-            this.BlockItemParametersPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.BlockItemParametersPanel.Controls.Add(this.BlockItemParametersLabel, 0, 0);
-            this.BlockItemParametersPanel.Controls.Add(this.BlockItemParametersGrid, 0, 1);
-            this.BlockItemParametersPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParametersPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.BlockItemParametersPanel.Location = new System.Drawing.Point(3, 93);
-            this.BlockItemParametersPanel.Name = "BlockItemParametersPanel";
-            this.BlockItemParametersPanel.RowCount = 2;
-            this.BlockItemParametersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.BlockItemParametersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.BlockItemParametersPanel.Size = new System.Drawing.Size(770, 175);
-            this.BlockItemParametersPanel.TabIndex = 1;
-            // 
-            // BlockItemParametersLabel
-            // 
-            this.BlockItemParametersLabel.AutoSize = true;
-            this.BlockItemParametersLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParametersLabel.Location = new System.Drawing.Point(3, 0);
-            this.BlockItemParametersLabel.Name = "BlockItemParametersLabel";
-            this.BlockItemParametersLabel.Size = new System.Drawing.Size(764, 35);
-            this.BlockItemParametersLabel.TabIndex = 0;
-            this.BlockItemParametersLabel.Text = "parameters";
-            this.BlockItemParametersLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // BlockItemTypePanel
             // 
@@ -768,102 +610,6 @@ namespace EcfFileViews
             this.MessagePanel.Size = new System.Drawing.Size(784, 0);
             this.MessagePanel.TabIndex = 1;
             // 
-            // ParameterItemValuesGrid
-            // 
-            this.ParameterItemValuesGrid.AllowUserToAddRows = false;
-            this.ParameterItemValuesGrid.AllowUserToDeleteRows = false;
-            this.ParameterItemValuesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ParameterItemValuesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.ParameterItemValuesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ParameterItemValuesPanel.SetColumnSpan(this.ParameterItemValuesGrid, 2);
-            this.ParameterItemValuesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemValuesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.ParameterItemValuesGrid.Location = new System.Drawing.Point(3, 38);
-            this.ParameterItemValuesGrid.MultiSelect = false;
-            this.ParameterItemValuesGrid.Name = "ParameterItemValuesGrid";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ParameterItemValuesGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.ParameterItemValuesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.ParameterItemValuesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.ParameterItemValuesGrid.ShowEditingIcon = false;
-            this.ParameterItemValuesGrid.Size = new System.Drawing.Size(764, 134);
-            this.ParameterItemValuesGrid.TabIndex = 2;
-            // 
-            // BlockItemParametersGrid
-            // 
-            this.BlockItemParametersGrid.AllowUserToAddRows = false;
-            this.BlockItemParametersGrid.AllowUserToDeleteRows = false;
-            this.BlockItemParametersGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.BlockItemParametersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.BlockItemParametersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BlockItem_ParametersGrid_ActivateColumn,
-            this.BlockItem_ParametersGrid_InheritColumn,
-            this.BlockItem_ParametersGrid_NameColumn,
-            this.BlockItem_ParametersGrid_InfoColumn,
-            this.BlockItem_ParametersGrid_CommentColumn});
-            this.BlockItemParametersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParametersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.BlockItemParametersGrid.Location = new System.Drawing.Point(3, 38);
-            this.BlockItemParametersGrid.MultiSelect = false;
-            this.BlockItemParametersGrid.Name = "BlockItemParametersGrid";
-            this.BlockItemParametersGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.BlockItemParametersGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.BlockItemParametersGrid.ShowEditingIcon = false;
-            this.BlockItemParametersGrid.Size = new System.Drawing.Size(764, 134);
-            this.BlockItemParametersGrid.TabIndex = 1;
-            // 
-            // BlockItem_ParametersGrid_ActivateColumn
-            // 
-            this.BlockItem_ParametersGrid_ActivateColumn.HeaderText = "active";
-            this.BlockItem_ParametersGrid_ActivateColumn.Name = "BlockItem_ParametersGrid_ActivateColumn";
-            this.BlockItem_ParametersGrid_ActivateColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.BlockItem_ParametersGrid_ActivateColumn.Width = 61;
-            // 
-            // BlockItem_ParametersGrid_InheritColumn
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle7.NullValue = false;
-            this.BlockItem_ParametersGrid_InheritColumn.DefaultCellStyle = dataGridViewCellStyle7;
-            this.BlockItem_ParametersGrid_InheritColumn.HeaderText = "inh.";
-            this.BlockItem_ParametersGrid_InheritColumn.Name = "BlockItem_ParametersGrid_InheritColumn";
-            this.BlockItem_ParametersGrid_InheritColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_InheritColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.BlockItem_ParametersGrid_InheritColumn.Width = 49;
-            // 
-            // BlockItem_ParametersGrid_NameColumn
-            // 
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_NameColumn.DefaultCellStyle = dataGridViewCellStyle8;
-            this.BlockItem_ParametersGrid_NameColumn.HeaderText = "name";
-            this.BlockItem_ParametersGrid_NameColumn.Name = "BlockItem_ParametersGrid_NameColumn";
-            this.BlockItem_ParametersGrid_NameColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_NameColumn.Width = 58;
-            // 
-            // BlockItem_ParametersGrid_InfoColumn
-            // 
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_InfoColumn.DefaultCellStyle = dataGridViewCellStyle9;
-            this.BlockItem_ParametersGrid_InfoColumn.HeaderText = "info";
-            this.BlockItem_ParametersGrid_InfoColumn.Name = "BlockItem_ParametersGrid_InfoColumn";
-            this.BlockItem_ParametersGrid_InfoColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_InfoColumn.Width = 49;
-            // 
-            // BlockItem_ParametersGrid_CommentColumn
-            // 
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.LightGray;
-            this.BlockItem_ParametersGrid_CommentColumn.DefaultCellStyle = dataGridViewCellStyle10;
-            this.BlockItem_ParametersGrid_CommentColumn.HeaderText = "comment";
-            this.BlockItem_ParametersGrid_CommentColumn.Name = "BlockItem_ParametersGrid_CommentColumn";
-            this.BlockItem_ParametersGrid_CommentColumn.ReadOnly = true;
-            this.BlockItem_ParametersGrid_CommentColumn.Width = 75;
-            // 
             // EcfItemEditingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -897,22 +643,14 @@ namespace EcfFileViews
             this.ParameterItemKeyPanel.PerformLayout();
             this.ParameterItemInfoPanel.ResumeLayout(false);
             this.ParameterItemInfoPanel.PerformLayout();
-            this.ParameterItemValuesPanel.ResumeLayout(false);
-            this.ParameterItemValuesPanel.PerformLayout();
-            this.ParameterItemValueButtonPanel.ResumeLayout(false);
-            this.ParameterItemValueButtonPanel.PerformLayout();
             this.BlockItemView.ResumeLayout(false);
             this.BlockItemView.PerformLayout();
             this.BlockItemViewPanel.ResumeLayout(false);
             this.BlockItemViewPanel.PerformLayout();
-            this.BlockItemParametersPanel.ResumeLayout(false);
-            this.BlockItemParametersPanel.PerformLayout();
             this.BlockItemTypePanel.ResumeLayout(false);
             this.BlockItemTypePanel.PerformLayout();
             this.BlockItemAddDataPanel.ResumeLayout(false);
             this.BlockItemAddDataPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ParameterItemValuesGrid)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BlockItemParametersGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -947,18 +685,7 @@ namespace EcfFileViews
         private System.Windows.Forms.Label ParameterItemCommentLabel;
         private System.Windows.Forms.TextBox ParameterItemInfoTextBox;
         private System.Windows.Forms.TextBox ParameterItemCommentTextBox;
-        private System.Windows.Forms.TableLayoutPanel ParameterItemValuesPanel;
-        private System.Windows.Forms.Label ParameterItemValuesLabel;
-        private System.Windows.Forms.FlowLayoutPanel ParameterItemValueButtonPanel;
-        private System.Windows.Forms.Button ParameterItemRemoveGroupButton;
-        private EcfFileViewTools.EcfDataGridView ParameterItemValuesGrid;
-        private System.Windows.Forms.Button ParameterItemAddGroupButton;
-        private System.Windows.Forms.Button ParameterItemRemoveValueButton;
-        private System.Windows.Forms.Button ParameterItemAddValueButton;
         private System.Windows.Forms.TableLayoutPanel BlockItemViewPanel;
-        private System.Windows.Forms.TableLayoutPanel BlockItemParametersPanel;
-        private System.Windows.Forms.Label BlockItemParametersLabel;
-        private EcfFileViewTools.EcfDataGridView BlockItemParametersGrid;
         private System.Windows.Forms.TableLayoutPanel BlockItemTypePanel;
         private System.Windows.Forms.TableLayoutPanel BlockItemAddDataPanel;
         private System.Windows.Forms.Label BlockItemDataTypeLabel;
@@ -968,11 +695,6 @@ namespace EcfFileViews
         private System.Windows.Forms.Label BlockItemPreMarkLabel;
         private System.Windows.Forms.ComboBox BlockItemPreMarkComboBox;
         private System.Windows.Forms.Label BlockItemInheritorLabel;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn BlockItem_ParametersGrid_ActivateColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn BlockItem_ParametersGrid_InheritColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BlockItem_ParametersGrid_NameColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BlockItem_ParametersGrid_InfoColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BlockItem_ParametersGrid_CommentColumn;
         private System.Windows.Forms.TextBox BlockItemInheritorTextBox;
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.Label BlockItemPostMarkLabel;

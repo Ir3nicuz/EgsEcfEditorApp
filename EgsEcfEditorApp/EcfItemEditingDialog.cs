@@ -1450,7 +1450,7 @@ namespace EcfFileViews
             }
             private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs evt)
             {
-                if (evt.RowIndex > -1 && Grid.Columns[evt.ColumnIndex] == ActivationColumn && Grid.Rows[evt.RowIndex] is ParameterMatrixRow row)
+                if (evt.RowIndex > -1 && evt.ColumnIndex > -1 && Grid.Columns[evt.ColumnIndex] == ActivationColumn && Grid.Rows[evt.RowIndex] is ParameterMatrixRow row)
                 {
                     Grid.EndEdit();
                     if (row.IsActive())
@@ -1468,13 +1468,13 @@ namespace EcfFileViews
             }
             private void AddValueButton_Click(object sender, EventArgs evt)
             {
-                if (TryGetSelectedCell(out DataGridViewCell cell, out DataGridViewRow row))
+                if (TryGetSelection(out List<DataGridViewColumn> columns, out List<DataGridViewRow> rows))
                 {
                     switch (Mode)
                     {
-                        case ParameterModes.Value: AddGroupValue(cell, row); break;
-                        case ParameterModes.Block: AddMatrixValue(cell, row); break;
-                        case ParameterModes.Matrix: AddMatrixColumn(cell, row); break;
+                        case ParameterModes.Value: AddGroupValues(columns.FirstOrDefault(), rows); break;
+                        case ParameterModes.Block: AddMatrixValues(columns.FirstOrDefault(), rows); break;
+                        case ParameterModes.Matrix: AddMatrixColumns(columns, rows.FirstOrDefault()); break;
                         default: throw new InvalidOperationException(string.Format("Add value operation not defined for {0}", Mode));
                     }
                     Grid.EndEdit();
@@ -1482,13 +1482,13 @@ namespace EcfFileViews
             }
             private void RemoveValueButton_Click(object sender, EventArgs evt)
             {
-                if (TryGetSelectedCell(out DataGridViewCell cell, out DataGridViewRow row))
+                if (TryGetSelection(out List<DataGridViewColumn> columns, out List<DataGridViewRow> rows))
                 {
                     switch (Mode)
                     {
-                        case ParameterModes.Value: RemoveGroupValue(cell, row); break;
-                        case ParameterModes.Block: RemoveMatrixValue(cell, row); break;
-                        case ParameterModes.Matrix: RemoveMatrixColumn(cell, row); break;
+                        case ParameterModes.Value: RemoveGroupValues(columns.FirstOrDefault(), rows); break;
+                        case ParameterModes.Block: RemoveMatrixValues(columns.FirstOrDefault(), rows); break;
+                        case ParameterModes.Matrix: RemoveMatrixColumns(columns, rows.FirstOrDefault()); break;
                         default: throw new InvalidOperationException(string.Format("Remove value operation not defined for {0}", Mode));
                     }
                     Grid.EndEdit();
@@ -1496,28 +1496,17 @@ namespace EcfFileViews
             }
             private void AddGroupButton_Click(object sender, EventArgs evt)
             {
-                if (TryGetSelectedCell(out DataGridViewCell _, out DataGridViewRow row))
+                if (TryGetSelection(out List<DataGridViewColumn> _, out List<DataGridViewRow> rows))
                 {
-                    if (row is ParameterGroupRow groupRow && groupRow.ItemDef.HasValue)
-                    {
-                        AddGroupRow(groupRow.ItemDef, groupRow.PresetParameter, groupRow.Index + 1, string.Empty);
-                        UpdateParameterValuesRowNumbering();
-                    }
+                    AddGroupRows(rows);
                     Grid.EndEdit();
                 }
             }
             private void RemoveGroupButton_Click(object sender, EventArgs evt)
             {
-                if (TryGetSelectedCell(out DataGridViewCell _, out DataGridViewRow row))
+                if (TryGetSelection(out List<DataGridViewColumn> _, out List <DataGridViewRow> rows))
                 {
-                    if (row is ParameterGroupRow groupRow)
-                    {
-                        if (Grid.Rows.Count > 1)
-                        {
-                            Grid.Rows.Remove(groupRow);
-                            UpdateParameterValuesRowNumbering();
-                        }
-                    }
+                    RemoveGroupRows(rows);
                     Grid.EndEdit();
                 }
             }
@@ -1780,7 +1769,7 @@ namespace EcfFileViews
             {
                 Grid.Dock = DockStyle.Fill;
                 Grid.EditMode = DataGridViewEditMode.EditOnKeystroke;
-                Grid.MultiSelect = false;
+                Grid.MultiSelect = true;
                 Grid.RowHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
                 Grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
                 Grid.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -1889,70 +1878,113 @@ namespace EcfFileViews
                     row.InitRow(values);
                 }
             }
-            private bool TryGetSelectedCell(out DataGridViewCell cell, out DataGridViewRow row)
+            private bool TryGetSelection(out List<DataGridViewColumn> columns, out List<DataGridViewRow> rows)
             {
-                cell = Grid.SelectedCells.Cast<DataGridViewCell>().FirstOrDefault();
-                row = cell?.OwningRow;
-                return cell != null;
+                columns = Grid.SelectedCells.Cast<DataGridViewCell>().Select(cell => cell.OwningColumn).Distinct().ToList();
+                rows = Grid.SelectedCells.Cast<DataGridViewCell>().Select(cell => cell.OwningRow).Distinct().ToList();
+                return columns.Count > 0 && rows.Count > 0;
             }
-            private void AddGroupValue(DataGridViewCell cell, DataGridViewRow row)
+            private void AddGroupValues(DataGridViewColumn column, List<DataGridViewRow> rows)
             {
-                if (row is ParameterGroupRow groupRow && groupRow.ItemDef.HasValue)
+                rows.ForEach(row =>
                 {
-                    ActivateNewValue(groupRow, cell.ColumnIndex + 1, false);
-                }
+                    if (row is ParameterGroupRow groupRow && groupRow.ItemDef.HasValue)
+                    {
+                        ActivateNewValue(groupRow, column.Index + 1, false);
+                    }
+                });
             }
-            private void AddMatrixValue(DataGridViewCell cell, DataGridViewRow row)
+            private void AddMatrixValues(DataGridViewColumn column, List<DataGridViewRow> rows)
+            {
+                rows.ForEach(row =>
+                {
+                    if (row is ParameterMatrixRow matrixRow && matrixRow.ItemDef.HasValue)
+                    {
+                        matrixRow.SetActive(true);
+                        ActivateNewValue(matrixRow, column.Index + 1, true);
+                    }
+                });
+            }
+            private void AddMatrixColumns(List<DataGridViewColumn> columns, DataGridViewRow row)
             {
                 if (row is ParameterMatrixRow matrixRow && matrixRow.ItemDef.HasValue)
                 {
-                    matrixRow.SetActive(true);
-                    ActivateNewValue(matrixRow, cell.ColumnIndex + 1, true);
-                }
-            }
-            private void AddMatrixColumn(DataGridViewCell cell, DataGridViewRow row)
-            {
-                if (row is ParameterMatrixRow matrixRow && matrixRow.ItemDef.HasValue)
-                {
-                    AddValueColumn(false, true, cell.ColumnIndex + 1);
+                    columns.ForEach(column =>
+                    {
+                        AddValueColumn(false, true, column.Index + 1);
+                    });
                     UpdateParameterValuesColumnNumbering();
                 }
             }
-            private void RemoveGroupValue(DataGridViewCell cell, DataGridViewRow row)
+            private void RemoveGroupValues(DataGridViewColumn column, List<DataGridViewRow> rows)
             {
-                if (row is ParameterGroupRow groupRow)
+                rows.ForEach(row =>
                 {
-                    if (groupRow.GetValues().Count > 1)
+                    if (row is ParameterGroupRow groupRow)
                     {
-                        groupRow.DeactivateLastUsedCell(cell.ColumnIndex);
+                        if (groupRow.GetValues().Count > 1)
+                        {
+                            groupRow.DeactivateLastUsedCell(column.Index);
+                        }
                     }
-                }
+                });
             }
-            private void RemoveMatrixValue(DataGridViewCell cell, DataGridViewRow row)
+            private void RemoveMatrixValues(DataGridViewColumn column, List<DataGridViewRow> rows)
             {
-                if (row is ParameterMatrixRow matrixRow)
+                rows.ForEach(row =>
                 {
-                    if (matrixRow.GetValues().Count > 1)
+                    if (row is ParameterMatrixRow matrixRow)
                     {
-                        matrixRow.DeactivateLastUsedCell(cell.ColumnIndex);
+                        if (matrixRow.GetValues().Count > 1)
+                        {
+                            matrixRow.DeactivateLastUsedCell(column.Index);
+                        }
+                        else if (matrixRow.ItemDef.IsOptional)
+                        {
+                            matrixRow.SetActive(false);
+                            matrixRow.Inactivate();
+                        }
                     }
-                    else if (matrixRow.ItemDef.IsOptional)
-                    {
-                        matrixRow.SetActive(false);
-                        matrixRow.Inactivate();
-                    }
-                }
+                });
             }
-            private void RemoveMatrixColumn(DataGridViewCell cell, DataGridViewRow row)
+            private void RemoveMatrixColumns(List<DataGridViewColumn> columns, DataGridViewRow row)
             {
-                if (row is ParameterMatrixRow matrixRow)
+                columns.ForEach(column =>
                 {
-                    if (matrixRow.GetValues().Count > 1)
+                    if (row is ParameterMatrixRow matrixRow)
                     {
-                        Grid.Columns.Remove(cell.OwningColumn);
-                        UpdateParameterValuesColumnNumbering();
+                        if (matrixRow.GetValues().Count > 1)
+                        {
+                            Grid.Columns.Remove(column);
+                        }
                     }
-                }
+                });
+                UpdateParameterValuesColumnNumbering();
+            }
+            private void AddGroupRows(List<DataGridViewRow> rows)
+            {
+                rows.ForEach(row =>
+                {
+                    if (row is ParameterGroupRow groupRow && groupRow.ItemDef.HasValue)
+                    {
+                        AddGroupRow(groupRow.ItemDef, groupRow.PresetParameter, groupRow.Index + 1, string.Empty);
+                    }
+                });
+                UpdateParameterValuesRowNumbering();
+            }
+            private void RemoveGroupRows(List<DataGridViewRow> rows)
+            {
+                rows.ForEach(row =>
+                {
+                    if (row is ParameterGroupRow groupRow)
+                    {
+                        if (Grid.Rows.Count > 1)
+                        {
+                            Grid.Rows.Remove(groupRow);
+                        }
+                    }
+                });
+                UpdateParameterValuesRowNumbering();
             }
 
             // subclasses
@@ -1988,11 +2020,13 @@ namespace EcfFileViews
                 {
                     DataGridViewCell nextCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).FirstOrDefault(cell => cell.Tag == null);
                     if (nextCell == null) { return false; }
-                    //for (int index = nextCell.ColumnIndex; index > newIndex; index--)
+                    newIndex = Math.Max(newIndex, PrefixColumnCount);
+                    newIndex = Math.Min(newIndex, Cells.Count - 1);
+                    for (int index = nextCell.ColumnIndex; index > newIndex; index--)
                     {
-                        //Cells[index].Value = Cells[index - 1].Value;
+                        Cells[index].Value = Cells[index - 1].Value;
                     }
-                    //Cells[newIndex].Value = string.Empty;
+                    Cells[newIndex].Value = string.Empty;
                     ActivateCell(nextCell);
                     return true;
                 }
@@ -2000,11 +2034,13 @@ namespace EcfFileViews
                 {
                     DataGridViewCell lastCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).LastOrDefault(cell => cell.Tag != null);
                     if (lastCell == null) { return false; }
-                    //for (int index = oldIndex; index < lastCell.ColumnIndex; index++)
+                    oldIndex = Math.Max(oldIndex, PrefixColumnCount);
+                    oldIndex = Math.Min(oldIndex, Cells.Count - 1);
+                    for (int index = oldIndex; index < lastCell.ColumnIndex; index++)
                     {
-                        //Cells[index].Value = Cells[index + 1].Value;
+                        Cells[index].Value = Cells[index + 1].Value;
                     }
-                    //lastCell.Value = string.Empty;
+                    lastCell.Value = string.Empty;
                     DeactivateCell(lastCell);
                     return true;
                 }

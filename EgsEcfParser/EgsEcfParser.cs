@@ -951,7 +951,7 @@ namespace EgsEcfParser
                 CreateBlockContent(writer, block, indent, onlyValid, inheritError, allowFallback);
                 CreateBlockEndLine(writer, indent);
             } 
-            else if (allowFallback && block.LineParsingDataUseable())
+            else if (allowFallback && block.IsParsingRawDataUseable())
             {
                 CreateParsingDataLine(writer, block.OpenerLineParsingData);
                 CreateBlockContent(writer, block, indent, onlyValid, inheritError, allowFallback);
@@ -2617,17 +2617,23 @@ namespace EgsEcfParser
         {
             return InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName))?.GetFirstValue();
         }
-        public bool HasAttribute(string attrName)
+        public bool HasAttribute(string attrName, out EcfAttribute attribute)
         {
-            return InternalAttributes.Any(attr => attr.Key.Equals(attrName));
+            attribute = InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName));
+            return attribute != null;
         }
-        public bool HasAttributeValue(string attrValue)
+        public bool HasParameter(string paramName, out EcfParameter parameter)
         {
-            return InternalAttributes.Any(attr => attr.ValueGroups.Any(group => group.Values.Any(value => value.Equals(attrValue))));
+            parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(paramName));
+            return parameter != null;
         }
-        public bool HasParameter(string paramName)
+        public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
         {
-            return InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().Any(param => param.Key.Equals(paramName));
+            if (HasParameter(paramName, out parameter))
+            {
+                return true;
+            }
+            return Inheritor?.IsInheritingParameter(paramName, out parameter) ?? false;
         }
         public override string BuildIdentification()
         {
@@ -2715,7 +2721,7 @@ namespace EgsEcfParser
             InternalAttributes.Clear();
             UpdateIdentification();
         }
-        public bool LineParsingDataUseable()
+        public bool IsParsingRawDataUseable()
         {
             return !string.IsNullOrEmpty(OpenerLineParsingData) && !string.IsNullOrEmpty(CloserLineParsingData);
         }

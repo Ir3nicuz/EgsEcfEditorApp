@@ -1236,14 +1236,14 @@ namespace EcfFileViews
         }
         private void AddTreeItemTo(EcfStructureItem item)
         {
-            CreateableItems addable;
+            Modes addable;
             if (item == null)
             {
-                addable = CreateableItems.Comment | CreateableItems.RootBlock;
+                addable = Modes.Comment | Modes.RootBlock;
             }
             else if (item is EcfBlock)
             {
-                addable = CreateableItems.Comment | CreateableItems.ChildBlock | CreateableItems.Parameter;
+                addable = Modes.Comment | Modes.ChildBlock | Modes.Parameter;
             }
             else
             {
@@ -1272,14 +1272,14 @@ namespace EcfFileViews
         }
         private void AddTreeItemAfter(EcfStructureItem item)
         {
-            CreateableItems addable;
+            Modes addable;
             if (item == null || item.IsRoot())
             {
-                addable = CreateableItems.Comment | CreateableItems.RootBlock;
+                addable = Modes.Comment | Modes.RootBlock;
             }
             else
             {
-                addable = CreateableItems.Comment | CreateableItems.Parameter | CreateableItems.ChildBlock;
+                addable = Modes.Comment | Modes.Parameter | Modes.ChildBlock;
             }
             EcfBlock parent = item?.Parent as EcfBlock;
             if (ItemEditor.ShowDialog(this, File, addable, parent) == DialogResult.OK)
@@ -1303,7 +1303,7 @@ namespace EcfFileViews
         }
         private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
         {
-            if (ItemEditor.ShowDialog(this, File, CreateableItems.Parameter, parentBlock) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, File, Modes.Parameter, parentBlock) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 parentBlock.AddChild(createdItem, preceedingItem);

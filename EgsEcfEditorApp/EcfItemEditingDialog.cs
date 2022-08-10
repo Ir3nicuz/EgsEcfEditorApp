@@ -18,13 +18,14 @@ namespace EcfFileViews
         public EcfStructureItem ResultItem { get; private set; } = null;
 
         [Flags]
-        public enum CreateableItems
+        public enum Modes
         {
             None = 0,
             Comment = 1 << 0,
             Parameter = 1 << 1,
             RootBlock = 1 << 2,
             ChildBlock = 1 << 3,
+            ParameterMatrix = 1 << 4,
         }
 
         private EcfComment PresetComment { get; set; } = null;
@@ -32,8 +33,8 @@ namespace EcfFileViews
         private EcfBlock PresetBlock { get; set; } = null;
         private EcfBlock ParentBlock { get; set; }
         private EgsEcfFile File { get; set; } = null;
-        private CreateableItems CreateableItemTypes { get; set; } = CreateableItems.None;
-        private CreateableItems SelectedItemType { get; set; } = CreateableItems.None;
+        private Modes CreationModes { get; set; } = Modes.None;
+        private Modes SelectedItemType { get; set; } = Modes.None;
         private ItemDefinition ParameterDefinition { get; set; } = null;
         private string PresetParameterCheckedKey { get; set; } = null;
         private ParameterKeyComparer ParamKeyComparer { get; } = new ParameterKeyComparer();
@@ -48,6 +49,7 @@ namespace EcfFileViews
         private EcfItemSelectorDialog ItemSelector { get; set; } = new EcfItemSelectorDialog();
 
         private ParameterPanel ParameterItemValuesPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Value);
+        private ParameterPanel ParameterMatrixPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Matrix);
         private AttributesPanel ParameterItemAttributesPanel { get; } = new AttributesPanel();
         private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
         private ParameterPanel BlockItemParametersPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Block);
@@ -78,6 +80,7 @@ namespace EcfFileViews
             CommentItem_InitView();
             ParameterItem_InitView();
             BlockItem_InitView();
+            ParameterMatrix_InitView();
         }
         private void AbortButton_Click(object sender, EventArgs evt)
         {
@@ -88,10 +91,11 @@ namespace EcfFileViews
         {
             switch (SelectedItemType)
             {
-                case CreateableItems.Comment: CommentItem_UpdateView(); break;
-                case CreateableItems.Parameter: ParameterItem_UpdateView(); break;
-                case CreateableItems.ChildBlock: BlockItem_UpdateView(); break;
-                case CreateableItems.RootBlock: BlockItem_UpdateView(); break;
+                case Modes.Comment: CommentItem_UpdateView(); break;
+                case Modes.Parameter: ParameterItem_UpdateView(); break;
+                case Modes.ChildBlock: BlockItem_UpdateView(); break;
+                case Modes.RootBlock: BlockItem_UpdateView(); break;
+                case Modes.ParameterMatrix: ParameterMatrix_UpdateView(); break;
                 default: break;
             }
         }
@@ -112,33 +116,21 @@ namespace EcfFileViews
             Close();
         }
         // selector
-        private void SelectCommentItemRadioButton_CheckedChanged(object sender, EventArgs evt)
+        private void SelectCommentItemButton_Click(object sender, EventArgs evt)
         {
-            if (SelectCommentItemRadioButton.Checked)
-            {
-                CommentItem_ActivateView();
-            }
+            CommentItem_ActivateView();
         }
-        private void SelectParameterItemRadioButton_CheckedChanged(object sender, EventArgs evt)
+        private void SelectParameterItemButton_Click(object sender, EventArgs evt)
         {
-            if (SelectParameterItemRadioButton.Checked)
-            {
-                ParameterItem_ActivateView();
-            }
+            ParameterItem_ActivateView();
         }
-        private void SelectChildBlockItemRadioButton_CheckedChanged(object sender, EventArgs evt)
+        private void SelectChildBlockItemButton_Click(object sender, EventArgs evt)
         {
-            if (SelectChildBlockItemRadioButton.Checked)
-            {
-                BlockItem_ActivateView(CreateableItems.ChildBlock);
-            }
+            BlockItem_ActivateView(Modes.ChildBlock);
         }
-        private void SelectRootBlockItemRadioButton_CheckedChanged(object sender, EventArgs evt)
+        private void SelectRootBlockItemButton_Click(object sender, EventArgs evt)
         {
-            if (SelectRootBlockItemRadioButton.Checked)
-            {
-                BlockItem_ActivateView(CreateableItems.RootBlock);
-            }
+            BlockItem_ActivateView(Modes.RootBlock);
         }
         // parameter
         private void ParameterItemKeyComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
@@ -159,7 +151,7 @@ namespace EcfFileViews
             ParentBlock = null;
             File = file;
             PresetComment = presetComment;
-            CreateableItemTypes = CreateableItems.Comment;
+            CreationModes = Modes.Comment;
 
             CommentItem_ActivateView();
 
@@ -171,7 +163,7 @@ namespace EcfFileViews
             ParentBlock = presetParameter?.Parent as EcfBlock;
             File = file;
             PresetParameter = presetParameter;
-            CreateableItemTypes = CreateableItems.Parameter;
+            CreationModes = Modes.Parameter;
 
             try
             {
@@ -192,7 +184,7 @@ namespace EcfFileViews
             File = file;
             Generic_BuildBlockCompareLists(file);
             PresetBlock = presetBlock;
-            CreateableItemTypes = presetBlock.IsRoot() ? CreateableItems.RootBlock : CreateableItems.ChildBlock;
+            CreationModes = presetBlock.IsRoot() ? Modes.RootBlock : Modes.ChildBlock;
 
             try
             {
@@ -202,18 +194,38 @@ namespace EcfFileViews
             {
                 return DialogResult.Abort;
             }
-            BlockItem_ActivateView(CreateableItemTypes);
+            BlockItem_ActivateView(CreationModes);
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, CreateableItems createable, EcfBlock parentBlock)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, List<EcfParameter> parameters)
+        {
+            ResultItem = null;
+            ParentBlock = null;
+            File = file;
+            PresetParameter = null;
+            CreationModes = Modes.ParameterMatrix;
+
+            try
+            {
+                ParameterMatrix_PreActivationChecks(parameters);
+            }
+            catch (Exception)
+            {
+                return DialogResult.Abort;
+            }
+            ParameterMatrix_ActivateView(parameters);
+
+            return ShowDialog(parent);
+        }
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, Modes createable, EcfBlock parentBlock)
         {
             ResultItem = null;
             ParentBlock = parentBlock;
             File = file;
             Generic_BuildBlockCompareLists(file);
             Generic_ClearPresets();
-            CreateableItemTypes = createable;
+            CreationModes = createable;
 
             try
             {
@@ -238,25 +250,25 @@ namespace EcfFileViews
         private void Generic_BuildBlockCompareLists(EgsEcfFile file)
         {
             List<EcfBlock> blocks = file?.GetDeepItemList<EcfBlock>();
-            IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockIdentificationAttribute)).ToList();
-            ReferencingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceSourceAttribute)).ToList();
-            ReferencedBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceTargetAttribute)).ToList();
+            IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockIdentificationAttribute, out _)).ToList();
+            ReferencingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceSourceAttribute, out _)).ToList();
+            ReferencedBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceTargetAttribute, out _)).ToList();
             BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
         }
         private void Generic_PreActivationChecks_AddingMulti()
         {
             ParameterItem_PreActivationChecks_Adding();
             BlockItem_PreActivationChecks_Adding();
-            if (CreateableItemTypes == CreateableItems.None)
+            if (CreationModes == Modes.None)
             {
                 throw new InvalidOperationException("No item type to add left");
             }
-            switch (CreateableItemTypes)
+            switch (CreationModes)
             {
-                case CreateableItems.Comment: CommentItem_ActivateView(); break;
-                case CreateableItems.Parameter: ParameterItem_ActivateView(); break;
-                case CreateableItems.RootBlock: BlockItem_ActivateView(CreateableItems.RootBlock); break;
-                case CreateableItems.ChildBlock: BlockItem_ActivateView(CreateableItems.ChildBlock); break;
+                case Modes.Comment: CommentItem_ActivateView(); break;
+                case Modes.Parameter: ParameterItem_ActivateView(); break;
+                case Modes.RootBlock: BlockItem_ActivateView(Modes.RootBlock); break;
+                case Modes.ChildBlock: BlockItem_ActivateView(Modes.ChildBlock); break;
                 default: SelectItem_ActivateView(); break;
             }
         }
@@ -264,10 +276,11 @@ namespace EcfFileViews
         {
             switch (SelectedItemType)
             {
-                case CreateableItems.Comment: return CommentItem_ValidateInputs();
-                case CreateableItems.Parameter: return ParameterItem_ValidateInputs();
-                case CreateableItems.RootBlock: return BlockItem_ValidateInputs();
-                case CreateableItems.ChildBlock: return BlockItem_ValidateInputs();
+                case Modes.Comment: return CommentItem_ValidateInputs();
+                case Modes.Parameter: return ParameterItem_ValidateInputs();
+                case Modes.RootBlock: return BlockItem_ValidateInputs();
+                case Modes.ChildBlock: return BlockItem_ValidateInputs();
+                case Modes.ParameterMatrix: return ParameterMatrix_ValidateInputs();
                 default: throw new ArgumentException(string.Format("No creator defined for item type {0}...that shouldn't happen", SelectedItemType.ToString()));
             }
         }
@@ -287,12 +300,41 @@ namespace EcfFileViews
         {
             switch (SelectedItemType)
             {
-                case CreateableItems.Comment: return CommentItem_PrepareResultItem();
-                case CreateableItems.Parameter: return ParameterItem_PrepareResultItem();
-                case CreateableItems.RootBlock: return BlockItem_PrepareResultItem();
-                case CreateableItems.ChildBlock: return BlockItem_PrepareResultItem();
+                case Modes.Comment: return CommentItem_PrepareResultItem();
+                case Modes.Parameter: return ParameterItem_PrepareResultItem();
+                case Modes.RootBlock: return BlockItem_PrepareResultItem();
+                case Modes.ChildBlock: return BlockItem_PrepareResultItem();
+                case Modes.ParameterMatrix: return ParameterMatrix_PrepareResultItem();
                 default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen", SelectedItemType.ToString()));
             }
+        }
+
+        // selecting section
+        private void SelectItem_InitView()
+        {
+            SelectCommentItemButton.Text = TitleRecources.Generic_Comment;
+            SelectParameterItemButton.Text = TitleRecources.Generic_Parameter;
+            SelectChildBlockItemButton.Text = TitleRecources.Generic_ChildElement;
+            SelectRootBlockItemButton.Text = TitleRecources.Generic_RootElement;
+        }
+        private void SelectItem_ActivateView()
+        {
+            BackButton.Enabled = false;
+            ResetButton.Enabled = false;
+            SelectedItemType = Modes.None;
+
+            Text = TitleRecources.EcfItemEditingDialog_Header_SelectItem;
+
+            SelectCommentItemButton.Enabled = CreationModes.HasFlag(Modes.Comment);
+            SelectParameterItemButton.Enabled = CreationModes.HasFlag(Modes.Parameter);
+            SelectChildBlockItemButton.Enabled = CreationModes.HasFlag(Modes.ChildBlock);
+            SelectRootBlockItemButton.Enabled = CreationModes.HasFlag(Modes.RootBlock);
+
+            // hack to prevent tab switch with tab key
+            ViewPanel.TabPages.Clear();
+            ViewPanel.TabPages.Add(SelectItemView);
+
+            OkButton.Focus();
         }
 
         // comment section
@@ -302,9 +344,9 @@ namespace EcfFileViews
         }
         private void CommentItem_ActivateView()
         {
-            BackButton.Enabled = CreateableItemTypes != CreateableItems.Comment;
+            BackButton.Enabled = CreationModes != Modes.Comment;
             ResetButton.Enabled = PresetComment != null;
-            SelectedItemType = CreateableItems.Comment;
+            SelectedItemType = Modes.Comment;
 
             CommentItem_ActivateViewHeader();
 
@@ -314,7 +356,7 @@ namespace EcfFileViews
             ViewPanel.TabPages.Clear();
             ViewPanel.TabPages.Add(CommentItemView);
 
-            CommentItemTextBox.Focus();
+            CommentItemRichTextBox.Focus();
         }
         private void CommentItem_ActivateViewHeader()
         {
@@ -329,12 +371,19 @@ namespace EcfFileViews
         }
         private void CommentItem_UpdateView()
         {
-            CommentItemTextBox.Text = PresetComment == null ? string.Empty : string.Join(" / ", PresetComment.Comments);
+            if (PresetComment == null)
+            {
+                CommentItemRichTextBox.Clear();
+            }
+            else
+            {
+                CommentItemRichTextBox.Lines = PresetComment.Comments.ToArray();
+            }
         }
         private List<string> CommentItem_ValidateInputs()
         {
             List<string> errors = new List<string>();
-            if (CommentItemTextBox.Text.Equals(string.Empty))
+            if (CommentItemRichTextBox.Lines.Any(line => line.Equals(string.Empty)))
             {
                 errors.Add(TextRecources.EcfItemEditingDialog_CommentItemError_Empty);
             }
@@ -344,12 +393,12 @@ namespace EcfFileViews
         {
             if (PresetComment == null)
             {
-                PresetComment = new EcfComment(CommentItemTextBox.Text);
+                PresetComment = new EcfComment(CommentItemRichTextBox.Lines.ToList());
             }
             else
             {
                 PresetComment.ClearComments();
-                PresetComment.AddComment(CommentItemTextBox.Text);
+                PresetComment.AddComments(CommentItemRichTextBox.Lines.ToList());
             }
             return PresetComment;
         }
@@ -363,11 +412,11 @@ namespace EcfFileViews
             ParameterItemInfoLabel.Text = TitleRecources.Generic_Info;
             ParameterItemCommentLabel.Text = TitleRecources.Generic_Comment;
 
-            ParameterItemViewPanel.Controls.Add(ParameterItemValuesPanel, 0, 1);
-            ParameterItemViewPanel.SetColumnSpan(ParameterItemValuesPanel, 2);
-
-            ParameterItemViewPanel.Controls.Add(ParameterItemAttributesPanel, 0, 2);
+            ParameterItemViewPanel.Controls.Add(ParameterItemAttributesPanel, 0, 1);
             ParameterItemViewPanel.SetColumnSpan(ParameterItemAttributesPanel, 2);
+
+            ParameterItemViewPanel.Controls.Add(ParameterItemValuesPanel, 0, 2);
+            ParameterItemViewPanel.SetColumnSpan(ParameterItemValuesPanel, 2);
         }
         private void ParameterItem_PreActivationChecks_Editing()
         {
@@ -405,23 +454,23 @@ namespace EcfFileViews
         }
         private void ParameterItem_PreActivationChecks_Adding()
         {
-            if (CreateableItemTypes.HasFlag(CreateableItems.Parameter))
+            if (CreationModes.HasFlag(Modes.Parameter))
             {
-                if (ParentBlock == null) { CreateableItemTypes &= ~CreateableItems.Parameter; return; }
+                if (ParentBlock == null) { CreationModes &= ~Modes.Parameter; return; }
 
                 List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
-                if (definedParameters.Count < 1) { CreateableItemTypes &= ~CreateableItems.Parameter; return; }
+                if (definedParameters.Count < 1) { CreationModes &= ~Modes.Parameter; return; }
 
                 List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => 
                     child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-                if (addableParameters.Count < 1) { CreateableItemTypes &= ~CreateableItems.Parameter; return; }
+                if (addableParameters.Count < 1) { CreationModes &= ~Modes.Parameter; return; }
             }
         }
         private void ParameterItem_ActivateView()
         {
-            BackButton.Enabled = CreateableItemTypes != CreateableItems.Parameter;
+            BackButton.Enabled = CreationModes != Modes.Parameter;
             ResetButton.Enabled = PresetParameter != null;
-            SelectedItemType = CreateableItems.Parameter;
+            SelectedItemType = Modes.Parameter;
 
             ParameterItem_ActivateViewHeader();
             ParameterItem_ActivateKeyComboBox();
@@ -566,12 +615,12 @@ namespace EcfFileViews
             PresetBlockCheckedPreMark = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.BlockTypePreMarks, PresetBlock.PreMark,
                 TextRecources.EcfItemEditingDialog_NoDefinitionForThisPreMark);
 
-            if (CreateableItemTypes == CreateableItems.ChildBlock)
+            if (CreationModes == Modes.ChildBlock)
             {
                 PresetBlockCheckedDataType = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.ChildBlockTypes, PresetBlock.DataType,
                     TextRecources.EcfItemEditingDialog_NoDefinitionForThisDataType);
             }
-            else if (CreateableItemTypes == CreateableItems.RootBlock)
+            else if (CreationModes == Modes.RootBlock)
             {
                 PresetBlockCheckedDataType = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.RootBlockTypes, PresetBlock.DataType,
                     TextRecources.EcfItemEditingDialog_NoDefinitionForThisDataType);
@@ -597,15 +646,15 @@ namespace EcfFileViews
             }
             return typeToCheck;
         }
-        private void BlockItem_UpdateDefinition(CreateableItems selectedBlockType)
+        private void BlockItem_UpdateDefinition(Modes selectedBlockType)
         {
             switch (selectedBlockType)
             {
-                case CreateableItems.ChildBlock:
+                case Modes.ChildBlock:
                     BlockTypeDefinitions = File.Definition.ChildBlockTypes.ToList();
                     BlockAttributeDefinitions = File.Definition.ChildBlockAttributes.ToList();
                     break;
-                case CreateableItems.RootBlock:
+                case Modes.RootBlock:
                     BlockTypeDefinitions = File.Definition.RootBlockTypes.ToList();
                     BlockAttributeDefinitions = File.Definition.RootBlockAttributes.ToList();
                     break;
@@ -621,28 +670,28 @@ namespace EcfFileViews
         {
             if (File.Definition.BlockTypePostMarks.Count < 1)
             {
-                CreateableItemTypes &= ~CreateableItems.ChildBlock;
-                CreateableItemTypes &= ~CreateableItems.RootBlock;
+                CreationModes &= ~Modes.ChildBlock;
+                CreationModes &= ~Modes.RootBlock;
                 return;
             }
-            if (CreateableItemTypes.HasFlag(CreateableItems.ChildBlock))
+            if (CreationModes.HasFlag(Modes.ChildBlock))
             {
                 if (File.Definition.ChildBlockTypes.Count < 1)
                 {
-                    CreateableItemTypes &= ~CreateableItems.ChildBlock;
+                    CreationModes &= ~Modes.ChildBlock;
                 }
             }
-            if (CreateableItemTypes.HasFlag(CreateableItems.RootBlock))
+            if (CreationModes.HasFlag(Modes.RootBlock))
             {
                 if (File.Definition.RootBlockTypes.Count < 1)
                 {
-                    CreateableItemTypes &= ~CreateableItems.RootBlock;
+                    CreationModes &= ~Modes.RootBlock;
                 }
             }
         }
-        private void BlockItem_ActivateView(CreateableItems selectedBlockType)
+        private void BlockItem_ActivateView(Modes selectedBlockType)
         {
-            BackButton.Enabled = CreateableItemTypes != selectedBlockType;
+            BackButton.Enabled = CreationModes != selectedBlockType;
             ResetButton.Enabled = PresetBlock != null;
             SelectedItemType = selectedBlockType;
 
@@ -664,7 +713,7 @@ namespace EcfFileViews
         {
             if (PresetBlock != null) 
             {
-                if (SelectedItemType == CreateableItems.ChildBlock)
+                if (SelectedItemType == Modes.ChildBlock)
                 {
                     Text = TitleRecources.EcfItemEditingDialog_Header_EditChildBlock;
                 }
@@ -675,7 +724,7 @@ namespace EcfFileViews
             }
             else
             {
-                if (SelectedItemType == CreateableItems.ChildBlock)
+                if (SelectedItemType == Modes.ChildBlock)
                 {
                     Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
                 }
@@ -750,7 +799,7 @@ namespace EcfFileViews
                 PresetBlock.UpdateStructureData(File, null, -1);
                 foreach (EcfParameter parameter in activeParameters)
                 {
-                    parameter.Revalidate(); // must be done for groups after the first (editor bypasses all groups after the first)
+                    parameter.Revalidate();
                 }
             }
             else
@@ -781,12 +830,10 @@ namespace EcfFileViews
         {
             List<EcfParameter> presentParameters = block.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList();
 
-            List<EcfParameter> unknownParameters = presentParameters.Where(parameter => parameter.Definition == null).ToList();
             List<EcfParameter> doubledParameters = presentParameters.Except(presentParameters.Distinct(ParamKeyComparer)).ToList();
             List<EcfParameter> removedParameters = presentParameters.Except(activeParameters, ParamKeyComparer).ToList();
             List<EcfParameter> createdParameters = activeParameters.Except(presentParameters, ParamKeyComparer).ToList();
 
-            block.RemoveChilds(unknownParameters);
             block.RemoveChilds(doubledParameters);
             block.RemoveChilds(removedParameters);
             block.AddChilds(createdParameters);
@@ -797,37 +844,64 @@ namespace EcfFileViews
             }
         }
 
-        // selecting section
-        private void SelectItem_InitView()
+        // parameter matrix section
+        private void ParameterMatrix_InitView()
         {
-            SelectCommentItemRadioButton.Text = TitleRecources.Generic_Comment;
-            SelectParameterItemRadioButton.Text = TitleRecources.Generic_Parameter;
-            SelectChildBlockItemRadioButton.Text = TitleRecources.Generic_ChildElement;
-            SelectRootBlockItemRadioButton.Text = TitleRecources.Generic_RootElement;
+            ParameterMatrixView.Controls.Add(ParameterMatrixPanel);
         }
-        private void SelectItem_ActivateView()
+        private void ParameterMatrix_PreActivationChecks(List<EcfParameter> parameters)
+        {
+            if (parameters.Any(parameter => parameter.Definition == null))
+            {
+                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed,
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                throw new InvalidOperationException("No matrix editing without Definition");
+            }
+            if (parameters.Any(parameter => !parameter.Definition.HasValue))
+            {
+                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed,
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                throw new InvalidOperationException("No matrix editing for parameters without values");
+            }
+        }
+        private void ParameterMatrix_ActivateView(List<EcfParameter> parameters)
         {
             BackButton.Enabled = false;
-            ResetButton.Enabled = false;
-            SelectedItemType = CreateableItems.None;
+            ResetButton.Enabled = true;
+            SelectedItemType = Modes.Parameter;
 
-            Text = TitleRecources.EcfItemEditingDialog_Header_SelectItem;
+            Text = TitleRecources.EcfItemEditingDialog_Header_EditParameterMatrix;
 
-            SelectCommentItemRadioButton.Visible = CreateableItemTypes.HasFlag(CreateableItems.Comment);
-            SelectParameterItemRadioButton.Visible = CreateableItemTypes.HasFlag(CreateableItems.Parameter);
-            SelectChildBlockItemRadioButton.Visible = CreateableItemTypes.HasFlag(CreateableItems.ChildBlock);
-            SelectRootBlockItemRadioButton.Visible = CreateableItemTypes.HasFlag(CreateableItems.RootBlock);
+            ParameterMatrixPanel.GenerateParameterMatrix(File.Definition, parameters);
 
-            SelectCommentItemRadioButton.Checked = false;
-            SelectParameterItemRadioButton.Checked = false;
-            SelectChildBlockItemRadioButton.Checked = false;
-            SelectRootBlockItemRadioButton.Checked = false;
+            ParameterMatrix_UpdateView();
 
             // hack to prevent tab switch with tab key
             ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(SelectItemView);
+            ViewPanel.TabPages.Add(ParameterMatrixView);
 
             OkButton.Focus();
+        }
+        private void ParameterMatrix_UpdateView()
+        {
+            ParameterMatrixPanel.UpdateParameterMatrix();
+        }
+        private List<string> ParameterMatrix_ValidateInputs()
+        {
+            List<string> errors = new List<string>();
+            errors.AddRange(ParameterMatrixPanel.ValidateParameterMatrix());
+            return errors;
+        }
+        private EcfParameter ParameterMatrix_PrepareResultItem()
+        {
+            List<EcfParameter> editedParameters = ParameterMatrixPanel.PrepareResultParameters();
+
+            foreach (EcfParameter parameter in editedParameters)
+            {
+                parameter.Revalidate();
+            }
+
+            return PresetParameter;
         }
 
         // subclasses
@@ -902,8 +976,8 @@ namespace EcfFileViews
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
                 Dock = DockStyle.Fill;
                 RowCount = 2;
-                RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+                RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
                 GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
 
                 InitHeader();
@@ -1434,8 +1508,8 @@ namespace EcfFileViews
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
                 Dock = DockStyle.Fill;
                 RowCount = 2;
-                RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+                RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
                 GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
 
                 InitHeader();
@@ -1638,7 +1712,9 @@ namespace EcfFileViews
                 {
                     if (row is ParameterMatrixRow paramRow)
                     {
-                        paramRow.UpdateInherited(inheritor?.HasParameter(paramRow.ItemDef.Name) ?? false);
+                        EcfParameter parameter = null;
+                        inheritor?.IsInheritingParameter(paramRow.ItemDef.Name, out parameter);
+                        paramRow.UpdateInherited(parameter);
                     }
                 }
                 Grid.ResumeLayout();
@@ -1696,12 +1772,20 @@ namespace EcfFileViews
                 {
                     if (row is ParameterMatrixRow paramRow && paramRow.IsActive())
                     {
-                        List<EcfValueGroup> valueGroups = new List<EcfValueGroup>()
-                        { 
-                            new EcfValueGroup(paramRow.GetValues()),
-                        };
-                        paramRow.PresetParameter?.ValueGroups.Skip(1).ToList().ForEach(group => valueGroups.Add(group));
-                        parameters.Add(new EcfParameter(paramRow.ItemDef.Name, valueGroups, null));
+                        if (paramRow.PresetParameter == null)
+                        {
+                            parameters.Add(new EcfParameter(paramRow.ItemDef.Name, paramRow.GetValues(), null));
+                        }
+                        else
+                        {
+                            List<EcfValueGroup> valueGroups = new List<EcfValueGroup>()
+                            {
+                                new EcfValueGroup(paramRow.GetValues()),
+                            };
+                            paramRow.PresetParameter.ValueGroups.Skip(1).ToList().ForEach(group => valueGroups.Add(group));
+                            paramRow.PresetParameter.ClearValues();
+                            paramRow.PresetParameter.AddValues(valueGroups);
+                        }
                     }
                 }
                 return parameters;
@@ -2147,9 +2231,11 @@ namespace EcfFileViews
                 {
                     return Convert.ToBoolean(ActivationCell.Value);
                 }
-                public void UpdateInherited(bool state)
+                public void UpdateInherited(EcfParameter parameter)
                 {
-                    InheritedCell.Value = state;
+                    bool isInherited = parameter != null;
+                    InheritedCell.Value = isInherited;
+                    InheritedCell.ToolTipText = isInherited ? string.Format("{0}: {1}", TitleRecources.Generic_Values, string.Join(", ", parameter.GetAllValues())) : string.Empty;
                 }
                 public void SetActive(bool state)
                 {

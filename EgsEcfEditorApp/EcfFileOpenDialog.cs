@@ -116,6 +116,11 @@ namespace EcfFileViews
             CreateFileDialog.InitialDirectory = directory;
             FindFileDialog.InitialDirectory = directory;
         }
+        public void SetInitFileName(string fileName)
+        {
+            CreateFileDialog.FileName = fileName;
+            FindFileDialog.FileName = fileName;
+        }
 
         // privates
         private void InitFilePathAndNameBox(string filePathAndName)

@@ -225,6 +225,9 @@
   <data name="EcfItemEditingDialog_Header_EditParameter" xml:space="preserve">
     <value>Parameter Element bearbeiten</value>
   </data>
+  <data name="EcfItemEditingDialog_Header_EditParameterMatrix" xml:space="preserve">
+    <value>Parameter Matrix Bearbeitung</value>
+  </data>
   <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
     <value>Basiselement bearbeiten</value>
   </data>

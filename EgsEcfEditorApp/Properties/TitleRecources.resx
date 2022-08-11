@@ -166,7 +166,7 @@
     <value>Create file</value>
   </data>
   <data name="EcfFileDialog_CreateFileName" xml:space="preserve">
-    <value>Newfile</value>
+    <value>NewFile</value>
   </data>
   <data name="EcfFileLoadingDialog_BarText" xml:space="preserve">
     <value>Lines</value>
@@ -224,6 +224,9 @@
   </data>
   <data name="EcfItemEditingDialog_Header_EditParameter" xml:space="preserve">
     <value>Edit parameter item</value>
+  </data>
+  <data name="EcfItemEditingDialog_Header_EditParameterMatrix" xml:space="preserve">
+    <value>Parameter Matrix editing</value>
   </data>
   <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
     <value>Edit root block item</value>

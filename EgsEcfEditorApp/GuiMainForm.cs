@@ -340,6 +340,7 @@ namespace EgsEcfEditorApp
             try
             {
                 OpenDialog.SetInitDirectory(FindFileDialogInitDirectory());
+                OpenDialog.SetInitFileName(TitleRecources.EcfFileDialog_CreateFileName);
                 if (OpenDialog.ShowDialogNewFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) == DialogResult.OK)
                 {
                     AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(OpenDialog.FilePathAndName);
@@ -359,6 +360,7 @@ namespace EgsEcfEditorApp
             try
             {
                 OpenDialog.SetInitDirectory(FindFileDialogInitDirectory());
+                OpenDialog.SetInitFileName(string.Empty);
                 if (OpenDialog.ShowDialogOpenFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) != DialogResult.OK) { 
                     return; 
                 }
@@ -391,6 +393,7 @@ namespace EgsEcfEditorApp
                         if (FileLoader.ShowDialog(this, tab.File) != DialogResult.OK) { return; }
 
                         tab.UpdateTabDescription();
+                        tab.ResetFilter();
                         tab.UpdateAllViews();
                     }
                     catch (Exception ex)
@@ -1065,6 +1068,10 @@ namespace EcfFileViews
             }
             return pasteCount;
         }
+        public void ResetFilter()
+        {
+            FilterControl.Reset();
+        }
 
         // view updating
         private void ShowSpecificItemInvoked(EcfStructureItem item)
@@ -1077,6 +1084,7 @@ namespace EcfFileViews
                 TreeView.ShowSpecificItem(item);
                 ParameterView.ShowSpecificItem(item);
                 InfoView.ShowSpecificItem(item);
+                ErrorView.UpdateView();
                 IsUpdating = false;
             }
         }
@@ -1133,7 +1141,7 @@ namespace EcfFileViews
             ToolTipText = Path.Combine(File.FilePath, File.FileName);
         }
 
-        // Reselecting 
+        // Reselecting / filtering
         private void ReselectTreeViewInvoked()
         {
             TreeView.TryReselect();
@@ -3268,8 +3276,7 @@ namespace EcfFileViewTools
         }
         public void ClearFilterButton_Click(object sender, EventArgs evt)
         {
-            SetSpecificItem(null);
-            AttachedFilters.ForEach(filter => filter.Reset());
+            Reset();
             ClearFilterClicked?.Invoke(sender, evt);
         }
 
@@ -3296,6 +3303,11 @@ namespace EcfFileViewTools
         {
             ApplyFilterButton.Enabled = true;
             AttachedFilters.ForEach(filter => filter.Enable());
+        }
+        public void Reset()
+        {
+            SetSpecificItem(null);
+            AttachedFilters.ForEach(filter => filter.Reset());
         }
     }
     public abstract class EcfBaseFilter : EcfToolBox

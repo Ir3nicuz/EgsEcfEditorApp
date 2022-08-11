@@ -832,6 +832,7 @@ namespace EcfFileViews
 
             List<EcfParameter> doubledParameters = presentParameters.Except(presentParameters.Distinct(ParamKeyComparer)).ToList();
             List<EcfParameter> removedParameters = presentParameters.Except(activeParameters, ParamKeyComparer).ToList();
+            removedParameters.RemoveAll(parameter => parameter.Definition == null);
             List<EcfParameter> createdParameters = activeParameters.Except(presentParameters, ParamKeyComparer).ToList();
 
             block.RemoveChilds(doubledParameters);
@@ -1143,11 +1144,14 @@ namespace EcfFileViews
                     if (idRow != null)
                     {
                         string value = idRow.GetValues().FirstOrDefault();
-                        foreach (EcfBlock block in identifyingBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
-                            && value.Equals(block.GetAttributeFirstValue(idRow.ItemDef.Name))))
+                        if (value != null)
                         {
-                            errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
-                                value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                            foreach (EcfBlock block in identifyingBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
+                                && value.Equals(block.GetAttributeFirstValue(idRow.ItemDef.Name))))
+                            {
+                                errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
+                                    value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                            }
                         }
                     }
                 }
@@ -1157,11 +1161,14 @@ namespace EcfFileViews
                     if (nameRow != null)
                     {
                         string value = nameRow.GetValues().FirstOrDefault();
-                        foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
-                             && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                        if (value != null)
                         {
-                            errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
-                                value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                            foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
+                                && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                            {
+                                errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
+                                    value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                            }
                         }
                     }
                 }
@@ -1394,6 +1401,8 @@ namespace EcfFileViews
                 {
                     DataGridViewCell nextCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).FirstOrDefault(cell => cell.Tag == null);
                     if (nextCell == null) { return false; }
+                    newIndex = Math.Max(newIndex, PrefixColumnCount);
+                    newIndex = Math.Min(newIndex, Cells.Count - 1);
                     for (int index = nextCell.ColumnIndex; index > newIndex; index--)
                     {
                         Cells[index].Value = Cells[index - 1].Value;
@@ -1406,6 +1415,8 @@ namespace EcfFileViews
                 {
                     DataGridViewCell lastCell = Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).LastOrDefault(cell => cell.Tag != null);
                     if (lastCell == null) { return false; }
+                    oldIndex = Math.Max(oldIndex, PrefixColumnCount);
+                    oldIndex = Math.Min(oldIndex, Cells.Count - 1);
                     for (int index = oldIndex; index < lastCell.ColumnIndex; index++)
                     {
                         Cells[index].Value = Cells[index + 1].Value;
@@ -1785,6 +1796,7 @@ namespace EcfFileViews
                             paramRow.PresetParameter.ValueGroups.Skip(1).ToList().ForEach(group => valueGroups.Add(group));
                             paramRow.PresetParameter.ClearValues();
                             paramRow.PresetParameter.AddValues(valueGroups);
+                            parameters.Add(paramRow.PresetParameter);
                         }
                     }
                 }

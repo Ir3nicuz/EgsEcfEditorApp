@@ -268,6 +268,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter matrix editing feature not allow unknown parameters.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter matrix editing feature not allow parameters without values.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No definition could be found for this parameter.
         /// </summary>
         internal static string EcfItemEditingDialog_ParameterNotDefined {

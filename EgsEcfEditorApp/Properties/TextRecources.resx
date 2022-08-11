@@ -186,6 +186,12 @@
   <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
     <value>not selected</value>
   </data>
+  <data name="EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed" xml:space="preserve">
+    <value>The parameter matrix editing feature not allow unknown parameters</value>
+  </data>
+  <data name="EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed" xml:space="preserve">
+    <value>The parameter matrix editing feature not allow parameters without values</value>
+  </data>
   <data name="EcfItemEditingDialog_ParameterNotDefined" xml:space="preserve">
     <value>No definition could be found for this parameter</value>
   </data>

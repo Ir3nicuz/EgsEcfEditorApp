@@ -205,7 +205,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Newfile.
+        ///   Looks up a localized string similar to NewFile.
         /// </summary>
         internal static string EcfFileDialog_CreateFileName {
             get {
@@ -381,6 +381,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemEditingDialog_Header_EditParameter {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_Header_EditParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Matrix editing.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_EditParameterMatrix {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_EditParameterMatrix", resourceCulture);
             }
         }
         

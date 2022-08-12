@@ -1074,7 +1074,7 @@ namespace EcfFileViews
             // publics
             public void GenerateAttributes(FormatDefinition definition, ReadOnlyCollection<ItemDefinition> attributes)
             {
-                AttributeRow[] rows = attributes.Select(attr => new AttributeRow(PrefixColumnCount, attr, definition)).ToArray();
+                AttributeRow[] rows = attributes.Select(attr => new AttributeRow(attr, definition)).ToArray();
                 Grid.SuspendLayout();
                 Grid.Rows.Clear();
                 Grid.Columns.Clear();
@@ -1096,23 +1096,31 @@ namespace EcfFileViews
                     presentAttributes = block.Attributes.ToList();
                 }
                 Grid.SuspendLayout();
-                UpdateValueColumns(presentAttributes);
                 foreach (DataGridViewRow row in Grid.Rows)
                 {
                     if (row is AttributeRow attrRow)
                     {
                         EcfAttribute attribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.ItemDef.Name));
-                        if (attribute == null)
+                        EcfValueGroup group = attribute?.ValueGroups.FirstOrDefault();
+                        if (attrRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
                         {
-                            attrRow.InitRow(false);
+                            group = new EcfValueGroup(string.Empty);
                         }
-                        else if (attrRow.IsReferenceSource)
+                        UpdateValueColumns(group);
+                        if (group != null) 
                         {
-                            attrRow.InitRow(true, inheritorBlock);
+                            if (attrRow.IsReferenceSource)
+                            {
+                                attrRow.InitRow(attribute != null, inheritorBlock);
+                            }
+                            else
+                            {
+                                attrRow.InitRow(attribute != null, group.Values.ToArray());
+                            }
                         }
                         else
                         {
-                            attrRow.InitRow(true, attribute.GetAllValues().ToArray());
+                            attrRow.InitRow(attribute != null);
                         }
                     }
                 }
@@ -1289,12 +1297,12 @@ namespace EcfFileViews
                 Grid.CellClick += Grid_CellClick;
                 Grid.CellContentClick += Grid_CellContentClick;
             }
-            private void UpdateValueColumns(List<EcfAttribute> presentAttributes)
+            private void UpdateValueColumns(EcfValueGroup group)
             {
                 int maxCount = 0;
-                if (presentAttributes != null && presentAttributes.Count > 0)
+                if (group != null)
                 {
-                    maxCount = presentAttributes.Max(attr => attr.GetAllValues().Count);
+                    maxCount = group.Values.Count;
                 }
                 while (Grid.Columns.Count - PrefixColumnCount < maxCount)
                 {
@@ -1340,18 +1348,18 @@ namespace EcfFileViews
 
                 private string ReferenceTargetAttribute { get; } = string.Empty;
 
-                private int PrefixColumnCount { get; } = 3;
+                private int PrefixColumnCount { get; } = 0;
                 private DataGridViewCheckBoxCell ActivationCell { get; } = new DataGridViewCheckBoxCell();
                 private DataGridViewTextBoxCell NameCell { get; } = new DataGridViewTextBoxCell();
                 private DataGridViewTextBoxCell InfoCell { get; } = new DataGridViewTextBoxCell();
 
-                public AttributeRow(int prefixColumnCount, ItemDefinition definition, FormatDefinition format) : base()
+                public AttributeRow(ItemDefinition definition, FormatDefinition format) : base()
                 {
                     Cells.Add(ActivationCell);
                     Cells.Add(NameCell);
                     Cells.Add(InfoCell);
+                    PrefixColumnCount = Cells.Count;
 
-                    PrefixColumnCount = prefixColumnCount;
                     ItemDef = definition;
                     FormDef = format;
 
@@ -1371,12 +1379,12 @@ namespace EcfFileViews
                 // publics
                 public void InitRow(bool active, params string[] values)
                 {
-                    SetActiveState(active);
+                    ActivationCell.Value = active;
                     SetValues(values);
                 }
                 public void InitRow(bool active, EcfBlock inheritor)
                 {
-                    SetActiveState(active);
+                    ActivationCell.Value = active;
                     SetInheritor(inheritor);
                 }
                 public void SetInheritor(EcfBlock inheritor)
@@ -1434,17 +1442,6 @@ namespace EcfFileViews
                 }
 
                 // privates
-                private void SetActiveState(bool state)
-                {
-                    if (ItemDef.IsOptional)
-                    {
-                        ActivationCell.Value = state;
-                    }
-                    else
-                    {
-                        ActivationCell.Value = true;
-                    }
-                }
                 private void SetValues(params string[] values)
                 {
                     foreach (DataGridViewCell valueCell in Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount))
@@ -1671,16 +1668,20 @@ namespace EcfFileViews
                     {
                         EcfParameter parameter = presentParameters?.FirstOrDefault(param => param.Key.Equals(paramRow.ItemDef.Name));
                         EcfValueGroup group = parameter?.ValueGroups.FirstOrDefault();
+                        if (paramRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
+                        {
+                            group = new EcfValueGroup(string.Empty);
+                        }
                         UpdateValueColumns(group, true);
                         if (parameter != null)
                         {
                             if (group != null)
                             {
-                                paramRow.InitRow(parameter, string.Join(" / ", parameter.Comments), group.Values.ToArray());
+                                paramRow.InitRow(parameter != null, parameter, string.Join(" / ", parameter.Comments), group.Values.ToArray());
                             }
                             else
                             {
-                                paramRow.InitRow(parameter, string.Join(" / ", parameter.Comments), string.Empty);
+                                paramRow.InitRow(parameter != null, parameter, string.Join(" / ", parameter.Comments));
                             }
                         }
                         else
@@ -1704,11 +1705,11 @@ namespace EcfFileViews
                         UpdateValueColumns(group, true);
                         if (group != null)
                         {
-                            paramRow.InitRow(string.Join(" / ", paramRow.PresetParameter.Comments), group.Values.ToArray());
+                            paramRow.InitRow(true, string.Join(" / ", paramRow.PresetParameter.Comments), group.Values.ToArray());
                         }
                         else
                         {
-                            paramRow.InitRow(string.Join(" / ", paramRow.PresetParameter.Comments), string.Empty);
+                            paramRow.InitRow(true, string.Join(" / ", paramRow.PresetParameter.Comments), string.Empty);
                         }
                     }
                 }
@@ -2103,10 +2104,6 @@ namespace EcfFileViews
                 }
 
                 // publics
-                public void InitRow(params string[] values)
-                {
-                    SetValues(values);
-                }
                 public List<string> GetValues()
                 {
                     return Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount).Where(cell => cell.Tag != null)
@@ -2142,7 +2139,7 @@ namespace EcfFileViews
                 }
 
                 // privates
-                private void SetValues(params string[] values)
+                protected void SetValues(params string[] values)
                 {
                     foreach (DataGridViewCell valueCell in Cells.Cast<DataGridViewCell>().Skip(PrefixColumnCount))
                     {
@@ -2178,6 +2175,11 @@ namespace EcfFileViews
                 {
                     PresetParameter = presetParameter;
                     PrefixColumnCount = 0;
+                }
+
+                public void InitRow(params string[] values)
+                {
+                    SetValues(values);
                 }
             }
             private class ParameterMatrixRow : ParameterRow
@@ -2226,18 +2228,18 @@ namespace EcfFileViews
                 {
                     PresetParameter = null;
                     InitRow(false, false, string.Empty);
-                    InitRow(string.Empty);
+                    SetValues();
                 }
-                public void InitRow(string comment, params string[] values)
+                public void InitRow(bool active, string comment, params string[] values)
                 {
-                    CommentCell.Value = comment;
-                    InitRow(values);
+                    InitRow(active, false, comment);
+                    SetValues(values);
                 }
-                public void InitRow(EcfParameter presetParameter, string comment, params string[] values)
+                public void InitRow(bool active, EcfParameter presetParameter, string comment, params string[] values)
                 {
                     PresetParameter = presetParameter;
-                    InitRow(true, false, comment);
-                    InitRow(values);
+                    InitRow(active, false, comment);
+                    SetValues(values);
                 }
                 public bool IsActive()
                 {
@@ -2262,16 +2264,9 @@ namespace EcfFileViews
                 }
 
                 // privates
-                public void InitRow(bool active, bool inherited, string comment)
+                private void InitRow(bool active, bool inherited, string comment)
                 {
-                    if (ItemDef.IsOptional)
-                    {
-                        ActivationCell.Value = active;
-                    }
-                    else
-                    {
-                        ActivationCell.Value = true;
-                    }
+                    ActivationCell.Value = active;
                     InheritedCell.Value = inherited;
                     CommentCell.Value = comment;
                 }

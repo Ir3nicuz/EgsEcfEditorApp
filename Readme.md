@@ -33,28 +33,42 @@ Just download the latest release and unzip the content wherever you might need t
 ## Feature Overview
 ### Content Definition
 For each `.ecf` file the tool needs a definition. These definitions are located in `.xml` files in the `EcfFileDefinitions` sub folder of the zip package. For creating or adjusting the definitions yourself refer to [File Content Definition](#file-content-definition). After loading a `.ecf` file the definition is attached to it. To reinterprete a `.ecf` file with a different or changed definition the `.ecf` file must be closed and reopened. The actual version of the tool is shipped with definitions for:
-- `BlocksConfig.ecf`
-- `Factions.ecf`
-- `ItemsConfig.ecf`
+- `BlocksConfig.ecf` (Vanilla and Reforged Eden)
+- `BlockShapeWindow.ecf` (Vanilla)
+- `Containers.ecf` (Vanilla and Reforged Eden)
+- `DefReputation.ecf` (Vanilla and Reforged Eden)
+- `EClassConfig.ecf` (Vanilla and Reforged Eden)
+- `EGroupsConfig.ecf` (Vanilla and Reforged Eden)
+- `Factions.ecf` (Vanilla and Reforged Eden)
+- `FactionWarfare.ecf` (Vanilla and Reforged Eden)
+- `GalaxyConfig.ecf` (Vanilla and Reforged Eden)
+- `ItemsConfig.ecf` (Vanilla and Reforged Eden)
+- `LootGroups.ecf` (Vanilla and Reforged Eden)
+- `MaterialConfig.ecf` (Vanilla and Reforged Eden)
+- `StatusEffects.ecf` (Vanilla and Reforged Eden)
+- `Templates.ecf` (Vanilla and Reforged Eden) - needs further improvement -> planned feature `Ingame Item creation support`
+- `TokenConfig.ecf` (Vanilla and Reforged Eden)
+- `TraderNPCConfig.ecf` (Vanilla and Reforged Eden)
 
 ### Content Recognition
 At file loading the tool parses the file content according to the attached definition. The tool is balanced to the variety of the subtleties of the spellings in the `.ecf` files. Due to the design goal `the output should match input in at much details as possible` the tool in its release state will likely also report failures in the default `.ecf` files of the game. This is not a tool bug, but developer inaccuracies that may or may not be compensated for by a fallback. In order to achieve reliable behavior, I have chosen to report such bugs rather than legitimizing these inaccuracies by the definition. For details see [File Content Recognition](#file-content-recognition).
 
 ### Content Creation
-At saving a `.ecf` file the whole content in the file is wiped and recreated.
-```diff
-- Any element with errors is NOT written to the file!
-```
-The error state is inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. So pay attention to any error listed in the error report view and take care of it if you need the corresponding elements in the final `.ecf` file. Due to the nature of the `.ecf` syntax of consecutive specifications its recommended to
+At saving a `.ecf` file the whole content in the file is wiped and recreated. At default setting elements with unsolved errors will not be written to the file. Instead the tool tries to recreate the data originially read from the file. Due to the nature of the `.ecf` syntax of consecutive specifications its recommended to
 ```diff
 - solve errors from top to bottom
 ```
 to not follow rabbits.
 
 ### Language and Tool Support
-Icons and Controls with complex behavior have tooltips on mouse over. All Labels and tootips are localised. At the moment de-DE and en-GB is supported. The language switches automaticly based on the local machine culture setting, defaulting to en-GB.
+The icons and controls have tooltips on mouse over. All labels and tootips are localised. At the moment de-DE and en-GB is supported. The language switches automaticly based on the local machine culture setting, defaulting to en-GB.
 
 ### Tool Overview
+### Settings Area
+The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
+
+<img src="images/settings_area.png" title="Settings Area" width="1000" height="500"/>
+
 #### File Operation Area
 The standard file operations (new, open, reload, save, close) are located in this area. The cross-file functions (diff, merge, xml) are also arranged here.
 
@@ -244,6 +258,8 @@ The exceptions are the white spaces, the empty lines and the comments. All the f
 The tool parses the `.ecf` file content line by line and seperates the line content item by item according to the definition and chronologic. A fault can depending on its severity lead to a whole bunch of follower errors. This is the reason of solving errors from top to bottom.
 
 For the content recognition and operation three groups of errors are possible.
+
+--- The error state is inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. So pay attention to any error listed in the error report view and take care of it if you need the corresponding elements in the final `.ecf` file.
 
 ### Fatal Error
 This errors occur during the parsing of the content at the loading of the `.ecf` file. The corresponding line in the file violates the syntax in a manner which makes it impossible to attach this data to the managed structure within the tool. Such an error must be corrected in the original file if the data is needed.

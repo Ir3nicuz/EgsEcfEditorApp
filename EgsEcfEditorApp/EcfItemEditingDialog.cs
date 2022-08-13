@@ -869,7 +869,7 @@ namespace EcfFileViews
         {
             BackButton.Enabled = false;
             ResetButton.Enabled = true;
-            SelectedItemType = Modes.Parameter;
+            SelectedItemType = Modes.ParameterMatrix;
 
             Text = TitleRecources.EcfItemEditingDialog_Header_EditParameterMatrix;
 
@@ -1102,25 +1102,23 @@ namespace EcfFileViews
                     {
                         EcfAttribute attribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.ItemDef.Name));
                         EcfValueGroup group = attribute?.ValueGroups.FirstOrDefault();
-                        if (attrRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
+                        bool activation = !attrRow.ItemDef.IsOptional || attribute != null;
+                        if (activation && attrRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
                         {
                             group = new EcfValueGroup(string.Empty);
                         }
                         UpdateValueColumns(group);
-                        if (group != null) 
+                        if (attrRow.IsReferenceSource)
                         {
-                            if (attrRow.IsReferenceSource)
-                            {
-                                attrRow.InitRow(attribute != null, inheritorBlock);
-                            }
-                            else
-                            {
-                                attrRow.InitRow(attribute != null, group.Values.ToArray());
-                            }
+                            attrRow.InitRow(activation, inheritorBlock);
+                        }
+                        else if (group != null)
+                        {
+                            attrRow.InitRow(activation, group.Values.ToArray());
                         }
                         else
                         {
-                            attrRow.InitRow(attribute != null);
+                            attrRow.InitRow(activation);
                         }
                     }
                 }
@@ -1390,7 +1388,14 @@ namespace EcfFileViews
                 public void SetInheritor(EcfBlock inheritor)
                 {
                     Inheritor = inheritor;
-                    SetValues(inheritor?.GetAttributeFirstValue(ReferenceTargetAttribute) ?? string.Empty);
+                    if (inheritor != null)
+                    {
+                        SetValues(inheritor?.GetAttributeFirstValue(ReferenceTargetAttribute));
+                    }
+                    else
+                    {
+                        SetValues();
+                    }
                 }
                 public bool IsActive()
                 {
@@ -1668,25 +1673,19 @@ namespace EcfFileViews
                     {
                         EcfParameter parameter = presentParameters?.FirstOrDefault(param => param.Key.Equals(paramRow.ItemDef.Name));
                         EcfValueGroup group = parameter?.ValueGroups.FirstOrDefault();
-                        if (paramRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
+                        bool activation = !paramRow.ItemDef.IsOptional || parameter != null;
+                        if (activation && paramRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
                         {
                             group = new EcfValueGroup(string.Empty);
                         }
                         UpdateValueColumns(group, true);
-                        if (parameter != null)
+                        if (group != null)
                         {
-                            if (group != null)
-                            {
-                                paramRow.InitRow(parameter != null, parameter, string.Join(" / ", parameter.Comments), group.Values.ToArray());
-                            }
-                            else
-                            {
-                                paramRow.InitRow(parameter != null, parameter, string.Join(" / ", parameter.Comments));
-                            }
+                            paramRow.InitRow(activation, parameter, group.Values.ToArray());
                         }
                         else
                         {
-                            paramRow.InitRow();
+                            paramRow.InitRow(activation, parameter);
                         }
                     }
                 }
@@ -1705,11 +1704,11 @@ namespace EcfFileViews
                         UpdateValueColumns(group, true);
                         if (group != null)
                         {
-                            paramRow.InitRow(true, string.Join(" / ", paramRow.PresetParameter.Comments), group.Values.ToArray());
+                            paramRow.InitRow(true, paramRow.PresetParameter, group.Values.ToArray());
                         }
                         else
                         {
-                            paramRow.InitRow(true, string.Join(" / ", paramRow.PresetParameter.Comments), string.Empty);
+                            paramRow.InitRow(true, paramRow.PresetParameter);
                         }
                     }
                 }
@@ -2008,7 +2007,10 @@ namespace EcfFileViews
                 {
                     columns.ForEach(column =>
                     {
-                        AddValueColumn(false, true, column.Index + 1);
+                        int newIndex = column.Index + 1;
+                        newIndex = Math.Max(newIndex, PrefixColumnCount);
+                        newIndex = Math.Min(newIndex, Grid.Columns.Count);
+                        AddValueColumn(false, true, newIndex);
                     });
                     UpdateParameterValuesColumnNumbering();
                 }
@@ -2224,21 +2226,12 @@ namespace EcfFileViews
                 }
 
                 // publics
-                public void InitRow()
-                {
-                    PresetParameter = null;
-                    InitRow(false, false, string.Empty);
-                    SetValues();
-                }
-                public void InitRow(bool active, string comment, params string[] values)
-                {
-                    InitRow(active, false, comment);
-                    SetValues(values);
-                }
-                public void InitRow(bool active, EcfParameter presetParameter, string comment, params string[] values)
+                public void InitRow(bool active, EcfParameter presetParameter, params string[] values)
                 {
                     PresetParameter = presetParameter;
-                    InitRow(active, false, comment);
+                    ActivationCell.Value = active;
+                    InheritedCell.Value = false;
+                    CommentCell.Value = presetParameter != null ? string.Join(" / ", presetParameter.Comments) : string.Empty;
                     SetValues(values);
                 }
                 public bool IsActive()
@@ -2263,13 +2256,6 @@ namespace EcfFileViews
                     }
                 }
 
-                // privates
-                private void InitRow(bool active, bool inherited, string comment)
-                {
-                    ActivationCell.Value = active;
-                    InheritedCell.Value = inherited;
-                    CommentCell.Value = comment;
-                }
             }
         }
     }

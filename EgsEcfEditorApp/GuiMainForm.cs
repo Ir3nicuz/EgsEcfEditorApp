@@ -768,16 +768,11 @@ namespace EcfFileViews
         {
             if (LastFocusedView is EcfTreeView treeView)
             {
-                EcfStructureItem item = treeView.SelectedItems.FirstOrDefault();
-                if (ChangeTreeItem(item)) { return; }
+                ChangeTreeSelection(treeView.SelectedItems);
             }
             else if (LastFocusedView is EcfParameterView parameterView)
             {
-                if (parameterView.SelectedParameters.FirstOrDefault() is EcfParameter parameter)
-                {
-                    ChangeParameterItem(parameter);
-                    return;
-                }
+                ChangeParameterSelection(parameterView.SelectedParameters);
             }
             MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
@@ -811,11 +806,11 @@ namespace EcfFileViews
         }
         private void TreeView_NodeDoubleClicked(object sender, TreeNodeMouseClickEventArgs evt)
         {
-            ChangeTreeItem(TreeView.SelectedItems.FirstOrDefault());
+            ChangeTreeSelection(TreeView.SelectedItems);
         }
         private void TreeView_ChangeItemClicked(object sender, EventArgs evt)
         {
-            ChangeTreeItem(TreeView.SelectedItems.FirstOrDefault());
+            ChangeTreeSelection(TreeView.SelectedItems);
         }
         private void TreeView_AddToItemClicked(object sender, EventArgs evt)
         {
@@ -855,11 +850,11 @@ namespace EcfFileViews
         }
         private void ParameterView_CellDoubleClicked(object sender, DataGridViewCellEventArgs evt)
         {
-            ChangeParameterItem(ParameterView.SelectedParameters.FirstOrDefault());
+            ChangeParameterSelection(ParameterView.SelectedParameters);
         }
         private void ParameterView_ChangeItemClicked(object sender, EventArgs evt)
         {
-            ChangeParameterItem(ParameterView.SelectedParameters.FirstOrDefault());
+            ChangeParameterSelection(ParameterView.SelectedParameters);
         }
         private void ParameterView_AddAfterItemClicked(object sender, EventArgs evt)
         {
@@ -1319,6 +1314,28 @@ namespace EcfFileViews
                 UpdateAllViews();
             }
         }
+        private void ChangeTreeSelection(List<EcfStructureItem> items)
+        {
+            if (items.Count > 1 && items.All(item => item is EcfParameter))
+            {
+                ChangeParameterMatrix(items.Cast<EcfParameter>().ToList());
+            }
+            else if (items.Count > 0)
+            {
+                ChangeTreeItem(items.FirstOrDefault());
+            }
+        }
+        private void ChangeParameterSelection(List<EcfParameter> parameters)
+        {
+            if (parameters.Count > 1)
+            {
+                ChangeParameterMatrix(parameters);
+            }
+            else if (parameters.Count > 0)
+            {
+                ChangeParameterItem(parameters.FirstOrDefault());
+            }
+        }
         private bool ChangeTreeItem(EcfStructureItem item)
         {
             if (item is EcfComment comment)
@@ -1362,6 +1379,13 @@ namespace EcfFileViews
                 {
                     block.RevalidateParameters();
                 }
+                UpdateAllViews();
+            }
+        }
+        private void ChangeParameterMatrix(List<EcfParameter> parameters)
+        {
+            if (ItemEditor.ShowDialog(this, File, parameters) == DialogResult.OK)
+            {
                 UpdateAllViews();
             }
         }

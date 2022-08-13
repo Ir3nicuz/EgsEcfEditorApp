@@ -2638,37 +2638,19 @@ namespace EgsEcfParser
         public override string BuildIdentification()
         {
             StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
-            if (Id != null) {
-                identification.Append(", ");
-                identification.Append(Id);
-            }
-            if (RefTarget != null && !RefTarget.Equals(Id))
-            {
-                identification.Append(", ");
-                identification.Append(RefTarget);
-            }
             if (!IsRoot())
             {
                 identification.Append(", Index: ");
                 identification.Append(GetIndexInStructureLevel<EcfBlock>());
-                if (Attributes.Count > 0)
-                {
-                    identification.Append(", ");
-                    identification.Append(string.Join(", ", Attributes.Select(attr => attr.Key)));
-                }
-
             }
-            else if (Id == null && RefTarget == null)
+            foreach (EcfAttribute attr in Attributes)
             {
-                foreach (EcfAttribute attr in Attributes)
+                identification.Append(", ");
+                identification.Append(attr.Key);
+                if (attr.HasValue())
                 {
-                    identification.Append(", ");
-                    identification.Append(attr.Key);
-                    if (attr.HasValue())
-                    {
-                        identification.Append(": ");
-                        identification.Append(attr.GetFirstValue());
-                    }
+                    identification.Append(": ");
+                    identification.Append(attr.GetFirstValue());
                 }
             }
             return identification.ToString();
@@ -2947,8 +2929,6 @@ namespace EgsEcfParser
             foreach (StringPairDefinition pair in MultiLineCommentPairs) { prohibitedPhrases.Add(pair.Opener); prohibitedPhrases.Add(pair.Closer); }
             foreach (StringPairDefinition pair in BlockIdentifierPairs) { prohibitedPhrases.Add(pair.Opener); prohibitedPhrases.Add(pair.Closer); }
             foreach (StringPairDefinition pair in EscapeIdentifiersPairs) { prohibitedPhrases.Add(pair.Opener); prohibitedPhrases.Add(pair.Closer); }
-            prohibitedPhrases.Add(ItemSeperator);
-            prohibitedPhrases.Add(ItemValueSeperator);
             prohibitedPhrases.Add(ValueSeperator);
             prohibitedPhrases.Add(ValueGroupSeperator);
             ProhibitedValuePhrases = prohibitedPhrases.ToList().AsReadOnly();

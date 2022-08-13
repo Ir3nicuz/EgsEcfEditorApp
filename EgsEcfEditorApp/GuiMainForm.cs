@@ -2495,7 +2495,7 @@ namespace EcfFileViews
             Grid.Rows.AddRange(ParameterRows.Skip(ParameterSorter.ItemCount * (ParameterSorter.ItemGroup - 1)).Take(ParameterSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ParameterSorter), ParameterSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
             Grid.AutoResizeRows();
-            Grid.AutoResizeColumns();
+            Grid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName, ParameterRows.Count,
@@ -2615,10 +2615,12 @@ namespace EcfFileViews
             private string BuildValueLine(ReadOnlyCollection<string> values)
             {
                 int maxCount = InternalSettings.Default.EgsEcfEditorApp_ValueMaxCount;
+                int maxLenght = InternalSettings.Default.EgsEcfEditorApp_ValueMaxLenght;
                 string valueSeperator = InternalSettings.Default.EgsEcfEditorApp_ValueSeperator;
                 string line = string.Join(valueSeperator, values.ToArray(), 0, Math.Min(values.Count, maxCount));
-                if (values.Count <= maxCount) { return line; }
-                return string.Format("{0}{1}{2}", line, valueSeperator, InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
+                if (values.Count <= maxCount && line.Length <= maxLenght) { return line; }
+                string limitedLine = line.Length > maxLenght ? line.Substring(0, maxLenght) : line;
+                return string.Format("{0}{1}{2}", limitedLine, valueSeperator, InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
             }
         }
     }
@@ -2986,6 +2988,13 @@ namespace EcfFileViews
             ElementNameColumn.HeaderText = TitleRecources.Generic_Name;
             ErrorInfoColumn.HeaderText = TitleRecources.Generic_Info;
 
+            ErrorNumberColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+            ErrorGroupColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+            ErrorTypeColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+            LineNumberColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+            ElementNameColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+            ErrorInfoColumn.SortMode = DataGridViewColumnSortMode.Programmatic;
+
             Grid.CellMouseClick += Grid_CellMouseClick;
 
             Grid.Columns.Add(ErrorNumberColumn);
@@ -3038,7 +3047,7 @@ namespace EcfFileViews
             Grid.Rows.Clear();
             Grid.Rows.AddRange(ErrorRows.Skip(ErrorSorter.ItemCount * (ErrorSorter.ItemGroup - 1)).Take(ErrorSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ErrorSorter), ErrorSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
-            Grid.AutoResizeColumns();
+            Grid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {2} - {3} {4} - {5} {6} - {7} {8} - {9} {10}", ViewName,
@@ -3724,8 +3733,9 @@ namespace EcfFileViewTools
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             AllowUserToOrderColumns = false;
+            AllowUserToResizeColumns = true;
             AllowDrop = false;
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             EditMode = DataGridViewEditMode.EditProgrammatically;
             ShowEditingIcon = false;

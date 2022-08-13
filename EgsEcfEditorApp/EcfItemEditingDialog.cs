@@ -1872,16 +1872,19 @@ namespace EcfFileViews
 
                 ActivationColumn.HeaderText = TitleRecources.Generic_Active;
                 ActivationColumn.SortMode = DataGridViewColumnSortMode.Automatic;
+                ActivationColumn.Frozen = true;
 
                 InheritColumn.DefaultCellStyle.BackColor = Color.LightGray;
                 InheritColumn.HeaderText = TitleRecources.Generic_Inherited;
                 InheritColumn.ReadOnly = true;
                 InheritColumn.SortMode = DataGridViewColumnSortMode.Automatic;
-                
+                InheritColumn.Frozen = true;
+
                 NameColumn.DefaultCellStyle.BackColor = Color.LightGray;
                 NameColumn.HeaderText = TitleRecources.Generic_Name;
                 NameColumn.ReadOnly = true;
                 NameColumn.SortMode = DataGridViewColumnSortMode.Automatic;
+                NameColumn.Frozen = true;
 
                 InfoColumn.DefaultCellStyle.BackColor = Color.LightGray;
                 InfoColumn.HeaderText = TitleRecources.Generic_Info;

@@ -262,5 +262,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["EgsEcfEditorApp_GroupMaxCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int EgsEcfEditorApp_ValueMaxLenght {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ValueMaxLenght"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ValueMaxLenght"] = value;
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+# :wrench: In Change for Release 1.1 :wrench:
 # Empyrion Configuration Editor
 An application to simplify the handling and customizing of the `.ecf` configuration files of [Empyrion Galactic Survival](https://empyriongame.com/)
 
@@ -254,15 +255,13 @@ This errors occur during the parsing of the content at the loading of the `.ecf`
 This errors occur at content editing operations in the tool which would consume too much system recources to prevent it by a pre check. It can in all cases be corrected in the tool.
 
 ## Planned Major Features
-:wrench::wrench::wrench: The next steps will be the compare / merge feature together with more supported files (included Reforged Eden). :wrench::wrench::wrench:
+:wrench::wrench::wrench: The next step will be the compare / merge feature. :wrench::wrench::wrench:
 
-- Support for Reforged Eden
-- Support for all .ecf files
 - Compare files view
 - Merge files with behaviour selection
+- Ingame Item creation support
 - Element, Parameter, Comment moving
 - TechTree Preview
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - SaveAs with taking applied filter into account
 - Undo / Redo
-

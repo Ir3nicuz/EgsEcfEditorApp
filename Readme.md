@@ -161,48 +161,48 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 
 ### Icons
 #### File Operations
-- <img src="EgsEcfControls\Resources\Icon_NewFile.png" title="icon" width="16" height="16"/> create new file
-- <img src="EgsEcfControls\Resources\Icon_OpenFile.png" title="icon" width="16" height="16"/> open existing file
-- <img src="EgsEcfControls\Resources\Icon_ReloadFile.png" title="icon" width="16" height="16"/> reload content from selected file
-- <img src="EgsEcfControls\Resources\Icon_SaveFile.png" title="icon" width="16" height="16"/> save selected file
-- <img src="EgsEcfControls\Resources\Icon_SaveAsFile.png" title="icon" width="16" height="16"/> save selected file with new name
-- <img src="EgsEcfControls\Resources\Icon_SaveAsFilteredFile.png" title="icon" width="16" height="16"/> save filter result to file
-- <img src="EgsEcfControls\Resources\Icon_SaveAllFiles.png" title="icon" width="16" height="16"/> save all opened files
-- <img src="EgsEcfControls\Resources\Icon_CloseFile.png" title="icon" width="16" height="16"/> close selected file
-- <img src="EgsEcfControls\Resources\Icon_CloseAllFiles.png" title="icon" width="16" height="16"/> close all open files
-- <img src="EgsEcfControls\Resources\Icon_Compare.png" title="icon" width="16" height="16"/> compares two files and displays differences (see [Compare and Merge](#compare-and-merge))
-- <img src="EgsEcfControls\Resources\Icon_Merge.png" title="icon" width="16" height="16"/> merge two files to one (see [Compare and Merge](#compare-and-merge))
-- <img src="EgsEcfControls\Resources\Icon_BuildTechTreePreview.png" title="icon" width="16" height="16"/> displays the tech tree preview (see [Tech Tree Preview](#tech-tree-preview))
-- <img src="EgsEcfControls\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [File Content Definition](#file-content-definition))
-- <img src="EgsEcfControls\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> checks the `.xml` definitions (see [File Content Definition](#file-content-definition))
+- <img src="EgsEcfEditorApp\Resources\Icon_NewFile.png" title="icon" width="16" height="16"/> create new file
+- <img src="EgsEcfEditorApp\Resources\Icon_OpenFile.png" title="icon" width="16" height="16"/> open existing file
+- <img src="EgsEcfEditorApp\Resources\Icon_ReloadFile.png" title="icon" width="16" height="16"/> reload content from selected file
+- <img src="EgsEcfEditorApp\Resources\Icon_SaveFile.png" title="icon" width="16" height="16"/> save selected file
+- <img src="EgsEcfEditorApp\Resources\Icon_SaveAsFile.png" title="icon" width="16" height="16"/> save selected file with new name
+- <img src="EgsEcfEditorApp\Resources\Icon_SaveAsFilteredFile.png" title="icon" width="16" height="16"/> save filter result to file
+- <img src="EgsEcfEditorApp\Resources\Icon_SaveAllFiles.png" title="icon" width="16" height="16"/> save all opened files
+- <img src="EgsEcfEditorApp\Resources\Icon_CloseFile.png" title="icon" width="16" height="16"/> close selected file
+- <img src="EgsEcfEditorApp\Resources\Icon_CloseAllFiles.png" title="icon" width="16" height="16"/> close all open files
+- <img src="EgsEcfEditorApp\Resources\Icon_Compare.png" title="icon" width="16" height="16"/> compares two files and displays differences (see [Compare and Merge](#compare-and-merge))
+- <img src="EgsEcfEditorApp\Resources\Icon_Merge.png" title="icon" width="16" height="16"/> merge two files to one (see [Compare and Merge](#compare-and-merge))
+- <img src="EgsEcfEditorApp\Resources\Icon_BuildTechTreePreview.png" title="icon" width="16" height="16"/> displays the tech tree preview (see [Tech Tree Preview](#tech-tree-preview))
+- <img src="EgsEcfEditorApp\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [File Content Definition](#file-content-definition))
+- <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> checks the `.xml` definitions (see [File Content Definition](#file-content-definition))
 
 #### Filter and Sorting Operations
-- <img src="EgsEcfControls\Resources\Icon_ApplyFilter.png" title="icon" width="16" height="16"/> apply filter
-- <img src="EgsEcfControls\Resources\Icon_ClearFilter.png" title="icon" width="16" height="16"/> clear filter
-- <img src="EgsEcfControls\Resources\Icon_ShowAllItems.png" title="icon" width="16" height="16"/> show item with / without error
-- <img src="EgsEcfControls\Resources\Icon_ChangeSortDirection.png" title="icon" width="16" height="16"/> switch the sort direction
-- <img src="EgsEcfControls\Resources\Icon_NumericSorting.png" title="icon" width="16" height="16"/> sets sorting to the origin (file) order
-- <img src="EgsEcfControls\Resources\Icon_AlphabeticSorting.png" title="icon" width="16" height="16"/> sets sorting to alphabetic order
+- <img src="EgsEcfEditorApp\Resources\Icon_ApplyFilter.png" title="icon" width="16" height="16"/> apply filter
+- <img src="EgsEcfEditorApp\Resources\Icon_ClearFilter.png" title="icon" width="16" height="16"/> clear filter
+- <img src="EgsEcfEditorApp\Resources\Icon_ShowAllItems.png" title="icon" width="16" height="16"/> show item with / without error
+- <img src="EgsEcfEditorApp\Resources\Icon_ChangeSortDirection.png" title="icon" width="16" height="16"/> switch the sort direction
+- <img src="EgsEcfEditorApp\Resources\Icon_NumericSorting.png" title="icon" width="16" height="16"/> sets sorting to the origin (file) order
+- <img src="EgsEcfEditorApp\Resources\Icon_AlphabeticSorting.png" title="icon" width="16" height="16"/> sets sorting to alphabetic order
 
 #### Content Operations
-- <img src="EgsEcfControls\Resources\Icon_Add.png" title="icon" width="16" height="16"/> add item to / after selection
-- <img src="EgsEcfControls\Resources\Icon_ChangeSimple.png" title="icon" width="16" height="16"/> editing first selected item
-- <img src="EgsEcfControls\Resources\Icon_ChangeComplex.png" title="icon" width="16" height="16"/> editing items with logics (see [Mass Changing](#mass-changing))
-- <img src="EgsEcfControls\Resources\Icon_Remove.png" title="icon" width="16" height="16"/> removing selected items
-- <img src="EgsEcfControls\Resources\Icon_Copy.png" title="icon" width="16" height="16"/> copy selected items
-- <img src="EgsEcfControls\Resources\Icon_Paste.png" title="icon" width="16" height="16"/> paste copied items to / after selection
-- <img src="EgsEcfControls\Resources\Icon_Undo.png" title="icon" width="16" height="16"/> undo last change
-- <img src="EgsEcfControls\Resources\Icon_Redo.png" title="icon" width="16" height="16"/> redo last undo
-- <img src="EgsEcfControls\Resources\Icon_MoveUp.png" title="icon" width="16" height="16"/> move selected items up
-- <img src="EgsEcfControls\Resources\Icon_MoveDown.png" title="icon" width="16" height="16"/> move selected items down
-- <img src="EgsEcfControls\Resources\Icon_AddValue.png" title="icon" width="16" height="16"/> add value slot after selection
-- <img src="EgsEcfControls\Resources\Icon_AddValueGroup.png" title="icon" width="16" height="16"/> add value group after selection
-- <img src="EgsEcfControls\Resources\Icon_RemoveValue.png" title="icon" width="16" height="16"/> remove selected value slot
-- <img src="EgsEcfControls\Resources\Icon_RemoveValueGroup.png" title="icon" width="16" height="16"/> remove selected value group
+- <img src="EgsEcfEditorApp\Resources\Icon_Add.png" title="icon" width="16" height="16"/> add item to / after selection
+- <img src="EgsEcfEditorApp\Resources\Icon_ChangeSimple.png" title="icon" width="16" height="16"/> editing first selected item
+- <img src="EgsEcfEditorApp\Resources\Icon_ChangeComplex.png" title="icon" width="16" height="16"/> editing items with logics (see [Mass Changing](#mass-changing))
+- <img src="EgsEcfEditorApp\Resources\Icon_Remove.png" title="icon" width="16" height="16"/> removing selected items
+- <img src="EgsEcfEditorApp\Resources\Icon_Copy.png" title="icon" width="16" height="16"/> copy selected items
+- <img src="EgsEcfEditorApp\Resources\Icon_Paste.png" title="icon" width="16" height="16"/> paste copied items to / after selection
+- <img src="EgsEcfEditorApp\Resources\Icon_Undo.png" title="icon" width="16" height="16"/> undo last change
+- <img src="EgsEcfEditorApp\Resources\Icon_Redo.png" title="icon" width="16" height="16"/> redo last undo
+- <img src="EgsEcfEditorApp\Resources\Icon_MoveUp.png" title="icon" width="16" height="16"/> move selected items up
+- <img src="EgsEcfEditorApp\Resources\Icon_MoveDown.png" title="icon" width="16" height="16"/> move selected items down
+- <img src="EgsEcfEditorApp\Resources\Icon_AddValue.png" title="icon" width="16" height="16"/> add value slot after selection
+- <img src="EgsEcfEditorApp\Resources\Icon_AddValueGroup.png" title="icon" width="16" height="16"/> add value group after selection
+- <img src="EgsEcfEditorApp\Resources\Icon_RemoveValue.png" title="icon" width="16" height="16"/> remove selected value slot
+- <img src="EgsEcfEditorApp\Resources\Icon_RemoveValueGroup.png" title="icon" width="16" height="16"/> remove selected value group
 
 #### Error Operations
-- <img src="EgsEcfControls\Resources\Icon_ShowInEditor.png" title="icon" width="16" height="16"/> show error in tool
-- <img src="EgsEcfControls\Resources\Icon_ShowInFile.png" title="icon" width="16" height="16"/> show error in file
+- <img src="EgsEcfEditorApp\Resources\Icon_ShowInEditor.png" title="icon" width="16" height="16"/> show error in tool
+- <img src="EgsEcfEditorApp\Resources\Icon_ShowInFile.png" title="icon" width="16" height="16"/> show error in file
 
 ## File Content Definition
 The file content definition is the basic information for the tool which content is viable in the loaded `.ecf` file and which is not. To achive the design goal to be reliable able to load and interprete `.ecf` files from any source (default files, text editor tool files, manually edited files and so on) the definition provides several options. 
@@ -213,9 +213,9 @@ The defintions will be read from the `EcfFileDefinitions` sub folder from the to
 
 If the `EcfFileDefinitions` sub folder is missing or empty the tool will create a simple template `.xml` file for `BlocksConfig.ecf`. This file can be used as starting point for creation of own files and is structural complete, but will likely be incomplete compared to the expected `.ecf` content.
 
-After starting the tool the present `.xml` files are loaded and prepared for use. Changing the `.xml` files after running the tool will not be recognized by the tool. If you want the tool to reload the definitions just hit the respective button ( <img src="EgsEcfControls\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> ). Due to the intended behaviour to not alter the definitions of opened `.ecf` files, reloading the '.xml' definitions not changing already opened `.ecf` files. 
+After starting the tool the present `.xml` files are loaded and prepared for use. Changing the `.xml` files after running the tool will not be recognized by the tool. If you want the tool to reload the definitions just hit the respective button ( <img src="EgsEcfEditorApp\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> ). Due to the intended behaviour to not alter the definitions of opened `.ecf` files, reloading the '.xml' definitions not changing already opened `.ecf` files. 
 
-After bigger patches of [Empyrion Galactic Survival](https://empyriongame.com/) a definition maybe can partly went deprecated. In this case a backwards check of the definition is recommended. This can be done (if I'm too lame to release an update :sleeping:) by hitting the respective button ( <img src="EgsEcfControls\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> ). This function compares the actual selected `.ecf` file against the latest loaded `.xml` definition of the same type and lists the `.xml` content definition for which no content is found in the `.ecf` file.
+After bigger patches of [Empyrion Galactic Survival](https://empyriongame.com/) a definition maybe can partly went deprecated. In this case a backwards check of the definition is recommended. This can be done (if I'm too lame to release an update :sleeping:) by hitting the respective button ( <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> ). This function compares the actual selected `.ecf` file against the latest loaded `.xml` definition of the same type and lists the `.xml` content definition for which no content is found in the `.ecf` file.
 
 ### Xml File Content
 The definition uses often the terminology `Block`. Don't missinterprete this with an `Empyrion ingame block`. In Xml-speaking `Block` stands for a `.ecf data block`.

@@ -764,7 +764,7 @@ namespace EcfFileViews
             }
             MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-        private void ContentOperations_ChangeSingleClicked(object sender, EventArgs evt)
+        private void ContentOperations_ChangeSimpleClicked(object sender, EventArgs evt)
         {
             if (LastFocusedView is EcfTreeView treeView)
             {
@@ -776,7 +776,7 @@ namespace EcfFileViews
             }
             MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-        private void ContentOperations_ChangeMultiClicked(object sender, EventArgs evt)
+        private void ContentOperations_ChangeComplexClicked(object sender, EventArgs evt)
         {
             MessageBox.Show(this, "not implemented yet! :)");
         }
@@ -1528,8 +1528,8 @@ namespace EcfFileViews
             ContentOperations.RedoClicked += ContentOperations_RedoClicked;
             ContentOperations.AddClicked += ContentOperations_AddClicked;
             ContentOperations.RemoveClicked += ContentOperations_RemoveClicked;
-            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSingleClicked;
-            ContentOperations.ChangeComplexClicked += ContentOperations_ChangeMultiClicked;
+            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSimpleClicked;
+            ContentOperations.ChangeComplexClicked += ContentOperations_ChangeComplexClicked;
             ContentOperations.MoveUpClicked += ContentOperations_MoveUpClicked;
             ContentOperations.MoveDownClicked += ContentOperations_MoveDownClicked;
             ContentOperations.CopyClicked += ContentOperations_CopyClicked;

@@ -556,7 +556,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change of several elements.
+        ///   Looks up a localized string similar to Change of several elements and values at once.
         /// </summary>
         internal static string EcfTabPage_ToolTip_ChangeComplex {
             get {
@@ -565,7 +565,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changes the first selected element.
+        ///   Looks up a localized string similar to Change single or few values of selected elements.
         /// </summary>
         internal static string EcfTabPage_ToolTip_ChangeSimple {
             get {

@@ -283,10 +283,10 @@
     <value>Adds an element of the selected type</value>
   </data>
   <data name="EcfTabPage_ToolTip_ChangeComplex" xml:space="preserve">
-    <value>Change of several elements</value>
+    <value>Change of several elements and values at once</value>
   </data>
   <data name="EcfTabPage_ToolTip_ChangeSimple" xml:space="preserve">
-    <value>Changes the first selected element</value>
+    <value>Change single or few values of selected elements</value>
   </data>
   <data name="EcfTabPage_ToolTip_CopyElements" xml:space="preserve">
     <value>Copies the selected elements to the clipboard</value>

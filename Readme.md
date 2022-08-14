@@ -269,17 +269,12 @@ The exceptions are the white spaces, the empty lines and the comments. All the f
 
 The tool parses the `.ecf` file content line by line and seperates the line content item by item according to the definition and chronologic. A fault can depending on its severity lead to a whole bunch of follower errors. This is the reason of solving errors from top to bottom.
 
-
-
-
---- The error state is inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. So pay attention to any error listed in the error report view and take care of it if you need the corresponding elements in the final `.ecf` file.
-
 In the settings are several behaviour adjustments possible:
 - `Write only valid items to file` Unchecking this option activates the behaviour that all elements will be written in its current state from within the tool. Notice that the file is the persistent storage. After loading a file written with this option unchecked several informations and the resulting errors could be gone.
 - `Invalidate parent of invalid item` Checking this option activates the behaviour that error states will be inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. 
-- `Allow fallback to original data` Unchecking this option activates the behaviour that elements with errors has no permition to try to use the data from the original file. In this case a creation error will be reported. Notice that even if this options is checked the error could occur for newly created elements which hav no original data.
+- `Allow fallback to original data` Unchecking this option activates the behaviour that elements with errors has no permission to try to use the data from the original file. In this case a creation error will be reported. Notice that even with this option checked the error could occur for newly created elements which have no original data available.
 
-The default setting will not write elements with errors to the resulting file. Instead the tool will try to recreate in such case the data read from the original file. In the error view all occured errors are listed. The errors belong to the four categories `structural`, `interpretation`, `editing` or `creation`:
+The default setting will not write elements with errors to the resulting file and the tool will try to recreate the data read from the original file. In the error view all occured errors are listed. The errors belong to the four categories `structural`, `interpretation`, `editing` or `creation`:
 
 ### Structural Error
 This errors occur during the parsing of the content at the loading of the `.ecf` file. The corresponding line in the file violates the syntax in a manner which makes it impossible to attach this data to the managed structure within the tool. Such an error must be corrected in the original file if the data content is needed.

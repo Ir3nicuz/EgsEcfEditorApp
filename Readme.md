@@ -113,6 +113,9 @@ In the error view all occured errors are listed. The view shows the error catego
 ### Tech Tree Preview
 :wrench: Not implemented yet :wrench:
 
+### Ingame Item Creation
+:wrench: Not implemented yet :wrench:
+
 ## Operations Overview
 ### Changing settings
 
@@ -266,20 +269,29 @@ The exceptions are the white spaces, the empty lines and the comments. All the f
 
 The tool parses the `.ecf` file content line by line and seperates the line content item by item according to the definition and chronologic. A fault can depending on its severity lead to a whole bunch of follower errors. This is the reason of solving errors from top to bottom.
 
-For the content recognition and operation three groups of errors are possible.
 
---- categories `structural`, `interpretation`, `editing` or `creating`. .
---- In the error view all occured errors are listed. The errors belong to categories `structural`, `interpretation`, `editing` or `creating`. The `structural` ones violate the basic `.ecf` syntax and therefore cannot be imported. This errors and must be corrected in the file. `interpretation` and `editing` errors are mostly correctable within the tool. The `creation` errors will occure when an element has an error and even the fallback to original data fails at file creation.
+
+
 --- The error state is inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. So pay attention to any error listed in the error report view and take care of it if you need the corresponding elements in the final `.ecf` file.
 
-### Fatal Error
-This errors occur during the parsing of the content at the loading of the `.ecf` file. The corresponding line in the file violates the syntax in a manner which makes it impossible to attach this data to the managed structure within the tool. Such an error must be corrected in the original file if the data is needed.
+In the settings are several behaviour adjustments possible:
+- `Write only valid items to file` Unchecking this option activates the behaviour that all elements will be written in its current state from within the tool. Notice that the file is the persistent storage. After loading a file written with this option unchecked several informations and the resulting errors could be gone.
+- `Invalidate parent of invalid item` Checking this option activates the behaviour that error states will be inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. 
+- `Allow fallback to original data` Unchecking this option activates the behaviour that elements with errors has no permition to try to use the data from the original file. In this case a creation error will be reported. Notice that even if this options is checked the error could occur for newly created elements which hav no original data.
 
-### Parsing Error
-This errors occur during the parsing of the content at the loading of the `.ecf` file. It can in mostly all cases be corrected in the tool.
+The default setting will not write elements with errors to the resulting file. Instead the tool will try to recreate in such case the data read from the original file. In the error view all occured errors are listed. The errors belong to the four categories `structural`, `interpretation`, `editing` or `creation`:
+
+### Structural Error
+This errors occur during the parsing of the content at the loading of the `.ecf` file. The corresponding line in the file violates the syntax in a manner which makes it impossible to attach this data to the managed structure within the tool. Such an error must be corrected in the original file if the data content is needed.
+
+### Interpretation Error
+This errors occur during the parsing of the content at the loading of the `.ecf` file. It means that the found data basically fits to the `.ecf` syntax but the content is unknown or contains invalid data compared to the definition. It can in mostly all cases be corrected in the tool.
 
 ### Editing error
-This errors occur at content editing operations in the tool which would consume too much system recources to prevent it by a pre check. It can in all cases be corrected in the tool.
+This errors occur during content editing in the tool at operations which would consume too much performance to prevent it by a pre check (or similar). It has the same meaning as `Interpretation errors` and can in all cases be corrected in the tool.
+
+### Creation error
+This errors occur during content writing at hitting `save`. This error depends on the error handling settings. It only reports elements that should be written but according to the settings no writeable data is available/permitted. It states if an element is not written because it contains an error and no fallback data from parsing could be found.
 
 ## Planned Major Features
 :wrench::wrench::wrench: The next step will be the compare / merge feature. :wrench::wrench::wrench:

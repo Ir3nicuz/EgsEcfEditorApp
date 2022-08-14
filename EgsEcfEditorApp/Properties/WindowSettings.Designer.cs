@@ -106,5 +106,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["EgsEcfEditorApp_Y"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string EgsEcfEditorApp_WindowState {
+            get {
+                return ((string)(this["EgsEcfEditorApp_WindowState"]));
+            }
+            set {
+                this["EgsEcfEditorApp_WindowState"] = value;
+            }
+        }
     }
 }

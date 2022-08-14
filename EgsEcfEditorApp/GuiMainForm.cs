@@ -178,22 +178,28 @@ namespace EgsEcfEditorApp
         }
         private void RestoreWindowSettings()
         {
-            Rectangle screen = Screen.FromControl(this).Bounds;
+            if(Enum.TryParse(WindowSettings.Default.EgsEcfEditorApp_WindowState, out FormWindowState state))
+            {
+                WindowState = state;
+            }
+            else
+            {
+                WindowState = FormWindowState.Normal;
+            }
 
+            Rectangle screen = Screen.FromControl(this).Bounds;
             Rectangle window = new Rectangle(
                 WindowSettings.Default.EgsEcfEditorApp_X,
                 WindowSettings.Default.EgsEcfEditorApp_Y,
                 WindowSettings.Default.EgsEcfEditorApp_Width,
                 WindowSettings.Default.EgsEcfEditorApp_Height);
-
-            if (screen.Contains(window))
-            {
-                Location = new Point(window.X, window.Y);
-                Size = new Size(window.Width, window.Height);
-            }
-            else
+            if (!screen.Contains(window))
             {
                 WindowSettings.Default.Reset();
+            }
+
+            if (WindowState != FormWindowState.Maximized)
+            {
                 Location = new Point(
                     WindowSettings.Default.EgsEcfEditorApp_X,
                     WindowSettings.Default.EgsEcfEditorApp_Y);
@@ -212,6 +218,7 @@ namespace EgsEcfEditorApp
             WindowSettings.Default.EgsEcfEditorApp_Height = Height;
             WindowSettings.Default.EgsEcfEditorApp_X = Location.X;
             WindowSettings.Default.EgsEcfEditorApp_Y = Location.Y;
+            WindowSettings.Default.EgsEcfEditorApp_WindowState = WindowState.ToString();
         }
         private void RestoreFilterSettings()
         {
@@ -3726,6 +3733,7 @@ namespace EcfFileViewTools
     }
     public class EcfDataGridView : DataGridView
     {
+
         public EcfDataGridView() : base()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
@@ -3739,15 +3747,6 @@ namespace EcfFileViewTools
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             EditMode = DataGridViewEditMode.EditProgrammatically;
             ShowEditingIcon = false;
-        }
-
-        public new void AutoResizeColumns()
-        {
-            
-
-
-
-
         }
     }
 }

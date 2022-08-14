@@ -23,5 +23,8 @@
     <Setting Name="EgsEcfEditorApp_Y" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="EgsEcfEditorApp_WindowState" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

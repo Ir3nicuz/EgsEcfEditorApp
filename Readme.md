@@ -75,7 +75,7 @@ The standard file operations (new, open, reload, save, close) are located in thi
 <img src="images/file_operation_area.png" title="File Operation Area" width="1000" height="500"/>
 
 #### Filter and File Selection Area
-In this Area each opened file will get a tab containing the file name. The first label in the tool line indicates the attached content definition, for example `BlocksConfig`. The remaining icons provide different filter options applied to all content view areas.
+In this area each opened file will get a tab containing the file name. The label in the tool line indicates the attached game mode and content definition, for example `Vanilla` and `BlocksConfig`. The remaining icons provide different filter options applied to all content view areas.
 
 <img src="images/filter_area.png" title="Filter Area" width="1000" height="500"/>
 
@@ -100,7 +100,7 @@ The info area displays additional detail information for the selected tree eleme
 <img src="images/info_area.png" title="Info View Area" width="1000" height="500"/>
 
 #### Error View Area
-In the error view all occured errors are listed. The errors belong to category `fatal`, `parsing` or `editing`. While `parsing` and `editing` are mostly correctable with the tool. The `fatal` ones violate the basic `.ecf` syntax and therefore cannot be imported. Due to the non-saving of elements with errors the list is cleared at file saving.
+In the error view all occured errors are listed. The view shows the error category and type together with additional information like line in file (if applicable) and the error producing data part.
 
 <img src="images/error_area.png" title="Error View Area" width="1000" height="500"/>
 
@@ -126,7 +126,7 @@ For especially big files like `BlocksConfig.ecf` (or especially lame PCs :zany_f
 ### Adding And Editing Content
 At adding or editing (see [Shortcuts and Functions](#shortcuts-and-functions)) the editor dialog is shown. The dialog is designed to not produce elements with errors. To achive this support pre opening checks, pre filled selection lists and pre closing checks will be performed. These logics depends primary on the attached file definition and the present content data.
 
-The only exception is the creation of a completely new root element. At the creation of a root element all mandatory (see [File Content Definition](#file-content-definition)) parameters will be added without values. This will create errors until the mandatory parameters will be filled with values.
+At multi selection the panel will normally open for the first selected element. If only parameters are selected (even across parent element borders) the panel will enter a matrix edition mode. This mode provides a table organized structure for matrix arranged parameters or to edit equal parameters of different parents in one view.
 
 <img src="images/editing_dialog.png" title="Editing Dialog"/>
 
@@ -259,6 +259,8 @@ The tool parses the `.ecf` file content line by line and seperates the line cont
 
 For the content recognition and operation three groups of errors are possible.
 
+--- categories `structural`, `interpretation`, `editing` or `creating`. .
+--- In the error view all occured errors are listed. The errors belong to categories `structural`, `interpretation`, `editing` or `creating`. The `structural` ones violate the basic `.ecf` syntax and therefore cannot be imported. This errors and must be corrected in the file. `interpretation` and `editing` errors are mostly correctable within the tool. The `creation` errors will occure when an element has an error and even the fallback to original data fails at file creation.
 --- The error state is inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. So pay attention to any error listed in the error report view and take care of it if you need the corresponding elements in the final `.ecf` file.
 
 ### Fatal Error

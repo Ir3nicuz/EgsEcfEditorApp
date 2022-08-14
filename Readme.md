@@ -1,4 +1,3 @@
-# :wrench: In Change for Release 1.1 :wrench:
 # Empyrion Configuration Editor
 An application to simplify the handling and customizing of the `.ecf` configuration files of [Empyrion Galactic Survival](https://empyriongame.com/)
 

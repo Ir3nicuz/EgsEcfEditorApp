@@ -114,6 +114,12 @@ In the error view all occured errors are listed. The view shows the error catego
 :wrench: Not implemented yet :wrench:
 
 ## Operations Overview
+### Changing settings
+
+???
+
+<img src="images/app_settings_panel.png" title="File Property Selector"/>
+
 ### Opening a file
 After selecting the file to open the tool tries to guess which definition fits to the file by examining the file name. If this is successful the guessed definition is automaticly selected in the following dialog. In this case the Dialog can be skipped with `Ok`. When the guessing fails or a new file is created the definition must be selected manually from the provided drop down list.
 

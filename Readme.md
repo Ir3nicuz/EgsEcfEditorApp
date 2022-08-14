@@ -116,7 +116,7 @@ In the error view all occured errors are listed. The view shows the error catego
 ## Operations Overview
 ### Changing settings
 
-The gear button ( <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> ) opens a settings panel with several settings. The `abort` button closes the panel and discarding all changes. The `save` button saves the settings persistent and closes the panel. The `reset` button reloads the default settings.
+The gear button ( <img src="EgsEcfEditorApp\Resources\Icon_Settings.png" title="icon" width="16" height="16"/> ) opens a settings panel with several settings. The `abort` button closes the panel and discarding all changes. The `save` button saves the settings persistent and closes the panel. The `reset` button reloads the default settings.
 
 <img src="images/app_settings_panel.png" title="App Settings Panel"/>
 
@@ -166,6 +166,9 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 <img src="images/sorting_panel.png" title="Sorting Panel"/>
 
 ### Icons
+#### Settings
+- <img src="EgsEcfEditorApp\Resources\Icon_Settings.png" title="icon" width="16" height="16"/> opens the settings panel
+
 #### File Operations
 - <img src="EgsEcfEditorApp\Resources\Icon_NewFile.png" title="icon" width="16" height="16"/> create new file
 - <img src="EgsEcfEditorApp\Resources\Icon_OpenFile.png" title="icon" width="16" height="16"/> open existing file

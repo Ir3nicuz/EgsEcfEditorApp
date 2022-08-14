@@ -3743,7 +3743,7 @@ namespace EcfFileViewTools
             AllowUserToOrderColumns = false;
             AllowUserToResizeColumns = true;
             AllowDrop = false;
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             EditMode = DataGridViewEditMode.EditProgrammatically;
             ShowEditingIcon = false;

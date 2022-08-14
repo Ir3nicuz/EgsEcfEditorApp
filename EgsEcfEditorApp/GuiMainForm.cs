@@ -2494,8 +2494,8 @@ namespace EcfFileViews
             Grid.Rows.Clear();
             Grid.Rows.AddRange(ParameterRows.Skip(ParameterSorter.ItemCount * (ParameterSorter.ItemGroup - 1)).Take(ParameterSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ParameterSorter), ParameterSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
+            Grid.AutoResizeColumns();
             Grid.AutoResizeRows();
-            Grid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {4} - {2} {5} - {3} {6}", ViewName, ParameterRows.Count,
@@ -2676,7 +2676,7 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 RefreshViewInvoke(item as EcfBlock);
-                RefreshViewInvoke(parameter);
+                RefreshViewInvoke(parameter ?? item as EcfParameter);
                 IsUpdating = false;
             }
         }
@@ -3047,7 +3047,7 @@ namespace EcfFileViews
             Grid.Rows.Clear();
             Grid.Rows.AddRange(ErrorRows.Skip(ErrorSorter.ItemCount * (ErrorSorter.ItemGroup - 1)).Take(ErrorSorter.ItemCount).ToArray());
             Grid.Sort(GetSortingColumn(ErrorSorter), ErrorSorter.IsAscending ? ListSortDirection.Ascending : ListSortDirection.Descending);
-            Grid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+            Grid.AutoResizeColumns();
             Grid.ClearSelection();
             Grid.ResumeLayout();
             Text = string.Format("{0} - {1} {2} - {3} {4} - {5} {6} - {7} {8} - {9} {10}", ViewName,
@@ -3739,6 +3739,15 @@ namespace EcfFileViewTools
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             EditMode = DataGridViewEditMode.EditProgrammatically;
             ShowEditingIcon = false;
+        }
+
+        public new void AutoResizeColumns()
+        {
+            
+
+
+
+
         }
     }
 }

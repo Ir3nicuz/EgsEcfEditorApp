@@ -4,6 +4,7 @@ using EgsEcfParser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -1122,6 +1123,7 @@ namespace EcfFileViews
                         }
                     }
                 }
+                Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
             public List<string> ValidateAttributeValues()
@@ -1660,6 +1662,7 @@ namespace EcfFileViews
                 }
                 UpdateParameterValuesColumnNumbering();
                 UpdateParameterValuesRowNumbering();
+                Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
             public void UpdateParameterMatrix(EcfBlock presetBlock)
@@ -1690,6 +1693,8 @@ namespace EcfFileViews
                     }
                 }
                 UpdateParameterValuesColumnNumbering();
+                Grid.Sort(ActivationColumn, ListSortDirection.Descending);
+                Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
             public void UpdateParameterMatrix()
@@ -1713,6 +1718,7 @@ namespace EcfFileViews
                     }
                 }
                 UpdateParameterValuesColumnNumbering();
+                Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
             public void UpdateParameterInheritance(EcfBlock inheritor)
@@ -1728,6 +1734,7 @@ namespace EcfFileViews
                         paramRow.UpdateInherited(parameter);
                     }
                 }
+                Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
             public List<string> ValidateParameterValues(FormatDefinition definition)

@@ -78,7 +78,7 @@ namespace EcfFileViews
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.IsForceEscaped });
                 Grid.Rows.Add(row);
             });
-            Grid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+            Grid.AutoResizeColumns();
             Grid.ClearSelection();
             Grid.ResumeLayout();
         }

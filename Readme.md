@@ -63,7 +63,7 @@ to not follow rabbits.
 ### Language and Tool Support
 The icons and controls have tooltips on mouse over. All labels and tootips are localised. At the moment de-DE and en-GB is supported. The language switches automaticly based on the local machine culture setting, defaulting to en-GB.
 
-### Tool Overview
+## Tool Overview
 ### Settings Area
 The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
 

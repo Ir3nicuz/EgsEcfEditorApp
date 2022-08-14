@@ -134,7 +134,7 @@ For especially big files like `BlocksConfig.ecf` (or especially lame PCs :zany_f
 ### Adding And Editing Content
 At adding or editing (see [Shortcuts and Functions](#shortcuts-and-functions)) the editor dialog is shown. The dialog is designed to not produce elements with errors. To achive this support pre opening checks, pre filled selection lists and pre closing checks will be performed. These logics depends primary on the attached file definition and the present content data.
 
-At multi selection the panel will normally open for the first selected element. If only parameters are selected (even across parent element borders) the panel will enter a matrix edition mode. This mode provides a table organized structure for matrix arranged parameters or to edit equal parameters of different parents in one view.
+At multi selection the panel will normally open for the first selected element. If only parameters are selected (even across parent element borders) the panel will enter a matrix editing mode. This mode provides a table organized structure for matrix arranged parameters or to edit equal parameters of different parents in one view.
 
 <img src="images/editing_dialog.png" title="Editing Dialog"/>
 

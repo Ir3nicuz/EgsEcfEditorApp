@@ -61,7 +61,9 @@ namespace EgsEcfEditorApp
         private void InitForm()
         {
             // MainForm settings
-            Text = string.Format("{0} - {1}", TitleRecources.EgsEcfEditorApp_AppName, Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            Text = string.Format("{0} - {1}", 
+                Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false).Cast<AssemblyTitleAttribute>().FirstOrDefault().Title, 
+                Assembly.GetExecutingAssembly().GetName().Version.ToString());
             Icon = IconRecources.Icon_App;
             
             RestoreWindowSettings();

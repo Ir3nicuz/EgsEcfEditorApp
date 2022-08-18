@@ -294,6 +294,9 @@
   <data name="EcfSettingsDialog_Header" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="EcfSettingsDialog_InfoPanel_Header" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Fehleransicht Elementanzahl Vorauswahl</value>
   </data>
@@ -311,9 +314,6 @@
   </data>
   <data name="EcfTreeView_Header" xml:space="preserve">
     <value>Baumansicht</value>
-  </data>
-  <data name="EgsEcfEditorApp_AppName" xml:space="preserve">
-    <value>Empyrion Configuration Editor</value>
   </data>
   <data name="Generic_Abort" xml:space="preserve">
     <value>Abbruch</value>
@@ -335,6 +335,9 @@
   </data>
   <data name="Generic_Attributes" xml:space="preserve">
     <value>Attribute</value>
+  </data>
+  <data name="Generic_Author" xml:space="preserve">
+    <value>Autor</value>
   </data>
   <data name="Generic_BackButton" xml:space="preserve">
     <value>Zurück</value>
@@ -393,8 +396,14 @@
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Ist optional</value>
   </data>
+  <data name="Generic_License" xml:space="preserve">
+    <value>Lizenz</value>
+  </data>
   <data name="Generic_LineNumber" xml:space="preserve">
     <value>Zeilennummer</value>
+  </data>
+  <data name="Generic_Manual" xml:space="preserve">
+    <value>Anleitung</value>
   </data>
   <data name="Generic_Name" xml:space="preserve">
     <value>Name</value>
@@ -464,6 +473,9 @@
   </data>
   <data name="Generic_Values" xml:space="preserve">
     <value>Werte</value>
+  </data>
+  <data name="Generic_Version" xml:space="preserve">
+    <value>Version</value>
   </data>
   <data name="Generic_Warning" xml:space="preserve">
     <value>Warnung</value>

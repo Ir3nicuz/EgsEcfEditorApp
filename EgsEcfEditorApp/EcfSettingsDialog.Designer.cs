@@ -29,10 +29,11 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("general");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("creation");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("filter");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("info");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -49,6 +50,8 @@ namespace EgsEcfEditorApp
             this.InvalidateParentsOnErrorCheckBox = new System.Windows.Forms.CheckBox();
             this.WriteOnlyValidItemsLabel = new System.Windows.Forms.Label();
             this.InvalidateParentsOnErrorLabel = new System.Windows.Forms.Label();
+            this.AllowFallbackToParsedDataLabel = new System.Windows.Forms.Label();
+            this.AllowFallbackToParsedDataCheckBox = new System.Windows.Forms.CheckBox();
             this.FilterTabPage = new System.Windows.Forms.TabPage();
             this.FilterPanel = new System.Windows.Forms.TableLayoutPanel();
             this.TreeViewFilterCommentsInitActiveLabel = new System.Windows.Forms.Label();
@@ -65,9 +68,19 @@ namespace EgsEcfEditorApp
             this.TreeViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ParameterViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ErrorViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
+            this.InfoTabPage = new System.Windows.Forms.TabPage();
+            this.InfoPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ReadmeTitleLabel = new System.Windows.Forms.Label();
+            this.LicenseTitleLabel = new System.Windows.Forms.Label();
+            this.LogoPictureBox = new System.Windows.Forms.PictureBox();
+            this.AuthorTitleLabel = new System.Windows.Forms.Label();
+            this.VersionTitleLabel = new System.Windows.Forms.Label();
+            this.VersionDataLabel = new System.Windows.Forms.Label();
+            this.AuthorDataLabel = new System.Windows.Forms.Label();
+            this.AppNameDataLabel = new System.Windows.Forms.Label();
             this.SettingsBorderPanel = new System.Windows.Forms.Panel();
-            this.AllowFallbackToParsedDataLabel = new System.Windows.Forms.Label();
-            this.AllowFallbackToParsedDataCheckBox = new System.Windows.Forms.CheckBox();
+            this.LicenseDataLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.ReadmeDataLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ButtonPanel.SuspendLayout();
             this.SettingPanelsTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -78,6 +91,9 @@ namespace EgsEcfEditorApp
             this.FilterPanel.SuspendLayout();
             this.SorterTabPage.SuspendLayout();
             this.SorterPanel.SuspendLayout();
+            this.InfoTabPage.SuspendLayout();
+            this.InfoPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
             this.SettingsBorderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -134,19 +150,22 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode5.Name = "GeneralNode";
-            treeNode5.Text = "general";
-            treeNode6.Name = "CreationNode";
-            treeNode6.Text = "creation";
-            treeNode7.Name = "FilterNode";
-            treeNode7.Text = "filter";
-            treeNode8.Name = "SorterNode";
-            treeNode8.Text = "sorter";
+            treeNode11.Name = "GeneralNode";
+            treeNode11.Text = "general";
+            treeNode12.Name = "CreationNode";
+            treeNode12.Text = "creation";
+            treeNode13.Name = "FilterNode";
+            treeNode13.Text = "filter";
+            treeNode14.Name = "SorterNode";
+            treeNode14.Text = "sorter";
+            treeNode15.Name = "InfoNode";
+            treeNode15.Text = "info";
             this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6,
-            treeNode7,
-            treeNode8});
+            treeNode11,
+            treeNode12,
+            treeNode13,
+            treeNode14,
+            treeNode15});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
@@ -157,6 +176,7 @@ namespace EgsEcfEditorApp
             this.SettingPanelsTabControl.Controls.Add(this.CreationTabPage);
             this.SettingPanelsTabControl.Controls.Add(this.FilterTabPage);
             this.SettingPanelsTabControl.Controls.Add(this.SorterTabPage);
+            this.SettingPanelsTabControl.Controls.Add(this.InfoTabPage);
             this.SettingPanelsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingPanelsTabControl.Location = new System.Drawing.Point(0, 0);
             this.SettingPanelsTabControl.Name = "SettingPanelsTabControl";
@@ -294,6 +314,28 @@ namespace EgsEcfEditorApp
             this.InvalidateParentsOnErrorLabel.TabIndex = 3;
             this.InvalidateParentsOnErrorLabel.Text = "invalidate parent";
             this.InvalidateParentsOnErrorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // AllowFallbackToParsedDataLabel
+            // 
+            this.AllowFallbackToParsedDataLabel.AutoSize = true;
+            this.AllowFallbackToParsedDataLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AllowFallbackToParsedDataLabel.Location = new System.Drawing.Point(3, 40);
+            this.AllowFallbackToParsedDataLabel.Name = "AllowFallbackToParsedDataLabel";
+            this.AllowFallbackToParsedDataLabel.Size = new System.Drawing.Size(267, 20);
+            this.AllowFallbackToParsedDataLabel.TabIndex = 4;
+            this.AllowFallbackToParsedDataLabel.Text = "allow falback";
+            this.AllowFallbackToParsedDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // AllowFallbackToParsedDataCheckBox
+            // 
+            this.AllowFallbackToParsedDataCheckBox.AutoSize = true;
+            this.AllowFallbackToParsedDataCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AllowFallbackToParsedDataCheckBox.Location = new System.Drawing.Point(276, 43);
+            this.AllowFallbackToParsedDataCheckBox.Name = "AllowFallbackToParsedDataCheckBox";
+            this.AllowFallbackToParsedDataCheckBox.Size = new System.Drawing.Size(267, 14);
+            this.AllowFallbackToParsedDataCheckBox.TabIndex = 5;
+            this.AllowFallbackToParsedDataCheckBox.UseVisualStyleBackColor = true;
+            this.AllowFallbackToParsedDataCheckBox.Click += new System.EventHandler(this.AllowFallbackToParsedDataCheckBox_Click);
             // 
             // FilterTabPage
             // 
@@ -495,6 +537,145 @@ namespace EgsEcfEditorApp
             this.ErrorViewSorterInitCountComboBox.TabIndex = 5;
             this.ErrorViewSorterInitCountComboBox.SelectionChangeCommitted += new System.EventHandler(this.ErrorViewSorterInitCountComboBox_SelectionChangeCommitted);
             // 
+            // InfoTabPage
+            // 
+            this.InfoTabPage.Controls.Add(this.InfoPanel);
+            this.InfoTabPage.Location = new System.Drawing.Point(4, 22);
+            this.InfoTabPage.Name = "InfoTabPage";
+            this.InfoTabPage.Size = new System.Drawing.Size(552, 336);
+            this.InfoTabPage.TabIndex = 4;
+            this.InfoTabPage.Text = "info";
+            this.InfoTabPage.UseVisualStyleBackColor = true;
+            // 
+            // InfoPanel
+            // 
+            this.InfoPanel.AutoSize = true;
+            this.InfoPanel.ColumnCount = 2;
+            this.InfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.InfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.InfoPanel.Controls.Add(this.ReadmeTitleLabel, 0, 5);
+            this.InfoPanel.Controls.Add(this.LicenseTitleLabel, 0, 4);
+            this.InfoPanel.Controls.Add(this.LogoPictureBox, 0, 1);
+            this.InfoPanel.Controls.Add(this.AuthorTitleLabel, 0, 2);
+            this.InfoPanel.Controls.Add(this.VersionTitleLabel, 0, 3);
+            this.InfoPanel.Controls.Add(this.VersionDataLabel, 1, 3);
+            this.InfoPanel.Controls.Add(this.AuthorDataLabel, 1, 2);
+            this.InfoPanel.Controls.Add(this.AppNameDataLabel, 0, 0);
+            this.InfoPanel.Controls.Add(this.LicenseDataLinkLabel, 1, 4);
+            this.InfoPanel.Controls.Add(this.ReadmeDataLinkLabel, 1, 5);
+            this.InfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InfoPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.InfoPanel.Location = new System.Drawing.Point(0, 0);
+            this.InfoPanel.Name = "InfoPanel";
+            this.InfoPanel.RowCount = 6;
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoPanel.Size = new System.Drawing.Size(552, 336);
+            this.InfoPanel.TabIndex = 1;
+            // 
+            // ReadmeTitleLabel
+            // 
+            this.ReadmeTitleLabel.AutoSize = true;
+            this.ReadmeTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ReadmeTitleLabel.Location = new System.Drawing.Point(3, 317);
+            this.ReadmeTitleLabel.Name = "ReadmeTitleLabel";
+            this.ReadmeTitleLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.ReadmeTitleLabel.Size = new System.Drawing.Size(270, 19);
+            this.ReadmeTitleLabel.TabIndex = 11;
+            this.ReadmeTitleLabel.Text = "readme";
+            this.ReadmeTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LicenseTitleLabel
+            // 
+            this.LicenseTitleLabel.AutoSize = true;
+            this.LicenseTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LicenseTitleLabel.Location = new System.Drawing.Point(3, 298);
+            this.LicenseTitleLabel.Name = "LicenseTitleLabel";
+            this.LicenseTitleLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.LicenseTitleLabel.Size = new System.Drawing.Size(270, 19);
+            this.LicenseTitleLabel.TabIndex = 9;
+            this.LicenseTitleLabel.Text = "license";
+            this.LicenseTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LogoPictureBox
+            // 
+            this.LogoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.InfoPanel.SetColumnSpan(this.LogoPictureBox, 2);
+            this.LogoPictureBox.Location = new System.Drawing.Point(187, 119);
+            this.LogoPictureBox.Name = "LogoPictureBox";
+            this.LogoPictureBox.Size = new System.Drawing.Size(177, 75);
+            this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.LogoPictureBox.TabIndex = 0;
+            this.LogoPictureBox.TabStop = false;
+            // 
+            // AuthorTitleLabel
+            // 
+            this.AuthorTitleLabel.AutoSize = true;
+            this.AuthorTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AuthorTitleLabel.Location = new System.Drawing.Point(3, 260);
+            this.AuthorTitleLabel.Name = "AuthorTitleLabel";
+            this.AuthorTitleLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.AuthorTitleLabel.Size = new System.Drawing.Size(270, 19);
+            this.AuthorTitleLabel.TabIndex = 4;
+            this.AuthorTitleLabel.Text = "author";
+            this.AuthorTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // VersionTitleLabel
+            // 
+            this.VersionTitleLabel.AutoSize = true;
+            this.VersionTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.VersionTitleLabel.Location = new System.Drawing.Point(3, 279);
+            this.VersionTitleLabel.Name = "VersionTitleLabel";
+            this.VersionTitleLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.VersionTitleLabel.Size = new System.Drawing.Size(270, 19);
+            this.VersionTitleLabel.TabIndex = 5;
+            this.VersionTitleLabel.Text = "vers";
+            this.VersionTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // VersionDataLabel
+            // 
+            this.VersionDataLabel.AutoSize = true;
+            this.VersionDataLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.VersionDataLabel.Location = new System.Drawing.Point(279, 279);
+            this.VersionDataLabel.Name = "VersionDataLabel";
+            this.VersionDataLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.VersionDataLabel.Size = new System.Drawing.Size(270, 19);
+            this.VersionDataLabel.TabIndex = 6;
+            this.VersionDataLabel.Text = "vers";
+            this.VersionDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // AuthorDataLabel
+            // 
+            this.AuthorDataLabel.AutoSize = true;
+            this.AuthorDataLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AuthorDataLabel.Location = new System.Drawing.Point(279, 260);
+            this.AuthorDataLabel.Name = "AuthorDataLabel";
+            this.AuthorDataLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.AuthorDataLabel.Size = new System.Drawing.Size(270, 19);
+            this.AuthorDataLabel.TabIndex = 7;
+            this.AuthorDataLabel.Text = "auth";
+            this.AuthorDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // AppNameDataLabel
+            // 
+            this.AppNameDataLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AppNameDataLabel.AutoSize = true;
+            this.InfoPanel.SetColumnSpan(this.AppNameDataLabel, 2);
+            this.AppNameDataLabel.Font = new System.Drawing.Font("Viner Hand ITC", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppNameDataLabel.Location = new System.Drawing.Point(3, 0);
+            this.AppNameDataLabel.Name = "AppNameDataLabel";
+            this.AppNameDataLabel.Padding = new System.Windows.Forms.Padding(5);
+            this.AppNameDataLabel.Size = new System.Drawing.Size(546, 54);
+            this.AppNameDataLabel.TabIndex = 8;
+            this.AppNameDataLabel.Text = "name";
+            this.AppNameDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SettingsBorderPanel
             // 
             this.SettingsBorderPanel.AutoSize = true;
@@ -506,27 +687,31 @@ namespace EgsEcfEditorApp
             this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
             this.SettingsBorderPanel.TabIndex = 3;
             // 
-            // AllowFallbackToParsedDataLabel
+            // LicenseDataLinkLabel
             // 
-            this.AllowFallbackToParsedDataLabel.AutoSize = true;
-            this.AllowFallbackToParsedDataLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AllowFallbackToParsedDataLabel.Location = new System.Drawing.Point(3, 40);
-            this.AllowFallbackToParsedDataLabel.Name = "AllowFallbackToParsedDataLabel";
-            this.AllowFallbackToParsedDataLabel.Size = new System.Drawing.Size(267, 20);
-            this.AllowFallbackToParsedDataLabel.TabIndex = 4;
-            this.AllowFallbackToParsedDataLabel.Text = "allow falback";
-            this.AllowFallbackToParsedDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LicenseDataLinkLabel.AutoSize = true;
+            this.LicenseDataLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LicenseDataLinkLabel.Location = new System.Drawing.Point(279, 298);
+            this.LicenseDataLinkLabel.Name = "LicenseDataLinkLabel";
+            this.LicenseDataLinkLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.LicenseDataLinkLabel.Size = new System.Drawing.Size(270, 19);
+            this.LicenseDataLinkLabel.TabIndex = 12;
+            this.LicenseDataLinkLabel.TabStop = true;
+            this.LicenseDataLinkLabel.Text = "license";
+            this.LicenseDataLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // AllowFallbackToParsedDataCheckBox
+            // ReadmeDataLinkLabel
             // 
-            this.AllowFallbackToParsedDataCheckBox.AutoSize = true;
-            this.AllowFallbackToParsedDataCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AllowFallbackToParsedDataCheckBox.Location = new System.Drawing.Point(276, 43);
-            this.AllowFallbackToParsedDataCheckBox.Name = "AllowFallbackToParsedDataCheckBox";
-            this.AllowFallbackToParsedDataCheckBox.Size = new System.Drawing.Size(267, 14);
-            this.AllowFallbackToParsedDataCheckBox.TabIndex = 5;
-            this.AllowFallbackToParsedDataCheckBox.UseVisualStyleBackColor = true;
-            this.AllowFallbackToParsedDataCheckBox.Click += new System.EventHandler(this.AllowFallbackToParsedDataCheckBox_Click);
+            this.ReadmeDataLinkLabel.AutoSize = true;
+            this.ReadmeDataLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ReadmeDataLinkLabel.Location = new System.Drawing.Point(279, 317);
+            this.ReadmeDataLinkLabel.Name = "ReadmeDataLinkLabel";
+            this.ReadmeDataLinkLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.ReadmeDataLinkLabel.Size = new System.Drawing.Size(270, 19);
+            this.ReadmeDataLinkLabel.TabIndex = 13;
+            this.ReadmeDataLinkLabel.TabStop = true;
+            this.ReadmeDataLinkLabel.Text = "readme";
+            this.ReadmeDataLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // EcfSettingsDialog
             // 
@@ -564,6 +749,11 @@ namespace EgsEcfEditorApp
             this.SorterTabPage.PerformLayout();
             this.SorterPanel.ResumeLayout(false);
             this.SorterPanel.PerformLayout();
+            this.InfoTabPage.ResumeLayout(false);
+            this.InfoTabPage.PerformLayout();
+            this.InfoPanel.ResumeLayout(false);
+            this.InfoPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
             this.SettingsBorderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -607,5 +797,17 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.ComboBox ErrorViewSorterInitCountComboBox;
         private System.Windows.Forms.Label AllowFallbackToParsedDataLabel;
         private System.Windows.Forms.CheckBox AllowFallbackToParsedDataCheckBox;
+        private System.Windows.Forms.TabPage InfoTabPage;
+        private System.Windows.Forms.PictureBox LogoPictureBox;
+        private System.Windows.Forms.TableLayoutPanel InfoPanel;
+        private System.Windows.Forms.Label AuthorTitleLabel;
+        private System.Windows.Forms.Label VersionTitleLabel;
+        private System.Windows.Forms.Label VersionDataLabel;
+        private System.Windows.Forms.Label AuthorDataLabel;
+        private System.Windows.Forms.Label AppNameDataLabel;
+        private System.Windows.Forms.Label ReadmeTitleLabel;
+        private System.Windows.Forms.Label LicenseTitleLabel;
+        private System.Windows.Forms.LinkLabel LicenseDataLinkLabel;
+        private System.Windows.Forms.LinkLabel ReadmeDataLinkLabel;
     }
 }

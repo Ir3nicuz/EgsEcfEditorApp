@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using static EcfFileViewTools.EcfSorter;
 using static EgsEcfParser.EcfDefinitionHandling;
@@ -35,7 +36,7 @@ namespace EgsEcfEditorApp
             InitPanels();
 
             ChapterSelectorTreeView.SelectedNode = ChapterSelectorTreeView.Nodes[0];
-            SwitchPanelw(0);
+            SwitchPanel(0);
         }
         private void EcfSettingsDialog_FormClosing(object sender, FormClosingEventArgs evt)
         {
@@ -80,7 +81,7 @@ namespace EgsEcfEditorApp
         }
         private void ChapterSelectorTreeView_AfterSelect(object sender, TreeViewEventArgs evt)
         {
-            SwitchPanelw(evt.Node.Index);
+            SwitchPanel(evt.Node.Index);
         }
         private void EcfSettingsDialog_Activated(object sender, EventArgs evt)
         {
@@ -153,6 +154,7 @@ namespace EgsEcfEditorApp
             InitCreationPanel();
             InitFilterPanel();
             InitSorterPanel();
+            InitInfoPanel();
         }
         private void InitGeneralPanel()
         {
@@ -190,8 +192,23 @@ namespace EgsEcfEditorApp
             new ToolTip().SetToolTip(ParameterViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount);
             new ToolTip().SetToolTip(ErrorViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount);
         }
+        private void InitInfoPanel()
+        {
+            ChapterSelectorTreeView.Nodes[4].Text = TitleRecources.EcfSettingsDialog_InfoPanel_Header;
+            AuthorTitleLabel.Text = TitleRecources.Generic_Author;
+            VersionTitleLabel.Text = TitleRecources.Generic_Version;
+            LicenseTitleLabel.Text = TitleRecources.Generic_License;
+            ReadmeTitleLabel.Text = TitleRecources.Generic_Manual;
 
-        private void SwitchPanelw(int index)
+            AppNameDataLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false).Cast<AssemblyTitleAttribute>().FirstOrDefault().Title;
+            LogoPictureBox.Image = new Icon(IconRecources.Icon_App, 256, 256).ToBitmap();
+            AuthorDataLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false).Cast<AssemblyCompanyAttribute>().FirstOrDefault().Company;
+            VersionDataLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LicenseDataLinkLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false).Cast<AssemblyCopyrightAttribute>().FirstOrDefault().Copyright;
+            ReadmeDataLinkLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false).Cast<AssemblyConfigurationAttribute>().FirstOrDefault().Configuration;
+        }
+
+        private void SwitchPanel(int index)
         {
             // hack to prevent tab switch with tab key
             SettingPanelsTabControl.TabPages.Clear();
@@ -201,6 +218,7 @@ namespace EgsEcfEditorApp
                 case 1: SettingPanelsTabControl.TabPages.Add(CreationTabPage); break;
                 case 2: SettingPanelsTabControl.TabPages.Add(FilterTabPage); break;
                 case 3: SettingPanelsTabControl.TabPages.Add(SorterTabPage); break;
+                case 4: SettingPanelsTabControl.TabPages.Add(InfoTabPage); break;
                 default: break;
             }
         }

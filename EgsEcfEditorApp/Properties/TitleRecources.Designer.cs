@@ -592,6 +592,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string EcfSettingsDialog_InfoPanel_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_InfoPanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error view item count preset.
         /// </summary>
         internal static string EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount {
@@ -642,15 +651,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfTreeView_Header {
             get {
                 return ResourceManager.GetString("EcfTreeView_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Empyrion Configuration Editor.
-        /// </summary>
-        internal static string EgsEcfEditorApp_AppName {
-            get {
-                return ResourceManager.GetString("EgsEcfEditorApp_AppName", resourceCulture);
             }
         }
         
@@ -714,6 +714,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_Attributes {
             get {
                 return ResourceManager.GetString("Generic_Attributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author.
+        /// </summary>
+        internal static string Generic_Author {
+            get {
+                return ResourceManager.GetString("Generic_Author", resourceCulture);
             }
         }
         
@@ -889,11 +898,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        internal static string Generic_License {
+            get {
+                return ResourceManager.GetString("Generic_License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line number.
         /// </summary>
         internal static string Generic_LineNumber {
             get {
                 return ResourceManager.GetString("Generic_LineNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        internal static string Generic_Manual {
+            get {
+                return ResourceManager.GetString("Generic_Manual", resourceCulture);
             }
         }
         
@@ -1101,6 +1128,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_Values {
             get {
                 return ResourceManager.GetString("Generic_Values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        internal static string Generic_Version {
+            get {
+                return ResourceManager.GetString("Generic_Version", resourceCulture);
             }
         }
         

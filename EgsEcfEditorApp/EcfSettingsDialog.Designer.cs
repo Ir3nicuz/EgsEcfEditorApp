@@ -29,11 +29,11 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("sorter");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("info");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("general");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("creation");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("filter");
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("info");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -78,9 +78,9 @@ namespace EgsEcfEditorApp
             this.VersionDataLabel = new System.Windows.Forms.Label();
             this.AuthorDataLabel = new System.Windows.Forms.Label();
             this.AppNameDataLabel = new System.Windows.Forms.Label();
-            this.SettingsBorderPanel = new System.Windows.Forms.Panel();
             this.LicenseDataLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ReadmeDataLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.SettingsBorderPanel = new System.Windows.Forms.Panel();
             this.ButtonPanel.SuspendLayout();
             this.SettingPanelsTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -150,22 +150,22 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode11.Name = "GeneralNode";
-            treeNode11.Text = "general";
-            treeNode12.Name = "CreationNode";
-            treeNode12.Text = "creation";
-            treeNode13.Name = "FilterNode";
-            treeNode13.Text = "filter";
-            treeNode14.Name = "SorterNode";
-            treeNode14.Text = "sorter";
-            treeNode15.Name = "InfoNode";
-            treeNode15.Text = "info";
+            treeNode16.Name = "GeneralNode";
+            treeNode16.Text = "general";
+            treeNode17.Name = "CreationNode";
+            treeNode17.Text = "creation";
+            treeNode18.Name = "FilterNode";
+            treeNode18.Text = "filter";
+            treeNode19.Name = "SorterNode";
+            treeNode19.Text = "sorter";
+            treeNode20.Name = "InfoNode";
+            treeNode20.Text = "info";
             this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode11,
-            treeNode12,
-            treeNode13,
-            treeNode14,
-            treeNode15});
+            treeNode16,
+            treeNode17,
+            treeNode18,
+            treeNode19,
+            treeNode20});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
@@ -603,12 +603,12 @@ namespace EgsEcfEditorApp
             // 
             // LogoPictureBox
             // 
-            this.LogoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.InfoPanel.SetColumnSpan(this.LogoPictureBox, 2);
-            this.LogoPictureBox.Location = new System.Drawing.Point(187, 119);
+            this.LogoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LogoPictureBox.Location = new System.Drawing.Point(3, 57);
             this.LogoPictureBox.Name = "LogoPictureBox";
-            this.LogoPictureBox.Size = new System.Drawing.Size(177, 75);
-            this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.LogoPictureBox.Size = new System.Drawing.Size(546, 200);
+            this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.LogoPictureBox.TabIndex = 0;
             this.LogoPictureBox.TabStop = false;
             // 
@@ -676,17 +676,6 @@ namespace EgsEcfEditorApp
             this.AppNameDataLabel.Text = "name";
             this.AppNameDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // SettingsBorderPanel
-            // 
-            this.SettingsBorderPanel.AutoSize = true;
-            this.SettingsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsBorderPanel.Controls.Add(this.SettingPanelsTabControl);
-            this.SettingsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsBorderPanel.Location = new System.Drawing.Point(150, 0);
-            this.SettingsBorderPanel.Name = "SettingsBorderPanel";
-            this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
-            this.SettingsBorderPanel.TabIndex = 3;
-            // 
             // LicenseDataLinkLabel
             // 
             this.LicenseDataLinkLabel.AutoSize = true;
@@ -699,6 +688,7 @@ namespace EgsEcfEditorApp
             this.LicenseDataLinkLabel.TabStop = true;
             this.LicenseDataLinkLabel.Text = "license";
             this.LicenseDataLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LicenseDataLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LicenseDataLinkLabel_LinkClicked);
             // 
             // ReadmeDataLinkLabel
             // 
@@ -712,6 +702,18 @@ namespace EgsEcfEditorApp
             this.ReadmeDataLinkLabel.TabStop = true;
             this.ReadmeDataLinkLabel.Text = "readme";
             this.ReadmeDataLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ReadmeDataLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReadmeDataLinkLabel_LinkClicked);
+            // 
+            // SettingsBorderPanel
+            // 
+            this.SettingsBorderPanel.AutoSize = true;
+            this.SettingsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsBorderPanel.Controls.Add(this.SettingPanelsTabControl);
+            this.SettingsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SettingsBorderPanel.Location = new System.Drawing.Point(150, 0);
+            this.SettingsBorderPanel.Name = "SettingsBorderPanel";
+            this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
+            this.SettingsBorderPanel.TabIndex = 3;
             // 
             // EcfSettingsDialog
             // 

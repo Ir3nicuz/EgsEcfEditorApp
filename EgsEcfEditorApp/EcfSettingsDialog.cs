@@ -1,5 +1,6 @@
 ﻿using EgsEcfEditorApp.Properties;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -145,6 +146,14 @@ namespace EgsEcfEditorApp
             UserSettings.Default.EgsEcfControls_ErrorViewSorterInitCount =
                 Convert.ToInt32(ErrorViewSorterInitCountComboBox.SelectedItem);
             HasUnsavedData = true;
+        }
+        private void LicenseDataLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
+        {
+            Process.Start(Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTrademarkAttribute), false).Cast<AssemblyTrademarkAttribute>().FirstOrDefault().Trademark);
+        }
+        private void ReadmeDataLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
+        {
+            Process.Start(Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false).Cast<AssemblyDescriptionAttribute>().FirstOrDefault().Description);
         }
 
         // privates
@@ -307,5 +316,7 @@ namespace EgsEcfEditorApp
             InvalidateParentsOnErrorCheckBox.Enabled = WriteOnlyValidItemsCheckBox.Checked;
             AllowFallbackToParsedDataCheckBox.Enabled = WriteOnlyValidItemsCheckBox.Checked;
         }
+
+        
     }
 }

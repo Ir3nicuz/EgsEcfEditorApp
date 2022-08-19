@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("Empyrion Configuration Editor")]
-[assembly: AssemblyDescription("An application to simplify the handling and customizing of the .ecf configuration files of Empyrion Galactic Survival")]
+[assembly: AssemblyDescription("https://github.com/Preston-Coding/EgsEcfEditorApp/blob/master/Readme.md")]
 [assembly: AssemblyConfiguration("Github Readme")]
 [assembly: AssemblyCompany("Preston-Coding")]
 [assembly: AssemblyProduct("EgsEcfEditorApp")]
 [assembly: AssemblyCopyright("BSD-3-Clause license")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("https://github.com/Preston-Coding/EgsEcfEditorApp/blob/master/LICENSE.md")]
 [assembly: AssemblyCulture("")]
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly

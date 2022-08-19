@@ -599,6 +599,7 @@ namespace EcfFileViews
 
         public EcfTabContainer() : base()
         {
+            ItemSize = new Size(1, 32); // just minimum Size
             ShowToolTips = true;
         }
 

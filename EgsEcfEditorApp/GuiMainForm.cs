@@ -29,6 +29,7 @@ using EcfToolBarControls;
 using EcfFileViewTools;
 using static EcfFileViews.EcfBaseView;
 using static EgsEcfParser.EcfDefinitionHandling;
+using static EcfFileViews.EcfFileOpenDialog;
 
 namespace EgsEcfEditorApp
 {
@@ -347,10 +348,9 @@ namespace EgsEcfEditorApp
                 OpenDialog.SetInitFileName(TitleRecources.EcfFileDialog_CreateFileName);
                 if (OpenDialog.ShowDialogNewFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) == DialogResult.OK)
                 {
-                    AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(OpenDialog.FilePathAndName);
-
-                    EgsEcfFile file = new EgsEcfFile(OpenDialog.FilePathAndName, OpenDialog.FileDefinition, OpenDialog.FileEncoding, OpenDialog.FileNewLineSymbol);
-
+                    EcfFileSetting fileSetting = OpenDialog.Files.FirstOrDefault();
+                    AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(fileSetting.PathAndName);
+                    EgsEcfFile file = new EgsEcfFile(fileSetting.PathAndName, fileSetting.Definition, fileSetting.Encoding, fileSetting.NewLineSymbol);
                     FileViewPanel.SelectedTab = FileViewPanel.Add(file);
                 }
             }
@@ -368,12 +368,15 @@ namespace EgsEcfEditorApp
                 if (OpenDialog.ShowDialogOpenFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) != DialogResult.OK) { 
                     return; 
                 }
-                AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(OpenDialog.FilePathAndName);
 
-                EgsEcfFile file = new EgsEcfFile(OpenDialog.FilePathAndName, OpenDialog.FileDefinition);
-                if (FileLoader.ShowDialog(this, file) != DialogResult.OK) { return; }
+                AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(OpenDialog.Files.FirstOrDefault().PathAndName);
 
-                FileViewPanel.SelectedTab = FileViewPanel.Add(file);
+                foreach (EcfFileSetting fileSetting in OpenDialog.Files)
+                {
+                    EgsEcfFile file = new EgsEcfFile(fileSetting.PathAndName, fileSetting.Definition);
+                    if (FileLoader.ShowDialog(this, file) != DialogResult.OK) { return; }
+                    FileViewPanel.SelectedTab = FileViewPanel.Add(file);
+                }
             }
             catch (Exception ex)
             {

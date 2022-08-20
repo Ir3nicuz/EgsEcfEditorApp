@@ -12,10 +12,8 @@ namespace EcfFileViews
 {
     public partial class EcfFileOpenDialog : Form
     {
-        public string FilePathAndName { get; private set; } = null;
-        public FormatDefinition FileDefinition { get; private set; } = null;
-        public Encoding FileEncoding { get; private set; } = null;
-        public EcfFileNewLineSymbols FileNewLineSymbol { get; private set; } = EcfFileNewLineSymbols.CrLf;
+        public List<EcfFileSetting> Files { get; } = new List<EcfFileSetting>();
+        private EcfFileSetting ActualEditedFile { get; set; } = null;
 
         private List<FormatDefinition> Definitions { get; set; } = new List<FormatDefinition>();
 
@@ -25,8 +23,6 @@ namespace EcfFileViews
         private ToolTip FormatDefinitionTooltip { get; } = new ToolTip();
         private ToolTip EncodingTooltip { get; } = new ToolTip();
         private ToolTip NewLineSymbolTooltip { get; } = new ToolTip();
-
-        private Func<IWin32Window, DialogResult> FileOperation { get; set; }
 
         public EcfFileOpenDialog()
         {
@@ -47,6 +43,9 @@ namespace EcfFileViews
             InitCreateFileDialog();
             InitFindFileDialog();
 
+            RefreshEncodingBox();
+            RefreshNewLineSymbolBox();
+
             OkButton.Text = TitleRecources.Generic_Ok;
             AbortButton.Text = TitleRecources.Generic_Abort;
         }
@@ -54,34 +53,29 @@ namespace EcfFileViews
         {
             OkButton.Focus();
         }
-        private void FilePathAndNameTextBox_Click(object sender, EventArgs evt)
-        {
-            FileOperation(this);
-        }
         private void FormatDefinitionComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
-            FileDefinition = Definitions.FirstOrDefault(definition => definition.FileType.Equals(Convert.ToString(FormatDefinitionComboBox.SelectedItem)));
+            ActualEditedFile.SetDefinition(Definitions.FirstOrDefault(definition => definition.FileType.Equals(Convert.ToString(FormatDefinitionComboBox.SelectedItem))));
         }
         private void EncodingComboBox_SelectedIndexChanged(object sender, EventArgs evt)
         {
-            FileEncoding = Encoding.GetEncoding(Convert.ToString(EncodingComboBox.SelectedItem));
+            ActualEditedFile.SetEncoding(EncodingComboBox.SelectedItem);
         }
         private void NewLineSymbolComboBox_SelectedIndexChanged(object sender, EventArgs evt)
         {
-            FileNewLineSymbol = (EcfFileNewLineSymbols)Enum.Parse(typeof(EcfFileNewLineSymbols), Convert.ToString(NewLineSymbolComboBox.SelectedItem));
+            ActualEditedFile.SetNewLineSymbol(NewLineSymbolComboBox.SelectedItem);
         }
         private void OkButton_Click(object sender, EventArgs evt)
         {
-            if (string.IsNullOrEmpty(FilePathAndName) || FileDefinition == null || 
-                FileEncoding == null || FileNewLineSymbol == EcfFileNewLineSymbols.Unknown)
-            {
-                MessageBox.Show(this, TextRecources.EcfFilePropertiesDialog_PropertiesIncomplete, 
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
+            if (ActualEditedFile.IsValid())
             {
                 DialogResult = DialogResult.OK;
                 Close();
+            }
+            else
+            {
+                MessageBox.Show(this, TextRecources.EcfFilePropertiesDialog_PropertiesIncomplete,
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         private void AbortButton_Click(object sender, EventArgs evt)
@@ -93,23 +87,43 @@ namespace EcfFileViews
         // publics
         public DialogResult ShowDialogNewFile(IWin32Window parent, string gameVersion)
         {
+            Files.Clear();
             Definitions = GetSupportedFileTypes(gameVersion);
-            FileOperation = CreateFile;
             RefreshFormatDefinitionBox();
             SetAppearanceNewFile();
-            DialogResult result = FileOperation(parent);
-            if (result != DialogResult.OK) { return result; }
+            DialogResult result = CreateFile(parent);
+            if (result != DialogResult.OK || Files.Count < 1) { return result; }
+            UpdateControls(Files.FirstOrDefault());
             return ShowDialog(parent);
         }
         public DialogResult ShowDialogOpenFile(IWin32Window parent, string gameVersion)
         {
+            Files.Clear();
             Definitions = GetSupportedFileTypes(gameVersion);
-            FileOperation = FindFile;
             RefreshFormatDefinitionBox();
             SetAppearanceOpenFile();
-            DialogResult result = FileOperation(parent);
-            if (result != DialogResult.OK) { return result; }
-            return ShowDialog(parent);
+            DialogResult result = FindFiles(parent);
+            if (result != DialogResult.OK || Files.Count < 1) { return DialogResult.Abort; }
+
+            if (Files.Count > 1 && Files.All(file => file.IsValid()))
+            {
+                return DialogResult.OK;
+            }
+
+            if (Files.Count == 1)
+            {
+                UpdateControls(Files.FirstOrDefault());
+                return ShowDialog(parent);
+            }
+            
+            foreach (EcfFileSetting setting in Files.Where(file => !file.IsValid()))
+            {
+                UpdateControls(setting);
+                result = ShowDialog(parent);
+                if (result != DialogResult.OK) { return DialogResult.Abort; }
+            }
+            
+            return DialogResult.OK;
         }
         public void SetInitDirectory(string directory)
         {
@@ -123,42 +137,6 @@ namespace EcfFileViews
         }
 
         // privates
-        private void InitFilePathAndNameBox(string filePathAndName)
-        {
-            FilePathAndNameLabel.Text = TitleRecources.EcfFileOpenDialog_FilePathAndNameBox;
-            FilePathAndNameTextBox.Text = filePathAndName;
-            FilePathAndNameTextBox.Click += FilePathAndNameTextBox_Click;
-        }
-        private void InitFormatDefinitionBox()
-        {
-            FormatDefinitionLabel.Text = TitleRecources.EcfFileOpenDialog_FormatDefinitionBox;
-            FormatDefinitionTooltip.SetToolTip(FormatDefinitionComboBox, TextRecources.EcfFileOpenDialog_ToolTip_FormatDefinition);
-        }
-        private void RefreshFormatDefinitionBox()
-        {
-            FormatDefinitionComboBox.Items.Clear();
-            FormatDefinitionComboBox.Items.AddRange(Definitions.Select(definition => definition.FileType).ToArray());
-        }
-        private FormatDefinition GetFileDefinition()
-        {
-            return Definitions.FirstOrDefault(definition => FilePathAndName.Contains(definition.FileType));
-        }
-        private void InitEncodingBox()
-        {
-            EncodingLabel.Text = TitleRecources.EcfFileOpenDialog_EncodingBox;
-            EncodingTooltip.SetToolTip(EncodingComboBox, TextRecources.EcfFileOpenDialog_ToolTip_Encoding);
-            EncodingComboBox.Items.AddRange(Encoding.GetEncodings().Select(encoding => encoding.Name).ToArray());
-            EncodingComboBox.SelectedItem = Encoding.UTF8.WebName;
-            FileEncoding = Encoding.UTF8;
-        }
-        private void InitNewLineSymbolBox()
-        {
-            NewLineSymbolLabel.Text = TitleRecources.EcfFileOpenDialog_NewLineSymbolBox;
-            NewLineSymbolTooltip.SetToolTip(NewLineSymbolComboBox, TextRecources.EcfFileOpenDialog_ToolTip_NewLineSymbol);
-            NewLineSymbolComboBox.Items.AddRange(Enum.GetValues(typeof(EcfFileNewLineSymbols)).Cast<EcfFileNewLineSymbols>().Skip(1).Select(value => value.ToString()).ToArray());
-            NewLineSymbolComboBox.SelectedItem = EcfFileNewLineSymbols.CrLf.ToString();
-            FileNewLineSymbol = EcfFileNewLineSymbols.CrLf;
-        }
         private void InitCreateFileDialog()
         {
             CreateFileDialog.AddExtension = true;
@@ -174,8 +152,61 @@ namespace EcfFileViews
             FindFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileDialogExtension;
             FindFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileDialogFilter;
             FindFileDialog.Title = TitleRecources.EcfFileOpenDialog_FindFileDialog;
-            FindFileDialog.Multiselect = false;
+            FindFileDialog.Multiselect = true;
             FindFileDialog.ShowHelp = false;
+        }
+        private void InitFilePathAndNameBox(string filePathAndName)
+        {
+            FilePathAndNameLabel.Text = TitleRecources.EcfFileOpenDialog_FilePathAndNameBox;
+            FilePathAndNameTextBox.Text = filePathAndName;
+        }
+        private void InitFormatDefinitionBox()
+        {
+            FormatDefinitionLabel.Text = TitleRecources.EcfFileOpenDialog_FormatDefinitionBox;
+            FormatDefinitionTooltip.SetToolTip(FormatDefinitionComboBox, TextRecources.EcfFileOpenDialog_ToolTip_FormatDefinition);
+        }
+        private void InitEncodingBox()
+        {
+            EncodingLabel.Text = TitleRecources.EcfFileOpenDialog_EncodingBox;
+            EncodingTooltip.SetToolTip(EncodingComboBox, TextRecources.EcfFileOpenDialog_ToolTip_Encoding);
+        }
+        private void InitNewLineSymbolBox()
+        {
+            NewLineSymbolLabel.Text = TitleRecources.EcfFileOpenDialog_NewLineSymbolBox;
+            NewLineSymbolTooltip.SetToolTip(NewLineSymbolComboBox, TextRecources.EcfFileOpenDialog_ToolTip_NewLineSymbol);
+        }
+        private void RefreshFormatDefinitionBox()
+        {
+            FormatDefinitionComboBox.BeginUpdate();
+            FormatDefinitionComboBox.Items.Clear();
+            FormatDefinitionComboBox.Items.AddRange(Definitions.Select(definition => definition.FileType).ToArray());
+            FormatDefinitionComboBox.EndUpdate();
+        }
+        private void RefreshEncodingBox()
+        {
+            EncodingComboBox.BeginUpdate();
+            EncodingComboBox.Items.Clear();
+            EncodingComboBox.Items.AddRange(Encoding.GetEncodings().Select(encoding => encoding.Name).ToArray());
+            EncodingComboBox.EndUpdate();
+        }
+        private void RefreshNewLineSymbolBox()
+        {
+            NewLineSymbolComboBox.BeginUpdate();
+            NewLineSymbolComboBox.Items.Clear();
+            NewLineSymbolComboBox.Items.AddRange(Enum.GetValues(typeof(EcfFileNewLineSymbols)).Cast<EcfFileNewLineSymbols>().Skip(1).Select(value => value.ToString()).ToArray());
+            NewLineSymbolComboBox.EndUpdate();
+        }
+        private void UpdateControls(EcfFileSetting setting)
+        {
+            ActualEditedFile = setting;
+            FilePathAndNameTextBox.Text = setting.PathAndName;
+            FormatDefinitionComboBox.SelectedItem = setting.Definition?.FileType;
+            EncodingComboBox.SelectedItem = setting.Encoding?.WebName ?? Encoding.UTF8.WebName;
+            NewLineSymbolComboBox.SelectedItem = setting.NewLineSymbol.ToString();
+        }
+        private FormatDefinition GetFileDefinition(string filePathAndName)
+        {
+            return Definitions.FirstOrDefault(definition => filePathAndName.Contains(definition.FileType));
         }
         private void SetAppearanceNewFile()
         {
@@ -196,30 +227,59 @@ namespace EcfFileViews
             DialogResult result = CreateFileDialog.ShowDialog(parent);
             if (result != DialogResult.OK) { return result; }
 
-            FilePathAndName = CreateFileDialog.FileName;
-            FileDefinition = GetFileDefinition();
-
-            FilePathAndNameTextBox.Text = FilePathAndName;
-            FormatDefinitionComboBox.SelectedItem = FileDefinition?.FileType;
+            string fileName = CreateFileDialog.FileName;
+            Files.Add(new EcfFileSetting(fileName, GetFileDefinition(fileName)));
 
             return result;
         }
-        private DialogResult FindFile(IWin32Window parent)
+        private DialogResult FindFiles(IWin32Window parent)
         {
             DialogResult result = FindFileDialog.ShowDialog(parent);
             if (result != DialogResult.OK) { return result; }
 
-            FilePathAndName = FindFileDialog.FileName;
-            FileDefinition = GetFileDefinition();
-            FileEncoding = GetFileEncoding(FilePathAndName);
-            FileNewLineSymbol = GetNewLineSymbol(FilePathAndName);
-
-            FilePathAndNameTextBox.Text = FilePathAndName;
-            FormatDefinitionComboBox.SelectedItem = FileDefinition?.FileType;
-            EncodingComboBox.SelectedItem = FileEncoding.WebName;
-            NewLineSymbolComboBox.SelectedItem = FileNewLineSymbol.ToString();
+            Files.AddRange(FindFileDialog.FileNames.Select(fileName => 
+                new EcfFileSetting(fileName, GetFileDefinition(fileName), GetFileEncoding(fileName), GetNewLineSymbol(fileName))));
 
             return result;
+        }
+
+        public class EcfFileSetting
+        {
+            public string PathAndName { get; } = null;
+            public FormatDefinition Definition { get; private set; } = null;
+            public Encoding Encoding { get; private set; } = Encoding.UTF8;
+            public EcfFileNewLineSymbols NewLineSymbol { get; private set; } = EcfFileNewLineSymbols.CrLf;
+
+            public EcfFileSetting(string pathAndName, FormatDefinition definition, Encoding encoding, EcfFileNewLineSymbols newLineSymbol)
+            {
+                PathAndName = pathAndName;
+                Definition = definition;
+                Encoding = encoding;
+                NewLineSymbol = newLineSymbol;
+            }
+            public EcfFileSetting(string pathAndName, FormatDefinition definition)
+            {
+                PathAndName = pathAndName;
+                Definition = definition;
+            }
+
+            // publics
+            public void SetDefinition(FormatDefinition definition)
+            {
+                Definition = definition;
+            }
+            public void SetEncoding(object encoding)
+            {
+                Encoding = Encoding.GetEncoding(Convert.ToString(encoding));
+            }
+            public void SetNewLineSymbol(object symbol)
+            {
+                NewLineSymbol = (EcfFileNewLineSymbols)Enum.Parse(typeof(EcfFileNewLineSymbols), Convert.ToString(symbol));
+            }
+            public bool IsValid()
+            {
+                return !string.IsNullOrEmpty(PathAndName) && Definition != null && Encoding != null && NewLineSymbol != EcfFileNewLineSymbols.Unknown;
+            }
         }
     }
 }

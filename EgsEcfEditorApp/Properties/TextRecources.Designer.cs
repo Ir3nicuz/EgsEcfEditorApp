@@ -889,11 +889,11 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Offers support functions to create new ingame items.
+        ///   Looks up a localized string similar to Offers support functions to edit ingame items.
         /// </summary>
-        internal static string EgsEcfEditorApp_ToolTip_IngameItemCreation {
+        internal static string EgsEcfEditorApp_ToolTip_IngameItemEditing {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_IngameItemCreation", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_IngameItemEditing", resourceCulture);
             }
         }
         

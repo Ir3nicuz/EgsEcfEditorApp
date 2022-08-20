@@ -393,8 +393,8 @@
   <data name="EgsEcfEditorApp_ToolTip_CompareAndMerge" xml:space="preserve">
     <value>Vergleicht zwei Dateien, zeigt die Unterschiede an und stellt Optionen zur Zusammenführung bereit</value>
   </data>
-  <data name="EgsEcfEditorApp_ToolTip_IngameItemCreation" xml:space="preserve">
-    <value>Stellt Unterstützungsfunktionen zur Erstellung von Ingame Items bereit</value>
+  <data name="EgsEcfEditorApp_ToolTip_IngameItemEditing" xml:space="preserve">
+    <value>Stellt Unterstützungsfunktionen zur Bearbeitung von Ingame Items bereit</value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_New" xml:space="preserve">
     <value>Erzeugt eine neue Datei</value>

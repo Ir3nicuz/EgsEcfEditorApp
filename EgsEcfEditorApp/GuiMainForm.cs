@@ -151,9 +151,9 @@ namespace EgsEcfEditorApp
         {
             CompareAndMergeFiles();
         }
-        private void ExtendedFileOperations_IngameItemCreationClicked(object sender, EventArgs evt)
+        private void ExtendedFileOperations_IngameItemEditingClicked(object sender, EventArgs evt)
         {
-            CreateNewIngameItem();
+            EditIngameItem();
         }
         private void ExtendedFileOperations_BuildTechTreePreviewClicked(object sender, EventArgs evt)
         {
@@ -299,7 +299,7 @@ namespace EgsEcfEditorApp
             ExtendedFileOperations.ReloadDefinitionsClicked += ExtendedFileOperations_ReloadDefinitionsClicked;
             ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
             ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
-            ExtendedFileOperations.IngameItemCreationClicked += ExtendedFileOperations_IngameItemCreationClicked;
+            ExtendedFileOperations.IngameItemEditingClicked += ExtendedFileOperations_IngameItemEditingClicked;
             ExtendedFileOperations.BuildTechTreePreviewClicked += ExtendedFileOperations_BuildTechTreePreviewClicked;
 
             SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
@@ -539,7 +539,7 @@ namespace EgsEcfEditorApp
         {
             MessageBox.Show(this, "not implemented yet! :)");
         }
-        private void CreateNewIngameItem()
+        private void EditIngameItem()
         {
             MessageBox.Show(this, "not implemented yet! :)");
         }
@@ -3173,7 +3173,7 @@ namespace EcfFileViewTools
         public event EventHandler ReloadDefinitionsClicked;
         public event EventHandler CheckDefinitionClicked;
         public event EventHandler CompareAndMergeClicked;
-        public event EventHandler IngameItemCreationClicked;
+        public event EventHandler IngameItemEditingClicked;
 
         public event EventHandler BuildTechTreePreviewClicked;
 
@@ -3181,8 +3181,8 @@ namespace EcfFileViewTools
         {
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CompareAndMerge, IconRecources.Icon_CompareAndMerge, null))
                 .Click += (sender, evt) => CompareAndMergeClicked?.Invoke(sender, evt);
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemCreation, IconRecources.Icon_IngameItemCreation, null))
-                .Click += (sender, evt) => IngameItemCreationClicked?.Invoke(sender, evt);
+            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemEditing, IconRecources.Icon_IngameItemEditing, null))
+                .Click += (sender, evt) => IngameItemEditingClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_BuildTechTreePreview, IconRecources.Icon_BuildTechTreePreview, null))
                 .Click += (sender, evt) => BuildTechTreePreviewClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))

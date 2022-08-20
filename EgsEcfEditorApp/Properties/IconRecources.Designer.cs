@@ -203,9 +203,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_Compare {
+        internal static System.Drawing.Bitmap Icon_CompareAndMerge {
             get {
-                object obj = ResourceManager.GetObject("Icon_Compare", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_CompareAndMerge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,9 +223,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_Merge {
+        internal static System.Drawing.Bitmap Icon_IngameItemCreation {
             get {
-                object obj = ResourceManager.GetObject("Icon_Merge", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_IngameItemCreation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -366,16 +366,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_SaveAsFile {
             get {
                 object obj = ResourceManager.GetObject("Icon_SaveAsFile", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Icon_SaveAsFilteredFile {
-            get {
-                object obj = ResourceManager.GetObject("Icon_SaveAsFilteredFile", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -126,10 +126,6 @@ namespace EgsEcfEditorApp
         {
             SaveAsEcfFile();
         }
-        private void BasicFileOperations_SaveAsFilteredFileClicked(object sender, EventArgs evt)
-        {
-            SaveAsFilteredEcfFile();
-        }
         private void BasicFileOperations_SaveAllFilesClicked(object sender, EventArgs evt)
         {
             SaveAllEcfFiles();
@@ -150,13 +146,13 @@ namespace EgsEcfEditorApp
         {
             CheckDefinition();
         }
-        private void ExtendedFileOperations_CompareFilesClicked(object sender, EventArgs evt)
+        private void ExtendedFileOperations_CompareAndMergeClicked(object sender, EventArgs evt)
         {
-            CompareFiles();
+            CompareAndMergeFiles();
         }
-        private void ExtendedFileOperations_MergeFilesClicked(object sender, EventArgs evt)
+        private void ExtendedFileOperations_IngameItemCreationClicked(object sender, EventArgs evt)
         {
-            MergeFiles();
+            CreateNewIngameItem();
         }
         private void ExtendedFileOperations_BuildTechTreePreviewClicked(object sender, EventArgs evt)
         {
@@ -295,15 +291,14 @@ namespace EgsEcfEditorApp
             BasicFileOperations.ReloadFileClicked += BasicFileOperations_ReloadFileClicked;
             BasicFileOperations.SaveFileClicked += BasicFileOperations_SaveFileClicked;
             BasicFileOperations.SaveAsFileClicked += BasicFileOperations_SaveAsFileClicked;
-            BasicFileOperations.SaveAsFilteredFileClicked += BasicFileOperations_SaveAsFilteredFileClicked;
             BasicFileOperations.SaveAllFilesClicked += BasicFileOperations_SaveAllFilesClicked;
             BasicFileOperations.CloseFileClicked += BasicFileOperations_CloseFileClicked;
             BasicFileOperations.CloseAllFilesClicked += BasicFileOperations_CloseAllFilesClicked;
 
             ExtendedFileOperations.ReloadDefinitionsClicked += ExtendedFileOperations_ReloadDefinitionsClicked;
             ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
-            ExtendedFileOperations.CompareFilesClicked += ExtendedFileOperations_CompareFilesClicked;
-            ExtendedFileOperations.MergeFilesClicked += ExtendedFileOperations_MergeFilesClicked;
+            ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
+            ExtendedFileOperations.IngameItemCreationClicked += ExtendedFileOperations_IngameItemCreationClicked;
             ExtendedFileOperations.BuildTechTreePreviewClicked += ExtendedFileOperations_BuildTechTreePreviewClicked;
 
             SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
@@ -456,10 +451,6 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void SaveAsFilteredEcfFile()
-        {
-            MessageBox.Show(this, "not implemented yet! :)");
-        }
         private void SaveAllEcfFiles()
         {
             try
@@ -541,11 +532,11 @@ namespace EgsEcfEditorApp
         }
         
         // Content handling
-        private void CompareFiles()
+        private void CompareAndMergeFiles()
         {
             MessageBox.Show(this, "not implemented yet! :)");
         }
-        private void MergeFiles()
+        private void CreateNewIngameItem()
         {
             MessageBox.Show(this, "not implemented yet! :)");
         }
@@ -3150,7 +3141,6 @@ namespace EcfFileViewTools
         public event EventHandler ReloadFileClicked;
         public event EventHandler SaveFileClicked;
         public event EventHandler SaveAsFileClicked;
-        public event EventHandler SaveAsFilteredFileClicked;
         public event EventHandler SaveAllFilesClicked;
         public event EventHandler CloseFileClicked;
         public event EventHandler CloseAllFilesClicked;
@@ -3167,8 +3157,6 @@ namespace EcfFileViewTools
                 .Click += (sender, evt) => SaveFileClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_SaveAs, IconRecources.Icon_SaveAsFile, null))
                 .Click += (sender, evt) => SaveAsFileClicked?.Invoke(sender, evt);
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_SaveAsFiltered, IconRecources.Icon_SaveAsFilteredFile, null))
-                .Click += (sender, evt) => SaveAsFilteredFileClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_SaveAll, IconRecources.Icon_SaveAllFiles, null))
                 .Click += (sender, evt) => SaveAllFilesClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_Close, IconRecources.Icon_CloseFile, null))
@@ -3181,17 +3169,17 @@ namespace EcfFileViewTools
     {
         public event EventHandler ReloadDefinitionsClicked;
         public event EventHandler CheckDefinitionClicked;
-        public event EventHandler CompareFilesClicked;
-        public event EventHandler MergeFilesClicked;
+        public event EventHandler CompareAndMergeClicked;
+        public event EventHandler IngameItemCreationClicked;
 
         public event EventHandler BuildTechTreePreviewClicked;
 
         public EcfExtendedFileOperations() : base()
         {
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CompareFiles, IconRecources.Icon_Compare, null))
-                .Click += (sender, evt) => CompareFilesClicked?.Invoke(sender, evt);
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_MergeFiles, IconRecources.Icon_Merge, null))
-                .Click += (sender, evt) => MergeFilesClicked?.Invoke(sender, evt);
+            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CompareAndMerge, IconRecources.Icon_CompareAndMerge, null))
+                .Click += (sender, evt) => CompareAndMergeClicked?.Invoke(sender, evt);
+            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemCreation, IconRecources.Icon_IngameItemCreation, null))
+                .Click += (sender, evt) => IngameItemCreationClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_BuildTechTreePreview, IconRecources.Icon_BuildTechTreePreview, null))
                 .Click += (sender, evt) => BuildTechTreePreviewClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))

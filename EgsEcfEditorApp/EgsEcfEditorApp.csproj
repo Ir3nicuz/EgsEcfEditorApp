@@ -327,6 +327,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Resources\Icon_IngameItemCreation.png" />
+    <None Include="Resources\Icon_CompareAndMerge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

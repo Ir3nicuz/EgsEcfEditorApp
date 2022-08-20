@@ -390,11 +390,11 @@
   <data name="EgsEcfEditorApp_ToolTip_CloseAll" xml:space="preserve">
     <value>Schließt alle Dateien</value>
   </data>
-  <data name="EgsEcfEditorApp_ToolTip_CompareFiles" xml:space="preserve">
-    <value>Vergleicht zwei Dateien und zeigt die Unterschiede an</value>
+  <data name="EgsEcfEditorApp_ToolTip_CompareAndMerge" xml:space="preserve">
+    <value>Vergleicht zwei Dateien, zeigt die Unterschiede an und stellt Optionen zur Zusammenführung bereit</value>
   </data>
-  <data name="EgsEcfEditorApp_ToolTip_MergeFiles" xml:space="preserve">
-    <value>Fügt zwei Dateien zu einer Datei zusammen</value>
+  <data name="EgsEcfEditorApp_ToolTip_IngameItemCreation" xml:space="preserve">
+    <value>Stellt Unterstützungsfunktionen zur Erstellung von Ingame Items bereit</value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_New" xml:space="preserve">
     <value>Erzeugt eine neue Datei</value>
@@ -419,9 +419,6 @@
   </data>
   <data name="EgsEcfEditorApp_ToolTip_SaveAs" xml:space="preserve">
     <value>Speichert die selektierte Datei unter einem anderen Namen</value>
-  </data>
-  <data name="EgsEcfEditorApp_ToolTip_SaveAsFiltered" xml:space="preserve">
-    <value>Speichert das Filterergebnis der selektierten Datei unter einem anderen Namen</value>
   </data>
   <data name="Generic_ChangeAll" xml:space="preserve">
     <value>Alle ändern</value>

@@ -880,20 +880,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compares two files and lists the differences.
+        ///   Looks up a localized string similar to Compares two files, lists the differences and offers merge options.
         /// </summary>
-        internal static string EgsEcfEditorApp_ToolTip_CompareFiles {
+        internal static string EgsEcfEditorApp_ToolTip_CompareAndMerge {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_CompareFiles", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_CompareAndMerge", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Merges two files to one file.
+        ///   Looks up a localized string similar to Offers support functions to create new ingame items.
         /// </summary>
-        internal static string EgsEcfEditorApp_ToolTip_MergeFiles {
+        internal static string EgsEcfEditorApp_ToolTip_IngameItemCreation {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_MergeFiles", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_IngameItemCreation", resourceCulture);
             }
         }
         
@@ -966,15 +966,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EgsEcfEditorApp_ToolTip_SaveAs {
             get {
                 return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_SaveAs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Saves the filter result of the selected file with new name.
-        /// </summary>
-        internal static string EgsEcfEditorApp_ToolTip_SaveAsFiltered {
-            get {
-                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_SaveAsFiltered", resourceCulture);
             }
         }
         

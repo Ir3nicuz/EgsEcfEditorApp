@@ -112,7 +112,7 @@ In the error view all occured errors are listed. The view shows the error catego
 ### Tech Tree Preview
 :wrench: Not implemented yet :wrench:
 
-### Ingame Item Creation
+### Ingame Item Editing
 :wrench: Not implemented yet :wrench:
 
 ## Operations Overview
@@ -181,7 +181,7 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_CloseFile.png" title="icon" width="16" height="16"/> close selected file
 - <img src="EgsEcfEditorApp\Resources\Icon_CloseAllFiles.png" title="icon" width="16" height="16"/> close all open files
 - <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> compares two files, displays differences and offer merge options (see [Compare and Merge](#compare-and-merge))
-- <img src="EgsEcfEditorApp\Resources\Icon_IngameItemCreation.png" title="icon" width="16" height="16"/> offers support functions to create new ingame items (see [Ingame Item Creation](#ingame-item-creation))
+- <img src="EgsEcfEditorApp\Resources\Icon_IngameItemEditing.png" title="icon" width="16" height="16"/> offers support functions to edit ingame items (see [Ingame Item Editing](#ingame-item-editing))
 - <img src="EgsEcfEditorApp\Resources\Icon_BuildTechTreePreview.png" title="icon" width="16" height="16"/> displays the tech tree preview (see [Tech Tree Preview](#tech-tree-preview))
 - <img src="EgsEcfEditorApp\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [File Content Definition](#file-content-definition))
 - <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> checks the `.xml` definitions (see [File Content Definition](#file-content-definition))
@@ -291,7 +291,7 @@ This errors occur during content writing at hitting `save`. This error depends o
 
 - Compare files view
 - Merge files with behaviour selection
-- Ingame Item creation support
+- Ingame Item Editing support
 - Element, Parameter, Comment moving
 - TechTree Preview
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)

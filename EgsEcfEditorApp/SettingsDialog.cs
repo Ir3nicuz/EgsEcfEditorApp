@@ -10,11 +10,11 @@ using static EgsEcfParser.EcfDefinitionHandling;
 
 namespace EgsEcfEditorApp
 {
-    public partial class EcfSettingsDialog : Form
+    public partial class SettingsDialog : Form
     {
         public bool HasUnsavedData { get; private set; } = false;
         
-        public EcfSettingsDialog()
+        public SettingsDialog()
         {
             InitializeComponent();
             InitForm();

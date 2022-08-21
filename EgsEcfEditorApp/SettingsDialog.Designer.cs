@@ -1,7 +1,7 @@
 ﻿
 namespace EgsEcfEditorApp
 {
-    partial class EcfSettingsDialog
+    partial class SettingsDialog
     {
         /// <summary>
         /// Required designer variable.

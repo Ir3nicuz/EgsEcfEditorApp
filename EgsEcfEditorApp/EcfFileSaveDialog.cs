@@ -28,13 +28,6 @@ namespace EcfFileViews
         {
             return SaveAsOperation(parent);
         }
-        public DialogResult ShowDialogSaveAsFiltered(IWin32Window parent)
-        {
-            
-
-
-            return ShowDialog(parent);
-        }
         public void SetInitDirectory(string directory)
         {
             CreateFileDialog.InitialDirectory = directory;

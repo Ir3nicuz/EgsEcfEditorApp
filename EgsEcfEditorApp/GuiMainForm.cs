@@ -50,7 +50,8 @@ namespace EgsEcfEditorApp
         private EcfFileSaveDialog SaveDialog { get; } = new EcfFileSaveDialog();
         private DeprecatedDefinitionsDialog DeprecatedDefinitions { get; } = new DeprecatedDefinitionsDialog();
         private EcfFileLoaderDialog FileLoader { get; } = new EcfFileLoaderDialog();
-        private EcfSettingsDialog SettingsDialog { get; } = new EcfSettingsDialog();
+        private SettingsDialog SettingsDialog { get; } = new SettingsDialog();
+        private EcfFileCaMDialog CompareMergeDialog { get; } = new EcfFileCaMDialog();
 
         public GuiMainForm()
         {
@@ -535,9 +536,10 @@ namespace EgsEcfEditorApp
         }
         
         // Content handling
+        [Obsolete("needs works")]
         private void CompareAndMergeFiles()
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            CompareMergeDialog.ShowDialog(this);
         }
         private void EditIngameItem()
         {

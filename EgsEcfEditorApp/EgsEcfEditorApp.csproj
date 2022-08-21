@@ -55,6 +55,12 @@
     <Compile Include="DeprecatedDefinitionsDialog.Designer.cs">
       <DependentUpon>DeprecatedDefinitionsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EcfFileCaMDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfFileCaMDialog.Designer.cs">
+      <DependentUpon>EcfFileCaMDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="EcfFileOpenDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,11 +85,11 @@
     <Compile Include="EcfItemSelectorDialog.Designer.cs">
       <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="EcfSettingsDialog.cs">
+    <Compile Include="SettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EcfSettingsDialog.Designer.cs">
-      <DependentUpon>EcfSettingsDialog.cs</DependentUpon>
+    <Compile Include="SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="GuiMainForm.cs">
       <SubType>Form</SubType>
@@ -137,6 +143,9 @@
     <EmbeddedResource Include="DeprecatedDefinitionsDialog.resx">
       <DependentUpon>DeprecatedDefinitionsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EcfFileCaMDialog.resx">
+      <DependentUpon>EcfFileCaMDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EcfFileOpenDialog.resx">
       <DependentUpon>EcfFileOpenDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,8 +155,8 @@
     <EmbeddedResource Include="EcfItemSelectorDialog.resx">
       <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EcfSettingsDialog.resx">
-      <DependentUpon>EcfSettingsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GuiMainForm.resx">
       <DependentUpon>GuiMainForm.cs</DependentUpon>

@@ -51,7 +51,7 @@ namespace EgsEcfEditorApp
         private DeprecatedDefinitionsDialog DeprecatedDefinitions { get; } = new DeprecatedDefinitionsDialog();
         private EcfFileLoaderDialog FileLoader { get; } = new EcfFileLoaderDialog();
         private SettingsDialog SettingsDialog { get; } = new SettingsDialog();
-        private EcfFileCaMDialog CompareMergeDialog { get; } = new EcfFileCaMDialog();
+        private EcfFileCAMDialog CompareMergeDialog { get; } = new EcfFileCAMDialog();
 
         public GuiMainForm()
         {

@@ -1,7 +1,7 @@
 ﻿
 namespace EgsEcfEditorApp
 {
-    partial class EcfFileCaMDialog
+    partial class EcfFileCAMDialog
     {
         /// <summary>
         /// Required designer variable.

@@ -162,7 +162,7 @@
   <data name="EcfErrorView_StructuralErrors" xml:space="preserve">
     <value>Strukturfehler</value>
   </data>
-  <data name="EcfFileCaMDialog_Header" xml:space="preserve">
+  <data name="EcfFileCAMDialog_Header" xml:space="preserve">
     <value>Vergleichen und Zusammenführen</value>
   </data>
   <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">

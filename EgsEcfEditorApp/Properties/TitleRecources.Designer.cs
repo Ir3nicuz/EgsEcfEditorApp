@@ -198,9 +198,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Compare and Merge.
         /// </summary>
-        internal static string EcfFileCaMDialog_Header {
+        internal static string EcfFileCAMDialog_Header {
             get {
-                return ResourceManager.GetString("EcfFileCaMDialog_Header", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_Header", resourceCulture);
             }
         }
         

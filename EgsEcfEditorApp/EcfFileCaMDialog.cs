@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
 {
-    public partial class EcfFileCaMDialog : Form
+    public partial class EcfFileCAMDialog : Form
     {
-        public EcfFileCaMDialog()
+        public EcfFileCAMDialog()
         {
             InitializeComponent();
             InitForm();
@@ -16,7 +16,7 @@ namespace EgsEcfEditorApp
         private void InitForm()
         {
             Icon = IconRecources.Icon_App;
-            Text = TitleRecources.EcfFileCaMDialog_Header;
+            Text = TitleRecources.EcfFileCAMDialog_Header;
 
             CloseButton.Text = TitleRecources.Generic_Close;
         }

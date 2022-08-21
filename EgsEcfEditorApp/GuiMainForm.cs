@@ -536,10 +536,13 @@ namespace EgsEcfEditorApp
         }
         
         // Content handling
-        [Obsolete("needs works")]
         private void CompareAndMergeFiles()
         {
-            CompareMergeDialog.ShowDialog(this);
+            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
+            CompareMergeDialog.ChangedFileTabs.ForEach(tab =>
+            {
+                tab.UpdateAllViews();
+            });
         }
         private void EditIngameItem()
         {

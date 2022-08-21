@@ -244,7 +244,7 @@ namespace EcfFileViews
             this.CommentItemView.Controls.Add(this.CommentItemRichTextBox);
             this.CommentItemView.Location = new System.Drawing.Point(4, 24);
             this.CommentItemView.Name = "CommentItemView";
-            this.CommentItemView.Size = new System.Drawing.Size(976, 604);
+            this.CommentItemView.Size = new System.Drawing.Size(1176, 604);
             this.CommentItemView.TabIndex = 1;
             this.CommentItemView.Text = "CommentItemView";
             this.CommentItemView.UseVisualStyleBackColor = true;
@@ -255,7 +255,7 @@ namespace EcfFileViews
             this.CommentItemRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CommentItemRichTextBox.Location = new System.Drawing.Point(0, 0);
             this.CommentItemRichTextBox.Name = "CommentItemRichTextBox";
-            this.CommentItemRichTextBox.Size = new System.Drawing.Size(976, 604);
+            this.CommentItemRichTextBox.Size = new System.Drawing.Size(1176, 604);
             this.CommentItemRichTextBox.TabIndex = 0;
             this.CommentItemRichTextBox.Text = "";
             // 
@@ -264,7 +264,7 @@ namespace EcfFileViews
             this.ParameterItemView.Controls.Add(this.ParameterItemViewPanel);
             this.ParameterItemView.Location = new System.Drawing.Point(4, 24);
             this.ParameterItemView.Name = "ParameterItemView";
-            this.ParameterItemView.Size = new System.Drawing.Size(976, 604);
+            this.ParameterItemView.Size = new System.Drawing.Size(1176, 604);
             this.ParameterItemView.TabIndex = 2;
             this.ParameterItemView.Text = "ParameterItemView";
             this.ParameterItemView.UseVisualStyleBackColor = true;
@@ -285,7 +285,7 @@ namespace EcfFileViews
             this.ParameterItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.ParameterItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.ParameterItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ParameterItemViewPanel.Size = new System.Drawing.Size(976, 604);
+            this.ParameterItemViewPanel.Size = new System.Drawing.Size(1176, 604);
             this.ParameterItemViewPanel.TabIndex = 0;
             // 
             // ParameterItemKeyPanel
@@ -305,7 +305,7 @@ namespace EcfFileViews
             this.ParameterItemKeyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.ParameterItemKeyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.ParameterItemKeyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.ParameterItemKeyPanel.Size = new System.Drawing.Size(286, 84);
+            this.ParameterItemKeyPanel.Size = new System.Drawing.Size(346, 84);
             this.ParameterItemKeyPanel.TabIndex = 0;
             // 
             // ParameterItemKeyLabel
@@ -314,7 +314,7 @@ namespace EcfFileViews
             this.ParameterItemKeyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemKeyLabel.Location = new System.Drawing.Point(3, 0);
             this.ParameterItemKeyLabel.Name = "ParameterItemKeyLabel";
-            this.ParameterItemKeyLabel.Size = new System.Drawing.Size(137, 28);
+            this.ParameterItemKeyLabel.Size = new System.Drawing.Size(167, 28);
             this.ParameterItemKeyLabel.TabIndex = 1;
             this.ParameterItemKeyLabel.Text = "key";
             this.ParameterItemKeyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -324,9 +324,9 @@ namespace EcfFileViews
             this.ParameterItemIsOptionalCheckBox.AutoSize = true;
             this.ParameterItemIsOptionalCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemIsOptionalCheckBox.Enabled = false;
-            this.ParameterItemIsOptionalCheckBox.Location = new System.Drawing.Point(146, 3);
+            this.ParameterItemIsOptionalCheckBox.Location = new System.Drawing.Point(176, 3);
             this.ParameterItemIsOptionalCheckBox.Name = "ParameterItemIsOptionalCheckBox";
-            this.ParameterItemIsOptionalCheckBox.Size = new System.Drawing.Size(137, 22);
+            this.ParameterItemIsOptionalCheckBox.Size = new System.Drawing.Size(167, 22);
             this.ParameterItemIsOptionalCheckBox.TabIndex = 2;
             this.ParameterItemIsOptionalCheckBox.Text = "isOpt";
             this.ParameterItemIsOptionalCheckBox.UseVisualStyleBackColor = true;
@@ -339,7 +339,7 @@ namespace EcfFileViews
             this.ParameterItemKeyComboBox.FormattingEnabled = true;
             this.ParameterItemKeyComboBox.Location = new System.Drawing.Point(3, 31);
             this.ParameterItemKeyComboBox.Name = "ParameterItemKeyComboBox";
-            this.ParameterItemKeyComboBox.Size = new System.Drawing.Size(280, 21);
+            this.ParameterItemKeyComboBox.Size = new System.Drawing.Size(340, 21);
             this.ParameterItemKeyComboBox.Sorted = true;
             this.ParameterItemKeyComboBox.TabIndex = 3;
             this.ParameterItemKeyComboBox.SelectionChangeCommitted += new System.EventHandler(this.ParameterItemKeyComboBox_SelectionChangeCommitted);
@@ -358,13 +358,13 @@ namespace EcfFileViews
             this.ParameterItemInfoPanel.Controls.Add(this.ParameterItemParentTextBox, 1, 0);
             this.ParameterItemInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemInfoPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.ParameterItemInfoPanel.Location = new System.Drawing.Point(295, 3);
+            this.ParameterItemInfoPanel.Location = new System.Drawing.Point(355, 3);
             this.ParameterItemInfoPanel.Name = "ParameterItemInfoPanel";
             this.ParameterItemInfoPanel.RowCount = 3;
             this.ParameterItemInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.ParameterItemInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.ParameterItemInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.ParameterItemInfoPanel.Size = new System.Drawing.Size(678, 84);
+            this.ParameterItemInfoPanel.Size = new System.Drawing.Size(818, 84);
             this.ParameterItemInfoPanel.TabIndex = 1;
             // 
             // ParameterItemCommentLabel
@@ -373,7 +373,7 @@ namespace EcfFileViews
             this.ParameterItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemCommentLabel.Location = new System.Drawing.Point(3, 56);
             this.ParameterItemCommentLabel.Name = "ParameterItemCommentLabel";
-            this.ParameterItemCommentLabel.Size = new System.Drawing.Size(129, 28);
+            this.ParameterItemCommentLabel.Size = new System.Drawing.Size(157, 28);
             this.ParameterItemCommentLabel.TabIndex = 1;
             this.ParameterItemCommentLabel.Text = "comment";
             this.ParameterItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -381,9 +381,9 @@ namespace EcfFileViews
             // ParameterItemCommentTextBox
             // 
             this.ParameterItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemCommentTextBox.Location = new System.Drawing.Point(138, 59);
+            this.ParameterItemCommentTextBox.Location = new System.Drawing.Point(166, 59);
             this.ParameterItemCommentTextBox.Name = "ParameterItemCommentTextBox";
-            this.ParameterItemCommentTextBox.Size = new System.Drawing.Size(537, 20);
+            this.ParameterItemCommentTextBox.Size = new System.Drawing.Size(649, 20);
             this.ParameterItemCommentTextBox.TabIndex = 3;
             // 
             // ParameterItemInfoLabel
@@ -392,7 +392,7 @@ namespace EcfFileViews
             this.ParameterItemInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemInfoLabel.Location = new System.Drawing.Point(3, 28);
             this.ParameterItemInfoLabel.Name = "ParameterItemInfoLabel";
-            this.ParameterItemInfoLabel.Size = new System.Drawing.Size(129, 28);
+            this.ParameterItemInfoLabel.Size = new System.Drawing.Size(157, 28);
             this.ParameterItemInfoLabel.TabIndex = 0;
             this.ParameterItemInfoLabel.Text = "info";
             this.ParameterItemInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -400,10 +400,10 @@ namespace EcfFileViews
             // ParameterItemInfoTextBox
             // 
             this.ParameterItemInfoTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemInfoTextBox.Location = new System.Drawing.Point(138, 31);
+            this.ParameterItemInfoTextBox.Location = new System.Drawing.Point(166, 31);
             this.ParameterItemInfoTextBox.Name = "ParameterItemInfoTextBox";
             this.ParameterItemInfoTextBox.ReadOnly = true;
-            this.ParameterItemInfoTextBox.Size = new System.Drawing.Size(537, 20);
+            this.ParameterItemInfoTextBox.Size = new System.Drawing.Size(649, 20);
             this.ParameterItemInfoTextBox.TabIndex = 2;
             // 
             // ParameterItemParentLabel
@@ -412,7 +412,7 @@ namespace EcfFileViews
             this.ParameterItemParentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ParameterItemParentLabel.Location = new System.Drawing.Point(3, 0);
             this.ParameterItemParentLabel.Name = "ParameterItemParentLabel";
-            this.ParameterItemParentLabel.Size = new System.Drawing.Size(129, 28);
+            this.ParameterItemParentLabel.Size = new System.Drawing.Size(157, 28);
             this.ParameterItemParentLabel.TabIndex = 4;
             this.ParameterItemParentLabel.Text = "parent";
             this.ParameterItemParentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -420,10 +420,10 @@ namespace EcfFileViews
             // ParameterItemParentTextBox
             // 
             this.ParameterItemParentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ParameterItemParentTextBox.Location = new System.Drawing.Point(138, 3);
+            this.ParameterItemParentTextBox.Location = new System.Drawing.Point(166, 3);
             this.ParameterItemParentTextBox.Name = "ParameterItemParentTextBox";
             this.ParameterItemParentTextBox.ReadOnly = true;
-            this.ParameterItemParentTextBox.Size = new System.Drawing.Size(537, 20);
+            this.ParameterItemParentTextBox.Size = new System.Drawing.Size(649, 20);
             this.ParameterItemParentTextBox.TabIndex = 5;
             // 
             // BlockItemView
@@ -431,7 +431,7 @@ namespace EcfFileViews
             this.BlockItemView.Controls.Add(this.BlockItemViewPanel);
             this.BlockItemView.Location = new System.Drawing.Point(4, 24);
             this.BlockItemView.Name = "BlockItemView";
-            this.BlockItemView.Size = new System.Drawing.Size(976, 604);
+            this.BlockItemView.Size = new System.Drawing.Size(1176, 604);
             this.BlockItemView.TabIndex = 3;
             this.BlockItemView.Text = "BlockItemView";
             this.BlockItemView.UseVisualStyleBackColor = true;
@@ -452,7 +452,7 @@ namespace EcfFileViews
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BlockItemViewPanel.Size = new System.Drawing.Size(976, 604);
+            this.BlockItemViewPanel.Size = new System.Drawing.Size(1176, 604);
             this.BlockItemViewPanel.TabIndex = 0;
             // 
             // BlockItemTypePanel
@@ -475,7 +475,7 @@ namespace EcfFileViews
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.BlockItemTypePanel.Size = new System.Drawing.Size(286, 84);
+            this.BlockItemTypePanel.Size = new System.Drawing.Size(346, 84);
             this.BlockItemTypePanel.TabIndex = 2;
             // 
             // BlockItemDataTypeLabel
@@ -484,7 +484,7 @@ namespace EcfFileViews
             this.BlockItemDataTypeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemDataTypeLabel.Location = new System.Drawing.Point(3, 28);
             this.BlockItemDataTypeLabel.Name = "BlockItemDataTypeLabel";
-            this.BlockItemDataTypeLabel.Size = new System.Drawing.Size(108, 28);
+            this.BlockItemDataTypeLabel.Size = new System.Drawing.Size(132, 28);
             this.BlockItemDataTypeLabel.TabIndex = 0;
             this.BlockItemDataTypeLabel.Text = "datatype";
             this.BlockItemDataTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -494,9 +494,9 @@ namespace EcfFileViews
             this.BlockItemDataTypeComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemDataTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.BlockItemDataTypeComboBox.FormattingEnabled = true;
-            this.BlockItemDataTypeComboBox.Location = new System.Drawing.Point(117, 31);
+            this.BlockItemDataTypeComboBox.Location = new System.Drawing.Point(141, 31);
             this.BlockItemDataTypeComboBox.Name = "BlockItemDataTypeComboBox";
-            this.BlockItemDataTypeComboBox.Size = new System.Drawing.Size(166, 21);
+            this.BlockItemDataTypeComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemDataTypeComboBox.TabIndex = 2;
             // 
             // BlockItemPreMarkLabel
@@ -505,7 +505,7 @@ namespace EcfFileViews
             this.BlockItemPreMarkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemPreMarkLabel.Location = new System.Drawing.Point(3, 0);
             this.BlockItemPreMarkLabel.Name = "BlockItemPreMarkLabel";
-            this.BlockItemPreMarkLabel.Size = new System.Drawing.Size(108, 28);
+            this.BlockItemPreMarkLabel.Size = new System.Drawing.Size(132, 28);
             this.BlockItemPreMarkLabel.TabIndex = 0;
             this.BlockItemPreMarkLabel.Text = "premark";
             this.BlockItemPreMarkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -515,9 +515,9 @@ namespace EcfFileViews
             this.BlockItemPreMarkComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemPreMarkComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.BlockItemPreMarkComboBox.FormattingEnabled = true;
-            this.BlockItemPreMarkComboBox.Location = new System.Drawing.Point(117, 3);
+            this.BlockItemPreMarkComboBox.Location = new System.Drawing.Point(141, 3);
             this.BlockItemPreMarkComboBox.Name = "BlockItemPreMarkComboBox";
-            this.BlockItemPreMarkComboBox.Size = new System.Drawing.Size(166, 21);
+            this.BlockItemPreMarkComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemPreMarkComboBox.TabIndex = 1;
             // 
             // BlockItemPostMarkLabel
@@ -526,7 +526,7 @@ namespace EcfFileViews
             this.BlockItemPostMarkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemPostMarkLabel.Location = new System.Drawing.Point(3, 56);
             this.BlockItemPostMarkLabel.Name = "BlockItemPostMarkLabel";
-            this.BlockItemPostMarkLabel.Size = new System.Drawing.Size(108, 28);
+            this.BlockItemPostMarkLabel.Size = new System.Drawing.Size(132, 28);
             this.BlockItemPostMarkLabel.TabIndex = 3;
             this.BlockItemPostMarkLabel.Text = "postmark";
             this.BlockItemPostMarkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -536,9 +536,9 @@ namespace EcfFileViews
             this.BlockItemPostMarkComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemPostMarkComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.BlockItemPostMarkComboBox.FormattingEnabled = true;
-            this.BlockItemPostMarkComboBox.Location = new System.Drawing.Point(117, 59);
+            this.BlockItemPostMarkComboBox.Location = new System.Drawing.Point(141, 59);
             this.BlockItemPostMarkComboBox.Name = "BlockItemPostMarkComboBox";
-            this.BlockItemPostMarkComboBox.Size = new System.Drawing.Size(166, 21);
+            this.BlockItemPostMarkComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemPostMarkComboBox.TabIndex = 4;
             // 
             // BlockItemAddDataPanel
@@ -553,13 +553,13 @@ namespace EcfFileViews
             this.BlockItemAddDataPanel.Controls.Add(this.BlockItemCommentTextBox, 1, 2);
             this.BlockItemAddDataPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemAddDataPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.BlockItemAddDataPanel.Location = new System.Drawing.Point(295, 3);
+            this.BlockItemAddDataPanel.Location = new System.Drawing.Point(355, 3);
             this.BlockItemAddDataPanel.Name = "BlockItemAddDataPanel";
             this.BlockItemAddDataPanel.RowCount = 3;
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.BlockItemAddDataPanel.Size = new System.Drawing.Size(678, 84);
+            this.BlockItemAddDataPanel.Size = new System.Drawing.Size(818, 84);
             this.BlockItemAddDataPanel.TabIndex = 3;
             // 
             // BlockItemInheritorLabel
@@ -568,7 +568,7 @@ namespace EcfFileViews
             this.BlockItemInheritorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemInheritorLabel.Location = new System.Drawing.Point(3, 0);
             this.BlockItemInheritorLabel.Name = "BlockItemInheritorLabel";
-            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(129, 28);
+            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(157, 28);
             this.BlockItemInheritorLabel.TabIndex = 4;
             this.BlockItemInheritorLabel.Text = "inher";
             this.BlockItemInheritorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -576,10 +576,10 @@ namespace EcfFileViews
             // BlockItemInheritorTextBox
             // 
             this.BlockItemInheritorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemInheritorTextBox.Location = new System.Drawing.Point(138, 3);
+            this.BlockItemInheritorTextBox.Location = new System.Drawing.Point(166, 3);
             this.BlockItemInheritorTextBox.Name = "BlockItemInheritorTextBox";
             this.BlockItemInheritorTextBox.ReadOnly = true;
-            this.BlockItemInheritorTextBox.Size = new System.Drawing.Size(537, 20);
+            this.BlockItemInheritorTextBox.Size = new System.Drawing.Size(649, 20);
             this.BlockItemInheritorTextBox.TabIndex = 5;
             // 
             // BlockItemCommentLabel
@@ -588,7 +588,7 @@ namespace EcfFileViews
             this.BlockItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemCommentLabel.Location = new System.Drawing.Point(3, 56);
             this.BlockItemCommentLabel.Name = "BlockItemCommentLabel";
-            this.BlockItemCommentLabel.Size = new System.Drawing.Size(129, 28);
+            this.BlockItemCommentLabel.Size = new System.Drawing.Size(157, 28);
             this.BlockItemCommentLabel.TabIndex = 1;
             this.BlockItemCommentLabel.Text = "comment";
             this.BlockItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -596,16 +596,16 @@ namespace EcfFileViews
             // BlockItemCommentTextBox
             // 
             this.BlockItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(138, 59);
+            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(166, 59);
             this.BlockItemCommentTextBox.Name = "BlockItemCommentTextBox";
-            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(537, 20);
+            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(649, 20);
             this.BlockItemCommentTextBox.TabIndex = 3;
             // 
             // ParameterMatrixView
             // 
             this.ParameterMatrixView.Location = new System.Drawing.Point(4, 24);
             this.ParameterMatrixView.Name = "ParameterMatrixView";
-            this.ParameterMatrixView.Size = new System.Drawing.Size(976, 604);
+            this.ParameterMatrixView.Size = new System.Drawing.Size(1176, 604);
             this.ParameterMatrixView.TabIndex = 4;
             this.ParameterMatrixView.Text = "ParameterMatrix";
             this.ParameterMatrixView.UseVisualStyleBackColor = true;

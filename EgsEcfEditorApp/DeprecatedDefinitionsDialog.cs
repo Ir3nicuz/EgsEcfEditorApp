@@ -1,5 +1,4 @@
-﻿using EcfFileViewTools;
-using EgsEcfEditorApp.Properties;
+﻿using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
 using System.IO;

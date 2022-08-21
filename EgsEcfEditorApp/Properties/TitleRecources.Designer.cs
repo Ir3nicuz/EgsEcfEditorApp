@@ -196,6 +196,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compare and Merge.
+        /// </summary>
+        internal static string EcfFileCaMDialog_Header {
+            get {
+                return ResourceManager.GetString("EcfFileCaMDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create file.
         /// </summary>
         internal static string EcfFileDialog_CreateFileDialog {
@@ -759,6 +768,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_ChildElements {
             get {
                 return ResourceManager.GetString("Generic_ChildElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Generic_Close {
+            get {
+                return ResourceManager.GetString("Generic_Close", resourceCulture);
             }
         }
         

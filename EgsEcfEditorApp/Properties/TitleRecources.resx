@@ -162,6 +162,9 @@
   <data name="EcfErrorView_StructuralErrors" xml:space="preserve">
     <value>Structural errors</value>
   </data>
+  <data name="EcfFileCaMDialog_Header" xml:space="preserve">
+    <value>Compare and Merge</value>
+  </data>
   <data name="EcfFileDialog_CreateFileDialog" xml:space="preserve">
     <value>Create file</value>
   </data>
@@ -350,6 +353,9 @@
   </data>
   <data name="Generic_ChildElements" xml:space="preserve">
     <value>Child items</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="Generic_Comment" xml:space="preserve">
     <value>Comment</value>

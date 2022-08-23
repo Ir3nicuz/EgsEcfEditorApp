@@ -1,5 +1,4 @@
 ﻿using EcfFileViews;
-using EcfFileViewTools;
 using EgsEcfEditorApp.Properties;
 using System;
 using System.Collections.Generic;
@@ -24,32 +23,12 @@ namespace EgsEcfEditorApp
             Text = TitleRecources.EcfFileCAMDialog_Header;
 
             CloseButton.Text = TitleRecources.Generic_Close;
+
+            FirstFileTreeView.LinkTreeView(SecondFileTreeView);
         }
         private void CloseButton_Click(object sender, EventArgs evt)
         {
             Close();
-        }
-        private void FirstFileGrid_Scroll(object sender, ScrollEventArgs evt)
-        {
-            if (evt.ScrollOrientation == ScrollOrientation.VerticalScroll)
-            {
-                SecondFileGrid.VerticalScrollingOffset = FirstFileGrid.VerticalScrollingOffset;
-            }
-            else
-            {
-                SecondFileGrid.HorizontalScrollingOffset = FirstFileGrid.HorizontalScrollingOffset;
-            }
-        }
-        private void SecondFileGrid_Scroll(object sender, ScrollEventArgs evt)
-        {
-            if (evt.ScrollOrientation == ScrollOrientation.VerticalScroll)
-            {
-                FirstFileGrid.VerticalScrollingOffset = SecondFileGrid.VerticalScrollingOffset;
-            }
-            else
-            {
-                FirstFileGrid.HorizontalScrollingOffset = SecondFileGrid.HorizontalScrollingOffset;
-            }
         }
 
         // public
@@ -62,7 +41,5 @@ namespace EgsEcfEditorApp
 
             return ShowDialog(parent);
         }
-
-        
     }
 }

@@ -21,7 +21,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms.VisualStyles;
 using static EcfFileViews.EcfItemEditingDialog;
 using static EcfToolBarControls.EcfToolBarCheckComboBox;
-using static EcfFileViewTools.EcfTreeFilter;
+using static EcfFileViewTools.EcfStructureFilter;
 using System.ComponentModel;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
@@ -30,6 +30,7 @@ using EcfFileViewTools;
 using static EcfFileViews.EcfBaseView;
 using static EgsEcfParser.EcfDefinitionHandling;
 using static EcfFileViews.EcfFileOpenDialog;
+using EcfWinFormControls;
 
 namespace EgsEcfEditorApp
 {
@@ -81,7 +82,7 @@ namespace EgsEcfEditorApp
         }
         private void FileViewPanel_TreeViewResized(object sender, EventArgs evt)
         {
-            if (sender is EcfTreeView treeView)
+            if (sender is EcfStructureView treeView)
             {
                 WindowSettings.Default.EgsEcfControls_TreeViewInitWidth = treeView.Width;
             }
@@ -605,7 +606,7 @@ namespace EcfFileViews
         // events
         private void TabPage_TreeViewResized(object sender, EventArgs evt)
         {
-            if (sender is EcfTreeView treeView)
+            if (sender is EcfStructureView treeView)
             {
                 TreeViewInitWidth = treeView.Width;
             }
@@ -664,12 +665,12 @@ namespace EcfFileViews
 
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfFilterControl FilterControl { get; }
-        private EcfTreeFilter TreeFilter { get; }
+        private EcfStructureFilter TreeFilter { get; }
         private EcfParameterFilter ParameterFilter { get; }
         private EcfContentOperations ContentOperations { get; }
 
         private EcfFileContainer FileViewPanel { get; } = new EcfFileContainer();
-        private EcfTreeView TreeView { get; }
+        private EcfStructureView TreeView { get; }
         private EcfParameterView ParameterView { get; }
         private EcfErrorView ErrorView { get; }
         private EcfInfoView InfoView { get; }
@@ -683,12 +684,12 @@ namespace EcfFileViews
             ItemEditor = new EcfItemEditingDialog(file);
 
             FilterControl = new EcfFilterControl(File.Definition.GameMode, File.Definition.FileType);
-            TreeFilter = new EcfTreeFilter(container.TreeViewFilterCommentInitActive, container.TreeViewFilterParameterInitActive, container.TreeViewFilterDataBlocksInitActive);
+            TreeFilter = new EcfStructureFilter(container.TreeViewFilterCommentInitActive, container.TreeViewFilterParameterInitActive, container.TreeViewFilterDataBlocksInitActive);
             ParameterFilter = new EcfParameterFilter(File.Definition.BlockParameters.Select(item => item.Name).ToList());
             ContentOperations = new EcfContentOperations();
 
             FileViewPanel = new EcfFileContainer();
-            TreeView = new EcfTreeView(TitleRecources.EcfTreeView_Header, File, ResizeableBorders.RightBorder, container.TreeViewSorterInitItemCount);
+            TreeView = new EcfStructureView(TitleRecources.EcfTreeView_Header, File, ResizeableBorders.RightBorder, container.TreeViewSorterInitItemCount);
             ParameterView = new EcfParameterView(TitleRecources.EcfParameterView_Header, File, ResizeableBorders.None, container.ParameterViewSorterInitItemCount);
             InfoView = new EcfInfoView(TitleRecources.EcfInfoView_Header, File, ResizeableBorders.LeftBorder);
             ErrorView = new EcfErrorView(TitleRecources.EcfErrorView_Header, File, ResizeableBorders.TopBorder, container.ErrorViewSorterInitItemCount);
@@ -733,7 +734,7 @@ namespace EcfFileViews
         }
         private void ContentOperations_AddClicked(object sender, EventArgs evt)
         {
-            if (LastFocusedView is EcfTreeView treeView)
+            if (LastFocusedView is EcfStructureView treeView)
             {
                 if (treeView.SelectedItems.LastOrDefault() is EcfStructureItem preceedingItem)
                 {
@@ -753,7 +754,7 @@ namespace EcfFileViews
         }
         private void ContentOperations_RemoveClicked(object sender, EventArgs evt)
         {
-            if (LastFocusedView is EcfTreeView treeView)
+            if (LastFocusedView is EcfStructureView treeView)
             {
                 List<EcfStructureItem> items = treeView.SelectedItems;
                 if (items.Count > 0)
@@ -775,7 +776,7 @@ namespace EcfFileViews
         }
         private void ContentOperations_ChangeSimpleClicked(object sender, EventArgs evt)
         {
-            if (LastFocusedView is EcfTreeView treeView)
+            if (LastFocusedView is EcfStructureView treeView)
             {
                 ChangeTreeSelection(treeView.SelectedItems);
             }
@@ -1400,7 +1401,7 @@ namespace EcfFileViews
         }
         private void CopyItems()
         {
-            if (LastFocusedView is EcfTreeView treeView)
+            if (LastFocusedView is EcfStructureView treeView)
             {
                 CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, treeView.SelectedItems));
                 return;
@@ -1414,7 +1415,7 @@ namespace EcfFileViews
         }
         private void PasteItems()
         {
-            if (LastFocusedView is EcfTreeView treeView)
+            if (LastFocusedView is EcfStructureView treeView)
             {
                 PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, treeView.SelectedItems));
                 return;
@@ -1759,7 +1760,7 @@ namespace EcfFileViews
             }
         }
     }
-    public class EcfTreeView : EcfBaseView
+    public class EcfStructureView : EcfBaseView
     {
         public event EventHandler DisplayedDataChanged;
         public event EventHandler ItemsSelected;
@@ -1790,7 +1791,7 @@ namespace EcfFileViews
 
         private bool IsSelectionUpdating { get; set; } = false;
 
-        public EcfTreeView(string headline, EgsEcfFile file, ResizeableBorders mode, VisibleItemCount sorterItemCount) : base(headline, file, mode)
+        public EcfStructureView(string headline, EgsEcfFile file, ResizeableBorders mode, VisibleItemCount sorterItemCount) : base(headline, file, mode)
         {
             StructureSorter = new EcfSorter(
                 TextRecources.EcfTreeView_ToolTip_TreeItemCountSelector,
@@ -1835,7 +1836,7 @@ namespace EcfFileViews
         }
 
         // publics
-        public void UpdateView(EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        public void UpdateView(EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             if (!IsUpdating)
             {
@@ -1982,7 +1983,7 @@ namespace EcfFileViews
                 IsSelectionUpdating = false;
             }
         }
-        private void BuildNodesTree(EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        private void BuildNodesTree(EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             RootTreeNodes.Clear();
             AllTreeNodes.Clear();
@@ -1998,7 +1999,7 @@ namespace EcfFileViews
             AllTreeNodes.Clear();
             BuildNodesTree(item, null, null);
         }
-        private void BuildNodesTree(EcfStructureItem item, EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        private void BuildNodesTree(EcfStructureItem item, EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             if (TryBuildNode(out EcfTreeNode rootNode, item, treeFilter, parameterFilter))
             {
@@ -2020,7 +2021,7 @@ namespace EcfFileViews
                 }
             }
         }
-        private bool TryBuildNode(out EcfTreeNode node, EcfStructureItem item, EcfTreeFilter treeFilter, EcfParameterFilter parameterFilter)
+        private bool TryBuildNode(out EcfTreeNode node, EcfStructureItem item, EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
         {
             node = null;
             if (item is EcfComment comment)
@@ -3473,7 +3474,7 @@ namespace EcfFileViewTools
             InternalUncheckedItems.AddRange(ItemSelector.GetUncheckedItems().Select(item => item.Id));
         }
     }
-    public class EcfTreeFilter : EcfBaseFilter
+    public class EcfStructureFilter : EcfBaseFilter
     {
         public bool IsCommentsActive { get; private set; } = false;
         public bool IsParametersActive { get; private set; } = false;
@@ -3498,7 +3499,7 @@ namespace EcfFileViewTools
             DataBlocks,
         }
 
-        public EcfTreeFilter(bool commentInitActive, bool parameterInitActive, bool dataBlockInitActive)
+        public EcfStructureFilter(bool commentInitActive, bool parameterInitActive, bool dataBlockInitActive)
             : base(TextRecources.EcfTabPage_ToolTip_TreeLikeInput, TitleRecources.EcfTreeView_FilterSelector_Elements, TextRecources.EcfTabPage_ToolTip_TreeItemTypeSelector)
         {
             List<CheckableItem> itemList = new List<CheckableItem>
@@ -3730,27 +3731,9 @@ namespace EcfFileViewTools
             IsUpdating = false;
         }
     }
-    public class EcfDataGridView : DataGridView
-    {
-
-        public EcfDataGridView() : base()
-        {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-
-            AllowUserToAddRows = false;
-            AllowUserToDeleteRows = false;
-            AllowUserToOrderColumns = false;
-            AllowUserToResizeColumns = true;
-            AllowDrop = false;
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            EditMode = DataGridViewEditMode.EditProgrammatically;
-            ShowEditingIcon = false;
-        }
-    }
 }
 
-    // generic tool controls
+// generic tool bar controls
 namespace EcfToolBarControls
 {
     public class EcfToolBarCheckComboBox : Panel
@@ -4269,6 +4252,107 @@ namespace EcfToolBarControls
         }
     }
 }
+}
+
+// winforms extension wrapper
+namespace EcfWinFormControls
+{
+    public class EcfDataGridView : DataGridView
+    {
+
+        public EcfDataGridView() : base()
+        {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+
+            AllowUserToAddRows = false;
+            AllowUserToDeleteRows = false;
+            AllowUserToOrderColumns = false;
+            AllowUserToResizeColumns = true;
+            AllowDrop = false;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            EditMode = DataGridViewEditMode.EditProgrammatically;
+            ShowEditingIcon = false;
+        }
+    }
+    public class EcfTreeView : TreeView
+    {
+        private List<EcfTreeView> LinkedTreeViews { get; } = new List<EcfTreeView>();
+
+        public EcfTreeView() : base()
+        {
+            CheckBoxes = true;
+        }
+
+        // publics
+        public void LinkTreeView(EcfTreeView treeView)
+        {
+            if (treeView == this)
+            {
+                throw new ArgumentException("Cannot link a TreeView to itself!", "treeView");
+            }
+
+            if (!LinkedTreeViews.Contains(treeView))
+            {
+                LinkedTreeViews.Add(treeView);
+                treeView.LinkTreeView(this);
+                for (int i = 0; i < LinkedTreeViews.Count; i++)
+                {
+                    var linkedTreeView = LinkedTreeViews[i];
+                    if (linkedTreeView != treeView)
+                    {
+                        linkedTreeView.LinkTreeView(treeView);
+                    }
+                }
+            }
+        }
+
+        // privates
+        protected override void WndProc(ref Message message)
+        {
+            base.WndProc(ref message);
+
+            if (message.Msg == User32.WM_VSCROLL || message.Msg == User32.WM_MOUSEWHEEL)
+            {
+                foreach (EcfTreeView linkedTreeView in LinkedTreeViews)
+                {
+                    SetScrollPositions(this, linkedTreeView);
+                    Message copiedMessage = new Message
+                    {
+                        HWnd = linkedTreeView.Handle,
+                        LParam = message.LParam,
+                        Msg = message.Msg,
+                        Result = message.Result,
+                        WParam = message.WParam,
+                    };
+                    linkedTreeView.RecieveWndProc(ref copiedMessage);
+                }
+            }
+        }
+        private void RecieveWndProc(ref Message message)
+        {
+            base.WndProc(ref message);
+        }
+        private static void SetScrollPositions(EcfTreeView source, EcfTreeView dest)
+        {
+            int horizontal = User32.GetScrollPos(source.Handle, Orientation.Horizontal);
+            int vertical = User32.GetScrollPos(source.Handle, Orientation.Vertical);
+            User32.SetScrollPos(dest.Handle, Orientation.Horizontal, horizontal, true);
+            User32.SetScrollPos(dest.Handle, Orientation.Vertical, vertical, true);
+        }
+
+        private static class User32
+        {
+            public const int WM_VSCROLL = 0x115;
+            public const int WM_MOUSEWHEEL = 0x020A;
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            public static extern int GetScrollPos(IntPtr hWnd, Orientation nBar);
+
+            [DllImport("user32.dll")]
+            public static extern int SetScrollPos(IntPtr hWnd, Orientation nBar, int nPos, bool bRedraw);
+        }
+    }
 }
 
 // helferlein

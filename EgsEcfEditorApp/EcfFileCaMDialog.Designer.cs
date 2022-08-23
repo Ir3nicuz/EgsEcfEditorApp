@@ -34,12 +34,10 @@ namespace EgsEcfEditorApp
             this.ComparePanel = new System.Windows.Forms.TableLayoutPanel();
             this.FirstFileComboBox = new System.Windows.Forms.ComboBox();
             this.SecondFileComboBox = new System.Windows.Forms.ComboBox();
-            this.FirstFileGrid = new EcfFileViewTools.EcfDataGridView();
-            this.SecondFileGrid = new EcfFileViewTools.EcfDataGridView();
+            this.FirstFileTreeView = new EcfWinFormControls.EcfTreeView();
+            this.SecondFileTreeView = new EcfWinFormControls.EcfTreeView();
             this.ButtonPanel.SuspendLayout();
             this.ComparePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FirstFileGrid)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SecondFileGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -74,8 +72,8 @@ namespace EgsEcfEditorApp
             this.ComparePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.ComparePanel.Controls.Add(this.FirstFileComboBox, 0, 1);
             this.ComparePanel.Controls.Add(this.SecondFileComboBox, 2, 1);
-            this.ComparePanel.Controls.Add(this.FirstFileGrid, 0, 2);
-            this.ComparePanel.Controls.Add(this.SecondFileGrid, 2, 2);
+            this.ComparePanel.Controls.Add(this.FirstFileTreeView, 0, 2);
+            this.ComparePanel.Controls.Add(this.SecondFileTreeView, 2, 2);
             this.ComparePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComparePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.ComparePanel.Location = new System.Drawing.Point(0, 0);
@@ -111,41 +109,25 @@ namespace EgsEcfEditorApp
             this.SecondFileComboBox.Sorted = true;
             this.SecondFileComboBox.TabIndex = 1;
             // 
-            // FirstFileGrid
+            // FirstFileTreeView
             // 
-            this.FirstFileGrid.AllowUserToAddRows = false;
-            this.FirstFileGrid.AllowUserToDeleteRows = false;
-            this.FirstFileGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.FirstFileGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ComparePanel.SetColumnSpan(this.FirstFileGrid, 2);
-            this.FirstFileGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FirstFileGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.FirstFileGrid.Location = new System.Drawing.Point(3, 282);
-            this.FirstFileGrid.MultiSelect = false;
-            this.FirstFileGrid.Name = "FirstFileGrid";
-            this.FirstFileGrid.ReadOnly = true;
-            this.FirstFileGrid.ShowEditingIcon = false;
-            this.FirstFileGrid.Size = new System.Drawing.Size(586, 247);
-            this.FirstFileGrid.TabIndex = 2;
-            this.FirstFileGrid.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FirstFileGrid_Scroll);
+            this.FirstFileTreeView.CheckBoxes = true;
+            this.ComparePanel.SetColumnSpan(this.FirstFileTreeView, 2);
+            this.FirstFileTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FirstFileTreeView.Location = new System.Drawing.Point(3, 282);
+            this.FirstFileTreeView.Name = "FirstFileTreeView";
+            this.FirstFileTreeView.Size = new System.Drawing.Size(586, 247);
+            this.FirstFileTreeView.TabIndex = 2;
             // 
-            // SecondFileGrid
+            // SecondFileTreeView
             // 
-            this.SecondFileGrid.AllowUserToAddRows = false;
-            this.SecondFileGrid.AllowUserToDeleteRows = false;
-            this.SecondFileGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.SecondFileGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ComparePanel.SetColumnSpan(this.SecondFileGrid, 2);
-            this.SecondFileGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SecondFileGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.SecondFileGrid.Location = new System.Drawing.Point(595, 282);
-            this.SecondFileGrid.MultiSelect = false;
-            this.SecondFileGrid.Name = "SecondFileGrid";
-            this.SecondFileGrid.ReadOnly = true;
-            this.SecondFileGrid.ShowEditingIcon = false;
-            this.SecondFileGrid.Size = new System.Drawing.Size(586, 247);
-            this.SecondFileGrid.TabIndex = 3;
-            this.SecondFileGrid.Scroll += new System.Windows.Forms.ScrollEventHandler(this.SecondFileGrid_Scroll);
+            this.SecondFileTreeView.CheckBoxes = true;
+            this.ComparePanel.SetColumnSpan(this.SecondFileTreeView, 2);
+            this.SecondFileTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SecondFileTreeView.Location = new System.Drawing.Point(595, 282);
+            this.SecondFileTreeView.Name = "SecondFileTreeView";
+            this.SecondFileTreeView.Size = new System.Drawing.Size(586, 247);
+            this.SecondFileTreeView.TabIndex = 3;
             // 
             // EcfFileCAMDialog
             // 
@@ -165,8 +147,6 @@ namespace EgsEcfEditorApp
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             this.ComparePanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.FirstFileGrid)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SecondFileGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,7 +159,7 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TableLayoutPanel ComparePanel;
         private System.Windows.Forms.ComboBox FirstFileComboBox;
         private System.Windows.Forms.ComboBox SecondFileComboBox;
-        private EcfFileViewTools.EcfDataGridView FirstFileGrid;
-        private EcfFileViewTools.EcfDataGridView SecondFileGrid;
+        private EcfWinFormControls.EcfTreeView FirstFileTreeView;
+        private EcfWinFormControls.EcfTreeView SecondFileTreeView;
     }
 }

@@ -34,7 +34,7 @@ namespace EcfFileViews
             this.OkButton = new System.Windows.Forms.Button();
             this.CompareFileLabel = new System.Windows.Forms.Label();
             this.DefinitionFileLabel = new System.Windows.Forms.Label();
-            this.Grid = new EcfFileViewTools.EcfDataGridView();
+            this.Grid = new EcfWinFormControls.EcfDataGridView();
             this.NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.InfoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsOptionalColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -196,7 +196,7 @@ namespace EcfFileViews
         private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.Label CompareFileLabel;
         private System.Windows.Forms.Label DefinitionFileLabel;
-        private EcfFileViewTools.EcfDataGridView Grid;
+        private EcfWinFormControls.EcfDataGridView Grid;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn InfoColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsOptionalColumn;

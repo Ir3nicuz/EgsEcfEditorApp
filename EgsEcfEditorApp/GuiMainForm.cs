@@ -3112,37 +3112,6 @@ namespace EcfFileViews
 // specific tool controls
 namespace EcfFileViewTools
 {
-    public class EcfToolContainer : FlowLayoutPanel
-    {
-        public EcfToolContainer()
-        {
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
-        }
-
-        public void Add(EcfToolBox toolGroup)
-        {
-            Controls.Add(toolGroup);
-        }
-    }
-    public abstract class EcfToolBox : FlowLayoutPanel
-    {
-        public EcfToolBox() : base()
-        {
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
-        }
-        protected Control Add(Control control)
-        {
-            control.AutoSize = true;
-            control.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            control.Dock = DockStyle.Fill;
-            Controls.Add(control);
-            return control;
-        }
-    }
     public class EcfBasicFileOperations : EcfToolBox
     {
         public event EventHandler NewFileClicked;
@@ -3481,8 +3450,8 @@ namespace EcfFileViewTools
         public bool IsDataBlocksActive { get; private set; } = false;
         public ErrorDisplayModes ErrorDisplayMode { get; private set; } = ErrorDisplayModes.ShowAllItems;
 
-        private EcfToolBarTreeStateCheckBox ErrorDisplaySelector { get; } =
-            new EcfToolBarTreeStateCheckBox(
+        private EcfToolBarThreeStateCheckBox ErrorDisplaySelector { get; } =
+            new EcfToolBarThreeStateCheckBox(
                 TextRecources.EcfTabPage_ToolTip_TreeErrorDisplayModeSelector, IconRecources.Icon_ShowAllItems,
                 IconRecources.Icon_ShowOnlyFaultyItems, IconRecources.Icon_ShowOnlyNonFaultyItems);
 
@@ -3524,7 +3493,7 @@ namespace EcfFileViewTools
         }
         private void ChangeErrorDisplayButton_Click(object sender, EventArgs evt)
         {
-            LoadErrrorDisplayState((sender as EcfToolBarTreeStateCheckBox).CheckState);
+            LoadErrrorDisplayState((sender as EcfToolBarThreeStateCheckBox).CheckState);
         }
 
         // publics
@@ -3736,6 +3705,37 @@ namespace EcfFileViewTools
 // generic tool bar controls
 namespace EcfToolBarControls
 {
+    public class EcfToolContainer : FlowLayoutPanel
+    {
+        public EcfToolContainer()
+        {
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
+        }
+
+        public void Add(EcfToolBox toolGroup)
+        {
+            Controls.Add(toolGroup);
+        }
+    }
+    public abstract class EcfToolBox : FlowLayoutPanel
+    {
+        public EcfToolBox() : base()
+        {
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
+        }
+        protected Control Add(Control control)
+        {
+            control.AutoSize = true;
+            control.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            control.Dock = DockStyle.Fill;
+            Controls.Add(control);
+            return control;
+        }
+    }
     public class EcfToolBarCheckComboBox : Panel
     {
         public event EventHandler SelectionChangeCommitted;
@@ -4173,13 +4173,13 @@ namespace EcfToolBarControls
             }
         }
     }
-    public class EcfToolBarTreeStateCheckBox : EcfToolBarCheckBox
+    public class EcfToolBarThreeStateCheckBox : EcfToolBarCheckBox
     {
         private Image IndeterminateImage { get; }
         private Image CheckedImage { get; }
         private Image UncheckedImage { get; }
 
-        public EcfToolBarTreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage)
+        public EcfToolBarThreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage)
             : base(toolTip, indeterminateImage, null)
         {
             IndeterminateImage = indeterminateImage;
@@ -4189,12 +4189,12 @@ namespace EcfToolBarControls
             ThreeState = true;
             AutoCheck = true;
 
-            CheckStateChanged += ToolBarTreeStateCheckBox_CheckStateChanged;
+            CheckStateChanged += ToolBarThreeStateCheckBox_CheckStateChanged;
 
             Reset();
         }
 
-        private void ToolBarTreeStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
+        private void ToolBarThreeStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
         {
             switch (CheckState)
             {

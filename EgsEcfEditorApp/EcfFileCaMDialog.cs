@@ -1,4 +1,6 @@
-﻿using EcfFileViews;
+﻿using EcfCAMTools;
+using EcfFileViews;
+using EcfToolBarControls;
 using EgsEcfEditorApp.Properties;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,11 @@ namespace EgsEcfEditorApp
             CloseButton.Text = TitleRecources.Generic_Close;
 
             FirstFileTreeView.LinkTreeView(SecondFileTreeView);
+
+            FirstFileSelectionContainer.Add(new CompareSelectionTools());
+            FirstFileActionContainer.Add(new MergeActionTools());
+            SecondFileActionContainer.Add(new MergeActionTools());
+            SecondFileSelectionContainer.Add(new CompareSelectionTools());
         }
         private void CloseButton_Click(object sender, EventArgs evt)
         {
@@ -40,6 +47,36 @@ namespace EgsEcfEditorApp
 
 
             return ShowDialog(parent);
+        }
+    }
+}
+
+namespace EcfCAMTools
+{
+    public class CompareSelectionTools : EcfToolBox
+    {
+        public event EventHandler SelectAllAddingsClicked;
+
+        public CompareSelectionTools() : base()
+        {
+            Add(new EcfToolBarThreeStateCheckBox("Test",
+                IconRecources.Icon_CompareAndMerge,
+                IconRecources.Icon_AddValue,
+                IconRecources.Icon_ApplyFilter)
+                ).Click += (sender, evt) => SelectAllAddingsClicked?.Invoke(sender, evt);
+        }
+    }
+    public class MergeActionTools : EcfToolBox
+    {
+        public event EventHandler SelectAllAddingsClicked;
+
+        public MergeActionTools() : base()
+        {
+            Add(new EcfToolBarThreeStateCheckBox("Test", 
+                IconRecources.Icon_CompareAndMerge,
+                IconRecources.Icon_AddValue,
+                IconRecources.Icon_ApplyFilter)
+                ).Click += (sender, evt) => SelectAllAddingsClicked?.Invoke(sender, evt);
         }
     }
 }

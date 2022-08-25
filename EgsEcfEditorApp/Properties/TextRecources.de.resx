@@ -135,6 +135,15 @@
   <data name="EcfErrorView_ToolTip_ErrorSorterOriginOrder" xml:space="preserve">
     <value>Aktiviert die Auftrittsreihenfolge</value>
   </data>
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllAdds" xml:space="preserve">
+    <value>Aktiviert / deaktiviert alle Elemente die hinzugefügt werden</value>
+  </data>
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllRemoves" xml:space="preserve">
+    <value>Aktiviert / deaktiviert alle Elemente die entfernt werden</value>
+  </data>
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllUpdates" xml:space="preserve">
+    <value>Aktiviert / deaktiviert alle Elemente die geändert werden</value>
+  </data>
   <data name="EcfFileOpenDialog_ToolTip_Encoding" xml:space="preserve">
     <value>Für eine neu erstellte Datei muss das Encoding festgelegt werden. Das vorausgewählte Encoding sollte in den meisten Fällen geeignet sein.</value>
   </data>

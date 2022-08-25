@@ -115,6 +115,33 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activates / deactivates all elements which would be added.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllAdds {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllAdds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activates / deactivates all elements which would be removed.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllRemoves {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllRemoves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activates / deactivates all elements which would be updated.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllUpdates {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For a new file the encoding has to be selected. The already selected default encoding should be suitable in most cases..
         /// </summary>
         internal static string EcfFileOpenDialog_ToolTip_Encoding {

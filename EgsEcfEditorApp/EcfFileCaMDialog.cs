@@ -96,77 +96,77 @@ namespace EcfCAMTools
 {
     public class CompareSelectionTools : EcfToolBox
     {
-        public event EventHandler SelectAllAddsClicked;
-        public event EventHandler SelectNoneAddsClicked;
-        public event EventHandler SelectAllUpdatesClicked;
-        public event EventHandler SelectNoneUpdatesClicked;
-        public event EventHandler SelectAllRemovesClicked;
-        public event EventHandler SelectNoneRemovesClicked;
+        public event EventHandler SelectAllAddItemsClicked;
+        public event EventHandler SelectNoneAddItemsClicked;
+        public event EventHandler SelectAllUnequalItemsClicked;
+        public event EventHandler SelectNoneUnequalItemsClicked;
+        public event EventHandler SelectAllRemoveItemsClicked;
+        public event EventHandler SelectNoneRemoveItemsClicked;
 
-        private EcfToolBarThreeStateCheckBox ChangeAllAddsButton { get; } = new EcfToolBarThreeStateCheckBox(
-            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllAdds, IconRecources.Icon_ReloadFile, IconRecources.Icon_Add, IconRecources.Icon_Remove);
-        private EcfToolBarThreeStateCheckBox ChangeAllUnequalsButton { get; } = new EcfToolBarThreeStateCheckBox(
-            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllUnequals, IconRecources.Icon_SomeUnequalItemsSet, IconRecources.Icon_AllUnequalItemsSet, IconRecources.Icon_NoneUnequalItemsSet);
-        private EcfToolBarThreeStateCheckBox ChangeAllRemovesButton { get; } = new EcfToolBarThreeStateCheckBox(
-            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllRemoves, IconRecources.Icon_ReloadFile, IconRecources.Icon_Add, IconRecources.Icon_Remove);
+        private EcfToolBarThreeStateCheckBox ChangeAllAddItemsButton { get; } = new EcfToolBarThreeStateCheckBox(
+            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllAddItems, IconRecources.Icon_SomeAddItemsSet, IconRecources.Icon_AllAddItemsSet, IconRecources.Icon_NoneAddItemsSet);
+        private EcfToolBarThreeStateCheckBox ChangeAllUnequalItemsButton { get; } = new EcfToolBarThreeStateCheckBox(
+            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems, IconRecources.Icon_SomeUnequalItemsSet, IconRecources.Icon_AllUnequalItemsSet, IconRecources.Icon_NoneUnequalItemsSet);
+        private EcfToolBarThreeStateCheckBox ChangeAllRemoveItemsButton { get; } = new EcfToolBarThreeStateCheckBox(
+            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllRemoveItems, IconRecources.Icon_SomeRemoveItemsSet, IconRecources.Icon_AllRemoveItemsSet, IconRecources.Icon_NoneRemoveItemsSet);
 
         public CompareSelectionTools() : base()
         {
-            Add(ChangeAllAddsButton).Click += ChangeAllAddsButton_Click;
-            Add(ChangeAllUnequalsButton).Click += ChangeAllUpdatesButton_Click;
-            Add(ChangeAllRemovesButton).Click += ChangeAllRemovesButton_Click;
+            Add(ChangeAllAddItemsButton).Click += ChangeAllAddsButton_Click;
+            Add(ChangeAllUnequalItemsButton).Click += ChangeAllUpdatesButton_Click;
+            Add(ChangeAllRemoveItemsButton).Click += ChangeAllRemovesButton_Click;
         }
 
         // events
         private void ChangeAllAddsButton_Click(object sender, EventArgs evt)
         {
-            if (ChangeAllAddsButton.CheckState == CheckState.Indeterminate)
+            if (ChangeAllAddItemsButton.CheckState == CheckState.Indeterminate)
             {
-                ChangeAllAddsButton.CheckState = CheckState.Unchecked;
-                SelectNoneAddsClicked?.Invoke(sender, evt);
+                ChangeAllAddItemsButton.CheckState = CheckState.Unchecked;
+                SelectNoneAddItemsClicked?.Invoke(sender, evt);
             }
-            else if(ChangeAllAddsButton.CheckState == CheckState.Checked)
+            else if(ChangeAllAddItemsButton.CheckState == CheckState.Checked)
             {
-                SelectAllAddsClicked?.Invoke(sender, evt);
+                SelectAllAddItemsClicked?.Invoke(sender, evt);
             }
         }
         private void ChangeAllUpdatesButton_Click(object sender, EventArgs evt)
         {
-            if (ChangeAllUnequalsButton.CheckState == CheckState.Indeterminate)
+            if (ChangeAllUnequalItemsButton.CheckState == CheckState.Indeterminate)
             {
-                ChangeAllUnequalsButton.CheckState = CheckState.Unchecked;
-                SelectNoneUpdatesClicked?.Invoke(sender, evt);
+                ChangeAllUnequalItemsButton.CheckState = CheckState.Unchecked;
+                SelectNoneUnequalItemsClicked?.Invoke(sender, evt);
             }
-            else if (ChangeAllUnequalsButton.CheckState == CheckState.Checked)
+            else if (ChangeAllUnequalItemsButton.CheckState == CheckState.Checked)
             {
-                SelectAllUpdatesClicked?.Invoke(sender, evt);
+                SelectAllUnequalItemsClicked?.Invoke(sender, evt);
             }
         }
         private void ChangeAllRemovesButton_Click(object sender, EventArgs evt)
         {
-            if (ChangeAllRemovesButton.CheckState == CheckState.Indeterminate)
+            if (ChangeAllRemoveItemsButton.CheckState == CheckState.Indeterminate)
             {
-                ChangeAllRemovesButton.CheckState = CheckState.Unchecked;
-                SelectNoneRemovesClicked?.Invoke(sender, evt);
+                ChangeAllRemoveItemsButton.CheckState = CheckState.Unchecked;
+                SelectNoneRemoveItemsClicked?.Invoke(sender, evt);
             }
-            else if (ChangeAllRemovesButton.CheckState == CheckState.Checked)
+            else if (ChangeAllRemoveItemsButton.CheckState == CheckState.Checked)
             {
-                SelectAllRemovesClicked?.Invoke(sender, evt);
+                SelectAllRemoveItemsClicked?.Invoke(sender, evt);
             }
         }
 
         // publics
         public void SetAllAddsState(CheckState state)
         {
-            ChangeAllAddsButton.CheckState = state;
+            ChangeAllAddItemsButton.CheckState = state;
         }
         public void SetAllUpdatesButton(CheckState state)
         {
-            ChangeAllUnequalsButton.CheckState = state;
+            ChangeAllUnequalItemsButton.CheckState = state;
         }
         public void SetAllRemovesButton(CheckState state)
         {
-            ChangeAllRemovesButton.CheckState = state;
+            ChangeAllRemoveItemsButton.CheckState = state;
         }
     }
     public class MergeActionTools : EcfToolBox

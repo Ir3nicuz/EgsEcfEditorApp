@@ -42,7 +42,7 @@ namespace EgsEcfEditorApp
             SecondFileSelectionContainer.Add(SecondFileSelectionTools);
 
             CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Add));
-            CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Update));
+            CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Unequal));
             CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Remove));
 
             FirstFileTreeView.ImageList = CAMListViewIcons;

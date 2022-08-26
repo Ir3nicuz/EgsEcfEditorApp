@@ -5,6 +5,7 @@ using EgsEcfEditorApp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
@@ -41,9 +42,9 @@ namespace EgsEcfEditorApp
             SecondFileActionContainer.Add(SecondFileActionTools);
             SecondFileSelectionContainer.Add(SecondFileSelectionTools);
 
-            CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Add));
-            CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Unequal));
-            CAMListViewIcons.Images.Add(AddIconImageGap(IconRecources.Icon_Remove));
+            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Add, 16, 3, 1));
+            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Unequal, 16, 3, 1));
+            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Remove, 16, 3, 1));
 
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
@@ -74,17 +75,19 @@ namespace EgsEcfEditorApp
         }
 
         // private
-        private static Bitmap AddIconImageGap(Bitmap icon)
+        private static Bitmap PrepareIcon(Bitmap icon, int edge, int xGap, int yGap)
         {
-            Point destPt = new Point(6, 0);
-            Size size = new Size(22, 16);
-            
-            Bitmap bmp = new Bitmap(size.Width, size.Height);
-            Graphics g = Graphics.FromImage(bmp);
-            g.DrawImage(icon, destPt);
-            g.Dispose();
+            Bitmap bmp = new Bitmap(edge + 2 * xGap, edge + 2 * yGap);
+            using (Graphics gfx = Graphics.FromImage(bmp))
+            {
+                gfx.CompositingMode = CompositingMode.SourceCopy;
+                gfx.CompositingQuality = CompositingQuality.HighQuality;
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gfx.SmoothingMode = SmoothingMode.HighQuality;
+                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gfx.DrawImage(icon, new Rectangle(xGap, yGap, edge, edge));
+            }
             return bmp;
-            
         }
     }
 }

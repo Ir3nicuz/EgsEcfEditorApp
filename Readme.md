@@ -1,4 +1,4 @@
-# Empyrion Configuration Editor
+# <img src="EgsEcfEditorApp\Icon_AppBranding.ico" title="icon" width="32" height="32"/> Empyrion Configuration Editor <img src="EgsEcfEditorApp\Icon_AppBranding.ico" title="icon" width="32" height="32"/>
 An application to simplify the handling and customizing of the `.ecf` configuration files of [Empyrion Galactic Survival](https://empyriongame.com/)
 
 <img src="images/tool_teaser.png" title="Tool Teaser" width="1000" height="500"/>

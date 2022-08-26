@@ -33,7 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -335,7 +336,6 @@
     <None Include="Resources\Icon_Undo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppIcon.ico" />
     <None Include="Resources\Icon_Unequal.png" />
     <None Include="Resources\Icon_Update.png" />
     <None Include="Resources\Icon_IngameItemEditing.png" />

@@ -336,6 +336,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Resources\Icon_Unequal.png" />
     <None Include="Resources\Icon_Update.png" />
     <None Include="Resources\Icon_IngameItemEditing.png" />
     <None Include="Resources\IngameItemEditing.png" />

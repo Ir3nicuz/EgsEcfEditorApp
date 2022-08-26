@@ -453,9 +453,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_Update {
+        internal static System.Drawing.Bitmap Icon_Unequal {
             get {
-                object obj = ResourceManager.GetObject("Icon_Update", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_Unequal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

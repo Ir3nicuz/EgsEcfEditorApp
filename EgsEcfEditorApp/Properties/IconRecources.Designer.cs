@@ -93,6 +93,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_AllUnequalItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_AllUnequalItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_AlphabeticSorting {
             get {
                 object obj = ResourceManager.GetObject("Icon_AlphabeticSorting", resourceCulture);
@@ -256,6 +266,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_NewFile {
             get {
                 object obj = ResourceManager.GetObject("Icon_NewFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_NoneUnequalItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_NoneUnequalItemsSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -436,6 +456,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_ShowOnlyNonFaultyItems {
             get {
                 object obj = ResourceManager.GetObject("Icon_ShowOnlyNonFaultyItems", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_SomeUnequalItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_SomeUnequalItemsSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

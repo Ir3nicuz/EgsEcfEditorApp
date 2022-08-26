@@ -127,6 +127,9 @@
   <data name="Icon_AddValueGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_AddValueGroup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Icon_AllUnequalItemsSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_AllUnequalItemsSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Icon_AlphabeticSorting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_AlphabeticSorting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -177,6 +180,9 @@
   </data>
   <data name="Icon_NewFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_NewFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_NoneUnequalItemsSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_NoneUnequalItemsSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_NumericSorting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_NumericSorting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -231,6 +237,9 @@
   </data>
   <data name="Icon_ShowOnlyNonFaultyItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_ShowOnlyNonFaultyItems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_SomeUnequalItemsSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_SomeUnequalItemsSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_Undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_Undo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -332,6 +332,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_SomeUnequalItemsSet.png" />
+    <None Include="Resources\Icon_NoneUnequalItemsSet.png" />
+    <None Include="Resources\Icon_AllUnequalItemsSet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

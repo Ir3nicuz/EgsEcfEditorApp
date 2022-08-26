@@ -135,9 +135,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Activates / deactivates all elements which would be updated.
         /// </summary>
-        internal static string EcfFileCAMDialog_ToolTip_ChangeAllUpdates {
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllUnequals {
             get {
-                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllUpdates", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllUnequals", resourceCulture);
             }
         }
         

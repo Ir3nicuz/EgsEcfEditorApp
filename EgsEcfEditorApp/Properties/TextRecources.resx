@@ -135,13 +135,13 @@
   <data name="EcfErrorView_ToolTip_ErrorSorterOriginOrder" xml:space="preserve">
     <value>Sets order of occurance</value>
   </data>
-  <data name="EcfFileCAMDialog_ToolTip_ChangeAllAdds" xml:space="preserve">
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllAddItems" xml:space="preserve">
     <value>Activates / deactivates all elements which would be added</value>
   </data>
-  <data name="EcfFileCAMDialog_ToolTip_ChangeAllRemoves" xml:space="preserve">
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllRemoveItems" xml:space="preserve">
     <value>Activates / deactivates all elements which would be removed</value>
   </data>
-  <data name="EcfFileCAMDialog_ToolTip_ChangeAllUnequals" xml:space="preserve">
+  <data name="EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems" xml:space="preserve">
     <value>Activates / deactivates all elements which would be updated</value>
   </data>
   <data name="EcfFileOpenDialog_ToolTip_Encoding" xml:space="preserve">

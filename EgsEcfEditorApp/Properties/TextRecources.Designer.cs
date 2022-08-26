@@ -117,27 +117,27 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Activates / deactivates all elements which would be added.
         /// </summary>
-        internal static string EcfFileCAMDialog_ToolTip_ChangeAllAdds {
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllAddItems {
             get {
-                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllAdds", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllAddItems", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Activates / deactivates all elements which would be removed.
         /// </summary>
-        internal static string EcfFileCAMDialog_ToolTip_ChangeAllRemoves {
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllRemoveItems {
             get {
-                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllRemoves", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllRemoveItems", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Activates / deactivates all elements which would be updated.
         /// </summary>
-        internal static string EcfFileCAMDialog_ToolTip_ChangeAllUnequals {
+        internal static string EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems {
             get {
-                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllUnequals", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems", resourceCulture);
             }
         }
         

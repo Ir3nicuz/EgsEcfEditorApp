@@ -332,6 +332,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_SomeRemoveItemsSet.png" />
+    <None Include="Resources\Icon_SomeAddItemsSet.png" />
+    <None Include="Resources\Icon_NoneRemoveItemsSet.png" />
+    <None Include="Resources\Icon_NoneAddItemsSet.png" />
+    <None Include="Resources\Icon_AllRemoveItemsSet.png" />
+    <None Include="Resources\Icon_AllAddItemsSet.png" />
     <None Include="Resources\Icon_SomeUnequalItemsSet.png" />
     <None Include="Resources\Icon_NoneUnequalItemsSet.png" />
     <None Include="Resources\Icon_AllUnequalItemsSet.png" />

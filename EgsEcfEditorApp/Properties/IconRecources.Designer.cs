@@ -93,6 +93,26 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_AllAddItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_AllAddItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_AllRemoveItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_AllRemoveItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_AllUnequalItemsSet {
             get {
                 object obj = ResourceManager.GetObject("Icon_AllUnequalItemsSet", resourceCulture);
@@ -266,6 +286,26 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_NewFile {
             get {
                 object obj = ResourceManager.GetObject("Icon_NewFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_NoneAddItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_NoneAddItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_NoneRemoveItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_NoneRemoveItemsSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -456,6 +496,26 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_ShowOnlyNonFaultyItems {
             get {
                 object obj = ResourceManager.GetObject("Icon_ShowOnlyNonFaultyItems", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_SomeAddItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_SomeAddItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_SomeRemoveItemsSet {
+            get {
+                object obj = ResourceManager.GetObject("Icon_SomeRemoveItemsSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

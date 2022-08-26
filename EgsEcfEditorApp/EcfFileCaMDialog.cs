@@ -105,15 +105,15 @@ namespace EcfCAMTools
 
         private EcfToolBarThreeStateCheckBox ChangeAllAddsButton { get; } = new EcfToolBarThreeStateCheckBox(
             TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllAdds, IconRecources.Icon_ReloadFile, IconRecources.Icon_Add, IconRecources.Icon_Remove);
-        private EcfToolBarThreeStateCheckBox ChangeAllUpdatesButton { get; } = new EcfToolBarThreeStateCheckBox(
-            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllUpdates, IconRecources.Icon_ReloadFile, IconRecources.Icon_Add, IconRecources.Icon_Remove);
+        private EcfToolBarThreeStateCheckBox ChangeAllUnequalsButton { get; } = new EcfToolBarThreeStateCheckBox(
+            TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllUnequals, IconRecources.Icon_SomeUnequalItemsSet, IconRecources.Icon_AllUnequalItemsSet, IconRecources.Icon_NoneUnequalItemsSet);
         private EcfToolBarThreeStateCheckBox ChangeAllRemovesButton { get; } = new EcfToolBarThreeStateCheckBox(
             TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllRemoves, IconRecources.Icon_ReloadFile, IconRecources.Icon_Add, IconRecources.Icon_Remove);
 
         public CompareSelectionTools() : base()
         {
             Add(ChangeAllAddsButton).Click += ChangeAllAddsButton_Click;
-            Add(ChangeAllUpdatesButton).Click += ChangeAllUpdatesButton_Click;
+            Add(ChangeAllUnequalsButton).Click += ChangeAllUpdatesButton_Click;
             Add(ChangeAllRemovesButton).Click += ChangeAllRemovesButton_Click;
         }
 
@@ -132,12 +132,12 @@ namespace EcfCAMTools
         }
         private void ChangeAllUpdatesButton_Click(object sender, EventArgs evt)
         {
-            if (ChangeAllUpdatesButton.CheckState == CheckState.Indeterminate)
+            if (ChangeAllUnequalsButton.CheckState == CheckState.Indeterminate)
             {
-                ChangeAllUpdatesButton.CheckState = CheckState.Unchecked;
+                ChangeAllUnequalsButton.CheckState = CheckState.Unchecked;
                 SelectNoneUpdatesClicked?.Invoke(sender, evt);
             }
-            else if (ChangeAllUpdatesButton.CheckState == CheckState.Checked)
+            else if (ChangeAllUnequalsButton.CheckState == CheckState.Checked)
             {
                 SelectAllUpdatesClicked?.Invoke(sender, evt);
             }
@@ -162,7 +162,7 @@ namespace EcfCAMTools
         }
         public void SetAllUpdatesButton(CheckState state)
         {
-            ChangeAllUpdatesButton.CheckState = state;
+            ChangeAllUnequalsButton.CheckState = state;
         }
         public void SetAllRemovesButton(CheckState state)
         {

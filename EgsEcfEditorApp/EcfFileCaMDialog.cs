@@ -29,7 +29,7 @@ namespace EgsEcfEditorApp
         // events
         private void InitForm()
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
             Text = TitleRecources.EcfFileCAMDialog_Header;
 
             CloseButton.Text = TitleRecources.Generic_Close;

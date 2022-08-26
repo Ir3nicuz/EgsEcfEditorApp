@@ -21,7 +21,7 @@ namespace EcfFileViews
         // events
         private void InitForm()
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
 
             AbortButton.Text = TitleRecources.Generic_Abort;
             OkButton.Text = TitleRecources.Generic_Ok;

@@ -24,7 +24,7 @@ namespace EgsEcfEditorApp
         // event
         private void InitForm()
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
             InitGui();
             InitWorker();
         }

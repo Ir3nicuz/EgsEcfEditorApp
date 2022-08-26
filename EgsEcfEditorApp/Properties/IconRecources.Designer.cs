@@ -103,9 +103,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Icon_App {
+        internal static System.Drawing.Icon Icon_AppBranding {
             get {
-                object obj = ResourceManager.GetObject("Icon_App", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_AppBranding", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -66,7 +66,7 @@ namespace EcfFileViews
         // unspecific
         private void InitForm(EgsEcfFile file)
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
             File = file;
 
             // Hack to hide tabs

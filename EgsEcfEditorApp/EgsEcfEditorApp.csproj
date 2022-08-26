@@ -33,8 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Icon_AppBranding.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -216,7 +215,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>WindowSettings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\AppIcon.ico" />
+    <None Include="Resources\Icon_AppBranding.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon_Add.png" />
@@ -258,13 +257,7 @@
     <None Include="Resources\Icon_CloseFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon_Compare.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Icon_Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icon_Merge.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon_MoveDown.png" />
@@ -309,9 +302,6 @@
     <None Include="Resources\Icon_SaveAsFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon_SaveAsFilteredFile.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Icon_SaveFile.png" />
   </ItemGroup>
   <ItemGroup>
@@ -337,11 +327,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon_Unequal.png" />
-    <None Include="Resources\Icon_Update.png" />
     <None Include="Resources\Icon_IngameItemEditing.png" />
-    <None Include="Resources\IngameItemEditing.png" />
-    <None Include="Resources\Icon_IngameItemCreation.png" />
     <None Include="Resources\Icon_CompareAndMerge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon_AppBranding.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

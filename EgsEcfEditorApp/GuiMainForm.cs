@@ -67,7 +67,7 @@ namespace EgsEcfEditorApp
             Text = string.Format("{0} - {1}", 
                 Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false).Cast<AssemblyTitleAttribute>().FirstOrDefault().Title, 
                 Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
             
             RestoreWindowSettings();
             RestoreFilterSettings();

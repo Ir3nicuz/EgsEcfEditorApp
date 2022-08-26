@@ -23,7 +23,7 @@ namespace EgsEcfEditorApp
         // events
         private void InitForm()
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
             Text = TitleRecources.EcfSettingsDialog_Header;
 
             // Hack to hide tabs
@@ -210,7 +210,7 @@ namespace EgsEcfEditorApp
             ReadmeTitleLabel.Text = TitleRecources.Generic_Manual;
 
             AppNameDataLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false).Cast<AssemblyTitleAttribute>().FirstOrDefault().Title;
-            LogoPictureBox.Image = new Icon(IconRecources.Icon_App, 256, 256).ToBitmap();
+            LogoPictureBox.Image = new Icon(IconRecources.Icon_AppBranding, 256, 256).ToBitmap();
             AuthorDataLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false).Cast<AssemblyCompanyAttribute>().FirstOrDefault().Company;
             VersionDataLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LicenseDataLinkLabel.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false).Cast<AssemblyCopyrightAttribute>().FirstOrDefault().Copyright;

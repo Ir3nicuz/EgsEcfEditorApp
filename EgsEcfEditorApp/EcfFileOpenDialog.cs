@@ -33,7 +33,7 @@ namespace EcfFileViews
         //events
         private void InitForm()
         {
-            Icon = IconRecources.Icon_App;
+            Icon = IconRecources.Icon_AppBranding;
 
             InitFilePathAndNameBox("");
             InitFormatDefinitionBox();

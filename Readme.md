@@ -190,7 +190,7 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_ApplyFilter.png" title="icon" width="16" height="16"/> apply filter
 - <img src="EgsEcfEditorApp\Resources\Icon_ClearFilter.png" title="icon" width="16" height="16"/> clear filter
 - <img src="EgsEcfEditorApp\Resources\Icon_ShowAllItems.png" title="icon" width="16" height="16"/> show item with / without error
-- <img src="EgsEcfEditorApp\Resources\Icon_ChangeSortDirection.png" title="icon" width="16" height="16"/> switch the sort direction
+- <img src="EgsEcfEditorApp\Resources\Icon_SortDirectionAscending.png" title="icon" width="16" height="16"/> switch the sort direction
 - <img src="EgsEcfEditorApp\Resources\Icon_NumericSorting.png" title="icon" width="16" height="16"/> sets sorting to the origin (file) order
 - <img src="EgsEcfEditorApp\Resources\Icon_AlphabeticSorting.png" title="icon" width="16" height="16"/> sets sorting to alphabetic order
 

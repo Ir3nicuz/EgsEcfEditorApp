@@ -242,9 +242,6 @@
     <None Include="Resources\Icon_ChangeSimple.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon_ChangeSortDirection.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Icon_CheckDefinition.png" />
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +329,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_SortDirectionDescending.png" />
+    <None Include="Resources\Icon_SortDirectionAscending.png" />
+    <None Include="Resources\Icon_MoveRight.png" />
+    <None Include="Resources\Icon_MoveLeft.png" />
     <None Include="Resources\Icon_SomeRemoveItemsSet.png" />
     <None Include="Resources\Icon_SomeAddItemsSet.png" />
     <None Include="Resources\Icon_NoneRemoveItemsSet.png" />

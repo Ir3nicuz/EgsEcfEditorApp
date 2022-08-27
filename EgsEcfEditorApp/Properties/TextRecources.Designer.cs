@@ -142,6 +142,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Integrates the selected changes into the opposite file.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_DoMerge {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_DoMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For a new file the encoding has to be selected. The already selected default encoding should be suitable in most cases..
         /// </summary>
         internal static string EcfFileOpenDialog_ToolTip_Encoding {

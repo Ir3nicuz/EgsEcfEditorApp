@@ -63,27 +63,27 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Comments.
         /// </summary>
-        internal static string EcfFileViewTools_EcfTreeFilter_SelectableItems_Comments {
+        internal static string EcfFileViewTools_EcfStructureFilter_SelectableItems_Comments {
             get {
-                return ResourceManager.GetString("EcfFileViewTools.EcfTreeFilter+SelectableItems.Comments", resourceCulture);
+                return ResourceManager.GetString("EcfFileViewTools.EcfStructureFilter+SelectableItems.Comments", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Data blocks.
         /// </summary>
-        internal static string EcfFileViewTools_EcfTreeFilter_SelectableItems_DataBlocks {
+        internal static string EcfFileViewTools_EcfStructureFilter_SelectableItems_DataBlocks {
             get {
-                return ResourceManager.GetString("EcfFileViewTools.EcfTreeFilter+SelectableItems.DataBlocks", resourceCulture);
+                return ResourceManager.GetString("EcfFileViewTools.EcfStructureFilter+SelectableItems.DataBlocks", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameters.
         /// </summary>
-        internal static string EcfFileViewTools_EcfTreeFilter_SelectableItems_Parameters {
+        internal static string EcfFileViewTools_EcfStructureFilter_SelectableItems_Parameters {
             get {
-                return ResourceManager.GetString("EcfFileViewTools.EcfTreeFilter+SelectableItems.Parameters", resourceCulture);
+                return ResourceManager.GetString("EcfFileViewTools.EcfStructureFilter+SelectableItems.Parameters", resourceCulture);
             }
         }
         

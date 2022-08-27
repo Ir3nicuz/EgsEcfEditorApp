@@ -144,6 +144,9 @@
   <data name="EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems" xml:space="preserve">
     <value>Aktiviert / deaktiviert alle Elemente die geändert werden</value>
   </data>
+  <data name="EcfFileCAMDialog_ToolTip_DoMerge" xml:space="preserve">
+    <value>Integriert die ausgewählten Änderungen in die gegensätzliche Datei</value>
+  </data>
   <data name="EcfFileOpenDialog_ToolTip_Encoding" xml:space="preserve">
     <value>Für eine neu erstellte Datei muss das Encoding festgelegt werden. Das vorausgewählte Encoding sollte in den meisten Fällen geeignet sein.</value>
   </data>

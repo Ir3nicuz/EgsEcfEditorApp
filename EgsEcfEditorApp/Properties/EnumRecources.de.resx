@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EcfFileViewTools.EcfTreeFilter+SelectableItems.Comments" xml:space="preserve">
+  <data name="EcfFileViewTools.EcfStructureFilter+SelectableItems.Comments" xml:space="preserve">
     <value>Kommentare</value>
   </data>
-  <data name="EcfFileViewTools.EcfTreeFilter+SelectableItems.DataBlocks" xml:space="preserve">
+  <data name="EcfFileViewTools.EcfStructureFilter+SelectableItems.DataBlocks" xml:space="preserve">
     <value>Datenblöcke</value>
   </data>
-  <data name="EcfFileViewTools.EcfTreeFilter+SelectableItems.Parameters" xml:space="preserve">
+  <data name="EcfFileViewTools.EcfStructureFilter+SelectableItems.Parameters" xml:space="preserve">
     <value>Parameter</value>
   </data>
   <data name="EgsEcfParser.EcfErrorGroups.Creating" xml:space="preserve">

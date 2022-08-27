@@ -183,16 +183,6 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_ChangeSortDirection {
-            get {
-                object obj = ResourceManager.GetObject("Icon_ChangeSortDirection", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Icon_CheckDefinition {
             get {
                 object obj = ResourceManager.GetObject("Icon_CheckDefinition", resourceCulture);
@@ -266,6 +256,26 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_MoveDown {
             get {
                 object obj = ResourceManager.GetObject("Icon_MoveDown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_MoveLeft {
+            get {
+                object obj = ResourceManager.GetObject("Icon_MoveLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_MoveRight {
+            get {
+                object obj = ResourceManager.GetObject("Icon_MoveRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -526,6 +536,26 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_SomeUnequalItemsSet {
             get {
                 object obj = ResourceManager.GetObject("Icon_SomeUnequalItemsSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_SortDirectionAscending {
+            get {
+                object obj = ResourceManager.GetObject("Icon_SortDirectionAscending", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_SortDirectionDescending {
+            get {
+                object obj = ResourceManager.GetObject("Icon_SortDirectionDescending", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

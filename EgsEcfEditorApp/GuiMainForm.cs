@@ -21,7 +21,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms.VisualStyles;
 using static EcfFileViews.EcfItemEditingDialog;
 using static EcfToolBarControls.EcfToolBarCheckComboBox;
-using static EcfFileViewTools.EcfStructureFilter;
 using System.ComponentModel;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
@@ -31,6 +30,7 @@ using static EcfFileViews.EcfBaseView;
 using static EgsEcfParser.EcfDefinitionHandling;
 using static EcfFileViews.EcfFileOpenDialog;
 using EcfWinFormControls;
+using static EcfFileViewTools.EcfFilterControl;
 
 namespace EgsEcfEditorApp
 {
@@ -1102,7 +1102,7 @@ namespace EcfFileViews
             else if (!IsUpdating)
             {
                 IsUpdating = true;
-                TreeView.UpdateView(TreeFilter, ParameterFilter);
+                TreeView.UpdateView(FilterControl, TreeFilter, ParameterFilter);
                 EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
                 ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
                 InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
@@ -1836,12 +1836,12 @@ namespace EcfFileViews
         }
 
         // publics
-        public void UpdateView(EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
+        public void UpdateView(EcfFilterControl filterControl, EcfStructureFilter structureFilter, EcfParameterFilter parameterFilter)
         {
             if (!IsUpdating)
             {
                 IsUpdating = true;
-                BuildNodesTree(treeFilter, parameterFilter);
+                BuildNodesTree(filterControl, structureFilter, parameterFilter);
                 UpdateSorterInvoke();
                 RefreshViewInvoke();
                 IsUpdating = false;
@@ -1983,35 +1983,35 @@ namespace EcfFileViews
                 IsSelectionUpdating = false;
             }
         }
-        private void BuildNodesTree(EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
+        private void BuildNodesTree(EcfFilterControl filterControl, EcfStructureFilter structureFilter, EcfParameterFilter parameterFilter)
         {
             RootTreeNodes.Clear();
             AllTreeNodes.Clear();
 
             foreach (EcfStructureItem item in File.ItemList)
             {
-                BuildNodesTree(item, treeFilter, parameterFilter);
+                BuildNodesTree(item, filterControl, structureFilter, parameterFilter);
             }
         }
         private void BuildNodesTree(EcfStructureItem item)
         {
             RootTreeNodes.Clear();
             AllTreeNodes.Clear();
-            BuildNodesTree(item, null, null);
+            BuildNodesTree(item, null, null, null);
         }
-        private void BuildNodesTree(EcfStructureItem item, EcfStructureFilter treeFilter, EcfParameterFilter parameterFilter)
+        private void BuildNodesTree(EcfStructureItem item, EcfFilterControl filterControl, EcfStructureFilter structureFilter, EcfParameterFilter parameterFilter)
         {
-            if (TryBuildNode(out EcfTreeNode rootNode, item, treeFilter, parameterFilter))
+            if (TryBuildNode(out EcfTreeNode rootNode, item, structureFilter, parameterFilter))
             {
-                if (treeFilter != null && treeFilter.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyFaultyItems && !rootNode.HasError)
+                if (filterControl != null && filterControl.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyFaultyItems && !rootNode.HasError)
                 {
                     return;
                 }
-                if (treeFilter != null && treeFilter.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyNonFaultyItems && rootNode.HasError)
+                if (filterControl != null && filterControl.ErrorDisplayMode == ErrorDisplayModes.ShowOnlyNonFaultyItems && rootNode.HasError)
                 {
                     return;
                 }
-                if (treeFilter?.IsLike(rootNode.Text) ?? true)
+                if (structureFilter?.IsLike(rootNode.Text) ?? true)
                 {
                     RootTreeNodes.Add(rootNode);
                     AllTreeNodes.Add(rootNode);
@@ -2051,7 +2051,6 @@ namespace EcfFileViews
                             node.PreparedNodes.Add(childNode);
                         }
                     }
-                    //if (node.PreparedNodes.Count == 0 && !(parameterFilter?.IsLikeText.Equals(string.Empty) ?? true))
                     if (node.PreparedNodes.Count == 0 && (parameterFilter?.AnyFilterSet() ?? false))
                     {
                         return false;
@@ -3263,11 +3262,22 @@ namespace EcfFileViewTools
         public event EventHandler ClearFilterClicked;
 
         public EcfStructureItem SpecificItem { get; private set; } = null;
+        public ErrorDisplayModes ErrorDisplayMode { get; private set; } = ErrorDisplayModes.ShowAllItems;
 
         private List<EcfBaseFilter> AttachedFilters { get; } = new List<EcfBaseFilter>();
 
         private EcfToolBarButton ApplyFilterButton { get; } = new EcfToolBarButton(TextRecources.EcfTabPage_ToolTip_FilterApplyButton, IconRecources.Icon_ApplyFilter, null);
         private EcfToolBarButton ClearFilterButton { get; } = new EcfToolBarButton(TextRecources.EcfTabPage_ToolTip_FilterClearButton, IconRecources.Icon_ClearFilter, null);
+        private EcfToolBarThreeStateCheckBox ErrorDisplaySelector { get; } = new EcfToolBarThreeStateCheckBox(
+            TextRecources.EcfTabPage_ToolTip_TreeErrorDisplayModeSelector, IconRecources.Icon_ShowAllItems,
+            IconRecources.Icon_ShowOnlyFaultyItems, IconRecources.Icon_ShowOnlyNonFaultyItems);
+
+        public enum ErrorDisplayModes
+        {
+            ShowAllItems,
+            ShowOnlyFaultyItems,
+            ShowOnlyNonFaultyItems,
+        }
 
         public EcfFilterControl(string gameMode, string fileType) : base()
         {
@@ -3276,6 +3286,7 @@ namespace EcfFileViewTools
 
             Add(ApplyFilterButton).Click += ApplyFilterButton_Click;
             Add(ClearFilterButton).Click += ClearFilterButton_Click;
+            Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
         }
 
         // events
@@ -3287,6 +3298,10 @@ namespace EcfFileViewTools
         {
             Reset();
             ClearFilterClicked?.Invoke(sender, evt);
+        }
+        private void ChangeErrorDisplayButton_Click(object sender, EventArgs evt)
+        {
+            LoadErrorDisplayState();
         }
 
         // publics
@@ -3305,18 +3320,91 @@ namespace EcfFileViewTools
         }
         public void Disable()
         {
-            ApplyFilterButton.Enabled = false;
+            InvokeDisable();
             AttachedFilters.ForEach(filter => filter.Disable());
         }
         public void Enable()
         {
-            ApplyFilterButton.Enabled = true;
+            InvokeEnable();
             AttachedFilters.ForEach(filter => filter.Enable());
         }
         public void Reset()
         {
             SetSpecificItem(null);
+            InvokeReset();
             AttachedFilters.ForEach(filter => filter.Reset());
+        }
+        public bool AnyFilterSet()
+        {
+            return ErrorDisplayMode != ErrorDisplayModes.ShowAllItems || AttachedFilters.Any(filter => filter.AnyFilterSet());
+        }
+
+        // privates
+        private void LoadErrorDisplayState()
+        {
+            switch (ErrorDisplaySelector.CheckState)
+            {
+                case CheckState.Checked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyFaultyItems; break;
+                case CheckState.Unchecked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyNonFaultyItems; break;
+                default: ErrorDisplayMode = ErrorDisplayModes.ShowAllItems; break;
+            }
+        }
+        private void InvokeReset()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    ResetInvoked();
+                });
+            }
+            else
+            {
+                ResetInvoked();
+            }
+        }
+        private void ResetInvoked()
+        {
+            ErrorDisplaySelector.Reset();
+            LoadErrorDisplayState();
+        }
+        private void InvokeEnable()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    EnableInvoked();
+                });
+            }
+            else
+            {
+                EnableInvoked();
+            }
+        }
+        private void EnableInvoked()
+        {
+            ApplyFilterButton.Enabled = true;
+            ErrorDisplaySelector.Enabled = true;
+        }
+        private void InvokeDisable()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    DisableInvoked();
+                });
+            }
+            else
+            {
+                DisableInvoked();
+            }
+        }
+        private void DisableInvoked()
+        {
+            ApplyFilterButton.Enabled = false;
+            ErrorDisplaySelector.Enabled = false;
         }
     }
     public abstract class EcfBaseFilter : EcfToolBox
@@ -3448,19 +3536,7 @@ namespace EcfFileViewTools
         public bool IsCommentsActive { get; private set; } = false;
         public bool IsParametersActive { get; private set; } = false;
         public bool IsDataBlocksActive { get; private set; } = false;
-        public ErrorDisplayModes ErrorDisplayMode { get; private set; } = ErrorDisplayModes.ShowAllItems;
 
-        private EcfToolBarThreeStateCheckBox ErrorDisplaySelector { get; } =
-            new EcfToolBarThreeStateCheckBox(
-                TextRecources.EcfTabPage_ToolTip_TreeErrorDisplayModeSelector, IconRecources.Icon_ShowAllItems,
-                IconRecources.Icon_ShowOnlyFaultyItems, IconRecources.Icon_ShowOnlyNonFaultyItems);
-
-        public enum ErrorDisplayModes
-        {
-            ShowAllItems,
-            ShowOnlyFaultyItems,
-            ShowOnlyNonFaultyItems,
-        }
         private enum SelectableItems
         {
             Comments,
@@ -3481,8 +3557,6 @@ namespace EcfFileViewTools
 
             ItemSelector.SelectionChangeCommitted += ItemSelector_SelectionChangeCommitted;
 
-            Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
-
             Reset();
         }
 
@@ -3491,15 +3565,11 @@ namespace EcfFileViewTools
         {
             LoadItemSelectionStates();
         }
-        private void ChangeErrorDisplayButton_Click(object sender, EventArgs evt)
-        {
-            LoadErrrorDisplayState((sender as EcfToolBarThreeStateCheckBox).CheckState);
-        }
 
         // publics
         public override bool AnyFilterSet()
         {
-            return ErrorDisplayMode != ErrorDisplayModes.ShowAllItems || base.AnyFilterSet();
+            return base.AnyFilterSet();
         }
 
         // privates
@@ -3509,31 +3579,19 @@ namespace EcfFileViewTools
             IsParametersActive = ItemSelector.IsItemChecked(SelectableItems.Parameters.ToString());
             IsDataBlocksActive = ItemSelector.IsItemChecked(SelectableItems.DataBlocks.ToString());
         }
-        private void LoadErrrorDisplayState(CheckState state)
-        {
-            switch (state)
-            {
-                case CheckState.Checked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyFaultyItems; break;
-                case CheckState.Unchecked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyNonFaultyItems; break;
-                default: ErrorDisplayMode = ErrorDisplayModes.ShowAllItems; break;
-            }
-        }
+        
         protected override void ResetInvoked()
         {
             base.ResetInvoked();
             LoadItemSelectionStates();
-            ErrorDisplaySelector.Reset();
-            LoadErrrorDisplayState(ErrorDisplaySelector.CheckState);
         }
         protected override void EnableInvoked()
         {
             base.EnableInvoked();
-            ErrorDisplaySelector.Enabled = true;
         }
         protected override void DisableInvoked()
         {
             base.DisableInvoked();
-            ErrorDisplaySelector.Enabled = false;
         }
     }
     public class EcfParameterFilter : EcfBaseFilter
@@ -3597,7 +3655,7 @@ namespace EcfFileViewTools
         {
             ItemCountSelector = (EcfToolBarComboBox)Add(new EcfToolBarComboBox(itemCountSelectorTooltip));
             ItemGroupSelector = (EcfToolBarNumericUpDown)Add(new EcfToolBarNumericUpDown(itemGroupSelectorTooltip));
-            DirectionSelector = (EcfToolBarCheckBox)Add(new EcfToolBarCheckBox(directionToolTip, IconRecources.Icon_ChangeSortDirection, null));
+            DirectionSelector = (EcfToolBarCheckBox)Add(new EcfToolBarTwoStateCheckBox(directionToolTip, IconRecources.Icon_SortDirectionAscending, IconRecources.Icon_SortDirectionDescending));
             OriginOrderSelector = (EcfToolBarRadioButton)Add(new EcfToolBarRadioButton(originToolTip, IconRecources.Icon_NumericSorting, null));
             AlphabeticOrderSelector = (EcfToolBarRadioButton)Add(new EcfToolBarRadioButton(aplhabeticToolTip, IconRecources.Icon_AlphabeticSorting, null));
 
@@ -4145,32 +4203,69 @@ namespace EcfToolBarControls
             {
                 FlatStyle = FlatStyle.Flat;
                 FlatAppearance.BorderSize = 0;
+                FlatAppearance.BorderColor = SystemColors.ControlDark;
+                FlatAppearance.CheckedBackColor = Color.Transparent;
+                FlatAppearance.MouseOverBackColor = Color.Transparent;
+                FlatAppearance.MouseDownBackColor = Color.Transparent;
                 Image = image;
             }
             else if (text != null)
             {
                 Text = text;
             }
+
+            CheckedChanged += EcfToolBarRadioButton_CheckedChanged;
+        }
+
+        // events
+        private void EcfToolBarRadioButton_CheckedChanged(object sender, EventArgs evt)
+        {
+            FlatAppearance.BorderSize = Checked ? 1 : 0;
         }
     }
-    public class EcfToolBarCheckBox : CheckBox
+    public abstract class EcfToolBarCheckBox : CheckBox
     {
-        public EcfToolBarCheckBox(string toolTip, Image image, string text) : base()
+        public EcfToolBarCheckBox(string toolTip) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
             new ToolTip().SetToolTip(this, toolTip);
 
+            AutoCheck = true;
+
             Appearance = Appearance.Button;
-            if (image != null)
-            {
-                FlatStyle = FlatStyle.Flat;
-                FlatAppearance.BorderSize = 0;
-                Image = image;
-            }
-            else if (text != null)
-            {
-                Text = text;
-            }
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
+            FlatAppearance.CheckedBackColor = Color.Transparent;
+            FlatAppearance.MouseOverBackColor = Color.Transparent;
+            FlatAppearance.MouseDownBackColor = Color.Transparent;
+        }
+    }
+    public class EcfToolBarTwoStateCheckBox : EcfToolBarCheckBox
+    {
+        private Image CheckedImage { get; }
+        private Image UncheckedImage { get; }
+
+        public EcfToolBarTwoStateCheckBox(string toolTip, Image checkedImage, Image uncheckedImage) : base(toolTip)
+        {
+            CheckedImage = checkedImage;
+            UncheckedImage = uncheckedImage;
+            Image = UncheckedImage;
+            
+            CheckStateChanged += ToolBarTwoStateCheckBox_CheckStateChanged;
+
+            Reset();
+        }
+
+        // events
+        private void ToolBarTwoStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
+        {
+            Image = Checked ? CheckedImage : UncheckedImage;
+        }
+
+        // public
+        public void Reset()
+        {
+            Checked = false;
         }
     }
     public class EcfToolBarThreeStateCheckBox : EcfToolBarCheckBox
@@ -4179,15 +4274,13 @@ namespace EcfToolBarControls
         private Image CheckedImage { get; }
         private Image UncheckedImage { get; }
 
-        public EcfToolBarThreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage)
-            : base(toolTip, indeterminateImage, null)
+        public EcfToolBarThreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage) : base(toolTip)
         {
             IndeterminateImage = indeterminateImage;
             CheckedImage = checkedImage;
             UncheckedImage = uncheckedImage;
 
             ThreeState = true;
-            AutoCheck = true;
 
             CheckStateChanged += ToolBarThreeStateCheckBox_CheckStateChanged;
 

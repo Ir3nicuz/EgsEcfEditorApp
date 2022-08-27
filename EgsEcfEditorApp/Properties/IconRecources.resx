@@ -154,9 +154,6 @@
   <data name="Icon_ChangeSimple" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_ChangeSimple.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Icon_ChangeSortDirection" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icon_ChangeSortDirection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Icon_CheckDefinition" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_CheckDefinition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -180,6 +177,12 @@
   </data>
   <data name="Icon_MoveDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_MoveDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_MoveLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_MoveLeft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_MoveRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_MoveRight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_MoveUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_MoveUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -258,6 +261,12 @@
   </data>
   <data name="Icon_SomeUnequalItemsSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_SomeUnequalItemsSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_SortDirectionAscending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_SortDirectionAscending.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_SortDirectionDescending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_SortDirectionDescending.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_Undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_Undo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -729,7 +729,21 @@ namespace EgsEcfParser
             }
         }
     } 
-    
+    public static class EcfStructureTools
+    {
+        public static EcfBaseItem FindRootItem(EcfBaseItem item)
+        {
+            if (item?.IsRoot() ?? true)
+            {
+                return item;
+            }
+            else
+            {
+                return FindRootItem(item?.Parent);
+            }
+        }
+    }
+
     public class EgsEcfFile
     {
         public string FilePath { get; private set; } = null;
@@ -1791,19 +1805,6 @@ namespace EgsEcfParser
             StructureLevel = level + 1;
             OnStructureDataUpdate();
         }
-        public static EcfBaseItem GetRootItem(EcfBaseItem item)
-        {
-            EcfBaseItem parent;
-            if (item?.IsRoot() ?? true)
-            {
-                parent = item;
-            }
-            else
-            {
-                parent = GetRootItem(item?.Parent);
-            }
-            return parent;
-        }
 
         // private
         protected abstract void OnStructureDataUpdate();
@@ -1839,7 +1840,9 @@ namespace EgsEcfParser
         public abstract string GetFullName();
         public abstract string BuildIdentification();
         public abstract int Revalidate();
+        public abstract bool Equals(EcfStructureItem other, bool includeStructure);
 
+        // publics
         public EcfStructureItem BuildDeepCopy()
         {
             switch (this)
@@ -1896,30 +1899,6 @@ namespace EgsEcfParser
             });
             return count;
         }
-        protected bool RemoveError(EcfError error)
-        {
-            if (error != null)
-            {
-                InternalErrors.Remove(error);
-                return true;
-            }
-            return false;
-        }
-        protected int RemoveErrors(List<EcfError> errors)
-        {
-            int count = 0;
-            errors?.ForEach(error => {
-                if (RemoveError(error))
-                {
-                    count++;
-                }
-            });
-            return count;
-        }
-        private int RemoveErrors(EcfErrors error)
-        {
-            return RemoveErrors(Errors.Where(err => err.Type.Equals(error)).ToList());
-        }
         public int RemoveErrors(params EcfErrors[] errors)
         {
             int count = 0;
@@ -1958,6 +1937,32 @@ namespace EgsEcfParser
         {
             InternalComments.Clear();
         }
+
+        // privates
+        protected bool RemoveError(EcfError error)
+        {
+            if (error != null)
+            {
+                InternalErrors.Remove(error);
+                return true;
+            }
+            return false;
+        }
+        protected int RemoveErrors(List<EcfError> errors)
+        {
+            int count = 0;
+            errors?.ForEach(error => {
+                if (RemoveError(error))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        private int RemoveErrors(EcfErrors error)
+        {
+            return RemoveErrors(Errors.Where(err => err.Type.Equals(error)).ToList());
+        }
     }
     public abstract class EcfKeyValueItem : EcfStructureItem
     {
@@ -1995,6 +2000,7 @@ namespace EgsEcfParser
             AddValues(template.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
         }
 
+        // publics
         public override string BuildIdentification()
         {
             return string.Format("{0} {1}", DefaultName, Key);
@@ -2010,27 +2016,6 @@ namespace EgsEcfParser
             if (DefinedKeyValueItems == null) { Definition = null; return; }
             CheckItemUnknown(definitionGroup, Key, ItemType, out ItemDefinition itemDefinition, EcfErrorGroups.Editing);
             Definition = itemDefinition;
-        }
-        protected int RevalidateKeyValue()
-        {
-            if (DefinedKeyValueItems == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
-
-            int errorCount = 0;
-            errorCount += RevalidateKey() ? 1 : 0;
-            if (Definition != null) { errorCount += RevalidateValues(); }
-            return errorCount;
-        }
-        private bool RevalidateKey()
-        {
-            RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeUnknown);
-            bool result = AddError(CheckItemUnknown(DefinedKeyValueItems, Key, ItemType, out ItemDefinition itemDefinition, EcfErrorGroups.Editing));
-            Definition = itemDefinition;
-            return result;
-        }
-        private int RevalidateValues()
-        {
-            RemoveErrors(EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
-            return AddErrors(CheckValuesValid(InternalValueGroups, Definition, EcfFile?.Definition, EcfErrorGroups.Editing));
         }
         public bool IsUsingGroups()
         {
@@ -2136,9 +2121,31 @@ namespace EgsEcfParser
             return InternalValueGroups.IndexOf(group);
         }
 
+        // privates
         private void CheckKey(string key)
         {
             if (!IsKeyValid(key)) { throw new EcfException(EcfErrors.KeyNullOrEmpty, GetType().Name); }
+        }
+        protected int RevalidateKeyValue()
+        {
+            if (DefinedKeyValueItems == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
+
+            int errorCount = 0;
+            errorCount += RevalidateKey() ? 1 : 0;
+            if (Definition != null) { errorCount += RevalidateValues(); }
+            return errorCount;
+        }
+        private bool RevalidateKey()
+        {
+            RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeUnknown);
+            bool result = AddError(CheckItemUnknown(DefinedKeyValueItems, Key, ItemType, out ItemDefinition itemDefinition, EcfErrorGroups.Editing));
+            Definition = itemDefinition;
+            return result;
+        }
+        private int RevalidateValues()
+        {
+            RemoveErrors(EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
+            return AddErrors(CheckValuesValid(InternalValueGroups, Definition, EcfFile?.Definition, EcfErrorGroups.Editing));
         }
     }
     public class EcfAttribute : EcfKeyValueItem

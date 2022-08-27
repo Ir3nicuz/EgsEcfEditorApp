@@ -1,5 +1,4 @@
-﻿using EgsEcfParser;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -9,29 +8,31 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using EcfFileViews;
 using System.Collections.Generic;
-using static EcfFileViews.EcfTabPage;
-using static EcfFileViewTools.EcfSorter;
-using static EcfFileViews.EcfTabPage.CopyPasteClickedEventArgs;
-using EgsEcfEditorApp.Properties;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows.Forms.VisualStyles;
-using static EcfFileViews.EcfItemEditingDialog;
-using static EcfToolBarControls.EcfToolBarCheckComboBox;
 using System.ComponentModel;
-using static Helpers.EnumLocalisation;
-using static Helpers.FileHandling;
+using System.Drawing.Drawing2D;
+using EgsEcfEditorApp.Properties;
 using EcfToolBarControls;
 using EcfFileViewTools;
-using static EcfFileViews.EcfBaseView;
-using static EgsEcfParser.EcfDefinitionHandling;
-using static EcfFileViews.EcfFileOpenDialog;
+using EgsEcfParser;
+using EcfFileViews;
 using EcfWinFormControls;
+using static EcfFileViews.EcfBaseView;
+using static EcfFileViews.EcfFileOpenDialog;
+using static EcfFileViews.EcfItemEditingDialog;
+using static EcfFileViews.EcfTabPage.CopyPasteClickedEventArgs;
+using static EcfFileViews.EcfTabPage;
 using static EcfFileViewTools.EcfFilterControl;
-using System.Drawing.Drawing2D;
+using static EcfFileViewTools.EcfSorter;
+using static EgsEcfParser.EcfDefinitionHandling;
+using static EgsEcfParser.EcfStructureTools;
+using static EcfToolBarControls.EcfToolBarCheckComboBox;
+using static Helpers.EnumLocalisation;
+using static Helpers.FileHandling;
 
 namespace EgsEcfEditorApp
 {
@@ -1086,7 +1087,7 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 FilterControl.SetSpecificItem(item);
-                if (EcfBaseItem.GetRootItem(item) is EcfBlock block) { item = block; }
+                if (FindRootItem(item) is EcfBlock block) { item = block; }
                 TreeView.ShowSpecificItem(item);
                 ParameterView.ShowSpecificItem(item);
                 InfoView.ShowSpecificItem(item);

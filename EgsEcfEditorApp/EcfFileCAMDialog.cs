@@ -53,9 +53,12 @@ namespace EgsEcfEditorApp
 
 
 
-            FirstFileTreeView.Nodes.Add("0", "0", 0);
-            FirstFileTreeView.Nodes.Add("1", "1", 1);
-            FirstFileTreeView.Nodes.Add("2", "2", 2);
+            FirstFileTreeView.Nodes.Add("0", "0", 0, 0);
+            FirstFileTreeView.Nodes.Add("1", "1", 1, 1);
+            FirstFileTreeView.Nodes.Add("2", "2", 2, 2);
+            
+
+
 
         }
         private void CloseButton_Click(object sender, EventArgs evt)

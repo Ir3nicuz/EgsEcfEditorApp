@@ -16,8 +16,8 @@ namespace EgsEcfEditorApp
 
         private CompareSelectionTools FirstFileSelectionTools { get; } = new CompareSelectionTools();
         private CompareSelectionTools SecondFileSelectionTools { get; } = new CompareSelectionTools();
-        private MergeActionTools FirstFileActionTools { get; } = new MergeActionTools();
-        private MergeActionTools SecondFileActionTools { get; } = new MergeActionTools();
+        private MergeActionTools FirstFileActionTools { get; } = new MergeActionTools(IconRecources.Icon_MoveRight);
+        private MergeActionTools SecondFileActionTools { get; } = new MergeActionTools(IconRecources.Icon_MoveLeft);
 
         private ImageList CAMListViewIcons { get; } = new ImageList();
 
@@ -171,15 +171,11 @@ namespace EcfCAMTools
     }
     public class MergeActionTools : EcfToolBox
     {
-        public event EventHandler SelectAllAddingsClicked;
+        public event EventHandler DoMergeClicked;
 
-        public MergeActionTools() : base()
+        public MergeActionTools(Image doMergeIcon) : base()
         {
-            Add(new EcfToolBarThreeStateCheckBox("Test", 
-                IconRecources.Icon_CompareAndMerge,
-                IconRecources.Icon_AddValue,
-                IconRecources.Icon_ApplyFilter)
-                ).Click += (sender, evt) => SelectAllAddingsClicked?.Invoke(sender, evt);
+            Add(new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_DoMerge, doMergeIcon, null)).Click += (sender, evt) => DoMergeClicked?.Invoke(sender, evt);
         }
     }
 }

@@ -5,8 +5,8 @@ using EgsEcfEditorApp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using static Helpers.ImageAjustments;
 
 namespace EgsEcfEditorApp
 {
@@ -42,9 +42,9 @@ namespace EgsEcfEditorApp
             SecondFileActionContainer.Add(SecondFileActionTools);
             SecondFileSelectionContainer.Add(SecondFileSelectionTools);
 
-            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Add, 16, 3, 1));
-            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Unequal, 16, 3, 1));
-            CAMListViewIcons.Images.Add(PrepareIcon(IconRecources.Icon_Remove, 16, 3, 1));
+            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Add, 16, 3, 1));
+            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Unequal, 16, 3, 1));
+            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Remove, 16, 3, 1));
 
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
@@ -75,20 +75,7 @@ namespace EgsEcfEditorApp
         }
 
         // private
-        private static Bitmap PrepareIcon(Bitmap icon, int edge, int xGap, int yGap)
-        {
-            Bitmap bmp = new Bitmap(edge + 2 * xGap, edge + 2 * yGap);
-            using (Graphics gfx = Graphics.FromImage(bmp))
-            {
-                gfx.CompositingMode = CompositingMode.SourceCopy;
-                gfx.CompositingQuality = CompositingQuality.HighQuality;
-                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                gfx.SmoothingMode = SmoothingMode.HighQuality;
-                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                gfx.DrawImage(icon, new Rectangle(xGap, yGap, edge, edge));
-            }
-            return bmp;
-        }
+        
     }
 }
 

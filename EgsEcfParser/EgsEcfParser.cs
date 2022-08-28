@@ -8,6 +8,7 @@ using System.Xml;
 using static EgsEcfParser.EcfDefinitionHandling;
 using static EgsEcfParser.EcfFormatChecking;
 using static EgsEcfParser.EcfKeyValueItem;
+using static EgsEcfParser.EcfStructureTools;
 
 namespace EgsEcfParser
 {
@@ -627,7 +628,7 @@ namespace EgsEcfParser
         {
             return items.Except(items.Distinct(KeyItemComparer)).Cast<T>().ToList();
         }
-        public static EcfError CheckItemUnknown(ReadOnlyCollection<ItemDefinition> definition, string key, KeyValueItemTypes itemType, out ItemDefinition itemDefinition, EcfErrorGroups errorGroup)
+        public static EcfError CheckItemUnknown(ReadOnlyCollection<ItemDefinition> definition, string key, KeyValueItemTypes? itemType, out ItemDefinition itemDefinition, EcfErrorGroups errorGroup)
         {
             itemDefinition = definition?.FirstOrDefault(defParam => defParam.Name.Equals(key));
             if (itemDefinition != null) { return null; }
@@ -741,6 +742,77 @@ namespace EgsEcfParser
             {
                 return FindRootItem(item?.Parent);
             }
+        }
+        public static bool ValueListsEqual(ReadOnlyCollection<string> ValueListA, ReadOnlyCollection<string> ValueListB)
+        {
+            if (ValueListA == null && ValueListB == null) { return true; }
+            if (ValueListA == null || ValueListB == null) { return false; }
+            if (ValueListA.Count != ValueListB.Count) { return false; }
+            if (ValueListA.Count == 0) { return true; }
+            for (int index = 0; index < ValueListA.Count; index++)
+            {
+                if (!string.Equals(ValueListA[index], ValueListB[index]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool ValueGroupsEqual(EcfValueGroup ValueGroupA, EcfValueGroup ValueGroupB)
+        {
+            if (ValueGroupA == null && ValueGroupB == null) { return true; }
+            if (ValueGroupA == null || ValueGroupB == null) { return false; }
+            return ValueListsEqual(ValueGroupA.Values, ValueGroupB.Values);
+        }
+        public static bool ValueGroupListsEqual(ReadOnlyCollection<EcfValueGroup> GroupListA, ReadOnlyCollection<EcfValueGroup> GroupListB)
+        {
+            if (GroupListA == null && GroupListB == null) { return true; }
+            if (GroupListA == null || GroupListB == null) { return false; }
+            if (GroupListA.Count != GroupListB.Count) { return false; }
+            if (GroupListA.Count == 0) { return true; }
+            for (int index = 0; index < GroupListA.Count; index++)
+            {
+                if (!ValueGroupsEqual(GroupListA[index], GroupListB[index]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool KeyValueItemsEqual(EcfStructureItem itemA, EcfStructureItem itemB)
+        {
+            if (!(itemA is EcfKeyValueItem kvItemA) || !(itemB is EcfKeyValueItem kvItemB)) { return false; }
+            return kvItemA.Key.Equals(kvItemB.Key) && ValueGroupListsEqual(kvItemA.ValueGroups, kvItemB.ValueGroups);
+        }
+        public static bool AttributeListsEqual(ReadOnlyCollection<EcfAttribute> attributeListA, ReadOnlyCollection<EcfAttribute> attributeListB)
+        {
+            if (attributeListA == null && attributeListB == null) { return true; }
+            if (attributeListA == null || attributeListB == null) { return false; }
+            if (attributeListA.Count != attributeListB.Count) { return false; }
+            if (attributeListA.Count == 0) { return true; }
+            for (int index = 0; index < attributeListA.Count; index++)
+            {
+                if (!KeyValueItemsEqual(attributeListA[index], attributeListB[index]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool StructureItemListsEqual(ReadOnlyCollection<EcfStructureItem> itemListA, ReadOnlyCollection<EcfStructureItem> itemListB, bool includeStructure)
+        {
+            if (itemListA == null && itemListB == null) { return true; }
+            if (itemListA == null || itemListB == null) { return false; }
+            if (itemListA.Count != itemListB.Count) { return false; }
+            if (itemListA.Count == 0) { return true; }
+            for (int index = 0; index < itemListA.Count; index++)
+            {
+                if (!itemListA[index].Equals(itemListB[index], includeStructure))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
@@ -1973,11 +2045,10 @@ namespace EgsEcfParser
         private List<EcfValueGroup> InternalValueGroups { get; } = new List<EcfValueGroup>();
         public ReadOnlyCollection<EcfValueGroup> ValueGroups { get; }
 
-        private KeyValueItemTypes ItemType { get; set; } = KeyValueItemTypes.Unknown;
+        private KeyValueItemTypes? ItemType { get; set; } = null;
 
         public enum KeyValueItemTypes
         {
-            Unknown,
             Parameter,
             Attribute,
         }
@@ -2173,6 +2244,7 @@ namespace EgsEcfParser
 
         }
 
+        // public
         public override int Revalidate()
         {
             return RevalidateKeyValue();
@@ -2184,6 +2256,10 @@ namespace EgsEcfParser
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
             return Errors.ToList();
+        }
+        public override bool Equals(EcfStructureItem other, bool includeStructure)
+        {
+            return KeyValueItemsEqual(this, other) && ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2201,6 +2277,7 @@ namespace EgsEcfParser
             return name.ToString();
         }
 
+        // privates
         protected override void OnStructureDataUpdate()
         {
             UpdateDefinition(EcfFile?.Definition.BlockParameters);
@@ -2236,6 +2313,7 @@ namespace EgsEcfParser
             AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
         }
 
+        // publics
         public override string ToString()
         {
             return string.Format("{0}, values: '{1}' and attributes: '{2}'", BuildIdentification(), ValueGroups.Sum(group => group.Values.Count).ToString(), Attributes.Count);
@@ -2256,6 +2334,11 @@ namespace EgsEcfParser
             List<EcfError> errors = new List<EcfError>(Errors);
             errors.AddRange(InternalAttributes.SelectMany(attribute => attribute.GetDeepErrorList(includeStructure)));
             return errors;
+        }
+        public override bool Equals(EcfStructureItem other, bool includeStructure)
+        {
+            if (!(other is EcfParameter otherParam)) { return false; }
+            return KeyValueItemsEqual(this, other) && AttributeListsEqual(Attributes, otherParam.Attributes) && ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2310,6 +2393,7 @@ namespace EgsEcfParser
             return !string.IsNullOrEmpty(LineParsingData);
         }
 
+        // privates
         protected override void OnStructureDataUpdate()
         {
             UpdateDefinition(EcfFile?.Definition.BlockParameters);
@@ -2416,6 +2500,16 @@ namespace EgsEcfParser
                 errors.AddRange(ChildItems.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList(includeStructure)));
             }
             return errors;
+        }
+        public override bool Equals(EcfStructureItem other, bool includeStructure)
+        {
+            if (!(other is EcfBlock otherBlock)) { return false; }
+            if (string.Equals(PreMark, otherBlock.PreMark) && string.Equals(DataType, otherBlock.DataType) && string.Equals(PostMark, otherBlock.PostMark) &&
+                AttributeListsEqual(Attributes, otherBlock.Attributes) && ValueListsEqual(Comments, other.Comments))
+            {
+                return !includeStructure || StructureItemListsEqual(ChildItems, otherBlock.ChildItems, includeStructure);
+            }
+            return false;
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2768,9 +2862,14 @@ namespace EgsEcfParser
 
         }
 
+        // publics
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
             return Errors.ToList();
+        }
+        public override bool Equals(EcfStructureItem other, bool includeStructure)
+        {
+            return ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2800,6 +2899,7 @@ namespace EgsEcfParser
             return 0;
         }
 
+        // privates
         protected override void OnStructureDataUpdate()
         {
             

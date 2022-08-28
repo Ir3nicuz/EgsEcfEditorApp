@@ -104,6 +104,7 @@ namespace EgsEcfEditorApp
             this.FirstFileComboBox.Size = new System.Drawing.Size(586, 21);
             this.FirstFileComboBox.Sorted = true;
             this.FirstFileComboBox.TabIndex = 0;
+            this.FirstFileComboBox.SelectionChangeCommitted += new System.EventHandler(this.FirstFileComboBox_SelectionChangeCommitted);
             // 
             // SecondFileComboBox
             // 
@@ -116,6 +117,7 @@ namespace EgsEcfEditorApp
             this.SecondFileComboBox.Size = new System.Drawing.Size(586, 21);
             this.SecondFileComboBox.Sorted = true;
             this.SecondFileComboBox.TabIndex = 1;
+            this.SecondFileComboBox.SelectionChangeCommitted += new System.EventHandler(this.SecondFileComboBox_SelectionChangeCommitted);
             // 
             // FirstFileTreeView
             // 

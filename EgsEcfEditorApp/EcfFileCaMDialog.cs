@@ -5,6 +5,7 @@ using EgsEcfEditorApp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using static Helpers.ImageAjustments;
 
@@ -20,6 +21,7 @@ namespace EgsEcfEditorApp
         private MergeActionTools SecondFileActionTools { get; } = new MergeActionTools(IconRecources.Icon_MoveLeft);
 
         private ImageList CAMListViewIcons { get; } = new ImageList();
+        private List<ComboBoxItem> AvailableFileTabs { get; } = new List<ComboBoxItem>();
 
         public EcfFileCAMDialog()
         {
@@ -48,6 +50,56 @@ namespace EgsEcfEditorApp
 
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
+        }
+        private void CloseButton_Click(object sender, EventArgs evt)
+        {
+            Close();
+        }
+        private void FirstFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
+        {
+            ComboBoxItem firstItem = FirstFileComboBox.SelectedItem as ComboBoxItem;
+            RefreshFileSelectorBox(SecondFileComboBox, firstItem);
+            CompareFiles(firstItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
+        }
+        private void SecondFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
+        {
+            ComboBoxItem secondItem = SecondFileComboBox.SelectedItem as ComboBoxItem;
+            RefreshFileSelectorBox(FirstFileComboBox, secondItem);
+            CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, secondItem);
+        }
+
+        // public
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
+        {
+            ChangedFileTabs.Clear();
+            AvailableFileTabs.Clear();
+            AvailableFileTabs.AddRange(openedFileTabs.Select(tab => new ComboBoxItem(tab)));
+            RefreshFileSelectorBox(FirstFileComboBox, null);
+            RefreshFileSelectorBox(SecondFileComboBox, null);
+            return ShowDialog(parent);
+        }
+
+        // private
+        private void RefreshFileSelectorBox(ComboBox box, ComboBoxItem otherSelectedItem)
+        {
+            ComboBoxItem selectedItem = box.SelectedItem as ComboBoxItem;
+            box.BeginUpdate();
+            box.Items.Clear();
+            box.Items.AddRange(AvailableFileTabs.Where(item => !item.Equals(otherSelectedItem)).ToArray());
+            box.EndUpdate();
+            box.SelectedItem = selectedItem;
+        }
+        private void CompareFiles(ComboBoxItem firstItem, ComboBoxItem secondItem)
+        {
+            if (firstItem == null || secondItem == null) { return; }
+
+            FirstFileTreeView.BeginUpdate();
+            SecondFileTreeView.BeginUpdate();
+            FirstFileTreeView.Nodes.Clear();
+            SecondFileTreeView.Nodes.Clear();
+
+
+            
 
 
 
@@ -56,29 +108,40 @@ namespace EgsEcfEditorApp
             FirstFileTreeView.Nodes.Add("0", "0", 0, 0);
             FirstFileTreeView.Nodes.Add("1", "1", 1, 1);
             FirstFileTreeView.Nodes.Add("2", "2", 2, 2);
-            
 
 
 
+
+            FirstFileTreeView.EndUpdate();
+            SecondFileTreeView.EndUpdate();
+
+            FirstFileSelectionTools.Reset();
+            SecondFileSelectionTools.Reset();
         }
-        private void CloseButton_Click(object sender, EventArgs evt)
+
+        // subclass
+        private class ComboBoxItem : IComparable<ComboBoxItem>
         {
-            Close();
+            public string DisplayText { get; }
+            public EcfTabPage Item { get; }
+
+            public ComboBoxItem(EcfTabPage item)
+            {
+                Item = item;
+                DisplayText = item.File.FileName;
+            }
+
+            public override string ToString()
+            {
+                return DisplayText;
+            }
+
+            public int CompareTo(ComboBoxItem other)
+            {
+                if (DisplayText == null || other.DisplayText == null) { return 0; }
+                return DisplayText.CompareTo(other.DisplayText);
+            }
         }
-
-        // public
-        [Obsolete("needs works")]
-        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
-        {
-            ChangedFileTabs.Clear();
-
-
-
-            return ShowDialog(parent);
-        }
-
-        // private
-        
     }
 }
 
@@ -157,6 +220,12 @@ namespace EcfCAMTools
         public void SetAllRemovesButton(CheckState state)
         {
             ChangeAllRemoveItemsButton.CheckState = state;
+        }
+        public void Reset()
+        {
+            SetAllAddsState(CheckState.Checked);
+            SetAllUpdatesButton(CheckState.Checked);
+            SetAllRemovesButton(CheckState.Checked);
         }
     }
     public class MergeActionTools : EcfToolBox

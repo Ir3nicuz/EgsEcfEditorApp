@@ -779,9 +779,8 @@ namespace EgsEcfParser
             }
             return true;
         }
-        public static bool KeyValueItemsEqual(EcfStructureItem itemA, EcfStructureItem itemB)
+        public static bool KeyValueItemsEqual(EcfKeyValueItem kvItemA, EcfKeyValueItem kvItemB)
         {
-            if (!(itemA is EcfKeyValueItem kvItemA) || !(itemB is EcfKeyValueItem kvItemB)) { return false; }
             return kvItemA.Key.Equals(kvItemB.Key) && ValueGroupListsEqual(kvItemA.ValueGroups, kvItemB.ValueGroups);
         }
         public static bool AttributeListsEqual(ReadOnlyCollection<EcfAttribute> attributeListA, ReadOnlyCollection<EcfAttribute> attributeListB)
@@ -2259,7 +2258,8 @@ namespace EgsEcfParser
         }
         public override bool Equals(EcfStructureItem other, bool includeStructure)
         {
-            return KeyValueItemsEqual(this, other) && ValueListsEqual(Comments, other.Comments);
+            if (!(other is EcfAttribute otherAttribute)) { return false; }
+            return KeyValueItemsEqual(this, otherAttribute) && ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2338,7 +2338,7 @@ namespace EgsEcfParser
         public override bool Equals(EcfStructureItem other, bool includeStructure)
         {
             if (!(other is EcfParameter otherParam)) { return false; }
-            return KeyValueItemsEqual(this, other) && AttributeListsEqual(Attributes, otherParam.Attributes) && ValueListsEqual(Comments, other.Comments);
+            return KeyValueItemsEqual(this, otherParam) && AttributeListsEqual(Attributes, otherParam.Attributes) && ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2869,6 +2869,7 @@ namespace EgsEcfParser
         }
         public override bool Equals(EcfStructureItem other, bool includeStructure)
         {
+            if (!(other is EcfComment)) { return false; }
             return ValueListsEqual(Comments, other.Comments);
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)

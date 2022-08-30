@@ -142,6 +142,19 @@ namespace EgsEcfEditorApp
                 return DisplayText.CompareTo(other.DisplayText);
             }
         }
+        private class CAMTreeNode : TreeNode
+        {
+            public CAMTypes CAMType { get; private set; } = CAMTypes.Undefined;
+
+            public enum CAMTypes
+            {
+                Undefined,
+                Adding,
+                Unequal,
+                Removing,
+            }
+        }
+
     }
 }
 

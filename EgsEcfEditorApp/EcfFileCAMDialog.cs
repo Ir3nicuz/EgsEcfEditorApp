@@ -2,8 +2,10 @@
 using EcfFileViews;
 using EcfToolBarControls;
 using EgsEcfEditorApp.Properties;
+using EgsEcfParser;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -44,9 +46,10 @@ namespace EgsEcfEditorApp
             SecondFileActionContainer.Add(SecondFileActionTools);
             SecondFileSelectionContainer.Add(SecondFileSelectionTools);
 
-            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Add, 16, 3, 1));
             CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Unequal, 16, 3, 1));
+            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Add, 16, 3, 1));
             CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Remove, 16, 3, 1));
+            CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Unknown, 16, 3, 1));
 
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
@@ -99,15 +102,13 @@ namespace EgsEcfEditorApp
             SecondFileTreeView.Nodes.Clear();
 
 
+
+
+
             
 
+            
 
-
-
-
-            FirstFileTreeView.Nodes.Add("0", "0", 0, 0);
-            FirstFileTreeView.Nodes.Add("1", "1", 1, 1);
-            FirstFileTreeView.Nodes.Add("2", "2", 2, 2);
 
 
 
@@ -144,14 +145,41 @@ namespace EgsEcfEditorApp
         }
         private class CAMTreeNode : TreeNode
         {
-            public CAMTypes CAMType { get; private set; } = CAMTypes.Undefined;
+            public MergeActions MergeAction { get; private set; } = MergeActions.Ignore;
+            public EcfStructureItem Item { get; } = null;
 
-            public enum CAMTypes
+            public enum MergeActions
             {
-                Undefined,
-                Adding,
-                Unequal,
-                Removing,
+                Ignore,
+                Update,
+                Add,
+                Remove,
+            }
+            
+            public CAMTreeNode(EcfStructureItem item)
+            {
+                Item = item;
+                Text = item?.BuildIdentification() ?? "---";
+            }
+
+            // publics
+            public void SetMergeAction(MergeActions action)
+            {
+                MergeAction = action;
+                switch (action)
+                {
+                    case MergeActions.Update: SetImage(0); break;
+                    case MergeActions.Add: SetImage(1); break;
+                    case MergeActions.Remove: SetImage(2); break;
+                    default: SetImage(3); break;
+                }
+            }
+
+            // privates
+            private void SetImage(int imageListIndex)
+            {
+                SelectedImageIndex = imageListIndex;
+                ImageIndex = imageListIndex;
             }
         }
 

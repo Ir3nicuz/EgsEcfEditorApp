@@ -329,6 +329,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_Unknown.png" />
     <None Include="Resources\Icon_SortDirectionDescending.png" />
     <None Include="Resources\Icon_SortDirectionAscending.png" />
     <None Include="Resources\Icon_MoveRight.png" />

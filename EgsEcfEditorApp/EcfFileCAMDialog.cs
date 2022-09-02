@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static EcfCAMTools.CompareSelectionTools;
 using static Helpers.ImageAjustments;
 
 namespace EgsEcfEditorApp
@@ -24,6 +25,11 @@ namespace EgsEcfEditorApp
 
         private ImageList CAMListViewIcons { get; } = new ImageList();
         private List<ComboBoxItem> AvailableFileTabs { get; } = new List<ComboBoxItem>();
+
+        private List<CAMTreeNode> FirstFileNodes { get; } = new List<CAMTreeNode>();
+        private List<CAMTreeNode> SecondFileNodes { get; } = new List<CAMTreeNode>();
+        private bool FirstFileCheckStateUpdate { get; set; } = false;
+        private bool SecondFileCheckStateUpdate { get; set; } = false;
 
         public EcfFileCAMDialog()
         {
@@ -53,22 +59,129 @@ namespace EgsEcfEditorApp
 
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
+
+            InitEvents();
+        }
+        private void InitEvents()
+        {
+            FirstFileTreeView.NodeMouseClick += FirstFileTreeView_NodeMouseClick;
+            SecondFileTreeView.NodeMouseClick += SecondFileTreeView_NodeMouseClick;
+
+            FirstFileTreeView.BeforeExpand += FirstFileTreeView_BeforeExpand;
+            FirstFileTreeView.BeforeCollapse += FirstFileTreeView_BeforeCollapse;
+            SecondFileTreeView.BeforeExpand += SecondFileTreeView_BeforeExpand;
+            SecondFileTreeView.BeforeCollapse += SecondFileTreeView_BeforeCollapse;
+
+            FirstFileTreeView.AfterCheck += FirstFileTreeView_AfterCheck;
+            SecondFileTreeView.AfterCheck += SecondFileTreeView_AfterCheck;
+
+            FirstFileSelectionTools.SelectionChangeClicked += FirstFileSelectionTools_SelectionChangeClicked;
+            SecondFileSelectionTools.SelectionChangeClicked += SecondFileSelectionTools_SelectionChangeClicked;
+
+            FirstFileActionTools.DoMergeClicked += FirstFileActionTools_DoMergeClicked;
+            SecondFileActionTools.DoMergeClicked += SecondFileActionTools_DoMergeClicked;
         }
         private void CloseButton_Click(object sender, EventArgs evt)
         {
             Close();
         }
+
+        private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
+        {
+            FirstFileCheckStateUpdate = true;
+            switch (evt.Group)
+            {
+                case SelectionGroups.Unequal: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All); break;
+                case SelectionGroups.Add: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All); break;
+                case SelectionGroups.Remove: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All); break;
+                default: break;
+            }
+            FirstFileCheckStateUpdate = false;
+        }
         private void FirstFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             ComboBoxItem firstItem = FirstFileComboBox.SelectedItem as ComboBoxItem;
-            RefreshFileSelectorBox(SecondFileComboBox, firstItem);
+            RefreshFileSelectorBox(SecondFileComboBox, firstItem, AvailableFileTabs);
             CompareFiles(firstItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
+        }
+        private void FirstFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            TransferExpandState(evt.Node);
+        }
+        private void FirstFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
+        {
+            InflateSubNodes(evt.Node);
+        }
+        private void FirstFileTreeView_BeforeCollapse(object sender, TreeViewCancelEventArgs evt)
+        {
+            ReduceSubNodes(evt.Node);
+        }
+        private void FirstFileTreeView_AfterCheck(object sender, TreeViewEventArgs evt)
+        {
+            if (!FirstFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
+            {
+                FirstFileCheckStateUpdate = true;
+                ChangeAllCheckStates(treeNode.AllNodes, null, treeNode.Checked);
+                FirstFileCheckStateUpdate = false;
+                FirstFileSelectionTools.ResetTo(CheckState.Indeterminate);
+            }
+        }
+        [Obsolete("needs work")]
+        private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
+        {
+
+
+
+            CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
+        }
+
+        private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
+        {
+            SecondFileCheckStateUpdate = true;
+            switch (evt.Group)
+            {
+                case SelectionGroups.Unequal: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All); break;
+                case SelectionGroups.Add: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All); break;
+                case SelectionGroups.Remove: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All); break;
+                default: break;
+            }
+            SecondFileCheckStateUpdate = false;
         }
         private void SecondFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             ComboBoxItem secondItem = SecondFileComboBox.SelectedItem as ComboBoxItem;
-            RefreshFileSelectorBox(FirstFileComboBox, secondItem);
+            RefreshFileSelectorBox(FirstFileComboBox, secondItem, AvailableFileTabs);
             CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, secondItem);
+        }
+        private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            TransferExpandState(evt.Node);
+        }
+        private void SecondFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
+        {
+            InflateSubNodes(evt.Node);
+        }
+        private void SecondFileTreeView_BeforeCollapse(object sender, TreeViewCancelEventArgs evt)
+        {
+            ReduceSubNodes(evt.Node);
+        }
+        private void SecondFileTreeView_AfterCheck(object sender, TreeViewEventArgs evt)
+        {
+            if (!SecondFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
+            {
+                SecondFileCheckStateUpdate = true;
+                ChangeAllCheckStates(treeNode.AllNodes, null, treeNode.Checked);
+                SecondFileCheckStateUpdate = false;
+                SecondFileSelectionTools.ResetTo(CheckState.Indeterminate);
+            }
+        }
+        [Obsolete("needs work")]
+        private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
+        {
+
+
+
+            CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
         // public
@@ -77,47 +190,119 @@ namespace EgsEcfEditorApp
             ChangedFileTabs.Clear();
             AvailableFileTabs.Clear();
             AvailableFileTabs.AddRange(openedFileTabs.Select(tab => new ComboBoxItem(tab)));
-            RefreshFileSelectorBox(FirstFileComboBox, null);
-            RefreshFileSelectorBox(SecondFileComboBox, null);
+            RefreshFileSelectorBox(FirstFileComboBox, null, AvailableFileTabs);
+            RefreshFileSelectorBox(SecondFileComboBox, null, AvailableFileTabs);
             return ShowDialog(parent);
         }
 
         // private
-        private void RefreshFileSelectorBox(ComboBox box, ComboBoxItem otherSelectedItem)
-        {
-            ComboBoxItem selectedItem = box.SelectedItem as ComboBoxItem;
-            box.BeginUpdate();
-            box.Items.Clear();
-            box.Items.AddRange(AvailableFileTabs.Where(item => !item.Equals(otherSelectedItem)).ToArray());
-            box.EndUpdate();
-            box.SelectedItem = selectedItem;
-        }
         private void CompareFiles(ComboBoxItem firstItem, ComboBoxItem secondItem)
         {
             if (firstItem == null || secondItem == null) { return; }
 
-            FirstFileTreeView.BeginUpdate();
-            SecondFileTreeView.BeginUpdate();
-            FirstFileTreeView.Nodes.Clear();
-            SecondFileTreeView.Nodes.Clear();
+            CheckState initState = CheckState.Checked;
+            RefreshTreeNodeList(FirstFileNodes, firstItem.Item.File.ItemList, initState == CheckState.Checked);
+            RefreshTreeNodeList(SecondFileNodes, secondItem.Item.File.ItemList, initState == CheckState.Checked);
+            CompareTreeNodeLists(FirstFileNodes, SecondFileNodes);
+            RefreshTreeViews(FirstFileTreeView, FirstFileNodes);
+            RefreshTreeViews(SecondFileTreeView, SecondFileNodes);
 
-
-
-
-
+            FirstFileSelectionTools.ResetTo(initState);
+            SecondFileSelectionTools.ResetTo(initState);
+        }
+        private static void ChangeAllCheckStates(List<CAMTreeNode> nodes, CAMTreeNode.MergeActions? nodeType, bool state)
+        {
+            foreach(CAMTreeNode node in nodes)
+            {
+                if (node.MergeAction == nodeType)
+                {
+                    node.Checked = state;
+                }
+                else if (nodeType == null)
+                {
+                    switch (node.MergeAction)
+                    {
+                        case CAMTreeNode.MergeActions.Update:
+                        case CAMTreeNode.MergeActions.Add:
+                        case CAMTreeNode.MergeActions.Remove:
+                            node.Checked = state;
+                            break;
+                        default:
+                            node.Checked = false;
+                            break;
+                    }
+                }
+                ChangeAllCheckStates(node.AllNodes, nodeType, state);
+            }
+        }
+        private static void TransferExpandState(TreeNode node)
+        {
+            if (node is CAMTreeNode treeNode)
+            {
+                if (treeNode.IsExpanded)
+                {
+                    treeNode.TwinNode?.Expand();
+                }
+                else
+                {
+                    treeNode.TwinNode?.Collapse();
+                }
+            }
+        }
+        private static void InflateSubNodes(TreeNode node)
+        {
+            if (node is CAMTreeNode treeNode)
+            {
+                treeNode.InflateSubNodes();
+            }
+        }
+        private static void ReduceSubNodes(TreeNode node)
+        {
+            if (node is CAMTreeNode treeNode)
+            {
+                treeNode.ReduceSubNodes();
+            }
+        }
+        private static void RefreshFileSelectorBox(ComboBox box, ComboBoxItem otherSelectedItem, List<ComboBoxItem> availableFiles)
+        {
+            ComboBoxItem selectedItem = box.SelectedItem as ComboBoxItem;
+            box.BeginUpdate();
+            box.Items.Clear();
+            box.Items.AddRange(availableFiles.Where(item => !item.Equals(otherSelectedItem)).ToArray());
+            box.EndUpdate();
+            box.SelectedItem = selectedItem;
+        }
+        private static void RefreshTreeNodeList(List<CAMTreeNode> nodeList, ReadOnlyCollection<EcfStructureItem> itemList, bool initState)
+        {
+            nodeList.Clear();
+            foreach (EcfStructureItem item in itemList)
+            {
+                CAMTreeNode node = new CAMTreeNode(item, initState);
+                nodeList.Add(node);
+                if (item is EcfBlock block)
+                {
+                    RefreshTreeNodeList(node.AllNodes, block.ChildItems, initState);
+                    node.ReduceSubNodes();
+                }
+            }
+        }
+        private static void CompareTreeNodeLists(List<CAMTreeNode> firstNodeList, List<CAMTreeNode> secondNodeList)
+        {
             
 
-            
 
 
 
 
 
-            FirstFileTreeView.EndUpdate();
-            SecondFileTreeView.EndUpdate();
 
-            FirstFileSelectionTools.Reset();
-            SecondFileSelectionTools.Reset();
+        }
+        private static void RefreshTreeViews(TreeView treeView, List<CAMTreeNode> nodeList)
+        {
+            treeView.BeginUpdate();
+            treeView.Nodes.Clear();
+            treeView.Nodes.AddRange(nodeList.Where(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore).ToArray());
+            treeView.EndUpdate();
         }
 
         // subclass
@@ -145,37 +330,61 @@ namespace EgsEcfEditorApp
         }
         private class CAMTreeNode : TreeNode
         {
-            public MergeActions MergeAction { get; private set; } = MergeActions.Ignore;
+            public MergeActions MergeAction { get; private set; } = MergeActions.Unknown;
+            public CAMTreeNode TwinNode { get; private set; } = null;
             public EcfStructureItem Item { get; } = null;
+            public List<CAMTreeNode> AllNodes { get; } = new List<CAMTreeNode>();
 
             public enum MergeActions
             {
+                Unknown,
                 Ignore,
                 Update,
                 Add,
                 Remove,
             }
             
-            public CAMTreeNode(EcfStructureItem item)
+            public CAMTreeNode(EcfStructureItem item, bool checkState)
             {
                 Item = item;
+                Checked = checkState;
                 Text = item?.BuildIdentification() ?? "---";
+                SetMergeAction(MergeActions.Unknown);
             }
 
             // publics
-            public void SetMergeAction(MergeActions action)
+            public void SetPairingData(CAMTreeNode twinNode, MergeActions action)
             {
-                MergeAction = action;
-                switch (action)
+                TwinNode = twinNode;
+                SetMergeAction(action);
+            }
+            public void InflateSubNodes()
+            {
+                Nodes.Clear();
+                Nodes.AddRange(AllNodes.Where(subNode => subNode.MergeAction != MergeActions.Ignore).Reverse().ToArray());
+            }
+            public void ReduceSubNodes()
+            {
+                Nodes.Clear();
+                if (AllNodes.Count > 0)
                 {
-                    case MergeActions.Update: SetImage(0); break;
-                    case MergeActions.Add: SetImage(1); break;
-                    case MergeActions.Remove: SetImage(2); break;
-                    default: SetImage(3); break;
+                    Nodes.Add(new CAMTreeNode(null, false));
                 }
             }
 
             // privates
+            private void SetMergeAction(MergeActions action)
+            {
+                MergeAction = action;
+                switch (action)
+                {
+                    // "ignore" has no specific icon since ignored items should never be visible in the treeview
+                    case MergeActions.Update: SetImage(0); break;
+                    case MergeActions.Add: SetImage(1); break;
+                    case MergeActions.Remove: SetImage(2); break;
+                    default: SetImage(3); Checked = false;  break;
+                }
+            }
             private void SetImage(int imageListIndex)
             {
                 SelectedImageIndex = imageListIndex;
@@ -190,12 +399,7 @@ namespace EcfCAMTools
 {
     public class CompareSelectionTools : EcfToolBox
     {
-        public event EventHandler SelectAllAddItemsClicked;
-        public event EventHandler SelectNoneAddItemsClicked;
-        public event EventHandler SelectAllUnequalItemsClicked;
-        public event EventHandler SelectNoneUnequalItemsClicked;
-        public event EventHandler SelectAllRemoveItemsClicked;
-        public event EventHandler SelectNoneRemoveItemsClicked;
+        public event EventHandler<SelectionChangeEventArgs> SelectionChangeClicked;
 
         private EcfToolBarThreeStateCheckBox ChangeAllAddItemsButton { get; } = new EcfToolBarThreeStateCheckBox(
             TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllAddItems, IconRecources.Icon_SomeAddItemsSet, IconRecources.Icon_AllAddItemsSet, IconRecources.Icon_NoneAddItemsSet);
@@ -204,49 +408,53 @@ namespace EcfCAMTools
         private EcfToolBarThreeStateCheckBox ChangeAllRemoveItemsButton { get; } = new EcfToolBarThreeStateCheckBox(
             TextRecources.EcfFileCAMDialog_ToolTip_ChangeAllRemoveItems, IconRecources.Icon_SomeRemoveItemsSet, IconRecources.Icon_AllRemoveItemsSet, IconRecources.Icon_NoneRemoveItemsSet);
 
+        public enum SelectionGroups
+        {
+            Unequal,
+            Add,
+            Remove,
+        }
+        public enum SelectionTypes
+        {
+            All,
+            None,
+        }
+
         public CompareSelectionTools() : base()
         {
-            Add(ChangeAllAddItemsButton).Click += ChangeAllAddsButton_Click;
-            Add(ChangeAllUnequalItemsButton).Click += ChangeAllUpdatesButton_Click;
-            Add(ChangeAllRemoveItemsButton).Click += ChangeAllRemovesButton_Click;
+            Add(ChangeAllAddItemsButton).Click += ChangeAllAddItemsButton_Click;
+            Add(ChangeAllUnequalItemsButton).Click += ChangeAllUnequalItemsButton_Click;
+            Add(ChangeAllRemoveItemsButton).Click += ChangeAllRemoveItemsButton_Click;
         }
 
         // events
-        private void ChangeAllAddsButton_Click(object sender, EventArgs evt)
+        private void ChangeAllAddItemsButton_Click(object sender, EventArgs evt)
         {
             if (ChangeAllAddItemsButton.CheckState == CheckState.Indeterminate)
             {
                 ChangeAllAddItemsButton.CheckState = CheckState.Unchecked;
-                SelectNoneAddItemsClicked?.Invoke(sender, evt);
             }
-            else if(ChangeAllAddItemsButton.CheckState == CheckState.Checked)
-            {
-                SelectAllAddItemsClicked?.Invoke(sender, evt);
-            }
+            SelectionChangeClicked?.Invoke(sender, new SelectionChangeEventArgs(
+                SelectionGroups.Add, ChangeAllAddItemsButton.CheckState == CheckState.Checked ? SelectionTypes.All : SelectionTypes.None));
         }
-        private void ChangeAllUpdatesButton_Click(object sender, EventArgs evt)
+        private void ChangeAllUnequalItemsButton_Click(object sender, EventArgs evt)
         {
             if (ChangeAllUnequalItemsButton.CheckState == CheckState.Indeterminate)
             {
                 ChangeAllUnequalItemsButton.CheckState = CheckState.Unchecked;
-                SelectNoneUnequalItemsClicked?.Invoke(sender, evt);
+                
             }
-            else if (ChangeAllUnequalItemsButton.CheckState == CheckState.Checked)
-            {
-                SelectAllUnequalItemsClicked?.Invoke(sender, evt);
-            }
+            SelectionChangeClicked?.Invoke(sender, new SelectionChangeEventArgs(
+                SelectionGroups.Unequal, ChangeAllUnequalItemsButton.CheckState == CheckState.Checked ? SelectionTypes.All : SelectionTypes.None));
         }
-        private void ChangeAllRemovesButton_Click(object sender, EventArgs evt)
+        private void ChangeAllRemoveItemsButton_Click(object sender, EventArgs evt)
         {
             if (ChangeAllRemoveItemsButton.CheckState == CheckState.Indeterminate)
             {
                 ChangeAllRemoveItemsButton.CheckState = CheckState.Unchecked;
-                SelectNoneRemoveItemsClicked?.Invoke(sender, evt);
             }
-            else if (ChangeAllRemoveItemsButton.CheckState == CheckState.Checked)
-            {
-                SelectAllRemoveItemsClicked?.Invoke(sender, evt);
-            }
+            SelectionChangeClicked?.Invoke(sender, new SelectionChangeEventArgs(
+                SelectionGroups.Remove, ChangeAllRemoveItemsButton.CheckState == CheckState.Checked ? SelectionTypes.All : SelectionTypes.None));
         }
 
         // publics
@@ -264,9 +472,26 @@ namespace EcfCAMTools
         }
         public void Reset()
         {
-            SetAllAddsState(CheckState.Checked);
-            SetAllUpdatesButton(CheckState.Checked);
-            SetAllRemovesButton(CheckState.Checked);
+            ResetTo(CheckState.Checked);
+        }
+        public void ResetTo(CheckState state)
+        {
+            SetAllAddsState(state);
+            SetAllUpdatesButton(state);
+            SetAllRemovesButton(state);
+        }
+
+        // subclasses
+        public class SelectionChangeEventArgs : EventArgs
+        {
+            public SelectionGroups Group { get; }
+            public SelectionTypes Type { get; }
+
+            public SelectionChangeEventArgs(SelectionGroups group, SelectionTypes type)
+            {
+                Group = group;
+                Type = type;
+            }
         }
     }
     public class MergeActionTools : EcfToolBox

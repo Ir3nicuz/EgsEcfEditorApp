@@ -16,7 +16,7 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfFileCAMDialog : Form
     {
-        public List<EcfTabPage> ChangedFileTabs { get; } = new List<EcfTabPage>();
+        public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
 
         private CompareSelectionTools FirstFileSelectionTools { get; } = new CompareSelectionTools();
         private CompareSelectionTools SecondFileSelectionTools { get; } = new CompareSelectionTools();
@@ -126,12 +126,9 @@ namespace EgsEcfEditorApp
                 FirstFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
         }
-        [Obsolete("needs work")]
         private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
-
-
-
+            MergeFiles(SecondFileComboBox.SelectedItem as ComboBoxItem, FirstFileNodes);
             CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
@@ -175,12 +172,9 @@ namespace EgsEcfEditorApp
                 SecondFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
         }
-        [Obsolete("needs work")]
         private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
-
-
-
+            MergeFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileNodes);
             CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
@@ -303,6 +297,17 @@ namespace EgsEcfEditorApp
             treeView.Nodes.Clear();
             treeView.Nodes.AddRange(nodeList.Where(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore).ToArray());
             treeView.EndUpdate();
+        }
+        [Obsolete("needs work")]
+        private void MergeFiles(ComboBoxItem targetFile, List<CAMTreeNode> sourceNodes)
+        {
+            if (sourceNodes.Count == 0 || targetFile == null) { return; }
+
+
+
+
+
+            ChangedFileTabs.Add(targetFile.Item);
         }
 
         // subclass

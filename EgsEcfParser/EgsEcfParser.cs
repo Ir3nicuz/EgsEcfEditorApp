@@ -796,6 +796,19 @@ namespace EgsEcfParser
             }
             return true;
         }
+        public static bool StructureItemIdEquals(EcfStructureItem itemA, EcfStructureItem itemB)
+        {
+            if (itemA == null && itemB == null) { return true; }
+            if (itemA == null || itemB == null) { return false; }
+            if (itemA is EcfComment && itemB is EcfComment)
+            {
+                return itemA.ContentEquals(itemB, false);
+            }
+            else
+            {
+                return itemA.IdEquals(itemB);
+            }
+        }
         public static bool StructureItemListEquals(ReadOnlyCollection<EcfStructureItem> itemListA, ReadOnlyCollection<EcfStructureItem> itemListB, bool includeStructure)
         {
             if (itemListA == null && itemListB == null) { return true; }

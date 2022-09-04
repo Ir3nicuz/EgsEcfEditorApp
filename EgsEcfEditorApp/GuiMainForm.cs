@@ -542,10 +542,10 @@ namespace EgsEcfEditorApp
         private void CompareAndMergeFiles()
         {
             CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
-            CompareMergeDialog.ChangedFileTabs.ForEach(tab =>
+            foreach(EcfTabPage tab in CompareMergeDialog.ChangedFileTabs)
             {
                 tab.UpdateAllViews();
-            });
+            }
         }
         private void EditIngameItem()
         {

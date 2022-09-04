@@ -296,9 +296,10 @@ namespace EgsEcfEditorApp
                     otherNode.MergeAction == CAMTreeNode.MergeActions.Unknown && StructureItemIdEquals(node.Item, otherNode.Item));
                 if (concurrentNode == null)
                 {
-                    concurrentNode = new CAMTreeNode(null, node.Checked);
+                    concurrentNode = new CAMTreeNode(node);
                     node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Add, true);
-                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, false);
+                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, true);
+                    secondNodeList.Insert(firstNodeList.IndexOf(node), concurrentNode);
                 }
                 else
                 {
@@ -322,15 +323,16 @@ namespace EgsEcfEditorApp
             {
                 if (node.MergeAction == CAMTreeNode.MergeActions.Unknown)
                 {
-                    concurrentNode = new CAMTreeNode(null, node.Checked);
+                    concurrentNode = new CAMTreeNode(node);
                     node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Add, true);
-                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, false);
+                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, true);
+                    firstNodeList.Insert(secondNodeList.IndexOf(node), concurrentNode);
                 }
             });
 
             
 
-            // find insert index for add verdict? -> add removing node to second list???
+            // find file insert index for add verdict
 
             // upwards / downswards check inherittance
 
@@ -399,6 +401,15 @@ namespace EgsEcfEditorApp
                 Checked = checkState;
                 Text = item?.BuildIdentification() ?? "---";
                 SetMergeAction(MergeActions.Unknown);
+            }
+            public CAMTreeNode(CAMTreeNode template)
+            {
+                Item = template.Item;
+                Checked = template.Checked;
+                Text = template.Text;
+                SetMergeAction(template.MergeAction);
+                AllNodes.AddRange(template.AllNodes.Select(subNode => new CAMTreeNode(subNode)));
+                ReduceSubNodes();
             }
 
             // publics

@@ -11,13 +11,14 @@ using System.Linq;
 using System.Windows.Forms;
 using static EcfCAMTools.CompareSelectionTools;
 using static Helpers.ImageAjustments;
+using static EgsEcfParser.EcfStructureTools;
 
 namespace EgsEcfEditorApp
 {
     public partial class EcfFileCAMDialog : Form
     {
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
-
+        
         private CompareSelectionTools FirstFileSelectionTools { get; } = new CompareSelectionTools();
         private CompareSelectionTools SecondFileSelectionTools { get; } = new CompareSelectionTools();
         private MergeActionTools FirstFileActionTools { get; } = new MergeActionTools(IconRecources.Icon_MoveRight);
@@ -186,13 +187,18 @@ namespace EgsEcfEditorApp
             AvailableFileTabs.AddRange(openedFileTabs.Select(tab => new ComboBoxItem(tab)));
             RefreshFileSelectorBox(FirstFileComboBox, null, AvailableFileTabs);
             RefreshFileSelectorBox(SecondFileComboBox, null, AvailableFileTabs);
+            CompareFiles(null, null);
             return ShowDialog(parent);
         }
 
         // private
         private void CompareFiles(ComboBoxItem firstItem, ComboBoxItem secondItem)
         {
-            if (firstItem == null || secondItem == null) { return; }
+            if (firstItem == null || secondItem == null) {
+                FirstFileTreeView.Nodes.Clear();
+                SecondFileTreeView.Nodes.Clear();
+                return;
+            }
 
             CheckState initState = CheckState.Checked;
             RefreshTreeNodeList(FirstFileNodes, firstItem.Item.File.ItemList, initState == CheckState.Checked);
@@ -235,11 +241,11 @@ namespace EgsEcfEditorApp
             {
                 if (treeNode.IsExpanded)
                 {
-                    treeNode.TwinNode?.Expand();
+                    treeNode.ConcurrentNode?.Expand();
                 }
                 else
                 {
-                    treeNode.TwinNode?.Collapse();
+                    treeNode.ConcurrentNode?.Collapse();
                 }
             }
         }
@@ -282,13 +288,40 @@ namespace EgsEcfEditorApp
         }
         private static void CompareTreeNodeLists(List<CAMTreeNode> firstNodeList, List<CAMTreeNode> secondNodeList)
         {
+            firstNodeList.ForEach(node =>
+            {
+                CAMTreeNode concurrentNode = secondNodeList.FirstOrDefault(otherNode => 
+                    otherNode.MergeAction == CAMTreeNode.MergeActions.Unknown && StructureItemIdEquals(node.Item, otherNode.Item));
+                if (concurrentNode == null)
+                {
+                    concurrentNode = new CAMTreeNode(null, node.Checked);
+                    node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Add, true);
+                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, false);
+                }
+                else
+                {
+                    CompareTreeNodeLists(node.AllNodes, concurrentNode.AllNodes);
+                    if (node.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
+                        !node.Item.ContentEquals(concurrentNode.Item, false))
+                    {
+                        node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Update, false);
+                        concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Update, false);
+                    }
+                    else
+                    {
+                        node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Ignore, false);
+                        concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Ignore, false);
+                    }
+                }
+            });
+
+
+
             
 
+            // find insert index for add verdict? -> add removing node to second list???
 
-
-
-
-
+            // loop over second list -> any unknown left???
 
         }
         private static void RefreshTreeViews(TreeView treeView, List<CAMTreeNode> nodeList)
@@ -336,7 +369,7 @@ namespace EgsEcfEditorApp
         private class CAMTreeNode : TreeNode
         {
             public MergeActions MergeAction { get; private set; } = MergeActions.Unknown;
-            public CAMTreeNode TwinNode { get; private set; } = null;
+            public CAMTreeNode ConcurrentNode { get; private set; } = null;
             public EcfStructureItem Item { get; } = null;
             public List<CAMTreeNode> AllNodes { get; } = new List<CAMTreeNode>();
 
@@ -358,15 +391,19 @@ namespace EgsEcfEditorApp
             }
 
             // publics
-            public void SetPairingData(CAMTreeNode twinNode, MergeActions action)
+            public void UpdatePairingData(CAMTreeNode twinNode, MergeActions action, bool inheritAction)
             {
-                TwinNode = twinNode;
-                SetMergeAction(action);
+                ConcurrentNode = twinNode;
+                UpdateMergeAction(action);
+                if (inheritAction)
+                {
+                    InheritMergeAction(AllNodes, action);
+                }
             }
             public void InflateSubNodes()
             {
                 Nodes.Clear();
-                Nodes.AddRange(AllNodes.Where(subNode => subNode.MergeAction != MergeActions.Ignore).Reverse().ToArray());
+                Nodes.AddRange(AllNodes.Where(subNode => subNode.MergeAction != MergeActions.Ignore).ToArray());
             }
             public void ReduceSubNodes()
             {
@@ -378,16 +415,31 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private void SetMergeAction(MergeActions action)
+            private void InheritMergeAction(List<CAMTreeNode> subNodes, MergeActions action)
+            {
+                subNodes.ForEach(node =>
+                {
+                    node.UpdateMergeAction(action);
+                    InheritMergeAction(node.AllNodes, action);
+                });
+            }
+            private void UpdateMergeAction(MergeActions action)
+            {
+                if (SetMergeAction(action))
+                {
+                    Checked = false;
+                }
+            }
+            private bool SetMergeAction(MergeActions action)
             {
                 MergeAction = action;
                 switch (action)
                 {
                     // "ignore" has no specific icon since ignored items should never be visible in the treeview
-                    case MergeActions.Update: SetImage(0); break;
-                    case MergeActions.Add: SetImage(1); break;
-                    case MergeActions.Remove: SetImage(2); break;
-                    default: SetImage(3); Checked = false;  break;
+                    case MergeActions.Update: SetImage(0); return false;
+                    case MergeActions.Add: SetImage(1); return false;
+                    case MergeActions.Remove: SetImage(2); return false;
+                    default: SetImage(3); return true;
                 }
             }
             private void SetImage(int imageListIndex)
@@ -396,7 +448,6 @@ namespace EgsEcfEditorApp
                 ImageIndex = imageListIndex;
             }
         }
-
     }
 }
 

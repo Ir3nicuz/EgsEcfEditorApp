@@ -154,6 +154,7 @@ namespace EgsEcfEditorApp
         private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
         {
             TransferExpandState(evt.Node);
+            
         }
         private void SecondFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
@@ -210,15 +211,15 @@ namespace EgsEcfEditorApp
             FirstFileSelectionTools.ResetTo(initState);
             SecondFileSelectionTools.ResetTo(initState);
         }
-        private static void ChangeAllCheckStates(List<CAMTreeNode> nodes, CAMTreeNode.MergeActions? nodeType, bool state)
+        private static void ChangeAllCheckStates(List<CAMTreeNode> nodes, CAMTreeNode.MergeActions? action, bool state)
         {
             foreach(CAMTreeNode node in nodes)
             {
-                if (node.MergeAction == nodeType)
+                if (node.MergeAction == action)
                 {
                     node.Checked = state;
                 }
-                else if (nodeType == null)
+                else if (action == null)
                 {
                     switch (node.MergeAction)
                     {
@@ -232,7 +233,7 @@ namespace EgsEcfEditorApp
                             break;
                     }
                 }
-                ChangeAllCheckStates(node.AllNodes, nodeType, state);
+                ChangeAllCheckStates(node.AllNodes, action, state);
             }
         }
         private static void TransferExpandState(TreeNode node)
@@ -288,9 +289,10 @@ namespace EgsEcfEditorApp
         }
         private static void CompareTreeNodeLists(List<CAMTreeNode> firstNodeList, List<CAMTreeNode> secondNodeList)
         {
+            CAMTreeNode concurrentNode;
             firstNodeList.ForEach(node =>
             {
-                CAMTreeNode concurrentNode = secondNodeList.FirstOrDefault(otherNode => 
+                concurrentNode = secondNodeList.FirstOrDefault(otherNode => 
                     otherNode.MergeAction == CAMTreeNode.MergeActions.Unknown && StructureItemIdEquals(node.Item, otherNode.Item));
                 if (concurrentNode == null)
                 {
@@ -302,6 +304,7 @@ namespace EgsEcfEditorApp
                 {
                     CompareTreeNodeLists(node.AllNodes, concurrentNode.AllNodes);
                     if (node.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
+                        concurrentNode.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
                         !node.Item.ContentEquals(concurrentNode.Item, false))
                     {
                         node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Update, false);
@@ -315,13 +318,21 @@ namespace EgsEcfEditorApp
                 }
             });
 
-
+            secondNodeList.ForEach(node =>
+            {
+                if (node.MergeAction == CAMTreeNode.MergeActions.Unknown)
+                {
+                    concurrentNode = new CAMTreeNode(null, node.Checked);
+                    node.UpdatePairingData(concurrentNode, CAMTreeNode.MergeActions.Add, true);
+                    concurrentNode.UpdatePairingData(node, CAMTreeNode.MergeActions.Remove, false);
+                }
+            });
 
             
 
             // find insert index for add verdict? -> add removing node to second list???
 
-            // loop over second list -> any unknown left???
+            // upwards / downswards check inherittance
 
         }
         private static void RefreshTreeViews(TreeView treeView, List<CAMTreeNode> nodeList)
@@ -391,9 +402,9 @@ namespace EgsEcfEditorApp
             }
 
             // publics
-            public void UpdatePairingData(CAMTreeNode twinNode, MergeActions action, bool inheritAction)
+            public void UpdatePairingData(CAMTreeNode concurrentNode, MergeActions action, bool inheritAction)
             {
-                ConcurrentNode = twinNode;
+                ConcurrentNode = concurrentNode;
                 UpdateMergeAction(action);
                 if (inheritAction)
                 {

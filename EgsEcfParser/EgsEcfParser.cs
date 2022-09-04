@@ -851,10 +851,10 @@ namespace EgsEcfParser
             ItemList = InternalItemList.AsReadOnly();
             FileName = Path.GetFileName(filePathAndName);
             FilePath = Path.GetDirectoryName(filePathAndName);
-            LineCount = File.ReadLines(filePathAndName).Count();
             Definition = new FormatDefinition(definition);
             FileEncoding = encoding;
             NewLineSymbol = newLineSymbol;
+            LineCount = File.Exists(filePathAndName) ? File.ReadLines(filePathAndName).Count() : 0;
         }
         public EgsEcfFile(string filePathAndName, FormatDefinition definition) : this(filePathAndName, definition, GetFileEncoding(filePathAndName), GetNewLineSymbol(filePathAndName))
         {

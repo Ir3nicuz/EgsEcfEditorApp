@@ -367,7 +367,7 @@
     <value>In dem gewählten Tab befinden sich ungesicherte Daten. Diesen Tab wirklich schließen?</value>
   </data>
   <data name="EgsEcfEditorApp_CreateEcfFileFailed" xml:space="preserve">
-    <value>Datei konnte nicht geöffnet erstellt!</value>
+    <value>Datei konnte nicht erstellt werden!</value>
   </data>
   <data name="EgsEcfEditorApp_NoTabSelected" xml:space="preserve">
     <value>Kein gültiger Dateireiter ausgewählt!</value>

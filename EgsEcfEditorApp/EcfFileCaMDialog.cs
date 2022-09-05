@@ -92,10 +92,17 @@ namespace EgsEcfEditorApp
             FirstFileCheckStateUpdate = true;
             switch (evt.Group)
             {
-                case SelectionGroups.Unequal: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All); break;
-                case SelectionGroups.Add: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All); break;
-                case SelectionGroups.Remove: ChangeAllCheckStates(FirstFileNodes, CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All); break;
-                default: break;
+                case SelectionGroups.Unequal:
+                    FirstFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All));
+                    break;
+                case SelectionGroups.Add:
+                    FirstFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All));
+                    break;
+                case SelectionGroups.Remove:
+                    FirstFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All));
+                    break;
+                default: 
+                    break;
             }
             FirstFileCheckStateUpdate = false;
         }
@@ -122,7 +129,7 @@ namespace EgsEcfEditorApp
             if (!FirstFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
             {
                 FirstFileCheckStateUpdate = true;
-                ChangeAllCheckStates(treeNode.AllNodes, null, treeNode.Checked);
+                treeNode.UpdateCheckState(null, treeNode.Checked);
                 FirstFileCheckStateUpdate = false;
                 FirstFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
@@ -138,10 +145,17 @@ namespace EgsEcfEditorApp
             SecondFileCheckStateUpdate = true;
             switch (evt.Group)
             {
-                case SelectionGroups.Unequal: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All); break;
-                case SelectionGroups.Add: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All); break;
-                case SelectionGroups.Remove: ChangeAllCheckStates(SecondFileNodes, CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All); break;
-                default: break;
+                case SelectionGroups.Unequal: 
+                    SecondFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Update, evt.Type == SelectionTypes.All)); 
+                    break;
+                case SelectionGroups.Add: 
+                    SecondFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Add, evt.Type == SelectionTypes.All)); 
+                    break;
+                case SelectionGroups.Remove: 
+                    SecondFileNodes.ForEach(node => node.UpdateCheckState(CAMTreeNode.MergeActions.Remove, evt.Type == SelectionTypes.All)); 
+                    break;
+                default: 
+                    break;
             }
             SecondFileCheckStateUpdate = false;
         }
@@ -154,7 +168,6 @@ namespace EgsEcfEditorApp
         private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
         {
             TransferExpandState(evt.Node);
-            
         }
         private void SecondFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
@@ -169,7 +182,7 @@ namespace EgsEcfEditorApp
             if (!SecondFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
             {
                 SecondFileCheckStateUpdate = true;
-                ChangeAllCheckStates(treeNode.AllNodes, null, treeNode.Checked);
+                treeNode.UpdateCheckState(null, treeNode.Checked);
                 SecondFileCheckStateUpdate = false;
                 SecondFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
@@ -210,31 +223,6 @@ namespace EgsEcfEditorApp
 
             FirstFileSelectionTools.ResetTo(initState);
             SecondFileSelectionTools.ResetTo(initState);
-        }
-        private static void ChangeAllCheckStates(List<CAMTreeNode> nodes, CAMTreeNode.MergeActions? action, bool state)
-        {
-            foreach(CAMTreeNode node in nodes)
-            {
-                if (node.MergeAction == action)
-                {
-                    node.Checked = state;
-                }
-                else if (action == null)
-                {
-                    switch (node.MergeAction)
-                    {
-                        case CAMTreeNode.MergeActions.Update:
-                        case CAMTreeNode.MergeActions.Add:
-                        case CAMTreeNode.MergeActions.Remove:
-                            node.Checked = state;
-                            break;
-                        default:
-                            node.Checked = false;
-                            break;
-                    }
-                }
-                ChangeAllCheckStates(node.AllNodes, action, state);
-            }
         }
         private static void TransferExpandState(TreeNode node)
         {
@@ -334,7 +322,8 @@ namespace EgsEcfEditorApp
 
             // find file insert index for add verdict
 
-            // upwards / downswards check inherittance
+            // upwards / downswards check change indicator update
+
 
         }
         private static void RefreshTreeViews(TreeView treeView, List<CAMTreeNode> nodeList)
@@ -435,6 +424,27 @@ namespace EgsEcfEditorApp
                     Nodes.Add(new CAMTreeNode(null, false));
                 }
             }
+            public void UpdateCheckState(MergeActions? action, bool state)
+            {
+                if (MergeAction == action)
+                {
+                    SetState(state);
+                    if (!state) { action = null; }
+                }
+                else if (action == null)
+                {
+                    switch (MergeAction)
+                    {
+                        case MergeActions.Update:
+                        case MergeActions.Add:
+                        case MergeActions.Remove:
+                            SetState(state); break;
+                        default:
+                            SetState(false); break;
+                    }
+                }
+                AllNodes.ForEach(node => node.UpdateCheckState(action, state));
+            }
 
             // privates
             private void InheritMergeAction(List<CAMTreeNode> subNodes, MergeActions action)
@@ -468,6 +478,19 @@ namespace EgsEcfEditorApp
             {
                 SelectedImageIndex = imageListIndex;
                 ImageIndex = imageListIndex;
+            }
+            private void SetParentChecked()
+            {
+                if (Parent is CAMTreeNode parent)
+                {
+                    parent.Checked = true;
+                    parent.SetParentChecked();
+                }
+            }
+            private void SetState(bool state)
+            {
+                Checked = state;
+                if (state) { SetParentChecked(); }
             }
         }
     }

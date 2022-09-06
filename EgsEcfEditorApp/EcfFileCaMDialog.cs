@@ -104,6 +104,7 @@ namespace EgsEcfEditorApp
                 default: 
                     break;
             }
+            RefreshSelectionTools(FirstFileSelectionTools, FirstFileNodes);
             FirstFileCheckStateUpdate = false;
         }
         private void FirstFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
@@ -130,8 +131,8 @@ namespace EgsEcfEditorApp
             {
                 FirstFileCheckStateUpdate = true;
                 treeNode.UpdateCheckState(null, treeNode.Checked);
+                RefreshSelectionTools(FirstFileSelectionTools, FirstFileNodes);
                 FirstFileCheckStateUpdate = false;
-                FirstFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
         }
         private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
@@ -157,6 +158,7 @@ namespace EgsEcfEditorApp
                 default: 
                     break;
             }
+            RefreshSelectionTools(SecondFileSelectionTools, SecondFileNodes);
             SecondFileCheckStateUpdate = false;
         }
         private void SecondFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
@@ -183,8 +185,8 @@ namespace EgsEcfEditorApp
             {
                 SecondFileCheckStateUpdate = true;
                 treeNode.UpdateCheckState(null, treeNode.Checked);
+                RefreshSelectionTools(SecondFileSelectionTools, SecondFileNodes);
                 SecondFileCheckStateUpdate = false;
-                SecondFileSelectionTools.ResetTo(CheckState.Indeterminate);
             }
         }
         private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
@@ -221,20 +223,23 @@ namespace EgsEcfEditorApp
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes);
 
-            FirstFileSelectionTools.ResetTo(initState);
-            SecondFileSelectionTools.ResetTo(initState);
+            FirstFileSelectionTools.Reset(initState);
+            SecondFileSelectionTools.Reset(initState);
         }
         private static void TransferExpandState(TreeNode node)
         {
             if (node is CAMTreeNode treeNode)
             {
-                if (treeNode.IsExpanded)
+                if (treeNode.ConcurrentNode is CAMTreeNode concurrentNode)
                 {
-                    treeNode.ConcurrentNode?.Expand();
-                }
-                else
-                {
-                    treeNode.ConcurrentNode?.Collapse();
+                    if (treeNode.IsExpanded && !concurrentNode.IsExpanded)
+                    {
+                        concurrentNode.Expand();
+                    }
+                    else if (!treeNode.IsExpanded && concurrentNode.IsExpanded)
+                    {
+                        concurrentNode.Collapse();
+                    }
                 }
             }
         }
@@ -320,9 +325,12 @@ namespace EgsEcfEditorApp
 
             
 
+
+
             // find file insert index for add verdict
 
-            // upwards / downswards check change indicator update
+            
+
 
 
         }
@@ -332,6 +340,58 @@ namespace EgsEcfEditorApp
             treeView.Nodes.Clear();
             treeView.Nodes.AddRange(nodeList.Where(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore).ToArray());
             treeView.EndUpdate();
+        }
+        private static void RefreshSelectionTools(CompareSelectionTools selectionTools, List<CAMTreeNode> nodes)
+        {
+            
+
+            // double click handling qwkward
+
+
+            // subnodes not included
+            // too much queries on same table -> combineable?
+            // same logic on all merge actions -> substituteable?
+
+
+            if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Add).All(node => node.Checked))
+            {
+                selectionTools.Reset(CheckState.Checked, SelectionGroups.Add);
+            } 
+            else if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Add).All(node => !node.Checked))
+            {
+                selectionTools.Reset(CheckState.Unchecked, SelectionGroups.Add);
+            }
+            else
+            {
+                selectionTools.Reset(CheckState.Indeterminate, SelectionGroups.Add);
+            }
+
+            if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Update).All(node => node.Checked))
+            {
+                selectionTools.Reset(CheckState.Checked, SelectionGroups.Unequal);
+            }
+            else if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Update).All(node => !node.Checked))
+            {
+                selectionTools.Reset(CheckState.Unchecked, SelectionGroups.Unequal);
+            }
+            else
+            {
+                selectionTools.Reset(CheckState.Indeterminate, SelectionGroups.Unequal);
+            }
+
+            if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Remove).All(node => node.Checked))
+            {
+                selectionTools.Reset(CheckState.Checked, SelectionGroups.Remove);
+            }
+            else if (nodes.Where(node => node.MergeAction == CAMTreeNode.MergeActions.Remove).All(node => !node.Checked))
+            {
+                selectionTools.Reset(CheckState.Unchecked, SelectionGroups.Remove);
+            }
+            else
+            {
+                selectionTools.Reset(CheckState.Indeterminate, SelectionGroups.Remove);
+            }
+
         }
         [Obsolete("needs work")]
         private void MergeFiles(ComboBoxItem targetFile, List<CAMTreeNode> sourceNodes)
@@ -559,27 +619,25 @@ namespace EcfCAMTools
         }
 
         // publics
-        public void SetAllAddsState(CheckState state)
-        {
-            ChangeAllAddItemsButton.CheckState = state;
-        }
-        public void SetAllUpdatesButton(CheckState state)
-        {
-            ChangeAllUnequalItemsButton.CheckState = state;
-        }
-        public void SetAllRemovesButton(CheckState state)
-        {
-            ChangeAllRemoveItemsButton.CheckState = state;
-        }
         public void Reset()
         {
-            ResetTo(CheckState.Checked);
+            Reset(CheckState.Checked);
         }
-        public void ResetTo(CheckState state)
+        public void Reset(CheckState state)
         {
-            SetAllAddsState(state);
-            SetAllUpdatesButton(state);
-            SetAllRemovesButton(state);
+            Reset(state, SelectionGroups.Add);
+            Reset(state, SelectionGroups.Unequal);
+            Reset(state, SelectionGroups.Remove);
+        }
+        public void Reset(CheckState state, SelectionGroups group)
+        {
+            switch (group)
+            {
+                case SelectionGroups.Add: ChangeAllAddItemsButton.CheckState = state; break;
+                case SelectionGroups.Unequal: ChangeAllUnequalItemsButton.CheckState = state; break;
+                case SelectionGroups.Remove: ChangeAllRemoveItemsButton.CheckState = state; break;
+                default: break;
+            }
         }
 
         // subclasses

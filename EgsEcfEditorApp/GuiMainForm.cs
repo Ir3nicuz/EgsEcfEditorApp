@@ -4289,6 +4289,7 @@ namespace EcfToolBarControls
             Reset();
         }
 
+        // events
         private void ToolBarThreeStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
         {
             switch (CheckState)
@@ -4299,6 +4300,7 @@ namespace EcfToolBarControls
             }
         }
 
+        // publics
         public void Reset()
         {
             CheckState = CheckState.Indeterminate;

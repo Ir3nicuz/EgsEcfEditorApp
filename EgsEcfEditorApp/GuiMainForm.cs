@@ -4407,6 +4407,12 @@ namespace EcfWinFormControls
         // privates
         protected override void WndProc(ref Message message)
         {
+            if (message.Msg == User32.WM_DOUBLECLICK)
+            {
+                message.Result = IntPtr.Zero;
+                return;
+            }
+
             base.WndProc(ref message);
 
             if (message.Msg == User32.WM_VSCROLL || message.Msg == User32.WM_MOUSEWHEEL)
@@ -4442,6 +4448,7 @@ namespace EcfWinFormControls
         {
             public const int WM_VSCROLL = 0x115;
             public const int WM_MOUSEWHEEL = 0x020A;
+            public const int WM_DOUBLECLICK = 0x0203;
 
             [DllImport("user32.dll", CharSet = CharSet.Auto)]
             public static extern int GetScrollPos(IntPtr hWnd, Orientation nBar);

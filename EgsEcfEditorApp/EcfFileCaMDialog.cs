@@ -29,8 +29,7 @@ namespace EgsEcfEditorApp
 
         private List<CAMTreeNode> FirstFileNodes { get; } = new List<CAMTreeNode>();
         private List<CAMTreeNode> SecondFileNodes { get; } = new List<CAMTreeNode>();
-        private bool FirstFileCheckStateUpdate { get; set; } = false;
-        private bool SecondFileCheckStateUpdate { get; set; } = false;
+        private static bool IsCrossAccessing { get; set; } = false;
 
         public EcfFileCAMDialog()
         {
@@ -73,9 +72,6 @@ namespace EgsEcfEditorApp
             SecondFileTreeView.BeforeExpand += SecondFileTreeView_BeforeExpand;
             SecondFileTreeView.BeforeCollapse += SecondFileTreeView_BeforeCollapse;
 
-            FirstFileTreeView.AfterCheck += FirstFileTreeView_AfterCheck;
-            SecondFileTreeView.AfterCheck += SecondFileTreeView_AfterCheck;
-
             FirstFileSelectionTools.SelectionChangeClicked += FirstFileSelectionTools_SelectionChangeClicked;
             SecondFileSelectionTools.SelectionChangeClicked += SecondFileSelectionTools_SelectionChangeClicked;
 
@@ -87,9 +83,16 @@ namespace EgsEcfEditorApp
             Close();
         }
 
+        private void FirstFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            if (evt.Node is CAMTreeNode treeNode)
+            {
+                treeNode.UpdateCheckState(null, treeNode.Checked);
+                RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
+            }
+        }
         private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
         {
-            FirstFileCheckStateUpdate = true;
             switch (evt.Group)
             {
                 case SelectionGroups.Unequal:
@@ -105,7 +108,6 @@ namespace EgsEcfEditorApp
                     break;
             }
             RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
-            FirstFileCheckStateUpdate = false;
         }
         private void FirstFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
@@ -113,27 +115,14 @@ namespace EgsEcfEditorApp
             RefreshFileSelectorBox(SecondFileComboBox, firstItem, AvailableFileTabs);
             CompareFiles(firstItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
-        private void FirstFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
-        {
-            TransferExpandState(evt.Node);
-        }
         private void FirstFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
             InflateSubNodes(evt.Node);
+
         }
         private void FirstFileTreeView_BeforeCollapse(object sender, TreeViewCancelEventArgs evt)
         {
             ReduceSubNodes(evt.Node);
-        }
-        private void FirstFileTreeView_AfterCheck(object sender, TreeViewEventArgs evt)
-        {
-            if (!FirstFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
-            {
-                FirstFileCheckStateUpdate = true;
-                treeNode.UpdateCheckState(null, treeNode.Checked);
-                RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
-                FirstFileCheckStateUpdate = false;
-            }
         }
         private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
@@ -141,9 +130,16 @@ namespace EgsEcfEditorApp
             CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
+        private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+        {
+            if (evt.Node is CAMTreeNode treeNode)
+            {
+                treeNode.UpdateCheckState(null, treeNode.Checked);
+                RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
+            }
+        }
         private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
         {
-            SecondFileCheckStateUpdate = true;
             switch (evt.Group)
             {
                 case SelectionGroups.Unequal: 
@@ -159,17 +155,12 @@ namespace EgsEcfEditorApp
                     break;
             }
             RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-            SecondFileCheckStateUpdate = false;
         }
         private void SecondFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             ComboBoxItem secondItem = SecondFileComboBox.SelectedItem as ComboBoxItem;
             RefreshFileSelectorBox(FirstFileComboBox, secondItem, AvailableFileTabs);
             CompareFiles(FirstFileComboBox.SelectedItem as ComboBoxItem, secondItem);
-        }
-        private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
-        {
-            TransferExpandState(evt.Node);
         }
         private void SecondFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
@@ -178,16 +169,6 @@ namespace EgsEcfEditorApp
         private void SecondFileTreeView_BeforeCollapse(object sender, TreeViewCancelEventArgs evt)
         {
             ReduceSubNodes(evt.Node);
-        }
-        private void SecondFileTreeView_AfterCheck(object sender, TreeViewEventArgs evt)
-        {
-            if (!SecondFileCheckStateUpdate && evt.Node is CAMTreeNode treeNode)
-            {
-                SecondFileCheckStateUpdate = true;
-                treeNode.UpdateCheckState(null, treeNode.Checked);
-                RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-                SecondFileCheckStateUpdate = false;
-            }
         }
         private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
@@ -228,28 +209,20 @@ namespace EgsEcfEditorApp
             RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
             RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
         }
-        private static void TransferExpandState(TreeNode node)
-        {
-            if (node is CAMTreeNode treeNode)
-            {
-                if (treeNode.ConcurrentNode is CAMTreeNode concurrentNode)
-                {
-                    if (treeNode.IsExpanded && !concurrentNode.IsExpanded)
-                    {
-                        concurrentNode.Expand();
-                    }
-                    else if (!treeNode.IsExpanded && concurrentNode.IsExpanded)
-                    {
-                        concurrentNode.Collapse();
-                    }
-                }
-            }
-        }
         private static void InflateSubNodes(TreeNode node)
         {
             if (node is CAMTreeNode treeNode)
             {
                 treeNode.InflateSubNodes();
+                if (!IsCrossAccessing && treeNode.ConcurrentNode is CAMTreeNode concurrentNode)
+                {
+                    IsCrossAccessing = true;
+                    if (!concurrentNode.IsExpanded)
+                    {
+                        concurrentNode.Expand();
+                    }
+                    IsCrossAccessing = false;
+                }
             }
         }
         private static void ReduceSubNodes(TreeNode node)
@@ -257,6 +230,15 @@ namespace EgsEcfEditorApp
             if (node is CAMTreeNode treeNode)
             {
                 treeNode.ReduceSubNodes();
+                if (!IsCrossAccessing && treeNode.ConcurrentNode is CAMTreeNode concurrentNode)
+                {
+                    IsCrossAccessing = true;
+                    if (concurrentNode.IsExpanded)
+                    {
+                        concurrentNode.Collapse();
+                    }
+                    IsCrossAccessing = false;
+                }
             }
         }
         private static void RefreshFileSelectorBox(ComboBox box, ComboBoxItem otherSelectedItem, List<ComboBoxItem> availableFiles)
@@ -332,8 +314,10 @@ namespace EgsEcfEditorApp
             // find file insert index for add verdict
 
 
-            // double click handling qwkward
+            // window init qol optimization
 
+
+            // id text / update content display
 
 
         }

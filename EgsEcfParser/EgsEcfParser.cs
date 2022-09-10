@@ -789,7 +789,7 @@ namespace EgsEcfParser
             {
                 EcfAttribute attrA = attributeListA[index];
                 EcfAttribute attrB = attributeListB[index];
-                if (!(attrA.IdEquals(attrB) && attrA.ContentEquals(attrB, false)))
+                if (!(attrA.IdEquals(attrB) && attrA.ContentEquals(attrB)))
                 {
                     return false;
                 }
@@ -802,14 +802,14 @@ namespace EgsEcfParser
             if (itemA == null || itemB == null) { return false; }
             if (itemA is EcfComment && itemB is EcfComment)
             {
-                return itemA.ContentEquals(itemB, false);
+                return itemA.ContentEquals(itemB);
             }
             else
             {
                 return itemA.IdEquals(itemB);
             }
         }
-        public static bool StructureItemListEquals(ReadOnlyCollection<EcfStructureItem> itemListA, ReadOnlyCollection<EcfStructureItem> itemListB, bool includeStructure)
+        public static bool StructureItemListEquals(ReadOnlyCollection<EcfStructureItem> itemListA, ReadOnlyCollection<EcfStructureItem> itemListB)
         {
             if (itemListA == null && itemListB == null) { return true; }
             if (itemListA == null || itemListB == null) { return false; }
@@ -819,12 +819,32 @@ namespace EgsEcfParser
             {
                 EcfStructureItem itemA = itemListA[index];
                 EcfStructureItem itemB = itemListB[index];
-                if (!(itemA.IdEquals(itemB) && itemA.ContentEquals(itemB, includeStructure)))
+                if (!(itemA.IdEquals(itemB) && itemA.ContentEquals(itemB)))
                 {
                     return false;
                 }
             }
             return true;
+        }
+        public static EcfStructureItem CopyStructureItem(EcfStructureItem template)
+        {
+            if (template is EcfComment comment)
+            {
+                return new EcfComment(comment);
+            }
+            else if (template is EcfAttribute attr)
+            {
+                return new EcfAttribute(attr);
+            }
+            else if (template is EcfParameter param)
+            {
+                return new EcfParameter(param);
+            }
+            else if (template is EcfBlock block)
+            {
+                return new EcfBlock(block);
+            }
+            return null;
         }
     }
 
@@ -947,6 +967,37 @@ namespace EgsEcfParser
             }
             return false;
         }
+        public bool AddItem(EcfStructureItem item, int index)
+        {
+            if (item != null)
+            {
+                item.UpdateStructureData(this, null, -1);
+                if (index > InternalItemList.Count)
+                {
+                    InternalItemList.Add(item);
+                }
+                else
+                {
+                    if (index < 0) { index = 0; }
+                    InternalItemList.Insert(index, item);
+                }
+                SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public bool AddItem(EcfStructureItem item, EcfStructureItem precedingItem)
+        {
+            int index = InternalItemList.IndexOf(precedingItem);
+            if (index < 0)
+            {
+                return AddItem(item);
+            }
+            else
+            {
+                return AddItem(item, index + 1);
+            }
+        }
         public int AddItems(List<EcfStructureItem> items)
         {
             int count = 0;
@@ -959,38 +1010,30 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public bool AddItem(EcfStructureItem item, EcfStructureItem precedingItem)
+        public int AddItems(List<EcfStructureItem> items, int index)
         {
-            if (item != null)
+            int count = 0;
+            items?.ForEach(item =>
             {
-                item.UpdateStructureData(this, null, -1);
-                int index = InternalItemList.IndexOf(precedingItem);
-                if (index < 0)
+                if (AddItem(item, index))
                 {
-                    InternalItemList.Add(item);
+                    count++;
+                    index++;
                 }
-                else
-                {
-                    InternalItemList.Insert(index + 1, item);
-                }
-                SetUnsavedDataFlag();
-                return true;
-            }
-            return false;
+            });
+            return count;
         }
         public int AddItems(List<EcfStructureItem> items, EcfStructureItem precedingItem)
         {
-            int count = 0;
-            EcfStructureItem preItem = precedingItem;
-            items?.ForEach(item =>
+            int index = InternalItemList.IndexOf(precedingItem);
+            if (index < 0)
             {
-                if (AddItem(item, preItem))
-                {
-                    count++;
-                }
-                preItem = item;
-            });
-            return count;
+                return AddItems(items);
+            }
+            else
+            {
+                return AddItems(items, index + 1);
+            }
         }
         public bool RemoveItem(EcfStructureItem item)
         {
@@ -1925,7 +1968,8 @@ namespace EgsEcfParser
         public abstract string BuildIdentification();
         public abstract int Revalidate();
         public abstract bool IdEquals(EcfStructureItem other);
-        public abstract bool ContentEquals(EcfStructureItem other, bool includeStructure);
+        public abstract bool ContentEquals(EcfStructureItem other);
+        public abstract void UpdateContent(EcfStructureItem template);
 
         // publics
         public EcfStructureItem BuildDeepCopy()
@@ -2275,10 +2319,18 @@ namespace EgsEcfParser
             if (!(other is EcfAttribute otherAttribute)) { return false; }
             return Key.Equals(otherAttribute.Key);
         }
-        public override bool ContentEquals(EcfStructureItem other, bool includeStructure)
+        public override bool ContentEquals(EcfStructureItem other)
         {
             if (!(other is EcfAttribute otherAttribute)) { return false; }
             return ValueGroupListEquals(ValueGroups, otherAttribute.ValueGroups) && ValueListEquals(Comments, other.Comments);
+        }
+        public override void UpdateContent(EcfStructureItem template)
+        {
+            if (!(template is EcfAttribute attr)) { throw new InvalidOperationException("Structure item type not matching!"); }
+            ClearComments();
+            AddComments(attr.Comments.ToList());
+            ClearValues();
+            AddValues(attr.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2359,12 +2411,22 @@ namespace EgsEcfParser
             if (!(other is EcfParameter otherParameter)) { return false; }
             return Key.Equals(otherParameter.Key);
         }
-        public override bool ContentEquals(EcfStructureItem other, bool includeStructure)
+        public override bool ContentEquals(EcfStructureItem other)
         {
             if (!(other is EcfParameter otherParameter)) { return false; }
             return ValueGroupListEquals(ValueGroups, otherParameter.ValueGroups) && 
                 AttributeListEquals(Attributes, otherParameter.Attributes) && 
                 ValueListEquals(Comments, other.Comments);
+        }
+        public override void UpdateContent(EcfStructureItem template)
+        {
+            if (!(template is EcfParameter param)) { throw new InvalidOperationException("Structure item type not matching!"); }
+            ClearComments();
+            AddComments(param.Comments.ToList());
+            ClearValues();
+            AddValues(param.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
+            ClearAttributes();
+            AddAttributes(param.Attributes.Select(attr => new EcfAttribute(attr)).ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2535,14 +2597,16 @@ namespace EgsEcfParser
                 string.Equals(PostMark, otherBlock.PostMark) &&
                 AttributeListEquals(Attributes, otherBlock.Attributes);
         }
-        public override bool ContentEquals(EcfStructureItem other, bool includeStructure)
+        public override bool ContentEquals(EcfStructureItem other)
         {
             if (!(other is EcfBlock otherBlock)) { return false; }
-            if (ValueListEquals(Comments, other.Comments))
-            {
-                return !includeStructure || StructureItemListEquals(ChildItems, otherBlock.ChildItems, includeStructure);
-            }
-            return false;
+            return ValueListEquals(Comments, otherBlock.Comments);
+        }
+        public override void UpdateContent(EcfStructureItem template)
+        {
+            if (!(template is EcfBlock block)) { throw new InvalidOperationException("Structure item type not matching!"); }
+            ClearComments();
+            AddComments(block.Comments.ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2657,6 +2721,37 @@ namespace EgsEcfParser
             }
             return false;
         }
+        public bool AddChild(EcfStructureItem child, int index)
+        {
+            if (child != null)
+            {
+                child.UpdateStructureData(EcfFile, this, StructureLevel);
+                if (index > InternalChildItems.Count)
+                {
+                    InternalChildItems.Add(child);
+                }
+                else
+                {
+                    if (index < 0) { index = 0; }
+                    InternalChildItems.Insert(index, child);
+                }
+                EcfFile?.SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public bool AddChild(EcfStructureItem child, EcfStructureItem precedingChild)
+        {
+            int index = InternalChildItems.IndexOf(precedingChild);
+            if (index < 0)
+            {
+                return AddChild(child);
+            }
+            else
+            {
+                return AddChild(child, index + 1);
+            }
+        }
         public int AddChilds(List<EcfStructureItem> childs)
         {
             int count = 0;
@@ -2690,38 +2785,30 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public bool AddChild(EcfStructureItem child, EcfStructureItem precedingChild)
+        public int AddChilds(List<EcfStructureItem> childs, int index)
         {
-            if (child != null)
+            int count = 0;
+            childs?.ForEach(child =>
             {
-                child.UpdateStructureData(EcfFile, this, StructureLevel);
-                int index = InternalChildItems.IndexOf(precedingChild);
-                if (index < 0)
+                if (AddChild(child, index))
                 {
-                    InternalChildItems.Add(child);
+                    count++;
+                    index++;
                 }
-                else
-                {
-                    InternalChildItems.Insert(index + 1, child);
-                }
-                EcfFile?.SetUnsavedDataFlag();
-                return true;
-            }
-            return false;
+            });
+            return count;
         }
         public int AddChilds(List<EcfStructureItem> childs, EcfStructureItem precedingChild)
         {
-            int count = 0;
-            EcfStructureItem preItem = precedingChild;
-            childs?.ForEach(child =>
+            int index = InternalChildItems.IndexOf(precedingChild);
+            if (index < 0)
             {
-                if (AddChild(child, preItem))
-                {
-                    count++;
-                }
-                preItem = child;
-            });
-            return count;
+                return AddChilds(childs);
+            }
+            else
+            {
+                return AddChilds(childs, index + 1);
+            }
         }
         public bool AddAttribute(EcfAttribute attribute)
         {
@@ -2904,12 +2991,17 @@ namespace EgsEcfParser
         {
             return other is EcfComment;
         }
-        public override bool ContentEquals(EcfStructureItem other, bool includeStructure)
+        public override bool ContentEquals(EcfStructureItem other)
         {
             if (!(other is EcfComment)) { return false; }
             return ValueListEquals(Comments, other.Comments);
         }
-
+        public override void UpdateContent(EcfStructureItem template)
+        {
+            if (!(template is EcfComment comment)) { throw new InvalidOperationException("Structure item type not matching!"); }
+            ClearComments();
+            AddComments(comment.Comments.ToList());
+        }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
             return RemoveErrors(errors);

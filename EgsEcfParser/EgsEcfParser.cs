@@ -909,7 +909,7 @@ namespace EgsEcfParser
             {
                 using (StreamReader reader = new StreamReader(File.Open(filePathAndName, FileMode.Open, FileAccess.Read), FileEncoding))
                 {
-                    ParseEcfContent(this, lineProgress, reader);
+                    ParseEcfContent(lineProgress, reader);
                 }
             }
             catch (Exception ex)
@@ -927,26 +927,23 @@ namespace EgsEcfParser
         }
         public void Save(string filePathAndName, bool onlyValid, bool inheritError, bool allowFallback)
         {
-            if (HasUnsavedData)
+            try
             {
-                try
+                string path = Path.GetDirectoryName(filePathAndName);
+                Directory.CreateDirectory(path);
+                using (StreamWriter writer = new StreamWriter(File.Open(filePathAndName, FileMode.Create, FileAccess.Write), FileEncoding))
                 {
-                    string path = Path.GetDirectoryName(filePathAndName);
-                    Directory.CreateDirectory(path);
-                    using (StreamWriter writer = new StreamWriter(File.Open(filePathAndName, FileMode.Create, FileAccess.Write), FileEncoding))
-                    {
-                        writer.NewLine = GetNewLineChar(NewLineSymbol);
-                        CreateEcfContent(writer, onlyValid, inheritError, allowFallback);
-                    }
-                    FileName = Path.GetFileName(filePathAndName);
-                    FilePath = path;
-                    LineCount = File.ReadLines(filePathAndName).Count();
-                    HasUnsavedData = false;
+                    writer.NewLine = GetNewLineChar(NewLineSymbol);
+                    CreateEcfContent(writer, onlyValid, inheritError, allowFallback);
                 }
-                catch (Exception ex)
-                {
-                    throw new IOException(string.Format("File {0} could not be saved: {1}", filePathAndName, ex.Message));
-                }
+                FileName = Path.GetFileName(filePathAndName);
+                FilePath = path;
+                LineCount = File.ReadLines(filePathAndName).Count();
+                HasUnsavedData = false;
+            }
+            catch (Exception ex)
+            {
+                throw new IOException(string.Format("File {0} could not be saved: {1}", filePathAndName, ex.Message));
             }
         }
         public void SetUnsavedDataFlag()
@@ -1227,7 +1224,7 @@ namespace EgsEcfParser
         }
 
         // ecf parsing
-        private void ParseEcfContent(EgsEcfFile file, IProgress<int> lineProgress, StreamReader reader)
+        private void ParseEcfContent(IProgress<int> lineProgress, StreamReader reader)
         {
             List<EcfStructureItem> rootItems = new List<EcfStructureItem>();
             List<EcfError> fatalErrors = new List<EcfError>();  
@@ -1265,7 +1262,7 @@ namespace EgsEcfParser
                         }
                         else
                         {
-                            comment.UpdateStructureData(file, null, -1);
+                            comment.UpdateStructureData(this, null, -1);
                             rootItems.Add(comment);
                         }
                         continue;
@@ -1335,7 +1332,7 @@ namespace EgsEcfParser
                             // append block to root list
                             else
                             {
-                                block.UpdateStructureData(file, null, -1);
+                                block.UpdateStructureData(this, null, -1);
                                 rootItems.Add(block);
                             }
                         }
@@ -1361,7 +1358,8 @@ namespace EgsEcfParser
                 while (level > 0)
                 {
                     StackItem item = stack[level - 1];
-                    fatalErrors.Add(new EcfError(EcfErrorGroups.Structural, EcfErrors.BlockOpenerWithoutCloser, string.Format("{0} / {1}", item.Block.GetFullName(), item.LineData), item.LineNumber));
+                    fatalErrors.Add(new EcfError(EcfErrorGroups.Structural, EcfErrors.BlockOpenerWithoutCloser, 
+                        string.Format("{0} / {1}", item.Block.GetFullName(), item.LineData), item.LineNumber));
                     level--;
                 }
 

@@ -492,7 +492,7 @@ namespace EgsEcfEditorApp
                 }
                 if (!cancelClosing)
                 {
-                    FileViewPanel.TabPages.Remove(tab);
+                    FileViewPanel.Remove(tab);
                 }
             }
         }
@@ -506,7 +506,7 @@ namespace EgsEcfEditorApp
             }
             if (!cancelClosing)
             {
-                FileViewPanel.TabPages.Clear();
+                FileViewPanel.Clear();
             }
         }
         private void ShowExceptionMessage(Exception ex, string header)
@@ -651,7 +651,20 @@ namespace EcfFileViews
             tabPage.PasteClicked += TabPage_PasteClicked;
 
             TabPages.Add(tabPage);
+            
             return tabPage;
+        }
+        public void Remove(EcfTabPage tabPage)
+        {
+            TabPages.Remove(tabPage);
+            tabPage.Dispose();
+        }
+        public void Clear()
+        {
+            TabPages.Cast<EcfTabPage>().ToList().ForEach(tabPage =>
+            {
+                Remove(tabPage);
+            });
         }
     }
     public class EcfTabPage : TabPage

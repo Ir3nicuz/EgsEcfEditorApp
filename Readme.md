@@ -63,14 +63,14 @@ to not follow rabbits.
 ### Language and Tool Support
 The icons and controls have tooltips on mouse over. All labels and tootips are localised. At the moment de-DE and en-GB is supported. The language switches automaticly based on the local machine culture setting, defaulting to en-GB.
 
-### Adding, Editing, Removing Content
+### Add, Edit, Remove Content
 The basic functionality of this tool is the alteration of any `.ecf` content.
 
 ### Mass Changing
 :wrench: Not implemented yet :wrench:
 
 ### Compare and Merge
-:wrench: Not implemented yet :wrench:
+The tool is capable of comparing two `.ecf` files, listing the differences and offer several options to update the opposite file partly or completely.
 
 ### Tech Tree Preview
 :wrench: Not implemented yet :wrench:
@@ -128,6 +128,10 @@ At adding or editing (see [Shortcuts and Functions](#shortcuts-and-functions)) t
 At multi selection the panel will normally open for the first selected element. If only parameters are selected (even across parent element borders) the panel will enter a matrix editing mode. This mode provides a table organized structure for matrix arranged parameters or to edit equal parameters of different parents in one view.
 
 <img src="images/editing_dialog.png" title="Editing Dialog"/>
+
+### Comparing and Merging files
+
+Description t.b.d.
 
 ## Shortcuts and Functions
 ### Shortcuts
@@ -204,6 +208,12 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 #### Error Operations
 - <img src="EgsEcfEditorApp\Resources\Icon_ShowInEditor.png" title="icon" width="16" height="16"/> show error in tool
 - <img src="EgsEcfEditorApp\Resources\Icon_ShowInFile.png" title="icon" width="16" height="16"/> show error in file
+
+#### Compare and Merge
+- <img src="EgsEcfEditorApp\Resources\Icon_AllAddItemsSet.png" title="icon" width="16" height="16"/> change checkmark of all "add" items
+- <img src="EgsEcfEditorApp\Resources\Icon_AllUnequalItemsSet.png" title="icon" width="16" height="16"/> change checkmark of all "unequal" items
+- <img src="EgsEcfEditorApp\Resources\Icon_AllRemoveItemsSet.png" title="icon" width="16" height="16"/> change checkmark of all "remove" items
+- <img src="EgsEcfEditorApp\Resources\Icon_MoveRight.png" title="icon" width="16" height="16"/> process all checked items to the opposite file
 
 ## File Content Definition
 The file content definition is the basic information for the tool which content is viable in the loaded `.ecf` file and which is not. To achive the design goal to be reliable able to load and interprete `.ecf` files from any source (default files, text editor tool files, manually edited files and so on) the definition provides several options. 

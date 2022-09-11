@@ -7,6 +7,7 @@ An application to simplify the handling and customizing of the `.ecf` configurat
 - [Motivation](#motivation)
 - [Installation](#installation)
 - [Feature Overview](#feature-overview)
+- [Tool Overview](#tool-overview)
 - [Operations Overview](#operations-overview)
 - [Shortcuts and Functions](#shortcuts-and-functions)
 - [File Content Definition](#file-content-definition)
@@ -62,46 +63,8 @@ to not follow rabbits.
 ### Language and Tool Support
 The icons and controls have tooltips on mouse over. All labels and tootips are localised. At the moment de-DE and en-GB is supported. The language switches automaticly based on the local machine culture setting, defaulting to en-GB.
 
-## Tool Overview
-### Settings Area
-The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
-
-<img src="images/settings_area.png" title="Settings Area" width="1000" height="500"/>
-
-#### File Operation Area
-The standard file operations (new, open, reload, save, close) are located in this area. The cross-file functions (diff, merge, xml) are also arranged here.
-
-<img src="images/file_operation_area.png" title="File Operation Area" width="1000" height="500"/>
-
-#### Filter and File Selection Area
-In this area each opened file will get a tab containing the file name. The label in the tool line indicates the attached game mode and content definition, for example `Vanilla` and `BlocksConfig`. The remaining icons provide different filter options applied to all content view areas.
-
-<img src="images/filter_area.png" title="Filter Area" width="1000" height="500"/>
-
-#### Content Operation Area
-The tools in this area provide content altering options like adding, editing or removing elements. The copy/paste function is located here, too.
-
-<img src="images/content_operation_area.png" title="Content Operation Area" width="1000" height="500"/>
-
-#### Tree View Area
-The tree view area brings the structural overview. The root elements, child elements, parameters and comments are displayed in this view. If an element has an error the entry in this view will turn red.
-
-<img src="images/tree_area.png" title="Tree View Area" width="1000" height="500"/>
-
-#### Parameter View Area
-The parameter view area shows the detail information of any parameter correlating to the selected tree element. Additionally the view analyzes and displays the inheritance dependancies to referenced elements to provide a overview over all parameters effecting the selected element. If an parameter has an error the entry in this view will turn red.
-
-<img src="images/parameter_area.png" title="Parameter View Area" width="1000" height="500"/>
-
-#### Info View Area
-The info area displays additional detail information for the selected tree element and the selected parameter. Especially the element attributes (e.g `formatter`) can be found here.
-
-<img src="images/info_area.png" title="Info View Area" width="1000" height="500"/>
-
-#### Error View Area
-In the error view all occured errors are listed. The view shows the error category and type together with additional information like line in file (if applicable) and the error producing data part.
-
-<img src="images/error_area.png" title="Error View Area" width="1000" height="500"/>
+### Adding, Editing, Removing Content
+The basic functionality of this tool is the alteration of any `.ecf` content.
 
 ### Mass Changing
 :wrench: Not implemented yet :wrench:
@@ -114,6 +77,34 @@ In the error view all occured errors are listed. The view shows the error catego
 
 ### Ingame Item Editing
 :wrench: Not implemented yet :wrench:
+
+## Tool Overview
+
+<img src="images/area_overview.png" title="Areas" width="1000" height="500"/>
+
+### Settings Area
+The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
+
+### File Operation Area
+The standard file operations (new, open, reload, save, close) are located in this area. The cross-file functions (diff, merge, xml) are also arranged here.
+
+### Filter and File Selection Area
+In this area each opened file will get a tab containing the file name. The label in the tool line indicates the attached game mode and content definition, for example `Vanilla` and `BlocksConfig`. The remaining icons provide different filter options applied to all content view areas.
+
+### Content Operation Area
+The tools in this area provide content altering options like adding, editing or removing elements. The copy/paste function is located here, too.
+
+### Tree View Area
+The tree view area brings the structural overview. The root elements, child elements, parameters and comments are displayed in this view. If an element has an error the entry in this view will turn red.
+
+### Parameter View Area
+The parameter view area shows the detail information of any parameter correlating to the selected tree element. Additionally the view analyzes and displays the inheritance dependancies to referenced elements to provide a overview over all parameters effecting the selected element. If an parameter has an error the entry in this view will turn red.
+
+### Info View Area
+The info area displays additional detail information for the selected tree element and the selected parameter. Especially the element attributes (e.g `formatter`) can be found here.
+
+### Error View Area
+In the error view all occured errors are listed. The view shows the error category and type together with additional information like line in file (if applicable) and the error producing data part.
 
 ## Operations Overview
 ### Changing settings
@@ -217,7 +208,7 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 ## File Content Definition
 The file content definition is the basic information for the tool which content is viable in the loaded `.ecf` file and which is not. To achive the design goal to be reliable able to load and interprete `.ecf` files from any source (default files, text editor tool files, manually edited files and so on) the definition provides several options. 
 
-The defintions will be read from the `EcfFileDefinitions` sub folder from the tool root directory. The file name doesn't matter. Each file in this directory will be read, even in sub directories. The first entry in each file must contain the game mode and the definition name, both also shown in the tool. The definition name is the link to the corresponding `.ecf` file (for guessing) and must be unique. Every further `.xml` file with the same `mode` and `type` setting will be ignored.
+The definitions will be read from the `EcfFileDefinitions` sub folder from the tool root directory. The file name doesn't matter. Each file in this directory will be read, even in sub directories. The first entry in each file must contain the game mode and the definition name, both also shown in the tool. The definition name is the link to the corresponding `.ecf` file (for guessing) and must be unique. Every further `.xml` file with the same `mode` and `type` setting will be ignored.
 
 <img src="images/xml_type.png" title="XML Type"/>
 
@@ -249,7 +240,7 @@ The available chapters are:
 - `BlockParameters` the expected parameters for the data blocks (e.g. `Material`)
 - `ParameterAttributes` the expected attributes for the parameters (e.g. `formatter`)
 
-Each `.xml Param` line item can hold different switches to control the behaviour of the error checking while parsing and editing the `.ecf` content. The chapters are allowed to be empty, but remind that the respective functions in the [Editor Panel](#adding-and-editing-content) will be switched off without the definition.
+Each `.xml Param` line item can hold different switches to control the behaviour of the error checking while parsing and editing the `.ecf` content. The chapters are allowed to be empty, but remind that the respective functions in the [Editor Panel](#adding-and-editing-content) will be switched off without the definition set.
 
 <img src="images/xml_options.png" title="ECF Options"/>
 
@@ -267,7 +258,7 @@ The exceptions are the white spaces, the empty lines and the comments. All the f
 
 The tool parses the `.ecf` file content line by line and seperates the line content item by item according to the definition and chronologic. A fault can depending on its severity lead to a whole bunch of follower errors. This is the reason of solving errors from top to bottom.
 
-In the settings are several behaviour adjustments possible how the tool should handle errors at wrting content to the file:
+In the settings are several behaviour adjustments possible how the tool should handle errors at writing content to the file:
 - `Write only valid items to file` Unchecking this option activates the behaviour that all elements will be written in its current state from within the tool. Notice that the file is the persistent storage. After loading a file written with this option unchecked several informations and the resulting errors will be gone.
 - `Invalidate parent of invalid item` Checking this option activates the behaviour that error states will be inherited structure upwards. A error of a sub element invalidates its containing element upto the root element. 
 - `Allow fallback to original data` Unchecking this option activates the behaviour that elements with errors has no permission to try to use the data from the original file. In this case a creation error will be reported. Notice that even with this option checked the error could occur for newly created elements which have no original data available.

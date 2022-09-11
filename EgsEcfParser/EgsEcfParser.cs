@@ -2381,6 +2381,8 @@ namespace EgsEcfParser
         {
             Attributes = InternalAttributes.AsReadOnly();
 
+            LineParsingData = template.LineParsingData;
+
             AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
         }
 
@@ -2547,24 +2549,17 @@ namespace EgsEcfParser
             PreMark = template.PreMark;
             DataType = template.DataType;
             PostMark = template.PostMark;
+
             Id = template.Id;
             RefTarget = template.RefTarget;
             RefSource = template.RefSource;
             Inheritor = template.Inheritor;
 
+            OpenerLineParsingData = template.OpenerLineParsingData;
+            CloserLineParsingData = template.CloserLineParsingData;
+
             AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
-            List<EcfStructureItem> childs = new List<EcfStructureItem>();
-            template.ChildItems.ToList().ForEach(child => {
-                switch (child)
-                {
-                    case EcfComment comment: childs.Add(new EcfComment(comment)); return;
-                    case EcfAttribute attribute: childs.Add(new EcfAttribute(attribute)); return;
-                    case EcfParameter parameter: childs.Add(new EcfParameter(parameter)); return;
-                    case EcfBlock block: childs.Add(new EcfBlock(block)); return;
-                    default: return;
-                }
-            });
-            AddChilds(childs);
+            AddChilds(template.ChildItems.Select(child => CopyStructureItem(child)).ToList());
         }
 
         // publics

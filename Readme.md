@@ -80,30 +80,30 @@ The basic functionality of this tool is the alteration of any `.ecf` content.
 
 ## Tool Overview
 
-<img src="images/area_overview.png" title="Areas" width="1000" height="500"/>
+<img src="images/Area_Overview.png" title="Areas" width="1000" height="500"/>
 
-### Settings Area
-The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
-
-### File Operation Area
+### File Operation Area (1)
 The standard file operations (new, open, reload, save, close) are located in this area. The cross-file functions (diff, merge, xml) are also arranged here.
 
-### Filter and File Selection Area
+### Filter and File Selection Area (2)
 In this area each opened file will get a tab containing the file name. The label in the tool line indicates the attached game mode and content definition, for example `Vanilla` and `BlocksConfig`. The remaining icons provide different filter options applied to all content view areas.
 
-### Content Operation Area
+### Content Operation Area (3)
 The tools in this area provide content altering options like adding, editing or removing elements. The copy/paste function is located here, too.
 
-### Tree View Area
+### Settings Area (4)
+The label shows the actual selected game mode and grants a temporary quick change option on click. The gear button opens the persistent settings menu. 
+
+### Tree View Area (5)
 The tree view area brings the structural overview. The root elements, child elements, parameters and comments are displayed in this view. If an element has an error the entry in this view will turn red.
 
-### Parameter View Area
+### Parameter View Area (6)
 The parameter view area shows the detail information of any parameter correlating to the selected tree element. Additionally the view analyzes and displays the inheritance dependancies to referenced elements to provide a overview over all parameters effecting the selected element. If an parameter has an error the entry in this view will turn red.
 
-### Info View Area
+### Info View Area (7)
 The info area displays additional detail information for the selected tree element and the selected parameter. Especially the element attributes (e.g `formatter`) can be found here.
 
-### Error View Area
+### Error View Area (8)
 In the error view all occured errors are listed. The view shows the error category and type together with additional information like line in file (if applicable) and the error producing data part.
 
 ## Operations Overview

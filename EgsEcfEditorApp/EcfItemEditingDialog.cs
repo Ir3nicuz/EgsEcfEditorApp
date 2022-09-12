@@ -1337,6 +1337,11 @@ namespace EcfFileViews
                 row = cell?.OwningRow as AttributeRow;
                 return cell != null;
             }
+            protected override void Dispose(bool disposing)
+            {
+                Tip.Dispose();
+                base.Dispose(disposing);
+            }
 
             //sub classes
             private class AttributeRow : DataGridViewRow
@@ -2099,6 +2104,11 @@ namespace EcfFileViews
                     }
                 });
                 UpdateParameterValuesRowNumbering();
+            }
+            protected override void Dispose(bool disposing)
+            {
+                Tip.Dispose();
+                base.Dispose(disposing);
             }
 
             // subclasses

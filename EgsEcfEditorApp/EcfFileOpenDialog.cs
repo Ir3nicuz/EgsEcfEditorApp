@@ -20,8 +20,6 @@ namespace EcfFileViews
         private SaveFileDialog CreateFileDialog { get; } = new SaveFileDialog();
         private OpenFileDialog FindFileDialog { get; } = new OpenFileDialog();
 
-        private ToolTip Tip { get; } = new ToolTip();
-
         public EcfFileOpenDialog()
         {
             InitializeComponent();
@@ -32,7 +30,7 @@ namespace EcfFileViews
         private void InitForm()
         {
             Icon = IconRecources.Icon_AppBranding;
-
+            
             InitFilePathAndNameBox("");
             InitFormatDefinitionBox();
             InitEncodingBox();
@@ -240,7 +238,7 @@ namespace EcfFileViews
 
             return result;
         }
-        
+
         public class EcfFileSetting
         {
             public string PathAndName { get; } = null;

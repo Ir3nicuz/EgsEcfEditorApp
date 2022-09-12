@@ -14,8 +14,6 @@ namespace EgsEcfEditorApp
     {
         public bool HasUnsavedData { get; private set; } = false;
 
-        private ToolTip Tip { get; } = new ToolTip();
-
         public SettingsDialog()
         {
             InitializeComponent();

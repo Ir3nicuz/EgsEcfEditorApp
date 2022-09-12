@@ -3909,6 +3909,12 @@ namespace EcfToolBarControls
                 MaximumSize = Size;
             }
         }
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            ItemList.Dispose();
+            base.Dispose(disposing);
+        }
 
         // public
         public void Reset()
@@ -4185,6 +4191,11 @@ namespace EcfToolBarControls
         {
             Tip.SetToolTip(this, ToolTipText);
         }
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
+        }
     }
     public class EcfToolBarButton : Button
     {
@@ -4206,6 +4217,12 @@ namespace EcfToolBarControls
             {
                 Text = text;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
         }
     }
     public class EcfToolBarRadioButton : RadioButton
@@ -4241,6 +4258,11 @@ namespace EcfToolBarControls
         {
             FlatAppearance.BorderSize = Checked ? 1 : 0;
         }
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
+        }
     }
     public abstract class EcfToolBarCheckBox : CheckBox
     {
@@ -4259,6 +4281,12 @@ namespace EcfToolBarControls
             FlatAppearance.CheckedBackColor = Color.Transparent;
             FlatAppearance.MouseOverBackColor = Color.Transparent;
             FlatAppearance.MouseDownBackColor = Color.Transparent;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
         }
     }
     public class EcfToolBarTwoStateCheckBox : EcfToolBarCheckBox
@@ -4335,6 +4363,12 @@ namespace EcfToolBarControls
 
             Tip.SetToolTip(this, toolTip);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
+        }
     }
     public class EcfToolBarComboBox : ComboBox
     {
@@ -4346,6 +4380,12 @@ namespace EcfToolBarControls
             Tip.SetToolTip(this, toolTip);
 
             DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Tip.Dispose();
+            base.Dispose(disposing);
         }
     }
     public class EcfToolBarLabel : Label

@@ -29,6 +29,7 @@ namespace EcfFileViews
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
@@ -36,6 +37,7 @@ namespace EcfFileViews
             this.SelectionPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.SearchLabel = new System.Windows.Forms.Label();
+            this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonPanel.SuspendLayout();
             this.SelectionPanel.SuspendLayout();
             this.SuspendLayout();
@@ -160,5 +162,6 @@ namespace EcfFileViews
         private System.Windows.Forms.TableLayoutPanel SelectionPanel;
         private System.Windows.Forms.TextBox SearchTextBox;
         private System.Windows.Forms.Label SearchLabel;
+        private System.Windows.Forms.ToolTip Tip;
     }
 }

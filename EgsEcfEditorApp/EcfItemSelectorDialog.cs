@@ -10,7 +10,6 @@ namespace EcfFileViews
     {
         public object SelectedItem { get; set; } = default;
         private object[] FullItemList { get; set; } = null;
-        private ToolTip Tip { get; } = new ToolTip();
 
         public EcfItemSelectorDialog()
         {

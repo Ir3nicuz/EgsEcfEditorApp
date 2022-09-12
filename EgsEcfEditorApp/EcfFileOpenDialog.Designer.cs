@@ -29,6 +29,7 @@ namespace EcfFileViews
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.FilePathAndNameLabel = new System.Windows.Forms.Label();
             this.FilePathAndNameTextBox = new System.Windows.Forms.TextBox();
             this.FormatDefinitionLabel = new System.Windows.Forms.Label();
@@ -41,6 +42,7 @@ namespace EcfFileViews
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
             this.SettingsPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonPanel.SuspendLayout();
             this.SettingsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -233,5 +235,6 @@ namespace EcfFileViews
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.TableLayoutPanel SettingsPanel;
+        private System.Windows.Forms.ToolTip Tip;
     }
 }

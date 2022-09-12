@@ -29,11 +29,12 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("sorter");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("info");
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("general");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("creation");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("filter");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("info");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -81,6 +82,7 @@ namespace EgsEcfEditorApp
             this.LicenseDataLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ReadmeDataLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SettingsBorderPanel = new System.Windows.Forms.Panel();
+            this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonPanel.SuspendLayout();
             this.SettingPanelsTabControl.SuspendLayout();
             this.GeneralTabPage.SuspendLayout();
@@ -150,22 +152,22 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode16.Name = "GeneralNode";
-            treeNode16.Text = "general";
-            treeNode17.Name = "CreationNode";
-            treeNode17.Text = "creation";
-            treeNode18.Name = "FilterNode";
-            treeNode18.Text = "filter";
-            treeNode19.Name = "SorterNode";
-            treeNode19.Text = "sorter";
-            treeNode20.Name = "InfoNode";
-            treeNode20.Text = "info";
+            treeNode1.Name = "GeneralNode";
+            treeNode1.Text = "general";
+            treeNode2.Name = "CreationNode";
+            treeNode2.Text = "creation";
+            treeNode3.Name = "FilterNode";
+            treeNode3.Text = "filter";
+            treeNode4.Name = "SorterNode";
+            treeNode4.Text = "sorter";
+            treeNode5.Name = "InfoNode";
+            treeNode5.Text = "info";
             this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode16,
-            treeNode17,
-            treeNode18,
-            treeNode19,
-            treeNode20});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
@@ -715,7 +717,7 @@ namespace EgsEcfEditorApp
             this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
             this.SettingsBorderPanel.TabIndex = 3;
             // 
-            // EcfSettingsDialog
+            // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -726,7 +728,7 @@ namespace EgsEcfEditorApp
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "EcfSettingsDialog";
+            this.Name = "SettingsDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfSettingsDialog";
@@ -811,5 +813,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Label LicenseTitleLabel;
         private System.Windows.Forms.LinkLabel LicenseDataLinkLabel;
         private System.Windows.Forms.LinkLabel ReadmeDataLinkLabel;
+        private System.Windows.Forms.ToolTip Tip;
     }
 }

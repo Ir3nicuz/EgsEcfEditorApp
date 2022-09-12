@@ -20,9 +20,7 @@ namespace EcfFileViews
         private SaveFileDialog CreateFileDialog { get; } = new SaveFileDialog();
         private OpenFileDialog FindFileDialog { get; } = new OpenFileDialog();
 
-        private ToolTip FormatDefinitionTooltip { get; } = new ToolTip();
-        private ToolTip EncodingTooltip { get; } = new ToolTip();
-        private ToolTip NewLineSymbolTooltip { get; } = new ToolTip();
+        private ToolTip Tip { get; } = new ToolTip();
 
         public EcfFileOpenDialog()
         {
@@ -163,17 +161,17 @@ namespace EcfFileViews
         private void InitFormatDefinitionBox()
         {
             FormatDefinitionLabel.Text = TitleRecources.EcfFileOpenDialog_FormatDefinitionBox;
-            FormatDefinitionTooltip.SetToolTip(FormatDefinitionComboBox, TextRecources.EcfFileOpenDialog_ToolTip_FormatDefinition);
+            Tip.SetToolTip(FormatDefinitionComboBox, TextRecources.EcfFileOpenDialog_ToolTip_FormatDefinition);
         }
         private void InitEncodingBox()
         {
             EncodingLabel.Text = TitleRecources.EcfFileOpenDialog_EncodingBox;
-            EncodingTooltip.SetToolTip(EncodingComboBox, TextRecources.EcfFileOpenDialog_ToolTip_Encoding);
+            Tip.SetToolTip(EncodingComboBox, TextRecources.EcfFileOpenDialog_ToolTip_Encoding);
         }
         private void InitNewLineSymbolBox()
         {
             NewLineSymbolLabel.Text = TitleRecources.EcfFileOpenDialog_NewLineSymbolBox;
-            NewLineSymbolTooltip.SetToolTip(NewLineSymbolComboBox, TextRecources.EcfFileOpenDialog_ToolTip_NewLineSymbol);
+            Tip.SetToolTip(NewLineSymbolComboBox, TextRecources.EcfFileOpenDialog_ToolTip_NewLineSymbol);
         }
         private void RefreshFormatDefinitionBox()
         {
@@ -242,7 +240,7 @@ namespace EcfFileViews
 
             return result;
         }
-
+        
         public class EcfFileSetting
         {
             public string PathAndName { get; } = null;

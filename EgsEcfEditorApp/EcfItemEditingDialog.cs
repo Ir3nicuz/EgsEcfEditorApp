@@ -965,6 +965,8 @@ namespace EcfFileViews
             private DataGridViewTextBoxColumn NameColumn { get; } = new DataGridViewTextBoxColumn();
             private DataGridViewTextBoxColumn InfoColumn { get; } = new DataGridViewTextBoxColumn();
 
+            private ToolTip Tip { get; } = new ToolTip();
+
             public AttributesPanel() : base()
             {
                 InitPanel();
@@ -1265,8 +1267,8 @@ namespace EcfFileViews
                 RemoveValueButton.Image = IconRecources.Icon_RemoveValue;
                 RemoveValueButton.UseVisualStyleBackColor = true;
 
-                new ToolTip().SetToolTip(AddValueButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValue);
-                new ToolTip().SetToolTip(RemoveValueButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValue);
+                Tip.SetToolTip(AddValueButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValue);
+                Tip.SetToolTip(RemoveValueButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValue);
 
                 AddValueButton.Click += AddValueButton_Click;
                 RemoveValueButton.Click += RemoveValueButton_Click;
@@ -1501,6 +1503,8 @@ namespace EcfFileViews
             private DataGridViewTextBoxColumn NameColumn { get; } = new DataGridViewTextBoxColumn();
             private DataGridViewTextBoxColumn InfoColumn { get; } = new DataGridViewTextBoxColumn();
             private DataGridViewTextBoxColumn CommentColumn { get; } = new DataGridViewTextBoxColumn();
+
+            private ToolTip Tip { get; } = new ToolTip();
 
             public enum ParameterModes
             {
@@ -1851,10 +1855,10 @@ namespace EcfFileViews
                 RemoveGroupButton.Image = IconRecources.Icon_RemoveValueGroup;
                 RemoveGroupButton.UseVisualStyleBackColor = true;
 
-                new ToolTip().SetToolTip(AddValueButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValue);
-                new ToolTip().SetToolTip(RemoveValueButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValue);
-                new ToolTip().SetToolTip(AddGroupButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValueGroup);
-                new ToolTip().SetToolTip(RemoveGroupButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValueGroup);
+                Tip.SetToolTip(AddValueButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValue);
+                Tip.SetToolTip(RemoveValueButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValue);
+                Tip.SetToolTip(AddGroupButton, TextRecources.EcfItemEditingDialog_ToolTip_AddValueGroup);
+                Tip.SetToolTip(RemoveGroupButton, TextRecources.EcfItemEditingDialog_ToolTip_RemoveValueGroup);
 
                 AddValueButton.Click += AddValueButton_Click;
                 RemoveValueButton.Click += RemoveValueButton_Click;

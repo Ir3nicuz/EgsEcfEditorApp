@@ -3815,7 +3815,7 @@ namespace EcfToolBarControls
 
         private bool IsResultBoxUnderCursor { get; set; } = false;
 
-        private ToolTip BoxToolTip { get; } = new ToolTip();
+        private ToolTip Tip { get; } = new ToolTip();
         private TextBox ResultBox { get; } = new TextBox();
         private DropDownButton DropButton { get; }
         private DropDownList ItemList { get; }
@@ -3830,7 +3830,7 @@ namespace EcfToolBarControls
             ToolTipText = toolTip;
             LocalisedOf = TextRecources.Generic_Of;
             LocalisedName = TypeText;
-
+            
             ResultBox.ReadOnly = true;
             ResultBox.Margin = new Padding(0);
             ResultBox.Location = new Point(0, 0);
@@ -3857,7 +3857,7 @@ namespace EcfToolBarControls
         // events
         private void ResultBox_MouseHover(object sender, EventArgs evt)
         {
-            BoxToolTip.SetToolTip(ResultBox, ToolTipText);
+            Tip.SetToolTip(ResultBox, ToolTipText);
         }
         private void ResultBox_Click(object sender, EventArgs evt)
         {
@@ -4178,20 +4178,22 @@ namespace EcfToolBarControls
         {
             ToolTipText = toolTip;
 
-            MouseHover += ToolTipTextBox_MouseHover;
+            MouseHover += TextBox_MouseHover;
         }
 
-        private void ToolTipTextBox_MouseHover(object sender, EventArgs evt)
+        private void TextBox_MouseHover(object sender, EventArgs evt)
         {
             Tip.SetToolTip(this, ToolTipText);
         }
     }
     public class EcfToolBarButton : Button
     {
+        private ToolTip Tip { get; } = new ToolTip();
+        
         public EcfToolBarButton(string toolTip, Image image, string text) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
-            new ToolTip().SetToolTip(this, toolTip);
+            Tip.SetToolTip(this, toolTip);
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
             if (image != null)
@@ -4208,10 +4210,12 @@ namespace EcfToolBarControls
     }
     public class EcfToolBarRadioButton : RadioButton
     {
+        private ToolTip Tip { get; } = new ToolTip();
+
         public EcfToolBarRadioButton(string toolTip, Image image, string text) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
-            new ToolTip().SetToolTip(this, toolTip);
+            Tip.SetToolTip(this, toolTip);
 
             Appearance = Appearance.Button;
             if (image != null)
@@ -4240,10 +4244,12 @@ namespace EcfToolBarControls
     }
     public abstract class EcfToolBarCheckBox : CheckBox
     {
+        private ToolTip Tip { get; } = new ToolTip();
+
         public EcfToolBarCheckBox(string toolTip) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
-            new ToolTip().SetToolTip(this, toolTip);
+            Tip.SetToolTip(this, toolTip);
 
             AutoCheck = true;
 
@@ -4321,18 +4327,23 @@ namespace EcfToolBarControls
     }
     public class EcfToolBarNumericUpDown : NumericUpDown
     {
+        private ToolTip Tip { get; } = new ToolTip();
+
         public EcfToolBarNumericUpDown(string toolTip) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
-            new ToolTip().SetToolTip(this, toolTip);
+
+            Tip.SetToolTip(this, toolTip);
         }
     }
     public class EcfToolBarComboBox : ComboBox
     {
+        private ToolTip Tip { get; } = new ToolTip();
+
         public EcfToolBarComboBox(string toolTip) : base()
         {
             SetStyle(ControlStyles.Selectable, false);
-            new ToolTip().SetToolTip(this, toolTip);
+            Tip.SetToolTip(this, toolTip);
 
             DropDownStyle = ComboBoxStyle.DropDownList;
         }

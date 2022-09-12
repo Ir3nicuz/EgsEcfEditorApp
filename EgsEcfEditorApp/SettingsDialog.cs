@@ -13,7 +13,9 @@ namespace EgsEcfEditorApp
     public partial class SettingsDialog : Form
     {
         public bool HasUnsavedData { get; private set; } = false;
-        
+
+        private ToolTip Tip { get; } = new ToolTip();
+
         public SettingsDialog()
         {
             InitializeComponent();
@@ -169,7 +171,7 @@ namespace EgsEcfEditorApp
         {
             ChapterSelectorTreeView.Nodes[0].Text = TitleRecources.EcfSettingsDialog_GeneralPanel_Header;
             GameVersionFolderLabel.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameVersion;
-            new ToolTip().SetToolTip(GameVersionFolderComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameVersionFolder);
+            Tip.SetToolTip(GameVersionFolderComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameVersionFolder);
         }
         private void InitCreationPanel()
         {
@@ -177,9 +179,9 @@ namespace EgsEcfEditorApp
             WriteOnlyValidItemsLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_WriteOnlyValidItems;
             InvalidateParentsOnErrorLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_InvalidateParentOnError;
             AllowFallbackToParsedDataLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData;
-            new ToolTip().SetToolTip(WriteOnlyValidItemsCheckBox, TextRecources.EcfSettingsDialog_ToolTip_WriteOnlyValidItems);
-            new ToolTip().SetToolTip(InvalidateParentsOnErrorCheckBox, TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError);
-            new ToolTip().SetToolTip(AllowFallbackToParsedDataCheckBox, TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData);
+            Tip.SetToolTip(WriteOnlyValidItemsCheckBox, TextRecources.EcfSettingsDialog_ToolTip_WriteOnlyValidItems);
+            Tip.SetToolTip(InvalidateParentsOnErrorCheckBox, TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError);
+            Tip.SetToolTip(AllowFallbackToParsedDataCheckBox, TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData);
         }
         private void InitFilterPanel()
         {
@@ -187,9 +189,9 @@ namespace EgsEcfEditorApp
             TreeViewFilterCommentsInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive;
             TreeViewFilterParametersInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive;
             TreeViewFilterDataBlocksInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive;
-            new ToolTip().SetToolTip(TreeViewFilterCommentsInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive);
-            new ToolTip().SetToolTip(TreeViewFilterParametersInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive);
-            new ToolTip().SetToolTip(TreeViewFilterDataBlocksInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive);
+            Tip.SetToolTip(TreeViewFilterCommentsInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive);
+            Tip.SetToolTip(TreeViewFilterParametersInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive);
+            Tip.SetToolTip(TreeViewFilterDataBlocksInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive);
         }
         private void InitSorterPanel()
         {
@@ -197,9 +199,9 @@ namespace EgsEcfEditorApp
             TreeViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount;
             ParameterViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount;
             ErrorViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount;
-            new ToolTip().SetToolTip(TreeViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewSorterInitCount);
-            new ToolTip().SetToolTip(ParameterViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount);
-            new ToolTip().SetToolTip(ErrorViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount);
+            Tip.SetToolTip(TreeViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewSorterInitCount);
+            Tip.SetToolTip(ParameterViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount);
+            Tip.SetToolTip(ErrorViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount);
         }
         private void InitInfoPanel()
         {
@@ -316,7 +318,5 @@ namespace EgsEcfEditorApp
             InvalidateParentsOnErrorCheckBox.Enabled = WriteOnlyValidItemsCheckBox.Checked;
             AllowFallbackToParsedDataCheckBox.Enabled = WriteOnlyValidItemsCheckBox.Checked;
         }
-
-        
     }
 }

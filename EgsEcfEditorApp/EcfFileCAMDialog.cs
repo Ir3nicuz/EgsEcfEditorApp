@@ -78,6 +78,7 @@ namespace EgsEcfEditorApp
             FirstFileActionTools.DoMergeClicked += FirstFileActionTools_DoMergeClicked;
             SecondFileActionTools.DoMergeClicked += SecondFileActionTools_DoMergeClicked;
         }
+
         private void CloseButton_Click(object sender, EventArgs evt)
         {
             Close();

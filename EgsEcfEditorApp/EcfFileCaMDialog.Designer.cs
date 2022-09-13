@@ -86,10 +86,11 @@ namespace EgsEcfEditorApp
             this.CompareAndMergePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.CompareAndMergePanel.Location = new System.Drawing.Point(0, 0);
             this.CompareAndMergePanel.Name = "CompareAndMergePanel";
-            this.CompareAndMergePanel.RowCount = 3;
+            this.CompareAndMergePanel.RowCount = 4;
             this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.92308F));
+            this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.07692F));
             this.CompareAndMergePanel.Size = new System.Drawing.Size(1184, 532);
             this.CompareAndMergePanel.TabIndex = 1;
             // 
@@ -126,7 +127,8 @@ namespace EgsEcfEditorApp
             this.FirstFileTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FirstFileTreeView.Location = new System.Drawing.Point(3, 30);
             this.FirstFileTreeView.Name = "FirstFileTreeView";
-            this.FirstFileTreeView.Size = new System.Drawing.Size(586, 499);
+            this.FirstFileTreeView.ShowNodeToolTips = true;
+            this.FirstFileTreeView.Size = new System.Drawing.Size(586, 382);
             this.FirstFileTreeView.TabIndex = 2;
             // 
             // SecondFileTreeView
@@ -136,7 +138,8 @@ namespace EgsEcfEditorApp
             this.SecondFileTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SecondFileTreeView.Location = new System.Drawing.Point(595, 30);
             this.SecondFileTreeView.Name = "SecondFileTreeView";
-            this.SecondFileTreeView.Size = new System.Drawing.Size(586, 499);
+            this.SecondFileTreeView.ShowNodeToolTips = true;
+            this.SecondFileTreeView.Size = new System.Drawing.Size(586, 382);
             this.SecondFileTreeView.TabIndex = 3;
             // 
             // FirstFileActionContainer

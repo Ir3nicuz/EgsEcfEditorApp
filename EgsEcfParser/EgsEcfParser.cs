@@ -3016,7 +3016,7 @@ namespace EgsEcfParser
         }
         public override string BuildIdentification()
         {
-            return string.Format("{0} {1}", DefaultName, GetHashCode());
+            return string.Format("{0} {1}", DefaultName, GetIndexInStructureLevel<EcfComment>());
         }
         public override int Revalidate()
         {

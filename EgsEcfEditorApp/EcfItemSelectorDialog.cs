@@ -142,7 +142,9 @@ namespace EcfFileViews
             {
                 switch (item)
                 {
-                    case EcfStructureItem structureItem: return structureItem.BuildIdentification();
+                    case EcfAttribute attr: return attr.Key;
+                    case EcfParameter param: return param.Key;
+                    case EcfBlock block: return block.BuildIdentification();
                     default: return string.Format("\"{0}\"", Convert.ToString(item));
                 }
             }

@@ -1149,7 +1149,7 @@ namespace EgsEcfParser
             }
             else
             {
-                parameter.AddError(new EcfError(EcfErrorGroups.Creating, EcfErrors.ParameterNotCreateable, parameter.BuildIdentification()));
+                parameter.AddError(new EcfError(EcfErrorGroups.Creating, EcfErrors.ParameterNotCreateable, parameter.Key));
             }
         }
         private void CreateIndentedLineStart(int indent)
@@ -1306,7 +1306,7 @@ namespace EgsEcfParser
                             }
                             catch (EcfException ex)
                             {
-                                fatalErrors.Add(new EcfError(EcfErrorGroups.Structural, ex.EcfError, string.Format("{0} / {1}", block.GetFullName(), ex.TextData), lineCount));
+                                fatalErrors.Add(new EcfError(EcfErrorGroups.Structural, ex.EcfError, string.Format("{0} / {1}", block.GetFullPath(), ex.TextData), lineCount));
                             }
                         }
                         // block closer
@@ -1359,7 +1359,7 @@ namespace EgsEcfParser
                 {
                     StackItem item = stack[level - 1];
                     fatalErrors.Add(new EcfError(EcfErrorGroups.Structural, EcfErrors.BlockOpenerWithoutCloser, 
-                        string.Format("{0} / {1}", item.Block.GetFullName(), item.LineData), item.LineNumber));
+                        string.Format("{0} / {1}", item.Block.GetFullPath(), item.LineData), item.LineNumber));
                     level--;
                 }
 
@@ -1848,7 +1848,7 @@ namespace EgsEcfParser
             {
                 errorText.Append("At '");
             }
-            errorText.Append(Item != null ? Item.GetFullName() : "unknown");
+            errorText.Append(Item != null ? Item.GetFullPath() : "unknown");
             errorText.Append("' occured error ");
             errorText.Append(Type.ToString());
             errorText.Append(", additional info: '");
@@ -1900,18 +1900,20 @@ namespace EgsEcfParser
     // ecf data Structure Classes
     public abstract class EcfBaseItem
     {
+        protected string DefaultName { get; }
         protected EgsEcfFile EcfFile { get; private set; } = null;
         public EcfStructureItem Parent { get; private set; } = null;
         public int StructureLevel { get; private set; } = -1;
 
-        public EcfBaseItem()
+        public EcfBaseItem(string defaultName)
         {
-            
+            DefaultName = defaultName;
         }
 
         // copy constructor
         public EcfBaseItem(EcfBaseItem template)
         {
+            DefaultName = template.DefaultName;
             EcfFile = template.EcfFile;
             Parent = template.Parent;
             StructureLevel = template.StructureLevel;
@@ -1936,15 +1938,13 @@ namespace EgsEcfParser
     }
     public abstract class EcfStructureItem : EcfBaseItem
     {
-        protected string DefaultName { get; }
         private List<EcfError> InternalErrors { get; } = new List<EcfError>();
         public ReadOnlyCollection<EcfError> Errors { get; }
         private List<string> InternalComments { get; } = new List<string>();
         public ReadOnlyCollection<string> Comments { get; }
 
-        public EcfStructureItem(string defaultName) : base()
+        public EcfStructureItem(string defaultName) : base(defaultName)
         {
-            DefaultName = defaultName;
             Errors = InternalErrors.AsReadOnly();
             Comments = InternalComments.AsReadOnly();
         }
@@ -1952,7 +1952,6 @@ namespace EgsEcfParser
         // copy constructor
         public EcfStructureItem(EcfStructureItem template) : base(template)
         {
-            DefaultName = template.DefaultName;
             Errors = InternalErrors.AsReadOnly();
             Comments = InternalComments.AsReadOnly();
 
@@ -1962,8 +1961,7 @@ namespace EgsEcfParser
 
         public abstract List<EcfError> GetDeepErrorList(bool includeStructure);
         public abstract int RemoveErrorsDeep(params EcfErrors[] errors);
-        public abstract string GetFullName();
-        public abstract string BuildIdentification();
+        public abstract string GetFullPath();
         public abstract int Revalidate();
         public abstract bool IdEquals(EcfStructureItem other);
         public abstract bool ContentEquals(EcfStructureItem other);
@@ -2127,10 +2125,6 @@ namespace EgsEcfParser
         }
 
         // publics
-        public override string BuildIdentification()
-        {
-            return string.Format("{0} {1}", DefaultName, Key);
-        }
         public void UpdateKey(string key)
         {
             CheckKey(key);
@@ -2306,7 +2300,8 @@ namespace EgsEcfParser
         }
         public override string ToString()
         {
-            return string.Format("{0}, values: '{1}'", BuildIdentification(), ValueGroups.Sum(group => group.Values.Count).ToString());
+            return string.Format("{0} {1}, values: {2}, errors: {3}", 
+                DefaultName, Key, ValueGroups.Sum(group => group.Values.Count).ToString(), Errors.Count.ToString());
         }
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
@@ -2334,15 +2329,15 @@ namespace EgsEcfParser
         {
             return RemoveErrors(errors);
         }
-        public override string GetFullName()
+        public override string GetFullPath()
         {
             StringBuilder name = new StringBuilder();
             if (!IsRoot())
             {
-                name.Append(Parent.GetFullName());
+                name.Append(Parent.GetFullPath());
                 name.Append(" / ");
             }
-            name.Append(BuildIdentification());
+            name.Append(Key);
             return name.ToString();
         }
 
@@ -2387,17 +2382,18 @@ namespace EgsEcfParser
         // publics
         public override string ToString()
         {
-            return string.Format("{0}, values: '{1}' and attributes: '{2}'", BuildIdentification(), ValueGroups.Sum(group => group.Values.Count).ToString(), Attributes.Count);
+            return string.Format("{0} {1}, values: {2}, attributes: {3}, errors: {4}",
+                DefaultName, Key, ValueGroups.Sum(group => group.Values.Count).ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
         }
-        public override string GetFullName()
+        public override string GetFullPath()
         {
             StringBuilder name = new StringBuilder();
             if (!IsRoot())
             {
-                name.Append(Parent.GetFullName());
+                name.Append(Parent.GetFullPath());
                 name.Append(" / ");
             }
-            name.Append(BuildIdentification());
+            name.Append(Key);
             return name.ToString();
         }
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
@@ -2569,8 +2565,8 @@ namespace EgsEcfParser
         }
         public override string ToString()
         {
-            return string.Format("Block with preMark: '{0}', blockDataType: '{1}', name: '{4}', items: '{2}', attributes: '{3}'",
-                PreMark, DataType, ChildItems.Count, Attributes.Count, GetAttributeFirstValue("Name"));
+            return string.Format("{0}: {1}, name: {2}, childs: {3}, attributes: {4}, errors: {5}",
+                DefaultName, DataType, GetAttributeFirstValue("Name"), ChildItems.Count.ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
         }
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
@@ -2608,7 +2604,7 @@ namespace EgsEcfParser
             count += InternalChildItems.Sum(child => child.RemoveErrors(errors));
             return count;
         }
-        public override string GetFullName()
+        public override string GetFullPath()
         {
             StringBuilder name = new StringBuilder();
             EcfBlock item = this;
@@ -2849,12 +2845,12 @@ namespace EgsEcfParser
             }
             return Inheritor?.IsInheritingParameter(paramName, out parameter) ?? false;
         }
-        public override string BuildIdentification()
+        public string BuildIdentification()
         {
             StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
             if (!IsRoot())
             {
-                identification.Append(", Index: ");
+                identification.Append(" ");
                 identification.Append(GetIndexInStructureLevel<EcfBlock>());
             }
             foreach (EcfAttribute attr in Attributes)
@@ -2999,24 +2995,22 @@ namespace EgsEcfParser
         {
             return RemoveErrors(errors);
         }
-        public override string GetFullName()
+        public override string GetFullPath()
         {
             StringBuilder name = new StringBuilder();
             if (!IsRoot())
             {
-                name.Append(Parent.GetFullName());
+                name.Append(Parent.GetFullPath());
                 name.Append(" / ");
             }
             name.Append(DefaultName);
+            name.Append(GetIndexInStructureLevel<EcfComment>().ToString());
             return name.ToString();
         }
         public override string ToString()
         {
-            return string.Format("{0}: '{1}'", DefaultName, string.Join(" / ", Comments));
-        }
-        public override string BuildIdentification()
-        {
-            return string.Format("{0} {1}", DefaultName, GetIndexInStructureLevel<EcfComment>());
+            return string.Format("{0} {1}, comments {2}, errors: {3}", 
+                DefaultName, GetIndexInStructureLevel<EcfComment>().ToString(), Comments.Count.ToString(), Errors.Count.ToString());
         }
         public override int Revalidate()
         {
@@ -3034,7 +3028,7 @@ namespace EgsEcfParser
         private List<string> InternalValues { get; } = new List<string>();
         public ReadOnlyCollection<string> Values { get; }
 
-        public EcfValueGroup() : base()
+        public EcfValueGroup() : base("ValueGroup")
         {
             Values = InternalValues.AsReadOnly();
         }
@@ -3056,7 +3050,7 @@ namespace EgsEcfParser
 
         public override string ToString()
         {
-            return string.Format("ValueGroup with '{0}'", string.Join(" / ", InternalValues));
+            return string.Format("{0}, values {1}", DefaultName, string.Join(" / ", InternalValues));
         }
         public bool AddValue(string value)
         {

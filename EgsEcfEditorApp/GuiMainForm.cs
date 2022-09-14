@@ -799,7 +799,10 @@ namespace EcfFileViews
             {
                 ChangeParameterSelection(parameterView.SelectedParameters);
             }
-            MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            else
+            {
+                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
         private void ContentOperations_ChangeComplexClicked(object sender, EventArgs evt)
         {
@@ -1210,7 +1213,7 @@ namespace EcfFileViews
         {
             List<string> mandatoryParameters = File.Definition.BlockParameters.Where(parameter => !parameter.IsOptional).Select(parameter => parameter.Name).ToList();
             return parameters.Where(parameter => mandatoryParameters.Contains(parameter.Key))
-                .Select(parameter => string.Format("{0} {1}", parameter.BuildIdentification(), TextRecources.Generic_IsNotOptional)).ToList();
+                .Select(parameter => string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
         }
         private List<string> CheckBlockReferences(List<EcfBlock> blockToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
         {
@@ -1349,6 +1352,10 @@ namespace EcfFileViews
             {
                 ChangeTreeItem(items.FirstOrDefault());
             }
+            else
+            {
+                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
         private void ChangeParameterSelection(List<EcfParameter> parameters)
         {
@@ -1359,6 +1366,10 @@ namespace EcfFileViews
             else if (parameters.Count > 0)
             {
                 ChangeParameterItem(parameters.FirstOrDefault());
+            }
+            else
+            {
+                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         private bool ChangeTreeItem(EcfStructureItem item)
@@ -2050,7 +2061,7 @@ namespace EcfFileViews
             {
                 if ((treeFilter?.IsParametersActive ?? true) && (parameterFilter?.IsParameterVisible(parameter) ?? true))
                 {
-                    node = new EcfTreeNode(parameter, parameter.BuildIdentification());
+                    node = new EcfTreeNode(parameter, string.Format("{0}: {1}", TitleRecources.Generic_Parameter, parameter.Key));
                 }
             }
             else if (item is EcfBlock block)
@@ -2482,7 +2493,8 @@ namespace EcfFileViews
         }
         private void BuildParameterRow(EcfParameter parameter, bool isInherited, EcfParameterRow overwrittenRow)
         {
-            ParameterRows.Add(new EcfParameterRow(ParameterRows.Count + 1, parameter.Parent?.BuildIdentification(), parameter, isInherited, overwrittenRow));
+            string parentName = (parameter.Parent as EcfBlock)?.BuildIdentification();
+            ParameterRows.Add(new EcfParameterRow(ParameterRows.Count + 1, parentName, parameter, isInherited, overwrittenRow));
         }
         private void UpdateSorterInvoke()
         {
@@ -3109,7 +3121,7 @@ namespace EcfFileViews
                 ErrorGroupCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Group) };
                 ErrorTypeCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Type) };
                 LineNumberCell = new DataGridViewTextBoxCell() { Value = error.IsFromParsing() ? error.LineInFile.ToString() : string.Empty };
-                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullName() ?? string.Empty };
+                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullPath() ?? string.Empty };
                 ErrorInfoCell = new DataGridViewTextBoxCell() { Value = error.Info };
 
                 Cells.Add(ErrorNumberCell);

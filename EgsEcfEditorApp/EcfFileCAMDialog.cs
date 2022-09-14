@@ -501,7 +501,7 @@ namespace EgsEcfEditorApp
             {
                 Item = item;
                 Checked = checkState;
-                Text = item?.BuildIdentification() ?? "---";
+                Text = BuildNodeText(item);
                 SetMergeAction(MergeActions.Unknown);
             }
             public CAMTreeNode(CAMTreeNode template)
@@ -592,6 +592,18 @@ namespace EgsEcfEditorApp
             {
                 Checked = state;
                 if (state) { SetParentChecked(); }
+            }
+            private string BuildNodeText(EcfStructureItem item)
+            {
+                switch (item)
+                {
+                    case EcfBlock block: return block.BuildIdentification();
+                    case EcfParameter param: return string.Format("{0} {1}", 
+                        TitleRecources.Generic_Parameter, param.Key);
+                    case EcfComment comment: return string.Format("{0} {1}", 
+                        TitleRecources.Generic_Comment, comment.GetIndexInStructureLevel<EcfComment>().ToString());
+                    default: return "---";
+                }
             }
         }
     }

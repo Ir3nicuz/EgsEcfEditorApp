@@ -2229,7 +2229,7 @@ namespace EcfFileViews
                     FormDef = format;
 
                     ActivationCell.Value = true;
-                    NameCell.Value = presetParameter.GetFullName();
+                    NameCell.Value = presetParameter.GetFullPath();
                     InfoCell.Value = ItemDef.Info;
                 }
                 public ParameterMatrixRow(FormatDefinition format, ItemDefinition item) : base(item)

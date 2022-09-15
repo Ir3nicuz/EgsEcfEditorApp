@@ -800,14 +800,7 @@ namespace EgsEcfParser
         {
             if (itemA == null && itemB == null) { return true; }
             if (itemA == null || itemB == null) { return false; }
-            if (itemA is EcfComment && itemB is EcfComment)
-            {
-                return itemA.ContentEquals(itemB);
-            }
-            else
-            {
-                return itemA.IdEquals(itemB);
-            }
+            return itemA.IdEquals(itemB) && (!(itemA is EcfComment) || itemA.ContentEquals(itemB));
         }
         public static bool StructureItemListEquals(ReadOnlyCollection<EcfStructureItem> itemListA, ReadOnlyCollection<EcfStructureItem> itemListB)
         {

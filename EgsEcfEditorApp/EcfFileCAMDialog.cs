@@ -90,6 +90,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
+                UpdateDiffDetailsView(treeNode);
             }
         }
         private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -137,6 +138,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
+                UpdateDiffDetailsView(treeNode);
             }
         }
         private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -456,6 +458,16 @@ namespace EgsEcfEditorApp
                     node.Item.Revalidate();
                 }
             }
+        }
+        private void UpdateDiffDetailsView(CAMTreeNode treeNode)
+        {
+            DiffDetailsView.Clear();
+
+
+
+
+
+            DiffDetailsView.AppendText(treeNode.Item.ToString());
         }
 
         // subclass

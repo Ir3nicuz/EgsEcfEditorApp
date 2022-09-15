@@ -40,6 +40,7 @@ namespace EgsEcfEditorApp
             this.SecondFileActionContainer = new EcfToolBarControls.EcfToolContainer();
             this.SecondFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
             this.FirstFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
+            this.DiffDetailsView = new System.Windows.Forms.RichTextBox();
             this.ButtonPanel.SuspendLayout();
             this.CompareAndMergePanel.SuspendLayout();
             this.SuspendLayout();
@@ -82,6 +83,7 @@ namespace EgsEcfEditorApp
             this.CompareAndMergePanel.Controls.Add(this.SecondFileActionContainer, 2, 0);
             this.CompareAndMergePanel.Controls.Add(this.SecondFileSelectionContainer, 3, 0);
             this.CompareAndMergePanel.Controls.Add(this.FirstFileSelectionContainer, 0, 0);
+            this.CompareAndMergePanel.Controls.Add(this.DiffDetailsView, 0, 3);
             this.CompareAndMergePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompareAndMergePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.CompareAndMergePanel.Location = new System.Drawing.Point(0, 0);
@@ -188,6 +190,17 @@ namespace EgsEcfEditorApp
             this.FirstFileSelectionContainer.Size = new System.Drawing.Size(290, 1);
             this.FirstFileSelectionContainer.TabIndex = 8;
             // 
+            // DiffDetailsView
+            // 
+            this.CompareAndMergePanel.SetColumnSpan(this.DiffDetailsView, 4);
+            this.DiffDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DiffDetailsView.Location = new System.Drawing.Point(3, 418);
+            this.DiffDetailsView.Name = "DiffDetailsView";
+            this.DiffDetailsView.ReadOnly = true;
+            this.DiffDetailsView.Size = new System.Drawing.Size(1178, 111);
+            this.DiffDetailsView.TabIndex = 9;
+            this.DiffDetailsView.Text = "";
+            // 
             // EcfFileCAMDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,5 +238,6 @@ namespace EgsEcfEditorApp
         private EcfToolBarControls.EcfToolContainer SecondFileActionContainer;
         private EcfToolBarControls.EcfToolContainer SecondFileSelectionContainer;
         private EcfToolBarControls.EcfToolContainer FirstFileSelectionContainer;
+        private System.Windows.Forms.RichTextBox DiffDetailsView;
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using static EcfCAMTools.CompareSelectionTools;
 using static Helpers.ImageAjustments;
 using static EgsEcfParser.EcfStructureTools;
+using System.Text;
 
 namespace EgsEcfEditorApp
 {
@@ -30,6 +31,9 @@ namespace EgsEcfEditorApp
         private List<CAMTreeNode> FirstFileNodes { get; } = new List<CAMTreeNode>();
         private List<CAMTreeNode> SecondFileNodes { get; } = new List<CAMTreeNode>();
         private static bool IsCrossAccessing { get; set; } = false;
+
+        public bool CAMAbortPending { get; set; } = false;
+        private EcfFileCAMWorkerDialog CAMWorker { get; } = new EcfFileCAMWorkerDialog();
 
         public EcfFileCAMDialog()
         {
@@ -60,6 +64,9 @@ namespace EgsEcfEditorApp
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
 
+            FirstFileDetailsView.SelectionTabs = new int[] { 20, 40, 60, 80, 100 };
+            SecondFileDetailsView.SelectionTabs = new int[] { 20, 40, 60, 80, 100 };
+
             InitEvents();
         }
         private void InitEvents()
@@ -78,7 +85,6 @@ namespace EgsEcfEditorApp
             FirstFileActionTools.DoMergeClicked += FirstFileActionTools_DoMergeClicked;
             SecondFileActionTools.DoMergeClicked += SecondFileActionTools_DoMergeClicked;
         }
-
         private void CloseButton_Click(object sender, EventArgs evt)
         {
             Close();
@@ -90,7 +96,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
-                UpdateDiffDetailsView(treeNode);
+                UpdateDetailsView(treeNode);
             }
         }
         private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -113,9 +119,8 @@ namespace EgsEcfEditorApp
         }
         private void FirstFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
-            ComboBoxItem firstItem = FirstFileComboBox.SelectedItem as ComboBoxItem;
-            RefreshFileSelectorBox(SecondFileComboBox, AvailableFiles, firstItem);
-            Compare(firstItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
+            RefreshFileSelectorBox(SecondFileComboBox, AvailableFiles, FirstFileComboBox.SelectedItem as ComboBoxItem);
+            RefreshViews();
         }
         private void FirstFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
@@ -129,7 +134,6 @@ namespace EgsEcfEditorApp
         private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
             Merge(SecondFileComboBox.SelectedItem as ComboBoxItem, FirstFileNodes);
-            Compare(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
         private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
@@ -138,7 +142,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-                UpdateDiffDetailsView(treeNode);
+                UpdateDetailsView(treeNode);
             }
         }
         private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -161,9 +165,8 @@ namespace EgsEcfEditorApp
         }
         private void SecondFileComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
-            ComboBoxItem secondItem = SecondFileComboBox.SelectedItem as ComboBoxItem;
-            RefreshFileSelectorBox(FirstFileComboBox, AvailableFiles, secondItem);
-            Compare(FirstFileComboBox.SelectedItem as ComboBoxItem, secondItem);
+            RefreshFileSelectorBox(FirstFileComboBox, AvailableFiles, SecondFileComboBox.SelectedItem as ComboBoxItem);
+            RefreshViews();
         }
         private void SecondFileTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs evt)
         {
@@ -176,7 +179,6 @@ namespace EgsEcfEditorApp
         private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
             Merge(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileNodes);
-            Compare(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileComboBox.SelectedItem as ComboBoxItem);
         }
 
         // public
@@ -196,37 +198,163 @@ namespace EgsEcfEditorApp
             RefreshFileSelectorBox(FirstFileComboBox, AvailableFiles, secondItem, firstItem);
             RefreshFileSelectorBox(SecondFileComboBox, AvailableFiles, firstItem, secondItem);
 
-            Compare(firstItem, secondItem);
+            RefreshViews();
 
             return ShowDialog(parent);
         }
 
         // private
-        private void Compare(ComboBoxItem firstItem, ComboBoxItem secondItem)
+        private void RefreshViews()
         {
-            if (firstItem == null || secondItem == null) {
-                FirstFileTreeView.Nodes.Clear();
-                SecondFileTreeView.Nodes.Clear();
-                FirstFileSelectionTools.Reset(CheckState.Indeterminate);
-                SecondFileSelectionTools.Reset(CheckState.Indeterminate);
+            if (!(FirstFileComboBox.SelectedItem is ComboBoxItem firstItem) || !(SecondFileComboBox.SelectedItem is ComboBoxItem secondItem))
+            {
+                ResetViews();
                 return;
             }
 
-            RefreshTreeNodeList(FirstFileNodes, firstItem.Item.File.ItemList, true);
-            RefreshTreeNodeList(SecondFileNodes, secondItem.Item.File.ItemList, true);
-            CompareTreeNodeLists(FirstFileNodes, SecondFileNodes);
+            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Comparing,
+                this, () => Compare(FirstFileNodes, firstItem.Item.File.ItemList, SecondFileNodes, secondItem.Item.File.ItemList)) != DialogResult.OK)
+            {
+                ResetViews();
+                return;
+            }
+
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes);
             RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
             RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
         }
+        private void ResetViews()
+        {
+            FirstFileNodes.Clear();
+            SecondFileNodes.Clear();
+            FirstFileTreeView.Nodes.Clear();
+            SecondFileTreeView.Nodes.Clear();
+            FirstFileDetailsView.Clear();
+            SecondFileDetailsView.Clear();
+            FirstFileSelectionTools.Reset(CheckState.Indeterminate);
+            SecondFileSelectionTools.Reset(CheckState.Indeterminate);
+        }
+        private void Compare(
+            List<CAMTreeNode> firstTargetNodeList, ReadOnlyCollection<EcfStructureItem> firstSourceItemList,
+            List<CAMTreeNode> secondTargetNodeList, ReadOnlyCollection<EcfStructureItem> secondSourceItemList)
+        {
+            RefreshTreeNodeList(firstTargetNodeList, firstSourceItemList, true);
+            RefreshTreeNodeList(secondTargetNodeList, secondSourceItemList, true);
+            CompareTreeNodeLists(firstTargetNodeList, secondTargetNodeList);
+        }
+        private void RefreshTreeNodeList(List<CAMTreeNode> nodeList, ReadOnlyCollection<EcfStructureItem> itemList, bool initState)
+        {
+            nodeList.Clear();
+            foreach (EcfStructureItem item in itemList)
+            {
+                if (CAMAbortPending)
+                {
+                    return;
+                }
+
+                CAMTreeNode node = new CAMTreeNode(item, initState);
+                nodeList.Add(node);
+                if (item is EcfBlock block)
+                {
+                    RefreshTreeNodeList(node.AllNodes, block.ChildItems, initState);
+                    node.ReduceSubNodes();
+                }
+            }
+        }
+        private void CompareTreeNodeLists(List<CAMTreeNode> firstNodeList, List<CAMTreeNode> secondNodeList)
+        {
+            CAMTreeNode concurrentNode;
+            firstNodeList.ForEach(node =>
+            {
+                if (CAMAbortPending)
+                {
+                    return;
+                }
+
+                concurrentNode = secondNodeList.FirstOrDefault(otherNode =>
+                    otherNode.MergeAction == CAMTreeNode.MergeActions.Unknown && StructureItemIdEquals(node.Item, otherNode.Item));
+                if (concurrentNode == null)
+                {
+                    BuildTreeNodePair(node, firstNodeList, secondNodeList);
+                }
+                else
+                {
+                    CompareTreeNodeLists(node.AllNodes, concurrentNode.AllNodes);
+                    CAMTreeNode.MergeActions action;
+                    if (node.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
+                        concurrentNode.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
+                        !node.Item.ContentEquals(concurrentNode.Item))
+                    {
+                        action = CAMTreeNode.MergeActions.Update;
+                    }
+                    else
+                    {
+                        action = CAMTreeNode.MergeActions.Ignore;
+                    }
+                    node.UpdatePairingData(concurrentNode, action);
+                    concurrentNode.UpdatePairingData(node, action);
+                }
+            });
+
+            secondNodeList.ForEach(node =>
+            {
+                if (CAMAbortPending)
+                {
+                    return;
+                }
+
+                if (node.MergeAction == CAMTreeNode.MergeActions.Unknown)
+                {
+                    BuildTreeNodePair(node, secondNodeList, firstNodeList);
+                }
+            });
+        }
         private void Merge(ComboBoxItem targetItem, List<CAMTreeNode> sourceNodes)
         {
             if (sourceNodes.Count == 0 || targetItem == null) { return; }
 
-            MergeFile(targetItem.Item.File, sourceNodes);
-
             ChangedFileTabs.Add(targetItem.Item);
+            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Merging, 
+                this, () => MergeFile(targetItem.Item.File, sourceNodes)) != DialogResult.OK)
+            {
+                ResetViews();
+                return;
+            }
+
+            RefreshViews();
+        }
+        private void MergeFile(EgsEcfFile file, List<CAMTreeNode> sourceList)
+        {
+            foreach (CAMTreeNode node in sourceList)
+            {
+                if (CAMAbortPending)
+                {
+                    return;
+                }
+
+                if (node.Checked)
+                {
+                    switch (node.MergeAction)
+                    {
+                        case CAMTreeNode.MergeActions.Add:
+                            file.AddItem(CopyStructureItem(node.Item), sourceList.IndexOf(node));
+                            break;
+                        case CAMTreeNode.MergeActions.Update:
+                            node.ConcurrentNode.Item.UpdateContent(node.Item);
+                            if (node.ConcurrentNode.Item is EcfBlock block)
+                            {
+                                MergeBlock(block, node.AllNodes);
+                            }
+                            break;
+                        case CAMTreeNode.MergeActions.Remove:
+                            file.RemoveItem(node.Item);
+                            break;
+                        default: break;
+                    }
+                    node.Item.Revalidate();
+                }
+            }
         }
         private static void InflateSubNodes(TreeNode node)
         {
@@ -271,58 +399,6 @@ namespace EgsEcfEditorApp
         private static void RefreshFileSelectorBox(ComboBox box, List<ComboBoxItem> availableFiles, ComboBoxItem otherSelectedItem)
         {
             RefreshFileSelectorBox(box, availableFiles, otherSelectedItem, box.SelectedItem as ComboBoxItem);
-        }
-        private static void RefreshTreeNodeList(List<CAMTreeNode> nodeList, ReadOnlyCollection<EcfStructureItem> itemList, bool initState)
-        {
-            nodeList.Clear();
-            foreach (EcfStructureItem item in itemList)
-            {
-                CAMTreeNode node = new CAMTreeNode(item, initState);
-                nodeList.Add(node);
-                if (item is EcfBlock block)
-                {
-                    RefreshTreeNodeList(node.AllNodes, block.ChildItems, initState);
-                    node.ReduceSubNodes();
-                }
-            }
-        }
-        private static void CompareTreeNodeLists(List<CAMTreeNode> firstNodeList, List<CAMTreeNode> secondNodeList)
-        {
-            CAMTreeNode concurrentNode;
-            firstNodeList.ForEach(node =>
-            {
-                concurrentNode = secondNodeList.FirstOrDefault(otherNode => 
-                    otherNode.MergeAction == CAMTreeNode.MergeActions.Unknown && StructureItemIdEquals(node.Item, otherNode.Item));
-                if (concurrentNode == null)
-                {
-                    BuildTreeNodePair(node, firstNodeList, secondNodeList);
-                }
-                else
-                {
-                    CompareTreeNodeLists(node.AllNodes, concurrentNode.AllNodes);
-                    CAMTreeNode.MergeActions action;
-                    if (node.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
-                        concurrentNode.AllNodes.Any(subnode => subnode.MergeAction != CAMTreeNode.MergeActions.Ignore) ||
-                        !node.Item.ContentEquals(concurrentNode.Item))
-                    {
-                        action = CAMTreeNode.MergeActions.Update;
-                    }
-                    else
-                    {
-                        action = CAMTreeNode.MergeActions.Ignore;
-                    }
-                    node.UpdatePairingData(concurrentNode, action);
-                    concurrentNode.UpdatePairingData(node, action);
-                }
-            });
-
-            secondNodeList.ForEach(node =>
-            {
-                if (node.MergeAction == CAMTreeNode.MergeActions.Unknown)
-                {
-                    BuildTreeNodePair(node, secondNodeList, firstNodeList);
-                }
-            });
         }
         private static void BuildTreeNodePair(CAMTreeNode node, List<CAMTreeNode> queryNodeList, List<CAMTreeNode> concurrentNodeList)
         {
@@ -405,33 +481,6 @@ namespace EgsEcfEditorApp
                 return CheckState.Checked;
             }
         }
-        private static void MergeFile(EgsEcfFile file, List<CAMTreeNode> sourceList)
-        {
-            foreach (CAMTreeNode node in sourceList)
-            {
-                if (node.Checked) 
-                {
-                    switch (node.MergeAction)
-                    {
-                        case CAMTreeNode.MergeActions.Add:
-                            file.AddItem(CopyStructureItem(node.Item), sourceList.IndexOf(node));
-                            break;
-                        case CAMTreeNode.MergeActions.Update:
-                            node.ConcurrentNode.Item.UpdateContent(node.Item);
-                            if (node.ConcurrentNode.Item is EcfBlock block)
-                            {
-                                MergeBlock(block, node.AllNodes);
-                            }
-                            break;
-                        case CAMTreeNode.MergeActions.Remove:
-                            file.RemoveItem(node.Item);
-                            break;
-                        default: break;
-                    }
-                    node.Item.Revalidate();
-                }
-            }
-        }
         private static void MergeBlock(EcfBlock targetBlock, List<CAMTreeNode> sourceList)
         {
             foreach (CAMTreeNode node in sourceList)
@@ -459,16 +508,70 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void UpdateDiffDetailsView(CAMTreeNode treeNode)
+        
+
+
+        
+        
+        
+        private void UpdateDetailsView(CAMTreeNode treeNode)
         {
-            DiffDetailsView.Clear();
-
-
-
-
-
-            DiffDetailsView.AppendText(treeNode.Item.ToString());
+            FirstFileDetailsView.Text = BuildDetailsText(treeNode.Item);
+            SecondFileDetailsView.Text = BuildDetailsText(treeNode.ConcurrentNode.Item);
         }
+        private static string BuildDetailsText(EcfStructureItem item)
+        {
+            StringBuilder DetailsText = new StringBuilder();
+
+            DetailsText.Append("comments:");
+            DetailsText.Append(Environment.NewLine);
+            foreach (string comment in item.Comments)
+            {
+                DetailsText.Append("\t");
+                DetailsText.Append(comment);
+                DetailsText.Append(Environment.NewLine);
+            }
+            DetailsText.Append(Environment.NewLine);
+
+            if (item is EcfParameter parameter)
+            {
+                DetailsText.Append("attributes:");
+                DetailsText.Append(Environment.NewLine);
+                foreach (EcfAttribute attribute in parameter.Attributes)
+                {
+                    DetailsText.Append("\t");
+                    DetailsText.Append(attribute.Key);
+                    DetailsText.Append(Environment.NewLine);
+                    foreach (EcfValueGroup group in attribute.ValueGroups)
+                    {
+                        DetailsText.Append("\t\t");
+                        DetailsText.Append(string.Join(", ", group.Values));
+                        DetailsText.Append(Environment.NewLine);
+                    }
+                }
+                DetailsText.Append(Environment.NewLine);
+            }
+
+            if (item is EcfKeyValueItem kvitem)
+            {
+                DetailsText.Append("values:");
+                DetailsText.Append(Environment.NewLine);
+                foreach (EcfValueGroup group in kvitem.ValueGroups)
+                {
+                    DetailsText.Append("\t");
+                    DetailsText.Append(string.Join(", ", group.Values));
+                    DetailsText.Append(Environment.NewLine);
+                }
+                DetailsText.Append(Environment.NewLine);
+            }
+
+            return DetailsText.ToString();
+        }
+
+
+
+
+
 
         // subclass
         private class ComboBoxItem : IComparable<ComboBoxItem>

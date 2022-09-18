@@ -151,6 +151,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compare running.
+        /// </summary>
+        internal static string EcfFileCamWorkerDialog_Comparing {
+            get {
+                return ResourceManager.GetString("EcfFileCamWorkerDialog_Comparing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge running.
+        /// </summary>
+        internal static string EcfFileCamWorkerDialog_Merging {
+            get {
+                return ResourceManager.GetString("EcfFileCamWorkerDialog_Merging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For a new file the encoding has to be selected. The already selected default encoding should be suitable in most cases..
         /// </summary>
         internal static string EcfFileOpenDialog_ToolTip_Encoding {

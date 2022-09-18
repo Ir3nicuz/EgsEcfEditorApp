@@ -32,6 +32,7 @@ namespace EgsEcfEditorApp
             this.AbortButton = new System.Windows.Forms.Button();
             this.FilePathAndNameTextBox = new System.Windows.Forms.TextBox();
             this.ProgressPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ProgressIndicator = new EcfWinFormControls.EcfProgressBar();
             this.ProgressPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,6 +67,7 @@ namespace EgsEcfEditorApp
             this.ProgressPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ProgressPanel.Controls.Add(this.FilePathAndNameTextBox, 0, 0);
             this.ProgressPanel.Controls.Add(this.AbortButton, 0, 2);
+            this.ProgressPanel.Controls.Add(this.ProgressIndicator, 0, 1);
             this.ProgressPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.ProgressPanel.Location = new System.Drawing.Point(0, 0);
@@ -76,6 +78,17 @@ namespace EgsEcfEditorApp
             this.ProgressPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.ProgressPanel.Size = new System.Drawing.Size(784, 111);
             this.ProgressPanel.TabIndex = 3;
+            // 
+            // ProgressIndicator
+            // 
+            this.ProgressIndicator.BarText = "";
+            this.ProgressPanel.SetColumnSpan(this.ProgressIndicator, 2);
+            this.ProgressIndicator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ProgressIndicator.Location = new System.Drawing.Point(3, 30);
+            this.ProgressIndicator.Name = "ProgressIndicator";
+            this.ProgressIndicator.Size = new System.Drawing.Size(778, 49);
+            this.ProgressIndicator.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.ProgressIndicator.TabIndex = 3;
             // 
             // EcfFileLoaderDialog
             // 
@@ -102,5 +115,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.TableLayoutPanel ProgressPanel;
         private System.Windows.Forms.TextBox FilePathAndNameTextBox;
+        private EcfWinFormControls.EcfProgressBar ProgressIndicator;
     }
 }

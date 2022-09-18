@@ -61,6 +61,12 @@
     <Compile Include="EcfFileCAMDialog.Designer.cs">
       <DependentUpon>EcfFileCAMDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EcfFileCAMWorkerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfFileCAMWorkerDialog.Designer.cs">
+      <DependentUpon>EcfFileCAMWorkerDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="EcfFileOpenDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EcfFileCAMDialog.resx">
       <DependentUpon>EcfFileCAMDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfFileCAMWorkerDialog.resx">
+      <DependentUpon>EcfFileCAMWorkerDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EcfFileOpenDialog.resx">
       <DependentUpon>EcfFileOpenDialog.cs</DependentUpon>

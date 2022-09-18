@@ -147,6 +147,12 @@
   <data name="EcfFileCAMDialog_ToolTip_DoMerge" xml:space="preserve">
     <value>Integriert die ausgewählten Änderungen in die gegensätzliche Datei</value>
   </data>
+  <data name="EcfFileCamWorkerDialog_Comparing" xml:space="preserve">
+    <value>Vergleich läuft</value>
+  </data>
+  <data name="EcfFileCamWorkerDialog_Merging" xml:space="preserve">
+    <value>Führe zusammen</value>
+  </data>
   <data name="EcfFileOpenDialog_ToolTip_Encoding" xml:space="preserve">
     <value>Für eine neu erstellte Datei muss das Encoding festgelegt werden. Das vorausgewählte Encoding sollte in den meisten Fällen geeignet sein.</value>
   </data>

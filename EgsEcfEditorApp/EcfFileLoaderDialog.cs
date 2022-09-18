@@ -2,7 +2,6 @@
 using EgsEcfParser;
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -11,9 +10,8 @@ namespace EgsEcfEditorApp
     public partial class EcfFileLoaderDialog : Form
     {
         private EgsEcfFile File { get; set; } = null;
-        private BackgroundWorker Worker { get; set; } = new BackgroundWorker();
+        private BackgroundWorker Worker { get; } = new BackgroundWorker();
         private Progress<int> ProgressInterface { get; } = new Progress<int>();
-        private LabeledProgressBar ProgressIndicator { get; } = new LabeledProgressBar();
 
         public EcfFileLoaderDialog()
         {
@@ -35,11 +33,6 @@ namespace EgsEcfEditorApp
             AbortButton.Text = TitleRecources.Generic_Abort;
 
             ProgressIndicator.BarText = TitleRecources.EcfFileLoadingDialog_BarText;
-            ProgressIndicator.Dock = DockStyle.Fill;
-            ProgressIndicator.Style = ProgressBarStyle.Continuous;
-
-            ProgressPanel.Controls.Add(ProgressIndicator, 0, 1);
-            ProgressPanel.SetColumnSpan(ProgressIndicator, 2);
         }
         private void InitWorker()
         {
@@ -148,35 +141,6 @@ namespace EgsEcfEditorApp
         {
             DialogResult = result;
             Close();
-        }
-
-        private class LabeledProgressBar : ProgressBar
-        {
-            public string BarText { get; set; } = string.Empty;
-
-            public LabeledProgressBar() : base()
-            {
-                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
-            }
-
-            protected override void OnPaint(PaintEventArgs evt)
-            {
-                Rectangle barArea = ClientRectangle;
-                Graphics gfx = evt.Graphics;
-                gfx.PageUnit = GraphicsUnit.Pixel;
-
-                ProgressBarRenderer.DrawHorizontalBar(gfx, barArea);
-                barArea.Inflate(-3, -3);
-                Font barTextFont = new Font(Font.FontFamily, barArea.Height - 3, GraphicsUnit.Pixel);
-                if (Value > 0)
-                {
-                    Rectangle chunkArea = new Rectangle(barArea.X, barArea.Y, (int)((float)Value / Maximum * barArea.Width), barArea.Height);
-                    ProgressBarRenderer.DrawHorizontalChunks(gfx, chunkArea);
-                }
-                string barText = string.Format("{0} {1} / {2}", BarText, Value, Maximum);
-                float barTextStart = (barArea.Width - gfx.MeasureString(barText, barTextFont).Width) / 2;
-                gfx.DrawString(barText, barTextFont, SystemBrushes.ControlText, barTextStart, 1);
-            }
         }
     }
 }

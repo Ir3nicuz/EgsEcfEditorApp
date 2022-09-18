@@ -40,7 +40,8 @@ namespace EgsEcfEditorApp
             this.SecondFileActionContainer = new EcfToolBarControls.EcfToolContainer();
             this.SecondFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
             this.FirstFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
-            this.DiffDetailsView = new System.Windows.Forms.RichTextBox();
+            this.FirstFileDetailsView = new System.Windows.Forms.RichTextBox();
+            this.SecondFileDetailsView = new System.Windows.Forms.RichTextBox();
             this.ButtonPanel.SuspendLayout();
             this.CompareAndMergePanel.SuspendLayout();
             this.SuspendLayout();
@@ -83,7 +84,8 @@ namespace EgsEcfEditorApp
             this.CompareAndMergePanel.Controls.Add(this.SecondFileActionContainer, 2, 0);
             this.CompareAndMergePanel.Controls.Add(this.SecondFileSelectionContainer, 3, 0);
             this.CompareAndMergePanel.Controls.Add(this.FirstFileSelectionContainer, 0, 0);
-            this.CompareAndMergePanel.Controls.Add(this.DiffDetailsView, 0, 3);
+            this.CompareAndMergePanel.Controls.Add(this.FirstFileDetailsView, 0, 3);
+            this.CompareAndMergePanel.Controls.Add(this.SecondFileDetailsView, 2, 3);
             this.CompareAndMergePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CompareAndMergePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.CompareAndMergePanel.Location = new System.Drawing.Point(0, 0);
@@ -190,16 +192,29 @@ namespace EgsEcfEditorApp
             this.FirstFileSelectionContainer.Size = new System.Drawing.Size(290, 1);
             this.FirstFileSelectionContainer.TabIndex = 8;
             // 
-            // DiffDetailsView
+            // FirstFileDetailsView
             // 
-            this.CompareAndMergePanel.SetColumnSpan(this.DiffDetailsView, 4);
-            this.DiffDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DiffDetailsView.Location = new System.Drawing.Point(3, 418);
-            this.DiffDetailsView.Name = "DiffDetailsView";
-            this.DiffDetailsView.ReadOnly = true;
-            this.DiffDetailsView.Size = new System.Drawing.Size(1178, 111);
-            this.DiffDetailsView.TabIndex = 9;
-            this.DiffDetailsView.Text = "";
+            this.CompareAndMergePanel.SetColumnSpan(this.FirstFileDetailsView, 2);
+            this.FirstFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FirstFileDetailsView.Location = new System.Drawing.Point(3, 418);
+            this.FirstFileDetailsView.Name = "FirstFileDetailsView";
+            this.FirstFileDetailsView.ReadOnly = true;
+            this.FirstFileDetailsView.Size = new System.Drawing.Size(586, 111);
+            this.FirstFileDetailsView.TabIndex = 9;
+            this.FirstFileDetailsView.Text = "";
+            this.FirstFileDetailsView.WordWrap = false;
+            // 
+            // SecondFileDetailsView
+            // 
+            this.CompareAndMergePanel.SetColumnSpan(this.SecondFileDetailsView, 2);
+            this.SecondFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SecondFileDetailsView.Location = new System.Drawing.Point(595, 418);
+            this.SecondFileDetailsView.Name = "SecondFileDetailsView";
+            this.SecondFileDetailsView.ReadOnly = true;
+            this.SecondFileDetailsView.Size = new System.Drawing.Size(586, 111);
+            this.SecondFileDetailsView.TabIndex = 10;
+            this.SecondFileDetailsView.Text = "";
+            this.SecondFileDetailsView.WordWrap = false;
             // 
             // EcfFileCAMDialog
             // 
@@ -238,6 +253,7 @@ namespace EgsEcfEditorApp
         private EcfToolBarControls.EcfToolContainer SecondFileActionContainer;
         private EcfToolBarControls.EcfToolContainer SecondFileSelectionContainer;
         private EcfToolBarControls.EcfToolContainer FirstFileSelectionContainer;
-        private System.Windows.Forms.RichTextBox DiffDetailsView;
+        private System.Windows.Forms.RichTextBox FirstFileDetailsView;
+        private System.Windows.Forms.RichTextBox SecondFileDetailsView;
     }
 }

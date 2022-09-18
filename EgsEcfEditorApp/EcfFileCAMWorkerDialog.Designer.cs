@@ -76,6 +76,7 @@ namespace EgsEcfEditorApp
             this.ProgressIndicator.Location = new System.Drawing.Point(3, 61);
             this.ProgressIndicator.MarqueeAnimationSpeed = 25;
             this.ProgressIndicator.Name = "ProgressIndicator";
+            this.ProgressIndicator.RightToLeftLayout = true;
             this.ProgressIndicator.Size = new System.Drawing.Size(435, 52);
             this.ProgressIndicator.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.ProgressIndicator.TabIndex = 1;

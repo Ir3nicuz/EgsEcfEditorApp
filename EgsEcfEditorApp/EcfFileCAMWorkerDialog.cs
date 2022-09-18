@@ -59,10 +59,11 @@ namespace EgsEcfEditorApp
         }
 
         //publics
-        public DialogResult ShowDialog(IWin32Window parent, string actionName, EcfFileCAMDialog cam, Action action)
+        public DialogResult ShowDialog(IWin32Window parent, string actionName, bool reverseAnimation, EcfFileCAMDialog cam, Action action)
         {
             CAMDialog = cam;
             CAMActionLabel.Text = actionName;
+            ProgressIndicator.RightToLeft = reverseAnimation ? RightToLeft.Yes : RightToLeft.No;
             Worker.RunWorkerAsync(action);
             return ShowDialog(parent);
         }

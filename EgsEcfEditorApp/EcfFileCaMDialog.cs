@@ -96,7 +96,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
-                UpdateDetailsView(treeNode);
+                UpdateDetailsView(FirstFileDetailsView, SecondFileDetailsView, treeNode);
             }
         }
         private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -133,7 +133,7 @@ namespace EgsEcfEditorApp
         }
         private void FirstFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
-            Merge(SecondFileComboBox.SelectedItem as ComboBoxItem, FirstFileNodes);
+            Merge(SecondFileComboBox.SelectedItem as ComboBoxItem, FirstFileNodes, false);
         }
 
         private void SecondFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
@@ -142,7 +142,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-                UpdateDetailsView(treeNode);
+                UpdateDetailsView(SecondFileDetailsView, FirstFileDetailsView, treeNode);
             }
         }
         private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -178,7 +178,7 @@ namespace EgsEcfEditorApp
         }
         private void SecondFileActionTools_DoMergeClicked(object sender, EventArgs evt)
         {
-            Merge(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileNodes);
+            Merge(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileNodes, true);
         }
 
         // public
@@ -212,7 +212,7 @@ namespace EgsEcfEditorApp
                 return;
             }
 
-            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Comparing,
+            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Comparing, false,
                 this, () => Compare(FirstFileNodes, firstItem.Item.File.ItemList, SecondFileNodes, secondItem.Item.File.ItemList)) != DialogResult.OK)
             {
                 ResetViews();
@@ -310,12 +310,12 @@ namespace EgsEcfEditorApp
                 }
             });
         }
-        private void Merge(ComboBoxItem targetItem, List<CAMTreeNode> sourceNodes)
+        private void Merge(ComboBoxItem targetItem, List<CAMTreeNode> sourceNodes, bool reverseAnimation)
         {
             if (sourceNodes.Count == 0 || targetItem == null) { return; }
 
             ChangedFileTabs.Add(targetItem.Item);
-            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Merging, 
+            if (CAMWorker.ShowDialog(this, TextRecources.EcfFileCamWorkerDialog_Merging, reverseAnimation,
                 this, () => MergeFile(targetItem.Item.File, sourceNodes)) != DialogResult.OK)
             {
                 ResetViews();
@@ -514,10 +514,10 @@ namespace EgsEcfEditorApp
         
         
         
-        private void UpdateDetailsView(CAMTreeNode treeNode)
+        private static void UpdateDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
         {
-            FirstFileDetailsView.Text = BuildDetailsText(treeNode.Item);
-            SecondFileDetailsView.Text = BuildDetailsText(treeNode.ConcurrentNode.Item);
+            firstBox.Text = BuildDetailsText(treeNode.Item);
+            secondBox.Text = BuildDetailsText(treeNode.ConcurrentNode.Item);
         }
         private static string BuildDetailsText(EcfStructureItem item)
         {

@@ -34,14 +34,14 @@ namespace EgsEcfEditorApp
             this.CompareAndMergePanel = new System.Windows.Forms.TableLayoutPanel();
             this.FirstFileComboBox = new System.Windows.Forms.ComboBox();
             this.SecondFileComboBox = new System.Windows.Forms.ComboBox();
+            this.FirstFileDetailsView = new System.Windows.Forms.RichTextBox();
+            this.SecondFileDetailsView = new System.Windows.Forms.RichTextBox();
             this.FirstFileTreeView = new EcfWinFormControls.EcfTreeView();
             this.SecondFileTreeView = new EcfWinFormControls.EcfTreeView();
             this.FirstFileActionContainer = new EcfToolBarControls.EcfToolContainer();
             this.SecondFileActionContainer = new EcfToolBarControls.EcfToolContainer();
             this.SecondFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
             this.FirstFileSelectionContainer = new EcfToolBarControls.EcfToolContainer();
-            this.FirstFileDetailsView = new System.Windows.Forms.RichTextBox();
-            this.SecondFileDetailsView = new System.Windows.Forms.RichTextBox();
             this.ButtonPanel.SuspendLayout();
             this.CompareAndMergePanel.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +49,7 @@ namespace EgsEcfEditorApp
             // ButtonPanel
             // 
             this.ButtonPanel.AutoSize = true;
+            this.ButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ButtonPanel.Controls.Add(this.CloseButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
@@ -124,6 +125,32 @@ namespace EgsEcfEditorApp
             this.SecondFileComboBox.TabIndex = 1;
             this.SecondFileComboBox.SelectionChangeCommitted += new System.EventHandler(this.SecondFileComboBox_SelectionChangeCommitted);
             // 
+            // FirstFileDetailsView
+            // 
+            this.FirstFileDetailsView.BackColor = System.Drawing.SystemColors.Window;
+            this.CompareAndMergePanel.SetColumnSpan(this.FirstFileDetailsView, 2);
+            this.FirstFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FirstFileDetailsView.Location = new System.Drawing.Point(3, 418);
+            this.FirstFileDetailsView.Name = "FirstFileDetailsView";
+            this.FirstFileDetailsView.ReadOnly = true;
+            this.FirstFileDetailsView.Size = new System.Drawing.Size(586, 111);
+            this.FirstFileDetailsView.TabIndex = 9;
+            this.FirstFileDetailsView.Text = "";
+            this.FirstFileDetailsView.WordWrap = false;
+            // 
+            // SecondFileDetailsView
+            // 
+            this.SecondFileDetailsView.BackColor = System.Drawing.SystemColors.Window;
+            this.CompareAndMergePanel.SetColumnSpan(this.SecondFileDetailsView, 2);
+            this.SecondFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SecondFileDetailsView.Location = new System.Drawing.Point(595, 418);
+            this.SecondFileDetailsView.Name = "SecondFileDetailsView";
+            this.SecondFileDetailsView.ReadOnly = true;
+            this.SecondFileDetailsView.Size = new System.Drawing.Size(586, 111);
+            this.SecondFileDetailsView.TabIndex = 10;
+            this.SecondFileDetailsView.Text = "";
+            this.SecondFileDetailsView.WordWrap = false;
+            // 
             // FirstFileTreeView
             // 
             this.FirstFileTreeView.CheckBoxes = true;
@@ -191,30 +218,6 @@ namespace EgsEcfEditorApp
             this.FirstFileSelectionContainer.Name = "FirstFileSelectionContainer";
             this.FirstFileSelectionContainer.Size = new System.Drawing.Size(290, 1);
             this.FirstFileSelectionContainer.TabIndex = 8;
-            // 
-            // FirstFileDetailsView
-            // 
-            this.CompareAndMergePanel.SetColumnSpan(this.FirstFileDetailsView, 2);
-            this.FirstFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FirstFileDetailsView.Location = new System.Drawing.Point(3, 418);
-            this.FirstFileDetailsView.Name = "FirstFileDetailsView";
-            this.FirstFileDetailsView.ReadOnly = true;
-            this.FirstFileDetailsView.Size = new System.Drawing.Size(586, 111);
-            this.FirstFileDetailsView.TabIndex = 9;
-            this.FirstFileDetailsView.Text = "";
-            this.FirstFileDetailsView.WordWrap = false;
-            // 
-            // SecondFileDetailsView
-            // 
-            this.CompareAndMergePanel.SetColumnSpan(this.SecondFileDetailsView, 2);
-            this.SecondFileDetailsView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SecondFileDetailsView.Location = new System.Drawing.Point(595, 418);
-            this.SecondFileDetailsView.Name = "SecondFileDetailsView";
-            this.SecondFileDetailsView.ReadOnly = true;
-            this.SecondFileDetailsView.Size = new System.Drawing.Size(586, 111);
-            this.SecondFileDetailsView.TabIndex = 10;
-            this.SecondFileDetailsView.Text = "";
-            this.SecondFileDetailsView.WordWrap = false;
             // 
             // EcfFileCAMDialog
             // 

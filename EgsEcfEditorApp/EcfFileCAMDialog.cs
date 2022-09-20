@@ -96,7 +96,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
-                UpdateDetailsView(FirstFileDetailsView, SecondFileDetailsView, treeNode);
+                UpdateDiffDetailsView(FirstFileDetailsView, SecondFileDetailsView, treeNode);
             }
         }
         private void FirstFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -142,7 +142,7 @@ namespace EgsEcfEditorApp
             {
                 treeNode.UpdateCheckState(null, treeNode.Checked);
                 RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-                UpdateDetailsView(SecondFileDetailsView, FirstFileDetailsView, treeNode);
+                UpdateDiffDetailsView(SecondFileDetailsView, FirstFileDetailsView, treeNode);
             }
         }
         private void SecondFileSelectionTools_SelectionChangeClicked(object sender, SelectionChangeEventArgs evt)
@@ -226,10 +226,15 @@ namespace EgsEcfEditorApp
         }
         private void ResetViews()
         {
+            FirstFileTreeView.BeginUpdate();
+            FirstFileTreeView.Nodes.Clear();
+            FirstFileTreeView.EndUpdate();
+            SecondFileTreeView.BeginUpdate();
+            SecondFileTreeView.Nodes.Clear();
+            SecondFileTreeView.EndUpdate();
+
             FirstFileNodes.Clear();
             SecondFileNodes.Clear();
-            FirstFileTreeView.Nodes.Clear();
-            SecondFileTreeView.Nodes.Clear();
             FirstFileDetailsView.Clear();
             SecondFileDetailsView.Clear();
             FirstFileSelectionTools.Reset(CheckState.Indeterminate);
@@ -419,7 +424,8 @@ namespace EgsEcfEditorApp
         {
             treeView.BeginUpdate();
             treeView.Nodes.Clear();
-            treeView.Nodes.AddRange(nodeList.Where(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore).ToArray());
+            treeView.Nodes.AddRange(nodeList.Where(node => 
+                node.MergeAction != CAMTreeNode.MergeActions.Ignore).ToArray());
             treeView.EndUpdate();
         }
         private static void RefreshSelectionTool(CompareSelectionTools selectionTool, List<CAMTreeNode> nodes)
@@ -508,70 +514,130 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        
-
-
-        
-        
-        
-        private static void UpdateDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
+        private static void UpdateDiffDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
         {
-            firstBox.Text = BuildDetailsText(treeNode.Item);
-            secondBox.Text = BuildDetailsText(treeNode.ConcurrentNode.Item);
+            switch (treeNode.MergeAction)
+            {
+                case CAMTreeNode.MergeActions.Add:
+                    UpdateDiffDetailsText(firstBox, treeNode.Item);
+                    secondBox.Text = string.Empty;
+                    break;
+                case CAMTreeNode.MergeActions.Update: 
+                    UpdateDiffDetailsText(firstBox, secondBox, treeNode.Item, treeNode.ConcurrentNode.Item);
+                    break;
+                default:
+                    firstBox.Text = string.Empty;
+                    secondBox.Text = string.Empty;
+                    break;
+            }
         }
-        private static string BuildDetailsText(EcfStructureItem item)
+        private static void UpdateDiffDetailsText(RichTextBox detailBox, EcfStructureItem item)
         {
-            StringBuilder DetailsText = new StringBuilder();
+            detailBox.SuspendLayout();
+            detailBox.Clear();
 
-            DetailsText.Append("comments:");
-            DetailsText.Append(Environment.NewLine);
+            if (item.Comments.Count > 0)
+            {
+                detailBox.AppendText(BuildCommentDiffDetails(item));
+            }
+
+            if (item is EcfParameter parameter && parameter.Attributes.Count > 0)
+            {
+                detailBox.AppendText(BuildAttributeDiffDetails(parameter));
+            }
+
+            if (item is EcfKeyValueItem kvItem && kvItem.ValueGroups.Count > 0)
+            {
+                detailBox.AppendText(BuildValueDiffDetails(kvItem));
+            }
+
+            detailBox.ResumeLayout();
+        }
+        private static void UpdateDiffDetailsText(RichTextBox firstBox, RichTextBox secondBox, EcfStructureItem primaryItem, EcfStructureItem secondaryItem)
+        {
+            firstBox.SuspendLayout();
+            secondBox.SuspendLayout();
+            firstBox.Clear();
+            secondBox.Clear();
+
+            if (!ValueListEquals(primaryItem.Comments, secondaryItem.Comments))
+            {
+                firstBox.AppendText(BuildCommentDiffDetails(primaryItem));
+                secondBox.AppendText(BuildCommentDiffDetails(secondaryItem));
+            }
+
+            if (primaryItem is EcfParameter primaryParameter && secondaryItem is EcfParameter secondaryParameter && 
+                !AttributeListEquals(primaryParameter.Attributes, secondaryParameter.Attributes))
+            {
+                firstBox.AppendText(BuildAttributeDiffDetails(primaryParameter));
+                secondBox.AppendText(BuildAttributeDiffDetails(secondaryParameter));
+            }
+
+            if (primaryItem is EcfParameter primaryKVItem && secondaryItem is EcfParameter secondaryKVItem &&
+                !ValueGroupListEquals(primaryKVItem.ValueGroups, secondaryKVItem.ValueGroups))
+            {
+                firstBox.AppendText(BuildValueDiffDetails(primaryKVItem));
+                secondBox.AppendText(BuildValueDiffDetails(secondaryKVItem));
+            }
+
+            firstBox.ResumeLayout();
+            secondBox.ResumeLayout();
+        }
+        private static string BuildCommentDiffDetails(EcfStructureItem item)
+        {
+            StringBuilder detailsText = new StringBuilder();
+
+            detailsText.Append(TitleRecources.Generic_Comments);
+            detailsText.Append(":");
+            detailsText.Append(Environment.NewLine);
             foreach (string comment in item.Comments)
             {
-                DetailsText.Append("\t");
-                DetailsText.Append(comment);
-                DetailsText.Append(Environment.NewLine);
-            }
-            DetailsText.Append(Environment.NewLine);
-
-            if (item is EcfParameter parameter)
-            {
-                DetailsText.Append("attributes:");
-                DetailsText.Append(Environment.NewLine);
-                foreach (EcfAttribute attribute in parameter.Attributes)
-                {
-                    DetailsText.Append("\t");
-                    DetailsText.Append(attribute.Key);
-                    DetailsText.Append(Environment.NewLine);
-                    foreach (EcfValueGroup group in attribute.ValueGroups)
-                    {
-                        DetailsText.Append("\t\t");
-                        DetailsText.Append(string.Join(", ", group.Values));
-                        DetailsText.Append(Environment.NewLine);
-                    }
-                }
-                DetailsText.Append(Environment.NewLine);
+                detailsText.Append("\t");
+                detailsText.Append(comment);
+                detailsText.Append(Environment.NewLine);
             }
 
-            if (item is EcfKeyValueItem kvitem)
-            {
-                DetailsText.Append("values:");
-                DetailsText.Append(Environment.NewLine);
-                foreach (EcfValueGroup group in kvitem.ValueGroups)
-                {
-                    DetailsText.Append("\t");
-                    DetailsText.Append(string.Join(", ", group.Values));
-                    DetailsText.Append(Environment.NewLine);
-                }
-                DetailsText.Append(Environment.NewLine);
-            }
-
-            return DetailsText.ToString();
+            return detailsText.ToString();
         }
+        private static string BuildAttributeDiffDetails(EcfParameter parameter)
+        {
+            StringBuilder detailsText = new StringBuilder();
 
+            detailsText.Append(TitleRecources.Generic_Attributes);
+            detailsText.Append(":");
+            detailsText.Append(Environment.NewLine);
+            foreach (EcfAttribute attribute in parameter.Attributes)
+            {
+                detailsText.Append("\t");
+                detailsText.Append(attribute.Key);
+                detailsText.Append(":");
+                detailsText.Append(Environment.NewLine);
+                foreach (EcfValueGroup group in attribute.ValueGroups)
+                {
+                    detailsText.Append("\t\t");
+                    detailsText.Append(string.Join(", ", group.Values));
+                    detailsText.Append(Environment.NewLine);
+                }
+            }
 
+            return detailsText.ToString();
+        }
+        private static string BuildValueDiffDetails(EcfKeyValueItem kvItem)
+        {
+            StringBuilder detailsText = new StringBuilder();
+            
+            detailsText.Append(TitleRecources.Generic_Values);
+            detailsText.Append(":");
+            detailsText.Append(Environment.NewLine);
+            foreach (EcfValueGroup group in kvItem.ValueGroups)
+            {
+                detailsText.Append("\t");
+                detailsText.Append(string.Join(", ", group.Values));
+                detailsText.Append(Environment.NewLine);
+            }
 
-
-
+            return detailsText.ToString();
+        }
 
         // subclass
         private class ComboBoxItem : IComparable<ComboBoxItem>

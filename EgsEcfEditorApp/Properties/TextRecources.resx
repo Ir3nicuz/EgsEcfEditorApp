@@ -144,8 +144,17 @@
   <data name="EcfFileCAMDialog_ToolTip_ChangeAllUnequalItems" xml:space="preserve">
     <value>Activates / deactivates all elements which would be updated</value>
   </data>
-  <data name="EcfFileCAMDialog_ToolTip_DoMerge" xml:space="preserve">
-    <value>Integrates the selected changes into the opposite file</value>
+  <data name="EcfFileCAMDialog_ToolTip_DoMergeLeft" xml:space="preserve">
+    <value>Integrates the selected changes from the right into the left file</value>
+  </data>
+  <data name="EcfFileCAMDialog_ToolTip_DoMergeRight" xml:space="preserve">
+    <value>Integrates the selected changes from the left into the right file</value>
+  </data>
+  <data name="EcfFileCAMDialog_ToolTip_PageDown" xml:space="preserve">
+    <value>Select next page</value>
+  </data>
+  <data name="EcfFileCAMDialog_ToolTip_PageUp" xml:space="preserve">
+    <value>Select previous page</value>
   </data>
   <data name="EcfFileCamWorkerDialog_Comparing" xml:space="preserve">
     <value>Compare running</value>

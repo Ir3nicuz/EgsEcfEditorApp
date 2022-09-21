@@ -142,11 +142,38 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Integrates the selected changes into the opposite file.
+        ///   Looks up a localized string similar to Integrates the selected changes from the right into the left file.
         /// </summary>
-        internal static string EcfFileCAMDialog_ToolTip_DoMerge {
+        internal static string EcfFileCAMDialog_ToolTip_DoMergeLeft {
             get {
-                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_DoMerge", resourceCulture);
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_DoMergeLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Integrates the selected changes from the left into the right file.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_DoMergeRight {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_DoMergeRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select next page.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_PageDown {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_PageDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select previous page.
+        /// </summary>
+        internal static string EcfFileCAMDialog_ToolTip_PageUp {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_ToolTip_PageUp", resourceCulture);
             }
         }
         

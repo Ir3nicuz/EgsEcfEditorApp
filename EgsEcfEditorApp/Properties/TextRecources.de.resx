@@ -477,4 +477,7 @@
   <data name="Generic_Of" xml:space="preserve">
     <value>von</value>
   </data>
+  <data name="Generic_Page" xml:space="preserve">
+    <value>Seite</value>
+  </data>
 </root>

@@ -541,7 +541,7 @@ namespace EgsEcfEditorApp
         // Content handling
         private void CompareAndMergeFiles()
         {
-            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
+            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList(), InternalSettings.Default.EcfFileCAMDialog_PageSize);
             foreach(EcfTabPage tab in CompareMergeDialog.ChangedFileTabs)
             {
                 tab.UpdateAllViews();
@@ -4225,10 +4225,7 @@ namespace EcfToolBarControls
                 FlatAppearance.BorderSize = 0;
                 Image = image;
             }
-            else if (text != null)
-            {
-                Text = text;
-            }
+            Text = text;
         }
 
         protected override void Dispose(bool disposing)

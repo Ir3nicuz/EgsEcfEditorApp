@@ -1139,5 +1139,14 @@ namespace EgsEcfEditorApp.Properties {
                 return ResourceManager.GetString("Generic_Of", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page.
+        /// </summary>
+        internal static string Generic_Page {
+            get {
+                return ResourceManager.GetString("Generic_Page", resourceCulture);
+            }
+        }
     }
 }

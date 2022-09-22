@@ -274,5 +274,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["EgsEcfEditorApp_ValueMaxLenght"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int EcfFileCAMDialog_PageSize {
+            get {
+                return ((int)(this["EcfFileCAMDialog_PageSize"]));
+            }
+            set {
+                this["EcfFileCAMDialog_PageSize"] = value;
+            }
+        }
     }
 }

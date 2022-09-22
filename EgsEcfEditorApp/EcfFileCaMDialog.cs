@@ -6,7 +6,6 @@ using EgsEcfParser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using static EcfCAMTools.CompareSelectionTools;
@@ -23,6 +22,7 @@ namespace EgsEcfEditorApp
         private CompareSelectionTools FirstFileSelectionTools { get; } = new CompareSelectionTools();
         private CompareSelectionTools SecondFileSelectionTools { get; } = new CompareSelectionTools();
         private MergeActionTools ActionTools { get; } = new MergeActionTools();
+        private DiffNavigationTools NavigationTools { get; } = new DiffNavigationTools();
 
         private ImageList CAMListViewIcons { get; } = new ImageList();
         private List<ComboBoxItem> AvailableFiles { get; } = new List<ComboBoxItem>();
@@ -30,7 +30,7 @@ namespace EgsEcfEditorApp
         private List<CAMTreeNode> FirstFileNodes { get; } = new List<CAMTreeNode>();
         private List<CAMTreeNode> SecondFileNodes { get; } = new List<CAMTreeNode>();
         private static bool IsCrossAccessing { get; set; } = false;
-        private int PageSize { get; } = 25;
+        private int PageSize { get; set; } = 100;
         private int PageNumber { get; set; } = 1;
         private int PageCount { get; set; } = 1;
 
@@ -54,8 +54,9 @@ namespace EgsEcfEditorApp
             FirstFileTreeView.LinkTreeView(SecondFileTreeView);
 
             FirstFileSelectionContainer.Add(FirstFileSelectionTools);
-            ActionContainer.Add(ActionTools);
             SecondFileSelectionContainer.Add(SecondFileSelectionTools);
+            ActionContainer.Add(ActionTools);
+            NavigationContainer.Add(NavigationTools);
 
             CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Unequal, 16, 3, 1));
             CAMListViewIcons.Images.Add(AddGap(IconRecources.Icon_Add, 16, 3, 1));
@@ -65,8 +66,8 @@ namespace EgsEcfEditorApp
             FirstFileTreeView.ImageList = CAMListViewIcons;
             SecondFileTreeView.ImageList = CAMListViewIcons;
 
-            FirstFileDetailsView.SelectionTabs = new int[] { 20, 40, 60, 80, 100 };
-            SecondFileDetailsView.SelectionTabs = new int[] { 20, 40, 60, 80, 100 };
+            FirstFileDetailsView.SelectionTabs = new int[] { 20, 40 };
+            SecondFileDetailsView.SelectionTabs = new int[] { 20, 40 };
 
             InitEvents();
         }
@@ -85,8 +86,8 @@ namespace EgsEcfEditorApp
 
             ActionTools.MergeToRightClicked += ActionTools_MergeToRightClicked;
             ActionTools.MergeToLeftClicked += ActionTools_MergeToLeftClicked;
-            ActionTools.PageUpClicked += ActionTools_PageUpClicked;
-            ActionTools.PageDownClicked += ActionTools_PageDownClicked;
+            NavigationTools.PageUpClicked += NavigationTools_PageUpClicked;
+            NavigationTools.PageDownClicked += NavigationTools_PageDownClicked;
         }
         private void CloseButton_Click(object sender, EventArgs evt)
         {
@@ -184,26 +185,28 @@ namespace EgsEcfEditorApp
         {
             Merge(FirstFileComboBox.SelectedItem as ComboBoxItem, SecondFileNodes, true);
         }
-        private void ActionTools_PageUpClicked(object sender, EventArgs evt)
+        private void NavigationTools_PageUpClicked(object sender, EventArgs evt)
         {
             if (PageNumber > 1) { PageNumber--; }
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
-            ActionTools.EnablePageUpButton(PageNumber > 1);
-            ActionTools.EnablePageDownButton(true);
+            NavigationTools.UpdatePageButtons(PageNumber, PageCount);
+            UpdatePageIndicator(PageNumber, PageCount);
         }
-        private void ActionTools_PageDownClicked(object sender, EventArgs evt)
+        private void NavigationTools_PageDownClicked(object sender, EventArgs evt)
         {
             if (PageNumber < PageCount) { PageNumber++; }
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
-            ActionTools.EnablePageUpButton(true);
-            ActionTools.EnablePageDownButton(PageNumber < PageCount);
+            NavigationTools.UpdatePageButtons(PageNumber, PageCount);
+            UpdatePageIndicator(PageNumber, PageCount);
         }
 
         // public
-        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs, int pageSize)
         {
+            PageSize = pageSize;
+            
             ChangedFileTabs.Clear();
             AvailableFiles.Clear();
             AvailableFiles.AddRange(openedFileTabs.Select(tab => new ComboBoxItem(tab)));
@@ -241,16 +244,16 @@ namespace EgsEcfEditorApp
 
             PageNumber = 1;
             PageCount = (int)Math.Ceiling(FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore) / (double)PageSize);
+            UpdatePageIndicator(PageNumber, PageCount);
 
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
             RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
             RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
-            
+
             ActionTools.EnableMergeToRightButton(FirstFileTreeView.Nodes.Count > 0);
             ActionTools.EnableMergeToLeftButton(SecondFileTreeView.Nodes.Count > 0);
-            ActionTools.EnablePageUpButton(false);
-            ActionTools.EnablePageDownButton(PageCount > 1);
+            NavigationTools.UpdatePageButtons(PageNumber, PageCount);
         }
         private void ResetViews()
         {
@@ -263,8 +266,8 @@ namespace EgsEcfEditorApp
 
             ActionTools.EnableMergeToRightButton(false);
             ActionTools.EnableMergeToLeftButton(false);
-            ActionTools.EnablePageUpButton(false);
-            ActionTools.EnablePageDownButton(false);
+            NavigationTools.UpdatePageButtons(0, 0);
+            UpdatePageIndicator(0, 0);
 
             FirstFileNodes.Clear();
             SecondFileNodes.Clear();
@@ -545,6 +548,18 @@ namespace EgsEcfEditorApp
                     }
                     node.Item.Revalidate();
                 }
+            }
+        }
+        private void UpdatePageIndicator(int pageNumber, int pageCount)
+        {
+            if (pageNumber < 1 || pageCount < 1)
+            {
+                PageIndicator.Text = string.Empty;
+            }
+            else
+            {
+                PageIndicator.Text = string.Format("{2} {0} {3} {1}", pageNumber, pageCount,
+                    TextRecources.Generic_Page, TextRecources.Generic_Of);
             }
         }
         private static void UpdateDiffDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
@@ -924,25 +939,17 @@ namespace EcfCAMTools
     {
         public event EventHandler MergeToRightClicked;
         public event EventHandler MergeToLeftClicked;
-        public event EventHandler PageUpClicked;
-        public event EventHandler PageDownClicked;
 
         private EcfToolBarButton MergeToRightButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_DoMergeRight, IconRecources.Icon_MoveRight, null);
         private EcfToolBarButton MergeToLeftButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_DoMergeLeft, IconRecources.Icon_MoveLeft, null);
-        private EcfToolBarButton PageUpButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_PageUp, IconRecources.Icon_MoveUp, null);
-        private EcfToolBarButton PageDownButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_PageDown, IconRecources.Icon_MoveDown, null);
-
+        
         public MergeActionTools() : base()
         {
             Add(MergeToRightButton);
             Add(MergeToLeftButton);
-            Add(PageUpButton);
-            Add(PageDownButton);
-
+            
             MergeToRightButton.Click += (sender, evt) => MergeToRightClicked?.Invoke(sender, evt);
             MergeToLeftButton.Click += (sender, evt) => MergeToLeftClicked?.Invoke(sender, evt);
-            PageUpButton.Click += (sender, evt) => PageUpClicked?.Invoke(sender, evt);
-            PageDownButton.Click += (sender, evt) => PageDownClicked?.Invoke(sender, evt);
         }
 
         public void EnableMergeToRightButton(bool enabled)
@@ -953,13 +960,36 @@ namespace EcfCAMTools
         {
             MergeToLeftButton.Enabled = enabled;
         }
-        public void EnablePageUpButton(bool enabled)
+    }
+    public class DiffNavigationTools : EcfToolBox
+    {
+        public event EventHandler PageUpClicked;
+        public event EventHandler PageDownClicked;
+
+        private EcfToolBarButton PageUpButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_PageUp, IconRecources.Icon_MoveUp, null);
+        private EcfToolBarButton PageDownButton { get; } = new EcfToolBarButton(TextRecources.EcfFileCAMDialog_ToolTip_PageDown, IconRecources.Icon_MoveDown, null);
+
+        public DiffNavigationTools() : base()
         {
-            PageUpButton.Enabled = enabled;
+            Add(PageUpButton);
+            Add(PageDownButton);
+
+            PageUpButton.Click += (sender, evt) => PageUpClicked?.Invoke(sender, evt);
+            PageDownButton.Click += (sender, evt) => PageDownClicked?.Invoke(sender, evt);
         }
-        public void EnablePageDownButton(bool enabled)
+
+        public void UpdatePageButtons(int pageNumber, int pageCount)
         {
-            PageDownButton.Enabled = enabled;
+            if (pageNumber < 1 || pageCount < 1)
+            {
+                PageUpButton.Enabled = false;
+                PageDownButton.Enabled = false;
+            }
+            else
+            {
+                PageUpButton.Enabled = pageNumber > 1;
+                PageDownButton.Enabled = pageNumber < pageCount;
+            }
         }
     }
 }

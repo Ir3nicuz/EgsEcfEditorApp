@@ -602,8 +602,9 @@ namespace EgsEcfParser
         }
         public static List<EcfError> CheckBlockUniqueness(EcfBlock block, List<EcfBlock> blockList, EcfErrorGroups errorGroup)
         {
+            bool isReferenced = block.RefTarget != null && blockList.Any(listedBlock => block.RefTarget.Equals(listedBlock.RefSource));
             return blockList.Where(listedBlock => !listedBlock.Equals(block) &&
-                ((block.Id?.Equals(listedBlock.Id) ?? false) || (block.RefTarget?.Equals(listedBlock.RefTarget) ?? false)))
+                ((block.Id?.Equals(listedBlock.Id) ?? false) || (isReferenced && block.RefTarget.Equals(listedBlock.RefTarget))))
                 .Select(listedBlock => new EcfError(errorGroup, EcfErrors.BlockIdNotUnique, listedBlock.BuildIdentification())).ToList();
         }
         public static EcfError CheckBlockReferenceValid(EcfBlock block, List<EcfBlock> blockList, out EcfBlock inheriter, EcfErrorGroups errorGroup)

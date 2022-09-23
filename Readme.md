@@ -131,7 +131,7 @@ At multi selection the panel will normally open for the first selected element. 
 
 ### Comparing and Merging files
 
-After clicking the compare and merge button ( <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> ) the compare and merge tool opens. Within each of the two dropdown boxes one of the opened `.ecf` files can be selected. After selecting two files the compare begins. Depending on file size a progress bar will be displayed until completion.
+In the compare and merge function ( <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> ) the compare is started by selecting two of the opened files. Depending on file size a progress bar will be displayed until completion.
 
 The two tree views will display all elements which differs between the two files. If no elements are displayed the two files are completely equal. The displayed elements belongs to the three categories:
 - <img src="EgsEcfEditorApp\Resources\Icon_Add.png" title="icon" width="16" height="16"/> add / element will be created in opposite file

@@ -131,7 +131,22 @@ At multi selection the panel will normally open for the first selected element. 
 
 ### Comparing and Merging files
 
-Description t.b.d.
+After clicking the compare and merge button ( <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> ) the compare and merge tool opens. Within each of the two dropdown boxes one of the opened `.ecf` files can be selected. After selecting two files the compare begins. Depending on file size a progress bar will be displayed until completion.
+
+The two tree views will display all elements which differs between the two files. If no elements are displayed the two files are completely equal. The displayed elements belongs to the three categories:
+- <img src="EgsEcfEditorApp\Resources\Icon_Add.png" title="icon" width="16" height="16"/> add / element will be created in opposite file
+- <img src="EgsEcfEditorApp\Resources\Icon_Unequal.png" title="icon" width="16" height="16"/> unequal / element will be updated in opposite file
+- <img src="EgsEcfEditorApp\Resources\Icon_Remove.png" title="icon" width="16" height="16"/> remove / element will be deleted in opposite file
+
+After clicking one of the merge buttons ( <img src="EgsEcfEditorApp\Resources\Icon_MoveLeft.png" title="icon" width="16" height="16"/> / <img src="EgsEcfEditorApp\Resources\Icon_MoveRight.png" title="icon" width="16" height="16"/> ) all checked elements behind the arrow will be merged into the file the arrow points to. 
+
+With the buttons above the tree view its possible to check / uncheck all elements of the corresponding category. In the tree view itself single elements can be checked / unchecked. The buttons above the tree view will display an indeterminated state to indicate the mixed state across pages of elements.
+
+To maintain a suitable performance only a limited amount of diff elements will be displayed at once. If this limit is exceeded all additional elements will be moved to a second (or more) page. The two page select buttons ( <img src="EgsEcfEditorApp\Resources\Icon_MoveUp.png" title="icon" width="16" height="16"/> / <img src="EgsEcfEditorApp\Resources\Icon_MoveDown.png" title="icon" width="16" height="16"/> ) change the displayed page.
+
+Clicking an element in the tree view will trigger the detail difference display at the lower window. The two text boxes again will only display differences. If this boxes are empty the selected element has no difference to the opposite element. If an element is marked as unequal but the details boxes shows no difference only a structural sub element contains a difference.
+
+<img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
 
 ## Shortcuts and Functions
 ### Shortcuts
@@ -214,6 +229,7 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_AllUnequalItemsSet.png" title="icon" width="16" height="16"/> change checkmark of all "unequal" items
 - <img src="EgsEcfEditorApp\Resources\Icon_AllRemoveItemsSet.png" title="icon" width="16" height="16"/> change checkmark of all "remove" items
 - <img src="EgsEcfEditorApp\Resources\Icon_MoveRight.png" title="icon" width="16" height="16"/> process all checked items to the opposite file
+- <img src="EgsEcfEditorApp\Resources\Icon_MoveUp.png" title="icon" width="16" height="16"/> switch displayed page
 
 ## File Content Definition
 The file content definition is the basic information for the tool which content is viable in the loaded `.ecf` file and which is not. To achive the design goal to be reliable able to load and interprete `.ecf` files from any source (default files, text editor tool files, manually edited files and so on) the definition provides several options. 

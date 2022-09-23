@@ -552,15 +552,18 @@ namespace EgsEcfEditorApp
         }
         private void UpdatePageIndicator(int pageNumber, int pageCount)
         {
+            string pageText;
             if (pageNumber < 1 || pageCount < 1)
             {
-                PageIndicator.Text = string.Empty;
+                pageText = string.Empty;
             }
             else
             {
-                PageIndicator.Text = string.Format("{2} {0} {3} {1}", pageNumber, pageCount,
+                pageText = string.Format("{2} {0} {3} {1}", pageNumber, pageCount,
                     TextRecources.Generic_Page, TextRecources.Generic_Of);
             }
+            FirstFileTreeBorderPanel.Text = pageText;
+            SecondFileTreeBorderPanel.Text = pageText;
         }
         private static void UpdateDiffDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
         {

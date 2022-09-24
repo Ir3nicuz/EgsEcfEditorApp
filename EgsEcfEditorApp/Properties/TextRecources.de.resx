@@ -183,6 +183,9 @@
   <data name="EcfItemEditingDialog_CouldNotBeFoundInTheItemList" xml:space="preserve">
     <value>konnte in der Element Liste nicht gefunden werden</value>
   </data>
+  <data name="EcfItemEditingDialog_HasNoUniqueIdentifier" xml:space="preserve">
+    <value>hat keine einzigartige Benennung</value>
+  </data>
   <data name="EcfItemEditingDialog_IsAlreadyUsedBy" xml:space="preserve">
     <value>wird bereits verwendet von</value>
   </data>

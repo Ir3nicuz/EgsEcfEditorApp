@@ -763,7 +763,7 @@ namespace EcfFileViews
         {
             List<string> errors = new List<string>();
             errors.AddRange(BlockItem_ValidateTypeData());
-            errors.AddRange(BlockItemAttributesPanel.ValidateIdName(IdentifyingBlockList, ReferencedBlockList, PresetBlock));
+            errors.AddRange(BlockItemAttributesPanel.ValidateIdName(IdentifyingBlockList, ReferencingBlockList, ReferencedBlockList, PresetBlock));
             errors.AddRange(BlockItemAttributesPanel.ValidateRefTarget(ReferencingBlockList, PresetBlock));
             errors.AddRange(BlockItemAttributesPanel.ValidateRefSource(ReferencedBlockList));
             errors.AddRange(BlockItemAttributesPanel.ValidateAttributeValues());
@@ -1146,7 +1146,7 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            public List<string> ValidateIdName(List<EcfBlock> identifyingBlockList, List<EcfBlock> referencedBlockList, EcfBlock presetBlock)
+            public List<string> ValidateIdName(List<EcfBlock> identifyingBlockList, List<EcfBlock> referencingBlockList, List<EcfBlock> referencedBlockList, EcfBlock presetBlock)
             {
                 List<string> errors = new List<string>();
                 if (identifyingBlockList != null)
@@ -1174,11 +1174,14 @@ namespace EcfFileViews
                         string value = nameRow.GetValues().FirstOrDefault();
                         if (value != null)
                         {
-                            foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
-                                && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                            if (referencingBlockList != null && referencingBlockList.Any(listedBlock => value.Equals(listedBlock.RefSource)))
                             {
-                                errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
-                                    value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                                foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
+                                    && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                                {
+                                    errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
+                                        value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                                }
                             }
                         }
                     }
@@ -1215,10 +1218,17 @@ namespace EcfFileViews
                     AttributeRow sourceRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource);
                     if (sourceRefRow != null && sourceRefRow.IsActive())
                     {
-                        if (!referencedBlockList.Any(block => block.Equals(sourceRefRow.Inheritor)))
+                        string value = sourceRefRow.GetValues().FirstOrDefault();
+                        int targetBlockCount = referencedBlockList.Count(block => block.RefTarget.Equals(value));
+                        if (targetBlockCount < 1)
                         {
                             errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
                                 sourceRefRow.Inheritor?.BuildIdentification(), TextRecources.EcfItemEditingDialog_CouldNotBeFoundInTheItemList));
+                        }
+                        else if (targetBlockCount > 1)
+                        {
+                            errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
+                                sourceRefRow.Inheritor?.BuildIdentification(), TextRecources.EcfItemEditingDialog_HasNoUniqueIdentifier));
                         }
                     }
                 }

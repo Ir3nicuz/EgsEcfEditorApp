@@ -259,6 +259,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to has no unique identifier.
+        /// </summary>
+        internal static string EcfItemEditingDialog_HasNoUniqueIdentifier {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_HasNoUniqueIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to is already used by.
         /// </summary>
         internal static string EcfItemEditingDialog_IsAlreadyUsedBy {

@@ -634,6 +634,7 @@ namespace EcfFileViews
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfItemEditingDialog";
+            this.Activated += new System.EventHandler(this.EcfItemEditingDialog_Activated);
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             this.ViewPanel.ResumeLayout(false);

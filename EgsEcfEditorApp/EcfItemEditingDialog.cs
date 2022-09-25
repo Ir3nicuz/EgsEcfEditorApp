@@ -107,15 +107,11 @@ namespace EcfFileViews
         }
         private void OkButton_Click(object sender, EventArgs evt)
         {
-            List<string> errors = Generic_ValidateInputs();
-            if (errors.Count > 0)
-            {
-                Generic_ShowValidationErrors(errors);
-                return;
-            }
-            ResultItem = Generic_PrepareResultItem();
-            DialogResult = DialogResult.OK;
-            Close();
+            Generic_TryCloseSuccess();
+        }
+        private void EcfItemEditingDialog_Activated(object sender, EventArgs evt)
+        {
+            Generic_SetFocus();
         }
         // selector
         private void SelectCommentItemButton_Click(object sender, EventArgs evt)
@@ -243,6 +239,34 @@ namespace EcfFileViews
         
         // privates
         // generics
+        private void Generic_SetFocus()
+        {
+            switch (SelectedItemType)
+            {
+                case Modes.Comment:
+                    CommentItemRichTextBox.Focus();
+                    CommentItemRichTextBox.SelectAll();
+                    break;
+                case Modes.Parameter:
+                    ParameterItemValuesPanel.TryFocusFirstCell();
+                    break;
+                default:
+                    OkButton.Focus();
+                    break;
+            }
+        }
+        private void Generic_TryCloseSuccess()
+        {
+            List<string> errors = Generic_ValidateInputs();
+            if (errors.Count > 0)
+            {
+                Generic_ShowValidationErrors(errors);
+                return;
+            }
+            ResultItem = Generic_PrepareResultItem();
+            DialogResult = DialogResult.OK;
+            Close();
+        }
         private void Generic_ClearPresets()
         {
             PresetComment = null;
@@ -357,8 +381,6 @@ namespace EcfFileViews
             // hack to prevent tab switch with tab key
             ViewPanel.TabPages.Clear();
             ViewPanel.TabPages.Add(CommentItemView);
-
-            CommentItemRichTextBox.Focus();
         }
         private void CommentItem_ActivateViewHeader()
         {
@@ -486,8 +508,6 @@ namespace EcfFileViews
             // hack to prevent tab switch with tab key
             ViewPanel.TabPages.Clear();
             ViewPanel.TabPages.Add(ParameterItemView);
-
-            OkButton.Focus();
         }
         private void ParameterItem_ActivateViewHeader()
         {
@@ -708,8 +728,6 @@ namespace EcfFileViews
             // hack to prevent tab switch with tab key
             ViewPanel.TabPages.Clear();
             ViewPanel.TabPages.Add(BlockItemView);
-
-            OkButton.Focus();
         }
         private void BlockItem_ActivateViewHeader()
         {
@@ -882,8 +900,6 @@ namespace EcfFileViews
             // hack to prevent tab switch with tab key
             ViewPanel.TabPages.Clear();
             ViewPanel.TabPages.Add(ParameterMatrixView);
-
-            OkButton.Focus();
         }
         private void ParameterMatrix_UpdateView()
         {
@@ -1621,6 +1637,14 @@ namespace EcfFileViews
             }
 
             // publics
+            public void TryFocusFirstCell()
+            {
+                if (Grid.Rows.Count > 0 && Grid.Rows[0].Cells.Count > 0)
+                {
+                    Grid.CurrentCell = Grid.Rows[0].Cells[0];
+                    Grid.BeginEdit(true);
+                }
+            }
             public void GenerateParameterMatrix(FormatDefinition definition, ReadOnlyCollection<ItemDefinition> parameters)
             {
                 if (Mode != ParameterModes.Block) { throw new InvalidOperationException(string.Format("Not allowed in {0} mode", Mode)); }

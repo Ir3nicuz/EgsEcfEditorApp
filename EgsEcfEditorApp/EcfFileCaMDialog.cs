@@ -49,8 +49,6 @@ namespace EgsEcfEditorApp
             Icon = IconRecources.Icon_AppBranding;
             Text = TitleRecources.EcfFileCAMDialog_Header;
 
-            CloseButton.Text = TitleRecources.Generic_Close;
-
             FirstFileTreeView.LinkTreeView(SecondFileTreeView);
 
             FirstFileSelectionContainer.Add(FirstFileSelectionTools);
@@ -88,10 +86,6 @@ namespace EgsEcfEditorApp
             ActionTools.MergeToLeftClicked += ActionTools_MergeToLeftClicked;
             NavigationTools.PageUpClicked += NavigationTools_PageUpClicked;
             NavigationTools.PageDownClicked += NavigationTools_PageDownClicked;
-        }
-        private void CloseButton_Click(object sender, EventArgs evt)
-        {
-            Close();
         }
 
         private void FirstFileTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)

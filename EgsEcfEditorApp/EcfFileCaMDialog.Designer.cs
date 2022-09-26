@@ -29,8 +29,6 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.CloseButton = new System.Windows.Forms.Button();
             this.CompareAndMergePanel = new System.Windows.Forms.TableLayoutPanel();
             this.FirstFileComboBox = new System.Windows.Forms.ComboBox();
             this.SecondFileComboBox = new System.Windows.Forms.ComboBox();
@@ -46,36 +44,12 @@ namespace EgsEcfEditorApp
             this.FirstFileTreeView = new EcfWinFormControls.EcfTreeView();
             this.SecondFileTreeBorderPanel = new System.Windows.Forms.GroupBox();
             this.SecondFileTreeView = new EcfWinFormControls.EcfTreeView();
-            this.ButtonPanel.SuspendLayout();
             this.CompareAndMergePanel.SuspendLayout();
             this.FirstFileDetailsBorderPanel.SuspendLayout();
             this.SecondFileDetailsBorderPanel.SuspendLayout();
             this.FirstFileTreeBorderPanel.SuspendLayout();
             this.SecondFileTreeBorderPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // ButtonPanel
-            // 
-            this.ButtonPanel.AutoSize = true;
-            this.ButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ButtonPanel.Controls.Add(this.CloseButton);
-            this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ButtonPanel.Location = new System.Drawing.Point(0, 532);
-            this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(1184, 29);
-            this.ButtonPanel.TabIndex = 0;
-            // 
-            // CloseButton
-            // 
-            this.CloseButton.AutoSize = true;
-            this.CloseButton.Location = new System.Drawing.Point(1106, 3);
-            this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(75, 23);
-            this.CloseButton.TabIndex = 0;
-            this.CloseButton.Text = "close";
-            this.CloseButton.UseVisualStyleBackColor = true;
-            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // CompareAndMergePanel
             // 
@@ -104,7 +78,7 @@ namespace EgsEcfEditorApp
             this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.55704F));
             this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.22148F));
             this.CompareAndMergePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.22148F));
-            this.CompareAndMergePanel.Size = new System.Drawing.Size(1184, 532);
+            this.CompareAndMergePanel.Size = new System.Drawing.Size(1184, 561);
             this.CompareAndMergePanel.TabIndex = 1;
             // 
             // FirstFileComboBox
@@ -160,10 +134,10 @@ namespace EgsEcfEditorApp
             this.ActionContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ActionContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ActionContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ActionContainer.Location = new System.Drawing.Point(592, 196);
+            this.ActionContainer.Location = new System.Drawing.Point(592, 206);
             this.ActionContainer.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.ActionContainer.Name = "ActionContainer";
-            this.ActionContainer.Size = new System.Drawing.Size(1, 167);
+            this.ActionContainer.Size = new System.Drawing.Size(1, 177);
             this.ActionContainer.TabIndex = 5;
             // 
             // NavigationContainer
@@ -175,7 +149,7 @@ namespace EgsEcfEditorApp
             this.NavigationContainer.Location = new System.Drawing.Point(592, 27);
             this.NavigationContainer.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.NavigationContainer.Name = "NavigationContainer";
-            this.NavigationContainer.Size = new System.Drawing.Size(1, 169);
+            this.NavigationContainer.Size = new System.Drawing.Size(1, 179);
             this.NavigationContainer.TabIndex = 11;
             // 
             // FirstFileDetailsBorderPanel
@@ -184,9 +158,9 @@ namespace EgsEcfEditorApp
             this.FirstFileDetailsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FirstFileDetailsBorderPanel.Controls.Add(this.FirstFileDetailsView);
             this.FirstFileDetailsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FirstFileDetailsBorderPanel.Location = new System.Drawing.Point(3, 366);
+            this.FirstFileDetailsBorderPanel.Location = new System.Drawing.Point(3, 386);
             this.FirstFileDetailsBorderPanel.Name = "FirstFileDetailsBorderPanel";
-            this.FirstFileDetailsBorderPanel.Size = new System.Drawing.Size(583, 163);
+            this.FirstFileDetailsBorderPanel.Size = new System.Drawing.Size(583, 172);
             this.FirstFileDetailsBorderPanel.TabIndex = 13;
             // 
             // FirstFileDetailsView
@@ -197,7 +171,7 @@ namespace EgsEcfEditorApp
             this.FirstFileDetailsView.Location = new System.Drawing.Point(0, 0);
             this.FirstFileDetailsView.Name = "FirstFileDetailsView";
             this.FirstFileDetailsView.ReadOnly = true;
-            this.FirstFileDetailsView.Size = new System.Drawing.Size(581, 161);
+            this.FirstFileDetailsView.Size = new System.Drawing.Size(581, 170);
             this.FirstFileDetailsView.TabIndex = 9;
             this.FirstFileDetailsView.Text = "";
             this.FirstFileDetailsView.WordWrap = false;
@@ -208,9 +182,9 @@ namespace EgsEcfEditorApp
             this.SecondFileDetailsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.SecondFileDetailsBorderPanel.Controls.Add(this.SecondFileDetailsView);
             this.SecondFileDetailsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SecondFileDetailsBorderPanel.Location = new System.Drawing.Point(598, 366);
+            this.SecondFileDetailsBorderPanel.Location = new System.Drawing.Point(598, 386);
             this.SecondFileDetailsBorderPanel.Name = "SecondFileDetailsBorderPanel";
-            this.SecondFileDetailsBorderPanel.Size = new System.Drawing.Size(583, 163);
+            this.SecondFileDetailsBorderPanel.Size = new System.Drawing.Size(583, 172);
             this.SecondFileDetailsBorderPanel.TabIndex = 14;
             // 
             // SecondFileDetailsView
@@ -221,7 +195,7 @@ namespace EgsEcfEditorApp
             this.SecondFileDetailsView.Location = new System.Drawing.Point(0, 0);
             this.SecondFileDetailsView.Name = "SecondFileDetailsView";
             this.SecondFileDetailsView.ReadOnly = true;
-            this.SecondFileDetailsView.Size = new System.Drawing.Size(581, 161);
+            this.SecondFileDetailsView.Size = new System.Drawing.Size(581, 170);
             this.SecondFileDetailsView.TabIndex = 10;
             this.SecondFileDetailsView.Text = "";
             this.SecondFileDetailsView.WordWrap = false;
@@ -236,7 +210,7 @@ namespace EgsEcfEditorApp
             this.FirstFileTreeBorderPanel.Name = "FirstFileTreeBorderPanel";
             this.FirstFileTreeBorderPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.CompareAndMergePanel.SetRowSpan(this.FirstFileTreeBorderPanel, 2);
-            this.FirstFileTreeBorderPanel.Size = new System.Drawing.Size(583, 330);
+            this.FirstFileTreeBorderPanel.Size = new System.Drawing.Size(583, 350);
             this.FirstFileTreeBorderPanel.TabIndex = 15;
             this.FirstFileTreeBorderPanel.TabStop = false;
             this.FirstFileTreeBorderPanel.Text = "groupBox1";
@@ -248,7 +222,7 @@ namespace EgsEcfEditorApp
             this.FirstFileTreeView.Location = new System.Drawing.Point(0, 16);
             this.FirstFileTreeView.Name = "FirstFileTreeView";
             this.FirstFileTreeView.ShowNodeToolTips = true;
-            this.FirstFileTreeView.Size = new System.Drawing.Size(583, 314);
+            this.FirstFileTreeView.Size = new System.Drawing.Size(583, 334);
             this.FirstFileTreeView.TabIndex = 2;
             // 
             // SecondFileTreeBorderPanel
@@ -261,7 +235,7 @@ namespace EgsEcfEditorApp
             this.SecondFileTreeBorderPanel.Name = "SecondFileTreeBorderPanel";
             this.SecondFileTreeBorderPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.CompareAndMergePanel.SetRowSpan(this.SecondFileTreeBorderPanel, 2);
-            this.SecondFileTreeBorderPanel.Size = new System.Drawing.Size(583, 330);
+            this.SecondFileTreeBorderPanel.Size = new System.Drawing.Size(583, 350);
             this.SecondFileTreeBorderPanel.TabIndex = 16;
             this.SecondFileTreeBorderPanel.TabStop = false;
             this.SecondFileTreeBorderPanel.Text = "groupBox1";
@@ -273,7 +247,7 @@ namespace EgsEcfEditorApp
             this.SecondFileTreeView.Location = new System.Drawing.Point(0, 16);
             this.SecondFileTreeView.Name = "SecondFileTreeView";
             this.SecondFileTreeView.ShowNodeToolTips = true;
-            this.SecondFileTreeView.Size = new System.Drawing.Size(583, 314);
+            this.SecondFileTreeView.Size = new System.Drawing.Size(583, 334);
             this.SecondFileTreeView.TabIndex = 3;
             // 
             // EcfFileCAMDialog
@@ -282,7 +256,6 @@ namespace EgsEcfEditorApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 561);
             this.Controls.Add(this.CompareAndMergePanel);
-            this.Controls.Add(this.ButtonPanel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -291,8 +264,6 @@ namespace EgsEcfEditorApp
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfFileCompareAndMergeDialog";
-            this.ButtonPanel.ResumeLayout(false);
-            this.ButtonPanel.PerformLayout();
             this.CompareAndMergePanel.ResumeLayout(false);
             this.CompareAndMergePanel.PerformLayout();
             this.FirstFileDetailsBorderPanel.ResumeLayout(false);
@@ -305,9 +276,6 @@ namespace EgsEcfEditorApp
         }
 
         #endregion
-
-        private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
-        private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.TableLayoutPanel CompareAndMergePanel;
         private System.Windows.Forms.ComboBox FirstFileComboBox;
         private System.Windows.Forms.ComboBox SecondFileComboBox;

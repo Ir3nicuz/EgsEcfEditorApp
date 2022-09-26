@@ -115,6 +115,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to differing root elements overall.
+        /// </summary>
+        internal static string EcfFileCAMDialog_RootElementsOverall {
+            get {
+                return ResourceManager.GetString("EcfFileCAMDialog_RootElementsOverall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activates / deactivates all elements which would be added.
         /// </summary>
         internal static string EcfFileCAMDialog_ToolTip_ChangeAllAddItems {

@@ -55,6 +55,7 @@ namespace EgsEcfEditorApp
         private EcfFileLoaderDialog FileLoader { get; } = new EcfFileLoaderDialog();
         private SettingsDialog SettingsDialog { get; } = new SettingsDialog();
         private EcfFileCAMDialog CompareMergeDialog { get; } = new EcfFileCAMDialog();
+        private EcfTechTreeDialog TechTreeDialog { get; } = new EcfTechTreeDialog();
 
         public GuiMainForm()
         {
@@ -159,9 +160,9 @@ namespace EgsEcfEditorApp
         {
             EditIngameItem();
         }
-        private void ExtendedFileOperations_BuildTechTreePreviewClicked(object sender, EventArgs evt)
+        private void ExtendedFileOperations_TechTreeToolClicked(object sender, EventArgs evt)
         {
-            BuildTechTreePreview();
+            TechTreeTool();
         }
         private void SettingOperations_GameVersionClicked(object sender, EventArgs evt)
         {
@@ -304,7 +305,7 @@ namespace EgsEcfEditorApp
             ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
             ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
             ExtendedFileOperations.IngameItemEditingClicked += ExtendedFileOperations_IngameItemEditingClicked;
-            ExtendedFileOperations.BuildTechTreePreviewClicked += ExtendedFileOperations_BuildTechTreePreviewClicked;
+            ExtendedFileOperations.TechTreeToolClicked += ExtendedFileOperations_TechTreeToolClicked;
 
             SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
             SettingOperations.OpenSettingsDialogClicked += SettingOperations_OpenSettingsDialogClicked;
@@ -569,9 +570,13 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        private void BuildTechTreePreview()
+        private void TechTreeTool()
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            TechTreeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
+            foreach (EcfTabPage tab in TechTreeDialog.ChangedFileTabs)
+            {
+                tab.UpdateAllViews();
+            }
         }
     }
 }
@@ -3176,7 +3181,7 @@ namespace EcfFileViewTools
         public event EventHandler CompareAndMergeClicked;
         public event EventHandler IngameItemEditingClicked;
 
-        public event EventHandler BuildTechTreePreviewClicked;
+        public event EventHandler TechTreeToolClicked;
 
         public EcfExtendedFileOperations() : base()
         {
@@ -3185,7 +3190,7 @@ namespace EcfFileViewTools
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemEditing, IconRecources.Icon_IngameItemEditing, null))
                 .Click += (sender, evt) => IngameItemEditingClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_BuildTechTreePreview, IconRecources.Icon_BuildTechTreePreview, null))
-                .Click += (sender, evt) => BuildTechTreePreviewClicked?.Invoke(sender, evt);
+                .Click += (sender, evt) => TechTreeToolClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))
                 .Click += (sender, evt) => ReloadDefinitionsClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CheckDefinition, IconRecources.Icon_CheckDefinition, null))

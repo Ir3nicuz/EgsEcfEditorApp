@@ -646,6 +646,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tech Tree preview and edit.
+        /// </summary>
+        internal static string EcfTechTreeDialog_Header {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tree items.
         /// </summary>
         internal static string EcfTreeView_FilterSelector_Elements {

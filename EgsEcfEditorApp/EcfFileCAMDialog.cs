@@ -191,7 +191,7 @@ namespace EgsEcfEditorApp
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
             NavigationTools.UpdatePageButtons(PageNumber, PageCount);
-            UpdatePageIndicator(PageNumber, PageCount);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
         }
         private void NavigationTools_PageDownClicked(object sender, EventArgs evt)
         {
@@ -199,7 +199,7 @@ namespace EgsEcfEditorApp
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
             NavigationTools.UpdatePageButtons(PageNumber, PageCount);
-            UpdatePageIndicator(PageNumber, PageCount);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
         }
 
         // public
@@ -244,7 +244,7 @@ namespace EgsEcfEditorApp
 
             PageNumber = 1;
             PageCount = (int)Math.Ceiling(FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore) / (double)PageSize);
-            UpdatePageIndicator(PageNumber, PageCount);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
 
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
@@ -267,7 +267,7 @@ namespace EgsEcfEditorApp
             ActionTools.EnableMergeToRightButton(false);
             ActionTools.EnableMergeToLeftButton(false);
             NavigationTools.UpdatePageButtons(0, 0);
-            UpdatePageIndicator(0, 0);
+            UpdatePageIndicator(0, 0, 0);
 
             FirstFileNodes.Clear();
             SecondFileNodes.Clear();
@@ -550,17 +550,17 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void UpdatePageIndicator(int pageNumber, int pageCount)
+        private void UpdatePageIndicator(int pageNumber, int pageCount, int elementCount)
         {
             string pageText;
-            if (pageNumber < 1 || pageCount < 1)
+            if (pageNumber < 1 || pageCount < 1 || elementCount < 1)
             {
                 pageText = string.Empty;
             }
             else
             {
-                pageText = string.Format("{2} {0} {3} {1}", pageNumber, pageCount,
-                    TextRecources.Generic_Page, TextRecources.Generic_Of);
+                pageText = string.Format("{0} {1} {2} {3} - {4} {5}", TextRecources.Generic_Page, pageNumber, TextRecources.Generic_Of, pageCount, 
+                    elementCount, TextRecources.EcfFileCAMDialog_RootElementsOverall);
             }
             FirstFileTreeBorderPanel.Text = pageText;
             SecondFileTreeBorderPanel.Text = pageText;

@@ -135,6 +135,9 @@
   <data name="EcfErrorView_ToolTip_ErrorSorterOriginOrder" xml:space="preserve">
     <value>Aktiviert die Auftrittsreihenfolge</value>
   </data>
+  <data name="EcfFileCAMDialog_RootElementsOverall" xml:space="preserve">
+    <value>unterschiedliche Basiselemente insgesamt</value>
+  </data>
   <data name="EcfFileCAMDialog_ToolTip_ChangeAllAddItems" xml:space="preserve">
     <value>Aktiviert / deaktiviert alle Elemente die hinzugefügt werden</value>
   </data>

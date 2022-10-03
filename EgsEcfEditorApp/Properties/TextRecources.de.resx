@@ -363,6 +363,9 @@
   <data name="EcfTabPage_ToolTip_Undo" xml:space="preserve">
     <value>Rückgängig</value>
   </data>
+  <data name="EcfTechTreeDialog_SelectFileForType" xml:space="preserve">
+    <value>Wähle die Datei für den Typ</value>
+  </data>
   <data name="EcfTreeView_ToolTip_TreeItemCountSelector" xml:space="preserve">
     <value>Anzahl der gleichzeitig angezeigten Baum Elemente</value>
   </data>

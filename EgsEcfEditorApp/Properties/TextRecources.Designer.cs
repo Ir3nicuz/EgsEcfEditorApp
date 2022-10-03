@@ -799,6 +799,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select file for the type.
+        /// </summary>
+        internal static string EcfTechTreeDialog_SelectFileForType {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_SelectFileForType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count of tree items shown at once.
         /// </summary>
         internal static string EcfTreeView_ToolTip_TreeItemCountSelector {

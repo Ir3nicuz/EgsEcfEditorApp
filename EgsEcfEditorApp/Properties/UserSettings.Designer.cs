@@ -142,5 +142,53 @@ namespace EgsEcfEditorApp.Properties {
                 this["EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("UnlockLevel")]
+        public string EcfTechTreeDialog_ParameterKey_UnlockLevel {
+            get {
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_UnlockLevel"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ParameterKey_UnlockLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("UnlockCost")]
+        public string EcfTechTreeDialog_ParameterKey_UnlockCost {
+            get {
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_UnlockCost"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ParameterKey_UnlockCost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("TechTreeNames")]
+        public string EcfTechTreeDialog_ParameterKey_TechTreeNames {
+            get {
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeNames"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ParameterKey_TechTreeNames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("TechTreeParent")]
+        public string EcfTechTreeDialog_ParameterKey_TechTreeParent {
+            get {
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeParent"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ParameterKey_TechTreeParent"] = value;
+            }
+        }
     }
 }

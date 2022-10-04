@@ -79,8 +79,12 @@ namespace EgsEcfEditorApp
             //UniqueFileTabs
 
 
-            // TechTreeNames, TechTreeParent, UnlockCost, UnlockLevel
-
+            /*
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParent;
+            */
 
 
             TechTreePageContainer.ResumeLayout();

@@ -32,5 +32,17 @@
     <Setting Name="EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="EcfTechTreeDialog_ParameterKey_UnlockLevel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UnlockLevel</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_ParameterKey_UnlockCost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UnlockCost</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeNames" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TechTreeNames</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeParent" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TechTreeParent</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

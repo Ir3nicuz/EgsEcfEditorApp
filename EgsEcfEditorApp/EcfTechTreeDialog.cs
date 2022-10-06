@@ -1,5 +1,6 @@
 ﻿using EcfFileViews;
 using EgsEcfEditorApp.Properties;
+using EgsEcfParser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -69,22 +70,63 @@ namespace EgsEcfEditorApp
         }
         private void UpdateTechTrees()
         {
+            string unlockLevelKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
+            string unlockCostKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
+            string techTreeNamesKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
+            string techTreeParentKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParent;
+            
             TechTreePageContainer.SuspendLayout();
             TechTreePageContainer.TabPages.Clear();
 
 
 
-            TechTreePageContainer.TabPages.Add(new EcfTechTreeTabPage("test"));
+            EcfTechTreeTabPage test = new EcfTechTreeTabPage("test");
+            TechTreePageContainer.TabPages.Add(test);
 
-            //UniqueFileTabs
+            UniqueFileTabs.ForEach(tab =>
+            {
+                foreach(EcfBlock block in tab.File.ItemList.Where(item => item is EcfBlock))
+                {
+                    block.HasParameter(unlockLevelKey, out EcfParameter unlockLevel);
+                    block.HasParameter(unlockCostKey, out EcfParameter unlockCost);
+                    block.HasParameter(techTreeNamesKey, out EcfParameter techTreeNames);
+                    block.HasParameter(techTreeParentKey, out EcfParameter techTreeParent);
 
+                    if (unlockLevel != null || unlockCost != null || techTreeNames != null || techTreeParent != null)
+                    {
+                        
+                        StringBuilder nodeName = new StringBuilder(block.BuildIdentification());
+                        nodeName.Append(", Missing: ");
+                        if (unlockLevel == null)
+                        {
+                            nodeName.Append(unlockLevelKey);
+                            nodeName.Append(" | ");
+                        }
+                        if (unlockCost == null)
+                        {
+                            nodeName.Append(unlockCostKey);
+                            nodeName.Append(" | ");
+                        }
+                        if (techTreeNames == null)
+                        {
+                            nodeName.Append(techTreeNamesKey);
+                            nodeName.Append(" | ");
+                        }
+                        if (techTreeParent == null)
+                        {
+                            nodeName.Append(techTreeParentKey);
+                            nodeName.Append(" | ");
+                        }
 
-            /*
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParent;
-            */
+                        if (unlockLevel == null || unlockCost == null || techTreeNames == null)
+                        {
+                            test.AddNode(new EcfTechTreeNode(nodeName.ToString(), block));
+                        }
+                        
+                    }
+                }
+            });
+
 
 
             TechTreePageContainer.ResumeLayout();
@@ -102,6 +144,21 @@ namespace EgsEcfEditorApp
                 Tree.Dock = DockStyle.Fill;
                 
                 Controls.Add(Tree);
+            }
+
+            public void AddNode(EcfTechTreeNode node)
+            {
+                Tree.Nodes.Add(node);
+            }
+        }
+        private class EcfTechTreeNode : TreeNode
+        {
+            public EcfBlock Block { get; }
+
+            public EcfTechTreeNode(string nodeName, EcfBlock block)
+            {
+                Text = nodeName;
+                Block = block;
             }
         }
     }

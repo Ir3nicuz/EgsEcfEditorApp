@@ -2826,9 +2826,9 @@ namespace EgsEcfParser
             attribute = InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName));
             return attribute != null;
         }
-        public bool HasParameter(string paramName, out EcfParameter parameter)
+        public bool HasParameter(string key, out EcfParameter parameter)
         {
-            parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(paramName));
+            parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(key));
             return parameter != null;
         }
         public bool IsInheritingParameter(string paramName, out EcfParameter parameter)

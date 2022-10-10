@@ -1,4 +1,5 @@
 ﻿using EcfFileViews;
+using EcfWinFormControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
@@ -78,11 +79,6 @@ namespace EgsEcfEditorApp
             TechTreePageContainer.SuspendLayout();
             TechTreePageContainer.TabPages.Clear();
 
-
-
-            EcfTechTreeTabPage test = new EcfTechTreeTabPage("test");
-            TechTreePageContainer.TabPages.Add(test);
-
             UniqueFileTabs.ForEach(tab =>
             {
                 foreach(EcfBlock block in tab.File.ItemList.Where(item => item is EcfBlock))
@@ -92,37 +88,30 @@ namespace EgsEcfEditorApp
                     block.HasParameter(techTreeNamesKey, out EcfParameter techTreeNames);
                     block.HasParameter(techTreeParentKey, out EcfParameter techTreeParent);
 
-                    if (unlockLevel != null || unlockCost != null || techTreeNames != null || techTreeParent != null)
+                    if (techTreeNames != null && unlockLevel != null && unlockCost != null)
                     {
-                        
-                        StringBuilder nodeName = new StringBuilder(block.BuildIdentification());
-                        nodeName.Append(", Missing: ");
-                        if (unlockLevel == null)
+                        // supposed to be listed
+                        foreach (string treeName in techTreeNames.GetAllValues())
                         {
-                            nodeName.Append(unlockLevelKey);
-                            nodeName.Append(" | ");
-                        }
-                        if (unlockCost == null)
-                        {
-                            nodeName.Append(unlockCostKey);
-                            nodeName.Append(" | ");
-                        }
-                        if (techTreeNames == null)
-                        {
-                            nodeName.Append(techTreeNamesKey);
-                            nodeName.Append(" | ");
-                        }
-                        if (techTreeParent == null)
-                        {
-                            nodeName.Append(techTreeParentKey);
-                            nodeName.Append(" | ");
-                        }
+                            EcfTechTree treePage = TechTreePageContainer.TabPages.Cast<EcfTechTree>().FirstOrDefault(tree => tree.Text.Equals(treeName));
+                            
+                            if (treePage == null)
+                            {
+                                treePage = new EcfTechTree(treeName);
+                                TechTreePageContainer.TabPages.Add(treePage);
+                            }
 
-                        if (unlockLevel == null || unlockCost == null || techTreeNames == null)
-                        {
-                            test.AddNode(new EcfTechTreeNode(nodeName.ToString(), block));
+                            treePage.AddCell(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), block);
                         }
-                        
+                    }
+                    else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
+                    {
+                        // incomplete
+
+
+
+
+
                     }
                 }
             });
@@ -133,11 +122,11 @@ namespace EgsEcfEditorApp
         }
 
         // subclasses
-        private class EcfTechTreeTabPage : TabPage
+        private class EcfTechTree : TabPage
         {
-            private TreeView Tree { get; } = new TreeView();
+            private EcfDataGridView Tree { get; } = new EcfDataGridView();
 
-            public EcfTechTreeTabPage(string name)
+            public EcfTechTree(string name)
             {
                 Text = name;
                 
@@ -146,19 +135,36 @@ namespace EgsEcfEditorApp
                 Controls.Add(Tree);
             }
 
-            public void AddNode(EcfTechTreeNode node)
+            public void AddCell(string unlockLevel, string unlockCost, EcfBlock element)
             {
-                Tree.Nodes.Add(node);
+                DataGridViewTextBoxColumn levelColumn = Tree.Columns.Cast<DataGridViewTextBoxColumn>().FirstOrDefault(column => column.HeaderText.Equals(unlockLevel));
+                if (levelColumn == null)
+                {
+                    levelColumn = new DataGridViewTextBoxColumn() { HeaderText = unlockLevel };
+                    Tree.Columns.Add(levelColumn);
+                }
+
+
+
+
+                
+
+                new TechTreeCell(unlockCost, element);
+
+
+
             }
         }
-        private class EcfTechTreeNode : TreeNode
+        private class TechTreeCell : DataGridTextBox
         {
-            public EcfBlock Block { get; }
+            public EcfBlock Element { get; }
+            public string UnlockCost { get; }
 
-            public EcfTechTreeNode(string nodeName, EcfBlock block)
+            public TechTreeCell(string unlockCost, EcfBlock block)
             {
-                Text = nodeName;
-                Block = block;
+                Element = block;
+                UnlockCost = unlockCost;
+                Text = block.BuildIdentification();
             }
         }
     }

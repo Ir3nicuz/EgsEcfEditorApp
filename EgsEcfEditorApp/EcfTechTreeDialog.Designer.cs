@@ -29,9 +29,11 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.TechTreePageContainer = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.TechTreePageContainer.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,5 +90,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TabControl TechTreePageContainer;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ToolTip Tip;
     }
 }

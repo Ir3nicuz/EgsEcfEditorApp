@@ -1,5 +1,4 @@
 ﻿using EcfFileViews;
-using EcfWinFormControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
@@ -16,6 +15,8 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeDialog : Form
     {
+        private Size ItemSize { get; } = new Size(InternalSettings.Default.EcfTechTreeDialog_ItemEdgeLenght, InternalSettings.Default.EcfTechTreeDialog_ItemEdgeLenght);
+
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
 
@@ -97,11 +98,11 @@ namespace EgsEcfEditorApp
                             
                             if (treePage == null)
                             {
-                                treePage = new EcfTechTree(treeName);
+                                treePage = new EcfTechTree(treeName, ItemSize, Tip);
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.AddCell(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), block);
+                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), block);
                         }
                     }
                     else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
@@ -116,56 +117,117 @@ namespace EgsEcfEditorApp
                 }
             });
 
-
-
             TechTreePageContainer.ResumeLayout();
         }
 
         // subclasses
         private class EcfTechTree : TabPage
         {
-            private EcfDataGridView Tree { get; } = new EcfDataGridView();
+            private Size ItemSize { get; }
+            private ToolTip ToolTipContainer { get; }
 
-            public EcfTechTree(string name)
+            private TableLayoutPanel Tree { get; } = new TableLayoutPanel();
+
+            public EcfTechTree(string name, Size itemSize, ToolTip toolTipContainer)
             {
                 Text = name;
-                
+                ItemSize = itemSize;
+                ToolTipContainer = toolTipContainer;
+
                 Tree.Dock = DockStyle.Fill;
                 
                 Controls.Add(Tree);
             }
 
-            public void AddCell(string unlockLevel, string unlockCost, EcfBlock element)
+            public void AddItem(string unlockLevel, string unlockCost, EcfBlock element)
             {
-                DataGridViewTextBoxColumn levelColumn = Tree.Columns.Cast<DataGridViewTextBoxColumn>().FirstOrDefault(column => column.HeaderText.Equals(unlockLevel));
-                if (levelColumn == null)
-                {
-                    levelColumn = new DataGridViewTextBoxColumn() { HeaderText = unlockLevel };
-                    Tree.Columns.Add(levelColumn);
-                }
 
 
 
+                Tree.Controls.Add(new TechTreeRoutingCell(RoutingTypes.SplitVerticalLeft, ItemSize));
 
                 
 
-                new TechTreeCell(unlockCost, element);
+                //new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
 
 
 
             }
-        }
-        private class TechTreeCell : DataGridTextBox
-        {
-            public EcfBlock Element { get; }
-            public string UnlockCost { get; }
 
-            public TechTreeCell(string unlockCost, EcfBlock block)
+            private enum RoutingTypes
             {
-                Element = block;
-                UnlockCost = unlockCost;
-                Text = block.BuildIdentification();
+                StraightVertical,
+                StraightHorizontal,
+                SplitVerticalRight,
+                SplitVerticalLeft,
+                SplitHorizontalUp,
+                SplitHorizontalDown
+            }
+            private class TechTreeHeaderCell : Label
+            {
+                public string UnlockLevel { get; }
+
+                public TechTreeHeaderCell(string unlockLevel, Size itemSize)
+                {
+                    UnlockLevel = unlockLevel;
+                    Text = string.Format("{0} {1}", "Level", UnlockLevel);
+
+                    Size headerSize = new Size(itemSize.Width, itemSize.Height * 2);
+
+                    Size = headerSize;
+                    MinimumSize = headerSize;
+                    MaximumSize = headerSize;
+
+                    TextAlign = ContentAlignment.BottomCenter;
+                }
+            }
+            private class TechTreeRoutingCell : Label
+            {
+                public TechTreeRoutingCell(RoutingTypes routingType, Size itemSize)
+                {
+                    Size = itemSize;
+                    MinimumSize = itemSize;
+                    MaximumSize = itemSize;
+
+                    switch (routingType)
+                    {
+                        case RoutingTypes.StraightVertical: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        case RoutingTypes.StraightHorizontal: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        case RoutingTypes.SplitVerticalRight: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        case RoutingTypes.SplitVerticalLeft: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        case RoutingTypes.SplitHorizontalUp: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        case RoutingTypes.SplitHorizontalDown: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
+                        default: Image = new Bitmap(IconRecources.Icon_Unknown, itemSize); break;
+                    }
+                }
+            }
+            private class TechTreeItemCell : Panel
+            {
+                public EcfBlock Element { get; }
+                public string UnlockCost { get; }
+
+                private Label Id { get; } = new Label();
+                private Label Cost { get; } = new Label();
+
+                public TechTreeItemCell(string unlockCost, EcfBlock block, Size itemSize, ToolTip toolTipContainer)
+                {
+                    Element = block;
+                    UnlockCost = unlockCost;
+                    Id.Text = block.Id;
+                    Cost.Text = UnlockCost;
+                    toolTipContainer.SetToolTip(this, block.BuildIdentification());
+
+                    Size = itemSize;
+                    MinimumSize = itemSize;
+                    MaximumSize = itemSize;
+
+                    BorderStyle = BorderStyle.FixedSingle;
+
+                    Controls.Add(Id);
+                    Controls.Add(Cost);
+                }
             }
         }
+        
     }
 }

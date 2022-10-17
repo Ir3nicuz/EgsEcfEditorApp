@@ -286,5 +286,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["EcfFileCAMDialog_PageSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int EcfTechTreeDialog_ItemEdgeLenght {
+            get {
+                return ((int)(this["EcfTechTreeDialog_ItemEdgeLenght"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ItemEdgeLenght"] = value;
+            }
+        }
     }
 }

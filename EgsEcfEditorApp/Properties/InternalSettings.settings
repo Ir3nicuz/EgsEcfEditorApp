@@ -68,5 +68,8 @@
     <Setting Name="EcfFileCAMDialog_PageSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="EcfTechTreeDialog_ItemEdgeLenght" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

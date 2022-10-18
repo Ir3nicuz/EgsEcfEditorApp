@@ -102,7 +102,7 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), block);
+                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
                         }
                     }
                     else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
@@ -134,24 +134,65 @@ namespace EgsEcfEditorApp
                 ItemSize = itemSize;
                 ToolTipContainer = toolTipContainer;
 
+                Tree.AutoScroll = true;
                 Tree.Dock = DockStyle.Fill;
-                
+
                 Controls.Add(Tree);
             }
 
-            public void AddItem(string unlockLevel, string unlockCost, EcfBlock element)
+            public void AddItem(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
             {
+                int columnIndex = FindOrAddColumn(unlockLevel);
+                int rowIndex = FindOrAddRow(columnIndex, techTreeParent);
+
+                TechTreeItemCell cell = new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
+                Tree.Controls.Add(cell, columnIndex, rowIndex);
 
 
-
-                Tree.Controls.Add(new TechTreeRoutingCell(RoutingTypes.SplitVerticalLeft, ItemSize));
-
-                
-
+                //new TechTreeRoutingCell(RoutingTypes.SplitVerticalLeft, ItemSize);
                 //new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
 
 
 
+            }
+
+            private int FindOrAddColumn(string unlockLevel)
+            {
+                List<TechTreeHeaderCell> headerCells = Tree.Controls.Cast<Control>().Where(cell => cell is TechTreeHeaderCell).Cast<TechTreeHeaderCell>().ToList();
+
+                TechTreeHeaderCell headerCell = headerCells.FirstOrDefault(cell => cell.UnlockLevel.Equals(unlockLevel));
+                if (headerCell != null) { return Tree.GetColumn(headerCell); }
+
+                headerCell = new TechTreeHeaderCell(unlockLevel, ItemSize);
+                Tree.ColumnCount++;
+                Tree.Controls.Add(headerCell, Tree.ColumnCount - 1, 0);
+
+                //sort??
+
+                return Tree.GetColumn(headerCell);
+            }
+            private int FindOrAddRow(int columnIndex, string techTreeParent)
+            {
+                if (string.IsNullOrEmpty(techTreeParent))
+                {
+
+                }
+                else
+                {
+
+                }
+
+                int rowIndex = Tree.RowCount - 1;
+                while(rowIndex >= 0 && Tree.GetControlFromPosition(columnIndex, rowIndex) == null)
+                {
+                    rowIndex--;
+                }
+                rowIndex += 2;
+                if (rowIndex >= Tree.RowCount)
+                {
+                    Tree.RowCount += rowIndex - Tree.RowCount + 1;
+                }
+                return rowIndex;
             }
 
             private enum RoutingTypes
@@ -177,7 +218,7 @@ namespace EgsEcfEditorApp
                     Size = headerSize;
                     MinimumSize = headerSize;
                     MaximumSize = headerSize;
-
+                    Dock = DockStyle.Fill;
                     TextAlign = ContentAlignment.BottomCenter;
                 }
             }
@@ -188,6 +229,7 @@ namespace EgsEcfEditorApp
                     Size = itemSize;
                     MinimumSize = itemSize;
                     MaximumSize = itemSize;
+                    Dock = DockStyle.Fill;
 
                     switch (routingType)
                     {
@@ -201,7 +243,7 @@ namespace EgsEcfEditorApp
                     }
                 }
             }
-            private class TechTreeItemCell : Panel
+            private class TechTreeItemCell : FlowLayoutPanel
             {
                 public EcfBlock Element { get; }
                 public string UnlockCost { get; }
@@ -215,13 +257,16 @@ namespace EgsEcfEditorApp
                     UnlockCost = unlockCost;
                     Id.Text = block.Id;
                     Cost.Text = UnlockCost;
-                    toolTipContainer.SetToolTip(this, block.BuildIdentification());
+
+                    toolTipContainer.SetToolTip(Id, block.BuildIdentification());
 
                     Size = itemSize;
                     MinimumSize = itemSize;
                     MaximumSize = itemSize;
 
                     BorderStyle = BorderStyle.FixedSingle;
+                    Dock = DockStyle.Fill;
+                    FlowDirection = FlowDirection.TopDown;
 
                     Controls.Add(Id);
                     Controls.Add(Cost);

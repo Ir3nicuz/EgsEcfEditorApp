@@ -167,7 +167,7 @@ namespace EgsEcfEditorApp
                 Tree.ColumnCount++;
                 Tree.Controls.Add(headerCell, Tree.ColumnCount - 1, 0);
 
-                //sort??
+                // sort??
 
                 return Tree.GetColumn(headerCell);
             }
@@ -183,10 +183,11 @@ namespace EgsEcfEditorApp
                 }
 
                 int rowIndex = Tree.RowCount - 1;
-                while(rowIndex >= 0 && Tree.GetControlFromPosition(columnIndex, rowIndex) == null)
+                while (rowIndex >= 0 && Tree.GetControlFromPosition(columnIndex, rowIndex) == null)
                 {
                     rowIndex--;
                 }
+                rowIndex = Math.Max(rowIndex, 0);
                 rowIndex += 2;
                 if (rowIndex >= Tree.RowCount)
                 {

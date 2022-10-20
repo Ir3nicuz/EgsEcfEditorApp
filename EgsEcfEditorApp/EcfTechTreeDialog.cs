@@ -142,36 +142,34 @@ namespace EgsEcfEditorApp
 
             public void AddItem(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
             {
-                int columnIndex = FindOrAddColumn(unlockLevel);
-                int rowIndex = FindOrAddRow(columnIndex, techTreeParent);
+                TechTreeColumn column = FindOrAddColumn(unlockLevel);
+                int rowIndex = FindInsertRow(column, techTreeParent);
 
                 TechTreeItemCell cell = new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
-                Tree.Controls.Add(cell, columnIndex, rowIndex);
+                column.Insert(cell, rowIndex);
 
 
-                //new TechTreeRoutingCell(RoutingTypes.SplitVerticalLeft, ItemSize);
-                //new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
-
+                //add or update routing???
 
 
             }
 
-            private int FindOrAddColumn(string unlockLevel)
+            private TechTreeColumn FindOrAddColumn(string unlockLevel)
             {
-                List<TechTreeHeaderCell> headerCells = Tree.Controls.Cast<Control>().Where(cell => cell is TechTreeHeaderCell).Cast<TechTreeHeaderCell>().ToList();
+                TechTreeColumn column = Tree.Controls.Cast<TechTreeColumn>().FirstOrDefault(control => control.UnlockLevel.Equals(unlockLevel));
+                if (column != null) { return column; }
 
-                TechTreeHeaderCell headerCell = headerCells.FirstOrDefault(cell => cell.UnlockLevel.Equals(unlockLevel));
-                if (headerCell != null) { return Tree.GetColumn(headerCell); }
-
-                headerCell = new TechTreeHeaderCell(unlockLevel, ItemSize);
+                column = new TechTreeColumn(unlockLevel, ItemSize);
                 Tree.ColumnCount++;
-                Tree.Controls.Add(headerCell, Tree.ColumnCount - 1, 0);
+                Tree.Controls.Add(column, Tree.ColumnCount - 1, 0);
 
-                // sort??
+                
+                // sort???
 
-                return Tree.GetColumn(headerCell);
+
+                return column;
             }
-            private int FindOrAddRow(int columnIndex, string techTreeParent)
+            private int FindInsertRow(TechTreeColumn column, string techTreeParent)
             {
                 if (string.IsNullOrEmpty(techTreeParent))
                 {
@@ -182,20 +180,49 @@ namespace EgsEcfEditorApp
 
                 }
 
-                int rowIndex = Tree.RowCount - 1;
-                while (rowIndex >= 0 && Tree.GetControlFromPosition(columnIndex, rowIndex) == null)
+                int rowIndex = column.RowCount - 1;
+                while (rowIndex >= 0 && column.GetControlFromPosition(0, rowIndex) == null)
                 {
                     rowIndex--;
                 }
+
                 rowIndex = Math.Max(rowIndex, 0);
                 rowIndex += 2;
-                if (rowIndex >= Tree.RowCount)
-                {
-                    Tree.RowCount += rowIndex - Tree.RowCount + 1;
-                }
+
                 return rowIndex;
             }
 
+            private class TechTreeColumn : TableLayoutPanel
+            {
+                public string UnlockLevel { get; }
+
+                public TechTreeColumn(string unlockLevel, Size itemSize)
+                {
+                    UnlockLevel = unlockLevel;
+
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                    AutoSize = true;
+
+                    Size headerSize = new Size(itemSize.Width, itemSize.Height * 2);
+                    Controls.Add(new Label()
+                    {
+                        Text = string.Format("{0} {1}", "Level", UnlockLevel),
+                        Size = headerSize,
+                        MinimumSize = headerSize,
+                        MaximumSize = headerSize,
+                        BorderStyle = BorderStyle.Fixed3D,
+                    }, 0, 0);
+                }
+
+                public void Insert(Control cell, int rowIndex)
+                {
+                    if (rowIndex >= RowCount)
+                    {
+                        RowCount += rowIndex - RowCount + 1;
+                    }
+                    Controls.Add(cell, 0, rowIndex);
+                }
+            }
             private enum RoutingTypes
             {
                 StraightVertical,
@@ -204,24 +231,6 @@ namespace EgsEcfEditorApp
                 SplitVerticalLeft,
                 SplitHorizontalUp,
                 SplitHorizontalDown
-            }
-            private class TechTreeHeaderCell : Label
-            {
-                public string UnlockLevel { get; }
-
-                public TechTreeHeaderCell(string unlockLevel, Size itemSize)
-                {
-                    UnlockLevel = unlockLevel;
-                    Text = string.Format("{0} {1}", "Level", UnlockLevel);
-
-                    Size headerSize = new Size(itemSize.Width, itemSize.Height * 2);
-
-                    Size = headerSize;
-                    MinimumSize = headerSize;
-                    MaximumSize = headerSize;
-                    Dock = DockStyle.Fill;
-                    TextAlign = ContentAlignment.BottomCenter;
-                }
             }
             private class TechTreeRoutingCell : Label
             {
@@ -266,7 +275,6 @@ namespace EgsEcfEditorApp
                     MaximumSize = itemSize;
 
                     BorderStyle = BorderStyle.FixedSingle;
-                    Dock = DockStyle.Fill;
                     FlowDirection = FlowDirection.TopDown;
 
                     Controls.Add(Id);

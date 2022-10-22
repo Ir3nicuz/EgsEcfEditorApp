@@ -289,7 +289,7 @@ namespace EgsEcfEditorApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int EcfTechTreeDialog_ItemEdgeLenght {
             get {
                 return ((int)(this["EcfTechTreeDialog_ItemEdgeLenght"]));

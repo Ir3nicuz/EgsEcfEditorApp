@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,6 +137,7 @@ namespace EgsEcfEditorApp
 
                 Tree.AutoScroll = true;
                 Tree.Dock = DockStyle.Fill;
+                Tree.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
 
                 Controls.Add(Tree);
             }
@@ -156,17 +158,21 @@ namespace EgsEcfEditorApp
 
             private TechTreeColumn FindOrAddColumn(string unlockLevel)
             {
-                TechTreeColumn column = Tree.Controls.Cast<TechTreeColumn>().FirstOrDefault(control => control.UnlockLevel.Equals(unlockLevel));
+                List<TechTreeColumn> columns = Tree.Controls.Cast<TechTreeColumn>().ToList();
+                TechTreeColumn column = columns.FirstOrDefault(control => control.UnlockLevel.Equals(unlockLevel));
                 if (column != null) { return column; }
 
                 column = new TechTreeColumn(unlockLevel, ItemSize);
-                Tree.ColumnCount++;
-                Tree.Controls.Add(column, Tree.ColumnCount - 1, 0);
+                columns.Add(column);
+                columns.Sort();
 
+                Tree.Controls.Clear();
+                columns.ForEach(control =>
+                {
+                    Tree.ColumnCount++;
+                    Tree.Controls.Add(control, Tree.ColumnCount - 1, 0);
+                });
                 
-                // sort???
-
-
                 return column;
             }
             private int FindInsertRow(TechTreeColumn column, string techTreeParent)
@@ -192,7 +198,7 @@ namespace EgsEcfEditorApp
                 return rowIndex;
             }
 
-            private class TechTreeColumn : TableLayoutPanel
+            private class TechTreeColumn : TableLayoutPanel, IComparable
             {
                 public string UnlockLevel { get; }
 
@@ -202,6 +208,7 @@ namespace EgsEcfEditorApp
 
                     AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     AutoSize = true;
+                    GrowStyle = TableLayoutPanelGrowStyle.AddRows;
 
                     Size headerSize = new Size(itemSize.Width, itemSize.Height * 2);
                     Controls.Add(new Label()
@@ -221,6 +228,16 @@ namespace EgsEcfEditorApp
                         RowCount += rowIndex - RowCount + 1;
                     }
                     Controls.Add(cell, 0, rowIndex);
+                }
+                public int CompareTo(object other)
+                {
+                    if (!(other is TechTreeColumn otherColumn)) { return 1; }
+                    if (double.TryParse(UnlockLevel, NumberStyles.Any, CultureInfo.InvariantCulture, out double thisLevel) && 
+                        double.TryParse(otherColumn.UnlockLevel, NumberStyles.Any, CultureInfo.InvariantCulture, out double otherLevel))
+                    {
+                        return thisLevel.CompareTo(otherLevel);
+                    }
+                    return string.Compare(UnlockLevel, otherColumn.UnlockLevel);
                 }
             }
             private enum RoutingTypes

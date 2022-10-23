@@ -103,7 +103,7 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
+                            treePage.AddCell(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
                         }
                     }
                     else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
@@ -116,7 +116,13 @@ namespace EgsEcfEditorApp
 
                     }
                 }
+
             });
+
+            foreach (EcfTechTree tree in TechTreePageContainer.TabPages.Cast<EcfTechTree>())
+            {
+                tree.OrderAndLinkCells();
+            }
 
             TechTreePageContainer.ResumeLayout();
         }
@@ -142,20 +148,19 @@ namespace EgsEcfEditorApp
                 Controls.Add(Tree);
             }
 
-            public void AddItem(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
+            // publics
+            public void AddCell(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
             {
                 TechTreeColumn column = FindOrAddColumn(unlockLevel);
-                int rowIndex = FindInsertRow(column, techTreeParent);
-
-                TechTreeItemCell cell = new TechTreeItemCell(unlockCost, element, ItemSize, ToolTipContainer);
-                column.Insert(cell, rowIndex);
-
-
-                //add or update routing???
-
+                TechTreeItemCell cell = new TechTreeItemCell(unlockCost, techTreeParent, element, ItemSize, ToolTipContainer);
+                column.Add(cell);
+            }
+            public void OrderAndLinkCells()
+            {
 
             }
 
+            // privates
             private TechTreeColumn FindOrAddColumn(string unlockLevel)
             {
                 List<TechTreeColumn> columns = Tree.Controls.Cast<TechTreeColumn>().ToList();
@@ -177,6 +182,8 @@ namespace EgsEcfEditorApp
             }
             private int FindInsertRow(TechTreeColumn column, string techTreeParent)
             {
+                
+                
                 if (string.IsNullOrEmpty(techTreeParent))
                 {
 
@@ -198,6 +205,7 @@ namespace EgsEcfEditorApp
                 return rowIndex;
             }
 
+            // subclasses
             private class TechTreeColumn : TableLayoutPanel, IComparable
             {
                 public string UnlockLevel { get; }
@@ -221,11 +229,23 @@ namespace EgsEcfEditorApp
                     }, 0, 0);
                 }
 
+                public void Add(Control cell)
+                {
+                    Controls.Add(cell);
+                }
                 public void Insert(Control cell, int rowIndex)
                 {
                     if (rowIndex >= RowCount)
                     {
                         RowCount += rowIndex - RowCount + 1;
+                    }
+                    else if (RowCount > 0)
+                    {
+                        RowCount++;
+                        for (int rowCounter = RowCount - 1; rowCounter > rowIndex; rowCounter--)
+                        {
+                            SetRow(GetControlFromPosition(0, rowCounter - 1), rowCounter);
+                        }
                     }
                     Controls.Add(cell, 0, rowIndex);
                 }
@@ -272,20 +292,24 @@ namespace EgsEcfEditorApp
             }
             private class TechTreeItemCell : FlowLayoutPanel
             {
+                public string TechTreeParent { get; }
                 public EcfBlock Element { get; }
-                public string UnlockCost { get; }
+                public TechTreeItemCell ParentCell { get; set; } = null;
 
-                private Label Id { get; } = new Label();
-                private Label Cost { get; } = new Label();
+                private Label IdNumberLabel { get; } = new Label();
+                private Label RefTargetLabel { get; } = new Label();
+                private Label UnlockCostLabel { get; } = new Label();
 
-                public TechTreeItemCell(string unlockCost, EcfBlock block, Size itemSize, ToolTip toolTipContainer)
+                public TechTreeItemCell(string unlockCost, string techTreeParent, EcfBlock block, Size itemSize, ToolTip toolTipContainer)
                 {
+                    TechTreeParent = techTreeParent;
                     Element = block;
-                    UnlockCost = unlockCost;
-                    Id.Text = block.Id;
-                    Cost.Text = UnlockCost;
 
-                    toolTipContainer.SetToolTip(Id, block.BuildIdentification());
+                    IdNumberLabel.Text = block.Id;
+                    RefTargetLabel.Text = block.RefTarget;
+                    UnlockCostLabel.Text = unlockCost;
+
+                    toolTipContainer.SetToolTip(IdNumberLabel, block.BuildIdentification());
 
                     Size = itemSize;
                     MinimumSize = itemSize;
@@ -294,11 +318,11 @@ namespace EgsEcfEditorApp
                     BorderStyle = BorderStyle.FixedSingle;
                     FlowDirection = FlowDirection.TopDown;
 
-                    Controls.Add(Id);
-                    Controls.Add(Cost);
+                    Controls.Add(IdNumberLabel);
+                    Controls.Add(RefTargetLabel);
+                    Controls.Add(UnlockCostLabel);
                 }
             }
         }
-        
     }
 }

@@ -121,7 +121,7 @@ namespace EgsEcfEditorApp
 
             foreach (EcfTechTree tree in TechTreePageContainer.TabPages.Cast<EcfTechTree>())
             {
-                tree.OrderAndLinkCells();
+                tree.SortAndLinkCells();
             }
 
             TechTreePageContainer.ResumeLayout();
@@ -155,8 +155,12 @@ namespace EgsEcfEditorApp
                 TechTreeItemCell cell = new TechTreeItemCell(unlockCost, techTreeParent, element, ItemSize, ToolTipContainer);
                 column.Add(cell);
             }
-            public void OrderAndLinkCells()
+            public void SortAndLinkCells()
             {
+
+
+
+
 
             }
 
@@ -294,7 +298,6 @@ namespace EgsEcfEditorApp
             {
                 public string TechTreeParent { get; }
                 public EcfBlock Element { get; }
-                public TechTreeItemCell ParentCell { get; set; } = null;
 
                 private Label IdNumberLabel { get; } = new Label();
                 private Label RefTargetLabel { get; } = new Label();

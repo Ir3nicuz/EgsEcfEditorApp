@@ -162,6 +162,12 @@ namespace EgsEcfEditorApp
 
 
 
+
+
+
+
+                // insert spacer line -> all columns, copy straight verticals
+
             }
 
             // privates
@@ -266,12 +272,17 @@ namespace EgsEcfEditorApp
             }
             private enum RoutingTypes
             {
+                None,
                 StraightVertical,
                 StraightHorizontal,
                 SplitVerticalRight,
                 SplitVerticalLeft,
                 SplitHorizontalUp,
-                SplitHorizontalDown
+                SplitHorizontalDown,
+                Edge12To3,
+                Edge3To6,
+                Edge6To9,
+                Edge9To12,
             }
             private class TechTreeRoutingCell : Label
             {

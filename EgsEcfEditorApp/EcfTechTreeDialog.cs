@@ -157,7 +157,10 @@ namespace EgsEcfEditorApp
             }
             public void SortAndLinkCells()
             {
-
+                Tree.Controls.Cast<TechTreeColumn>().FirstOrDefault()?.Controls.Cast<Control>().Where(ctrl => ctrl is TechTreeItemCell).Cast<TechTreeItemCell>().ToList().ForEach(cell =>
+                {
+                    FindAndArrangePredecessors(cell);
+                });
 
 
 
@@ -190,10 +193,10 @@ namespace EgsEcfEditorApp
                 
                 return column;
             }
-            private int FindInsertRow(TechTreeColumn column, string techTreeParent)
+            private void FindAndArrangePredecessors(TechTreeItemCell rootCell)
             {
                 
-                
+                /*
                 if (string.IsNullOrEmpty(techTreeParent))
                 {
 
@@ -213,6 +216,7 @@ namespace EgsEcfEditorApp
                 rowIndex += 2;
 
                 return rowIndex;
+                */
             }
 
             // subclasses

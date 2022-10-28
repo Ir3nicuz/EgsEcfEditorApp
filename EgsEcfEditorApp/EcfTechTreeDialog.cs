@@ -153,7 +153,7 @@ namespace EgsEcfEditorApp
             {
                 TechTreeColumn column = FindOrAddColumn(unlockLevel);
                 TechTreeItemCell cell = new TechTreeItemCell(unlockCost, techTreeParent, element, ItemSize, ToolTipContainer);
-                column.Add(cell);
+                column.Add(cell, true);
             }
             public void SortAndLinkCells()
             {
@@ -232,36 +232,30 @@ namespace EgsEcfEditorApp
                     AutoSize = true;
                     GrowStyle = TableLayoutPanelGrowStyle.AddRows;
 
-                    Size headerSize = new Size(itemSize.Width, itemSize.Height * 2);
-                    Controls.Add(new Label()
+                    Add(new Label()
                     {
                         Text = string.Format("{0} {1}", "Level", UnlockLevel),
-                        Size = headerSize,
-                        MinimumSize = headerSize,
-                        MaximumSize = headerSize,
+                        Size = itemSize,
+                        MinimumSize = itemSize,
+                        MaximumSize = itemSize,
                         BorderStyle = BorderStyle.Fixed3D,
-                    }, 0, 0);
+                    }, false);
                 }
 
-                public void Add(Control cell)
+                public void Add(Control cell, bool addSpace)
                 {
-                    Controls.Add(cell);
+                    RowCount += addSpace ? 2 : 1;
+                    Controls.Add(cell, 1, RowCount - 1);
                 }
                 public void Insert(Control cell, int rowIndex)
                 {
-                    if (rowIndex >= RowCount)
+                    Add(cell, true);
+                    for (int rowCounter = RowCount - 1; rowCounter > rowIndex; rowCounter--)
                     {
-                        RowCount += rowIndex - RowCount + 1;
+                        int preRow = rowCounter - 1;
+                        SetRow(GetControlFromPosition(0, preRow), rowCounter);
+                        SetRow(GetControlFromPosition(1, preRow), rowCounter);
                     }
-                    else if (RowCount > 0)
-                    {
-                        RowCount++;
-                        for (int rowCounter = RowCount - 1; rowCounter > rowIndex; rowCounter--)
-                        {
-                            SetRow(GetControlFromPosition(0, rowCounter - 1), rowCounter);
-                        }
-                    }
-                    Controls.Add(cell, 0, rowIndex);
                 }
                 public int CompareTo(object other)
                 {

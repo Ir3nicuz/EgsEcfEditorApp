@@ -153,7 +153,7 @@ namespace EgsEcfEditorApp
             {
                 TechTreeColumn column = FindOrAddColumn(unlockLevel);
                 TechTreeItemCell cell = new TechTreeItemCell(unlockCost, techTreeParent, element, ItemSize, ToolTipContainer);
-                column.Add(cell, true);
+                column.Add(cell);
             }
             public void SortAndLinkCells()
             {
@@ -224,37 +224,43 @@ namespace EgsEcfEditorApp
             {
                 public string UnlockLevel { get; }
 
+                private Size ItemSize { get; }
+
                 public TechTreeColumn(string unlockLevel, Size itemSize)
                 {
                     UnlockLevel = unlockLevel;
+                    ItemSize = itemSize;
 
                     AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     AutoSize = true;
                     GrowStyle = TableLayoutPanelGrowStyle.AddRows;
 
-                    Add(new Label()
+                    Controls.Add(new Label()
                     {
                         Text = string.Format("{0} {1}", "Level", UnlockLevel),
                         Size = itemSize,
                         MinimumSize = itemSize,
                         MaximumSize = itemSize,
                         BorderStyle = BorderStyle.Fixed3D,
-                    }, false);
+                    });
                 }
 
-                public void Add(Control cell, bool addSpace)
+                // publics
+                public void Add(TechTreeItemCell cell)
                 {
-                    RowCount += addSpace ? 2 : 1;
-                    Controls.Add(cell, 1, RowCount - 1);
+                    Controls.Add(new TechTreeItem(cell, ItemSize));
                 }
-                public void Insert(Control cell, int rowIndex)
+                public void Insert(TechTreeItemCell cell, int rowIndex)
                 {
-                    Add(cell, true);
+                    Add(cell);
                     for (int rowCounter = RowCount - 1; rowCounter > rowIndex; rowCounter--)
                     {
-                        int preRow = rowCounter - 1;
-                        SetRow(GetControlFromPosition(0, preRow), rowCounter);
-                        SetRow(GetControlFromPosition(1, preRow), rowCounter);
+                        Control temp0 = GetControlFromPosition(0, rowCounter);
+                        
+                        int preCellRow = rowCounter - 1;
+                        SetRow(GetControlFromPosition(0, preCellRow), rowCounter);
+
+                        SetRow(temp0, preCellRow);
                     }
                 }
                 public int CompareTo(object other)
@@ -267,6 +273,7 @@ namespace EgsEcfEditorApp
                     }
                     return string.Compare(UnlockLevel, otherColumn.UnlockLevel);
                 }
+
             }
             private enum RoutingTypes
             {
@@ -281,6 +288,32 @@ namespace EgsEcfEditorApp
                 Edge3To6,
                 Edge6To9,
                 Edge9To12,
+            }
+            private class TechTreeItem : TableLayoutPanel
+            {
+                private TechTreeRoutingCell TopLeftRoutingCell { get; set; }
+                private TechTreeRoutingCell TopCenterRoutingCell { get; set; }
+                private TechTreeRoutingCell LeftCenterRoutingCell { get; set; }
+                private TechTreeItemCell ItemCell { get; }
+
+                public TechTreeItem(TechTreeItemCell itemCell, Size itemSize)
+                {
+                    TopLeftRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
+                    TopCenterRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
+                    LeftCenterRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
+                    ItemCell = itemCell;
+
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                    AutoSize = true;
+                    ColumnCount = 2;
+                    RowCount = 2;
+                    GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+
+                    Controls.Add(TopLeftRoutingCell, 0, 0);
+                    Controls.Add(TopCenterRoutingCell, 1, 0);
+                    Controls.Add(LeftCenterRoutingCell, 0, 1);
+                    Controls.Add(ItemCell, 1, 1);
+                }
             }
             private class TechTreeRoutingCell : Label
             {

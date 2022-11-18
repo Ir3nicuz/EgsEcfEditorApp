@@ -16,8 +16,6 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeDialog : Form
     {
-        private Size ItemSize { get; } = new Size(InternalSettings.Default.EcfTechTreeDialog_ItemEdgeLenght, InternalSettings.Default.EcfTechTreeDialog_ItemEdgeLenght);
-
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
 
@@ -99,11 +97,11 @@ namespace EgsEcfEditorApp
                             
                             if (treePage == null)
                             {
-                                treePage = new EcfTechTree(treeName, ItemSize, Tip);
+                                treePage = new EcfTechTree(treeName, Tip);
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.AddCell(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
+                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
                         }
                     }
                     else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
@@ -121,7 +119,7 @@ namespace EgsEcfEditorApp
 
             foreach (EcfTechTree tree in TechTreePageContainer.TabPages.Cast<EcfTechTree>())
             {
-                tree.SortAndLinkCells();
+                tree.UpdateItemStructure();
             }
 
             TechTreePageContainer.ResumeLayout();
@@ -130,244 +128,34 @@ namespace EgsEcfEditorApp
         // subclasses
         private class EcfTechTree : TabPage
         {
-            private Size ItemSize { get; }
             private ToolTip ToolTipContainer { get; }
 
-            private TableLayoutPanel Tree { get; } = new TableLayoutPanel();
+            private TreeView Tree { get; } = new TreeView();
 
-            public EcfTechTree(string name, Size itemSize, ToolTip toolTipContainer)
+            public EcfTechTree(string name, ToolTip toolTipContainer)
             {
                 Text = name;
-                ItemSize = itemSize;
                 ToolTipContainer = toolTipContainer;
 
-                Tree.AutoScroll = true;
                 Tree.Dock = DockStyle.Fill;
-                Tree.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
 
                 Controls.Add(Tree);
             }
 
             // publics
-            public void AddCell(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
+            public void AddItem(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
             {
-                TechTreeColumn column = FindOrAddColumn(unlockLevel);
-                TechTreeItemCell cell = new TechTreeItemCell(unlockCost, techTreeParent, element, ItemSize, ToolTipContainer);
-                column.Add(cell);
+                
             }
-            public void SortAndLinkCells()
+            public void UpdateItemStructure()
             {
-                Tree.Controls.Cast<TechTreeColumn>().FirstOrDefault()?.Controls.Cast<Control>().Where(ctrl => ctrl is TechTreeItemCell).Cast<TechTreeItemCell>().ToList().ForEach(cell =>
-                {
-                    FindAndArrangePredecessors(cell);
-                });
-
-
-
-
-
-
-
-
-                // insert spacer line -> all columns, copy straight verticals
 
             }
 
             // privates
-            private TechTreeColumn FindOrAddColumn(string unlockLevel)
-            {
-                List<TechTreeColumn> columns = Tree.Controls.Cast<TechTreeColumn>().ToList();
-                TechTreeColumn column = columns.FirstOrDefault(control => control.UnlockLevel.Equals(unlockLevel));
-                if (column != null) { return column; }
 
-                column = new TechTreeColumn(unlockLevel, ItemSize);
-                columns.Add(column);
-                columns.Sort();
 
-                Tree.Controls.Clear();
-                columns.ForEach(control =>
-                {
-                    Tree.ColumnCount++;
-                    Tree.Controls.Add(control, Tree.ColumnCount - 1, 0);
-                });
-                
-                return column;
-            }
-            private void FindAndArrangePredecessors(TechTreeItemCell rootCell)
-            {
-                
-                /*
-                if (string.IsNullOrEmpty(techTreeParent))
-                {
 
-                }
-                else
-                {
-
-                }
-
-                int rowIndex = column.RowCount - 1;
-                while (rowIndex >= 0 && column.GetControlFromPosition(0, rowIndex) == null)
-                {
-                    rowIndex--;
-                }
-
-                rowIndex = Math.Max(rowIndex, 0);
-                rowIndex += 2;
-
-                return rowIndex;
-                */
-            }
-
-            // subclasses
-            private class TechTreeColumn : TableLayoutPanel, IComparable
-            {
-                public string UnlockLevel { get; }
-
-                private Size ItemSize { get; }
-
-                public TechTreeColumn(string unlockLevel, Size itemSize)
-                {
-                    UnlockLevel = unlockLevel;
-                    ItemSize = itemSize;
-
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                    AutoSize = true;
-                    GrowStyle = TableLayoutPanelGrowStyle.AddRows;
-
-                    Controls.Add(new Label()
-                    {
-                        Text = string.Format("{0} {1}", "Level", UnlockLevel),
-                        Size = itemSize,
-                        MinimumSize = itemSize,
-                        MaximumSize = itemSize,
-                        BorderStyle = BorderStyle.Fixed3D,
-                    });
-                }
-
-                // publics
-                public void Add(TechTreeItemCell cell)
-                {
-                    Controls.Add(new TechTreeItem(cell, ItemSize));
-                }
-                public void Insert(TechTreeItemCell cell, int rowIndex)
-                {
-                    Add(cell);
-                    for (int rowCounter = RowCount - 1; rowCounter > rowIndex; rowCounter--)
-                    {
-                        Control temp0 = GetControlFromPosition(0, rowCounter);
-                        
-                        int preCellRow = rowCounter - 1;
-                        SetRow(GetControlFromPosition(0, preCellRow), rowCounter);
-
-                        SetRow(temp0, preCellRow);
-                    }
-                }
-                public int CompareTo(object other)
-                {
-                    if (!(other is TechTreeColumn otherColumn)) { return 1; }
-                    if (double.TryParse(UnlockLevel, NumberStyles.Any, CultureInfo.InvariantCulture, out double thisLevel) && 
-                        double.TryParse(otherColumn.UnlockLevel, NumberStyles.Any, CultureInfo.InvariantCulture, out double otherLevel))
-                    {
-                        return thisLevel.CompareTo(otherLevel);
-                    }
-                    return string.Compare(UnlockLevel, otherColumn.UnlockLevel);
-                }
-
-            }
-            private enum RoutingTypes
-            {
-                None,
-                StraightVertical,
-                StraightHorizontal,
-                SplitVerticalRight,
-                SplitVerticalLeft,
-                SplitHorizontalUp,
-                SplitHorizontalDown,
-                Edge12To3,
-                Edge3To6,
-                Edge6To9,
-                Edge9To12,
-            }
-            private class TechTreeItem : TableLayoutPanel
-            {
-                private TechTreeRoutingCell TopLeftRoutingCell { get; set; }
-                private TechTreeRoutingCell TopCenterRoutingCell { get; set; }
-                private TechTreeRoutingCell LeftCenterRoutingCell { get; set; }
-                private TechTreeItemCell ItemCell { get; }
-
-                public TechTreeItem(TechTreeItemCell itemCell, Size itemSize)
-                {
-                    TopLeftRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
-                    TopCenterRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
-                    LeftCenterRoutingCell = new TechTreeRoutingCell(RoutingTypes.None, itemSize);
-                    ItemCell = itemCell;
-
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                    AutoSize = true;
-                    ColumnCount = 2;
-                    RowCount = 2;
-                    GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-
-                    Controls.Add(TopLeftRoutingCell, 0, 0);
-                    Controls.Add(TopCenterRoutingCell, 1, 0);
-                    Controls.Add(LeftCenterRoutingCell, 0, 1);
-                    Controls.Add(ItemCell, 1, 1);
-                }
-            }
-            private class TechTreeRoutingCell : Label
-            {
-                public TechTreeRoutingCell(RoutingTypes routingType, Size itemSize)
-                {
-                    Size = itemSize;
-                    MinimumSize = itemSize;
-                    MaximumSize = itemSize;
-                    Dock = DockStyle.Fill;
-
-                    switch (routingType)
-                    {
-                        case RoutingTypes.StraightVertical: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        case RoutingTypes.StraightHorizontal: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        case RoutingTypes.SplitVerticalRight: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        case RoutingTypes.SplitVerticalLeft: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        case RoutingTypes.SplitHorizontalUp: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        case RoutingTypes.SplitHorizontalDown: Image = new Bitmap(IconRecources.Icon_ChangeComplex, itemSize); break;
-                        default: Image = new Bitmap(IconRecources.Icon_Unknown, itemSize); break;
-                    }
-                }
-            }
-            private class TechTreeItemCell : FlowLayoutPanel
-            {
-                public string TechTreeParent { get; }
-                public EcfBlock Element { get; }
-
-                private Label IdNumberLabel { get; } = new Label();
-                private Label RefTargetLabel { get; } = new Label();
-                private Label UnlockCostLabel { get; } = new Label();
-
-                public TechTreeItemCell(string unlockCost, string techTreeParent, EcfBlock block, Size itemSize, ToolTip toolTipContainer)
-                {
-                    TechTreeParent = techTreeParent;
-                    Element = block;
-
-                    IdNumberLabel.Text = block.Id;
-                    RefTargetLabel.Text = block.RefTarget;
-                    UnlockCostLabel.Text = unlockCost;
-
-                    toolTipContainer.SetToolTip(IdNumberLabel, block.BuildIdentification());
-
-                    Size = itemSize;
-                    MinimumSize = itemSize;
-                    MaximumSize = itemSize;
-
-                    BorderStyle = BorderStyle.FixedSingle;
-                    FlowDirection = FlowDirection.TopDown;
-
-                    Controls.Add(IdNumberLabel);
-                    Controls.Add(RefTargetLabel);
-                    Controls.Add(UnlockCostLabel);
-                }
-            }
         }
     }
 }

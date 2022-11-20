@@ -101,7 +101,7 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.AddItem(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block);
+                            treePage.Add(new TechTreeElement(unlockLevel.GetFirstValue(), unlockCost.GetFirstValue(), techTreeParent?.GetFirstValue(), block));
                         }
                     }
                     else if (techTreeNames != null || unlockLevel != null || unlockCost != null || techTreeParent != null)
@@ -116,11 +116,6 @@ namespace EgsEcfEditorApp
                 }
 
             });
-
-            foreach (EcfTechTree tree in TechTreePageContainer.TabPages.Cast<EcfTechTree>())
-            {
-                tree.UpdateItemStructure();
-            }
 
             TechTreePageContainer.ResumeLayout();
         }
@@ -143,18 +138,43 @@ namespace EgsEcfEditorApp
             }
 
             // publics
-            public void AddItem(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
+            public void Add(TechTreeElement element)
             {
+                Tree.BeginUpdate();
+
+                Tree.Nodes.Cast<TechTreeElement>().ToList().ForEach(unboundElement =>
+                {
+                    if (string.Equals(unboundElement.Element.Id, element.TechTreeParent))
+                    {
+                        element.Nodes.Add(unboundElement);
+                        Tree.Nodes.Remove(unboundElement);
+                    }
+                });
+
                 
+
+
+
+                Tree.EndUpdate();
             }
-            public void UpdateItemStructure()
+        }
+        private class TechTreeElement : TreeNode
+        {
+            private string UnlockLevel { get; }
+            private string UnlockCost { get; }
+            public string TechTreeParent { get; }
+
+            public EcfBlock Element { get; }
+
+            public TechTreeElement(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
             {
+                UnlockLevel = unlockLevel;
+                UnlockCost = unlockCost;
+                TechTreeParent = techTreeParent;
+                Element = element;
 
+                Text = string.Format("{0} / Level {1} / Cost {2}", element.BuildIdentification(), unlockLevel, unlockCost);
             }
-
-            // privates
-
-
 
         }
     }

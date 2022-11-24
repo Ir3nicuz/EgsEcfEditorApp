@@ -144,18 +144,42 @@ namespace EgsEcfEditorApp
 
                 Tree.Nodes.Cast<TechTreeElement>().ToList().ForEach(unboundElement =>
                 {
-                    if (string.Equals(unboundElement.Element.Id, element.TechTreeParent))
+                    if (!string.IsNullOrEmpty(unboundElement.TechTreeParent) && string.Equals(unboundElement.TechTreeParent, element.Element.Id))
                     {
                         element.Nodes.Add(unboundElement);
                         Tree.Nodes.Remove(unboundElement);
                     }
                 });
 
-                
-
-
+                TechTreeElement parent = FindParent(element.TechTreeParent, Tree.Nodes);
+                if (parent != null)
+                {
+                    parent.Nodes.Add(element);
+                }
+                else
+                {
+                    Tree.Nodes.Add(element);
+                }
 
                 Tree.EndUpdate();
+            }
+
+            // privates
+            private TechTreeElement FindParent(string parentName, TreeNodeCollection nodes)
+            {
+                foreach (TechTreeElement node in nodes.Cast<TechTreeElement>())
+                {
+                    if (string.Equals(node.Element.Id, parentName))
+                    {
+                        return node;
+                    }
+                    TechTreeElement parent = FindParent(parentName, node.Nodes);
+                    if (parent != null)
+                    {
+                        return parent;
+                    }
+                }
+                return null;
             }
         }
         private class TechTreeElement : TreeNode

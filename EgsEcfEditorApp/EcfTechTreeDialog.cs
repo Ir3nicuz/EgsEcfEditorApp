@@ -123,45 +123,79 @@ namespace EgsEcfEditorApp
         // subclasses
         private class EcfTechTree : TabPage
         {
-            private ToolTip ToolTipContainer { get; }
+            private TreeView ElementTreeView { get; } = new TreeView();
+            private ListView UnlockLevelListView { get; } = new ListView();
+            private ListView UnlockCostListView { get; } = new ListView();
 
-            private TreeView Tree { get; } = new TreeView();
+            private TableLayoutPanel ViewPanel { get; } = new TableLayoutPanel();
+            private ToolTip ToolTipContainer { get; }
 
             public EcfTechTree(string name, ToolTip toolTipContainer)
             {
                 Text = name;
                 ToolTipContainer = toolTipContainer;
 
-                Tree.Dock = DockStyle.Fill;
+                ElementTreeView.Dock = DockStyle.Fill;
+                UnlockLevelListView.Dock = DockStyle.Fill;
+                UnlockCostListView.Dock = DockStyle.Fill;
+                ViewPanel.Dock = DockStyle.Fill;
 
-                Controls.Add(Tree);
+                ElementTreeView.ShowPlusMinus = false;
+
+
+                ViewPanel.ColumnCount = 3;
+                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.2f));
+                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.2f));
+                ViewPanel.RowCount = 2;
+                ViewPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                ViewPanel.RowStyles.Add(new RowStyle(SizeType.Percent,1.0f));
+                ViewPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+
+                ViewPanel.Controls.Add(new Label() { Text = "Name", TextAlign = ContentAlignment.MiddleCenter }, 0, 0);
+                ViewPanel.Controls.Add(new Label() { Text = "Level", TextAlign = ContentAlignment.MiddleCenter }, 1, 0);
+                ViewPanel.Controls.Add(new Label() { Text = "Cost", TextAlign = ContentAlignment.MiddleCenter }, 2, 0);
+                ViewPanel.Controls.Add(ElementTreeView, 0, 1);
+                ViewPanel.Controls.Add(UnlockLevelListView, 1, 1);
+                ViewPanel.Controls.Add(UnlockCostListView, 2, 1);
+                Controls.Add(ViewPanel);
             }
 
             // publics
             public void Add(TechTreeElement element)
             {
-                Tree.BeginUpdate();
+                ElementTreeView.BeginUpdate();
 
-                Tree.Nodes.Cast<TechTreeElement>().ToList().ForEach(unboundElement =>
+                ElementTreeView.Nodes.Cast<TechTreeElement>().ToList().ForEach(unboundElement =>
                 {
-                    if (!string.IsNullOrEmpty(unboundElement.TechTreeParent) && string.Equals(unboundElement.TechTreeParent, element.Element.Id))
+                    if (!string.IsNullOrEmpty(unboundElement.TechTreeParentName) && string.Equals(unboundElement.TechTreeParentName, element.ElementName))
                     {
                         element.Nodes.Add(unboundElement);
-                        Tree.Nodes.Remove(unboundElement);
+                        ElementTreeView.Nodes.Remove(unboundElement);
                     }
                 });
 
-                TechTreeElement parent = FindParent(element.TechTreeParent, Tree.Nodes);
+                TechTreeElement parent = FindParent(element.TechTreeParentName, ElementTreeView.Nodes);
                 if (parent != null)
                 {
                     parent.Nodes.Add(element);
                 }
                 else
                 {
-                    Tree.Nodes.Add(element);
+                    ElementTreeView.Nodes.Add(element);
                 }
 
-                Tree.EndUpdate();
+                ElementTreeView.ExpandAll();
+                ElementTreeView.EndUpdate();
+
+
+
+                // still unsorted/unlinked
+                UnlockLevelListView.Items.Add(element.UnlockLevel);
+                UnlockCostListView.Items.Add(element.UnlockCost);
+
+
+
             }
 
             // privates
@@ -169,7 +203,7 @@ namespace EgsEcfEditorApp
             {
                 foreach (TechTreeElement node in nodes.Cast<TechTreeElement>())
                 {
-                    if (string.Equals(node.Element.Id, parentName))
+                    if (string.Equals(node.ElementName, parentName))
                     {
                         return node;
                     }
@@ -184,20 +218,22 @@ namespace EgsEcfEditorApp
         }
         private class TechTreeElement : TreeNode
         {
-            private string UnlockLevel { get; }
-            private string UnlockCost { get; }
-            public string TechTreeParent { get; }
+            public string UnlockLevel { get; }
+            public string UnlockCost { get; }
+            public string ElementName { get; }
+            public string TechTreeParentName { get; }
 
             public EcfBlock Element { get; }
 
-            public TechTreeElement(string unlockLevel, string unlockCost, string techTreeParent, EcfBlock element)
+            public TechTreeElement(string unlockLevel, string unlockCost, string techTreeParentName, EcfBlock element)
             {
                 UnlockLevel = unlockLevel;
                 UnlockCost = unlockCost;
-                TechTreeParent = techTreeParent;
+                ElementName = element.GetAttributeFirstValue("Name");
+                TechTreeParentName = techTreeParentName;
                 Element = element;
 
-                Text = string.Format("{0} / Level {1} / Cost {2}", element.BuildIdentification(), unlockLevel, unlockCost);
+                Text = element.BuildIdentification();
             }
 
         }

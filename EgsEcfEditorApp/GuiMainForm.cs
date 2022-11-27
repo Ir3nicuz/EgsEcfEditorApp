@@ -4456,7 +4456,7 @@ namespace EcfWinFormControls
 
         public EcfTreeView() : base()
         {
-            CheckBoxes = true;
+            
         }
 
         // publics

@@ -1,4 +1,5 @@
 ﻿using EcfFileViews;
+using EcfWinFormControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
@@ -123,9 +124,9 @@ namespace EgsEcfEditorApp
         // subclasses
         private class EcfTechTree : TabPage
         {
-            private TreeView ElementTreeView { get; } = new TreeView();
-            private ListView UnlockLevelListView { get; } = new ListView();
-            private ListView UnlockCostListView { get; } = new ListView();
+            private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
+            private EcfTreeView UnlockLevelListView { get; } = new EcfTreeView();
+            private EcfTreeView UnlockCostListView { get; } = new EcfTreeView();
 
             private TableLayoutPanel ViewPanel { get; } = new TableLayoutPanel();
             private ToolTip ToolTipContainer { get; }
@@ -135,13 +136,19 @@ namespace EgsEcfEditorApp
                 Text = name;
                 ToolTipContainer = toolTipContainer;
 
+                ElementTreeView.LinkTreeView(UnlockLevelListView);
+                ElementTreeView.LinkTreeView(UnlockCostListView);
+
                 ElementTreeView.Dock = DockStyle.Fill;
                 UnlockLevelListView.Dock = DockStyle.Fill;
                 UnlockCostListView.Dock = DockStyle.Fill;
                 ViewPanel.Dock = DockStyle.Fill;
 
                 ElementTreeView.ShowPlusMinus = false;
-
+                UnlockLevelListView.ShowPlusMinus = false;
+                UnlockLevelListView.ShowRootLines = false;
+                UnlockCostListView.ShowPlusMinus = false;
+                UnlockCostListView.ShowRootLines = false;
 
                 ViewPanel.ColumnCount = 3;
                 ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -191,8 +198,8 @@ namespace EgsEcfEditorApp
 
 
                 // still unsorted/unlinked
-                UnlockLevelListView.Items.Add(element.UnlockLevel);
-                UnlockCostListView.Items.Add(element.UnlockCost);
+                UnlockLevelListView.Nodes.Add(element.UnlockLevel);
+                UnlockCostListView.Nodes.Add(element.UnlockCost);
 
 
 

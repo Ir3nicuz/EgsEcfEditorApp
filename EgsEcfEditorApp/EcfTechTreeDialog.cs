@@ -194,13 +194,12 @@ namespace EgsEcfEditorApp
                     }
                 });
 
-                List<int> indexPath = GetIndexPath(elementNode.TechTreeParentName, ElementTreeView);
-                
+                List<int> indexPath = FindIndexPath(elementNode.TechTreeParentName, ElementTreeView);
                 if (indexPath.Count > 0)
                 {
-                    AddAtIndexPath(indexPath, ElementTreeView, elementNode);
-                    AddAtIndexPath(indexPath, UnlockLevelListView, levelNode);
-                    AddAtIndexPath(indexPath, UnlockCostListView, costNode);
+                    AddToIndexAtPathEnd(indexPath, ElementTreeView, elementNode);
+                    AddToIndexAtPathEnd(indexPath, UnlockLevelListView, levelNode);
+                    AddToIndexAtPathEnd(indexPath, UnlockCostListView, costNode);
                 }
                 else
                 {
@@ -219,17 +218,39 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private List<int> GetIndexPath(string parentName, TreeView view)
+            private List<int> FindIndexPath(string parentName, TreeView view)
             {
+                TreeNode node = FindParentNode(parentName, view.Nodes);
                 List<int> indexPath = new List<int>();
+
+                while (node != null)
+                {
+                    indexPath.Insert(0, node.Index);
+                    node = node.Parent;
+                }
                 
-
-                //...
-
-
                 return indexPath;
             }
-            private void AddAtIndexPath(List<int> indexPath, TreeView view, TreeNode node)
+            private TechTreeElementNode FindParentNode(string parentName, TreeNodeCollection nodes)
+            {
+                foreach (TechTreeElementNode node in nodes.Cast<TechTreeElementNode>())
+                {
+                    if  (string.Equals(parentName, node.ElementName))
+                    {
+                        return node;
+                    }
+                    else
+                    {
+                        TechTreeElementNode subNode = FindParentNode(parentName, node.Nodes);
+                        if (subNode != null)
+                        {
+                            return subNode;
+                        }
+                    }
+                }
+                return null;
+            }
+            private void AddToIndexAtPathEnd(List<int> indexPath, TreeView view, TreeNode node)
             {
                 
 

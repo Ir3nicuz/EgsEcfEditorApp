@@ -195,9 +195,9 @@ namespace EgsEcfEditorApp
                 });
 
                 Stack<int> indexPath = FindIndexPath(elementNode.TechTreeParentName, ElementTreeView);
-                AddToIndexAtPathEnd(indexPath, ElementTreeView, elementNode);
-                AddToIndexAtPathEnd(indexPath, UnlockLevelListView, levelNode);
-                AddToIndexAtPathEnd(indexPath, UnlockCostListView, costNode);
+                AddToIndexPath(indexPath, ElementTreeView, elementNode);
+                AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
+                AddToIndexPath(indexPath, UnlockCostListView, costNode);
 
                 ElementTreeView.ExpandAll();
                 UnlockLevelListView.ExpandAll();
@@ -241,19 +241,21 @@ namespace EgsEcfEditorApp
                 }
                 return null;
             }
-            private void AddToIndexAtPathEnd(Stack<int> indexPath, TreeView view, TreeNode node)
+            private void AddToIndexPath(Stack<int> indexPath, TreeView view, TreeNode node)
             {
+                TreeNodeCollection nodes = view.Nodes;
                 if (indexPath != null && indexPath.Count > 0)
                 {
-                    
-
-
-
-
+                    Stack<int> path = new Stack<int>(indexPath);
+                    while (path.Count > 1)
+                    {
+                        nodes = nodes[path.Pop()].Nodes;
+                    }
+                    nodes.Insert(path.Pop(), node);
                 }
                 else
                 {
-                    view.Nodes.Add(node);
+                    nodes.Add(node);
                 }
             }
         }

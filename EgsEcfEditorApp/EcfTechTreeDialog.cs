@@ -194,19 +194,10 @@ namespace EgsEcfEditorApp
                     }
                 });
 
-                List<int> indexPath = FindIndexPath(elementNode.TechTreeParentName, ElementTreeView);
-                if (indexPath.Count > 0)
-                {
-                    AddToIndexAtPathEnd(indexPath, ElementTreeView, elementNode);
-                    AddToIndexAtPathEnd(indexPath, UnlockLevelListView, levelNode);
-                    AddToIndexAtPathEnd(indexPath, UnlockCostListView, costNode);
-                }
-                else
-                {
-                    ElementTreeView.Nodes.Add(elementNode);
-                    UnlockLevelListView.Nodes.Add(levelNode);
-                    UnlockCostListView.Nodes.Add(costNode);
-                }
+                Stack<int> indexPath = FindIndexPath(elementNode.TechTreeParentName, ElementTreeView);
+                AddToIndexAtPathEnd(indexPath, ElementTreeView, elementNode);
+                AddToIndexAtPathEnd(indexPath, UnlockLevelListView, levelNode);
+                AddToIndexAtPathEnd(indexPath, UnlockCostListView, costNode);
 
                 ElementTreeView.ExpandAll();
                 UnlockLevelListView.ExpandAll();
@@ -218,14 +209,14 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private List<int> FindIndexPath(string parentName, TreeView view)
+            private Stack<int> FindIndexPath(string parentName, TreeView view)
             {
                 TreeNode node = FindParentNode(parentName, view.Nodes);
-                List<int> indexPath = new List<int>();
+                Stack<int> indexPath = new Stack<int>();
 
                 while (node != null)
                 {
-                    indexPath.Insert(0, node.Index);
+                    indexPath.Push(node.Index);
                     node = node.Parent;
                 }
                 
@@ -250,13 +241,20 @@ namespace EgsEcfEditorApp
                 }
                 return null;
             }
-            private void AddToIndexAtPathEnd(List<int> indexPath, TreeView view, TreeNode node)
+            private void AddToIndexAtPathEnd(Stack<int> indexPath, TreeView view, TreeNode node)
             {
-                
+                if (indexPath != null && indexPath.Count > 0)
+                {
+                    
 
-                //...
 
 
+
+                }
+                else
+                {
+                    view.Nodes.Add(node);
+                }
             }
         }
         private class TechTreeElementNode : TreeNode

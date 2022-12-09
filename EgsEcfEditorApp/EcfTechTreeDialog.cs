@@ -194,10 +194,20 @@ namespace EgsEcfEditorApp
                     }
                 });
 
-                Stack<int> indexPath = FindIndexPath(elementNode.TechTreeParentName, ElementTreeView);
-                AddToIndexPath(indexPath, ElementTreeView, elementNode);
-                AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
-                AddToIndexPath(indexPath, UnlockCostListView, costNode);
+                TechTreeElementNode parent = FindParentNode(elementNode.TechTreeParentName, ElementTreeView.Nodes);
+                if (parent != null)
+                {
+                    parent.Nodes.Add(elementNode);
+                    Stack<int> indexPath = GetIndexPath(parent);
+                    //AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
+                    //AddToIndexPath(indexPath, UnlockCostListView, costNode);
+                }
+                else
+                {
+                    ElementTreeView.Nodes.Add(elementNode);
+                    UnlockLevelListView.Nodes.Add(levelNode);
+                    UnlockCostListView.Nodes.Add(costNode);
+                }
 
                 ElementTreeView.ExpandAll();
                 UnlockLevelListView.ExpandAll();
@@ -209,9 +219,8 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private Stack<int> FindIndexPath(string parentName, TreeView view)
+            private Stack<int> GetIndexPath(TreeNode node)
             {
-                TreeNode node = FindParentNode(parentName, view.Nodes);
                 Stack<int> indexPath = new Stack<int>();
 
                 while (node != null)

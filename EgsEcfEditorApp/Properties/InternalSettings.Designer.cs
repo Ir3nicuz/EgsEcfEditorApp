@@ -286,5 +286,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["EcfFileCAMDialog_PageSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name")]
+        public string EcfTechTreeDialog_NameReferenceAttribute {
+            get {
+                return ((string)(this["EcfTechTreeDialog_NameReferenceAttribute"]));
+            }
+            set {
+                this["EcfTechTreeDialog_NameReferenceAttribute"] = value;
+            }
+        }
     }
 }

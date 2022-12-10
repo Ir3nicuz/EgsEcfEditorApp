@@ -139,16 +139,15 @@ namespace EgsEcfEditorApp
                 ElementTreeView.LinkTreeView(UnlockLevelListView);
                 ElementTreeView.LinkTreeView(UnlockCostListView);
 
-                ElementTreeView.Dock = DockStyle.Fill;
-                UnlockLevelListView.Dock = DockStyle.Fill;
-                UnlockCostListView.Dock = DockStyle.Fill;
                 ViewPanel.Dock = DockStyle.Fill;
 
-                ElementTreeView.ShowPlusMinus = false;
-                UnlockLevelListView.ShowPlusMinus = false;
-                UnlockLevelListView.ShowRootLines = false;
-                UnlockCostListView.ShowPlusMinus = false;
-                UnlockCostListView.ShowRootLines = false;
+                InitTreeView(ElementTreeView);
+                InitTreeView(UnlockLevelListView);
+                InitTreeView(UnlockCostListView);
+
+                ElementTreeView.NodeMouseClick += ElementTreeView_NodeMouseClick;
+                UnlockLevelListView.NodeMouseClick += UnlockLevelListView_NodeMouseClick;
+                UnlockCostListView.NodeMouseClick += UnlockCostListView_NodeMouseClick;
 
                 ViewPanel.ColumnCount = 3;
                 ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.0f));
@@ -159,13 +158,40 @@ namespace EgsEcfEditorApp
                 ViewPanel.RowStyles.Add(new RowStyle(SizeType.Percent,1.0f));
                 ViewPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
 
-                ViewPanel.Controls.Add(new Label() { Text = "Name", TextAlign = ContentAlignment.MiddleLeft, Dock = DockStyle.Fill }, 0, 0);
-                ViewPanel.Controls.Add(new Label() { Text = "Level", TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 1, 0);
-                ViewPanel.Controls.Add(new Label() { Text = "Cost", TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 2, 0);
+                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Name, TextAlign = ContentAlignment.MiddleLeft, Dock = DockStyle.Fill }, 0, 0);
+                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Level, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 1, 0);
+                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Cost, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 2, 0);
                 ViewPanel.Controls.Add(ElementTreeView, 0, 1);
                 ViewPanel.Controls.Add(UnlockLevelListView, 1, 1);
                 ViewPanel.Controls.Add(UnlockCostListView, 2, 1);
                 Controls.Add(ViewPanel);
+            }
+
+            // events
+            private void InitTreeView(EcfTreeView view)
+            {
+                view.Dock = DockStyle.Fill;
+                view.HideSelection = false;
+                view.ShowPlusMinus = false;
+                view.ShowRootLines = false;
+            }
+            private void ElementTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+            {
+                Stack<int> indexPath = GetIndexPath(evt.Node);
+                SelectIndexPath(indexPath, UnlockLevelListView);
+                SelectIndexPath(indexPath, UnlockCostListView);
+            }
+            private void UnlockLevelListView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+            {
+                Stack<int> indexPath = GetIndexPath(evt.Node);
+                SelectIndexPath(indexPath, ElementTreeView);
+                SelectIndexPath(indexPath, UnlockCostListView);
+            }
+            private void UnlockCostListView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+            {
+                Stack<int> indexPath = GetIndexPath(evt.Node);
+                SelectIndexPath(indexPath, ElementTreeView);
+                SelectIndexPath(indexPath, UnlockLevelListView);
             }
 
             // publics
@@ -198,9 +224,9 @@ namespace EgsEcfEditorApp
                 if (parent != null)
                 {
                     parent.Nodes.Add(elementNode);
-                    Stack<int> indexPath = GetIndexPath(parent);
-                    //AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
-                    //AddToIndexPath(indexPath, UnlockCostListView, costNode);
+                    Stack<int> indexPath = GetIndexPath(elementNode);
+                    AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
+                    AddToIndexPath(indexPath, UnlockCostListView, costNode);
                 }
                 else
                 {
@@ -255,7 +281,7 @@ namespace EgsEcfEditorApp
                 TreeNodeCollection nodes = view.Nodes;
                 if (indexPath != null && indexPath.Count > 0)
                 {
-                    Stack<int> path = new Stack<int>(indexPath);
+                    Stack<int> path = new Stack<int>(indexPath.Reverse());
                     while (path.Count > 1)
                     {
                         nodes = nodes[path.Pop()].Nodes;
@@ -265,6 +291,19 @@ namespace EgsEcfEditorApp
                 else
                 {
                     nodes.Add(node);
+                }
+            }
+            private void SelectIndexPath(Stack<int> indexPath, TreeView view)
+            {
+                TreeNodeCollection nodes = view.Nodes;
+                if (indexPath != null && indexPath.Count > 0)
+                {
+                    Stack<int> path = new Stack<int>(indexPath.Reverse());
+                    while (path.Count > 1)
+                    {
+                        nodes = nodes[path.Pop()].Nodes;
+                    }
+                    view.SelectedNode = nodes[path.Pop()];
                 }
             }
         }
@@ -281,7 +320,7 @@ namespace EgsEcfEditorApp
             {
                 UnlockLevel = unlockLevel;
                 UnlockCost = unlockCost;
-                ElementName = element.GetAttributeFirstValue("Name");
+                ElementName = element.GetAttributeFirstValue(InternalSettings.Default.EcfTechTreeDialog_NameReferenceAttribute);
                 TechTreeParentName = techTreeParentName;
                 Element = element;
 

@@ -817,6 +817,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cost.
+        /// </summary>
+        internal static string Generic_Cost {
+            get {
+                return ResourceManager.GetString("Generic_Cost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data item.
         /// </summary>
         internal static string Generic_DataElement {
@@ -921,6 +930,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_IsOptional {
             get {
                 return ResourceManager.GetString("Generic_IsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        internal static string Generic_Level {
+            get {
+                return ResourceManager.GetString("Generic_Level", resourceCulture);
             }
         }
         

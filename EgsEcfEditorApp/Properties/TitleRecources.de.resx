@@ -369,6 +369,9 @@
   <data name="Generic_Copy" xml:space="preserve">
     <value>Kopieren</value>
   </data>
+  <data name="Generic_Cost" xml:space="preserve">
+    <value>Kosten</value>
+  </data>
   <data name="Generic_DataElement" xml:space="preserve">
     <value>Daten Element</value>
   </data>
@@ -404,6 +407,9 @@
   </data>
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Ist optional</value>
+  </data>
+  <data name="Generic_Level" xml:space="preserve">
+    <value>Level</value>
   </data>
   <data name="Generic_License" xml:space="preserve">
     <value>Lizenz</value>

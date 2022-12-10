@@ -68,5 +68,8 @@
     <Setting Name="EcfFileCAMDialog_PageSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="EcfTechTreeDialog_NameReferenceAttribute" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

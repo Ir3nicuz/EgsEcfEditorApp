@@ -204,13 +204,13 @@ namespace EgsEcfEditorApp
                 UnlockLevelListView.BeginUpdate();
                 UnlockCostListView.BeginUpdate();
 
-                ElementTreeView.Nodes.Cast<TechTreeElementNode>().ToList().ForEach(unboundElement =>
+                ElementTreeView.Nodes.Cast<TechTreeElementNode>().ToList().ForEach(rootElement =>
                 {
-                    if (!string.IsNullOrEmpty(unboundElement.TechTreeParentName) && string.Equals(unboundElement.TechTreeParentName, elementNode.ElementName))
+                    if (!string.IsNullOrEmpty(rootElement.TechTreeParentName) && string.Equals(rootElement.TechTreeParentName, elementNode.ElementName))
                     {
-                        int index = ElementTreeView.Nodes.IndexOf(unboundElement);
+                        int index = ElementTreeView.Nodes.IndexOf(rootElement);
 
-                        elementNode.Nodes.Add(unboundElement);
+                        elementNode.Nodes.Add(rootElement);
                         levelNode.Nodes.Add(UnlockLevelListView.Nodes[index]);
                         costNode.Nodes.Add(UnlockCostListView.Nodes[index]);
 

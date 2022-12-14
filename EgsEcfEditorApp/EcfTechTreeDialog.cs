@@ -199,7 +199,7 @@ namespace EgsEcfEditorApp
             {
                 UnlockLevelNode levelNode = new UnlockLevelNode(elementNode.UnlockLevel, elementNode.Element);
                 UnlockCostNode costNode = new UnlockCostNode(elementNode.UnlockCost, elementNode.Element);
-                
+
                 ElementTreeView.BeginUpdate();
                 UnlockLevelListView.BeginUpdate();
                 UnlockCostListView.BeginUpdate();
@@ -210,13 +210,16 @@ namespace EgsEcfEditorApp
                     {
                         int index = ElementTreeView.Nodes.IndexOf(rootElement);
 
-                        elementNode.Nodes.Add(rootElement);
-                        levelNode.Nodes.Add(UnlockLevelListView.Nodes[index]);
-                        costNode.Nodes.Add(UnlockCostListView.Nodes[index]);
+                        TreeNode levelParentNode = UnlockLevelListView.Nodes[index];
+                        TreeNode costParentNode = UnlockCostListView.Nodes[index];
 
                         ElementTreeView.Nodes.RemoveAt(index);
                         UnlockLevelListView.Nodes.RemoveAt(index);
                         UnlockCostListView.Nodes.RemoveAt(index);
+
+                        elementNode.Nodes.Add(rootElement);
+                        levelNode.Nodes.Add(levelParentNode);
+                        costNode.Nodes.Add(costParentNode);
                     }
                 });
 

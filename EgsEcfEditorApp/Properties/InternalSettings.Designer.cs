@@ -298,5 +298,29 @@ namespace EgsEcfEditorApp.Properties {
                 this["EcfTechTreeDialog_NameReferenceAttribute"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string EcfTechTreeDialog_DefaultUnlockLevel {
+            get {
+                return ((string)(this["EcfTechTreeDialog_DefaultUnlockLevel"]));
+            }
+            set {
+                this["EcfTechTreeDialog_DefaultUnlockLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string EcfTechTreeDialog_DefaultUnlockCost {
+            get {
+                return ((string)(this["EcfTechTreeDialog_DefaultUnlockCost"]));
+            }
+            set {
+                this["EcfTechTreeDialog_DefaultUnlockCost"] = value;
+            }
+        }
     }
 }

@@ -282,6 +282,12 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
+    <value>The default value if an element has no unlock cost value specified</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel" xml:space="preserve">
+    <value>The default value if an element has no unlock level value specified</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the error view</value>
   </data>
@@ -290,6 +296,21 @@
   </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>If activated, items with at least one invalid sub item will not be saved</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyReferenceName" xml:space="preserve">
+    <value>The name of the parameter key which will be used for element naming and parent referencing</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
+    <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
+    <value>The name of the parameter key which contains the tech tree parent element name</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock cost value</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock level value</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the parameter view</value>

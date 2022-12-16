@@ -68,14 +68,5 @@
     <Setting Name="EcfFileCAMDialog_PageSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_NameReferenceAttribute" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Name</Value>
-    </Setting>
-    <Setting Name="EcfTechTreeDialog_DefaultUnlockLevel" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="EcfTechTreeDialog_DefaultUnlockCost" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

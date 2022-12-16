@@ -30,11 +30,12 @@ namespace EgsEcfEditorApp
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("sorter");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("info");
+            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("general");
+            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("creation");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("filter");
+            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("sorter");
+            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("techTree");
+            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("info");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -43,8 +44,8 @@ namespace EgsEcfEditorApp
             this.SettingPanelsTabControl = new System.Windows.Forms.TabControl();
             this.GeneralTabPage = new System.Windows.Forms.TabPage();
             this.GeneralSettingsPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.GameVersionFolderLabel = new System.Windows.Forms.Label();
-            this.GameVersionFolderComboBox = new System.Windows.Forms.ComboBox();
+            this.GameVersionLabel = new System.Windows.Forms.Label();
+            this.GameVersionComboBox = new System.Windows.Forms.ComboBox();
             this.CreationTabPage = new System.Windows.Forms.TabPage();
             this.CreationPanel = new System.Windows.Forms.TableLayoutPanel();
             this.WriteOnlyValidItemsCheckBox = new System.Windows.Forms.CheckBox();
@@ -69,6 +70,22 @@ namespace EgsEcfEditorApp
             this.TreeViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ParameterViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
             this.ErrorViewSorterInitCountComboBox = new System.Windows.Forms.ComboBox();
+            this.TechTreeTabPage = new System.Windows.Forms.TabPage();
+            this.TechTreePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.TechTreeDefaultValueUnlockCostNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TechTreeParameterKeyUnlockCostTextBox = new System.Windows.Forms.TextBox();
+            this.TechTreeParameterKeyUnlockLevelTextBox = new System.Windows.Forms.TextBox();
+            this.TechTreeParameterKeyTechTreeParentNameTextBox = new System.Windows.Forms.TextBox();
+            this.TechTreeParameterKeyTechTreeNamesTextBox = new System.Windows.Forms.TextBox();
+            this.TechTreeParameterKeyReferenceNameLabel = new System.Windows.Forms.Label();
+            this.TechTreeParameterKeyTechTreeNamesLabel = new System.Windows.Forms.Label();
+            this.TechTreeParameterKeyTechTreeParentNameLabel = new System.Windows.Forms.Label();
+            this.TechTreeParameterKeyUnlockLevelLabel = new System.Windows.Forms.Label();
+            this.TechTreeDefaultValueUnlockLevelLabel = new System.Windows.Forms.Label();
+            this.TechTreeParameterKeyUnlockCostLabel = new System.Windows.Forms.Label();
+            this.TechTreeDefaultValueUnlockCostLabel = new System.Windows.Forms.Label();
+            this.TechTreeParameterKeyReferenceNameTextBox = new System.Windows.Forms.TextBox();
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
             this.InfoPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ReadmeTitleLabel = new System.Windows.Forms.Label();
@@ -93,6 +110,10 @@ namespace EgsEcfEditorApp
             this.FilterPanel.SuspendLayout();
             this.SorterTabPage.SuspendLayout();
             this.SorterPanel.SuspendLayout();
+            this.TechTreeTabPage.SuspendLayout();
+            this.TechTreePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TechTreeDefaultValueUnlockCostNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TechTreeDefaultValueUnlockLevelNumericUpDown)).BeginInit();
             this.InfoTabPage.SuspendLayout();
             this.InfoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
@@ -152,22 +173,25 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode1.Name = "GeneralNode";
-            treeNode1.Text = "general";
-            treeNode2.Name = "CreationNode";
-            treeNode2.Text = "creation";
-            treeNode3.Name = "FilterNode";
-            treeNode3.Text = "filter";
-            treeNode4.Name = "SorterNode";
-            treeNode4.Text = "sorter";
-            treeNode5.Name = "InfoNode";
-            treeNode5.Text = "info";
+            treeNode37.Name = "GeneralNode";
+            treeNode37.Text = "general";
+            treeNode38.Name = "CreationNode";
+            treeNode38.Text = "creation";
+            treeNode39.Name = "FilterNode";
+            treeNode39.Text = "filter";
+            treeNode40.Name = "SorterNode";
+            treeNode40.Text = "sorter";
+            treeNode41.Name = "TechTreeNode";
+            treeNode41.Text = "techTree";
+            treeNode42.Name = "InfoNode";
+            treeNode42.Text = "info";
             this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4,
-            treeNode5});
+            treeNode37,
+            treeNode38,
+            treeNode39,
+            treeNode40,
+            treeNode41,
+            treeNode42});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
@@ -178,6 +202,7 @@ namespace EgsEcfEditorApp
             this.SettingPanelsTabControl.Controls.Add(this.CreationTabPage);
             this.SettingPanelsTabControl.Controls.Add(this.FilterTabPage);
             this.SettingPanelsTabControl.Controls.Add(this.SorterTabPage);
+            this.SettingPanelsTabControl.Controls.Add(this.TechTreeTabPage);
             this.SettingPanelsTabControl.Controls.Add(this.InfoTabPage);
             this.SettingPanelsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingPanelsTabControl.Location = new System.Drawing.Point(0, 0);
@@ -203,8 +228,8 @@ namespace EgsEcfEditorApp
             this.GeneralSettingsPanel.ColumnCount = 2;
             this.GeneralSettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.GeneralSettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GeneralSettingsPanel.Controls.Add(this.GameVersionFolderLabel, 0, 0);
-            this.GeneralSettingsPanel.Controls.Add(this.GameVersionFolderComboBox, 1, 0);
+            this.GeneralSettingsPanel.Controls.Add(this.GameVersionLabel, 0, 0);
+            this.GeneralSettingsPanel.Controls.Add(this.GameVersionComboBox, 1, 0);
             this.GeneralSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralSettingsPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.GeneralSettingsPanel.Location = new System.Drawing.Point(3, 3);
@@ -215,28 +240,28 @@ namespace EgsEcfEditorApp
             this.GeneralSettingsPanel.Size = new System.Drawing.Size(546, 330);
             this.GeneralSettingsPanel.TabIndex = 0;
             // 
-            // GameVersionFolderLabel
+            // GameVersionLabel
             // 
-            this.GameVersionFolderLabel.AutoSize = true;
-            this.GameVersionFolderLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GameVersionFolderLabel.Location = new System.Drawing.Point(3, 0);
-            this.GameVersionFolderLabel.Name = "GameVersionFolderLabel";
-            this.GameVersionFolderLabel.Size = new System.Drawing.Size(267, 27);
-            this.GameVersionFolderLabel.TabIndex = 0;
-            this.GameVersionFolderLabel.Text = "label1";
-            this.GameVersionFolderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GameVersionLabel.AutoSize = true;
+            this.GameVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GameVersionLabel.Location = new System.Drawing.Point(3, 0);
+            this.GameVersionLabel.Name = "GameVersionLabel";
+            this.GameVersionLabel.Size = new System.Drawing.Size(267, 27);
+            this.GameVersionLabel.TabIndex = 0;
+            this.GameVersionLabel.Text = "game version";
+            this.GameVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // GameVersionFolderComboBox
+            // GameVersionComboBox
             // 
-            this.GameVersionFolderComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GameVersionFolderComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.GameVersionFolderComboBox.FormattingEnabled = true;
-            this.GameVersionFolderComboBox.Location = new System.Drawing.Point(276, 3);
-            this.GameVersionFolderComboBox.Name = "GameVersionFolderComboBox";
-            this.GameVersionFolderComboBox.Size = new System.Drawing.Size(267, 21);
-            this.GameVersionFolderComboBox.Sorted = true;
-            this.GameVersionFolderComboBox.TabIndex = 1;
-            this.GameVersionFolderComboBox.SelectionChangeCommitted += new System.EventHandler(this.GameVersionFolderComboBox_SelectionChangeCommitted);
+            this.GameVersionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GameVersionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.GameVersionComboBox.FormattingEnabled = true;
+            this.GameVersionComboBox.Location = new System.Drawing.Point(276, 3);
+            this.GameVersionComboBox.Name = "GameVersionComboBox";
+            this.GameVersionComboBox.Size = new System.Drawing.Size(267, 21);
+            this.GameVersionComboBox.Sorted = true;
+            this.GameVersionComboBox.TabIndex = 1;
+            this.GameVersionComboBox.SelectionChangeCommitted += new System.EventHandler(this.GameVersionFolderComboBox_SelectionChangeCommitted);
             // 
             // CreationTabPage
             // 
@@ -539,6 +564,212 @@ namespace EgsEcfEditorApp
             this.ErrorViewSorterInitCountComboBox.TabIndex = 5;
             this.ErrorViewSorterInitCountComboBox.SelectionChangeCommitted += new System.EventHandler(this.ErrorViewSorterInitCountComboBox_SelectionChangeCommitted);
             // 
+            // TechTreeTabPage
+            // 
+            this.TechTreeTabPage.Controls.Add(this.TechTreePanel);
+            this.TechTreeTabPage.Location = new System.Drawing.Point(4, 22);
+            this.TechTreeTabPage.Name = "TechTreeTabPage";
+            this.TechTreeTabPage.Size = new System.Drawing.Size(552, 336);
+            this.TechTreeTabPage.TabIndex = 5;
+            this.TechTreeTabPage.Text = "techTree";
+            this.TechTreeTabPage.UseVisualStyleBackColor = true;
+            // 
+            // TechTreePanel
+            // 
+            this.TechTreePanel.AutoSize = true;
+            this.TechTreePanel.ColumnCount = 2;
+            this.TechTreePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TechTreePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostNumericUpDown, 1, 6);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostTextBox, 1, 5);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelTextBox, 1, 3);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameTextBox, 1, 2);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesTextBox, 1, 1);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyReferenceNameLabel, 0, 0);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesLabel, 0, 1);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameLabel, 0, 2);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelLabel, 0, 3);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelLabel, 0, 4);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostLabel, 0, 5);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostLabel, 0, 6);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyReferenceNameTextBox, 1, 0);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelNumericUpDown, 1, 4);
+            this.TechTreePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.TechTreePanel.Location = new System.Drawing.Point(0, 0);
+            this.TechTreePanel.Name = "TechTreePanel";
+            this.TechTreePanel.RowCount = 8;
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TechTreePanel.Size = new System.Drawing.Size(552, 336);
+            this.TechTreePanel.TabIndex = 1;
+            // 
+            // TechTreeDefaultValueUnlockCostNumericUpDown
+            // 
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Location = new System.Drawing.Point(279, 159);
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Name = "TechTreeDefaultValueUnlockCostNumericUpDown";
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.TabIndex = 14;
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.ValueChanged += new System.EventHandler(this.TechTreeDefaultValueUnlockCostNumericUpDown_ValueChanged);
+            // 
+            // TechTreeParameterKeyUnlockCostTextBox
+            // 
+            this.TechTreeParameterKeyUnlockCostTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyUnlockCostTextBox.Location = new System.Drawing.Point(279, 133);
+            this.TechTreeParameterKeyUnlockCostTextBox.Name = "TechTreeParameterKeyUnlockCostTextBox";
+            this.TechTreeParameterKeyUnlockCostTextBox.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeParameterKeyUnlockCostTextBox.TabIndex = 12;
+            this.TechTreeParameterKeyUnlockCostTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyUnlockCostTextBox_TextChanged);
+            // 
+            // TechTreeParameterKeyUnlockLevelTextBox
+            // 
+            this.TechTreeParameterKeyUnlockLevelTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyUnlockLevelTextBox.Location = new System.Drawing.Point(279, 81);
+            this.TechTreeParameterKeyUnlockLevelTextBox.Name = "TechTreeParameterKeyUnlockLevelTextBox";
+            this.TechTreeParameterKeyUnlockLevelTextBox.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeParameterKeyUnlockLevelTextBox.TabIndex = 10;
+            this.TechTreeParameterKeyUnlockLevelTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyUnlockLevelTextBox_TextChanged);
+            // 
+            // TechTreeParameterKeyTechTreeParentNameTextBox
+            // 
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.Location = new System.Drawing.Point(279, 55);
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.Name = "TechTreeParameterKeyTechTreeParentNameTextBox";
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.TabIndex = 9;
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyTechTreeParentNameTextBox_TextChanged);
+            // 
+            // TechTreeParameterKeyTechTreeNamesTextBox
+            // 
+            this.TechTreeParameterKeyTechTreeNamesTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyTechTreeNamesTextBox.Location = new System.Drawing.Point(279, 29);
+            this.TechTreeParameterKeyTechTreeNamesTextBox.Name = "TechTreeParameterKeyTechTreeNamesTextBox";
+            this.TechTreeParameterKeyTechTreeNamesTextBox.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeParameterKeyTechTreeNamesTextBox.TabIndex = 8;
+            this.TechTreeParameterKeyTechTreeNamesTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyTechTreeNamesTextBox_TextChanged);
+            // 
+            // TechTreeParameterKeyReferenceNameLabel
+            // 
+            this.TechTreeParameterKeyReferenceNameLabel.AutoSize = true;
+            this.TechTreeParameterKeyReferenceNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyReferenceNameLabel.Location = new System.Drawing.Point(3, 0);
+            this.TechTreeParameterKeyReferenceNameLabel.Name = "TechTreeParameterKeyReferenceNameLabel";
+            this.TechTreeParameterKeyReferenceNameLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeParameterKeyReferenceNameLabel.TabIndex = 0;
+            this.TechTreeParameterKeyReferenceNameLabel.Text = "ref name key";
+            this.TechTreeParameterKeyReferenceNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeParameterKeyTechTreeNamesLabel
+            // 
+            this.TechTreeParameterKeyTechTreeNamesLabel.AutoSize = true;
+            this.TechTreeParameterKeyTechTreeNamesLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyTechTreeNamesLabel.Location = new System.Drawing.Point(3, 26);
+            this.TechTreeParameterKeyTechTreeNamesLabel.Name = "TechTreeParameterKeyTechTreeNamesLabel";
+            this.TechTreeParameterKeyTechTreeNamesLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeParameterKeyTechTreeNamesLabel.TabIndex = 1;
+            this.TechTreeParameterKeyTechTreeNamesLabel.Text = "tech tree names key";
+            this.TechTreeParameterKeyTechTreeNamesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeParameterKeyTechTreeParentNameLabel
+            // 
+            this.TechTreeParameterKeyTechTreeParentNameLabel.AutoSize = true;
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Location = new System.Drawing.Point(3, 52);
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Name = "TechTreeParameterKeyTechTreeParentNameLabel";
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeParameterKeyTechTreeParentNameLabel.TabIndex = 2;
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Text = "tech tree parent key";
+            this.TechTreeParameterKeyTechTreeParentNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeParameterKeyUnlockLevelLabel
+            // 
+            this.TechTreeParameterKeyUnlockLevelLabel.AutoSize = true;
+            this.TechTreeParameterKeyUnlockLevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyUnlockLevelLabel.Location = new System.Drawing.Point(3, 78);
+            this.TechTreeParameterKeyUnlockLevelLabel.Name = "TechTreeParameterKeyUnlockLevelLabel";
+            this.TechTreeParameterKeyUnlockLevelLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeParameterKeyUnlockLevelLabel.TabIndex = 3;
+            this.TechTreeParameterKeyUnlockLevelLabel.Text = "unlock level key";
+            this.TechTreeParameterKeyUnlockLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeDefaultValueUnlockLevelLabel
+            // 
+            this.TechTreeDefaultValueUnlockLevelLabel.AutoSize = true;
+            this.TechTreeDefaultValueUnlockLevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeDefaultValueUnlockLevelLabel.Location = new System.Drawing.Point(3, 104);
+            this.TechTreeDefaultValueUnlockLevelLabel.Name = "TechTreeDefaultValueUnlockLevelLabel";
+            this.TechTreeDefaultValueUnlockLevelLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeDefaultValueUnlockLevelLabel.TabIndex = 4;
+            this.TechTreeDefaultValueUnlockLevelLabel.Text = "unlock level default value";
+            this.TechTreeDefaultValueUnlockLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeParameterKeyUnlockCostLabel
+            // 
+            this.TechTreeParameterKeyUnlockCostLabel.AutoSize = true;
+            this.TechTreeParameterKeyUnlockCostLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyUnlockCostLabel.Location = new System.Drawing.Point(3, 130);
+            this.TechTreeParameterKeyUnlockCostLabel.Name = "TechTreeParameterKeyUnlockCostLabel";
+            this.TechTreeParameterKeyUnlockCostLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeParameterKeyUnlockCostLabel.TabIndex = 5;
+            this.TechTreeParameterKeyUnlockCostLabel.Text = "unlock cost key";
+            this.TechTreeParameterKeyUnlockCostLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeDefaultValueUnlockCostLabel
+            // 
+            this.TechTreeDefaultValueUnlockCostLabel.AutoSize = true;
+            this.TechTreeDefaultValueUnlockCostLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeDefaultValueUnlockCostLabel.Location = new System.Drawing.Point(3, 156);
+            this.TechTreeDefaultValueUnlockCostLabel.Name = "TechTreeDefaultValueUnlockCostLabel";
+            this.TechTreeDefaultValueUnlockCostLabel.Size = new System.Drawing.Size(270, 26);
+            this.TechTreeDefaultValueUnlockCostLabel.TabIndex = 6;
+            this.TechTreeDefaultValueUnlockCostLabel.Text = "unlock cost default value";
+            this.TechTreeDefaultValueUnlockCostLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TechTreeParameterKeyReferenceNameTextBox
+            // 
+            this.TechTreeParameterKeyReferenceNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeParameterKeyReferenceNameTextBox.Location = new System.Drawing.Point(279, 3);
+            this.TechTreeParameterKeyReferenceNameTextBox.Name = "TechTreeParameterKeyReferenceNameTextBox";
+            this.TechTreeParameterKeyReferenceNameTextBox.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeParameterKeyReferenceNameTextBox.TabIndex = 7;
+            this.TechTreeParameterKeyReferenceNameTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyReferenceNameTextBox_TextChanged);
+            // 
+            // TechTreeDefaultValueUnlockLevelNumericUpDown
+            // 
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Location = new System.Drawing.Point(279, 107);
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Name = "TechTreeDefaultValueUnlockLevelNumericUpDown";
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Size = new System.Drawing.Size(270, 20);
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.TabIndex = 13;
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.ValueChanged += new System.EventHandler(this.TechTreeDefaultValueUnlockLevelNumericUpDown_ValueChanged);
+            // 
             // InfoTabPage
             // 
             this.InfoTabPage.Controls.Add(this.InfoPanel);
@@ -753,6 +984,12 @@ namespace EgsEcfEditorApp
             this.SorterTabPage.PerformLayout();
             this.SorterPanel.ResumeLayout(false);
             this.SorterPanel.PerformLayout();
+            this.TechTreeTabPage.ResumeLayout(false);
+            this.TechTreeTabPage.PerformLayout();
+            this.TechTreePanel.ResumeLayout(false);
+            this.TechTreePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TechTreeDefaultValueUnlockCostNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TechTreeDefaultValueUnlockLevelNumericUpDown)).EndInit();
             this.InfoTabPage.ResumeLayout(false);
             this.InfoTabPage.PerformLayout();
             this.InfoPanel.ResumeLayout(false);
@@ -778,8 +1015,8 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TabPage SorterTabPage;
         private System.Windows.Forms.Panel SettingsBorderPanel;
         private System.Windows.Forms.TableLayoutPanel GeneralSettingsPanel;
-        private System.Windows.Forms.Label GameVersionFolderLabel;
-        private System.Windows.Forms.ComboBox GameVersionFolderComboBox;
+        private System.Windows.Forms.Label GameVersionLabel;
+        private System.Windows.Forms.ComboBox GameVersionComboBox;
         private System.Windows.Forms.TableLayoutPanel CreationPanel;
         private System.Windows.Forms.CheckBox WriteOnlyValidItemsCheckBox;
         private System.Windows.Forms.CheckBox InvalidateParentsOnErrorCheckBox;
@@ -814,5 +1051,21 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.LinkLabel LicenseDataLinkLabel;
         private System.Windows.Forms.LinkLabel ReadmeDataLinkLabel;
         private System.Windows.Forms.ToolTip Tip;
+        private System.Windows.Forms.TabPage TechTreeTabPage;
+        private System.Windows.Forms.TableLayoutPanel TechTreePanel;
+        private System.Windows.Forms.Label TechTreeParameterKeyReferenceNameLabel;
+        private System.Windows.Forms.TextBox TechTreeParameterKeyUnlockCostTextBox;
+        private System.Windows.Forms.TextBox TechTreeParameterKeyUnlockLevelTextBox;
+        private System.Windows.Forms.TextBox TechTreeParameterKeyTechTreeParentNameTextBox;
+        private System.Windows.Forms.TextBox TechTreeParameterKeyTechTreeNamesTextBox;
+        private System.Windows.Forms.Label TechTreeParameterKeyTechTreeNamesLabel;
+        private System.Windows.Forms.Label TechTreeParameterKeyTechTreeParentNameLabel;
+        private System.Windows.Forms.Label TechTreeParameterKeyUnlockLevelLabel;
+        private System.Windows.Forms.Label TechTreeDefaultValueUnlockLevelLabel;
+        private System.Windows.Forms.Label TechTreeParameterKeyUnlockCostLabel;
+        private System.Windows.Forms.Label TechTreeDefaultValueUnlockCostLabel;
+        private System.Windows.Forms.TextBox TechTreeParameterKeyReferenceNameTextBox;
+        private System.Windows.Forms.NumericUpDown TechTreeDefaultValueUnlockCostNumericUpDown;
+        private System.Windows.Forms.NumericUpDown TechTreeDefaultValueUnlockLevelNumericUpDown;
     }
 }

@@ -312,6 +312,30 @@
   <data name="EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount" xml:space="preserve">
     <value>Tree view item count preset</value>
   </data>
+  <data name="EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost" xml:space="preserve">
+    <value>Default Value 'Unlock Cost'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel" xml:space="preserve">
+    <value>Default Value 'Unlock Level'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_Header" xml:space="preserve">
+    <value>Tech Tree</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName" xml:space="preserve">
+    <value>Parameter Key 'Referenced Name'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames" xml:space="preserve">
+    <value>Parameter Key 'Tech Tree Names'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName" xml:space="preserve">
+    <value>Parameter Key 'Tech Tree Parent Name'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost" xml:space="preserve">
+    <value>Parameter Key 'Unlock Cost'</value>
+  </data>
+  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel" xml:space="preserve">
+    <value>Parameter Key 'Unlock Level'</value>
+  </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>Tech Tree preview and edit</value>
   </data>

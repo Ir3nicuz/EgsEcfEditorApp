@@ -95,7 +95,7 @@ namespace EgsEcfEditorApp
         private void GameVersionFolderComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = 
-                Convert.ToString(GameVersionFolderComboBox.SelectedItem);
+                Convert.ToString(GameVersionComboBox.SelectedItem);
             HasUnsavedData = true;
         }
         private void WriteOnlyValidItemsCheckBox_Click(object sender, EventArgs evt)
@@ -147,6 +147,48 @@ namespace EgsEcfEditorApp
                 Convert.ToInt32(ErrorViewSorterInitCountComboBox.SelectedItem);
             HasUnsavedData = true;
         }
+        private void TechTreeParameterKeyReferenceNameTextBox_TextChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName = 
+                TechTreeParameterKeyReferenceNameTextBox.Text;
+            HasUnsavedData = true;
+        }
+        private void TechTreeParameterKeyTechTreeNamesTextBox_TextChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames = 
+                TechTreeParameterKeyTechTreeNamesTextBox.Text;
+            HasUnsavedData = true;
+        }
+        private void TechTreeParameterKeyTechTreeParentNameTextBox_TextChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName = 
+                TechTreeParameterKeyTechTreeParentNameTextBox.Text;
+            HasUnsavedData = true;
+        }
+        private void TechTreeParameterKeyUnlockLevelTextBox_TextChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel = 
+                TechTreeParameterKeyUnlockLevelTextBox.Text;
+            HasUnsavedData = true;
+        }
+        private void TechTreeDefaultValueUnlockLevelNumericUpDown_ValueChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel = 
+                Convert.ToInt32(TechTreeDefaultValueUnlockLevelNumericUpDown.Value);
+            HasUnsavedData = true;
+        }
+        private void TechTreeParameterKeyUnlockCostTextBox_TextChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost = 
+                TechTreeParameterKeyUnlockCostTextBox.Text;
+            HasUnsavedData = true;
+        }
+        private void TechTreeDefaultValueUnlockCostNumericUpDown_ValueChanged(object sender, EventArgs evt)
+        {
+            UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost = 
+                Convert.ToInt32(TechTreeDefaultValueUnlockCostNumericUpDown.Value);
+            HasUnsavedData = true;
+        }
         private void LicenseDataLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
         {
             Process.Start(Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTrademarkAttribute), false).Cast<AssemblyTrademarkAttribute>().FirstOrDefault().Trademark);
@@ -159,51 +201,81 @@ namespace EgsEcfEditorApp
         // privates
         private void InitPanels()
         {
-            InitGeneralPanel();
-            InitCreationPanel();
-            InitFilterPanel();
-            InitSorterPanel();
-            InitInfoPanel();
+            InitGeneralPanel(0);
+            InitCreationPanel(1);
+            InitFilterPanel(2);
+            InitSorterPanel(3);
+            InitTechTreePanel(4);
+            InitInfoPanel(5);
         }
-        private void InitGeneralPanel()
+        private void InitGeneralPanel(int index)
         {
-            ChapterSelectorTreeView.Nodes[0].Text = TitleRecources.EcfSettingsDialog_GeneralPanel_Header;
-            GameVersionFolderLabel.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameVersion;
-            Tip.SetToolTip(GameVersionFolderComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameVersionFolder);
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_GeneralPanel_Header;
+
+            GameVersionLabel.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameVersion;
+
+            Tip.SetToolTip(GameVersionComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameVersionFolder);
         }
-        private void InitCreationPanel()
+        private void InitCreationPanel(int index)
         {
-            ChapterSelectorTreeView.Nodes[1].Text = TitleRecources.EcfSettingsDialog_CreationPanel_Header;
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_CreationPanel_Header;
+
             WriteOnlyValidItemsLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_WriteOnlyValidItems;
             InvalidateParentsOnErrorLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_InvalidateParentOnError;
             AllowFallbackToParsedDataLabel.Text = TitleRecources.EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData;
+
             Tip.SetToolTip(WriteOnlyValidItemsCheckBox, TextRecources.EcfSettingsDialog_ToolTip_WriteOnlyValidItems);
             Tip.SetToolTip(InvalidateParentsOnErrorCheckBox, TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError);
             Tip.SetToolTip(AllowFallbackToParsedDataCheckBox, TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData);
         }
-        private void InitFilterPanel()
+        private void InitFilterPanel(int index)
         {
-            ChapterSelectorTreeView.Nodes[2].Text = TitleRecources.EcfSettingsDialog_FilterPanel_Header;
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_FilterPanel_Header;
+
             TreeViewFilterCommentsInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive;
             TreeViewFilterParametersInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive;
             TreeViewFilterDataBlocksInitActiveLabel.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive;
+
             Tip.SetToolTip(TreeViewFilterCommentsInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive);
             Tip.SetToolTip(TreeViewFilterParametersInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive);
             Tip.SetToolTip(TreeViewFilterDataBlocksInitActiveCheckBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive);
         }
-        private void InitSorterPanel()
+        private void InitSorterPanel(int index)
         {
-            ChapterSelectorTreeView.Nodes[3].Text = TitleRecources.EcfSettingsDialog_SorterPanel_Header;
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_SorterPanel_Header;
+
             TreeViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount;
             ParameterViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount;
             ErrorViewSorterInitCountLabel.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount;
+
             Tip.SetToolTip(TreeViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_TreeViewSorterInitCount);
             Tip.SetToolTip(ParameterViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount);
             Tip.SetToolTip(ErrorViewSorterInitCountComboBox, TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount);
         }
-        private void InitInfoPanel()
+        private void InitTechTreePanel(int index)
         {
-            ChapterSelectorTreeView.Nodes[4].Text = TitleRecources.EcfSettingsDialog_InfoPanel_Header;
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_TechTreePanel_Header;
+
+            TechTreeParameterKeyReferenceNameLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName;
+            TechTreeParameterKeyTechTreeNamesLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames;
+            TechTreeParameterKeyTechTreeParentNameLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName;
+            TechTreeParameterKeyUnlockLevelLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel;
+            TechTreeDefaultValueUnlockLevelLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel;
+            TechTreeParameterKeyUnlockCostLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost;
+            TechTreeDefaultValueUnlockCostLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost;
+
+            Tip.SetToolTip(TechTreeParameterKeyReferenceNameTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyReferenceName);
+            Tip.SetToolTip(TechTreeParameterKeyTechTreeNamesTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames);
+            Tip.SetToolTip(TechTreeParameterKeyTechTreeParentNameTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName);
+            Tip.SetToolTip(TechTreeParameterKeyUnlockLevelTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel);
+            Tip.SetToolTip(TechTreeDefaultValueUnlockLevelNumericUpDown, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel);
+            Tip.SetToolTip(TechTreeParameterKeyUnlockCostTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost);
+            Tip.SetToolTip(TechTreeDefaultValueUnlockCostNumericUpDown, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockCost);
+        }
+        private void InitInfoPanel(int index)
+        {
+            ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_InfoPanel_Header;
+
             AuthorTitleLabel.Text = TitleRecources.Generic_Author;
             VersionTitleLabel.Text = TitleRecources.Generic_Version;
             LicenseTitleLabel.Text = TitleRecources.Generic_License;
@@ -227,7 +299,8 @@ namespace EgsEcfEditorApp
                 case 1: SettingPanelsTabControl.TabPages.Add(CreationTabPage); break;
                 case 2: SettingPanelsTabControl.TabPages.Add(FilterTabPage); break;
                 case 3: SettingPanelsTabControl.TabPages.Add(SorterTabPage); break;
-                case 4: SettingPanelsTabControl.TabPages.Add(InfoTabPage); break;
+                case 4: SettingPanelsTabControl.TabPages.Add(TechTreeTabPage); break;
+                case 5: SettingPanelsTabControl.TabPages.Add(InfoTabPage); break;
                 default: break;
             }
         }
@@ -239,10 +312,10 @@ namespace EgsEcfEditorApp
         }
         private void PrepareGeneralPanel()
         {
-            GameVersionFolderComboBox.BeginUpdate();
-            GameVersionFolderComboBox.Items.Clear();
-            GameVersionFolderComboBox.Items.AddRange(GetGameModes().ToArray());
-            GameVersionFolderComboBox.EndUpdate();
+            GameVersionComboBox.BeginUpdate();
+            GameVersionComboBox.Items.Clear();
+            GameVersionComboBox.Items.AddRange(GetGameModes().ToArray());
+            GameVersionComboBox.EndUpdate();
         }
         private void PrepareSorterPanel()
         {
@@ -268,13 +341,14 @@ namespace EgsEcfEditorApp
             PresetCreationPanel();
             PresetFilterPanel();
             PresetSorterPanel();
+            PresetTechTreePanel();
         }
         private void PresetGeneralPanel()
         {
-            GameVersionFolderComboBox.SelectedItem = UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion;
-            if (GameVersionFolderComboBox.SelectedIndex < 0)
+            GameVersionComboBox.SelectedItem = UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion;
+            if (GameVersionComboBox.SelectedIndex < 0)
             {
-                GameVersionFolderComboBox.SelectedIndex = 0;
+                GameVersionComboBox.SelectedIndex = 0;
             }
         }
         private void PresetCreationPanel()
@@ -309,6 +383,16 @@ namespace EgsEcfEditorApp
             {
                 ErrorViewSorterInitCountComboBox.SelectedIndex = 0;
             }
+        }
+        private void PresetTechTreePanel()
+        {
+            TechTreeParameterKeyReferenceNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName;
+            TechTreeParameterKeyTechTreeNamesTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
+            TechTreeParameterKeyTechTreeParentNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName;
+            TechTreeParameterKeyUnlockLevelTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
+            TechTreeDefaultValueUnlockLevelNumericUpDown.Value = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
+            TechTreeParameterKeyUnlockCostTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
+            TechTreeDefaultValueUnlockCostNumericUpDown.Value = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
         }
 
         private void UpdateCreationPanel()

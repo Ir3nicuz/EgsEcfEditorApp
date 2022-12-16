@@ -182,12 +182,48 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("TechTreeParent")]
-        public string EcfTechTreeDialog_ParameterKey_TechTreeParent {
+        public string EcfTechTreeDialog_ParameterKey_TechTreeParentName {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeParent"]));
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeParentName"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_TechTreeParent"] = value;
+                this["EcfTechTreeDialog_ParameterKey_TechTreeParentName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Name")]
+        public string EcfTechTreeDialog_ParameterKey_ReferenceName {
+            get {
+                return ((string)(this["EcfTechTreeDialog_ParameterKey_ReferenceName"]));
+            }
+            set {
+                this["EcfTechTreeDialog_ParameterKey_ReferenceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int EcfTechTreeDialog_DefaultValue_UnlockLevel {
+            get {
+                return ((int)(this["EcfTechTreeDialog_DefaultValue_UnlockLevel"]));
+            }
+            set {
+                this["EcfTechTreeDialog_DefaultValue_UnlockLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EcfTechTreeDialog_DefaultValue_UnlockCost {
+            get {
+                return ((int)(this["EcfTechTreeDialog_DefaultValue_UnlockCost"]));
+            }
+            set {
+                this["EcfTechTreeDialog_DefaultValue_UnlockCost"] = value;
             }
         }
     }

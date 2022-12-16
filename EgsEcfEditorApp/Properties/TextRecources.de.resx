@@ -282,6 +282,12 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>Wenn aktiviert, werden Elemente versuchen die Originaldaten zu verwenden wenn die Editordaten fehlerhaft sind</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird wenn das Element keinen Freischalt Kosten Wert enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird wenn das Element keinen Freischalt Level Wert enthält</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Fehleransicht fest</value>
   </data>
@@ -290,6 +296,21 @@
   </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>Wenn aktiviert, werden auch Elemente mit mindestens einem fehlerhaften Unterelement nicht gespeichert</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyReferenceName" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der für die Elementbenennung und übergeordnete Referenzierung verwendet wird</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der die Namen der Technologiebäume, zu denen das Element gehört, enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Namen des übergeordneten Technologiebaum Elementes enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Freischalt Kosten Wert enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Freischalt Level Wert enthält</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Parameteransicht fest</value>

@@ -646,6 +646,78 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Value &apos;Unlock Cost&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Value &apos;Unlock Level&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tech Tree.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Referenced Name&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Parent Name&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Cost&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Level&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tech Tree preview and edit.
         /// </summary>
         internal static string EcfTechTreeDialog_Header {

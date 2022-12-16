@@ -41,8 +41,17 @@
     <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeNames" Type="System.String" Scope="User">
       <Value Profile="(Default)">TechTreeNames</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeParent" Type="System.String" Scope="User">
+    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeParentName" Type="System.String" Scope="User">
       <Value Profile="(Default)">TechTreeParent</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_ParameterKey_ReferenceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Name</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_DefaultValue_UnlockLevel" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="EcfTechTreeDialog_DefaultValue_UnlockCost" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

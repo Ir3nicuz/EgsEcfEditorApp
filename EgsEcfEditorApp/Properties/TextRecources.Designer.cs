@@ -556,6 +556,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default value if an element has no unlock cost value specified.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultValueUnlockCost {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultValueUnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value if an element has no unlock level value specified.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the error view.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount {
@@ -579,6 +597,51 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfSettingsDialog_ToolTip_InvalidateParentsOnError {
             get {
                 return ResourceManager.GetString("EcfSettingsDialog_ToolTip_InvalidateParentsOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which will be used for element naming and parent referencing.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyReferenceName {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyReferenceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the names of the trees the element belongs to.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the tech tree parent element name.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock cost value.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock level value.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel", resourceCulture);
             }
         }
         

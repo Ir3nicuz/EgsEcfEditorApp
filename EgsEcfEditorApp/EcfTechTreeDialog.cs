@@ -17,6 +17,10 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeDialog : Form
     {
+        private string UnlockLevelParameterKey { get; set; } = null;
+        private string UnlockCostParameterKey { get; set; } = null;
+        private string TechTreeNamesParameterKey { get; set; } = null;
+        private string TechTreeParentParameterKey { get; set; } = null;
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
 
@@ -38,7 +42,13 @@ namespace EgsEcfEditorApp
         // public
         public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
         {
+            UnlockLevelParameterKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
+            UnlockCostParameterKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
+            TechTreeNamesParameterKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
+            TechTreeParentParameterKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName;
+
             ChangedFileTabs.Clear();
+
             DialogResult result = UpdateUniqueFileTabs(openedFileTabs);
             if (result != DialogResult.OK) { return result; }
             UpdateTechTrees();
@@ -72,11 +82,6 @@ namespace EgsEcfEditorApp
         }
         private void UpdateTechTrees()
         {
-            string unlockLevelKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
-            string unlockCostKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
-            string techTreeNamesKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
-            string techTreeParentKey = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParent;
-            
             TechTreePageContainer.SuspendLayout();
             TechTreePageContainer.TabPages.Clear();
 
@@ -84,10 +89,10 @@ namespace EgsEcfEditorApp
             {
                 foreach(EcfBlock block in tab.File.ItemList.Where(item => item is EcfBlock))
                 {
-                    block.HasParameter(unlockLevelKey, out EcfParameter unlockLevel);
-                    block.HasParameter(unlockCostKey, out EcfParameter unlockCost);
-                    block.HasParameter(techTreeNamesKey, out EcfParameter techTreeNames);
-                    block.HasParameter(techTreeParentKey, out EcfParameter techTreeParent);
+                    block.HasParameter(UnlockLevelParameterKey, out EcfParameter unlockLevel);
+                    block.HasParameter(UnlockCostParameterKey, out EcfParameter unlockCost);
+                    block.HasParameter(TechTreeNamesParameterKey, out EcfParameter techTreeNames);
+                    block.HasParameter(TechTreeParentParameterKey, out EcfParameter techTreeParent);
 
                     if (techTreeNames != null)
                     {
@@ -320,7 +325,7 @@ namespace EgsEcfEditorApp
 
             public ElementNode(EcfBlock element, string techTreeParent)
             {
-                ElementName = element.GetAttributeFirstValue(InternalSettings.Default.EcfTechTreeDialog_NameReferenceAttribute);
+                ElementName = element.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName);
                 TechTreeParentName = techTreeParent;
                 Text = ElementName;
 
@@ -334,7 +339,7 @@ namespace EgsEcfEditorApp
 
             public UnlockLevelNode(EcfBlock element, string unlockLevel)
             {
-                Text = unlockLevel ?? InternalSettings.Default.EcfTechTreeDialog_DefaultUnlockLevel;
+                Text = unlockLevel ?? UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel.ToString();
 
                 Element = element;
                 ToolTipText = element.BuildIdentification();
@@ -346,7 +351,7 @@ namespace EgsEcfEditorApp
 
             public UnlockCostNode(EcfBlock element, string unlockCost)
             {
-                Text = unlockCost ?? InternalSettings.Default.EcfTechTreeDialog_DefaultUnlockCost;
+                Text = unlockCost ?? UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost.ToString();
 
                 Element = element;
                 ToolTipText = element.BuildIdentification();

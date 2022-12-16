@@ -41,7 +41,7 @@ namespace EgsEcfEditorApp
             
             if (evt.Item is TreeNode node)
             {
-                
+                UnattachedElementsTreeView.DoDragDrop(node, DragDropEffects.Move); 
                 Console.WriteLine(node.Text + " _ drag start");
             }
             

@@ -33,6 +33,18 @@ namespace EgsEcfEditorApp
         {
             Icon = IconRecources.Icon_AppBranding;
             Text = TitleRecources.EcfTechTreeDialog_Header;
+
+            UnattachedElementsGroupBox.Text = TitleRecources.EcfTechTreeDialog_UnattachedElementsHeader;
+        }
+        private void UnattachedElementsTreeView_ItemDrag(object sender, ItemDragEventArgs evt)
+        {
+            
+            if (evt.Item is TreeNode node)
+            {
+                
+                Console.WriteLine(node.Text + " _ drag start");
+            }
+            
         }
 
         // public
@@ -80,19 +92,21 @@ namespace EgsEcfEditorApp
         {
             TechTreePageContainer.SuspendLayout();
             TechTreePageContainer.TabPages.Clear();
+            UnattachedElementsTreeView.BeginUpdate();
+            UnattachedElementsTreeView.Nodes.Clear();
 
             UniqueFileTabs.ForEach(tab =>
             {
                 foreach(EcfBlock block in tab.File.ItemList.Where(item => item is EcfBlock))
                 {
-                    block.HasParameter(UnlockLevelParameterKey, out EcfParameter unlockLevel);
-                    block.HasParameter(UnlockCostParameterKey, out EcfParameter unlockCost);
                     block.HasParameter(TechTreeNamesParameterKey, out EcfParameter techTreeNames);
-                    block.HasParameter(TechTreeParentParameterKey, out EcfParameter techTreeParent);
+
+                    string techTreeParent = block.GetParameterFirstValue(TechTreeParentParameterKey);
+                    string unlockLevel = block.GetParameterFirstValue(UnlockLevelParameterKey);
+                    string unlockCost = block.GetParameterFirstValue(UnlockCostParameterKey);
 
                     if (techTreeNames != null)
                     {
-                        // supposed to be listed
                         foreach (string treeName in techTreeNames.GetAllValues())
                         {
                             EcfTechTree treePage = TechTreePageContainer.TabPages.Cast<EcfTechTree>().FirstOrDefault(tree => tree.Text.Equals(treeName));
@@ -103,23 +117,43 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.Add(block, techTreeParent?.GetFirstValue(), unlockLevel?.GetFirstValue(), unlockCost?.GetFirstValue());
+                            treePage.Add(block, techTreeParent, unlockLevel, unlockCost);
                         }
                     }
                     else if (unlockLevel != null || unlockCost != null || techTreeParent != null)
                     {
-                        // incomplete
-
-
-                        Console.WriteLine(string.Format("{0}_level:{1}_cost:{2}_treeparent:{3}", 
-                            block.BuildIdentification(), unlockLevel != null, unlockCost != null, techTreeParent != null));
-
-
+                        UnattachedElementsTreeView.Nodes.Add(new UnattachedElementNode(block, techTreeParent, unlockLevel, unlockCost));
                     }
                 }
-
             });
 
+
+
+            TreeNode node1 = new TreeNode("node1");
+            TreeNode node2 = new TreeNode("node2");
+            TreeNode node3 = new TreeNode("node3");
+            TreeNode node4 = new TreeNode("node4");
+            TreeNode node5 = new TreeNode("node5");
+            TreeNode node6 = new TreeNode("node6");
+            TreeNode node7 = new TreeNode("node7");
+            TreeNode node8 = new TreeNode("node8");
+            TreeNode node9 = new TreeNode("node9");
+            TreeNode node10 = new TreeNode("node10");
+            node1.Nodes.Add(node2);
+            node1.Nodes.Add(node3);
+            node3.Nodes.Add(node4);
+            node4.Nodes.Add(node5);
+            node6.Nodes.Add(node7);
+            node6.Nodes.Add(node8);
+            node6.Nodes.Add(node9);
+            node9.Nodes.Add(node10);
+            UnattachedElementsTreeView.Nodes.Add(node1);
+            UnattachedElementsTreeView.Nodes.Add(node6);
+            
+
+
+            UnattachedElementsGroupBox.Visible = UnattachedElementsTreeView.Nodes.Count != 0;
+            UnattachedElementsTreeView.EndUpdate();
             TechTreePageContainer.ResumeLayout();
         }
 
@@ -134,7 +168,7 @@ namespace EgsEcfEditorApp
 
             public EcfTechTree(string name)
             {
-                Text = name;
+                Text = name ?? string.Empty;
 
                 ElementTreeView.LinkTreeView(UnlockLevelListView);
                 ElementTreeView.LinkTreeView(UnlockCostListView);
@@ -170,6 +204,7 @@ namespace EgsEcfEditorApp
             // events
             private void InitTreeView(EcfTreeView view)
             {
+                view.AllowDrop = true;
                 view.Dock = DockStyle.Fill;
                 view.HideSelection = false;
                 view.ShowPlusMinus = false;
@@ -350,6 +385,27 @@ namespace EgsEcfEditorApp
                 Text = unlockCost ?? UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost.ToString();
 
                 Element = element;
+                ToolTipText = element.BuildIdentification();
+            }
+        }
+        private class UnattachedElementNode : TreeNode
+        {
+            public string ElementName { get; }
+            public string TechTreeParentName { get; }
+            public string UnlockLevel { get; }
+            public string UnlockCost { get; }
+
+            public EcfBlock Element { get; }
+
+            public UnattachedElementNode(EcfBlock element, string techTreeParent, string unlockLevel, string unlockCost)
+            {
+                Element = element;
+                ElementName = element.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName);
+                UnlockLevel = unlockLevel;
+                UnlockCost = unlockCost;
+                TechTreeParentName = techTreeParent;
+
+                Text = ElementName;
                 ToolTipText = element.BuildIdentification();
             }
         }

@@ -727,6 +727,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unattached Elements.
+        /// </summary>
+        internal static string EcfTechTreeDialog_UnattachedElementsHeader {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_UnattachedElementsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tree items.
         /// </summary>
         internal static string EcfTreeView_FilterSelector_Elements {

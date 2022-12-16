@@ -32,7 +32,12 @@ namespace EgsEcfEditorApp
             this.TechTreePageContainer = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.TechTreeDialogPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.UnattachedElementsGroupBox = new System.Windows.Forms.GroupBox();
+            this.UnattachedElementsTreeView = new System.Windows.Forms.TreeView();
             this.TechTreePageContainer.SuspendLayout();
+            this.TechTreeDialogPanel.SuspendLayout();
+            this.UnattachedElementsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // TechTreePageContainer
@@ -41,10 +46,10 @@ namespace EgsEcfEditorApp
             this.TechTreePageContainer.Controls.Add(this.tabPage2);
             this.TechTreePageContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TechTreePageContainer.ItemSize = new System.Drawing.Size(1, 32);
-            this.TechTreePageContainer.Location = new System.Drawing.Point(0, 0);
+            this.TechTreePageContainer.Location = new System.Drawing.Point(3, 3);
             this.TechTreePageContainer.Name = "TechTreePageContainer";
             this.TechTreePageContainer.SelectedIndex = 0;
-            this.TechTreePageContainer.Size = new System.Drawing.Size(800, 450);
+            this.TechTreePageContainer.Size = new System.Drawing.Size(794, 338);
             this.TechTreePageContainer.TabIndex = 0;
             // 
             // tabPage1
@@ -52,7 +57,7 @@ namespace EgsEcfEditorApp
             this.tabPage1.Location = new System.Drawing.Point(4, 36);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 410);
+            this.tabPage1.Size = new System.Drawing.Size(786, 298);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -67,18 +72,56 @@ namespace EgsEcfEditorApp
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // TechTreeDialogPanel
+            // 
+            this.TechTreeDialogPanel.ColumnCount = 1;
+            this.TechTreeDialogPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TechTreeDialogPanel.Controls.Add(this.UnattachedElementsGroupBox, 0, 1);
+            this.TechTreeDialogPanel.Controls.Add(this.TechTreePageContainer, 0, 0);
+            this.TechTreeDialogPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TechTreeDialogPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.TechTreeDialogPanel.Location = new System.Drawing.Point(0, 0);
+            this.TechTreeDialogPanel.Name = "TechTreeDialogPanel";
+            this.TechTreeDialogPanel.RowCount = 2;
+            this.TechTreeDialogPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TechTreeDialogPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreeDialogPanel.Size = new System.Drawing.Size(800, 450);
+            this.TechTreeDialogPanel.TabIndex = 1;
+            // 
+            // UnattachedElementsGroupBox
+            // 
+            this.UnattachedElementsGroupBox.Controls.Add(this.UnattachedElementsTreeView);
+            this.UnattachedElementsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UnattachedElementsGroupBox.Location = new System.Drawing.Point(3, 347);
+            this.UnattachedElementsGroupBox.Name = "UnattachedElementsGroupBox";
+            this.UnattachedElementsGroupBox.Size = new System.Drawing.Size(794, 100);
+            this.UnattachedElementsGroupBox.TabIndex = 0;
+            this.UnattachedElementsGroupBox.TabStop = false;
+            this.UnattachedElementsGroupBox.Text = "unattched";
+            // 
+            // UnattachedElementsTreeView
+            // 
+            this.UnattachedElementsTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UnattachedElementsTreeView.Location = new System.Drawing.Point(3, 16);
+            this.UnattachedElementsTreeView.Name = "UnattachedElementsTreeView";
+            this.UnattachedElementsTreeView.Size = new System.Drawing.Size(788, 81);
+            this.UnattachedElementsTreeView.TabIndex = 0;
+            this.UnattachedElementsTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.UnattachedElementsTreeView_ItemDrag);
+            // 
             // EcfTechTreeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.TechTreePageContainer);
+            this.Controls.Add(this.TechTreeDialogPanel);
             this.MinimizeBox = false;
             this.Name = "EcfTechTreeDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfTechTreeDialog";
             this.TechTreePageContainer.ResumeLayout(false);
+            this.TechTreeDialogPanel.ResumeLayout(false);
+            this.UnattachedElementsGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -88,5 +131,8 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TabControl TechTreePageContainer;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TableLayoutPanel TechTreeDialogPanel;
+        private System.Windows.Forms.GroupBox UnattachedElementsGroupBox;
+        private System.Windows.Forms.TreeView UnattachedElementsTreeView;
     }
 }

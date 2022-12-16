@@ -13,6 +13,7 @@ namespace EgsEcfEditorApp
     public partial class SettingsDialog : Form
     {
         public bool HasUnsavedData { get; private set; } = false;
+        public bool PresetRunning { get; private set; } = false;
 
         public SettingsDialog()
         {
@@ -149,45 +150,66 @@ namespace EgsEcfEditorApp
         }
         private void TechTreeParameterKeyReferenceNameTextBox_TextChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName = 
-                TechTreeParameterKeyReferenceNameTextBox.Text;
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName =
+                    TechTreeParameterKeyReferenceNameTextBox.Text;
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeParameterKeyTechTreeNamesTextBox_TextChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames = 
-                TechTreeParameterKeyTechTreeNamesTextBox.Text;
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames =
+                    TechTreeParameterKeyTechTreeNamesTextBox.Text;
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeParameterKeyTechTreeParentNameTextBox_TextChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName = 
-                TechTreeParameterKeyTechTreeParentNameTextBox.Text;
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName =
+                    TechTreeParameterKeyTechTreeParentNameTextBox.Text;
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeParameterKeyUnlockLevelTextBox_TextChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel = 
-                TechTreeParameterKeyUnlockLevelTextBox.Text;
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel =
+                    TechTreeParameterKeyUnlockLevelTextBox.Text;
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeDefaultValueUnlockLevelNumericUpDown_ValueChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel = 
-                Convert.ToInt32(TechTreeDefaultValueUnlockLevelNumericUpDown.Value);
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel =
+                    Convert.ToInt32(TechTreeDefaultValueUnlockLevelNumericUpDown.Value);
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeParameterKeyUnlockCostTextBox_TextChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost = 
-                TechTreeParameterKeyUnlockCostTextBox.Text;
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost =
+                    TechTreeParameterKeyUnlockCostTextBox.Text;
+                HasUnsavedData = true;
+            }
         }
         private void TechTreeDefaultValueUnlockCostNumericUpDown_ValueChanged(object sender, EventArgs evt)
         {
-            UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost = 
-                Convert.ToInt32(TechTreeDefaultValueUnlockCostNumericUpDown.Value);
-            HasUnsavedData = true;
+            if (!PresetRunning)
+            {
+                UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost =
+                    Convert.ToInt32(TechTreeDefaultValueUnlockCostNumericUpDown.Value);
+                HasUnsavedData = true;
+            }
         }
         private void LicenseDataLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
         {
@@ -337,11 +359,13 @@ namespace EgsEcfEditorApp
 
         private void PresetPanels()
         {
+            PresetRunning = true;
             PresetGeneralPanel();
             PresetCreationPanel();
             PresetFilterPanel();
             PresetSorterPanel();
             PresetTechTreePanel();
+            PresetRunning = false;
         }
         private void PresetGeneralPanel()
         {

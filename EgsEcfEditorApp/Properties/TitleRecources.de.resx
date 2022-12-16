@@ -339,6 +339,9 @@
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>Tech Tree Vorschau und Editor</value>
   </data>
+  <data name="EcfTechTreeDialog_UnattachedElementsHeader" xml:space="preserve">
+    <value>Nicht zugeordnete Elemente</value>
+  </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>Baumelemente</value>
   </data>

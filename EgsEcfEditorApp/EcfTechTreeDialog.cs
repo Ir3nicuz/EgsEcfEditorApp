@@ -38,13 +38,13 @@ namespace EgsEcfEditorApp
         }
         private void UnattachedElementsTreeView_ItemDrag(object sender, ItemDragEventArgs evt)
         {
-            
-            if (evt.Item is TreeNode node)
+            if (evt.Item is UnattachedElementNode node)
             {
-                UnattachedElementsTreeView.DoDragDrop(node, DragDropEffects.Move); 
-                Console.WriteLine(node.Text + " _ drag start");
+                if (DoDragDrop(node, DragDropEffects.Move) == DragDropEffects.Move)
+                {
+                    UnattachedElementsTreeView.Nodes.Remove(node);
+                }
             }
-            
         }
 
         // public
@@ -88,6 +88,7 @@ namespace EgsEcfEditorApp
             }
             return DialogResult.OK;
         }
+        [Obsolete("has test data.")]
         private void UpdateTechTrees()
         {
             TechTreePageContainer.SuspendLayout();
@@ -129,26 +130,11 @@ namespace EgsEcfEditorApp
 
 
 
-            TreeNode node1 = new TreeNode("node1");
-            TreeNode node2 = new TreeNode("node2");
-            TreeNode node3 = new TreeNode("node3");
-            TreeNode node4 = new TreeNode("node4");
-            TreeNode node5 = new TreeNode("node5");
-            TreeNode node6 = new TreeNode("node6");
-            TreeNode node7 = new TreeNode("node7");
-            TreeNode node8 = new TreeNode("node8");
-            TreeNode node9 = new TreeNode("node9");
-            TreeNode node10 = new TreeNode("node10");
-            node1.Nodes.Add(node2);
-            node1.Nodes.Add(node3);
-            node3.Nodes.Add(node4);
-            node4.Nodes.Add(node5);
-            node6.Nodes.Add(node7);
-            node6.Nodes.Add(node8);
-            node6.Nodes.Add(node9);
-            node9.Nodes.Add(node10);
+            EcfBlock element = UniqueFileTabs.FirstOrDefault().File.GetDeepItemList<EcfBlock>().FirstOrDefault();
+            UnattachedElementNode node1 = new UnattachedElementNode(element , "horst", "gerda", "inge");
+            UnattachedElementNode node2 = new UnattachedElementNode(element , "kunibert", "elfriede", "otto");
             UnattachedElementsTreeView.Nodes.Add(node1);
-            UnattachedElementsTreeView.Nodes.Add(node6);
+            UnattachedElementsTreeView.Nodes.Add(node2);
             
 
 
@@ -210,7 +196,41 @@ namespace EgsEcfEditorApp
                 view.ShowPlusMinus = false;
                 view.ShowRootLines = false;
                 view.ShowNodeToolTips = true;
+
+                view.DragEnter += View_DragEnter;
+                view.DragDrop += View_DragDrop;
             }
+            private void View_DragEnter(object sender, DragEventArgs evt)
+            {
+                // specifies the acceptance of the drop operation
+                evt.Effect = DragDropEffects.Move;
+            }
+            [Obsolete("needs work.")]
+            private void View_DragDrop(object sender, DragEventArgs evt)
+            {
+                if (sender is TreeView view)
+                {
+                    UnattachedElementNode sourceNode = (UnattachedElementNode)evt.Data.GetData(typeof(UnattachedElementNode));
+                    TreeNode receiverNode = view.GetNodeAt(view.PointToClient(new Point(evt.X, evt.Y)));
+                    if(sourceNode != null && receiverNode != null)
+                    {
+                        
+
+
+                        if (sourceNode is UnattachedElementNode node)
+                        {
+                            Console.WriteLine(node.Text + " _ UnattachedElementNode dropped on _ " + receiverNode.Text);
+                            evt.Effect = DragDropEffects.Move;
+                            return;
+                        }
+
+
+
+                    }
+                }
+                evt.Effect = DragDropEffects.None;
+            }
+
             private void ElementTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
             {
                 Stack<int> indexPath = GetIndexPath(evt.Node);

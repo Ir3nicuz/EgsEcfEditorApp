@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
@@ -38,11 +39,13 @@ namespace EgsEcfEditorApp
         }
         private void UnattachedElementsTreeView_ItemDrag(object sender, ItemDragEventArgs evt)
         {
-            if (evt.Item is UnattachedElementNode node)
+            if (evt.Item is ElementNode node)
             {
-                if (DoDragDrop(node, DragDropEffects.Move) == DragDropEffects.Move)
+                int index = node.Index;
+                UnattachedElementsTreeView.Nodes.Remove(node);
+                if (DoDragDrop(node, DragDropEffects.Move) != DragDropEffects.Move)
                 {
-                    UnattachedElementsTreeView.Nodes.Remove(node);
+                    UnattachedElementsTreeView.Nodes.Insert(index, node);
                 }
             }
         }
@@ -102,9 +105,18 @@ namespace EgsEcfEditorApp
                 {
                     block.HasParameter(TechTreeNamesParameterKey, out EcfParameter techTreeNames);
 
+                    string elementName = block.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName);
                     string techTreeParent = block.GetParameterFirstValue(TechTreeParentParameterKey);
                     string unlockLevel = block.GetParameterFirstValue(UnlockLevelParameterKey);
                     string unlockCost = block.GetParameterFirstValue(UnlockCostParameterKey);
+
+                    if (!int.TryParse(unlockLevel, out int unlockLevelValue)) {
+                        unlockLevelValue = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
+                    }
+                    if (!int.TryParse(unlockCost, out int unlockCostValue))
+                    {
+                        unlockCostValue = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+                    }
 
                     if (techTreeNames != null)
                     {
@@ -118,12 +130,12 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.Add(block, techTreeParent, unlockLevel, unlockCost);
+                            treePage.Add(new ElementNode(block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
                         }
                     }
                     else if (unlockLevel != null || unlockCost != null || techTreeParent != null)
                     {
-                        UnattachedElementsTreeView.Nodes.Add(new UnattachedElementNode(block, techTreeParent, unlockLevel, unlockCost));
+                        UnattachedElementsTreeView.Nodes.Add(new ElementNode(block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
                     }
                 }
             });
@@ -131,8 +143,8 @@ namespace EgsEcfEditorApp
 
 
             EcfBlock element = UniqueFileTabs.FirstOrDefault().File.GetDeepItemList<EcfBlock>().FirstOrDefault();
-            UnattachedElementNode node1 = new UnattachedElementNode(element , "horst", "gerda", "inge");
-            UnattachedElementNode node2 = new UnattachedElementNode(element , "kunibert", "elfriede", "otto");
+            ElementNode node1 = new ElementNode(element , "inge", "horst", 0, 258);
+            ElementNode node2 = new ElementNode(element , "gerda", "kunibert", 0, 12);
             UnattachedElementsTreeView.Nodes.Add(node1);
             UnattachedElementsTreeView.Nodes.Add(node2);
             
@@ -147,136 +159,79 @@ namespace EgsEcfEditorApp
         private class EcfTechTree : TabPage
         {
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
-            private EcfTreeView UnlockLevelListView { get; } = new EcfTreeView();
-            private EcfTreeView UnlockCostListView { get; } = new EcfTreeView();
-
-            private TableLayoutPanel ViewPanel { get; } = new TableLayoutPanel();
 
             public EcfTechTree(string name)
             {
                 Text = name ?? string.Empty;
 
-                ElementTreeView.LinkTreeView(UnlockLevelListView);
-                ElementTreeView.LinkTreeView(UnlockCostListView);
+                ElementTreeView.AllowDrop = true;
+                ElementTreeView.Dock = DockStyle.Fill;
+                ElementTreeView.ShowNodeToolTips = true;
 
-                ViewPanel.Dock = DockStyle.Fill;
+                ElementTreeView.DragEnter += ElementTreeView_DragEnter;
+                ElementTreeView.DragDrop += ElementTreeView_DragDrop;
+                ElementTreeView.ItemDrag += ElementTreeView_ItemDrag;
 
-                InitTreeView(ElementTreeView);
-                InitTreeView(UnlockLevelListView);
-                InitTreeView(UnlockCostListView);
-
-                ElementTreeView.NodeMouseClick += ElementTreeView_NodeMouseClick;
-                UnlockLevelListView.NodeMouseClick += UnlockLevelListView_NodeMouseClick;
-                UnlockCostListView.NodeMouseClick += UnlockCostListView_NodeMouseClick;
-
-                ViewPanel.ColumnCount = 3;
-                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.0f));
-                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-                ViewPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-                ViewPanel.RowCount = 2;
-                ViewPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                ViewPanel.RowStyles.Add(new RowStyle(SizeType.Percent,1.0f));
-                ViewPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-
-                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Name, TextAlign = ContentAlignment.MiddleLeft, Dock = DockStyle.Fill }, 0, 0);
-                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Level, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 1, 0);
-                ViewPanel.Controls.Add(new Label() { Text = TitleRecources.Generic_Cost, TextAlign = ContentAlignment.MiddleCenter, Dock = DockStyle.Fill }, 2, 0);
-                ViewPanel.Controls.Add(ElementTreeView, 0, 1);
-                ViewPanel.Controls.Add(UnlockLevelListView, 1, 1);
-                ViewPanel.Controls.Add(UnlockCostListView, 2, 1);
-                Controls.Add(ViewPanel);
+                Controls.Add(ElementTreeView);
             }
 
             // events
-            private void InitTreeView(EcfTreeView view)
-            {
-                view.AllowDrop = true;
-                view.Dock = DockStyle.Fill;
-                view.HideSelection = false;
-                view.ShowPlusMinus = false;
-                view.ShowRootLines = false;
-                view.ShowNodeToolTips = true;
-
-                view.DragEnter += View_DragEnter;
-                view.DragDrop += View_DragDrop;
-            }
-            private void View_DragEnter(object sender, DragEventArgs evt)
+            private void ElementTreeView_DragEnter(object sender, DragEventArgs evt)
             {
                 // specifies the acceptance of the drop operation
                 evt.Effect = DragDropEffects.Move;
             }
             [Obsolete("needs work.")]
-            private void View_DragDrop(object sender, DragEventArgs evt)
+            private void ElementTreeView_DragDrop(object sender, DragEventArgs evt)
             {
-                if (sender is TreeView view)
+                ElementNode sourceNode = (ElementNode)evt.Data.GetData(typeof(ElementNode));
+
+
+
+                TreeNodeCollection receiverNode = ElementTreeView.Nodes;// ElementTreeView.GetNodeAt(ElementTreeView.PointToClient(new Point(evt.X, evt.Y)));
+                
+
+
+
+                // -> block parameter tree names ergänzen
+                // -> tree parent parameter auf basis des dropnode aktualisieren
+
+
+
+                
+                if(sourceNode != null && receiverNode != null)
                 {
-                    UnattachedElementNode sourceNode = (UnattachedElementNode)evt.Data.GetData(typeof(UnattachedElementNode));
-                    TreeNode receiverNode = view.GetNodeAt(view.PointToClient(new Point(evt.X, evt.Y)));
-                    if(sourceNode != null && receiverNode != null)
-                    {
-                        
-
-
-                        if (sourceNode is UnattachedElementNode node)
-                        {
-                            Console.WriteLine(node.Text + " _ UnattachedElementNode dropped on _ " + receiverNode.Text);
-                            evt.Effect = DragDropEffects.Move;
-                            return;
-                        }
-
-
-
-                    }
+                    Add(sourceNode);
+                    evt.Effect = DragDropEffects.Move;
+                    return;
                 }
                 evt.Effect = DragDropEffects.None;
             }
-
-            private void ElementTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+            private void ElementTreeView_ItemDrag(object sender, ItemDragEventArgs evt)
             {
-                Stack<int> indexPath = GetIndexPath(evt.Node);
-                SelectIndexPath(indexPath, UnlockLevelListView);
-                SelectIndexPath(indexPath, UnlockCostListView);
-            }
-            private void UnlockLevelListView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
-            {
-                Stack<int> indexPath = GetIndexPath(evt.Node);
-                SelectIndexPath(indexPath, ElementTreeView);
-                SelectIndexPath(indexPath, UnlockCostListView);
-            }
-            private void UnlockCostListView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
-            {
-                Stack<int> indexPath = GetIndexPath(evt.Node);
-                SelectIndexPath(indexPath, ElementTreeView);
-                SelectIndexPath(indexPath, UnlockLevelListView);
+                if (evt.Item is ElementNode node)
+                {
+                    int index = node.Index;
+                    TreeNodeCollection nodes = node.Parent != null ? node.Parent.Nodes : ElementTreeView.Nodes;
+                    nodes.Remove(node);
+                    if (DoDragDrop(node, DragDropEffects.Move) != DragDropEffects.Move)
+                    {
+                        nodes.Insert(index, node);
+                    }
+                }
             }
 
             // publics
-            public void Add(EcfBlock element, string techTreeParent, string unlockLevel, string unlockCost)
+            public void Add(ElementNode elementNode)
             {
-                ElementNode elementNode = new ElementNode(element, techTreeParent);
-                UnlockLevelNode levelNode = new UnlockLevelNode(element, unlockLevel);
-                UnlockCostNode costNode = new UnlockCostNode(element, unlockCost);
-
                 ElementTreeView.BeginUpdate();
-                UnlockLevelListView.BeginUpdate();
-                UnlockCostListView.BeginUpdate();
 
                 ElementTreeView.Nodes.Cast<ElementNode>().ToList().ForEach(rootElement =>
                 {
                     if (!string.IsNullOrEmpty(rootElement.TechTreeParentName) && string.Equals(rootElement.TechTreeParentName, elementNode.ElementName))
                     {
-                        int index = ElementTreeView.Nodes.IndexOf(rootElement);
-
-                        TreeNode levelParentNode = UnlockLevelListView.Nodes[index];
-                        TreeNode costParentNode = UnlockCostListView.Nodes[index];
-
-                        ElementTreeView.Nodes.RemoveAt(index);
-                        UnlockLevelListView.Nodes.RemoveAt(index);
-                        UnlockCostListView.Nodes.RemoveAt(index);
-
+                        ElementTreeView.Nodes.Remove(rootElement);
                         elementNode.Nodes.Add(rootElement);
-                        levelNode.Nodes.Add(levelParentNode);
-                        costNode.Nodes.Add(costParentNode);
                     }
                 });
 
@@ -284,39 +239,16 @@ namespace EgsEcfEditorApp
                 if (parent != null)
                 {
                     parent.Nodes.Add(elementNode);
-                    Stack<int> indexPath = GetIndexPath(elementNode);
-                    AddToIndexPath(indexPath, UnlockLevelListView, levelNode);
-                    AddToIndexPath(indexPath, UnlockCostListView, costNode);
                 }
                 else
                 {
                     ElementTreeView.Nodes.Add(elementNode);
-                    UnlockLevelListView.Nodes.Add(levelNode);
-                    UnlockCostListView.Nodes.Add(costNode);
                 }
 
-                ElementTreeView.ExpandAll();
-                UnlockLevelListView.ExpandAll();
-                UnlockCostListView.ExpandAll();
-
                 ElementTreeView.EndUpdate();
-                UnlockLevelListView.EndUpdate();
-                UnlockCostListView.EndUpdate();
             }
 
             // privates
-            private Stack<int> GetIndexPath(TreeNode node)
-            {
-                Stack<int> indexPath = new Stack<int>();
-
-                while (node != null)
-                {
-                    indexPath.Push(node.Index);
-                    node = node.Parent;
-                }
-                
-                return indexPath;
-            }
             private ElementNode FindParentNode(string parentName, TreeNodeCollection nodes)
             {
                 foreach (ElementNode node in nodes.Cast<ElementNode>())
@@ -336,97 +268,48 @@ namespace EgsEcfEditorApp
                 }
                 return null;
             }
-            private void AddToIndexPath(Stack<int> indexPath, TreeView view, TreeNode node)
-            {
-                TreeNodeCollection nodes = view.Nodes;
-                if (indexPath != null && indexPath.Count > 0)
-                {
-                    Stack<int> path = new Stack<int>(indexPath.Reverse());
-                    while (path.Count > 1)
-                    {
-                        nodes = nodes[path.Pop()].Nodes;
-                    }
-                    nodes.Insert(path.Pop(), node);
-                }
-                else
-                {
-                    nodes.Add(node);
-                }
-            }
-            private void SelectIndexPath(Stack<int> indexPath, TreeView view)
-            {
-                TreeNodeCollection nodes = view.Nodes;
-                if (indexPath != null && indexPath.Count > 0)
-                {
-                    Stack<int> path = new Stack<int>(indexPath.Reverse());
-                    while (path.Count > 1)
-                    {
-                        nodes = nodes[path.Pop()].Nodes;
-                    }
-                    view.SelectedNode = nodes[path.Pop()];
-                }
-            }
         }
         private class ElementNode : TreeNode
         {
             public string ElementName { get; }
-            public string TechTreeParentName { get; }
+            public string TechTreeParentName { get; set; }
+            public int UnlockLevel { get; private set; }
+            public int UnlockCost { get; private set; }
 
             public EcfBlock Element { get; }
 
-            public ElementNode(EcfBlock element, string techTreeParent)
-            {
-                ElementName = element.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName);
-                TechTreeParentName = techTreeParent;
-                Text = ElementName;
-
-                Element = element;
-                ToolTipText = element.BuildIdentification();
-            }
-        }
-        private class UnlockLevelNode : TreeNode
-        {
-            public EcfBlock Element { get; }
-
-            public UnlockLevelNode(EcfBlock element, string unlockLevel)
-            {
-                Text = unlockLevel ?? UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel.ToString();
-
-                Element = element;
-                ToolTipText = element.BuildIdentification();
-            }
-        }
-        private class UnlockCostNode : TreeNode
-        {
-            public EcfBlock Element { get; }
-
-            public UnlockCostNode(EcfBlock element, string unlockCost)
-            {
-                Text = unlockCost ?? UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost.ToString();
-
-                Element = element;
-                ToolTipText = element.BuildIdentification();
-            }
-        }
-        private class UnattachedElementNode : TreeNode
-        {
-            public string ElementName { get; }
-            public string TechTreeParentName { get; }
-            public string UnlockLevel { get; }
-            public string UnlockCost { get; }
-
-            public EcfBlock Element { get; }
-
-            public UnattachedElementNode(EcfBlock element, string techTreeParent, string unlockLevel, string unlockCost)
+            public ElementNode(EcfBlock element, string elementName, string techTreeParentName, int unlockLevel, int unlockCost)
             {
                 Element = element;
-                ElementName = element.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName);
+                ElementName = elementName ?? TitleRecources.Generic_Replacement_Empty;
+                TechTreeParentName = techTreeParentName;
                 UnlockLevel = unlockLevel;
                 UnlockCost = unlockCost;
-                TechTreeParentName = techTreeParent;
 
-                Text = ElementName;
-                ToolTipText = element.BuildIdentification();
+                ToolTipText = element?.BuildIdentification() ?? TitleRecources.Generic_Replacement_Empty;
+
+                UpdateNodeText();
+            }
+
+            // public
+            public void SetUnlockLevel(int unlockLevel)
+            {
+                UnlockLevel = unlockLevel;
+                UpdateNodeText();
+            }
+            public void SetUnlockCost(int unlockCost)
+            {
+                UnlockCost = unlockCost;
+                UpdateNodeText();
+            }
+
+            // private 
+            private void UpdateNodeText()
+            {
+                Text = string.Format("{0}: {1} // {2}: {3} // {4}: {5}",
+                    TitleRecources.Generic_Name, ElementName,
+                    TitleRecources.Generic_Level, UnlockLevel,
+                    TitleRecources.Generic_Cost, UnlockCost);
             }
         }
     }

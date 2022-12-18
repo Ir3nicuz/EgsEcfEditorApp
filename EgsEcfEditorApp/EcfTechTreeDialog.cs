@@ -158,11 +158,13 @@ namespace EgsEcfEditorApp
         // subclasses
         private class EcfTechTree : TabPage
         {
+            public string TreeName { get; private set; }
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
 
             public EcfTechTree(string name)
             {
-                Text = name ?? string.Empty;
+                TreeName = name ?? string.Empty;
+                Text = TreeName;
 
                 ElementTreeView.AllowDrop = true;
                 ElementTreeView.Dock = DockStyle.Fill;
@@ -188,18 +190,16 @@ namespace EgsEcfEditorApp
 
 
 
-                TreeNodeCollection receiverNode = ElementTreeView.Nodes;// ElementTreeView.GetNodeAt(ElementTreeView.PointToClient(new Point(evt.X, evt.Y)));
-                
+
+                string techTreeParentName = GetNodeByCursor(new Point(evt.X, evt.Y))?.ElementName;
+
+                // -> block parameter tree names ergänzen -> TreeName -> SetParameter (key: create if not exist, check if allowed, value: forceuniqueness?) 
+                // -> tree parent parameter auf basis des dropnode aktualisieren -> ElementName -> SetParameter (key: create if not exist, check if allowed, value: isSingle?)
 
 
 
-                // -> block parameter tree names ergänzen
-                // -> tree parent parameter auf basis des dropnode aktualisieren
 
-
-
-                
-                if(sourceNode != null && receiverNode != null)
+                if (sourceNode != null)
                 {
                     Add(sourceNode);
                     evt.Effect = DragDropEffects.Move;
@@ -264,6 +264,28 @@ namespace EgsEcfEditorApp
                         {
                             return subNode;
                         }
+                    }
+                }
+                return null;
+            }
+            private ElementNode GetNodeByCursor(Point cursorPosition)
+            {
+                Point position = ElementTreeView.PointToClient(cursorPosition);
+                TreeNode node = ElementTreeView.GetNodeAt(position);
+                if (node != null)
+                {
+                    Rectangle innerNodeBounds = node.Bounds;
+                    int borderThickness = innerNodeBounds.Height * 10 / 100;
+                    innerNodeBounds.Offset(0, borderThickness);
+                    innerNodeBounds.Inflate(0, -2 * borderThickness);
+
+                    if (innerNodeBounds.Contains(position) && node is ElementNode receiverNode)
+                    {
+                        return receiverNode;
+                    }
+                    else if (node.Parent is ElementNode receiverParentNode)
+                    {
+                        return receiverParentNode;
                     }
                 }
                 return null;

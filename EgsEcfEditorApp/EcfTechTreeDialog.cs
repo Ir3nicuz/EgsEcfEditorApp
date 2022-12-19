@@ -14,10 +14,10 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeDialog : Form
     {
-        private string UnlockLevelParameterKey { get; set; } = null;
-        private string UnlockCostParameterKey { get; set; } = null;
-        private string TechTreeNamesParameterKey { get; set; } = null;
-        private string TechTreeParentParameterKey { get; set; } = null;
+        public string UnlockLevelParameterKey { get; private set; } = null;
+        public string UnlockCostParameterKey { get; private set; } = null;
+        public string TechTreeNamesParameterKey { get; private set; } = null;
+        public string TechTreeParentParameterKey { get; private set; } = null;
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
 
@@ -126,7 +126,7 @@ namespace EgsEcfEditorApp
                             
                             if (treePage == null)
                             {
-                                treePage = new EcfTechTree(treeName);
+                                treePage = new EcfTechTree(this, treeName);
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
@@ -160,9 +160,11 @@ namespace EgsEcfEditorApp
         {
             public string TreeName { get; private set; }
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
+            private EcfTechTreeDialog ParentForm { get; }
 
-            public EcfTechTree(string name)
+            public EcfTechTree(EcfTechTreeDialog parentForm, string name)
             {
+                ParentForm = parentForm;
                 TreeName = name ?? string.Empty;
                 Text = TreeName;
 
@@ -189,18 +191,17 @@ namespace EgsEcfEditorApp
                 ElementNode sourceNode = (ElementNode)evt.Data.GetData(typeof(ElementNode));
 
 
-
-
-                string techTreeParentName = GetNodeByCursor(new Point(evt.X, evt.Y))?.ElementName;
-
                 // -> block parameter tree names ergänzen -> TreeName -> SetParameter (key: create if not exist, check if allowed, value: forceuniqueness?) 
                 // -> tree parent parameter auf basis des dropnode aktualisieren -> ElementName -> SetParameter (key: create if not exist, check if allowed, value: isSingle?)
-
-
-
+                // key: create if not exist, check if allowed -> exception
+                // behaviour: append, appendifmissing, replace
 
                 if (sourceNode != null)
                 {
+                    string techTreeParentName = GetNodeByCursor(new Point(evt.X, evt.Y))?.ElementName;
+                    sourceNode.Element.UpdateParameter(ParentForm.TechTreeNamesParameterKey, TreeName, UpdateBehaviour.AppendIfMissing);
+                    sourceNode.Element.UpdateParameter(ParentForm.TechTreeParentParameterKey, techTreeParentName, UpdateBehaviour.Replace);
+
                     Add(sourceNode);
                     evt.Effect = DragDropEffects.Move;
                     return;

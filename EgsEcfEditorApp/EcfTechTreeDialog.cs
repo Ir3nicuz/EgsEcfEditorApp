@@ -131,21 +131,22 @@ namespace EgsEcfEditorApp
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
 
-                            treePage.Add(new ElementNode(block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
+                            treePage.Add(new ElementNode(tab, block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
                         }
                     }
                     else if (unlockLevel != null || unlockCost != null || techTreeParent != null)
                     {
-                        UnattachedElementsTreeView.Nodes.Add(new ElementNode(block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
+                        UnattachedElementsTreeView.Nodes.Add(new ElementNode(tab, block, elementName, techTreeParent, unlockLevelValue, unlockCostValue));
                     }
                 }
             });
 
 
 
-            EcfBlock element = UniqueFileTabs.FirstOrDefault().File.GetDeepItemList<EcfBlock>().FirstOrDefault();
-            ElementNode node1 = new ElementNode(element , "inge", "horst", 0, 258);
-            ElementNode node2 = new ElementNode(element , "gerda", "kunibert", 0, 12);
+            EcfTabPage testtab = UniqueFileTabs.FirstOrDefault();
+            EcfBlock element = testtab.File.GetDeepItemList<EcfBlock>().FirstOrDefault();
+            ElementNode node1 = new ElementNode(testtab, element, "inge", "horst", 0, 258);
+            ElementNode node2 = new ElementNode(testtab, element, "gerda", "kunibert", 0, 12);
             UnattachedElementsTreeView.Nodes.Add(node1);
             UnattachedElementsTreeView.Nodes.Add(node2);
             
@@ -186,8 +187,8 @@ namespace EgsEcfEditorApp
 
                 TechTreeOperation.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => NodeChangeClicked(sender, evt));
                 TechTreeOperation.Items.Add(TitleRecources.Generic_Add, IconRecources.Icon_Add, (sender, evt) => NodeAddClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Copy, IconRecources.Icon_Copy, (sender, evt) => NodeCopiedClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Paste, IconRecources.Icon_Paste, (sender, evt) => NodePastedClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Copy, IconRecources.Icon_Copy, (sender, evt) => NodeCopyClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Paste, IconRecources.Icon_Paste, (sender, evt) => NodePasteClicked(sender, evt));
                 TechTreeOperation.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => NodeRemoveClicked(sender, evt));
             }
 
@@ -235,8 +236,8 @@ namespace EgsEcfEditorApp
             private void ElementTreeView_KeyUp(object sender, KeyEventArgs evt)
             {
                 if (evt.KeyCode == Keys.Delete) { NodeRemoveClicked(sender, evt); evt.Handled = true; }
-                else if (evt.Control && evt.KeyCode == Keys.C) { NodeCopiedClicked(sender, evt); evt.Handled = true; }
-                else if (evt.Control && evt.KeyCode == Keys.V) { NodePastedClicked(sender, evt); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.C) { NodeCopyClicked(sender, evt); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.V) { NodePasteClicked(sender, evt); evt.Handled = true; }
             }
             private void ElementTreeView_KeyPress(object sender, KeyPressEventArgs evt)
             {
@@ -260,16 +261,16 @@ namespace EgsEcfEditorApp
 
             }
             [Obsolete("needs work")]
-            private void NodeCopiedClicked(object sender, EventArgs evt)
+            private void NodeCopyClicked(object sender, EventArgs evt)
             {
                 
                 
-                ParentForm.LastCopiedElement = new ElementNode(null, "1", "2", 3, 4);
+                ParentForm.LastCopiedElement = new ElementNode(null, null, "1", "2", 3, 4);
 
 
             }
             [Obsolete("needs work")]
-            private void NodePastedClicked(object sender, EventArgs evt)
+            private void NodePasteClicked(object sender, EventArgs evt)
             {
                 
                 
@@ -287,7 +288,11 @@ namespace EgsEcfEditorApp
             [Obsolete("needs work")]
             private void NodeRemoveClicked(object sender, EventArgs evt)
             {
-
+                if (ElementTreeView.SelectedNode is ElementNode node) 
+                {
+                    RemoveTechTreeName(node);
+                    node.Remove();
+                }
             }
 
             // publics
@@ -366,6 +371,8 @@ namespace EgsEcfEditorApp
                 parameter.AddValue(techTreeParentName ?? string.Empty);
                 
                 sourceNode.TechTreeParentName = techTreeParentName;
+
+                ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
             }
             private void UpdateTechTreeNames(ElementNode sourceNode)
             {
@@ -373,9 +380,16 @@ namespace EgsEcfEditorApp
                 if (!parameter.ContainsValue(TreeName))
                 {
                     parameter.AddValue(TreeName);
+                    ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
                 }
             }
-            
+            [Obsolete("needs work")]
+            private void RemoveTechTreeName(ElementNode sourceNode)
+            {
+
+
+
+            }
         }
         protected class ElementNode : TreeNode
         {
@@ -384,10 +398,12 @@ namespace EgsEcfEditorApp
             public int UnlockLevel { get; private set; }
             public int UnlockCost { get; private set; }
 
+            public EcfTabPage Tab { get; }
             public EcfBlock Element { get; }
 
-            public ElementNode(EcfBlock element, string elementName, string techTreeParentName, int unlockLevel, int unlockCost)
+            public ElementNode(EcfTabPage tab, EcfBlock element, string elementName, string techTreeParentName, int unlockLevel, int unlockCost)
             {
+                Tab = tab;
                 Element = element;
                 ElementName = elementName ?? TitleRecources.Generic_Replacement_Empty;
                 TechTreeParentName = techTreeParentName;

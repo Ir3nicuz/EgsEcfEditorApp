@@ -1895,7 +1895,7 @@ namespace EgsEcfParser
     public abstract class EcfBaseItem
     {
         protected string DefaultName { get; }
-        protected EgsEcfFile EcfFile { get; private set; } = null;
+        public EgsEcfFile EcfFile { get; private set; } = null;
         public EcfStructureItem Parent { get; private set; } = null;
         public int StructureLevel { get; private set; } = -1;
 

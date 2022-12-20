@@ -772,6 +772,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Generic_Add {
+            get {
+                return ResourceManager.GetString("Generic_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add after.
         /// </summary>
         internal static string Generic_AddAfter {
@@ -1110,6 +1119,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_ParentElement {
             get {
                 return ResourceManager.GetString("Generic_ParentElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste.
+        /// </summary>
+        internal static string Generic_Paste {
+            get {
+                return ResourceManager.GetString("Generic_Paste", resourceCulture);
             }
         }
         

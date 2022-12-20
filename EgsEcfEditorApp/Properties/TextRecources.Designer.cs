@@ -862,6 +862,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The update of the element settings failed.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ElementSettingsUpdateError {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ElementSettingsUpdateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select file for the type.
         /// </summary>
         internal static string EcfTechTreeDialog_SelectFileForType {

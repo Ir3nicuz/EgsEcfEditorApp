@@ -20,6 +20,7 @@ namespace EgsEcfEditorApp
         public string TechTreeParentParameterKey { get; private set; } = null;
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
+        protected ElementNode LastCopiedElement { get; set; } = null;
 
         private EcfItemSelectorDialog FileTabSelector { get; } = new EcfItemSelectorDialog();
 
@@ -161,6 +162,7 @@ namespace EgsEcfEditorApp
             public string TreeName { get; private set; }
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
             private EcfTechTreeDialog ParentForm { get; }
+            private ContextMenuStrip TechTreeOperation { get; } = new ContextMenuStrip();
 
             public EcfTechTree(EcfTechTreeDialog parentForm, string name)
             {
@@ -175,8 +177,18 @@ namespace EgsEcfEditorApp
                 ElementTreeView.DragEnter += ElementTreeView_DragEnter;
                 ElementTreeView.DragDrop += ElementTreeView_DragDrop;
                 ElementTreeView.ItemDrag += ElementTreeView_ItemDrag;
+                ElementTreeView.KeyUp += ElementTreeView_KeyUp;
+                ElementTreeView.KeyPress += ElementTreeView_KeyPress;
+                ElementTreeView.NodeMouseClick += ElementTreeView_NodeMouseClick;
+                ElementTreeView.NodeMouseDoubleClick += ElementTreeView_NodeMouseDoubleClick;
 
                 Controls.Add(ElementTreeView);
+
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => NodeChangeClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Add, IconRecources.Icon_Add, (sender, evt) => NodeAddClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Copy, IconRecources.Icon_Copy, (sender, evt) => NodeCopiedClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Paste, IconRecources.Icon_Paste, (sender, evt) => NodePastedClicked(sender, evt));
+                TechTreeOperation.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => NodeRemoveClicked(sender, evt));
             }
 
             // events
@@ -185,26 +197,25 @@ namespace EgsEcfEditorApp
                 // specifies the acceptance of the drop operation
                 evt.Effect = DragDropEffects.Move;
             }
-            [Obsolete("needs work.")]
             private void ElementTreeView_DragDrop(object sender, DragEventArgs evt)
             {
                 ElementNode sourceNode = (ElementNode)evt.Data.GetData(typeof(ElementNode));
-
-
-                // -> block parameter tree names ergänzen -> TreeName -> SetParameter (key: create if not exist, check if allowed, value: forceuniqueness?) 
-                // -> tree parent parameter auf basis des dropnode aktualisieren -> ElementName -> SetParameter (key: create if not exist, check if allowed, value: isSingle?)
-                // key: create if not exist, check if allowed -> exception
-                // behaviour: append, appendifmissing, replace
-
                 if (sourceNode != null)
                 {
-                    string techTreeParentName = GetNodeByCursor(new Point(evt.X, evt.Y))?.ElementName;
-                    sourceNode.Element.UpdateParameter(ParentForm.TechTreeNamesParameterKey, TreeName, UpdateBehaviour.AppendIfMissing);
-                    sourceNode.Element.UpdateParameter(ParentForm.TechTreeParentParameterKey, techTreeParentName, UpdateBehaviour.Replace);
+                    try
+                    {
+                        UpdateTechTreeNames(sourceNode);
+                        UpdateTechTreeParent(GetNodeByCursor(new Point(evt.X, evt.Y))?.ElementName, sourceNode);
 
-                    Add(sourceNode);
-                    evt.Effect = DragDropEffects.Move;
-                    return;
+                        Add(sourceNode);
+                        evt.Effect = DragDropEffects.Move;
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, string.Format("{0}:{1}{2}", TextRecources.EcfTechTreeDialog_ElementSettingsUpdateError, Environment.NewLine, ex.Message), 
+                            TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 evt.Effect = DragDropEffects.None;
             }
@@ -220,6 +231,63 @@ namespace EgsEcfEditorApp
                         nodes.Insert(index, node);
                     }
                 }
+            }
+            private void ElementTreeView_KeyUp(object sender, KeyEventArgs evt)
+            {
+                if (evt.KeyCode == Keys.Delete) { NodeRemoveClicked(sender, evt); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.C) { NodeCopiedClicked(sender, evt); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.V) { NodePastedClicked(sender, evt); evt.Handled = true; }
+            }
+            private void ElementTreeView_KeyPress(object sender, KeyPressEventArgs evt)
+            {
+                // hack for sqirky "ding"
+                evt.Handled = true;
+            }
+            private void ElementTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
+            {
+                if (evt.Button == MouseButtons.Right)
+                {
+                    TechTreeOperation.Show(this, evt.Location);
+                }
+            }
+            private void ElementTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs evt)
+            {
+                NodeChangeClicked(sender, evt);
+            }
+            [Obsolete("needs work")]
+            private void NodeChangeClicked(object sender, EventArgs evt)
+            {
+
+            }
+            [Obsolete("needs work")]
+            private void NodeCopiedClicked(object sender, EventArgs evt)
+            {
+                
+                
+                ParentForm.LastCopiedElement = new ElementNode(null, "1", "2", 3, 4);
+
+
+            }
+            [Obsolete("needs work")]
+            private void NodePastedClicked(object sender, EventArgs evt)
+            {
+                
+                
+                
+                ElementNode source = ParentForm.LastCopiedElement;
+
+
+
+            }
+            [Obsolete("needs work")]
+            private void NodeAddClicked(object sender, EventArgs evt)
+            {
+
+            }
+            [Obsolete("needs work")]
+            private void NodeRemoveClicked(object sender, EventArgs evt)
+            {
+
             }
 
             // publics
@@ -291,8 +359,25 @@ namespace EgsEcfEditorApp
                 }
                 return null;
             }
+            private void UpdateTechTreeParent(string techTreeParentName, ElementNode sourceNode)
+            {
+                EcfParameter parameter = sourceNode.Element.FindOrCreateParameter(ParentForm.TechTreeParentParameterKey);
+                parameter.ClearValues();
+                parameter.AddValue(techTreeParentName ?? string.Empty);
+                
+                sourceNode.TechTreeParentName = techTreeParentName;
+            }
+            private void UpdateTechTreeNames(ElementNode sourceNode)
+            {
+                EcfParameter parameter = sourceNode.Element.FindOrCreateParameter(ParentForm.TechTreeNamesParameterKey);
+                if (!parameter.ContainsValue(TreeName))
+                {
+                    parameter.AddValue(TreeName);
+                }
+            }
+            
         }
-        private class ElementNode : TreeNode
+        protected class ElementNode : TreeNode
         {
             public string ElementName { get; }
             public string TechTreeParentName { get; set; }

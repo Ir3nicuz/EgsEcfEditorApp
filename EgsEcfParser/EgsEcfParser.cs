@@ -2234,6 +2234,10 @@ namespace EgsEcfParser
         {
             return InternalValueGroups.IndexOf(group);
         }
+        public bool ContainsValue(string value)
+        {
+            return GetAllValues().Any(storedValue => storedValue.Equals(value));
+        }
 
         // privates
         private void CheckKey(string key)
@@ -2834,6 +2838,19 @@ namespace EgsEcfParser
         {
             parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(key));
             return parameter != null;
+        }
+        public EcfParameter FindOrCreateParameter(string key)
+        {
+            if (!HasParameter(key, out EcfParameter parameter))
+            {
+                FormatDefinition definition = EcfFile?.Definition;
+                if (definition == null) { throw new InvalidOperationException("Parameter creation is only possible with file reference"); }
+                if (!definition.BlockParameters.Any(param => param.Name.Equals(key))) { throw new InvalidOperationException(string.Format("Parameter key '{0}' is not allowed", key)); }
+
+                parameter = new EcfParameter(key);
+                AddChild(parameter);
+            }
+            return parameter;
         }
         public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
         {

@@ -354,6 +354,9 @@
   <data name="Generic_Active" xml:space="preserve">
     <value>Aktiv</value>
   </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
   <data name="Generic_AddAfter" xml:space="preserve">
     <value>Hinzufügen nach</value>
   </data>
@@ -467,6 +470,9 @@
   </data>
   <data name="Generic_ParentElement" xml:space="preserve">
     <value>Überg. Element</value>
+  </data>
+  <data name="Generic_Paste" xml:space="preserve">
+    <value>Einfügen</value>
   </data>
   <data name="Generic_PasteAfter" xml:space="preserve">
     <value>Einfügen nach</value>

@@ -989,7 +989,7 @@ namespace EgsEcfParser
                 return AddItem(item, index + 1);
             }
         }
-        public int AddItems(List<EcfStructureItem> items)
+        public int AddItem(List<EcfStructureItem> items)
         {
             int count = 0;
             items?.ForEach(item =>
@@ -1001,7 +1001,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddItems(List<EcfStructureItem> items, int index)
+        public int AddItem(List<EcfStructureItem> items, int index)
         {
             int count = 0;
             items?.ForEach(item =>
@@ -1014,16 +1014,16 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddItems(List<EcfStructureItem> items, EcfStructureItem precedingItem)
+        public int AddItem(List<EcfStructureItem> items, EcfStructureItem precedingItem)
         {
             int index = InternalItemList.IndexOf(precedingItem);
             if (index < 0)
             {
-                return AddItems(items);
+                return AddItem(items);
             }
             else
             {
-                return AddItems(items, index + 1);
+                return AddItem(items, index + 1);
             }
         }
         public bool RemoveItem(EcfStructureItem item)
@@ -1036,7 +1036,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int RemoveItems(List<EcfStructureItem> items)
+        public int RemoveItem(List<EcfStructureItem> items)
         {
             int count = 0;
             items?.ForEach(item =>
@@ -1047,6 +1047,10 @@ namespace EgsEcfParser
                 }
             });
             return count;
+        }
+        public int Revalidate()
+        {
+            return InternalItemList.Sum(item => item.Revalidate());
         }
 
         // ecf creating
@@ -1267,7 +1271,7 @@ namespace EgsEcfParser
                     {
                         EcfBlock block = ParseBlockElement(Definition, level < 1, processedlineData, lineCount);
                         // comments
-                        block.AddComments(comments);
+                        block.AddComment(comments);
                         // raw data fallback
                         block.OpenerLineParsingData = rawLineData;
                         level++;
@@ -1294,7 +1298,7 @@ namespace EgsEcfParser
                             {
                                 EcfParameter parameter = ParseParameter(Definition, processedlineData, block, lineCount);
                                 // comments
-                                parameter.AddComments(comments);
+                                parameter.AddComment(comments);
                                 // raw data fallback
                                 parameter.LineParsingData = rawLineData;
                             }
@@ -1312,9 +1316,9 @@ namespace EgsEcfParser
                             List<EcfError> errors = CheckParametersValid(block.ChildItems.Where(child => child is EcfParameter)
                                 .Cast<EcfParameter>().ToList(), Definition.BlockParameters, EcfErrorGroups.Interpretation);
                             errors.ForEach(error => { if (error != null) { error.LineInFile = stackItem.LineNumber; } });
-                            block.AddErrors(errors);
+                            block.AddError(errors);
                             // comments
-                            if (!parameterLine) { block.AddComments(comments); }
+                            if (!parameterLine) { block.AddComment(comments); }
                             // raw data fallback
                             block.CloserLineParsingData = rawLineData;
                             // append block to parent
@@ -1366,12 +1370,12 @@ namespace EgsEcfParser
                     errors.AddRange(CheckBlockUniqueness(block, completeBlockList, EcfErrorGroups.Interpretation));
                     errors.Add(CheckBlockReferenceValid(block, completeBlockList, out EcfBlock inheriter, EcfErrorGroups.Interpretation));
                     block.Inheritor = inheriter;
-                    block.AddErrors(errors);
+                    block.AddError(errors);
                 });
 
                 // update der daten
                 InternalItemList.Clear();
-                AddItems(rootItems);
+                AddItem(rootItems);
                 StructuralErrors.Clear();
                 StructuralErrors.AddRange(fatalErrors);
             }
@@ -1493,14 +1497,14 @@ namespace EgsEcfParser
             Queue<string> splittedItems = SplitEcfItems(definition, lineData);
             EcfBlock block = new EcfBlock(preMark, blockType, postMark);
             List<EcfAttribute> attributes = ParseAttributes(definition, splittedItems, attributeDefinitions, lineInFile);
-            block.AddAttributes(attributes);
+            block.AddAttribute(attributes);
             List<EcfError> errors = new List<EcfError>();
             errors.AddRange(CheckBlockPreMark(preMark, definition.BlockTypePreMarks, EcfErrorGroups.Interpretation));
             errors.AddRange(CheckBlockDataType(blockType, dataTypeDefinitions, EcfErrorGroups.Interpretation));
             errors.AddRange(CheckBlockPostMark(postMark, definition.BlockTypePostMarks, EcfErrorGroups.Interpretation));
             errors.AddRange(CheckAttributesValid(attributes, attributeDefinitions, EcfErrorGroups.Interpretation));
             errors.ForEach(error => { if (error != null) { error.LineInFile = lineInFile; } });
-            block.AddErrors(errors);
+            block.AddError(errors);
             return block;
         }
         private static EcfParameter ParseParameter(FormatDefinition definition, string lineData, EcfBlock block, int lineInFile)
@@ -1509,10 +1513,10 @@ namespace EgsEcfParser
             Queue<string> splittedItems = SplitEcfItems(definition, lineData);
             EcfParameter parameter = ParseParameterBase(definition, splittedItems, block, lineInFile);
             List<EcfAttribute> attributes = ParseAttributes(definition, splittedItems, definition.ParameterAttributes, lineInFile);
-            parameter.AddAttributes(attributes);
+            parameter.AddAttribute(attributes);
             List<EcfError> errors = CheckAttributesValid(attributes, definition.ParameterAttributes, EcfErrorGroups.Interpretation);
             errors.ForEach(error => { if (error != null) { error.LineInFile = lineInFile; } });
-            parameter.AddErrors(errors);
+            parameter.AddError(errors);
             return parameter;
         }
         private static string ParseBlockPreMark(FormatDefinition definition, string lineData)
@@ -1566,9 +1570,9 @@ namespace EgsEcfParser
                 }
                 EcfAttribute attr = new EcfAttribute(key);
                 attributes.Add(attr);
-                attr.AddValues(groups);
+                attr.AddValue(groups);
                 errors.ForEach(error => { if (error != null) { error.LineInFile = lineInFile; } });
-                attr.AddErrors(errors);
+                attr.AddError(errors);
             }
             return attributes;
         }
@@ -1594,7 +1598,7 @@ namespace EgsEcfParser
             EcfParameter parameter = new EcfParameter(key, groups, null);
             block.AddChild(parameter);
             errors.ForEach(error => { if (error != null) { error.LineInFile = lineInFile; } });
-            parameter.AddErrors(errors);
+            parameter.AddError(errors);
             return parameter;
         }
         private static List<EcfValueGroup> ParseValues(FormatDefinition definition, string itemValue)
@@ -1949,8 +1953,8 @@ namespace EgsEcfParser
             Errors = InternalErrors.AsReadOnly();
             Comments = InternalComments.AsReadOnly();
 
-            AddErrors(template.Errors.Cast<EcfError>().Select(error => new EcfError(error, this)).ToList());
-            AddComments(template.InternalComments);
+            AddError(template.Errors.Cast<EcfError>().Select(error => new EcfError(error, this)).ToList());
+            AddComment(template.InternalComments);
         }
 
         public abstract List<EcfError> GetDeepErrorList(bool includeStructure);
@@ -2007,7 +2011,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddErrors(List<EcfError> errors)
+        public int AddError(List<EcfError> errors)
         {
             int count = 0;
             errors?.ForEach(error => {
@@ -2041,7 +2045,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddComments(List<string> comments)
+        public int AddComment(List<string> comments)
         {
             int count = 0;
             comments?.ForEach(comment => {
@@ -2115,7 +2119,7 @@ namespace EgsEcfParser
             DefinedKeyValueItems = template.DefinedKeyValueItems.Select(def => new ItemDefinition(def)).ToList().AsReadOnly();
             ValueGroups = InternalValueGroups.AsReadOnly();
             ItemType = template.ItemType;
-            AddValues(template.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
+            AddValue(template.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
         }
 
         // publics
@@ -2158,7 +2162,7 @@ namespace EgsEcfParser
             if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfException(EcfErrors.ValueGroupIndexInvalid, groupIndex.ToString()); }
             return InternalValueGroups[groupIndex].AddValue(value);
         }
-        public int AddValues(List<string> values)
+        public int AddValue(List<string> values)
         {
             int count = 0;
             values?.ForEach(value => {
@@ -2169,12 +2173,12 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddValues(List<string> values, int groupIndex)
+        public int AddValue(List<string> values, int groupIndex)
         {
             if (groupIndex < 0 || groupIndex >= InternalValueGroups.Count) { throw new EcfException(EcfErrors.ValueGroupIndexInvalid, groupIndex.ToString()); }
-            return InternalValueGroups[groupIndex].AddValues(values);
+            return InternalValueGroups[groupIndex].AddValue(values);
         }
-        public bool AddValues(EcfValueGroup valueGroup)
+        public bool AddValue(EcfValueGroup valueGroup)
         {
             if (valueGroup != null) {
                 valueGroup.UpdateStructureData(EcfFile, this, StructureLevel);
@@ -2184,11 +2188,11 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddValues(List<EcfValueGroup> valueGroups)
+        public int AddValue(List<EcfValueGroup> valueGroups)
         {
             int count = 0;
             valueGroups?.ForEach(group => {
-                if (AddValues(group))
+                if (AddValue(group))
                 {
                     count++;
                 }
@@ -2238,6 +2242,29 @@ namespace EgsEcfParser
         {
             return GetAllValues().Any(storedValue => storedValue.Equals(value));
         }
+        public bool RemoveValue(string value)
+        {
+            foreach (EcfValueGroup group in InternalValueGroups)
+            {
+                if (group.RemoveValue(value))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public int RemoveValue(List<string> values)
+        {
+            return InternalValueGroups.Sum(group => group.RemoveValue(values));
+        }
+        public int RemoveAllValue(string value)
+        {
+            return InternalValueGroups.Sum(group => group.RemoveAllValue(value));
+        }
+        public int RemoveAllValue(List<string> values)
+        {
+            return InternalValueGroups.Sum(group => group.RemoveAllValue(values));
+        }
 
         // privates
         private void CheckKey(string key)
@@ -2263,7 +2290,7 @@ namespace EgsEcfParser
         private int RevalidateValues()
         {
             RemoveErrors(EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
-            return AddErrors(CheckValuesValid(InternalValueGroups, Definition, EcfFile?.Definition, EcfErrorGroups.Editing));
+            return AddError(CheckValuesValid(InternalValueGroups, Definition, EcfFile?.Definition, EcfErrorGroups.Editing));
         }
     }
     public class EcfAttribute : EcfKeyValueItem
@@ -2278,11 +2305,11 @@ namespace EgsEcfParser
         }
         public EcfAttribute(string key, List<string> values) : this(key)
         {
-            AddValues(values);
+            AddValue(values);
         }
         public EcfAttribute(string key, List<EcfValueGroup> valueGroups) : this(key)
         {
-            AddValues(valueGroups);
+            AddValue(valueGroups);
         }
 
         // copyconstructor
@@ -2319,9 +2346,9 @@ namespace EgsEcfParser
         {
             if (!(template is EcfAttribute attr)) { throw new InvalidOperationException("Structure item type not matching!"); }
             ClearComments();
-            AddComments(attr.Comments.ToList());
+            AddComment(attr.Comments.ToList());
             ClearValues();
-            AddValues(attr.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
+            AddValue(attr.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2358,13 +2385,13 @@ namespace EgsEcfParser
         }
         public EcfParameter(string key, List<string> values, List<EcfAttribute> attributes) : this(key)
         {
-            AddValues(values);
-            AddAttributes(attributes);
+            AddValue(values);
+            AddAttribute(attributes);
         }
         public EcfParameter(string key, List<EcfValueGroup> valueGroups, List<EcfAttribute> attributes) : this(key)
         {
-            AddValues(valueGroups);
-            AddAttributes(attributes);
+            AddValue(valueGroups);
+            AddAttribute(attributes);
         }
         
         // copy constructor
@@ -2374,7 +2401,7 @@ namespace EgsEcfParser
 
             LineParsingData = template.LineParsingData;
 
-            AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
+            AddAttribute(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
         }
 
         // publics
@@ -2416,11 +2443,11 @@ namespace EgsEcfParser
         {
             if (!(template is EcfParameter param)) { throw new InvalidOperationException("Structure item type not matching!"); }
             ClearComments();
-            AddComments(param.Comments.ToList());
+            AddComment(param.Comments.ToList());
             ClearValues();
-            AddValues(param.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
+            AddValue(param.ValueGroups.Select(group => new EcfValueGroup(group)).ToList());
             ClearAttributes();
-            AddAttributes(param.Attributes.Select(attr => new EcfAttribute(attr)).ToList());
+            AddAttribute(param.Attributes.Select(attr => new EcfAttribute(attr)).ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2441,7 +2468,7 @@ namespace EgsEcfParser
             if (definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
 
             RemoveErrors(EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
-            return AddErrors(CheckAttributesValid(InternalAttributes, definition.ParameterAttributes, EcfErrorGroups.Editing));
+            return AddError(CheckAttributesValid(InternalAttributes, definition.ParameterAttributes, EcfErrorGroups.Editing));
         }
         public bool AddAttribute(EcfAttribute attribute)
         {
@@ -2454,7 +2481,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddAttributes(List<EcfAttribute> attributes)
+        public int AddAttribute(List<EcfAttribute> attributes)
         {
             int count = 0;
             attributes?.ForEach(attribute =>
@@ -2516,20 +2543,20 @@ namespace EgsEcfParser
         public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfStructureItem> childItems)
             : this(preMark, blockType, postMark)
         {
-            AddAttributes(attributes);
-            AddChilds(childItems);
+            AddAttribute(attributes);
+            AddChild(childItems);
         }
         public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfParameter> parameters)
             : this(preMark, blockType, postMark)
         {
-            AddAttributes(attributes);
-            AddChilds(parameters);
+            AddAttribute(attributes);
+            AddChild(parameters);
         }
         public EcfBlock(string preMark, string blockType, string postMark, List<EcfAttribute> attributes, List<EcfBlock> blocks)
             : this(preMark, blockType, postMark)
         {
-            AddAttributes(attributes);
-            AddChilds(blocks);
+            AddAttribute(attributes);
+            AddChild(blocks);
         }
 
         // copyconstructor
@@ -2550,8 +2577,8 @@ namespace EgsEcfParser
             OpenerLineParsingData = template.OpenerLineParsingData;
             CloserLineParsingData = template.CloserLineParsingData;
 
-            AddAttributes(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
-            AddChilds(template.ChildItems.Select(child => CopyStructureItem(child)).ToList());
+            AddAttribute(template.Attributes.Select(attribute => new EcfAttribute(attribute)).ToList());
+            AddChild(template.ChildItems.Select(child => CopyStructureItem(child)).ToList());
         }
 
         // publics
@@ -2593,7 +2620,7 @@ namespace EgsEcfParser
         {
             if (!(template is EcfBlock block)) { throw new InvalidOperationException("Structure item type not matching!"); }
             ClearComments();
-            AddComments(block.Comments.ToList());
+            AddComment(block.Comments.ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -2640,9 +2667,9 @@ namespace EgsEcfParser
                 EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown,
                 EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown);
             
-            errorCount += AddErrors(CheckBlockPreMark(PreMark, definition.BlockTypePreMarks, EcfErrorGroups.Editing));
-            errorCount += AddErrors(CheckBlockDataType(DataType, IsRoot() ? definition.RootBlockTypes : definition.ChildBlockTypes, EcfErrorGroups.Editing));
-            errorCount += AddErrors(CheckBlockPostMark(PostMark, definition.BlockTypePostMarks, EcfErrorGroups.Editing));
+            errorCount += AddError(CheckBlockPreMark(PreMark, definition.BlockTypePreMarks, EcfErrorGroups.Editing));
+            errorCount += AddError(CheckBlockDataType(DataType, IsRoot() ? definition.RootBlockTypes : definition.ChildBlockTypes, EcfErrorGroups.Editing));
+            errorCount += AddError(CheckBlockPostMark(PostMark, definition.BlockTypePostMarks, EcfErrorGroups.Editing));
             return errorCount;
         }
         public int RevalidateUniqueness(List<EcfBlock> blockList)
@@ -2650,7 +2677,7 @@ namespace EgsEcfParser
             if (EcfFile?.Definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
             
             RemoveErrors(EcfErrors.BlockIdNotUnique);
-            return AddErrors(CheckBlockUniqueness(this, blockList, EcfErrorGroups.Editing));
+            return AddError(CheckBlockUniqueness(this, blockList, EcfErrorGroups.Editing));
         }
         public bool RevalidateReferenceHighLevel(List<EcfBlock> blockList)
         {
@@ -2678,7 +2705,7 @@ namespace EgsEcfParser
 
             RemoveErrors(EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled);
             List<EcfParameter> parameters = ChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
-            return AddErrors(CheckParametersValid(parameters, definition.BlockParameters, EcfErrorGroups.Editing));
+            return AddError(CheckParametersValid(parameters, definition.BlockParameters, EcfErrorGroups.Editing));
         }
         public int RevalidateAttributes()
         {
@@ -2686,7 +2713,7 @@ namespace EgsEcfParser
             if (definition == null) { throw new InvalidOperationException("Validation is only possible with File reference"); }
 
             RemoveErrors(EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
-            return AddErrors(CheckAttributesValid(InternalAttributes, IsRoot() ? definition.RootBlockAttributes : definition.ChildBlockAttributes, EcfErrorGroups.Editing));
+            return AddError(CheckAttributesValid(InternalAttributes, IsRoot() ? definition.RootBlockAttributes : definition.ChildBlockAttributes, EcfErrorGroups.Editing));
         }
         public List<T> GetDeepChildList<T>() where T : EcfBaseItem
         {
@@ -2739,7 +2766,7 @@ namespace EgsEcfParser
                 return AddChild(child, index + 1);
             }
         }
-        public int AddChilds(List<EcfStructureItem> childs)
+        public int AddChild(List<EcfStructureItem> childs)
         {
             int count = 0;
             childs?.ForEach(child => { 
@@ -2750,7 +2777,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddChilds(List<EcfParameter> parameters)
+        public int AddChild(List<EcfParameter> parameters)
         {
             int count = 0;
             parameters?.ForEach(parameter => {
@@ -2761,7 +2788,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddChilds(List<EcfBlock> blocks)
+        public int AddChild(List<EcfBlock> blocks)
         {
             int count = 0;
             blocks?.ForEach(block => {
@@ -2772,7 +2799,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddChilds(List<EcfStructureItem> childs, int index)
+        public int AddChild(List<EcfStructureItem> childs, int index)
         {
             int count = 0;
             childs?.ForEach(child =>
@@ -2785,16 +2812,16 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int AddChilds(List<EcfStructureItem> childs, EcfStructureItem precedingChild)
+        public int AddChild(List<EcfStructureItem> childs, EcfStructureItem precedingChild)
         {
             int index = InternalChildItems.IndexOf(precedingChild);
             if (index < 0)
             {
-                return AddChilds(childs);
+                return AddChild(childs);
             }
             else
             {
-                return AddChilds(childs, index + 1);
+                return AddChild(childs, index + 1);
             }
         }
         public bool AddAttribute(EcfAttribute attribute)
@@ -2809,7 +2836,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddAttributes(List<EcfAttribute> attributes)
+        public int AddAttribute(List<EcfAttribute> attributes)
         {
             int count = 0;
             attributes?.ForEach(attribute => 
@@ -2852,6 +2879,18 @@ namespace EgsEcfParser
             }
             return parameter;
         }
+        public bool RemoveParameter(string key)
+        {
+            if (HasParameter(key, out EcfParameter parameter))
+            {
+                return RemoveChild(parameter);
+            }
+            return false;
+        }
+        public int RemoveParameter(List<string> keys)
+        {
+            return keys.Where(key => RemoveParameter(key) == true).Count();
+        }
         public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
         {
             if (HasParameter(paramName, out parameter))
@@ -2890,7 +2929,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int RemoveChilds(List<EcfStructureItem> childItems)
+        public int RemoveChild(List<EcfStructureItem> childItems)
         {
             int count = 0;
             childItems?.ForEach(child => {
@@ -2901,7 +2940,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int RemoveChilds(List<EcfParameter> parameters)
+        public int RemoveChild(List<EcfParameter> parameters)
         {
             int count = 0;
             parameters?.ForEach(parameter => {
@@ -2912,7 +2951,7 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public int RemoveChilds(List<EcfBlock> blocks)
+        public int RemoveChild(List<EcfBlock> blocks)
         {
             int count = 0;
             blocks?.ForEach(block => {
@@ -2977,7 +3016,7 @@ namespace EgsEcfParser
         }
         public EcfComment(List<string> comments) : base("Comment")
         {
-            AddComments(comments);
+            AddComment(comments);
         }
 
         // copy constructor
@@ -3004,7 +3043,7 @@ namespace EgsEcfParser
         {
             if (!(template is EcfComment comment)) { throw new InvalidOperationException("Structure item type not matching!"); }
             ClearComments();
-            AddComments(comment.Comments.ToList());
+            AddComment(comment.Comments.ToList());
         }
         public override int RemoveErrorsDeep(params EcfErrors[] errors)
         {
@@ -3053,14 +3092,14 @@ namespace EgsEcfParser
         }
         public EcfValueGroup(List<string> values) : this()
         {
-            AddValues(values);
+            AddValue(values);
         }
 
         // copy constructor
         public EcfValueGroup(EcfValueGroup template) : base(template)
         {
             Values = InternalValues.AsReadOnly();
-            AddValues(template.InternalValues);
+            AddValue(template.InternalValues);
         }
 
         public override string ToString()
@@ -3076,7 +3115,7 @@ namespace EgsEcfParser
             }
             return false;
         }
-        public int AddValues(List<string> values)
+        public int AddValue(List<string> values)
         {
             int count = 0;
             values?.ForEach(value =>
@@ -3087,6 +3126,40 @@ namespace EgsEcfParser
                 }
             });
             return count;
+        }
+        public bool RemoveValue(string value)
+        {
+            if (InternalValues.Remove(value))
+            {
+                EcfFile?.SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public int RemoveValue(List<string> values)
+        {
+            int count = 0;
+            values?.ForEach(value =>
+            {
+                if (RemoveValue(value))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveAllValue(string value)
+        {
+            int count = InternalValues.RemoveAll(val => string.Equals(val, value));
+            if (count > 0)
+            {
+                EcfFile?.SetUnsavedDataFlag();
+            }
+            return count;
+        }
+        public int RemoveAllValue(List<string> values)
+        {
+            return values.Sum(value => RemoveAllValue(value));
         }
 
         protected override void OnStructureDataUpdate()

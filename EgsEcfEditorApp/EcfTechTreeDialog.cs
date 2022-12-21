@@ -285,14 +285,9 @@ namespace EgsEcfEditorApp
             {
 
             }
-            [Obsolete("needs work")]
             private void NodeRemoveClicked(object sender, EventArgs evt)
             {
-                if (ElementTreeView.SelectedNode is ElementNode node) 
-                {
-                    RemoveTechTreeName(node);
-                    node.Remove();
-                }
+                RemoveNode(ElementTreeView.SelectedNode);
             }
 
             // publics
@@ -383,12 +378,33 @@ namespace EgsEcfEditorApp
                     ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
                 }
             }
-            [Obsolete("needs work")]
+            private void RemoveNode(TreeNode sourceNode)
+            {
+                if (sourceNode is ElementNode node)
+                {
+                    foreach (TreeNode subNode in node.Nodes)
+                    {
+                        RemoveNode(subNode);
+                    }
+                    RemoveTechTreeName(node);
+                    node.Remove();
+                }
+            }
             private void RemoveTechTreeName(ElementNode sourceNode)
             {
-
-
-
+                EcfBlock block = sourceNode.Element;
+                if (block.HasParameter(ParentForm.TechTreeNamesParameterKey, out EcfParameter parameter))
+                {
+                    parameter.RemoveValue(TreeName);
+                    if (!parameter.HasValue())
+                    {
+                        block.RemoveParameter(ParentForm.TechTreeNamesParameterKey);
+                        block.RemoveParameter(ParentForm.TechTreeParentParameterKey);
+                        block.RemoveParameter(ParentForm.UnlockLevelParameterKey);
+                        block.RemoveParameter(ParentForm.UnlockCostParameterKey);
+                    }
+                    ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
+                }
             }
         }
         protected class ElementNode : TreeNode

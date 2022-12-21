@@ -422,7 +422,7 @@ namespace EcfFileViews
             else
             {
                 PresetComment.ClearComments();
-                PresetComment.AddComments(CommentItemRichTextBox.Lines.ToList());
+                PresetComment.AddComment(CommentItemRichTextBox.Lines.ToList());
             }
             return PresetComment;
         }
@@ -581,9 +581,9 @@ namespace EcfFileViews
             {
                 PresetParameter.UpdateKey(Convert.ToString(ParameterItemKeyComboBox.SelectedItem));
                 PresetParameter.ClearValues();
-                PresetParameter.AddValues(valueGroups);
+                PresetParameter.AddValue(valueGroups);
                 PresetParameter.ClearAttributes();
-                PresetParameter.AddAttributes(attributes);
+                PresetParameter.AddAttribute(attributes);
                 PresetParameter.ClearComments();
                 PresetParameter.RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled,
                     EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
@@ -830,7 +830,7 @@ namespace EcfFileViews
                     (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value);
                 BlockItem_PrepareResultParameterUpdate(PresetBlock, activeParameters);
                 PresetBlock.ClearAttributes();
-                PresetBlock.AddAttributes(attributes);
+                PresetBlock.AddAttribute(attributes);
                 PresetBlock.ClearComments();
                 PresetBlock.RemoveErrors(EcfErrors.BlockIdNotUnique, EcfErrors.BlockInheritorMissing,
                     EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown,
@@ -855,9 +855,9 @@ namespace EcfFileViews
             removedParameters.RemoveAll(parameter => parameter.Definition == null);
             List<EcfParameter> createdParameters = activeParameters.Except(presentParameters, ParamKeyComparer).ToList();
 
-            block.RemoveChilds(doubledParameters);
-            block.RemoveChilds(removedParameters);
-            block.AddChilds(createdParameters);
+            block.RemoveChild(doubledParameters);
+            block.RemoveChild(removedParameters);
+            block.AddChild(createdParameters);
 
             foreach (EcfParameter parameter in createdParameters)
             {
@@ -1846,7 +1846,7 @@ namespace EcfFileViews
                             };
                             paramRow.PresetParameter.ValueGroups.Skip(1).ToList().ForEach(group => valueGroups.Add(group));
                             paramRow.PresetParameter.ClearValues();
-                            paramRow.PresetParameter.AddValues(valueGroups);
+                            paramRow.PresetParameter.AddValue(valueGroups);
                             parameters.Add(paramRow.PresetParameter);
                         }
                     }

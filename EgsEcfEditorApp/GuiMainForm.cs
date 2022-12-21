@@ -575,6 +575,7 @@ namespace EgsEcfEditorApp
             TechTreeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
             foreach (EcfTabPage tab in TechTreeDialog.ChangedFileTabs)
             {
+                tab.File.Revalidate();
                 tab.UpdateAllViews();
             }
         }

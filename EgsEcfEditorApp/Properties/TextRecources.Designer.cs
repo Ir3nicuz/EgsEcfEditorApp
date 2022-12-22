@@ -880,6 +880,51 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adds a new empty tech tree.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ToolTip_AddTree {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_AddTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copies the selected tech tree to clipboard.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ToolTip_CopyTree {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_CopyTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creates a new tech tree from the clipboard.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ToolTip_PasteTree {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_PasteTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes the selected tech tree.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ToolTip_RemoveTree {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_RemoveTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renames the selected tech tree.
+        /// </summary>
+        internal static string EcfTechTreeDialog_ToolTip_RenameTree {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_RenameTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count of tree items shown at once.
         /// </summary>
         internal static string EcfTreeView_ToolTip_TreeItemCountSelector {

@@ -390,6 +390,21 @@
   <data name="EcfTechTreeDialog_SelectFileForType" xml:space="preserve">
     <value>Select file for the type</value>
   </data>
+  <data name="EcfTechTreeDialog_ToolTip_AddTree" xml:space="preserve">
+    <value>Adds a new empty tech tree</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_CopyTree" xml:space="preserve">
+    <value>Copies the selected tech tree to clipboard</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_PasteTree" xml:space="preserve">
+    <value>Creates a new tech tree from the clipboard</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_RemoveTree" xml:space="preserve">
+    <value>Removes the selected tech tree</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_RenameTree" xml:space="preserve">
+    <value>Renames the selected tech tree</value>
+  </data>
   <data name="EcfTreeView_ToolTip_TreeItemCountSelector" xml:space="preserve">
     <value>Count of tree items shown at once</value>
   </data>

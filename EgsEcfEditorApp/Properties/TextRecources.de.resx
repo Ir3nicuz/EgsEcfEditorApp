@@ -390,6 +390,21 @@
   <data name="EcfTechTreeDialog_SelectFileForType" xml:space="preserve">
     <value>Wähle die Datei für den Typ</value>
   </data>
+  <data name="EcfTechTreeDialog_ToolTip_AddTree" xml:space="preserve">
+    <value>Fügt einen neuen leeren TechTree hinzu</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_CopyTree" xml:space="preserve">
+    <value>Kopiert den gewählten TechTree in die Zwischenablage</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_PasteTree" xml:space="preserve">
+    <value>Erzeugt einen neuen TechTree aus der Zwischenablage</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_RemoveTree" xml:space="preserve">
+    <value>Entfernt den ausgewählten TechTree</value>
+  </data>
+  <data name="EcfTechTreeDialog_ToolTip_RenameTree" xml:space="preserve">
+    <value>Benennt den gewählten TechTree um</value>
+  </data>
   <data name="EcfTreeView_ToolTip_TreeItemCountSelector" xml:space="preserve">
     <value>Anzahl der gleichzeitig angezeigten Baum Elemente</value>
   </data>

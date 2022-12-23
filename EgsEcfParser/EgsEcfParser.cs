@@ -2234,6 +2234,10 @@ namespace EgsEcfParser
         {
             InternalValueGroups.Clear();
         }
+        public int CountValues()
+        {
+            return InternalValueGroups.Sum(group => group.Values.Count);
+        }
         public int IndexOf(EcfValueGroup group)
         {
             return InternalValueGroups.IndexOf(group);
@@ -2859,11 +2863,24 @@ namespace EgsEcfParser
         }
         public string GetParameterFirstValue(string paramName)
         {
-            return InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(paramName))?.GetFirstValue();
+            return GetParameterFirstValue(paramName, false);
+        }
+        public string GetParameterFirstValue(string paramName, bool withInheritance)
+        {
+            HasParameter(paramName, withInheritance, out EcfParameter parameter);
+            return parameter?.GetFirstValue();
         }
         public bool HasParameter(string key, out EcfParameter parameter)
         {
+            return HasParameter(key, false, out parameter);
+        }
+        public bool HasParameter(string key, bool withInheritance, out EcfParameter parameter)
+        {
             parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(key));
+            if (parameter == null && withInheritance && Inheritor != null)
+            {
+                Inheritor.HasParameter(key, true, out parameter);
+            }
             return parameter != null;
         }
         public EcfParameter FindOrCreateParameter(string key)

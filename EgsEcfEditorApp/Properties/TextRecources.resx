@@ -387,6 +387,9 @@
   <data name="EcfTechTreeDialog_ElementSettingsUpdateError" xml:space="preserve">
     <value>The update of the element settings failed</value>
   </data>
+  <data name="EcfTechTreeDialog_ReallyRemoveTechTreeQuestion" xml:space="preserve">
+    <value>Really remove complete TechTree?</value>
+  </data>
   <data name="EcfTechTreeDialog_SelectFileForType" xml:space="preserve">
     <value>Select file for the type</value>
   </data>

@@ -152,7 +152,7 @@ namespace EgsEcfEditorApp
         {
             if (!PresetRunning)
             {
-                UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName =
+                UserSettings.Default.EcfTechTreeDialog_AttributeKey_ReferenceName =
                     TechTreeParameterKeyReferenceNameTextBox.Text;
                 HasUnsavedData = true;
             }
@@ -410,7 +410,7 @@ namespace EgsEcfEditorApp
         }
         private void PresetTechTreePanel()
         {
-            TechTreeParameterKeyReferenceNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_ReferenceName;
+            TechTreeParameterKeyReferenceNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_AttributeKey_ReferenceName;
             TechTreeParameterKeyTechTreeNamesTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
             TechTreeParameterKeyTechTreeParentNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName;
             TechTreeParameterKeyUnlockLevelTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;

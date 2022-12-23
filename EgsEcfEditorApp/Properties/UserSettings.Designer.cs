@@ -194,12 +194,12 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Name")]
-        public string EcfTechTreeDialog_ParameterKey_ReferenceName {
+        public string EcfTechTreeDialog_AttributeKey_ReferenceName {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_ReferenceName"]));
+                return ((string)(this["EcfTechTreeDialog_AttributeKey_ReferenceName"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_ReferenceName"] = value;
+                this["EcfTechTreeDialog_AttributeKey_ReferenceName"] = value;
             }
         }
         

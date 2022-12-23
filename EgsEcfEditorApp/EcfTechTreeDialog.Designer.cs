@@ -111,14 +111,14 @@ namespace EgsEcfEditorApp
             this.UnattachedElementsTreeView.TabIndex = 0;
             this.UnattachedElementsTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.UnattachedElementsTreeView_ItemDrag);
             // 
-            // TreeOperationsContainer
+            // ToolContainer
             // 
             this.ToolContainer.AutoSize = true;
             this.ToolContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ToolContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolContainer.Location = new System.Drawing.Point(3, 0);
             this.ToolContainer.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.ToolContainer.Name = "TreeOperationsContainer";
+            this.ToolContainer.Name = "ToolContainer";
             this.ToolContainer.Size = new System.Drawing.Size(794, 1);
             this.ToolContainer.TabIndex = 1;
             // 
@@ -128,6 +128,7 @@ namespace EgsEcfEditorApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.TechTreeDialogPanel);
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EcfTechTreeDialog";
             this.ShowInTaskbar = false;

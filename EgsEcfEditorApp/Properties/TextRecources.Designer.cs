@@ -871,6 +871,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New TechTree.
+        /// </summary>
+        internal static string EcfTechTreeDialog_NewTreeName {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_NewTreeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Really remove complete TechTree?.
         /// </summary>
         internal static string EcfTechTreeDialog_ReallyRemoveTechTreeQuestion {

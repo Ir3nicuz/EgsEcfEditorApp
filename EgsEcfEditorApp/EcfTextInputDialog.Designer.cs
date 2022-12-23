@@ -1,0 +1,126 @@
+﻿
+namespace EgsEcfEditorApp
+{
+    partial class EcfTextInputDialog
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.TextInputPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.InputTextBox = new System.Windows.Forms.TextBox();
+            this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.AbortButton = new System.Windows.Forms.Button();
+            this.OkButton = new System.Windows.Forms.Button();
+            this.TextInputPanel.SuspendLayout();
+            this.ButtonPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // TextInputPanel
+            // 
+            this.TextInputPanel.ColumnCount = 1;
+            this.TextInputPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.TextInputPanel.Controls.Add(this.InputTextBox, 0, 0);
+            this.TextInputPanel.Controls.Add(this.ButtonPanel, 0, 1);
+            this.TextInputPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextInputPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.TextInputPanel.Location = new System.Drawing.Point(0, 0);
+            this.TextInputPanel.Name = "TextInputPanel";
+            this.TextInputPanel.RowCount = 2;
+            this.TextInputPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TextInputPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TextInputPanel.Size = new System.Drawing.Size(334, 61);
+            this.TextInputPanel.TabIndex = 0;
+            // 
+            // InputTextBox
+            // 
+            this.InputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.InputTextBox.Location = new System.Drawing.Point(3, 3);
+            this.InputTextBox.Name = "InputTextBox";
+            this.InputTextBox.Size = new System.Drawing.Size(328, 20);
+            this.InputTextBox.TabIndex = 0;
+            this.InputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.InputTextBox_KeyPress);
+            // 
+            // ButtonPanel
+            // 
+            this.ButtonPanel.Controls.Add(this.AbortButton);
+            this.ButtonPanel.Controls.Add(this.OkButton);
+            this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.ButtonPanel.Location = new System.Drawing.Point(3, 29);
+            this.ButtonPanel.Name = "ButtonPanel";
+            this.ButtonPanel.Size = new System.Drawing.Size(328, 100);
+            this.ButtonPanel.TabIndex = 1;
+            // 
+            // AbortButton
+            // 
+            this.AbortButton.Location = new System.Drawing.Point(250, 3);
+            this.AbortButton.Name = "AbortButton";
+            this.AbortButton.Size = new System.Drawing.Size(75, 23);
+            this.AbortButton.TabIndex = 0;
+            this.AbortButton.Text = "abort";
+            this.AbortButton.UseVisualStyleBackColor = true;
+            this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
+            // 
+            // OkButton
+            // 
+            this.OkButton.Location = new System.Drawing.Point(169, 3);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(75, 23);
+            this.OkButton.TabIndex = 1;
+            this.OkButton.Text = "ok";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
+            // 
+            // EcfTextInputDialog
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(334, 61);
+            this.Controls.Add(this.TextInputPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "EcfTextInputDialog";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "EcfTextInputDialog";
+            this.Activated += new System.EventHandler(this.EcfTextInputDialog_Activated_1);
+            this.TextInputPanel.ResumeLayout(false);
+            this.TextInputPanel.PerformLayout();
+            this.ButtonPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TableLayoutPanel TextInputPanel;
+        private System.Windows.Forms.TextBox InputTextBox;
+        private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
+        private System.Windows.Forms.Button AbortButton;
+        private System.Windows.Forms.Button OkButton;
+    }
+}

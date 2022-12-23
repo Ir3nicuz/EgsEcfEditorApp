@@ -727,6 +727,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TechTree name input.
+        /// </summary>
+        internal static string EcfTechTreeDialog_TreeNameInputHeader {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_TreeNameInputHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unattached Elements.
         /// </summary>
         internal static string EcfTechTreeDialog_UnattachedElementsHeader {
@@ -903,6 +912,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_Copy {
             get {
                 return ResourceManager.GetString("Generic_Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        internal static string Generic_Copying {
+            get {
+                return ResourceManager.GetString("Generic_Copying", resourceCulture);
             }
         }
         

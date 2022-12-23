@@ -339,6 +339,9 @@
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>Tech Tree preview and edit</value>
   </data>
+  <data name="EcfTechTreeDialog_TreeNameInputHeader" xml:space="preserve">
+    <value>TechTree name input</value>
+  </data>
   <data name="EcfTechTreeDialog_UnattachedElementsHeader" xml:space="preserve">
     <value>Unattached Elements</value>
   </data>
@@ -397,6 +400,9 @@
     <value>Comments</value>
   </data>
   <data name="Generic_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Generic_Copying" xml:space="preserve">
     <value>Copy</value>
   </data>
   <data name="Generic_Cost" xml:space="preserve">

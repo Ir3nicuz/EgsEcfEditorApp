@@ -1861,7 +1861,7 @@ namespace EcfFileViews
             TreeMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
             TreeMenu.Items.Add(TitleRecources.Generic_AddTo, IconRecources.Icon_Add, (sender, evt) => AddToItemClicked?.Invoke(sender, evt));
             TreeMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
-            TreeMenu.Items.Add(TitleRecources.Generic_Copy, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            TreeMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
             TreeMenu.Items.Add(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, (sender, evt) => PasteToItemClicked?.Invoke(sender, evt));
             TreeMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
             TreeMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
@@ -2288,7 +2288,7 @@ namespace EcfFileViews
 
             GridMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
             GridMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
-            GridMenu.Items.Add(TitleRecources.Generic_Copy, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            GridMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
             GridMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
             GridMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
 

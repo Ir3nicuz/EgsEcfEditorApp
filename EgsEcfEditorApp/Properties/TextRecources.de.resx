@@ -396,6 +396,9 @@
   <data name="EcfTechTreeDialog_SelectFileForType" xml:space="preserve">
     <value>Wähle die Datei für den Typ</value>
   </data>
+  <data name="EcfTechTreeDialog_TechTreeNameAlreadyUsed" xml:space="preserve">
+    <value>Der TechTree Name wird bereits von einem anderen TechTree verwendet!</value>
+  </data>
   <data name="EcfTechTreeDialog_ToolTip_AddTree" xml:space="preserve">
     <value>Fügt einen neuen leeren TechTree hinzu</value>
   </data>

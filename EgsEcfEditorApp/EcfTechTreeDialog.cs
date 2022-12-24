@@ -68,14 +68,8 @@ namespace EgsEcfEditorApp
         }
         private void TreeTools_AddTreeClicked(object sender, EventArgs evt)
         {
-            string treeName = TextRecources.EcfTechTreeDialog_NewTreeName;
-            DialogResult result = DialogResult.Abort;
-            {
-                result = TreeNameSelector.ShowDialog(this, treeName);
-                treeName = TreeNameSelector.GetText();
-            }
-            while (result == DialogResult.OK && TechTreePageContainer.TabPages.Cast<EcfTechTree>().Any(tree => tree.TreeName.Equals(treeName)));
-            if (result == DialogResult.OK)
+            string treeName = PromptTreeNameEdit(TextRecources.EcfTechTreeDialog_NewTreeName, null);
+            if (treeName != null)
             {
                 TechTreePageContainer.TabPages.Add(new EcfTechTree(this, treeName));
             }
@@ -96,14 +90,8 @@ namespace EgsEcfEditorApp
         {
             if (TechTreePageContainer.SelectedTab is EcfTechTree selectedTree)
             {
-                string treeName = selectedTree.TreeName;
-                DialogResult result = DialogResult.Abort;
-                {
-                    result = TreeNameSelector.ShowDialog(this, treeName);
-                    treeName = TreeNameSelector.GetText();
-                }
-                while (result == DialogResult.OK && TechTreePageContainer.TabPages.Cast<EcfTechTree>().Where(tree => tree != selectedTree).Any(tree => tree.TreeName.Equals(treeName)));
-                if (result == DialogResult.OK)
+                string treeName = PromptTreeNameEdit(selectedTree.TreeName, selectedTree);
+                if (treeName != null)
                 {
                     selectedTree.SetTreeName(treeName);
                 }
@@ -120,14 +108,8 @@ namespace EgsEcfEditorApp
         {
             if (LastCopiedTree != null)
             {
-                string treeName = string.Format("{0} - {1}", LastCopiedTree.TreeName, TitleRecources.Generic_Copy);
-                DialogResult result = DialogResult.Abort;
-                {
-                    result = TreeNameSelector.ShowDialog(this, treeName);
-                    treeName = TreeNameSelector.GetText();
-                }
-                while (result == DialogResult.OK && TechTreePageContainer.TabPages.Cast<EcfTechTree>().Any(tree => tree.TreeName.Equals(treeName))) ;
-                if (result == DialogResult.OK)
+                string treeName = PromptTreeNameEdit(string.Format("{0} - {1}", LastCopiedTree.TreeName, TitleRecources.Generic_Copy), null);
+                if (treeName != null)
                 {
                     EcfTechTree copiedTree = new EcfTechTree(LastCopiedTree);
                     copiedTree.SetTreeName(treeName);
@@ -154,6 +136,27 @@ namespace EgsEcfEditorApp
         }
 
         // private
+        private string PromptTreeNameEdit(string treeName, EcfTechTree editedTree)
+        {
+            bool treeNameValid = false;
+            DialogResult result = DialogResult.OK;
+            while (result == DialogResult.OK && !treeNameValid)
+            {
+                result = TreeNameSelector.ShowDialog(this, treeName);
+                treeName = TreeNameSelector.GetText();
+                treeNameValid = !TechTreePageContainer.TabPages.Cast<EcfTechTree>().Where(tree => tree != editedTree).Any(tree => tree.TreeName.Equals(treeName));
+                if (result == DialogResult.OK && !treeNameValid)
+                {
+                    MessageBox.Show(this, TextRecources.EcfTechTreeDialog_TechTreeNameAlreadyUsed,
+                        TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            if (result != DialogResult.OK)
+            {
+                treeName = null;
+            }
+            return treeName;
+        }
         private DialogResult UpdateUniqueFileTabs(List<EcfTabPage> openedFileTabs)
         {
             UniqueFileTabs.Clear();
@@ -590,7 +593,7 @@ namespace EgsEcfEditorApp
             UpperEdge,
             LowerEdge,
         } 
-        protected class ElementNode : TreeNode
+        public class ElementNode : TreeNode
         {
             public string ElementName { get; }
             public string TechTreeParentName { get; set; }

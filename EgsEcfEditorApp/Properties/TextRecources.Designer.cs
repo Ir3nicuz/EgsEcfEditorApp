@@ -898,6 +898,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The TechTree name is already used by another TechTree!.
+        /// </summary>
+        internal static string EcfTechTreeDialog_TechTreeNameAlreadyUsed {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_TechTreeNameAlreadyUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adds a new empty tech tree.
         /// </summary>
         internal static string EcfTechTreeDialog_ToolTip_AddTree {

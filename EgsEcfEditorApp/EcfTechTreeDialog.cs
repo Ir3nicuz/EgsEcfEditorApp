@@ -592,7 +592,7 @@ namespace EgsEcfEditorApp
             private void ChangeNode(TreeNode targetNode)
             {
 
-
+                // cross tree view update?
                 // daten in altem element zurücksetzen?
 
 

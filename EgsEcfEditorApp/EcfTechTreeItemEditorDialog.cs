@@ -75,7 +75,6 @@ namespace EgsEcfEditorApp
             UnlockCostNumUpDown.Value = unlockCost;
 
             AvailableElements.Clear();
-            if (actualElement != null && !availableElements.Contains(actualElement)) { AvailableElements.Add(actualElement); }
             AvailableElements.AddRange(availableElements);
 
             return ShowDialog(parent);

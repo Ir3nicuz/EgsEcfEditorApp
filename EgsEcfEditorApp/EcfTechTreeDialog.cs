@@ -27,6 +27,12 @@ namespace EgsEcfEditorApp
         private TreeAlteratingTools TreeTools { get; } = new TreeAlteratingTools();
         private EcfTextInputDialog TreeNameSelector { get; } = new EcfTextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
         protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
+        protected ContextMenuStrip TechTreeOperationMenu { get; } = new ContextMenuStrip();
+        private ToolStripMenuItem NodeChangeItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple);
+        private ToolStripMenuItem NodeAddItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Add, IconRecources.Icon_Add);
+        private ToolStripMenuItem NodeCopyItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Copying, IconRecources.Icon_Copy);
+        private ToolStripMenuItem NodePasteItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Paste, IconRecources.Icon_Paste);
+        private ToolStripMenuItem NodeRemoveItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Remove, IconRecources.Icon_Remove);
 
         protected List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
         protected ElementNode LastCopiedElement { get; set; } = null;
@@ -53,6 +59,18 @@ namespace EgsEcfEditorApp
             TreeTools.RenameTreeClicked += TreeTools_RenameTreeClicked;
             TreeTools.CopyTreeClicked += TreeTools_CopyTreeClicked;
             TreeTools.PasteTreeClicked += TreeTools_PasteTreeClicked;
+
+            NodeChangeItem.Click += NodeChangeItem_Click;
+            NodeAddItem.Click += NodeAddItem_Click;
+            NodeCopyItem.Click += NodeCopyItem_Click;
+            NodePasteItem.Click += NodePasteItem_Click;
+            NodeRemoveItem.Click += NodeRemoveItem_Click;
+
+            TechTreeOperationMenu.Items.Add(NodeChangeItem);
+            TechTreeOperationMenu.Items.Add(NodeAddItem);
+            TechTreeOperationMenu.Items.Add(NodeCopyItem);
+            TechTreeOperationMenu.Items.Add(NodePasteItem);
+            TechTreeOperationMenu.Items.Add(NodeRemoveItem);
         }
 
         // events
@@ -121,6 +139,41 @@ namespace EgsEcfEditorApp
                 }
             }
         }
+        private void NodeChangeItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
+            {
+                tree.ChangeSelectedNode();
+            }
+        }
+        private void NodeAddItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
+            {
+                tree.AddNodeToSelectedNode();
+            }
+        }
+        private void NodeCopyItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
+            {
+                tree.CopySelectedNode();
+            }
+        }
+        private void NodePasteItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
+            {
+                tree.PasteNodeToSelectedNode();
+            }
+        }
+        private void NodeRemoveItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
+            {
+                tree.RemoveSelectedNode();
+            }
+        }
 
         // public
         public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
@@ -137,6 +190,12 @@ namespace EgsEcfEditorApp
             if (result != DialogResult.OK) { return result; }
             UpdateTechTrees();
             return ShowDialog(parent);
+        }
+        public void HideNodeSpecificMenuStripItems(bool hide)
+        {
+            NodeChangeItem.Visible = !hide;
+            NodeCopyItem.Visible = !hide;
+            NodeRemoveItem.Visible = !hide;
         }
 
         // private
@@ -258,7 +317,6 @@ namespace EgsEcfEditorApp
             public string TreeName { get; private set; }
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
             private EcfTechTreeDialog ParentForm { get; }
-            private ContextMenuStrip TechTreeOperation { get; } = new ContextMenuStrip();
             private List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
 
             public EcfTechTree(EcfTechTreeDialog parentForm, string name)
@@ -280,12 +338,6 @@ namespace EgsEcfEditorApp
                 ElementTreeView.NodeMouseDoubleClick += ElementTreeView_NodeMouseDoubleClick;
 
                 Controls.Add(ElementTreeView);
-
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => NodeChangeClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Add, IconRecources.Icon_Add, (sender, evt) => NodeAddClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => NodeCopyClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Paste, IconRecources.Icon_Paste, (sender, evt) => NodePasteClicked(sender, evt));
-                TechTreeOperation.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => NodeRemoveClicked(sender, evt));
             }
             public EcfTechTree(EcfTechTree template) : this(template.ParentForm, template.TreeName)
             {
@@ -340,8 +392,8 @@ namespace EgsEcfEditorApp
             private void ElementTreeView_KeyUp(object sender, KeyEventArgs evt)
             {
                 if (evt.KeyCode == Keys.Delete) { RemoveNode(ElementTreeView.SelectedNode); evt.Handled = true; }
-                else if (evt.Control && evt.KeyCode == Keys.C) { CopyNode(ElementTreeView.SelectedNode); evt.Handled = true; }
-                else if (evt.Control && evt.KeyCode == Keys.V) { PasteNode(ElementTreeView.SelectedNode); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.C) { CopySelectedNode(); evt.Handled = true; }
+                else if (evt.Control && evt.KeyCode == Keys.V) { PasteNodeToSelectedNode(); evt.Handled = true; }
             }
             private void ElementTreeView_KeyPress(object sender, KeyPressEventArgs evt)
             {
@@ -350,9 +402,10 @@ namespace EgsEcfEditorApp
             }
             private void ElementTreeView_MouseUp(object sender, MouseEventArgs evt)
             {
-                if (ElementTreeView.Nodes.Count < 1)
+                if (ElementTreeView.Nodes.Count < 1 && evt.Button == MouseButtons.Right)
                 {
-                    AddNode(null);
+                    ParentForm.HideNodeSpecificMenuStripItems(true);
+                    ParentForm.TechTreeOperationMenu.Show(this, evt.Location);
                 }
             }
             private void ElementTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs evt)
@@ -360,32 +413,13 @@ namespace EgsEcfEditorApp
                 ElementTreeView.SelectedNode = evt.Node;
                 if (evt.Button == MouseButtons.Right)
                 {
-                    TechTreeOperation.Show(this, evt.Location);
+                    ParentForm.HideNodeSpecificMenuStripItems(false);
+                    ParentForm.TechTreeOperationMenu.Show(this, evt.Location);
                 }
             }
             private void ElementTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs evt)
             {
-                ChangeNode(ElementTreeView.SelectedNode);
-            }
-            private void NodeChangeClicked(object sender, EventArgs evt)
-            {
-                ChangeNode(ElementTreeView.SelectedNode);
-            }
-            private void NodeCopyClicked(object sender, EventArgs evt)
-            {
-                CopyNode(ElementTreeView.SelectedNode);
-            }
-            private void NodePasteClicked(object sender, EventArgs evt)
-            {
-                PasteNode(ElementTreeView.SelectedNode);
-            }
-            private void NodeAddClicked(object sender, EventArgs evt)
-            {
-                AddNode(ElementTreeView.SelectedNode);
-            }
-            private void NodeRemoveClicked(object sender, EventArgs evt)
-            {
-                RemoveNode(ElementTreeView.SelectedNode);
+                ChangeSelectedNode();
             }
 
             // publics
@@ -435,11 +469,91 @@ namespace EgsEcfEditorApp
                     ShowUpdateErrorMessage(ex.Message);
                 }
             }
+            [Obsolete("needs work")]
+            public void ChangeSelectedNode()
+            {
+                
 
+                // cross tree view update?
+                // daten in altem element zurücksetzen?
+
+
+                if (ElementTreeView.SelectedNode is ElementNode sourceNode)
+                {
+                    EcfBlock sourceElement = sourceNode.Element;
+                    int unlockLevel = sourceNode.UnlockLevel;
+                    int unlockCost = sourceNode.UnlockCost;
+
+                    AvailableElements.Clear();
+                    AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList(ElementTreeView.Nodes)));
+                    if (!AvailableElements.Contains(sourceElement)) { AvailableElements.Insert(0, sourceElement); }
+
+                    if (ParentForm.TreeItemEditor.ShowDialog(this, sourceElement, AvailableElements, unlockLevel, unlockCost) == DialogResult.OK)
+                    {
+                        EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
+                        EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File.ItemList.Contains(element));
+                        unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
+                        unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
+
+                        string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
+                        ElementNode newNode = new ElementNode(tab, element, elementName);
+                        TrySetUnlockData(newNode, unlockLevel, unlockCost);
+
+                        TryInsertNode(ElementTreeView.SelectedNode as ElementNode, null, newNode);
+                    }
+                }
+
+
+
+            }
+            [Obsolete("needs work")]
+            public void AddNodeToSelectedNode()
+            {
+                int unlockLevel = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
+                int unlockCost = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+
+                AvailableElements.Clear();
+                AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList(ElementTreeView.Nodes)));
+
+                if (ParentForm.TreeItemEditor.ShowDialog(this, null, AvailableElements, unlockLevel, unlockCost) == DialogResult.OK)
+                {
+                    EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
+                    EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File.ItemList.Contains(element));
+                    unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
+                    unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
+
+                    string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
+                    ElementNode newNode = new ElementNode(tab, element, elementName);
+                    TrySetUnlockData(newNode, unlockLevel, unlockCost);
+
+                    TryInsertNode(ElementTreeView.SelectedNode as ElementNode, null, newNode);
+                }
+            }
+            public void CopySelectedNode()
+            {
+                if (ElementTreeView.SelectedNode is ElementNode node)
+                {
+                    ParentForm.LastCopiedElement = new ElementNode(node);
+                }
+            }
+            public void PasteNodeToSelectedNode()
+            {
+                ElementNode sourceNode = ParentForm.LastCopiedElement;
+                if (sourceNode != null)
+                {
+                    ElementNode newNode = new ElementNode(sourceNode);
+                    TryInsertNode(ElementTreeView.SelectedNode as ElementNode, null, newNode);
+                }
+            }
+            public void RemoveSelectedNode()
+            {
+                RemoveNode(ElementTreeView.SelectedNode);
+            }
+            
             // privates
             private void ShowUpdateErrorMessage(string message)
             {
-                MessageBox.Show(this, string.Format("{0}:{1}{2}", TextRecources.EcfTechTreeDialog_ElementSettingsUpdateError, Environment.NewLine, message),
+                MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_ElementSettingsUpdateError, Environment.NewLine, message),
                     TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             private ElementNode FindParentNode(string parentName, TreeNodeCollection nodes)
@@ -481,22 +595,58 @@ namespace EgsEcfEditorApp
                     return CursorAlignment.Center;
                 }
             }
-            [Obsolete("needs work")]
             private bool TryInsertNode(ElementNode targetNode, int? targetIndex, ElementNode sourceNode)
             {
                 if (sourceNode != null)
                 {
-                    try
+                    List<EcfBlock> treeElements = BuildElementList(ElementTreeView.Nodes);
+                    List<EcfBlock> insertingElements = BuildElementList(sourceNode);
+                    List<EcfBlock> forbiddenElements = insertingElements.Where(element => treeElements.Contains(element)).ToList();
+                    if (forbiddenElements.Count > 0)
                     {
-                        UpdateTechTreeNames(sourceNode);
-                        UpdateTechTreeParent(targetNode?.ElementName, sourceNode);
-                        Add(sourceNode, targetIndex);
-                        return true;
+                        MessageBox.Show(this,
+                            string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_InsertNotPossibleWhileElementInTree, Environment.NewLine,
+                            string.Join(Environment.NewLine, forbiddenElements.Select(element => element.BuildIdentification()))),
+                            TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        ShowUpdateErrorMessage(ex.Message);
+                        try
+                        {
+                            UpdateTechTreeNames(sourceNode);
+                            UpdateTechTreeParent(targetNode?.ElementName, sourceNode);
+                            Add(sourceNode, targetIndex);
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowUpdateErrorMessage(ex.Message);
+                        }
                     }
+                }
+                return false;
+            }
+            private bool TrySetUnlockData(ElementNode sourceNode, int unlockLevel, int unlockCost)
+            {
+                try
+                {
+                    EcfParameter levelParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockLevelParameterKey);
+                    EcfParameter costParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockCostParameterKey);
+
+                    levelParameter.ClearValues();
+                    costParameter.ClearValues();
+                    levelParameter.AddValue(unlockLevel.ToString());
+                    costParameter.AddValue(unlockCost.ToString());
+                    ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
+
+                    sourceNode.SetUnlockLevel(unlockLevel);
+                    sourceNode.SetUnlockCost(unlockCost);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ShowUpdateErrorMessage(ex.Message);
                 }
                 return false;
             }
@@ -512,10 +662,7 @@ namespace EgsEcfEditorApp
             }
             private void UpdateTechTreeNames(TreeNodeCollection sourceNodes)
             {
-                sourceNodes.Cast<ElementNode>().ToList().ForEach(node => {
-                    UpdateTechTreeNames(node);
-                    UpdateTechTreeNames(node.Nodes);
-                });
+                sourceNodes.Cast<ElementNode>().ToList().ForEach(node => UpdateTechTreeNames(node));
             }
             private void UpdateTechTreeNames(ElementNode sourceNode)
             {
@@ -525,32 +672,7 @@ namespace EgsEcfEditorApp
                     parameter.AddValue(TreeName);
                     ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
                 }
-            }
-            private void UpdateUnlockData(ElementNode sourceNode, int unlockLevel, int unlockCost)
-            {
-                EcfParameter levelParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockLevelParameterKey);
-                EcfParameter costParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockCostParameterKey);
-
-                levelParameter.ClearValues();
-                costParameter.ClearValues();
-                levelParameter.AddValue(unlockLevel.ToString());
-                costParameter.AddValue(unlockCost.ToString());
-                ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
-
-                sourceNode.SetUnlockLevel(unlockLevel);
-                sourceNode.SetUnlockCost(unlockCost);
-            }
-            private void RemoveNode(TreeNode targetNode)
-            {
-                if (targetNode is ElementNode node)
-                {
-                    foreach (TreeNode subNode in node.Nodes)
-                    {
-                        RemoveNode(subNode);
-                    }
-                    RemoveTechTreeName(node);
-                    node.Remove();
-                }
+                UpdateTechTreeNames(sourceNode.Nodes);
             }
             private void RemoveTechTreeName(ElementNode targetNode)
             {
@@ -572,52 +694,23 @@ namespace EgsEcfEditorApp
                     ParentForm.ChangedFileTabs.Add(targetNode.Tab);
                 }
             }
-            private void CopyNode(TreeNode targetNode)
+            private void RemoveNode(TreeNode targetNode)
             {
                 if (targetNode is ElementNode node)
                 {
-                    ParentForm.LastCopiedElement = new ElementNode(node);
+                    foreach (TreeNode subNode in node.Nodes)
+                    {
+                        RemoveNode(subNode);
+                    }
+                    RemoveTechTreeName(node);
+                    node.Remove();
                 }
             }
-            [Obsolete("needs work")]
-            private void PasteNode(TreeNode targetNode)
+            private List<EcfBlock> BuildElementList(ElementNode node)
             {
-                
-                
-                ElementNode source = new ElementNode(ParentForm.LastCopiedElement);
-
-
-            }
-            [Obsolete("needs work")]
-            private void ChangeNode(TreeNode targetNode)
-            {
-
-                // cross tree view update?
-                // daten in altem element zurücksetzen?
-
-
-            }
-            [Obsolete("needs work")]
-            private void AddNode(TreeNode targetNode)
-            {
-                AvailableElements.Clear();
-                AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList(ElementTreeView.Nodes)));
-
-                if (ParentForm.TreeItemEditor.ShowDialog(this, null, AvailableElements, 
-                    UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel,
-                    UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost) == DialogResult.OK)
-                {
-                    EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
-                    EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File.ItemList.Contains(element));
-                    string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
-                    ElementNode newNode = new ElementNode(tab, element, elementName);
-                    
-                    int unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
-                    int unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
-                    UpdateUnlockData(newNode, unlockLevel, unlockCost);
-                    
-                    TryInsertNode(targetNode as ElementNode, null, newNode);
-                }
+                List<EcfBlock> elements = new List<EcfBlock> { node.Element };
+                elements.AddRange(BuildElementList(node.Nodes));
+                return elements;
             }
             private List<EcfBlock> BuildElementList(TreeNodeCollection nodes)
             {

@@ -28,6 +28,7 @@ namespace EgsEcfEditorApp
         private EcfTextInputDialog TreeNameSelector { get; } = new EcfTextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
         protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
 
+        protected List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
         protected ElementNode LastCopiedElement { get; set; } = null;
         private EcfTechTree LastCopiedTree { get; set; } = null;
 
@@ -163,6 +164,7 @@ namespace EgsEcfEditorApp
         private DialogResult UpdateUniqueFileTabs(List<EcfTabPage> openedFileTabs)
         {
             UniqueFileTabs.Clear();
+            AvailableElements.Clear();
             foreach (EcfTabPage openedTab in openedFileTabs)
             {
                 string openedTabFileType = openedTab.File.Definition.FileType;
@@ -182,6 +184,7 @@ namespace EgsEcfEditorApp
                     }
                 }
             }
+            AvailableElements.AddRange(UniqueFileTabs.SelectMany(tab => tab.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()));
             return DialogResult.OK;
         }
         [Obsolete("has test data.")]
@@ -256,6 +259,7 @@ namespace EgsEcfEditorApp
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
             private EcfTechTreeDialog ParentForm { get; }
             private ContextMenuStrip TechTreeOperation { get; } = new ContextMenuStrip();
+            private List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
 
             public EcfTechTree(EcfTechTreeDialog parentForm, string name)
             {
@@ -589,37 +593,41 @@ namespace EgsEcfEditorApp
             {
 
 
-
+                // daten in altem element zurücksetzen?
 
 
             }
             [Obsolete("needs work")]
             private void AddNode(TreeNode targetNode)
             {
-                // targetnode "null" muss auch gehen -> ADD at end
-                // index nicht erforderlich weil node als einstieg gewählt wird -> add at end
+                AvailableElements.Clear();
+                AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList(ElementTreeView.Nodes)));
 
-                // daten in neuem element ändern?
-                // daten in altem element zurücksetzen?
-
-                // setzen des change tab erforderlich?
-
-                if (ParentForm.TreeItemEditor.ShowDialog(this, null, new List<EcfBlock>(), 
+                if (ParentForm.TreeItemEditor.ShowDialog(this, null, AvailableElements, 
                     UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel,
                     UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost) == DialogResult.OK)
                 {
                     EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
                     EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File.ItemList.Contains(element));
-
                     string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
+                    ElementNode newNode = new ElementNode(tab, element, elementName);
                     
                     int unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
                     int unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
-
-                    ElementNode newNode = new ElementNode(tab, element, elementName);
                     UpdateUnlockData(newNode, unlockLevel, unlockCost);
+                    
                     TryInsertNode(targetNode as ElementNode, null, newNode);
                 }
+            }
+            private List<EcfBlock> BuildElementList(TreeNodeCollection nodes)
+            {
+                List<EcfBlock> elements = new List<EcfBlock>();
+                foreach (ElementNode node in nodes.Cast<ElementNode>())
+                {
+                    elements.Add(node.Element);
+                    elements.AddRange(BuildElementList(node.Nodes));
+                }
+                return elements;
             }
         }
         private enum CursorAlignment

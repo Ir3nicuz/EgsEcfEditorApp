@@ -293,6 +293,11 @@ namespace EgsEcfEditorApp
             Tip.SetToolTip(TechTreeDefaultValueUnlockLevelNumericUpDown, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel);
             Tip.SetToolTip(TechTreeParameterKeyUnlockCostTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost);
             Tip.SetToolTip(TechTreeDefaultValueUnlockCostNumericUpDown, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockCost);
+
+            TechTreeDefaultValueUnlockLevelNumericUpDown.Minimum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockLevelMinValue;
+            TechTreeDefaultValueUnlockLevelNumericUpDown.Maximum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockLevelMaxValue;
+            TechTreeDefaultValueUnlockCostNumericUpDown.Minimum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue;
+            TechTreeDefaultValueUnlockCostNumericUpDown.Maximum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue;
         }
         private void InitInfoPanel(int index)
         {

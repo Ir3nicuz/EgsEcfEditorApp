@@ -614,11 +614,6 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Location = new System.Drawing.Point(279, 159);
-            this.TechTreeDefaultValueUnlockCostNumericUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Name = "TechTreeDefaultValueUnlockCostNumericUpDown";
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Size = new System.Drawing.Size(270, 20);
             this.TechTreeDefaultValueUnlockCostNumericUpDown.TabIndex = 27;
@@ -750,16 +745,6 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Location = new System.Drawing.Point(279, 107);
-            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Name = "TechTreeDefaultValueUnlockLevelNumericUpDown";
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Size = new System.Drawing.Size(270, 20);
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.TabIndex = 25;

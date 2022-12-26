@@ -414,6 +414,9 @@
   <data name="EcfTechTreeDialog_ToolTip_RenameTree" xml:space="preserve">
     <value>Renames the selected tech tree</value>
   </data>
+  <data name="EcfTechTreeItemEditorDialog_NoElementSelected" xml:space="preserve">
+    <value>No suitable element selected</value>
+  </data>
   <data name="EcfTreeView_ToolTip_TreeItemCountSelector" xml:space="preserve">
     <value>Count of tree items shown at once</value>
   </data>

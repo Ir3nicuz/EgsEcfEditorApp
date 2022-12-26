@@ -239,8 +239,8 @@ namespace EgsEcfEditorApp
         }
         private void RestoreDefinitionSettings()
         {
-            DefaultBaseFolder = InternalSettings.Default.EgsEcfEditorApp_DefinitionDefaultBaseFolder;
-            TemplateFileName = InternalSettings.Default.EgsEcfEditorApp_DefinitionTemplateFileName;
+            DefaultBaseFolder = InternalSettings.Default.EgsEcfEditorApp_FileHandling_DefinitionDefaultBaseFolder;
+            TemplateFileName = InternalSettings.Default.EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName;
             try
             {
                 List<string> gameVersions = GetGameModes();
@@ -2634,7 +2634,7 @@ namespace EcfFileViews
                         valueGroups.Append(BuildGroupPrefix(0));
                     }
                     valueGroups.Append(BuildValueLine(Parameter.ValueGroups[0].Values));
-                    int maxCount = InternalSettings.Default.EgsEcfEditorApp_GroupMaxCount;
+                    int maxCount = InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_GroupMaxCount;
                     for (int groupIndex = 1; groupIndex < Parameter.ValueGroups.Count; groupIndex++)
                     {
                         if (groupIndex >= maxCount) { break; }
@@ -2645,24 +2645,24 @@ namespace EcfFileViews
                     if (Parameter.ValueGroups.Count > maxCount)
                     {
                         valueGroups.Append(Environment.NewLine);
-                        valueGroups.Append(InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
+                        valueGroups.Append(InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator);
                     }
                 }
                 return valueGroups.ToString();
             }
             private string BuildGroupPrefix(int groupIndex)
             {
-                return string.Format("{0} {1}{2}", TitleRecources.Generic_Group, groupIndex + 1, InternalSettings.Default.EgsEcfEditorApp_GroupSeperator);
+                return string.Format("{0} {1}{2}", TitleRecources.Generic_Group, groupIndex + 1, InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_GroupSeperator);
             }
             private string BuildValueLine(ReadOnlyCollection<string> values)
             {
-                int maxCount = InternalSettings.Default.EgsEcfEditorApp_ValueMaxCount;
-                int maxLenght = InternalSettings.Default.EgsEcfEditorApp_ValueMaxLenght;
-                string valueSeperator = InternalSettings.Default.EgsEcfEditorApp_ValueSeperator;
+                int maxCount = InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_ValueMaxCount;
+                int maxLenght = InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_ValueMaxLenght;
+                string valueSeperator = InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_ValueSeperator;
                 string line = string.Join(valueSeperator, values.ToArray(), 0, Math.Min(values.Count, maxCount));
                 if (values.Count <= maxCount && line.Length <= maxLenght) { return line; }
                 string limitedLine = line.Length > maxLenght ? line.Substring(0, maxLenght) : line;
-                return string.Format("{0}{1}{2}", limitedLine, valueSeperator, InternalSettings.Default.EgsEcfEditorApp_ValuesPendingIndicator);
+                return string.Format("{0}{1}{2}", limitedLine, valueSeperator, InternalSettings.Default.EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator);
             }
         }
     }
@@ -4609,29 +4609,29 @@ namespace Helpers
         {
             string appPath = null;
             string steamInstallPath = Registry.GetValue(
-                InternalSettings.Default.EgsEcfEditorApp_SteamRegistryKey64,
-                InternalSettings.Default.EgsEcfEditorApp_InstallPathRegistryValue, null)?.ToString();
+                InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamRegistryKey64,
+                InternalSettings.Default.EgsEcfEditorApp_FileHandling_InstallPathRegistryValue, null)?.ToString();
             if (string.IsNullOrEmpty(steamInstallPath))
             {
                 steamInstallPath = Registry.GetValue(
-                    InternalSettings.Default.EgsEcfEditorApp_SteamRegistryKey32,
-                    InternalSettings.Default.EgsEcfEditorApp_InstallPathRegistryValue, null)?.ToString();
+                    InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamRegistryKey32,
+                    InternalSettings.Default.EgsEcfEditorApp_FileHandling_InstallPathRegistryValue, null)?.ToString();
             }
             if (!string.IsNullOrEmpty(steamInstallPath))
             {
-                string steamManifestPath = Path.Combine(steamInstallPath, InternalSettings.Default.EgsEcfEditorApp_SteamAppsFolderName);
-                string[] manifestFiles = Directory.GetFiles(steamManifestPath, string.Format("*.{0}", InternalSettings.Default.EgsEcfEditorApp_SteamAppManifestFileExtension));
+                string steamManifestPath = Path.Combine(steamInstallPath, InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamAppsFolderName);
+                string[] manifestFiles = Directory.GetFiles(steamManifestPath, string.Format("*.{0}", InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamAppManifestFileExtension));
 
-                string steamLibraryFilePath = Path.Combine(steamManifestPath, InternalSettings.Default.EgsEcfEditorApp_SteamLibraryConfigFileName);
-                string steamAppRootPath = ParseSteamConfigFileValue(steamLibraryFilePath, InternalSettings.Default.EgsEcfEditorApp_AppRootPathSteamConfigKey);
+                string steamLibraryFilePath = Path.Combine(steamManifestPath, InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamLibraryConfigFileName);
+                string steamAppRootPath = ParseSteamConfigFileValue(steamLibraryFilePath, InternalSettings.Default.EgsEcfEditorApp_FileHandling_AppRootPathSteamConfigKey);
 
                 string manifestFile = manifestFiles.FirstOrDefault(file => Path.GetFileNameWithoutExtension(file).Contains(appId));
-                string appBasePath = ParseSteamConfigFileValue(manifestFile, InternalSettings.Default.EgsEcfEditorApp_AppPathSteamConfigKey);
+                string appBasePath = ParseSteamConfigFileValue(manifestFile, InternalSettings.Default.EgsEcfEditorApp_FileHandling_AppPathSteamConfigKey);
 
                 if (!string.IsNullOrEmpty(steamAppRootPath) && !string.IsNullOrEmpty(appBasePath))
                 {
-                    appPath = Path.Combine(steamAppRootPath, InternalSettings.Default.EgsEcfEditorApp_SteamAppsFolderName, 
-                        InternalSettings.Default.EgsEcfEditorApp_SteamCommonFolderName, appBasePath);
+                    appPath = Path.Combine(steamAppRootPath, InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamAppsFolderName, 
+                        InternalSettings.Default.EgsEcfEditorApp_FileHandling_SteamCommonFolderName, appBasePath);
                 }
             }
             return appPath;
@@ -4642,10 +4642,10 @@ namespace Helpers
             directory.Append(AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory);
             if (directory.Length == 0)
             {
-                string gamePath = FindSteamAppPath(InternalSettings.Default.EgsEcfEditorApp_EgsSteamAppId);
+                string gamePath = FindSteamAppPath(InternalSettings.Default.EgsEcfEditorApp_EGSSteamAppId);
                 if (gamePath != null)
                 {
-                    directory.Append(Path.Combine(gamePath, InternalSettings.Default.EgsEcfEditorApp_EgsConfigDirectory));
+                    directory.Append(Path.Combine(gamePath, InternalSettings.Default.EgsEcfEditorApp_FileHandling_EGSConfigDirectory));
                 }
             }
             if (directory.Length == 0)

@@ -952,6 +952,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No suitable element selected.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_NoElementSelected {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_NoElementSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count of tree items shown at once.
         /// </summary>
         internal static string EcfTreeView_ToolTip_TreeItemCountSelector {

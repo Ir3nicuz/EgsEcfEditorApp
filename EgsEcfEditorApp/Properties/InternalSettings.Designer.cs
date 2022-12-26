@@ -26,252 +26,252 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("EgsEcfFile|*.ecf")]
-        public string EgsEcfEditorApp_FileDialogFilter {
+        public string EgsEcfEditorApp_FileHandling_FileDialogFilter {
             get {
-                return ((string)(this["EgsEcfEditorApp_FileDialogFilter"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_FileDialogFilter"]));
             }
             set {
-                this["EgsEcfEditorApp_FileDialogFilter"] = value;
+                this["EgsEcfEditorApp_FileHandling_FileDialogFilter"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ecf")]
-        public string EgsEcfEditorApp_FileDialogExtension {
+        public string EgsEcfEditorApp_FileHandling_FileDialogExtension {
             get {
-                return ((string)(this["EgsEcfEditorApp_FileDialogExtension"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_FileDialogExtension"]));
             }
             set {
-                this["EgsEcfEditorApp_FileDialogExtension"] = value;
+                this["EgsEcfEditorApp_FileHandling_FileDialogExtension"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Content\\Configuration")]
-        public string EgsEcfEditorApp_EgsConfigDirectory {
+        public string EgsEcfEditorApp_FileHandling_EGSConfigDirectory {
             get {
-                return ((string)(this["EgsEcfEditorApp_EgsConfigDirectory"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_EGSConfigDirectory"]));
             }
             set {
-                this["EgsEcfEditorApp_EgsConfigDirectory"] = value;
+                this["EgsEcfEditorApp_FileHandling_EGSConfigDirectory"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("383120")]
-        public string EgsEcfEditorApp_EgsSteamAppId {
+        public string EgsEcfEditorApp_EGSSteamAppId {
             get {
-                return ((string)(this["EgsEcfEditorApp_EgsSteamAppId"]));
+                return ((string)(this["EgsEcfEditorApp_EGSSteamAppId"]));
             }
             set {
-                this["EgsEcfEditorApp_EgsSteamAppId"] = value;
+                this["EgsEcfEditorApp_EGSSteamAppId"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SteamApps")]
-        public string EgsEcfEditorApp_SteamAppsFolderName {
+        public string EgsEcfEditorApp_FileHandling_SteamAppsFolderName {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamAppsFolderName"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamAppsFolderName"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamAppsFolderName"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamAppsFolderName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("InstallPath")]
-        public string EgsEcfEditorApp_InstallPathRegistryValue {
+        public string EgsEcfEditorApp_FileHandling_InstallPathRegistryValue {
             get {
-                return ((string)(this["EgsEcfEditorApp_InstallPathRegistryValue"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_InstallPathRegistryValue"]));
             }
             set {
-                this["EgsEcfEditorApp_InstallPathRegistryValue"] = value;
+                this["EgsEcfEditorApp_FileHandling_InstallPathRegistryValue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("HKEY_LOCAL_MACHINE\\SOFTWARE\\Valve\\Steam")]
-        public string EgsEcfEditorApp_SteamRegistryKey32 {
+        public string EgsEcfEditorApp_FileHandling_SteamRegistryKey32 {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamRegistryKey32"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamRegistryKey32"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamRegistryKey32"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamRegistryKey32"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Valve\\Steam")]
-        public string EgsEcfEditorApp_SteamRegistryKey64 {
+        public string EgsEcfEditorApp_FileHandling_SteamRegistryKey64 {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamRegistryKey64"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamRegistryKey64"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamRegistryKey64"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamRegistryKey64"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("acf")]
-        public string EgsEcfEditorApp_SteamAppManifestFileExtension {
+        public string EgsEcfEditorApp_FileHandling_SteamAppManifestFileExtension {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamAppManifestFileExtension"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamAppManifestFileExtension"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamAppManifestFileExtension"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamAppManifestFileExtension"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("libraryfolders.vdf")]
-        public string EgsEcfEditorApp_SteamLibraryConfigFileName {
+        public string EgsEcfEditorApp_FileHandling_SteamLibraryConfigFileName {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamLibraryConfigFileName"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamLibraryConfigFileName"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamLibraryConfigFileName"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamLibraryConfigFileName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("path")]
-        public string EgsEcfEditorApp_AppRootPathSteamConfigKey {
+        public string EgsEcfEditorApp_FileHandling_AppRootPathSteamConfigKey {
             get {
-                return ((string)(this["EgsEcfEditorApp_AppRootPathSteamConfigKey"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_AppRootPathSteamConfigKey"]));
             }
             set {
-                this["EgsEcfEditorApp_AppRootPathSteamConfigKey"] = value;
+                this["EgsEcfEditorApp_FileHandling_AppRootPathSteamConfigKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("installdir")]
-        public string EgsEcfEditorApp_AppPathSteamConfigKey {
+        public string EgsEcfEditorApp_FileHandling_AppPathSteamConfigKey {
             get {
-                return ((string)(this["EgsEcfEditorApp_AppPathSteamConfigKey"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_AppPathSteamConfigKey"]));
             }
             set {
-                this["EgsEcfEditorApp_AppPathSteamConfigKey"] = value;
+                this["EgsEcfEditorApp_FileHandling_AppPathSteamConfigKey"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("common")]
-        public string EgsEcfEditorApp_SteamCommonFolderName {
+        public string EgsEcfEditorApp_FileHandling_SteamCommonFolderName {
             get {
-                return ((string)(this["EgsEcfEditorApp_SteamCommonFolderName"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_SteamCommonFolderName"]));
             }
             set {
-                this["EgsEcfEditorApp_SteamCommonFolderName"] = value;
+                this["EgsEcfEditorApp_FileHandling_SteamCommonFolderName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("EcfFileDefinitions")]
-        public string EgsEcfEditorApp_DefinitionDefaultBaseFolder {
+        public string EgsEcfEditorApp_FileHandling_DefinitionDefaultBaseFolder {
             get {
-                return ((string)(this["EgsEcfEditorApp_DefinitionDefaultBaseFolder"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_DefinitionDefaultBaseFolder"]));
             }
             set {
-                this["EgsEcfEditorApp_DefinitionDefaultBaseFolder"] = value;
+                this["EgsEcfEditorApp_FileHandling_DefinitionDefaultBaseFolder"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("VanillaEcfDefinition_BlocksConfig.xml")]
-        public string EgsEcfEditorApp_DefinitionTemplateFileName {
+        public string EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName {
             get {
-                return ((string)(this["EgsEcfEditorApp_DefinitionTemplateFileName"]));
+                return ((string)(this["EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName"]));
             }
             set {
-                this["EgsEcfEditorApp_DefinitionTemplateFileName"] = value;
+                this["EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(", ")]
-        public string EgsEcfEditorApp_ValueSeperator {
+        public string EgsEcfEditorApp_ParameterDisplay_ValueSeperator {
             get {
-                return ((string)(this["EgsEcfEditorApp_ValueSeperator"]));
+                return ((string)(this["EgsEcfEditorApp_ParameterDisplay_ValueSeperator"]));
             }
             set {
-                this["EgsEcfEditorApp_ValueSeperator"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_ValueSeperator"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(": ")]
-        public string EgsEcfEditorApp_GroupSeperator {
+        public string EgsEcfEditorApp_ParameterDisplay_GroupSeperator {
             get {
-                return ((string)(this["EgsEcfEditorApp_GroupSeperator"]));
+                return ((string)(this["EgsEcfEditorApp_ParameterDisplay_GroupSeperator"]));
             }
             set {
-                this["EgsEcfEditorApp_GroupSeperator"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_GroupSeperator"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("...")]
-        public string EgsEcfEditorApp_ValuesPendingIndicator {
+        public string EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator {
             get {
-                return ((string)(this["EgsEcfEditorApp_ValuesPendingIndicator"]));
+                return ((string)(this["EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator"]));
             }
             set {
-                this["EgsEcfEditorApp_ValuesPendingIndicator"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int EgsEcfEditorApp_ValueMaxCount {
+        public int EgsEcfEditorApp_ParameterDisplay_ValueMaxCount {
             get {
-                return ((int)(this["EgsEcfEditorApp_ValueMaxCount"]));
+                return ((int)(this["EgsEcfEditorApp_ParameterDisplay_ValueMaxCount"]));
             }
             set {
-                this["EgsEcfEditorApp_ValueMaxCount"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_ValueMaxCount"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int EgsEcfEditorApp_GroupMaxCount {
+        public int EgsEcfEditorApp_ParameterDisplay_GroupMaxCount {
             get {
-                return ((int)(this["EgsEcfEditorApp_GroupMaxCount"]));
+                return ((int)(this["EgsEcfEditorApp_ParameterDisplay_GroupMaxCount"]));
             }
             set {
-                this["EgsEcfEditorApp_GroupMaxCount"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_GroupMaxCount"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("80")]
-        public int EgsEcfEditorApp_ValueMaxLenght {
+        public int EgsEcfEditorApp_ParameterDisplay_ValueMaxLenght {
             get {
-                return ((int)(this["EgsEcfEditorApp_ValueMaxLenght"]));
+                return ((int)(this["EgsEcfEditorApp_ParameterDisplay_ValueMaxLenght"]));
             }
             set {
-                this["EgsEcfEditorApp_ValueMaxLenght"] = value;
+                this["EgsEcfEditorApp_ParameterDisplay_ValueMaxLenght"] = value;
             }
         }
         
@@ -284,6 +284,54 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["EcfFileCAMDialog_PageSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int EgsEcfEditorApp_ParameterHandling_UnlockLevelMaxValue {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ParameterHandling_UnlockLevelMaxValue"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ParameterHandling_UnlockLevelMaxValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int EgsEcfEditorApp_ParameterHandling_UnlockLevelMinValue {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ParameterHandling_UnlockLevelMinValue"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ParameterHandling_UnlockLevelMinValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue {
+            get {
+                return ((int)(this["EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue"]));
+            }
+            set {
+                this["EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue"] = value;
             }
         }
     }

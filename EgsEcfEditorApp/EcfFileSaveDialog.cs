@@ -41,8 +41,8 @@ namespace EcfFileViews
         private void InitCreateFileDialog()
         {
             CreateFileDialog.AddExtension = true;
-            CreateFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileDialogExtension;
-            CreateFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileDialogFilter;
+            CreateFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogExtension;
+            CreateFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogFilter;
             CreateFileDialog.Title = TitleRecources.EcfFileDialog_CreateFileDialog;
             CreateFileDialog.ShowHelp = false;
             SetInitFileName(TitleRecources.EcfFileDialog_CreateFileName);

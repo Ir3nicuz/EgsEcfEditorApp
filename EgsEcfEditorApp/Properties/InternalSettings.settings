@@ -2,71 +2,83 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EgsEcfEditorApp.Properties" GeneratedClassName="InternalSettings">
   <Profiles />
   <Settings>
-    <Setting Name="EgsEcfEditorApp_FileDialogFilter" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_FileDialogFilter" Type="System.String" Scope="User">
       <Value Profile="(Default)">EgsEcfFile|*.ecf</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_FileDialogExtension" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_FileDialogExtension" Type="System.String" Scope="User">
       <Value Profile="(Default)">ecf</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_EgsConfigDirectory" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_EGSConfigDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">Content\Configuration</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_EgsSteamAppId" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_EGSSteamAppId" Type="System.String" Scope="User">
       <Value Profile="(Default)">383120</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamAppsFolderName" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamAppsFolderName" Type="System.String" Scope="User">
       <Value Profile="(Default)">SteamApps</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_InstallPathRegistryValue" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_InstallPathRegistryValue" Type="System.String" Scope="User">
       <Value Profile="(Default)">InstallPath</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamRegistryKey32" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamRegistryKey32" Type="System.String" Scope="User">
       <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Valve\Steam</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamRegistryKey64" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamRegistryKey64" Type="System.String" Scope="User">
       <Value Profile="(Default)">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamAppManifestFileExtension" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamAppManifestFileExtension" Type="System.String" Scope="User">
       <Value Profile="(Default)">acf</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamLibraryConfigFileName" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamLibraryConfigFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">libraryfolders.vdf</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_AppRootPathSteamConfigKey" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_AppRootPathSteamConfigKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">path</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_AppPathSteamConfigKey" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_AppPathSteamConfigKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">installdir</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_SteamCommonFolderName" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_SteamCommonFolderName" Type="System.String" Scope="User">
       <Value Profile="(Default)">common</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_DefinitionDefaultBaseFolder" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_DefinitionDefaultBaseFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">EcfFileDefinitions</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_DefinitionTemplateFileName" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">VanillaEcfDefinition_BlocksConfig.xml</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_ValueSeperator" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_ValueSeperator" Type="System.String" Scope="User">
       <Value Profile="(Default)">, </Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_GroupSeperator" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_GroupSeperator" Type="System.String" Scope="User">
       <Value Profile="(Default)">: </Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_ValuesPendingIndicator" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_ValuesPendingIndicator" Type="System.String" Scope="User">
       <Value Profile="(Default)">...</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_ValueMaxCount" Type="System.Int32" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_ValueMaxCount" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_GroupMaxCount" Type="System.Int32" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_GroupMaxCount" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_ValueMaxLenght" Type="System.Int32" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ParameterDisplay_ValueMaxLenght" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="EcfFileCAMDialog_PageSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ParameterHandling_UnlockLevelMaxValue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ParameterHandling_UnlockLevelMinValue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

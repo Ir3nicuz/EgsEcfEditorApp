@@ -718,15 +718,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit element.
-        /// </summary>
-        internal static string EcfTechTreeDialog_ElementEditorHeader {
-            get {
-                return ResourceManager.GetString("EcfTechTreeDialog_ElementEditorHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tech Tree preview and edit.
         /// </summary>
         internal static string EcfTechTreeDialog_Header {
@@ -750,6 +741,51 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfTechTreeDialog_UnattachedElementsHeader {
             get {
                 return ResourceManager.GetString("EcfTechTreeDialog_UnattachedElementsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element name.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_ElementNameSetting {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_ElementNameSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick Element.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_ElementPickerHeader {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_ElementPickerHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit element.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_Header {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlock cost.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_UnlockCostSetting {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_UnlockCostSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlock level.
+        /// </summary>
+        internal static string EcfTechTreeItemEditorDialog_UnlockLevelSetting {
+            get {
+                return ResourceManager.GetString("EcfTechTreeItemEditorDialog_UnlockLevelSetting", resourceCulture);
             }
         }
         

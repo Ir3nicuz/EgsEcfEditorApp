@@ -136,8 +136,8 @@ namespace EcfFileViews
         private void InitCreateFileDialog()
         {
             CreateFileDialog.AddExtension = true;
-            CreateFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileDialogExtension;
-            CreateFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileDialogFilter;
+            CreateFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogExtension;
+            CreateFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogFilter;
             CreateFileDialog.Title = TitleRecources.EcfFileDialog_CreateFileDialog;
             CreateFileDialog.ShowHelp = false;
             CreateFileDialog.FileName = TitleRecources.EcfFileDialog_CreateFileName;
@@ -145,8 +145,8 @@ namespace EcfFileViews
         private void InitFindFileDialog()
         {
             FindFileDialog.AddExtension = true;
-            FindFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileDialogExtension;
-            FindFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileDialogFilter;
+            FindFileDialog.DefaultExt = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogExtension;
+            FindFileDialog.Filter = InternalSettings.Default.EgsEcfEditorApp_FileHandling_FileDialogFilter;
             FindFileDialog.Title = TitleRecources.EcfFileOpenDialog_FindFileDialog;
             FindFileDialog.Multiselect = true;
             FindFileDialog.ShowHelp = false;

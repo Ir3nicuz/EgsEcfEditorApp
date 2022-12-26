@@ -21,11 +21,12 @@ namespace EgsEcfEditorApp
         public string TechTreeParentParameterKey { get; private set; } = null;
         
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
-        private List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
+        protected List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
         
         private EcfItemSelectorDialog FileTabSelector { get; } = new EcfItemSelectorDialog();
         private TreeAlteratingTools TreeTools { get; } = new TreeAlteratingTools();
         private EcfTextInputDialog TreeNameSelector { get; } = new EcfTextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
+        protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
 
         protected ElementNode LastCopiedElement { get; set; } = null;
         private EcfTechTree LastCopiedTree { get; set; } = null;
@@ -71,7 +72,9 @@ namespace EgsEcfEditorApp
             string treeName = PromptTreeNameEdit(TextRecources.EcfTechTreeDialog_NewTreeName, null);
             if (treeName != null)
             {
-                TechTreePageContainer.TabPages.Add(new EcfTechTree(this, treeName));
+                EcfTechTree newTree = new EcfTechTree(this, treeName);
+                TechTreePageContainer.TabPages.Add(newTree);
+                TechTreePageContainer.SelectedTab = newTree;
             }
         }
         private void TreeTools_RemoveTreeClicked(object sender, EventArgs evt)
@@ -496,12 +499,12 @@ namespace EgsEcfEditorApp
             private void UpdateTechTreeParent(string techTreeParentName, ElementNode sourceNode)
             {
                 EcfParameter parameter = sourceNode.Element.FindOrCreateParameter(ParentForm.TechTreeParentParameterKey);
+                
                 parameter.ClearValues();
                 parameter.AddValue(techTreeParentName ?? string.Empty);
-                
-                sourceNode.TechTreeParentName = techTreeParentName;
-
                 ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
+
+                sourceNode.TechTreeParentName = techTreeParentName;
             }
             private void UpdateTechTreeNames(TreeNodeCollection sourceNodes)
             {
@@ -518,6 +521,20 @@ namespace EgsEcfEditorApp
                     parameter.AddValue(TreeName);
                     ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
                 }
+            }
+            private void UpdateUnlockData(ElementNode sourceNode, int unlockLevel, int unlockCost)
+            {
+                EcfParameter levelParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockLevelParameterKey);
+                EcfParameter costParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockCostParameterKey);
+
+                levelParameter.ClearValues();
+                costParameter.ClearValues();
+                levelParameter.AddValue(unlockLevel.ToString());
+                costParameter.AddValue(unlockCost.ToString());
+                ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
+
+                sourceNode.SetUnlockLevel(unlockLevel);
+                sourceNode.SetUnlockCost(unlockCost);
             }
             private void RemoveNode(TreeNode targetNode)
             {
@@ -580,10 +597,29 @@ namespace EgsEcfEditorApp
             private void AddNode(TreeNode targetNode)
             {
                 // targetnode "null" muss auch gehen -> ADD at end
+                // index nicht erforderlich weil node als einstieg gewählt wird -> add at end
 
+                // daten in neuem element ändern?
+                // daten in altem element zurücksetzen?
 
+                // setzen des change tab erforderlich?
 
+                if (ParentForm.TreeItemEditor.ShowDialog(this, null, new List<EcfBlock>(), 
+                    UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel,
+                    UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost) == DialogResult.OK)
+                {
+                    EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
+                    EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File.ItemList.Contains(element));
 
+                    string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
+                    
+                    int unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
+                    int unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
+
+                    ElementNode newNode = new ElementNode(tab, element, elementName);
+                    UpdateUnlockData(newNode, unlockLevel, unlockCost);
+                    TryInsertNode(targetNode as ElementNode, null, newNode);
+                }
             }
         }
         private enum CursorAlignment
@@ -596,18 +632,29 @@ namespace EgsEcfEditorApp
         public class ElementNode : TreeNode
         {
             public string ElementName { get; }
-            public string TechTreeParentName { get; set; }
-            public int UnlockLevel { get; private set; }
-            public int UnlockCost { get; private set; }
+            public string TechTreeParentName { get; set; } = null;
+            public int UnlockLevel { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
+            public int UnlockCost { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
 
             public EcfTabPage Tab { get; }
             public EcfBlock Element { get; }
 
+            public ElementNode(EcfTabPage tab, EcfBlock element, string elementName)
+            {
+                Tab = tab;
+                Element = element;
+                ElementName = elementName ?? TitleRecources.Generic_Replacement_Empty;
+
+                ToolTipText = element?.BuildIdentification() ?? TitleRecources.Generic_Replacement_Empty;
+
+                UpdateNodeText();
+            }
             public ElementNode(EcfTabPage tab, EcfBlock element, string elementName, string techTreeParentName, int unlockLevel, int unlockCost)
             {
                 Tab = tab;
                 Element = element;
                 ElementName = elementName ?? TitleRecources.Generic_Replacement_Empty;
+
                 TechTreeParentName = techTreeParentName;
                 UnlockLevel = unlockLevel;
                 UnlockCost = unlockCost;

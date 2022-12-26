@@ -336,9 +336,6 @@
   <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel" xml:space="preserve">
     <value>Parameter Key 'Unlock Level'</value>
   </data>
-  <data name="EcfTechTreeDialog_ElementEditorHeader" xml:space="preserve">
-    <value>Edit element</value>
-  </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>Tech Tree preview and edit</value>
   </data>
@@ -347,6 +344,21 @@
   </data>
   <data name="EcfTechTreeDialog_UnattachedElementsHeader" xml:space="preserve">
     <value>Unattached Elements</value>
+  </data>
+  <data name="EcfTechTreeItemEditorDialog_ElementNameSetting" xml:space="preserve">
+    <value>Element name</value>
+  </data>
+  <data name="EcfTechTreeItemEditorDialog_ElementPickerHeader" xml:space="preserve">
+    <value>Pick Element</value>
+  </data>
+  <data name="EcfTechTreeItemEditorDialog_Header" xml:space="preserve">
+    <value>Edit element</value>
+  </data>
+  <data name="EcfTechTreeItemEditorDialog_UnlockCostSetting" xml:space="preserve">
+    <value>Unlock cost</value>
+  </data>
+  <data name="EcfTechTreeItemEditorDialog_UnlockLevelSetting" xml:space="preserve">
+    <value>Unlock level</value>
   </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>tree items</value>

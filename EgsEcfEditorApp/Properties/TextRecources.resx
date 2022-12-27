@@ -417,6 +417,9 @@
   <data name="EcfTechTreeDialog_ToolTip_RenameTree" xml:space="preserve">
     <value>Renames the selected tech tree</value>
   </data>
+  <data name="EcfTechTreeDialog_ToolTip_ReorderInFile" xml:space="preserve">
+    <value>Reordering the elements in the file according to the order of appearance in the editor forces the ingame TechTree to look like the editor</value>
+  </data>
   <data name="EcfTechTreeItemEditorDialog_NoElementSelected" xml:space="preserve">
     <value>No suitable element selected</value>
   </data>

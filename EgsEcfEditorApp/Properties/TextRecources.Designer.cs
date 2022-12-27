@@ -961,15 +961,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reordering the elements in the file according to the order of appearance in the editor forces the ingame TechTree to look like the editor.
-        /// </summary>
-        internal static string EcfTechTreeDialog_ToolTip_ReorderInFile {
-            get {
-                return ResourceManager.GetString("EcfTechTreeDialog_ToolTip_ReorderInFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No suitable element selected.
         /// </summary>
         internal static string EcfTechTreeItemEditorDialog_NoElementSelected {

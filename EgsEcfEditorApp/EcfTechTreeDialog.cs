@@ -59,7 +59,6 @@ namespace EgsEcfEditorApp
             TreeTools.RenameTreeClicked += TreeTools_RenameTreeClicked;
             TreeTools.CopyTreeClicked += TreeTools_CopyTreeClicked;
             TreeTools.PasteTreeClicked += TreeTools_PasteTreeClicked;
-            TreeTools.ReorderInFileClicked += TreeTools_ReorderInFileClicked;
 
             NodeChangeItem.Click += NodeChangeItem_Click;
             NodeAddItem.Click += NodeAddItem_Click;
@@ -138,18 +137,6 @@ namespace EgsEcfEditorApp
                     copiedTree.SetTreeName(treeName);
                     TechTreePageContainer.TabPages.Add(copiedTree);
                 }
-            }
-        }
-        private void TreeTools_ReorderInFileClicked(object sender, EventArgs evt)
-        {
-            if (TechTreePageContainer.SelectedTab is EcfTechTree tree)
-            {
-                tree.BuildElementList();
-
-
-
-
-
             }
         }
         private void NodeChangeItem_Click(object sender, EventArgs evt)
@@ -296,26 +283,25 @@ namespace EgsEcfEditorApp
                 {
                     element.HasParameter(TechTreeNamesParameterKey, true, out EcfParameter techTreeNames);
 
-                    ElementNode newNode = BuildNodeFromElement(tab, element, out ParameterInfo paramInfo);
+                    ElementNode newTemplateNode = BuildNodeFromElement(tab, element, out ParameterInfo paramInfo);
 
                     if (techTreeNames != null)
                     {
                         foreach (string treeName in techTreeNames.GetAllValues())
                         {
+                            ElementNode newNode = new ElementNode(newTemplateNode);
                             EcfTechTree treePage = TechTreePageContainer.TabPages.Cast<EcfTechTree>().FirstOrDefault(tree => tree.Text.Equals(treeName));
-                            
                             if (treePage == null)
                             {
                                 treePage = new EcfTechTree(this, treeName);
                                 TechTreePageContainer.TabPages.Add(treePage);
                             }
-
                             treePage.Add(newNode);
                         }
                     }
                     else if (paramInfo.AnyValid())
                     {
-                        UnattachedElementsTreeView.Nodes.Add(newNode);
+                        UnattachedElementsTreeView.Nodes.Add(newTemplateNode);
                     }
                 }
             });
@@ -844,14 +830,12 @@ namespace EgsEcfEditorApp
             public event EventHandler RenameTreeClicked;
             public event EventHandler CopyTreeClicked;
             public event EventHandler PasteTreeClicked;
-            public event EventHandler ReorderInFileClicked;
 
             private EcfToolBarButton AddTreeButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_AddTree, IconRecources.Icon_Add, null);
             private EcfToolBarButton RemoveTreeButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_RemoveTree, IconRecources.Icon_Remove, null);
             private EcfToolBarButton RenameTreeButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_RenameTree, IconRecources.Icon_ChangeSimple, null);
             private EcfToolBarButton CopyTreeButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_CopyTree, IconRecources.Icon_Copy, null);
             private EcfToolBarButton PasteTreeButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_PasteTree, IconRecources.Icon_Paste, null);
-            private EcfToolBarButton ReorderInFileButton { get; } = new EcfToolBarButton(TextRecources.EcfTechTreeDialog_ToolTip_ReorderInFile, IconRecources.Icon_Unknown, null);
 
             public TreeAlteratingTools() : base()
             {
@@ -860,14 +844,12 @@ namespace EgsEcfEditorApp
                 Add(RenameTreeButton);
                 Add(CopyTreeButton);
                 Add(PasteTreeButton);
-                Add(ReorderInFileButton);
 
                 AddTreeButton.Click += (sender, evt) => AddTreeClicked?.Invoke(sender, evt);
                 RenameTreeButton.Click += (sender, evt) => RenameTreeClicked?.Invoke(sender, evt);
                 RemoveTreeButton.Click += (sender, evt) => RemoveTreeClicked?.Invoke(sender, evt);
                 CopyTreeButton.Click += (sender, evt) => CopyTreeClicked?.Invoke(sender, evt);
                 PasteTreeButton.Click += (sender, evt) => PasteTreeClicked?.Invoke(sender, evt);
-                ReorderInFileButton.Click += (sender, evt) => ReorderInFileClicked?.Invoke(sender, evt);
             }
         }
     }

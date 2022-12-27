@@ -2374,6 +2374,10 @@ namespace EgsEcfParser
         protected override void OnStructureDataUpdate()
         {
             UpdateDefinition(EcfFile?.Definition.BlockParameters);
+            foreach (EcfValueGroup group in ValueGroups)
+            {
+                group.UpdateStructureData(EcfFile, this, StructureLevel);
+            }
         }
     }
     public class EcfParameter : EcfKeyValueItem
@@ -2514,6 +2518,10 @@ namespace EgsEcfParser
                 attribute.UpdateStructureData(EcfFile, this, StructureLevel);
                 attribute.UpdateDefinition(EcfFile?.Definition.ParameterAttributes);
             });
+            foreach (EcfValueGroup group in ValueGroups)
+            {
+                group.UpdateStructureData(EcfFile, this, StructureLevel);
+            }
         }
     }
     public class EcfBlock : EcfStructureItem

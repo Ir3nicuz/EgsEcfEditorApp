@@ -337,7 +337,7 @@
     <value>Parameter Key 'Unlock Level'</value>
   </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
-    <value>Tech Tree preview and edit</value>
+    <value>TechTree preview and edit</value>
   </data>
   <data name="EcfTechTreeDialog_TreeNameInputHeader" xml:space="preserve">
     <value>TechTree name input</value>

@@ -342,9 +342,6 @@
   <data name="EcfTechTreeDialog_TreeNameInputHeader" xml:space="preserve">
     <value>TechTree Namenseingabe</value>
   </data>
-  <data name="EcfTechTreeDialog_UnattachedElementsHeader" xml:space="preserve">
-    <value>Nicht zugeordnete Elemente</value>
-  </data>
   <data name="EcfTechTreeItemEditorDialog_ElementNameSetting" xml:space="preserve">
     <value>Element Name</value>
   </data>

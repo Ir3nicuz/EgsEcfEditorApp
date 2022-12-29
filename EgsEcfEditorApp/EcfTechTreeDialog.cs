@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -257,7 +256,7 @@ namespace EgsEcfEditorApp
                 }
             });
         }
-        private void AddTechTreeNode(TechTreeNode techTreeNode, int? index)
+        protected void AddTechTreeNode(TechTreeNode techTreeNode, int? index)
         {
             TechTreeRootNodes.ForEach(rootElement =>
             {
@@ -328,6 +327,20 @@ namespace EgsEcfEditorApp
         {
             TechTreePageContainer.TabPages.Cast<EcfTechTree>().Where(tree => tree != changedTechTree && tree.HasNode(changedNode)).ToList().ForEach(tree => tree.Reload());
         }
+        private List<EcfBlock> BuildElementList(ReadOnlyCollection<TechTreeNode> nodes)
+        {
+            List<EcfBlock> elements = new List<EcfBlock>();
+            foreach (TechTreeNode node in nodes)
+            {
+                elements.Add(node.Element);
+                elements.AddRange(BuildElementList(node.Nodes));
+            }
+            return elements;
+        }
+        protected List<EcfBlock> BuildUnusedElementsList()
+        {
+            return AvailableElements.Except(BuildElementList(TechTreeRootNodes.AsReadOnly())).ToList();
+        }
 
         // subclasses
         protected class EcfTechTree : TabPage
@@ -335,7 +348,6 @@ namespace EgsEcfEditorApp
             public string TreeName { get; private set; }
             private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
             private EcfTechTreeDialog Dialog { get; }
-            private List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
 
             public EcfTechTree(EcfTechTreeDialog dialog, string name)
             {
@@ -416,7 +428,7 @@ namespace EgsEcfEditorApp
                 Text = TreeName;
                 try
                 {
-                    AddTechTreeNameToAllNodes(ElementTreeView.Nodes);
+                    AddTechTreeNameToAllNodes(ElementTreeView.Nodes.Cast<TechTreeDisplayNode>().Select(node => node.SourceNode).ToList().AsReadOnly(), treeName);
                 }
                 catch (Exception ex)
                 {
@@ -445,9 +457,10 @@ namespace EgsEcfEditorApp
             public void PasteRootNode()
             {
                 TechTreeDisplayNode pastingNode = Dialog.LastCopiedTechTreeNode?.BuildNodeTree();
-                if (pastingNode != null)
+                if (pastingNode != null && InsertionAllowed(pastingNode))
                 {
-                    TryInsertNode(null, null, pastingNode);
+                    TrySetStructureData(pastingNode.SourceNode, TreeName, null);
+                    ElementTreeView.Nodes.Add(pastingNode);
                 }
             }
             public void RemoveSelectedNode()
@@ -460,8 +473,10 @@ namespace EgsEcfEditorApp
             }
             public void Reload()
             {
+                ElementTreeView.SuspendLayout();
                 ElementTreeView.Nodes.Clear();
                 AddRange(Dialog.GetRootTechTreeNodes(TreeName));
+                ElementTreeView.ResumeLayout();
             }
 
             // private
@@ -478,68 +493,59 @@ namespace EgsEcfEditorApp
                     node.SourceNode.RemoveTechTreeName(TreeName);
                 }
             }
-            private void AddTechTreeNameToAllNodes(TechTreeDisplayNode node)
+            private void AddTechTreeNameToAllNodes(TechTreeNode targetNode, string treeName)
             {
-                node.SourceNode.AddTechTreeName(TreeName);
-                AddTechTreeNameToAllNodes(node.Nodes);
+                targetNode.AddTechTreeName(treeName);
+                AddTechTreeNameToAllNodes(targetNode.Nodes, treeName);
             }
-            private void AddTechTreeNameToAllNodes(TreeNodeCollection nodes)
+            private void AddTechTreeNameToAllNodes(ReadOnlyCollection<TechTreeNode> nodes, string treeName)
             {
-                foreach (TechTreeDisplayNode node in nodes.Cast<TechTreeDisplayNode>())
+                foreach (TechTreeNode node in nodes.Cast<TechTreeNode>())
                 {
-                    node.SourceNode.AddTechTreeName(TreeName);
-                    AddTechTreeNameToAllNodes(node.Nodes);
+                    node.AddTechTreeName(treeName);
+                    AddTechTreeNameToAllNodes(node.Nodes, treeName);
                 }
             }
-            private bool TryInsertNode(TechTreeDisplayNode targetNode, int? targetIndex, TechTreeDisplayNode sourceNode)
+            private bool InsertionAllowed(TechTreeDisplayNode sourceNode)
             {
-                if (sourceNode != null)
+                List<TechTreeNode> treeElements = BuildElementList(ElementTreeView.Nodes);
+                List<TechTreeNode> insertingElements = BuildElementList(sourceNode);
+                List<TechTreeNode> forbiddenElements = insertingElements.Where(element => treeElements.Contains(element)).ToList();
+                if (forbiddenElements.Count > 0)
                 {
-                    List<TechTreeNode> treeElements = BuildElementList(ElementTreeView.Nodes);
-                    List<TechTreeNode> insertingElements = BuildElementList(sourceNode);
-                    List<TechTreeNode> forbiddenElements = insertingElements.Where(element => treeElements.Contains(element)).ToList();
-                    if (forbiddenElements.Count > 0)
-                    {
-                        MessageBox.Show(this,
-                            string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_InsertNotPossibleWhileElementInTree, Environment.NewLine,
-                            string.Join(Environment.NewLine, forbiddenElements.Select(element => element.Element.BuildIdentification()))),
-                            TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            AddTechTreeNameToAllNodes(sourceNode);
-                            SetTechTreeParent(sourceNode, targetNode);
-                            if (targetNode != null)
-                            {
-                                if (targetIndex != null)
-                                {
-                                    targetNode.Nodes.Insert(targetIndex.Value, sourceNode);
-                                }
-                                else
-                                {
-                                    targetNode.Nodes.Add(sourceNode);
-                                }
-                            }
-                            else
-                            {
-                                if (targetIndex != null)
-                                {
-                                    ElementTreeView.Nodes.Insert(targetIndex.Value, sourceNode);
-                                }
-                                else
-                                {
-                                    ElementTreeView.Nodes.Add(sourceNode);
-                                }
-                            }
-                            return true;
-                        }
-                        catch (Exception ex)
-                        {
-                            ShowUpdateErrorMessage(ex.Message);
-                        }
-                    }
+                    MessageBox.Show(this,
+                        string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_InsertNotPossibleWhileElementInTree, Environment.NewLine,
+                        string.Join(Environment.NewLine, forbiddenElements.Select(element => element.Element.BuildIdentification()))),
+                        TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+                return true;
+            }
+            private bool TrySetStructureData(TechTreeNode targetNode, string treeName, string techTreeParentName)
+            {
+                try
+                {
+                    AddTechTreeNameToAllNodes(targetNode, treeName);
+                    targetNode.SetTechTreeParent(techTreeParentName);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ShowUpdateErrorMessage(ex.Message);
+                }
+                return false;
+            }
+            private bool TrySetUnlockData(TechTreeNode targetNode, int unlockLevel, int unlockCost)
+            {
+                try
+                {
+                    targetNode.SetUnlockLevel(unlockLevel);
+                    targetNode.SetUnlockCost(unlockCost);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ShowUpdateErrorMessage(ex.Message);
                 }
                 return false;
             }
@@ -559,28 +565,27 @@ namespace EgsEcfEditorApp
                 }
                 return elements;
             }
-            private void SetTechTreeParent(TechTreeDisplayNode targetNode, TechTreeDisplayNode sourceNode)
-            {
-                targetNode.SourceNode.SetTechTreeParent(sourceNode?.SourceNode.ElementName);
-            }
             [Obsolete("needs work")]
-            private void ChangeNode(TreeNode target)
+            private void ChangeNode(TreeNode targetNode)
             {
-                if (ElementTreeView.SelectedNode is ElementNode sourceNode)
+                if (targetNode is TechTreeDisplayNode node)
                 {
-                    EcfBlock sourceElement = sourceNode.Element;
-                    int unlockLevel = sourceNode.UnlockLevel;
-                    int unlockCost = sourceNode.UnlockCost;
+                    TechTreeNode techTreeNode = node.SourceNode;
+                    EcfBlock element = techTreeNode.Element;
+                    int unlockLevel = techTreeNode.UnlockLevel;
+                    int unlockCost = techTreeNode.UnlockCost;
 
-                    AvailableElements.Clear();
-                    AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList()));
-                    if (!AvailableElements.Contains(sourceElement)) { AvailableElements.Insert(0, sourceElement); }
+                    List<EcfBlock> availableElements = Dialog.BuildUnusedElementsList();
+                    if (!availableElements.Contains(element)) { availableElements.Insert(0, element); }
 
-                    if (ParentForm.TreeItemEditor.ShowDialog(this, sourceElement, AvailableElements, unlockLevel, unlockCost) == DialogResult.OK)
+                    if (Dialog.TreeItemEditor.ShowDialog(this, element, availableElements, unlockLevel, unlockCost) == DialogResult.OK)
                     {
-                        EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
-                        unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
-                        unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
+                        element = Dialog.TreeItemEditor.GetSelectedElement();
+                        unlockLevel = Dialog.TreeItemEditor.GetUnlockLevel();
+                        unlockCost = Dialog.TreeItemEditor.GetUnlockCost();
+
+
+
 
                         if (element == sourceElement)
                         {
@@ -599,28 +604,30 @@ namespace EgsEcfEditorApp
                             newNode.Nodes.AddRange(sourceNode.Nodes.Cast<ElementNode>().ToArray());
                             TryInsertNode(parent, index, newNode);
                         }
+
+
+
+                        Dialog.UpdateCoUseTechTrees(changedNode, this);
+                        Reload();
                     }
                 }
             }
-            [Obsolete("needs work")]
-            private void AddNode(TreeNode target)
+            private void AddNode(TreeNode targetNode)
             {
+                TechTreeDisplayNode targetDisplayNode = targetNode as TechTreeDisplayNode;
                 int unlockLevel = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
                 int unlockCost = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+                List<EcfBlock> availableElements = Dialog.BuildUnusedElementsList();
 
-                AvailableElements.Clear();
-                AvailableElements.AddRange(ParentForm.AvailableElements.Except(BuildElementList()));
-
-                if (ParentForm.TreeItemEditor.ShowDialog(this, null, AvailableElements, unlockLevel, unlockCost) == DialogResult.OK)
+                if (Dialog.TreeItemEditor.ShowDialog(this, null, availableElements, unlockLevel, unlockCost) == DialogResult.OK)
                 {
-                    EcfBlock element = ParentForm.TreeItemEditor.GetSelectedElement();
-                    EcfTabPage tab = ParentForm.UniqueFileTabs.FirstOrDefault(page => page.File == element.EcfFile);
-                    string elementName = element.GetAttributeFirstValue(ParentForm.ReferenceNameAttributeKey);
-                    unlockLevel = ParentForm.TreeItemEditor.GetUnlockLevel();
-                    unlockCost = ParentForm.TreeItemEditor.GetUnlockCost();
-
-                    ElementNode newNode = new ElementNode(tab, element, elementName, null, unlockLevel, unlockCost);
-                    TryInsertNode(ElementTreeView.SelectedNode as ElementNode, null, newNode);
+                    EcfBlock element = Dialog.TreeItemEditor.GetSelectedElement();
+                    EcfTabPage tab = Dialog.UniqueFileTabs.FirstOrDefault(page => page.File == element.EcfFile);
+                    TechTreeNode newNode = new TechTreeNode(Dialog, tab, element);
+                    TrySetUnlockData(newNode, Dialog.TreeItemEditor.GetUnlockLevel(), Dialog.TreeItemEditor.GetUnlockCost());
+                    TrySetStructureData(newNode, TreeName, targetDisplayNode?.SourceNode.ElementName);
+                    Dialog.AddTechTreeNode(newNode, null);
+                    Reload();
                 }
             }
             private void RemoveNode(TreeNode targetNode)
@@ -641,48 +648,6 @@ namespace EgsEcfEditorApp
                     node.Remove();
                 }
             }
-            
-
-
-
-
-
-
-
-            // ##############
-            // privates
-            
-            private bool TrySetUnlockData(ElementNode sourceNode, int unlockLevel, int unlockCost)
-            {
-                try
-                {
-                    EcfParameter levelParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockLevelParameterKey);
-                    EcfParameter costParameter = sourceNode.Element.FindOrCreateParameter(ParentForm.UnlockCostParameterKey);
-
-                    levelParameter.ClearValues();
-                    costParameter.ClearValues();
-                    levelParameter.AddValue(unlockLevel.ToString());
-                    costParameter.AddValue(unlockCost.ToString());
-                    ParentForm.ChangedFileTabs.Add(sourceNode.Tab);
-
-                    sourceNode.SetUnlockLevel(unlockLevel);
-                    sourceNode.SetUnlockCost(unlockCost);
-
-                    ParentForm.UpdateCoUseTechTrees(sourceNode.Element, this);
-
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    ShowUpdateErrorMessage(ex.Message);
-                }
-                return false;
-            }
-            
-            
-            
-
-
         }
         public class TechTreeNode
         {
@@ -793,11 +758,17 @@ namespace EgsEcfEditorApp
             public void SetTechTreeParent(string parentName)
             {
                 TechTreeParentName = parentName;
-
-                EcfParameter parameter = Element.FindOrCreateParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName);
-                parameter.ClearValues();
-                parameter.AddValue(parentName ?? string.Empty);
-                Dialog.ChangedFileTabs.Add(Tab);
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName, parentName ?? string.Empty);
+            }
+            public void SetUnlockLevel(int level)
+            {
+                UnlockLevel = level;
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel, level.ToString());
+            }
+            public void SetUnlockCost(int cost)
+            {
+                UnlockCost = cost;
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost, cost.ToString());
             }
 
             // private
@@ -821,6 +792,13 @@ namespace EgsEcfEditorApp
                 TechTreeDisplayNode treeNode = techNode.BuildTreeNode();
                 treeNode.Nodes.AddRange(techNode.Nodes.Select(node => BuildNodeTree(node)).ToArray());
                 return treeNode;
+            }
+            private void SetParameter(string paramKey, string value)
+            {
+                EcfParameter parameter = Element.FindOrCreateParameter(paramKey);
+                parameter.ClearValues();
+                parameter.AddValue(value);
+                Dialog.ChangedFileTabs.Add(Tab);
             }
         }
         public class TechTreeDisplayNode : TreeNode

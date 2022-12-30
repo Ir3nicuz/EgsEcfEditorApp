@@ -339,6 +339,12 @@
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>TechTree preview and edit</value>
   </data>
+  <data name="EcfTechTreeDialog_RemoveFromAllMenuItem" xml:space="preserve">
+    <value>Remove from all TechTrees</value>
+  </data>
+  <data name="EcfTechTreeDialog_RemoveFromThisMenuItem" xml:space="preserve">
+    <value>Remove from this TechTree</value>
+  </data>
   <data name="EcfTechTreeDialog_TreeNameInputHeader" xml:space="preserve">
     <value>TechTree name input</value>
   </data>

@@ -27,7 +27,8 @@ namespace EgsEcfEditorApp
         private ToolStripMenuItem NodeAddSubItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Add, IconRecources.Icon_Add);
         private ToolStripMenuItem NodeCopyItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Copying, IconRecources.Icon_Copy);
         private ToolStripMenuItem NodePasteItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Paste, IconRecources.Icon_Paste);
-        private ToolStripMenuItem NodeRemoveItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Remove, IconRecources.Icon_Remove);
+        private ToolStripMenuItem NodeRemoveFromThisItem { get; } = new ToolStripMenuItem(TitleRecources.EcfTechTreeDialog_RemoveFromThisMenuItem, IconRecources.Icon_Remove);
+        private ToolStripMenuItem NodeRemoveFromAllItem { get; } = new ToolStripMenuItem(TitleRecources.EcfTechTreeDialog_RemoveFromAllMenuItem, IconRecources.Icon_Remove);
 
         protected List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
         protected TechTreeNode LastCopiedTechTreeNode { get; set; } = null;
@@ -59,14 +60,16 @@ namespace EgsEcfEditorApp
             NodeAddSubItem.Click += NodeAddSubItem_Click;
             NodeCopyItem.Click += NodeCopyItem_Click;
             NodePasteItem.Click += NodePasteItem_Click;
-            NodeRemoveItem.Click += NodeRemoveItem_Click;
+            NodeRemoveFromThisItem.Click += NodeRemoveFromThisItem_Click;
+            NodeRemoveFromAllItem.Click += NodeRemoveFromAllItem_Click;
 
             TechTreeOperationMenu.Items.Add(NodeChangeItem);
             TechTreeOperationMenu.Items.Add(NodeAddRootItem);
             TechTreeOperationMenu.Items.Add(NodeAddSubItem);
             TechTreeOperationMenu.Items.Add(NodeCopyItem);
             TechTreeOperationMenu.Items.Add(NodePasteItem);
-            TechTreeOperationMenu.Items.Add(NodeRemoveItem);
+            TechTreeOperationMenu.Items.Add(NodeRemoveFromThisItem);
+            TechTreeOperationMenu.Items.Add(NodeRemoveFromAllItem);
         }
         private void TreeTools_AddTreeClicked(object sender, EventArgs evt)
         {
@@ -157,11 +160,18 @@ namespace EgsEcfEditorApp
                 selectedTree.PasteRootNode();
             }
         }
-        private void NodeRemoveItem_Click(object sender, EventArgs evt)
+        private void NodeRemoveFromThisItem_Click(object sender, EventArgs evt)
         {
             if (TechTreePageContainer.SelectedTab is EcfTechTree selectedTree)
             {
-                selectedTree.RemoveSelectedNode();
+                selectedTree.RemoveSelectedNode(false);
+            }
+        }
+        private void NodeRemoveFromAllItem_Click(object sender, EventArgs evt)
+        {
+            if (TechTreePageContainer.SelectedTab is EcfTechTree selectedTree)
+            {
+                selectedTree.RemoveSelectedNode(true);
             }
         }
 
@@ -276,6 +286,10 @@ namespace EgsEcfEditorApp
                 TechTreeRootNodes.Insert(index ?? TechTreeRootNodes.Count, techTreeNode);
             }
         }
+        protected void RemoveTechTreeNode(TechTreeNode techTreeNode)
+        {
+            TechTreeRootNodes.Remove(techTreeNode);
+        }
         private TechTreeNode FindParentNode(string parentName, ReadOnlyCollection<TechTreeNode> nodes)
         {
             foreach (TechTreeNode node in nodes)
@@ -321,7 +335,8 @@ namespace EgsEcfEditorApp
             NodeAddRootItem.Visible = hide;
             NodeAddSubItem.Visible = !hide;
             NodeCopyItem.Visible = !hide;
-            NodeRemoveItem.Visible = !hide;
+            NodeRemoveFromThisItem.Visible = !hide;
+            NodeRemoveFromAllItem.Visible = !hide;
         }
         protected void UpdateCoUseTechTrees(TechTreeNode changedNode, EcfTechTree changedTechTree)
         {
@@ -376,7 +391,7 @@ namespace EgsEcfEditorApp
             // events
             private void ElementTreeView_KeyUp(object sender, KeyEventArgs evt)
             {
-                if (evt.KeyCode == Keys.Delete) { RemoveNode(ElementTreeView.SelectedNode); evt.Handled = true; }
+                if (evt.KeyCode == Keys.Delete) { RemoveNode(ElementTreeView.SelectedNode, false); evt.Handled = true; }
                 else if (evt.Control && evt.KeyCode == Keys.C) { CopySelectedRootNode(); evt.Handled = true; }
                 else if (evt.Control && evt.KeyCode == Keys.V) { PasteRootNode(); evt.Handled = true; }
             }
@@ -424,6 +439,7 @@ namespace EgsEcfEditorApp
             public void ClearTreeNameFromAllNodes()
             {
                 RemoveTechTreeNameFromAllNodes(ElementTreeView.Nodes);
+                Reload();
             }
             public void SetTreeName(string treeName)
             {
@@ -466,9 +482,10 @@ namespace EgsEcfEditorApp
                     ElementTreeView.Nodes.Add(pastingNode);
                 }
             }
-            public void RemoveSelectedNode()
+            public void RemoveSelectedNode(bool forceCompleteRemove)
             {
-                RemoveNode(ElementTreeView.SelectedNode);
+                RemoveNode(ElementTreeView.SelectedNode, forceCompleteRemove);
+
             }
             public bool HasNode(TechTreeNode node)
             {
@@ -487,15 +504,6 @@ namespace EgsEcfEditorApp
             {
                 MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_ElementSettingsUpdateError, Environment.NewLine, message),
                     TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            [Obsolete("needs work")]
-            private void RemoveTechTreeNameFromAllNodes(TreeNodeCollection nodes)
-            {
-                foreach (TechTreeDisplayNode node in nodes.Cast<TechTreeDisplayNode>())
-                {
-                    RemoveTechTreeNameFromAllNodes(node.Nodes);
-                    node.SourceNode.RemoveTechTreeName(TreeName);
-                }
             }
             private void AddTechTreeNameToAllNodes(TechTreeNode targetNode, string treeName)
             {
@@ -626,23 +634,41 @@ namespace EgsEcfEditorApp
                     Reload();
                 }
             }
-            [Obsolete("needs work")]
-            private void RemoveNode(TreeNode targetNode)
+            private void RemoveNode(TreeNode targetNode, bool forceCompleteRemove)
             {
                 if (targetNode is TechTreeDisplayNode node)
                 {
-                    RemoveNode(node.Nodes);
+                    RemoveTechTreeName(node, forceCompleteRemove);
                     Dialog.UpdateCoUseTechTrees(node.SourceNode, this);
                     Reload();
                 }
             }
-            [Obsolete("needs work")]
-            private void RemoveNode(TreeNodeCollection nodes)
+            private void RemoveTechTreeNameFromAllNodes(TreeNodeCollection nodes)
             {
                 foreach (TechTreeDisplayNode node in nodes.Cast<TechTreeDisplayNode>())
                 {
-                    RemoveNode(node.Nodes);
                     RemoveTechTreeNameFromAllNodes(node.Nodes);
+                    RemoveTechTreeName(node, false);
+                }
+            }
+            [Obsolete("needs work")]
+            private void RemoveTechTreeName(TechTreeDisplayNode targetNode, bool forceCompleteRemove)
+            {
+                // wenn force complete remove gewählt ist, muss der aktuelle node und die unternodes bearbeitet werden
+                // wenn nicht, muss der gesamte nodetree bearbeitet werden
+
+                // wenn force complete remove gewählt wird, müssen alle treenamen gelöscht werden
+                // wenn nicht, muss nur der aktuelle tree name entfernt werden
+
+                // wenn kein treename mehr im element ist, element aus zentralliste entfernen
+
+                if (forceCompleteRemove)
+                {
+                    Dialog.RemoveTechTreeNode(node.SourceNode);
+                }
+                else
+                {
+                    node.SourceNode.RemoveTechTreeName(TreeName);
                 }
             }
         }

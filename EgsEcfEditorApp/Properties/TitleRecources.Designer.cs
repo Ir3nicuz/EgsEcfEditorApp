@@ -727,6 +727,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove from all TechTrees.
+        /// </summary>
+        internal static string EcfTechTreeDialog_RemoveFromAllMenuItem {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_RemoveFromAllMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove from this TechTree.
+        /// </summary>
+        internal static string EcfTechTreeDialog_RemoveFromThisMenuItem {
+            get {
+                return ResourceManager.GetString("EcfTechTreeDialog_RemoveFromThisMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TechTree name input.
         /// </summary>
         internal static string EcfTechTreeDialog_TreeNameInputHeader {

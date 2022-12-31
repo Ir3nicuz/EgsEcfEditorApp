@@ -147,7 +147,9 @@ Clicking an element in the tree view will trigger the detail difference display 
 <img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
 
 ### Tech Tree editing
-At opening the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool tool parses the content of all opened files and compute the resulting Tech Trees as tabs.
+At opening the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and compute the resulting Tech Trees as tabs.
+
+WIP
 
 <img src="images/TechTreeEditor.png" title="Tech Tree Editor Dialog"/>
 

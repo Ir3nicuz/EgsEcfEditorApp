@@ -72,8 +72,8 @@ The basic functionality of this tool is the alteration of any `.ecf` content.
 ### Compare and Merge
 The tool is capable of comparing two `.ecf` files, listing the differences and offer several options to update the opposite file partly or completely.
 
-### Tech Tree Preview
-:wrench: Not implemented yet :wrench:
+### Tech Tree Editor
+The tool is capable of editing the "TechTree" which is based on several properties spreaded over different files and file elements.
 
 ### Ingame Item Editing
 :wrench: Not implemented yet :wrench:
@@ -108,7 +108,6 @@ In the error view all occured errors are listed. The view shows the error catego
 
 ## Operations Overview
 ### Changing settings
-
 The gear button ( <img src="EgsEcfEditorApp\Resources\Icon_Settings.png" title="icon" width="16" height="16"/> ) opens a settings panel with several settings. The `abort` button closes the panel and discarding all changes. The `save` button saves the settings persistent and closes the panel. The `reset` button reloads the default settings.
 
 <img src="images/app_settings_panel.png" title="App Settings Panel"/>
@@ -130,7 +129,6 @@ At multi selection the panel will normally open for the first selected element. 
 <img src="images/editing_dialog.png" title="Editing Dialog"/>
 
 ### Comparing and Merging files
-
 In the compare and merge function ( <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> ) the compare is started by selecting two of the opened files. Depending on file size a progress bar will be displayed until completion.
 
 The two tree views will display all elements which differs between the two files. If no elements are displayed the two files are completely equal. The displayed elements belongs to the three categories:
@@ -147,6 +145,11 @@ To maintain a suitable performance only a limited amount of diff elements will b
 Clicking an element in the tree view will trigger the detail difference display at the lower window. The two text boxes again will only display differences. If this boxes are empty the selected element has no difference to the opposite element. If an element is marked as unequal but the details boxes shows no difference only a structural sub element contains a difference.
 
 <img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
+
+### Tech Tree editing
+At opening the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool tool parses the content of all opened files and compute the resulting Tech Trees as tabs.
+
+<img src="images/TechTreeEditor.png" title="Tech Tree Editor Dialog"/>
 
 ## Shortcuts and Functions
 ### Shortcuts
@@ -304,7 +307,6 @@ This errors occur during content editing in the tool at operations which would c
 This errors occur during content writing at hitting `save`. This error depends on the error handling settings. It only reports elements that should be written but according to the settings no writeable data is available/permitted. It states if an element is not written because it contains an error and no fallback data from parsing could be found.
 
 ## Planned Major Features
-- TechTree Preview
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - Ingame Item Editing support
 - Element, Parameter, Comment moving

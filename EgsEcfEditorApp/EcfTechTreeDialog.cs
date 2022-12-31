@@ -88,7 +88,7 @@ namespace EgsEcfEditorApp
                 if (MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_ReallyRemoveTechTreeQuestion, Environment.NewLine, selectedTree.TreeName),
                     TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    selectedTree.ClearTreeNameFromAllNodes();
+                    selectedTree.ClearTreeNameFromAllNodes(true);
                     TechTreePageContainer.TabPages.Remove(selectedTree);
                 }
             }
@@ -100,7 +100,7 @@ namespace EgsEcfEditorApp
                 string treeName = PromptTreeNameEdit(selectedTree.TreeName, selectedTree);
                 if (treeName != null)
                 {
-                    selectedTree.SetTreeName(treeName);
+                    selectedTree.ResetTreeName(treeName);
                 }
             }
         }
@@ -245,8 +245,7 @@ namespace EgsEcfEditorApp
                 if (!string.IsNullOrEmpty(treeName)) 
                 {
                     EcfTechTree treePage = new EcfTechTree(this, treeName);
-                    treePage.AddRange(GetRootTechTreeNodes(treeName));
-                    treePage.ExpandAll();
+                    treePage.Reload();
                     TechTreePageContainer.TabPages.Add(treePage);
                 }
             }
@@ -435,21 +434,17 @@ namespace EgsEcfEditorApp
             }
 
             // public
-            public void Add(TechTreeNode node)
-            {
-                ElementTreeView.Nodes.Add(node.BuildNodeTree());
-            }
-            public void AddRange(List<TechTreeNode> nodes)
-            {
-                ElementTreeView.Nodes.AddRange(nodes.Select(node => node.BuildNodeTree()).ToArray());
-            }
-            public void ClearTreeNameFromAllNodes()
+            public void ClearTreeNameFromAllNodes(bool checkUnattached)
             {
                 foreach (TechTreeDisplayNode node in ElementTreeView.Nodes.Cast<TechTreeDisplayNode>())
                 {
-                    RemoveNodeTreeFromTechTree(node.SourceNode);
+                    RemoveTechTreeName(node.SourceNode, checkUnattached);
                 }
-                Reload();
+            }
+            public void ResetTreeName(string treeName)
+            {
+                ClearTreeNameFromAllNodes(false);
+                SetTreeName(treeName);
             }
             public void SetTreeName(string treeName)
             {
@@ -480,16 +475,16 @@ namespace EgsEcfEditorApp
             {
                 if (ElementTreeView.SelectedNode is TechTreeDisplayNode selectedNode)
                 {
-                    Dialog.LastCopiedTechTreeNode = new TechTreeNode(selectedNode.SourceNode);
+                    Dialog.LastCopiedTechTreeNode = selectedNode.SourceNode;
                 }
             }
             public void PasteRootNode()
             {
-                TechTreeDisplayNode pastingNode = Dialog.LastCopiedTechTreeNode?.BuildNodeTree();
+                TechTreeNode pastingNode = Dialog.LastCopiedTechTreeNode?.FindRoot();
                 if (pastingNode != null && InsertionAllowed(pastingNode))
                 {
-                    TrySetStructureData(pastingNode.SourceNode, TreeName, null);
-                    ElementTreeView.Nodes.Add(pastingNode);
+                    TrySetStructureData(pastingNode, TreeName, null);
+                    Reload();
                 }
             }
             public void RemoveSelectedNode(bool removeFromAllTrees)
@@ -500,17 +495,14 @@ namespace EgsEcfEditorApp
             {
                 return BuildElementList(ElementTreeView.Nodes).Contains(node);
             }
+            [Obsolete("needs work")]
             public void Reload()
             {
                 ElementTreeView.SuspendLayout();
                 ElementTreeView.Nodes.Clear();
-                AddRange(Dialog.GetRootTechTreeNodes(TreeName));
+                ElementTreeView.Nodes.AddRange(Dialog.GetRootTechTreeNodes(TreeName).Select(node => node.BuildNodeTree()).ToArray());
                 ElementTreeView.ExpandAll();
                 ElementTreeView.ResumeLayout();
-            }
-            public void ExpandAll()
-            {
-                ElementTreeView.ExpandAll();
             }
 
             // private
@@ -532,7 +524,7 @@ namespace EgsEcfEditorApp
                     AddTechTreeNameToAllNodes(node.Nodes, treeName);
                 }
             }
-            private bool InsertionAllowed(TechTreeDisplayNode sourceNode)
+            private bool InsertionAllowed(TechTreeNode sourceNode)
             {
                 List<TechTreeNode> treeElements = BuildElementList(ElementTreeView.Nodes);
                 List<TechTreeNode> insertingElements = BuildElementList(sourceNode);
@@ -592,10 +584,13 @@ namespace EgsEcfEditorApp
                 }
                 return false;
             }
-            private List<TechTreeNode> BuildElementList(TechTreeDisplayNode node)
+            private List<TechTreeNode> BuildElementList(TechTreeNode node)
             {
-                List<TechTreeNode> elements = new List<TechTreeNode> { node.SourceNode };
-                elements.AddRange(BuildElementList(node.Nodes));
+                List<TechTreeNode> elements = new List<TechTreeNode> { node };
+                foreach (TechTreeNode subNode in node.Nodes)
+                {
+                    elements.AddRange(BuildElementList(subNode));
+                }
                 return elements;
             }
             private List<TechTreeNode> BuildElementList(TreeNodeCollection nodes)
@@ -661,7 +656,7 @@ namespace EgsEcfEditorApp
                     }
                     else
                     {
-                        RemoveNodeTreeFromTechTree(node.SourceNode.FindRoot());
+                        RemoveTechTreeName(node.SourceNode.FindRoot(), true);
                     }
                     Dialog.UpdateCoUseTechTrees(node.SourceNode, this);
                     Reload();
@@ -676,14 +671,14 @@ namespace EgsEcfEditorApp
                 targetNode.RemoveTechTreeNames();
                 Dialog.RemoveTechTreeNode(targetNode);
             }
-            private void RemoveNodeTreeFromTechTree(TechTreeNode targetNode)
+            private void RemoveTechTreeName(TechTreeNode targetNode, bool checkUnattached)
             {
                 targetNode.Nodes.ToList().ForEach(node =>
                 {
-                    RemoveNodeTreeFromTechTree(node);
+                    RemoveTechTreeName(node, checkUnattached);
                 });
                 targetNode.RemoveTechTreeName(TreeName);
-                if (targetNode.IsTechTreeNamesEmpty())
+                if (checkUnattached && targetNode.IsTechTreeNamesEmpty())
                 {
                     Dialog.RemoveTechTreeNode(targetNode);
                 }
@@ -696,7 +691,7 @@ namespace EgsEcfEditorApp
             public string TechTreeParentName { get; private set; } = null;
             public int UnlockLevel { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
             public int UnlockCost { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
-            public string ToolTip { get; set; } = null;
+            public string ToolTip { get; private set; } = null;
 
             public TechTreeNode Parent { get; set; } = null;
             public ReadOnlyCollection<TechTreeNode> Nodes { get; }
@@ -716,11 +711,6 @@ namespace EgsEcfEditorApp
 
                 UpdateFromElement();
             }
-            public TechTreeNode(TechTreeNode template) : this(template.Dialog, template.Tab, template.Element)
-            {
-                Parent = template.Parent;
-                InternalNodes.AddRange(template.Nodes.Cast<TechTreeNode>().Select(node => new TechTreeNode(node)).ToArray());
-            }
 
             // public
             public void Add(TechTreeNode node)
@@ -739,8 +729,8 @@ namespace EgsEcfEditorApp
             }
             public TechTreeDisplayNode BuildTreeNode()
             {
-                return new TechTreeDisplayNode(this, string.Format("{0}: {1} // {2}: {3} // {4}: {5}",
-                    TitleRecources.Generic_Name, ElementName, TitleRecources.Generic_Level, UnlockLevel, TitleRecources.Generic_Cost, UnlockCost), ToolTip);
+                return new TechTreeDisplayNode(this, string.Format("{0} // {1}: {2} // {3}: {4}",
+                    ElementName, TitleRecources.Generic_Level, UnlockLevel, TitleRecources.Generic_Cost, UnlockCost), ToolTip);
             }
             public TechTreeDisplayNode BuildNodeTree()
             {
@@ -824,7 +814,6 @@ namespace EgsEcfEditorApp
             }
             public void SwapElement(EcfTabPage tab, EcfBlock element)
             {
-                
                 Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames);
                 Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName);
                 Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel);
@@ -835,11 +824,16 @@ namespace EgsEcfEditorApp
                 Element = element;
                 UpdateElementName();
 
+                foreach(TechTreeNode node in Nodes)
+                {
+                    node.SetTechTreeParent(ElementName);
+                }
+
                 SetTechTreeNames(TechTreeNames.ToList());
                 SetTechTreeParent(TechTreeParentName);
                 SetUnlockLevel(UnlockLevel);
                 SetUnlockCost(UnlockCost);
-                Dialog.ChangedFileTabs.Add(Tab);
+                Dialog.ChangedFileTabs.Add(tab);
             }
             public TechTreeNode FindRoot()
             {

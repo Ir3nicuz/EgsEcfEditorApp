@@ -1,12 +1,12 @@
 ﻿using EcfFileViews;
 using EcfToolBarControls;
-using EcfWinFormControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -371,7 +371,7 @@ namespace EgsEcfEditorApp
         protected class EcfTechTree : TabPage
         {
             public string TreeName { get; private set; }
-            private EcfTreeView ElementTreeView { get; } = new EcfTreeView();
+            private TreeView ElementTreeView { get; } = new TreeView();
             private EcfTechTreeDialog Dialog { get; }
 
             public EcfTechTree(EcfTechTreeDialog dialog, string name)
@@ -384,8 +384,8 @@ namespace EgsEcfEditorApp
 
                 ElementTreeView.KeyUp += ElementTreeView_KeyUp;
                 ElementTreeView.KeyPress += ElementTreeView_KeyPress;
-                ElementTreeView.MouseClick += ElementTreeView_MouseClick;
-                ElementTreeView.MouseDoubleClick += ElementTreeView_MouseDoubleClick;
+                ElementTreeView.MouseUp += ElementTreeView_MouseUp;
+                ElementTreeView.NodeMouseDoubleClick += ElementTreeView_NodeMouseDoubleClick;
 
                 Controls.Add(ElementTreeView);
             }
@@ -406,30 +406,30 @@ namespace EgsEcfEditorApp
                 // hack for sqirky "ding"
                 evt.Handled = true;
             }
-            private void ElementTreeView_MouseClick(object sender, MouseEventArgs evt)
+            private void ElementTreeView_MouseUp(object sender, MouseEventArgs evt)
             {
-                TreeNode node = ElementTreeView.GetNodeAt(evt.Location);
                 if (evt.Button == MouseButtons.Right)
                 {
-                    if (node != null)
+                    Point clickPosition = PointToClient(Cursor.Position);
+                    TreeNode node = ElementTreeView.GetNodeAt(clickPosition);
+                    ElementTreeView.SelectedNode = node;
+                    if (node != null && node.Bounds.Contains(clickPosition))
                     {
-                        ElementTreeView.SelectedNode = node;
                         Dialog.HideNodeSpecificMenuStripItems(false);
-                        Dialog.TechTreeOperationMenu.Show(this, evt.Location);
+                        Dialog.TechTreeOperationMenu.Show(this, clickPosition);
                     }
                     else
                     {
                         Dialog.HideNodeSpecificMenuStripItems(true);
-                        Dialog.TechTreeOperationMenu.Show(this, evt.Location);
+                        Dialog.TechTreeOperationMenu.Show(this, clickPosition);
                     }
                 }
             }
-            private void ElementTreeView_MouseDoubleClick(object sender, MouseEventArgs evt)
+            private void ElementTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs evt)
             {
-                TreeNode node = ElementTreeView.GetNodeAt(evt.Location);
-                if (node != null && evt.Button == MouseButtons.Left)
+                if (evt.Button == MouseButtons.Left)
                 {
-                    ChangeNode(node);
+                    ChangeNode(evt.Node);
                 }
             }
 
@@ -495,13 +495,15 @@ namespace EgsEcfEditorApp
             {
                 return BuildElementList(ElementTreeView.Nodes).Contains(node);
             }
-            [Obsolete("needs work")]
             public void Reload()
             {
                 ElementTreeView.SuspendLayout();
+                
+                List<TechTreeNode> expandedNodes = BuildExpandedNodeList(ElementTreeView.Nodes);
                 ElementTreeView.Nodes.Clear();
                 ElementTreeView.Nodes.AddRange(Dialog.GetRootTechTreeNodes(TreeName).Select(node => node.BuildNodeTree()).ToArray());
-                ElementTreeView.ExpandAll();
+                ExpandListedNodes(ElementTreeView.Nodes, expandedNodes);
+                
                 ElementTreeView.ResumeLayout();
             }
 
@@ -681,6 +683,30 @@ namespace EgsEcfEditorApp
                 if (checkUnattached && targetNode.IsTechTreeNamesEmpty())
                 {
                     Dialog.RemoveTechTreeNode(targetNode);
+                }
+            }
+            private List<TechTreeNode> BuildExpandedNodeList(TreeNodeCollection nodes)
+            {
+                List<TechTreeNode> expanededNodes = new List<TechTreeNode>();
+                foreach(TechTreeDisplayNode node in nodes.Cast<TechTreeDisplayNode>())
+                {
+                    if (node.IsExpanded) 
+                    { 
+                        expanededNodes.Add(node.SourceNode); 
+                    }
+                    expanededNodes.AddRange(BuildExpandedNodeList(node.Nodes));
+                }
+                return expanededNodes;
+            }
+            private void ExpandListedNodes(TreeNodeCollection nodes, List<TechTreeNode> expandedNodes)
+            {
+                foreach(TechTreeDisplayNode node in nodes)
+                {
+                    if (expandedNodes.Contains(node.SourceNode))
+                    {
+                        node.Expand();
+                    }
+                    ExpandListedNodes(node.Nodes, expandedNodes);
                 }
             }
         }

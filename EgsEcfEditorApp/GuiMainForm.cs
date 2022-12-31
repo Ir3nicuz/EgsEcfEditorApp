@@ -3190,7 +3190,7 @@ namespace EcfFileViewTools
                 .Click += (sender, evt) => CompareAndMergeClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemEditing, IconRecources.Icon_IngameItemEditing, null))
                 .Click += (sender, evt) => IngameItemEditingClicked?.Invoke(sender, evt);
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_BuildTechTreePreview, IconRecources.Icon_BuildTechTreePreview, null))
+            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_BuildTechTreePreview, IconRecources.Icon_TechTreeEditor, null))
                 .Click += (sender, evt) => TechTreeToolClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))
                 .Click += (sender, evt) => ReloadDefinitionsClicked?.Invoke(sender, evt);
@@ -4483,11 +4483,13 @@ namespace EcfWinFormControls
             }
         }
 
+
         // privates
         protected override void WndProc(ref Message message)
         {
             if (message.Msg == User32.WM_DOUBLECLICK)
             {
+                OnDoubleClick(new EventArgs());
                 message.Result = IntPtr.Zero;
                 return;
             }

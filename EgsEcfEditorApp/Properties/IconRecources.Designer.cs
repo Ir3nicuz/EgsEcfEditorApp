@@ -153,16 +153,6 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_BuildTechTreePreview {
-            get {
-                object obj = ResourceManager.GetObject("Icon_BuildTechTreePreview", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Icon_ChangeComplex {
             get {
                 object obj = ResourceManager.GetObject("Icon_ChangeComplex", resourceCulture);
@@ -556,6 +546,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_SortDirectionDescending {
             get {
                 object obj = ResourceManager.GetObject("Icon_SortDirectionDescending", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_TechTreeEditor {
+            get {
+                object obj = ResourceManager.GetObject("Icon_TechTreeEditor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

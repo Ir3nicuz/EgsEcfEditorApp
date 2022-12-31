@@ -274,7 +274,7 @@
     <None Include="Resources\Icon_ApplyFilter.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon_BuildTechTreePreview.png" />
+    <None Include="Resources\Icon_TechTreeEditor.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon_ChangeComplex.png" />

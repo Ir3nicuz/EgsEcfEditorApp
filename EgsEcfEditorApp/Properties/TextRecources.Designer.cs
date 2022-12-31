@@ -1114,15 +1114,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creates a preview for the TechTree based on the open files.
-        /// </summary>
-        internal static string EgsEcfEditorApp_ToolTip_BuildTechTreePreview {
-            get {
-                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_BuildTechTreePreview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Checks the format definition of the selected file on deprecated specifications.
         /// </summary>
         internal static string EgsEcfEditorApp_ToolTip_CheckDefinition {
@@ -1236,6 +1227,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EgsEcfEditorApp_ToolTip_SaveAs {
             get {
                 return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creates a preview for the TechTree based on the open files and provides altering options.
+        /// </summary>
+        internal static string EgsEcfEditorApp_ToolTip_TechTreeEditor {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_TechTreeEditor", resourceCulture);
             }
         }
         

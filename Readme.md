@@ -149,12 +149,13 @@ Clicking an element in the tree view will trigger the detail difference display 
 ### Tech Tree editing
 At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the `.ecf` internal names.
 
-The element order question is a difficult one. Empyrion seems not to follow a 
+The element order question is a difficult one. Empyrion uses a ordering logic for the display of the Tech Trees which is not obvious. This tool orders the elements as they appear in the `.ecf` files. The ingame order may vary but the tree element dependencies are not effected from this.
 
+If a single element is added to a Tech Tree Empyrion checks if this element has a parent or child in another Tech Tree and adds this elements automaticly to the Tech Tree, too. They logic to create and copy elements from Tech Tree to Tech Tree is aligned with this behaviour. It is only possible to add new elements to a Tech Tree which are not used in any Tech Tree. Elements can only be copied if they are already in a Tech Tree. The copy function always copies the complete element tree.
 
-WIP
+All changes done in the Tech Tree Editor will directly effect the corresponding opened files. After closing the Tech Tree Editor window the files need just to be saved.
 
-<img src="images/TechTreeEditor.png" title="Tech Tree Editor Dialog"/>
+<img src="images/TechTreeEditorTeaser.png" title="Tech Tree Editor Dialog"/>
 
 ## Shortcuts and Functions
 ### Shortcuts

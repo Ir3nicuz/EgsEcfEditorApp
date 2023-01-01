@@ -147,13 +147,11 @@ Clicking an element in the tree view will trigger the detail difference display 
 <img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
 
 ### Tech Tree Editing
-At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the `.ecf` internal names.
+At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the `.ecf` internal names. The tool can add, remove, rename and copy Tech Trees. Additionally it can 
 
 The element order question is a difficult one. Empyrion uses a ordering logic for the display of the Tech Trees which is not obvious. This tool orders the elements as they appear in the `.ecf` files. The ingame order may vary but the tree element dependencies are not effected from this.
 
 New elements can only be added if they are not already used in a Tech Tree. Elements which are already in a Tech Tree can only be copied to align with the mirrowing behaviour of Empyrion. A element must have the exact equal parent element structure in all containing Tech Trees. To preserve the integrity across the Tech Trees changes violating this rule will automaticly be spreaded to all Tech Trees the copied element belongs to.
-
-The copy function always copies the parent tree elements, too.
 
 All changes done in the Tech Tree Editor will directly effect the corresponding opened files. After closing the Tech Tree Editor window the files need just to be saved.
 

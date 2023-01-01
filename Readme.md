@@ -147,9 +147,9 @@ Clicking an element in the tree view will trigger the detail difference display 
 <img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
 
 ### Tech Tree editing
-At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the internal name. 
+At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the `.ecf` internal names.
 
-The element order question is a difficult one. Empyrion seems not to follow a  ...
+The element order question is a difficult one. Empyrion seems not to follow a 
 
 
 WIP

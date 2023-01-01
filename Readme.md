@@ -128,7 +128,7 @@ At multi selection the panel will normally open for the first selected element. 
 
 <img src="images/editing_dialog.png" title="Editing Dialog"/>
 
-### Comparing and Merging files
+### Comparing and Merging Files
 In the compare and merge function ( <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> ) the compare is started by selecting two of the opened files. Depending on file size a progress bar will be displayed until completion.
 
 The two tree views will display all elements which differs between the two files. If no elements are displayed the two files are completely equal. The displayed elements belongs to the three categories:
@@ -146,7 +146,7 @@ Clicking an element in the tree view will trigger the detail difference display 
 
 <img src="images/CompareAndMerge.png" title="Compare and Merge Dialog"/>
 
-### Tech Tree editing
+### Tech Tree Editing
 At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> ) the tool parses the content of all opened files and shows the computed resulting Tech Trees as tabs. The parameters used for the computation can be altered within the new settings section `Tech Tree` found in the settings window. If new Tech Trees are added the localized name must be added manually to the localisation file of Empyrion. The Editor just uses the `.ecf` internal names.
 
 The element order question is a difficult one. Empyrion uses a ordering logic for the display of the Tech Trees which is not obvious. This tool orders the elements as they appear in the `.ecf` files. The ingame order may vary but the tree element dependencies are not effected from this.

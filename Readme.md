@@ -151,7 +151,9 @@ At clicking the Tech Tree Editor function ( <img src="EgsEcfEditorApp\Resources\
 
 The element order question is a difficult one. Empyrion uses a ordering logic for the display of the Tech Trees which is not obvious. This tool orders the elements as they appear in the `.ecf` files. The ingame order may vary but the tree element dependencies are not effected from this.
 
-If a single element is added to a Tech Tree Empyrion checks if this element has a parent in another Tech Tree and adds this elements automaticly to the Tech Tree, too. The logic to add a element to a Tech Tree and copy elements from Tech Tree to Tech Tree is aligned with this behaviour. It is only possible to add new elements to a Tech Tree which are not used in any Tech Tree. Elements which are already in a Tech Tree can only be copied. The copy function always copies the parent tree elements, too.
+New elements can only be added if they are not already used in a Tech Tree. Elements which are already in a Tech Tree can only be copied to align with the mirrowing behaviour of Empyrion. A element must have the exact equal parent element structure in all containing Tech Trees. To preserve the integrity across the Tech Trees changes violating this rule will automaticly be spreaded to all Tech Trees the copied element belongs to.
+
+The copy function always copies the parent tree elements, too.
 
 All changes done in the Tech Tree Editor will directly effect the corresponding opened files. After closing the Tech Tree Editor window the files need just to be saved.
 

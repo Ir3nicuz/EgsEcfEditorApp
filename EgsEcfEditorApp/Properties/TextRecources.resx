@@ -387,9 +387,6 @@
   <data name="EcfTechTreeDialog_ElementSettingsUpdateError" xml:space="preserve">
     <value>The update of the element settings failed</value>
   </data>
-  <data name="EcfTechTreeDialog_InsertNotPossibleWhileElementInTree" xml:space="preserve">
-    <value>The inserting operation is not possible because the following elements are already in the TechTree</value>
-  </data>
   <data name="EcfTechTreeDialog_NewTreeName" xml:space="preserve">
     <value>New TechTree</value>
   </data>

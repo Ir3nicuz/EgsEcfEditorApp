@@ -871,15 +871,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The inserting operation is not possible because the following elements are already in the TechTree.
-        /// </summary>
-        internal static string EcfTechTreeDialog_InsertNotPossibleWhileElementInTree {
-            get {
-                return ResourceManager.GetString("EcfTechTreeDialog_InsertNotPossibleWhileElementInTree", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New TechTree.
         /// </summary>
         internal static string EcfTechTreeDialog_NewTreeName {

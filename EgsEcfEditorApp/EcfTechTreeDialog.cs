@@ -554,19 +554,21 @@ namespace EgsEcfEditorApp
                     AddTreeNamesToParentStruct(targetNode.Parent as TechTreeDisplayNode, treeNames);
                 }
             }
-            private bool InsertionAllowed(TechTreeNode sourceNode)
+            private bool CleanUpPresentElements(TechTreeNode sourceNode)
             {
                 List<TechTreeNode> treeElements = BuildElementList(ElementTreeView.Nodes);
                 List<TechTreeNode> insertingElements = BuildElementList(sourceNode);
                 List<TechTreeNode> forbiddenElements = insertingElements.Where(element => treeElements.Contains(element)).ToList();
-                if (forbiddenElements.Count > 0)
+
+
+                forbiddenElements.ForEach(element =>
                 {
-                    MessageBox.Show(this,
-                        string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_InsertNotPossibleWhileElementInTree, Environment.NewLine,
-                        string.Join(Environment.NewLine, forbiddenElements.Select(element => element.Element.BuildIdentification()))),
-                        TitleRecources.Generic_Error, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
-                }
+                    Dialog.RemoveTechTreeNode(element);
+                });
+
+
+
+                
                 return true;
             }
             private bool TrySetStructureData(TechTreeNode targetNode, string treeName, string techTreeParentName)
@@ -691,14 +693,21 @@ namespace EgsEcfEditorApp
                     Reload();
                 }
             }
+            [Obsolete("needs work")]
             private void PasteNode(TreeNode targetNode)
             {
                 TechTreeDisplayNode targetDisplayNode = targetNode as TechTreeDisplayNode;
                 TechTreeDisplayNode pastingNode = Dialog.LastCopiedNode;
-                if (pastingNode != null && InsertionAllowed(pastingNode.SourceNode))
+                if (pastingNode != null)
                 {
                     TrySetStructureData(pastingNode, TreeName, targetDisplayNode);
-                    Dialog.RemoveTechTreeNode(pastingNode.SourceNode);
+
+
+
+                    CleanUpPresentElements(pastingNode.SourceNode);
+
+
+
                     Dialog.AddTechTreeNode(pastingNode.SourceNode);
                     Dialog.UpdateCoUseTechTrees(this, pastingNode.SourceNode, targetDisplayNode?.SourceNode);
                     Reload();

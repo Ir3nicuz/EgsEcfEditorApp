@@ -185,7 +185,7 @@ namespace EgsEcfEditorApp
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
             NavigationTools.UpdatePageButtons(PageNumber, PageCount);
-            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore));
         }
         private void NavigationTools_PageDownClicked(object sender, EventArgs evt)
         {
@@ -193,13 +193,13 @@ namespace EgsEcfEditorApp
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
             NavigationTools.UpdatePageButtons(PageNumber, PageCount);
-            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore));
         }
 
         // public
-        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs, int pageSize)
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
         {
-            PageSize = pageSize;
+            PageSize = InternalSettings.Default.EcfFileCAMDialog_PageSize;
             
             ChangedFileTabs.Clear();
             AvailableFiles.Clear();
@@ -238,7 +238,7 @@ namespace EgsEcfEditorApp
 
             PageNumber = 1;
             PageCount = (int)Math.Ceiling(FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore) / (double)PageSize);
-            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count);
+            UpdatePageIndicator(PageNumber, PageCount, FirstFileNodes.Count(node => node.MergeAction != CAMTreeNode.MergeActions.Ignore));
 
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
@@ -361,6 +361,7 @@ namespace EgsEcfEditorApp
         }
         private void MergeFile(EgsEcfFile file, List<CAMTreeNode> sourceList)
         {
+            EcfStructureItem concurrentItem;
             foreach (CAMTreeNode node in sourceList)
             {
                 if (CAMAbortPending)
@@ -373,21 +374,24 @@ namespace EgsEcfEditorApp
                     switch (node.MergeAction)
                     {
                         case CAMTreeNode.MergeActions.Add:
-                            file.AddItem(CopyStructureItem(node.Item), sourceList.IndexOf(node));
+                            concurrentItem = CopyStructureItem(node.Item);
+                            concurrentItem.Revalidate();
+                            file.AddItem(concurrentItem, sourceList.IndexOf(node));
                             break;
                         case CAMTreeNode.MergeActions.Update:
-                            node.ConcurrentNode.Item.UpdateContent(node.Item);
-                            if (node.ConcurrentNode.Item is EcfBlock block)
+                            concurrentItem = node.ConcurrentNode.Item;
+                            concurrentItem.UpdateContent(node.Item);
+                            if (concurrentItem is EcfBlock block)
                             {
                                 MergeBlock(block, node.AllNodes);
                             }
+                            concurrentItem.Revalidate();
                             break;
                         case CAMTreeNode.MergeActions.Remove:
                             file.RemoveItem(node.Item);
                             break;
                         default: break;
                     }
-                    node.Item.Revalidate();
                 }
             }
         }
@@ -529,8 +533,9 @@ namespace EgsEcfEditorApp
                             targetBlock.AddChild(CopyStructureItem(node.Item), sourceList.IndexOf(node));
                             break;
                         case CAMTreeNode.MergeActions.Update:
-                            node.ConcurrentNode.Item.UpdateContent(node.Item);
-                            if (node.Item is EcfBlock block)
+                            EcfStructureItem concurrentItem = node.ConcurrentNode.Item;
+                            concurrentItem.UpdateContent(node.Item);
+                            if (concurrentItem is EcfBlock block)
                             {
                                 MergeBlock(block, node.AllNodes);
                             }
@@ -540,7 +545,6 @@ namespace EgsEcfEditorApp
                             break;
                         default: break;
                     }
-                    node.Item.Revalidate();
                 }
             }
         }

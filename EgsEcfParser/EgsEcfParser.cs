@@ -2115,7 +2115,7 @@ namespace EgsEcfParser
         public EcfKeyValueItem(EcfKeyValueItem template) : base (template)
         {
             Key = template.Key;
-            Definition = Definition == null ? null : new ItemDefinition(template.Definition);
+            Definition = template.Definition == null ? null : new ItemDefinition(template.Definition);
             DefinedKeyValueItems = template.DefinedKeyValueItems.Select(def => new ItemDefinition(def)).ToList().AsReadOnly();
             ValueGroups = InternalValueGroups.AsReadOnly();
             ItemType = template.ItemType;
@@ -2373,7 +2373,6 @@ namespace EgsEcfParser
         // privates
         protected override void OnStructureDataUpdate()
         {
-            UpdateDefinition(EcfFile?.Definition.BlockParameters);
             foreach (EcfValueGroup group in ValueGroups)
             {
                 group.UpdateStructureData(EcfFile, this, StructureLevel);

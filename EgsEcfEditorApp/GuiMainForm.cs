@@ -542,7 +542,7 @@ namespace EgsEcfEditorApp
         // Content handling
         private void CompareAndMergeFiles()
         {
-            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList(), InternalSettings.Default.EcfFileCAMDialog_PageSize);
+            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
             foreach(EcfTabPage tab in CompareMergeDialog.ChangedFileTabs)
             {
                 tab.UpdateAllViews();

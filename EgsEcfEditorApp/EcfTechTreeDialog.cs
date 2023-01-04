@@ -554,23 +554,6 @@ namespace EgsEcfEditorApp
                     AddTreeNamesToParentStruct(targetNode.Parent as TechTreeDisplayNode, treeNames);
                 }
             }
-            private bool CleanUpPresentElements(TechTreeNode sourceNode)
-            {
-                List<TechTreeNode> treeElements = BuildElementList(ElementTreeView.Nodes);
-                List<TechTreeNode> insertingElements = BuildElementList(sourceNode);
-                List<TechTreeNode> forbiddenElements = insertingElements.Where(element => treeElements.Contains(element)).ToList();
-
-
-                forbiddenElements.ForEach(element =>
-                {
-                    Dialog.RemoveTechTreeNode(element);
-                });
-
-
-
-                
-                return true;
-            }
             private bool TrySetStructureData(TechTreeNode targetNode, string treeName, string techTreeParentName)
             {
                 try
@@ -693,7 +676,6 @@ namespace EgsEcfEditorApp
                     Reload();
                 }
             }
-            [Obsolete("needs work")]
             private void PasteNode(TreeNode targetNode)
             {
                 TechTreeDisplayNode targetDisplayNode = targetNode as TechTreeDisplayNode;
@@ -702,14 +684,16 @@ namespace EgsEcfEditorApp
                 {
                     TrySetStructureData(pastingNode, TreeName, targetDisplayNode);
 
+                    List<TechTreeNode> changedElements = BuildElementList(pastingNode.SourceNode);
+                    changedElements.ForEach(element =>
+                    {
+                        Dialog.RemoveTechTreeNode(element);
+                        Dialog.AddTechTreeNode(element);
+                    });
 
+                    changedElements.Add(targetDisplayNode?.SourceNode);
+                    Dialog.UpdateCoUseTechTrees(this, changedElements.ToArray());
 
-                    CleanUpPresentElements(pastingNode.SourceNode);
-
-
-
-                    Dialog.AddTechTreeNode(pastingNode.SourceNode);
-                    Dialog.UpdateCoUseTechTrees(this, pastingNode.SourceNode, targetDisplayNode?.SourceNode);
                     Reload();
                 }
             }
@@ -811,11 +795,6 @@ namespace EgsEcfEditorApp
             {
                 node.Parent = this;
                 InternalNodes.Add(node);
-            }
-            public void Insert(int index, TechTreeNode node)
-            {
-                node.Parent = this;
-                InternalNodes.Insert(index, node);
             }
             public void Remove(TechTreeNode node)
             {

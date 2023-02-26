@@ -209,7 +209,7 @@ namespace EgsEcfParser
                 public static string XChapterBlockParameters { get; } = "BlockParameters";
                 public static string XChapterParameterAttributes { get; } = "ParameterAttributes";
 
-                public static string XElementDefinesTemplateIngredients { get; } = "DefinesTemplateIngredients";
+                public static string XElementDefinesIngredients { get; } = "DefinesIngredients";
                 public static string XElementDefinesTemplates { get; } = "DefinesTemplates";
                 public static string XElementSingleLineCommentStart { get; } = "SingleLineCommentStart";
                 public static string XElementMultiLineCommentPair { get; } = "MultiLineCommentPair";
@@ -305,7 +305,7 @@ namespace EgsEcfParser
             private static FormatDefinition BuildFormatDefinition(XmlNode configNode, string filePathAndName, string gameMode, string fileType)
             {
                 XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
-                bool definesTemplateIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplateIngredients)?
+                bool definesIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesIngredients)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 bool definesTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
@@ -357,7 +357,7 @@ namespace EgsEcfParser
                 List<ItemDefinition> blockParameters = BuildItemList(configNode, XmlSettings.XChapterBlockParameters);
                 List<ItemDefinition> parameterAttributes = BuildItemList(configNode, XmlSettings.XChapterParameterAttributes);
 
-                return new FormatDefinition(filePathAndName, gameMode, fileType, definesTemplateIngredients, definesTemplates,
+                return new FormatDefinition(filePathAndName, gameMode, fileType, definesIngredients, definesTemplates,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
@@ -391,7 +391,7 @@ namespace EgsEcfParser
                     writer.WriteComment("Content Altering Function Settings");
                     {
                         writer.WriteStartElement(XmlSettings.XChapterContentAltering);
-                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplateIngredients, "true");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesIngredients, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
                         writer.WriteEndElement();
                     }
@@ -3216,7 +3216,7 @@ namespace EgsEcfParser
         public string GameMode { get; }
         public string FileType { get; }
 
-        public bool DefinesTemplateIngredients { get; }
+        public bool DefinesIngredients { get; }
         public bool DefinesTemplates { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
@@ -3250,7 +3250,7 @@ namespace EgsEcfParser
         public StringPairDefinition WritingBlockIdentifierPair { get;}
         public StringPairDefinition WritingEscapeIdentifiersPair { get; }
 
-        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool definesTemplateIngredients, bool definesTemplates,
+        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool definesIngredients, bool definesTemplates,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
@@ -3265,7 +3265,7 @@ namespace EgsEcfParser
             GameMode = gameMode;
             FileType = fileType;
 
-            DefinesTemplateIngredients = definesTemplateIngredients;
+            DefinesIngredients = definesIngredients;
             DefinesTemplates = definesTemplates;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
@@ -3312,7 +3312,7 @@ namespace EgsEcfParser
             GameMode = template.GameMode;
             FileType = template.FileType;
 
-            DefinesTemplateIngredients = template.DefinesTemplateIngredients;
+            DefinesIngredients = template.DefinesIngredients;
             DefinesTemplates = template.DefinesTemplates;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();

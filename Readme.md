@@ -46,7 +46,7 @@ For each `.ecf` file the tool needs a definition. These definitions are located 
 - `LootGroups.ecf` (Vanilla and Reforged Eden)
 - `MaterialConfig.ecf` (Vanilla and Reforged Eden)
 - `StatusEffects.ecf` (Vanilla and Reforged Eden)
-- `Templates.ecf` (Vanilla and Reforged Eden) - needs further improvement -> planned feature `Ingame Item creation support`
+- `Templates.ecf` (Vanilla and Reforged Eden)
 - `TokenConfig.ecf` (Vanilla and Reforged Eden)
 - `TraderNPCConfig.ecf` (Vanilla and Reforged Eden)
 
@@ -75,7 +75,7 @@ The tool is capable of comparing two `.ecf` files, listing the differences and o
 ### Tech Tree Editor
 The tool is capable of editing the "TechTree" which is based on several properties spreaded over different files and file elements.
 
-### Ingame Item Editing
+### Template Handling Support
 :wrench: Not implemented yet :wrench:
 
 ## Tool Overview
@@ -313,6 +313,5 @@ This errors occur during content writing at hitting `save`. This error depends o
 
 ## Planned Major Features
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
-- Ingame Item Editing support
 - Element, Parameter, Comment moving
 - Undo / Redo

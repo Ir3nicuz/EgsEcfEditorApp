@@ -200,7 +200,6 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_CloseFile.png" title="icon" width="16" height="16"/> close selected file
 - <img src="EgsEcfEditorApp\Resources\Icon_CloseAllFiles.png" title="icon" width="16" height="16"/> close all open files
 - <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> compares two files, displays differences and offer merge options (see [Compare and Merge](#compare-and-merge))
-- <img src="EgsEcfEditorApp\Resources\Icon_IngameItemEditing.png" title="icon" width="16" height="16"/> offers support functions to edit ingame items (see [Ingame Item Editing](#ingame-item-editing))
 - <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> displays the tech tree editor (see [Tech Tree Editor](#tech-tree-editor))
 - <img src="EgsEcfEditorApp\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [File Content Definition](#file-content-definition))
 - <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> checks the `.xml` definitions (see [File Content Definition](#file-content-definition))

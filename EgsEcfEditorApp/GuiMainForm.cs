@@ -156,10 +156,6 @@ namespace EgsEcfEditorApp
         {
             CompareAndMergeFiles();
         }
-        private void ExtendedFileOperations_IngameItemEditingClicked(object sender, EventArgs evt)
-        {
-            EditIngameItem();
-        }
         private void ExtendedFileOperations_TechTreeEditorClicked(object sender, EventArgs evt)
         {
             StartTechTreeEditor();
@@ -304,7 +300,6 @@ namespace EgsEcfEditorApp
             ExtendedFileOperations.ReloadDefinitionsClicked += ExtendedFileOperations_ReloadDefinitionsClicked;
             ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
             ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
-            ExtendedFileOperations.IngameItemEditingClicked += ExtendedFileOperations_IngameItemEditingClicked;
             ExtendedFileOperations.TechTreeEditorClicked += ExtendedFileOperations_TechTreeEditorClicked;
 
             SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
@@ -547,10 +542,6 @@ namespace EgsEcfEditorApp
             {
                 tab.UpdateAllViews();
             }
-        }
-        private void EditIngameItem()
-        {
-            MessageBox.Show(this, "not implemented yet! :)");
         }
         private void CopyElements(object sender, CopyPasteClickedEventArgs evt)
         {
@@ -3178,7 +3169,6 @@ namespace EcfFileViewTools
     public class EcfExtendedFileOperations : EcfToolBox
     {
         public event EventHandler CompareAndMergeClicked;
-        public event EventHandler IngameItemEditingClicked;
         public event EventHandler TechTreeEditorClicked;
         public event EventHandler ReloadDefinitionsClicked;
         public event EventHandler CheckDefinitionClicked;
@@ -3187,8 +3177,6 @@ namespace EcfFileViewTools
         {
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CompareAndMerge, IconRecources.Icon_CompareAndMerge, null))
                 .Click += (sender, evt) => CompareAndMergeClicked?.Invoke(sender, evt);
-            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_IngameItemEditing, IconRecources.Icon_IngameItemEditing, null))
-                .Click += (sender, evt) => IngameItemEditingClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_TechTreeEditor, IconRecources.Icon_TechTreeEditor, null))
                 .Click += (sender, evt) => TechTreeEditorClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))

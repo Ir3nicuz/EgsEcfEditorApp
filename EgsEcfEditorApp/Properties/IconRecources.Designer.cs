@@ -233,16 +233,6 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_IngameItemEditing {
-            get {
-                object obj = ResourceManager.GetObject("Icon_IngameItemEditing", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Icon_MoveDown {
             get {
                 object obj = ResourceManager.GetObject("Icon_MoveDown", resourceCulture);

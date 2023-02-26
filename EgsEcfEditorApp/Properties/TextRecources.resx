@@ -477,9 +477,6 @@
   <data name="EgsEcfEditorApp_ToolTip_CompareAndMerge" xml:space="preserve">
     <value>Compares two files, lists the differences and offers merge options</value>
   </data>
-  <data name="EgsEcfEditorApp_ToolTip_IngameItemEditing" xml:space="preserve">
-    <value>Offers support functions to edit ingame items</value>
-  </data>
   <data name="EgsEcfEditorApp_ToolTip_New" xml:space="preserve">
     <value>Creates a new file</value>
   </data>

@@ -198,6 +198,7 @@ namespace EgsEcfParser
                 public static string XChapterRoot { get; } = "Settings";
 
                 public static string XChapterFileConfig { get; } = "Config";
+                public static string XChapterContentAltering { get; } = "ContentAltering";
                 public static string XChapterFormatting { get; } = "Formatting";
                 public static string XChapterBlockTypePreMarks { get; } = "BlockTypePreMarks";
                 public static string XChapterBlockTypePostMarks { get; } = "BlockTypePostMarks";
@@ -208,6 +209,8 @@ namespace EgsEcfParser
                 public static string XChapterBlockParameters { get; } = "BlockParameters";
                 public static string XChapterParameterAttributes { get; } = "ParameterAttributes";
 
+                public static string XElementDefinesTemplateIngredients { get; } = "DefinesTemplateIngredients";
+                public static string XElementDefinesTemplates { get; } = "DefinesTemplates";
                 public static string XElementSingleLineCommentStart { get; } = "SingleLineCommentStart";
                 public static string XElementMultiLineCommentPair { get; } = "MultiLineCommentPair";
                 public static string XElementBlockIdentifierPair { get; } = "BlockIdentifierPair";
@@ -301,6 +304,12 @@ namespace EgsEcfParser
             }
             private static FormatDefinition BuildFormatDefinition(XmlNode configNode, string filePathAndName, string gameMode, string fileType)
             {
+                XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
+                bool definesTemplateIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplateIngredients)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool definesTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
                 if (formatterNode == null) { throw new ArgumentException(string.Format("Chapter {0} not found", XmlSettings.XChapterFormatting)); }
 
@@ -348,7 +357,7 @@ namespace EgsEcfParser
                 List<ItemDefinition> blockParameters = BuildItemList(configNode, XmlSettings.XChapterBlockParameters);
                 List<ItemDefinition> parameterAttributes = BuildItemList(configNode, XmlSettings.XChapterParameterAttributes);
 
-                return new FormatDefinition(filePathAndName, gameMode, fileType,
+                return new FormatDefinition(filePathAndName, gameMode, fileType, definesTemplateIngredients, definesTemplates,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
@@ -378,8 +387,16 @@ namespace EgsEcfParser
                     writer.WriteStartElement(XmlSettings.XChapterFileConfig);
                     writer.WriteAttributeString(XmlSettings.XAttributeMode, "Vanilla");
                     writer.WriteAttributeString(XmlSettings.XAttributeType, "BlocksConfig");
-                    writer.WriteComment("Ecf Syntax Format Settings");
+                    // Content Altering Function Settings
+                    writer.WriteComment("Content Altering Function Settings");
+                    {
+                        writer.WriteStartElement(XmlSettings.XChapterContentAltering);
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplateIngredients, "true");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
+                        writer.WriteEndElement();
+                    }
                     // Formatting
+                    writer.WriteComment("Ecf Syntax Format Settings");
                     {
                         writer.WriteStartElement(XmlSettings.XChapterFormatting);
                         writer.WriteComment("Copy Parameters if more needed");
@@ -405,8 +422,8 @@ namespace EgsEcfParser
                         CreateXmlPairValueItem(writer, XmlSettings.XElementEscapeIdentifierPair, "\"", "\"");
                         writer.WriteEndElement();
                     }
-                    writer.WriteComment("File Specific Syntax Settings, Add more child-params if needed");
                     // premarks
+                    writer.WriteComment("File Specific Syntax Settings, Add more child-params if needed");
                     {
                         writer.WriteStartElement(XmlSettings.XChapterBlockTypePreMarks);
                         CreateXmlOptionalValueItem(writer, "+", true);
@@ -3199,6 +3216,9 @@ namespace EgsEcfParser
         public string GameMode { get; }
         public string FileType { get; }
 
+        public bool DefinesTemplateIngredients { get; }
+        public bool DefinesTemplates { get; }
+
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
         public ReadOnlyCollection<StringPairDefinition> MultiLineCommentPairs { get; }
         public ReadOnlyCollection<StringPairDefinition> BlockIdentifierPairs { get; }
@@ -3230,7 +3250,7 @@ namespace EgsEcfParser
         public StringPairDefinition WritingBlockIdentifierPair { get;}
         public StringPairDefinition WritingEscapeIdentifiersPair { get; }
 
-        public FormatDefinition(string filePathAndName, string gameMode, string fileType,
+        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool definesTemplateIngredients, bool definesTemplates,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
@@ -3244,6 +3264,9 @@ namespace EgsEcfParser
             FilePathAndName = filePathAndName;
             GameMode = gameMode;
             FileType = fileType;
+
+            DefinesTemplateIngredients = definesTemplateIngredients;
+            DefinesTemplates = definesTemplates;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
             MultiLineCommentPairs = multiLineCommentPairs.AsReadOnly();
@@ -3288,6 +3311,9 @@ namespace EgsEcfParser
             FilePathAndName = template.FilePathAndName;
             GameMode = template.GameMode;
             FileType = template.FileType;
+
+            DefinesTemplateIngredients = template.DefinesTemplateIngredients;
+            DefinesTemplates = template.DefinesTemplates;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
             MultiLineCommentPairs = template.MultiLineCommentPairs.Select(pair => new StringPairDefinition(pair)).ToList().AsReadOnly();

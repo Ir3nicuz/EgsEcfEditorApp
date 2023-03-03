@@ -1820,7 +1820,7 @@ namespace EcfFileViews
         private EcfSorter StructureSorter { get; }
         private TreeView Tree { get; } = new TreeView();
         private ContextMenuStrip TreeContextMenu { get; } = new ContextMenuStrip();
-        private ToolStripMenuItem ContextMenuItemListTemplateUser { get; }
+        private ToolStripMenuItem ContextMenuItemListTemplateUsers { get; }
         private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; }
         private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; }
         private ToolStripMenuItem ContextMenuItemCreateTemplate { get; }
@@ -1875,9 +1875,9 @@ namespace EcfFileViews
             TreeContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
             TreeContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
 
-            ContextMenuItemListTemplateUser = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListTemplateUser, IconRecources.Icon_Unknown,//Icon_ListTemplateUser,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListTemplateUser, TemplateSourceItem)));
-            ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_Unknown,//Icon_ListItemUsingTemplates,
+            ContextMenuItemListTemplateUsers = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListTemplateUsers, IconRecources.Icon_ListTemplateUsers,
+                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListTemplateUsers, TemplateSourceItem)));
+            ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_ListItemUsingTemplates,
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListItemUsingTemplates, TemplateSourceItem)));
             ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate,
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ShowLinkedTemplate, TemplateSourceItem)));
@@ -1888,7 +1888,7 @@ namespace EcfFileViews
             ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition,
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.AddToTemplateDefinition, TemplateSourceItem)));
 
-            TreeContextMenu.Items.Add(ContextMenuItemListTemplateUser);
+            TreeContextMenu.Items.Add(ContextMenuItemListTemplateUsers);
             TreeContextMenu.Items.Add(ContextMenuItemListItemUsingTemplates);
             TreeContextMenu.Items.Add(ContextMenuItemShowLinkedTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemCreateTemplate);
@@ -2004,9 +2004,18 @@ namespace EcfFileViews
             bool showTemplatesSpecificItems = (File?.Definition?.DefinesTemplates ?? false) && isSpecificItem;
             bool showIngredientsSpecificItems = (File?.Definition?.DefinesIngredients ?? false) && isSpecificItem;
 
-            ContextMenuItemCreateTemplate.Enabled = false;
 
-            ContextMenuItemListTemplateUser.Visible = showTemplatesSpecificItems;
+
+            ContextMenuItemListTemplateUsers.Enabled = false;
+            ContextMenuItemListItemUsingTemplates.Enabled = false;
+            ContextMenuItemShowLinkedTemplate.Enabled = false;
+            ContextMenuItemCreateTemplate.Enabled = false;
+            ContextMenuItemDeleteTemplate.Enabled = false;
+            ContextMenuItemAddToTemplateDefinition.Enabled = false;
+
+
+
+            ContextMenuItemListTemplateUsers.Visible = showTemplatesSpecificItems;
             ContextMenuItemListItemUsingTemplates.Visible = showIngredientsSpecificItems;
             ContextMenuItemShowLinkedTemplate.Visible = showIngredientsSpecificItems;
             ContextMenuItemCreateTemplate.Visible = showIngredientsSpecificItems;
@@ -2285,7 +2294,7 @@ namespace EcfFileViews
 
             public enum TemplateOperations
             {
-                ListTemplateUser,
+                ListTemplateUsers,
                 ListItemUsingTemplates, 
                 ShowLinkedTemplate,
                 CreateTemplate, 

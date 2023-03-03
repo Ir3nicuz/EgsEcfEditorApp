@@ -853,11 +853,11 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List template user.
+        ///   Looks up a localized string similar to List template users.
         /// </summary>
-        internal static string EcfTreeView_ListTemplateUser {
+        internal static string EcfTreeView_ListTemplateUsers {
             get {
-                return ResourceManager.GetString("EcfTreeView_ListTemplateUser", resourceCulture);
+                return ResourceManager.GetString("EcfTreeView_ListTemplateUsers", resourceCulture);
             }
         }
         

@@ -381,8 +381,8 @@
   <data name="EcfTreeView_ListItemUsingTemplates" xml:space="preserve">
     <value>List item using templates</value>
   </data>
-  <data name="EcfTreeView_ListTemplateUser" xml:space="preserve">
-    <value>List template user</value>
+  <data name="EcfTreeView_ListTemplateUsers" xml:space="preserve">
+    <value>List template users</value>
   </data>
   <data name="EcfTreeView_ShowLinkedTemplate" xml:space="preserve">
     <value>Show linked template</value>

@@ -263,6 +263,26 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_ListItemUsingTemplates {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ListItemUsingTemplates", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_ListTemplateUsers {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ListTemplateUsers", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_MoveDown {
             get {
                 object obj = ResourceManager.GetObject("Icon_MoveDown", resourceCulture);

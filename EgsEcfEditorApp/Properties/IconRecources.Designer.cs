@@ -73,6 +73,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_AddToTemplateDefinition {
+            get {
+                object obj = ResourceManager.GetObject("Icon_AddToTemplateDefinition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_AddValue {
             get {
                 object obj = ResourceManager.GetObject("Icon_AddValue", resourceCulture);
@@ -226,6 +236,26 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_Copy {
             get {
                 object obj = ResourceManager.GetObject("Icon_Copy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_CreateTemplate {
+            get {
+                object obj = ResourceManager.GetObject("Icon_CreateTemplate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_DeleteTemplate {
+            get {
+                object obj = ResourceManager.GetObject("Icon_DeleteTemplate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -486,6 +516,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_ShowOnlyNonFaultyItems {
             get {
                 object obj = ResourceManager.GetObject("Icon_ShowOnlyNonFaultyItems", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_ShowTemplate {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ShowTemplate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

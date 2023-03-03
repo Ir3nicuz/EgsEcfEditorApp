@@ -363,11 +363,29 @@
   <data name="EcfTechTreeItemEditorDialog_UnlockLevelSetting" xml:space="preserve">
     <value>Freischaltlevel</value>
   </data>
+  <data name="EcfTreeView_AddToTemplateDefinition" xml:space="preserve">
+    <value>Hinzufügen zu Template Definition</value>
+  </data>
+  <data name="EcfTreeView_CreateTemplate" xml:space="preserve">
+    <value>Erzeuge Template</value>
+  </data>
+  <data name="EcfTreeView_DeleteTemplate" xml:space="preserve">
+    <value>Lösche Template</value>
+  </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>Baumelemente</value>
   </data>
   <data name="EcfTreeView_Header" xml:space="preserve">
     <value>Baumansicht</value>
+  </data>
+  <data name="EcfTreeView_ListItemUsingTemplates" xml:space="preserve">
+    <value>Liste verwendende Templates</value>
+  </data>
+  <data name="EcfTreeView_ListTemplateUser" xml:space="preserve">
+    <value>Liste Template Nutzer</value>
+  </data>
+  <data name="EcfTreeView_ShowLinkedTemplate" xml:space="preserve">
+    <value>Zeige verknüpftes Template</value>
   </data>
   <data name="Generic_Abort" xml:space="preserve">
     <value>Abbruch</value>

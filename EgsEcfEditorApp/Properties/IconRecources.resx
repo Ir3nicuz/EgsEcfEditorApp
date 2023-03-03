@@ -121,6 +121,9 @@
   <data name="Icon_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Icon_AddToTemplateDefinition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_AddToTemplateDefinition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Icon_AddValue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_AddValue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -168,6 +171,12 @@
   </data>
   <data name="Icon_Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_CreateTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_CreateTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_DeleteTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_DeleteTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_MoveDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_MoveDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -246,6 +255,9 @@
   </data>
   <data name="Icon_ShowOnlyNonFaultyItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_ShowOnlyNonFaultyItems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon_ShowTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon_ShowTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Icon_SomeAddItemsSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon_SomeAddItemsSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

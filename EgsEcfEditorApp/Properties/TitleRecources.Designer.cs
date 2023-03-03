@@ -799,6 +799,33 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to template definition.
+        /// </summary>
+        internal static string EcfTreeView_AddToTemplateDefinition {
+            get {
+                return ResourceManager.GetString("EcfTreeView_AddToTemplateDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create template.
+        /// </summary>
+        internal static string EcfTreeView_CreateTemplate {
+            get {
+                return ResourceManager.GetString("EcfTreeView_CreateTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete template.
+        /// </summary>
+        internal static string EcfTreeView_DeleteTemplate {
+            get {
+                return ResourceManager.GetString("EcfTreeView_DeleteTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tree items.
         /// </summary>
         internal static string EcfTreeView_FilterSelector_Elements {
@@ -813,6 +840,33 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfTreeView_Header {
             get {
                 return ResourceManager.GetString("EcfTreeView_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List item using templates.
+        /// </summary>
+        internal static string EcfTreeView_ListItemUsingTemplates {
+            get {
+                return ResourceManager.GetString("EcfTreeView_ListItemUsingTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List template user.
+        /// </summary>
+        internal static string EcfTreeView_ListTemplateUser {
+            get {
+                return ResourceManager.GetString("EcfTreeView_ListTemplateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show linked template.
+        /// </summary>
+        internal static string EcfTreeView_ShowLinkedTemplate {
+            get {
+                return ResourceManager.GetString("EcfTreeView_ShowLinkedTemplate", resourceCulture);
             }
         }
         

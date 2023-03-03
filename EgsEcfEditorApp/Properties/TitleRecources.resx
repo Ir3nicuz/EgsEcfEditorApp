@@ -363,11 +363,29 @@
   <data name="EcfTechTreeItemEditorDialog_UnlockLevelSetting" xml:space="preserve">
     <value>Unlock level</value>
   </data>
+  <data name="EcfTreeView_AddToTemplateDefinition" xml:space="preserve">
+    <value>Add to template definition</value>
+  </data>
+  <data name="EcfTreeView_CreateTemplate" xml:space="preserve">
+    <value>Create template</value>
+  </data>
+  <data name="EcfTreeView_DeleteTemplate" xml:space="preserve">
+    <value>Delete template</value>
+  </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>tree items</value>
   </data>
   <data name="EcfTreeView_Header" xml:space="preserve">
     <value>Tree view</value>
+  </data>
+  <data name="EcfTreeView_ListItemUsingTemplates" xml:space="preserve">
+    <value>List item using templates</value>
+  </data>
+  <data name="EcfTreeView_ListTemplateUser" xml:space="preserve">
+    <value>List template user</value>
+  </data>
+  <data name="EcfTreeView_ShowLinkedTemplate" xml:space="preserve">
+    <value>Show linked template</value>
   </data>
   <data name="Generic_Abort" xml:space="preserve">
     <value>Abort</value>

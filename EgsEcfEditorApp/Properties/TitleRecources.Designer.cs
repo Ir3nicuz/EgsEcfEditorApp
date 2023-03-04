@@ -799,20 +799,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add template.
+        /// </summary>
+        internal static string EcfTreeView_AddTemplate {
+            get {
+                return ResourceManager.GetString("EcfTreeView_AddTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to template definition.
         /// </summary>
         internal static string EcfTreeView_AddToTemplateDefinition {
             get {
                 return ResourceManager.GetString("EcfTreeView_AddToTemplateDefinition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create template.
-        /// </summary>
-        internal static string EcfTreeView_CreateTemplate {
-            get {
-                return ResourceManager.GetString("EcfTreeView_CreateTemplate", resourceCulture);
             }
         }
         

@@ -363,11 +363,11 @@
   <data name="EcfTechTreeItemEditorDialog_UnlockLevelSetting" xml:space="preserve">
     <value>Unlock level</value>
   </data>
+  <data name="EcfTreeView_AddTemplate" xml:space="preserve">
+    <value>Add template</value>
+  </data>
   <data name="EcfTreeView_AddToTemplateDefinition" xml:space="preserve">
     <value>Add to template definition</value>
-  </data>
-  <data name="EcfTreeView_CreateTemplate" xml:space="preserve">
-    <value>Create template</value>
   </data>
   <data name="EcfTreeView_DeleteTemplate" xml:space="preserve">
     <value>Delete template</value>

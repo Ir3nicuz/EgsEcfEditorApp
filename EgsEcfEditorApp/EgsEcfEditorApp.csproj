@@ -370,6 +370,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_AddTemplate.png" />
     <None Include="Resources\Icon_ListTemplateUsers.png" />
     <None Include="Resources\Icon_ListItemUsingTemplates.png" />
     <None Include="Resources\Icon_AddToTemplateDefinition.png" />

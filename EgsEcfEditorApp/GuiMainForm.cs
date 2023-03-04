@@ -1823,7 +1823,7 @@ namespace EcfFileViews
         private ToolStripMenuItem ContextMenuItemListTemplateUsers { get; }
         private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; }
         private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; }
-        private ToolStripMenuItem ContextMenuItemCreateTemplate { get; }
+        private ToolStripMenuItem ContextMenuItemAddTemplate { get; }
         private ToolStripMenuItem ContextMenuItemDeleteTemplate { get; }
         private ToolStripMenuItem ContextMenuItemAddToTemplateDefinition { get; }
         private List<EcfTreeNode> RootTreeNodes { get; } = new List<EcfTreeNode>();
@@ -1881,8 +1881,8 @@ namespace EcfFileViews
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListItemUsingTemplates, TemplateSourceItem)));
             ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate,
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ShowLinkedTemplate, TemplateSourceItem)));
-            ContextMenuItemCreateTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_CreateTemplate, IconRecources.Icon_CreateTemplate,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.CreateTemplate, TemplateSourceItem)));
+            ContextMenuItemAddTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddTemplate, IconRecources.Icon_AddTemplate,
+                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.AddTemplate, TemplateSourceItem)));
             ContextMenuItemDeleteTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_DeleteTemplate, IconRecources.Icon_DeleteTemplate,
                 (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.DeleteTemplate, TemplateSourceItem)));
             ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition,
@@ -1891,7 +1891,7 @@ namespace EcfFileViews
             TreeContextMenu.Items.Add(ContextMenuItemListTemplateUsers);
             TreeContextMenu.Items.Add(ContextMenuItemListItemUsingTemplates);
             TreeContextMenu.Items.Add(ContextMenuItemShowLinkedTemplate);
-            TreeContextMenu.Items.Add(ContextMenuItemCreateTemplate);
+            TreeContextMenu.Items.Add(ContextMenuItemAddTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemDeleteTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemAddToTemplateDefinition);
         }
@@ -2006,10 +2006,48 @@ namespace EcfFileViews
 
 
 
+
+            /*
+             * AddToTemplateDefinition
+             * Source Item Id Name: Name
+             * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
+             * 
+             * UsedByTemplates
+             * Source Item Id Name: Name
+             * Walk Template Files Parameter Names
+             * 
+             * UsedByItems
+             * Source Template Id Name: Name
+             * Target Template Parameter Name: TemplateRoot
+             * Walk Ingredients Files Parameter Values
+             * 
+             * FindTemplate
+             * Source Template Parameter Name: TemplateRoot
+             * Target Template Id Attribute Name: Name
+             * Walk Template Files Parameter Names
+             * 
+             * AddTemplate (Addexisting or new from existing or complete new)
+             * Target Template Parameter Name: TemplateRoot
+             * Target Template Id Attribute Name: Name
+             * EcfBlock Default Parameter, values
+             * Add EcfBlock to Template File
+             * Add Ingredients Item Parameter
+             * 
+             * DeleteTemplate (UsedByItems > 1 -> warning -> remove from all)
+             * Target Template Parameter Name: TemplateRoot
+             * Target Template Id Attribute Name: Name
+             * Remove EcfBlock from Template File
+             * Remove Ingredients Item Parameter 
+             * 
+             */
+
+
+
+
             ContextMenuItemListTemplateUsers.Enabled = false;
             ContextMenuItemListItemUsingTemplates.Enabled = false;
             ContextMenuItemShowLinkedTemplate.Enabled = false;
-            ContextMenuItemCreateTemplate.Enabled = false;
+            ContextMenuItemAddTemplate.Enabled = false;
             ContextMenuItemDeleteTemplate.Enabled = false;
             ContextMenuItemAddToTemplateDefinition.Enabled = false;
 
@@ -2018,7 +2056,7 @@ namespace EcfFileViews
             ContextMenuItemListTemplateUsers.Visible = showTemplatesSpecificItems;
             ContextMenuItemListItemUsingTemplates.Visible = showIngredientsSpecificItems;
             ContextMenuItemShowLinkedTemplate.Visible = showIngredientsSpecificItems;
-            ContextMenuItemCreateTemplate.Visible = showIngredientsSpecificItems;
+            ContextMenuItemAddTemplate.Visible = showIngredientsSpecificItems;
             ContextMenuItemDeleteTemplate.Visible = showIngredientsSpecificItems;
             ContextMenuItemAddToTemplateDefinition.Visible = showIngredientsSpecificItems;
         }
@@ -2297,7 +2335,7 @@ namespace EcfFileViews
                 ListTemplateUsers,
                 ListItemUsingTemplates, 
                 ShowLinkedTemplate,
-                CreateTemplate, 
+                AddTemplate, 
                 DeleteTemplate, 
                 AddToTemplateDefinition,
             }

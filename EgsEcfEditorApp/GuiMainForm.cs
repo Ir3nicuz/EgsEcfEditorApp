@@ -2009,6 +2009,8 @@ namespace EcfFileViews
 
             /*
              * AddToTemplateDefinition
+             * PreCheck: (not present at least one file)
+             * Variants: (addToAll, addToSelected)
              * Source Item Id Name: Name
              * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
              * 
@@ -2022,18 +2024,23 @@ namespace EcfFileViews
              * Walk Ingredients Files Parameter Values
              * 
              * FindTemplate
+             * PreCheck: (hasParamter: TemplateRoot)
              * Source Template Parameter Name: TemplateRoot
              * Target Template Id Attribute Name: Name
              * Walk Template Files Parameter Names
              * 
-             * AddTemplate (Addexisting or new from existing or complete new)
+             * AddTemplate 
+             * PreCheck: (hasNotParameter: TemplateRoot)
+             * Variants: (Addexisting or new from existing or complete new)
              * Target Template Parameter Name: TemplateRoot
              * Target Template Id Attribute Name: Name
              * EcfBlock Default Parameter, values
              * Add EcfBlock to Template File
              * Add Ingredients Item Parameter
              * 
-             * DeleteTemplate (UsedByItems > 1 -> warning -> remove from all)
+             * DeleteTemplate 
+             * PreCheck: (hasParameter: TemplateRoot)
+             * Variants: (UsedByItems > 1 -> warning -> remove from all)
              * Target Template Parameter Name: TemplateRoot
              * Target Template Id Attribute Name: Name
              * Remove EcfBlock from Template File

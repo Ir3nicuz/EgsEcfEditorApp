@@ -242,6 +242,7 @@ namespace EgsEcfEditorApp
 
             RefreshTreeViews(FirstFileTreeView, FirstFileNodes, PageSize, PageNumber);
             RefreshTreeViews(SecondFileTreeView, SecondFileNodes, PageSize, PageNumber);
+            UpdateDiffDetailsView(FirstFileDetailsView, SecondFileDetailsView, null);
             RefreshSelectionTool(FirstFileSelectionTools, FirstFileNodes);
             RefreshSelectionTool(SecondFileSelectionTools, SecondFileNodes);
 
@@ -565,7 +566,7 @@ namespace EgsEcfEditorApp
         }
         private static void UpdateDiffDetailsView(RichTextBox firstBox, RichTextBox secondBox, CAMTreeNode treeNode)
         {
-            switch (treeNode.MergeAction)
+            switch (treeNode?.MergeAction)
             {
                 case CAMTreeNode.MergeActions.Add:
                     UpdateDiffDetailsText(firstBox, treeNode.Item);

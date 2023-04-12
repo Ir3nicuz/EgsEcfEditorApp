@@ -197,7 +197,7 @@ namespace EgsEcfEditorApp
         }
 
         // public
-        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs)
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfTabPage> openedFileTabs, EcfTabPage selectedPage)
         {
             PageSize = InternalSettings.Default.EcfFileCAMDialog_PageSize;
             
@@ -205,13 +205,8 @@ namespace EgsEcfEditorApp
             AvailableFiles.Clear();
             AvailableFiles.AddRange(openedFileTabs.Select(tab => new ComboBoxItem(tab)));
 
-            ComboBoxItem firstItem = null;
-            ComboBoxItem secondItem = null;
-            if (AvailableFiles.Count == 2)
-            {
-                firstItem = AvailableFiles.FirstOrDefault();
-                secondItem = AvailableFiles.Skip(1).FirstOrDefault();
-            }
+            ComboBoxItem firstItem = AvailableFiles.FirstOrDefault(tab => tab.Item == selectedPage);
+            ComboBoxItem secondItem = AvailableFiles.FirstOrDefault(tab => tab.Item != selectedPage);
             RefreshFileSelectorBox(FirstFileComboBox, AvailableFiles, secondItem, firstItem);
             RefreshFileSelectorBox(SecondFileComboBox, AvailableFiles, firstItem, secondItem);
 

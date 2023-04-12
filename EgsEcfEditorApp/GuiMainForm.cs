@@ -33,8 +33,7 @@ using static EgsEcfParser.EcfStructureTools;
 using static EcfToolBarControls.EcfToolBarCheckComboBox;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
-using static EcfFileViews.EcfStructureView;
-using static EcfFileViews.EcfStructureView.TemplateOperationEventArgs;
+using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
 
 namespace EgsEcfEditorApp
 {
@@ -113,6 +112,17 @@ namespace EgsEcfEditorApp
         private void FileViewPanel_PasteClicked(object sender, CopyPasteClickedEventArgs evt)
         {
             PasteElements(sender, evt);
+        }
+        [Obsolete("needs operation logic")]
+        private void FileViewPanel_ItemHandlingSupportOperationClicked(object sender, ItemHandlingSupportOperationEventArgs evt)
+        {
+
+
+
+            switch (evt.Operation)
+            {
+                default: MessageBox.Show(this, "not implemented yet! :)", evt.SourceItem.ToString()); break;
+            }
         }
         private void BasicFileOperations_NewFileClicked(object sender, EventArgs evt)
         {
@@ -312,7 +322,9 @@ namespace EgsEcfEditorApp
             FileViewPanel.ErrorViewResized += FileViewPanel_ErrorViewResized;
             FileViewPanel.CopyClicked += FileViewPanel_CopyClicked;
             FileViewPanel.PasteClicked += FileViewPanel_PasteClicked;
+            FileViewPanel.ItemHandlingSupportOperationClicked += FileViewPanel_ItemHandlingSupportOperationClicked;
         }
+
         private bool AppClosing()
         {
             bool cancelClosing = false;
@@ -585,6 +597,7 @@ namespace EcfFileViews
         public event EventHandler ErrorViewResized;
         public event EventHandler<CopyPasteClickedEventArgs> CopyClicked;
         public event EventHandler<CopyPasteClickedEventArgs> PasteClicked;
+        public event EventHandler<ItemHandlingSupportOperationEventArgs> ItemHandlingSupportOperationClicked;
 
         public int TreeViewInitWidth { get; set; } = 100;
         public int InfoViewInitWidth { get; set; } = 100;
@@ -629,14 +642,6 @@ namespace EcfFileViews
             }
             ErrorViewResized?.Invoke(sender, evt);
         }
-        private void TabPage_CopyClicked(object sender, CopyPasteClickedEventArgs evt)
-        {
-            CopyClicked?.Invoke(sender, evt);
-        }
-        private void TabPage_PasteClicked(object sender, CopyPasteClickedEventArgs evt)
-        {
-            PasteClicked?.Invoke(sender, evt);
-        }
 
         // publics 
         public EcfTabPage Add(EgsEcfFile ecfFile)
@@ -646,8 +651,9 @@ namespace EcfFileViews
             tabPage.TreeViewResized += TabPage_TreeViewResized;
             tabPage.InfoViewResized += TabPage_InfoViewResized;
             tabPage.ErrorViewResized += TabPage_ErrorViewResized;
-            tabPage.CopyClicked += TabPage_CopyClicked;
-            tabPage.PasteClicked += TabPage_PasteClicked;
+            tabPage.CopyClicked += (sender, evt) => CopyClicked(sender, evt);
+            tabPage.PasteClicked += (sender, evt) => PasteClicked(sender, evt);
+            tabPage.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
 
             TabPages.Add(tabPage);
             
@@ -673,7 +679,7 @@ namespace EcfFileViews
         public event EventHandler ErrorViewResized;
         public event EventHandler<CopyPasteClickedEventArgs> CopyClicked;
         public event EventHandler<CopyPasteClickedEventArgs> PasteClicked;
-        public event EventHandler<TemplateOperationEventArgs> TemplateOperationClicked;
+        public event EventHandler<ItemHandlingSupportOperationEventArgs> ItemHandlingSupportOperationClicked;
 
         public EgsEcfFile File { get; }
         private EcfItemEditingDialog ItemEditor { get; }
@@ -875,10 +881,6 @@ namespace EcfFileViews
         private void TreeView_PasteKeyPressed(object sender, EventArgs evt)
         {
             PasteItems();
-        }
-        private void TreeView_TemplateOperationItemClicked(object sender, TemplateOperationEventArgs evt)
-        {
-            TemplateOperationClicked?.Invoke(this, evt);
         }
         private void ParameterView_CellDoubleClicked(object sender, DataGridViewCellEventArgs evt)
         {
@@ -1596,7 +1598,7 @@ namespace EcfFileViews
             TreeView.CopyKeyPressed += TreeView_CopyKeyPressed;
             TreeView.PasteKeyPressed += TreeView_PasteKeyPressed;
 
-            TreeView.TemplateOperationItemClicked += TreeView_TemplateOperationItemClicked;
+            TreeView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
 
             ParameterView.CellDoubleClicked += ParameterView_CellDoubleClicked;
             ParameterView.ChangeItemClicked += ParameterView_ChangeItemClicked;
@@ -1608,10 +1610,13 @@ namespace EcfFileViews
             ParameterView.CopyKeyPressed += ParameterView_CopyKeyPressed;
             ParameterView.PasteKeyPressed += ParameterView_PasteKeyPressed;
 
+            ParameterView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
+
             ErrorView.ShowInEditorClicked += ErrorView_ShowInEditorClicked;
             ErrorView.ShowInFileClicked += ErrorView_ShowInFileClicked;
         }
 
+        // classes
         public class CopyPasteClickedEventArgs : EventArgs
         {
             public CopyPasteModes Mode { get; }
@@ -1638,6 +1643,29 @@ namespace EcfFileViews
                 this(mode, source, selectedItems.Cast<EcfStructureItem>().ToList())
             {
 
+            }
+        }
+        public class ItemHandlingSupportOperationEventArgs : EventArgs
+        {
+            public ItemOperations Operation { get; }
+            public EcfStructureItem SourceItem { get; }
+
+            public enum ItemOperations
+            {
+                ListTemplateUsers,
+                ListItemUsingTemplates,
+                ShowLinkedTemplate,
+                AddTemplate,
+                DeleteTemplate,
+                AddToTemplateDefinition,
+
+                ListParameterValueUsers,
+            }
+
+            public ItemHandlingSupportOperationEventArgs(ItemOperations operation, EcfStructureItem sourceItem) : base()
+            {
+                Operation = operation;
+                SourceItem = sourceItem;
             }
         }
     }
@@ -1727,6 +1755,7 @@ namespace EcfFileViews
         }
 
         // public
+        
 
         // privates
         private ResizeableBorders IsInDragArea(MouseEventArgs evt)
@@ -1807,7 +1836,7 @@ namespace EcfFileViews
         public event EventHandler PasteAfterItemClicked;
         public event EventHandler RemoveItemClicked;
 
-        public event EventHandler<TemplateOperationEventArgs> TemplateOperationItemClicked;
+        public event EventHandler<ItemHandlingSupportOperationEventArgs> ItemHandlingSupportOperationClicked;
 
         public event EventHandler DelKeyPressed;
         public event EventHandler CopyKeyPressed;
@@ -1830,7 +1859,6 @@ namespace EcfFileViews
         private List<EcfTreeNode> AllTreeNodes { get; } = new List<EcfTreeNode>();
         private List<EcfTreeNode> SelectedNodes { get; } = new List<EcfTreeNode>();
         private bool IsSelectionUpdating { get; set; } = false;
-        private EcfBlock TemplateSourceItem { get; set; } = null;
 
         public EcfStructureView(string headline, EgsEcfFile file, ResizeableBorders mode, VisibleItemCount sorterItemCount) : base(headline, file, mode)
         {
@@ -1855,13 +1883,6 @@ namespace EcfFileViews
             Tree.HideSelection = false;
             Tree.TreeViewNodeSorter = new EcfStructureComparer(StructureSorter, file);
 
-            Tree.NodeMouseClick += Tree_NodeMouseClick;
-            Tree.NodeMouseDoubleClick += Tree_NodeMouseDoubleClick;
-            Tree.KeyPress += Tree_KeyPress;
-            Tree.KeyUp += Tree_KeyUp;
-            Tree.BeforeExpand += Tree_BeforeExpand;
-            Tree.BeforeCollapse += Tree_BeforeCollapse;
-
             ToolContainer.Add(StructureSorter);
             View.Controls.Add(Tree);
             View.Controls.Add(ToolContainer);
@@ -1875,18 +1896,12 @@ namespace EcfFileViews
             TreeContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
             TreeContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
 
-            ContextMenuItemListTemplateUsers = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListTemplateUsers, IconRecources.Icon_ListTemplateUsers,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListTemplateUsers, TemplateSourceItem)));
-            ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_ListItemUsingTemplates,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ListItemUsingTemplates, TemplateSourceItem)));
-            ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.ShowLinkedTemplate, TemplateSourceItem)));
-            ContextMenuItemAddTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddTemplate, IconRecources.Icon_AddTemplate,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.AddTemplate, TemplateSourceItem)));
-            ContextMenuItemDeleteTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_DeleteTemplate, IconRecources.Icon_DeleteTemplate,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.DeleteTemplate, TemplateSourceItem)));
-            ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition,
-                (sender, evt) => TemplateOperationItemClicked?.Invoke(this, new TemplateOperationEventArgs(TemplateOperations.AddToTemplateDefinition, TemplateSourceItem)));
+            ContextMenuItemListTemplateUsers = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListTemplateUsers, IconRecources.Icon_ListItems);
+            ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_ListTemplates);
+            ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate);
+            ContextMenuItemAddTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddTemplate, IconRecources.Icon_AddTemplate);
+            ContextMenuItemDeleteTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_DeleteTemplate, IconRecources.Icon_DeleteTemplate);
+            ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition);
 
             TreeContextMenu.Items.Add(ContextMenuItemListTemplateUsers);
             TreeContextMenu.Items.Add(ContextMenuItemListItemUsingTemplates);
@@ -1894,6 +1909,8 @@ namespace EcfFileViews
             TreeContextMenu.Items.Add(ContextMenuItemAddTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemDeleteTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemAddToTemplateDefinition);
+
+            InitEvents();
         }
 
         // publics
@@ -1993,12 +2010,52 @@ namespace EcfFileViews
                 DisplayedDataChanged?.Invoke(this, null);
             }
         }
+        private void ContextMenuItemListTemplateUsers_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListTemplateUsers, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemListItemUsingTemplates_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListItemUsingTemplates, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemShowLinkedTemplate_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ShowLinkedTemplate, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemAddTemplate_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.AddTemplate, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemDeleteTemplate_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.DeleteTemplate, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemAddToTemplateDefinition_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.AddToTemplateDefinition, SelectedItems.FirstOrDefault()));
+        }
 
         // privates
+        private void InitEvents()
+        {
+            Tree.NodeMouseClick += Tree_NodeMouseClick;
+            Tree.NodeMouseDoubleClick += Tree_NodeMouseDoubleClick;
+            Tree.KeyPress += Tree_KeyPress;
+            Tree.KeyUp += Tree_KeyUp;
+            Tree.BeforeExpand += Tree_BeforeExpand;
+            Tree.BeforeCollapse += Tree_BeforeCollapse;
+
+            ContextMenuItemListTemplateUsers.Click += ContextMenuItemListTemplateUsers_Click;
+            ContextMenuItemListItemUsingTemplates.Click += ContextMenuItemListItemUsingTemplates_Click;
+            ContextMenuItemShowLinkedTemplate.Click += ContextMenuItemShowLinkedTemplate_Click;
+            ContextMenuItemAddTemplate.Click += ContextMenuItemAddTemplate_Click;
+            ContextMenuItemDeleteTemplate.Click += ContextMenuItemDeleteTemplate_Click;
+            ContextMenuItemAddToTemplateDefinition.Click += ContextMenuItemAddToTemplateDefinition_Click;
+        }
         [Obsolete("needs activate logic")]
         private void PrepareOptionalMenuItems(EcfTreeNode node)
         {
-            TemplateSourceItem = node?.Item as EcfBlock;
+            EcfBlock TemplateSourceItem = node?.Item as EcfBlock;
 
             bool isSpecificItem = TemplateSourceItem?.IsRoot() ?? false;
             bool showTemplatesSpecificItems = (File?.Definition?.DefinesTemplates ?? false) && isSpecificItem;
@@ -2051,12 +2108,12 @@ namespace EcfFileViews
 
 
 
-            ContextMenuItemListTemplateUsers.Enabled = false;
-            ContextMenuItemListItemUsingTemplates.Enabled = false;
-            ContextMenuItemShowLinkedTemplate.Enabled = false;
-            ContextMenuItemAddTemplate.Enabled = false;
-            ContextMenuItemDeleteTemplate.Enabled = false;
-            ContextMenuItemAddToTemplateDefinition.Enabled = false;
+            ContextMenuItemListTemplateUsers.Enabled = true;
+            ContextMenuItemListItemUsingTemplates.Enabled = true;
+            ContextMenuItemShowLinkedTemplate.Enabled = true;
+            ContextMenuItemAddTemplate.Enabled = true;
+            ContextMenuItemDeleteTemplate.Enabled = true;
+            ContextMenuItemAddToTemplateDefinition.Enabled = true;
 
 
 
@@ -2332,27 +2389,6 @@ namespace EcfFileViews
 
             }
         }
-        public class TemplateOperationEventArgs : EventArgs
-        {
-            public TemplateOperations Operation { get; }
-            public EcfBlock SourceItem { get; }
-
-            public enum TemplateOperations
-            {
-                ListTemplateUsers,
-                ListItemUsingTemplates, 
-                ShowLinkedTemplate,
-                AddTemplate, 
-                DeleteTemplate, 
-                AddToTemplateDefinition,
-            }
-
-            public TemplateOperationEventArgs(TemplateOperations operation, EcfBlock sourceItem) : base()
-            {
-                Operation = operation;
-                SourceItem = sourceItem;
-            }
-        }
     }
     public class EcfParameterView : EcfBaseView
     {
@@ -2365,6 +2401,8 @@ namespace EcfFileViews
         public event EventHandler CopyItemClicked;
         public event EventHandler PasteAfterItemClicked;
         public event EventHandler RemoveItemClicked;
+
+        public event EventHandler<ItemHandlingSupportOperationEventArgs> ItemHandlingSupportOperationClicked;
 
         public event EventHandler DelKeyPressed;
         public event EventHandler CopyKeyPressed;
@@ -2411,6 +2449,7 @@ namespace EcfFileViews
             InitGridView();
 
             ParameterContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListValueUsers, IconRecources.Icon_ListValues, (sender, evt) => ParameterContextMenuListValueUsersItem_Click(sender, evt));
             ParameterContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
             ParameterContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
             ParameterContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
@@ -2462,6 +2501,10 @@ namespace EcfFileViews
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
+        }
+        private void ParameterContextMenuListValueUsersItem_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListParameterValueUsers, SelectedParameters.FirstOrDefault()));
         }
 
         // publics

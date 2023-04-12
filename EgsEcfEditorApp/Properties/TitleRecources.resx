@@ -249,6 +249,9 @@
   <data name="EcfParameterView_Header_OverwritingParameters" xml:space="preserve">
     <value>overwriting</value>
   </data>
+  <data name="EcfParameterView_ListValueUsers" xml:space="preserve">
+    <value>List value using items</value>
+  </data>
   <data name="EcfParameterView_ParameterNameColumn" xml:space="preserve">
     <value>Parameter name</value>
   </data>

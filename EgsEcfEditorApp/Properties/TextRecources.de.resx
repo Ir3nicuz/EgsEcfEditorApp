@@ -444,6 +444,9 @@
   <data name="EgsEcfEditorApp_CreateEcfFileFailed" xml:space="preserve">
     <value>Datei konnte nicht erstellt werden!</value>
   </data>
+  <data name="EgsEcfEditorApp_LesserThenTwoFilesOpened" xml:space="preserve">
+    <value>Weniger als zwei Dateien geöffnet!</value>
+  </data>
   <data name="EgsEcfEditorApp_NoTabSelected" xml:space="preserve">
     <value>Kein gültiger Dateireiter ausgewählt!</value>
   </data>

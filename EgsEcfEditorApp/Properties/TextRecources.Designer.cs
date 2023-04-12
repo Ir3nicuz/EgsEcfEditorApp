@@ -1042,6 +1042,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lesser then two files opened!.
+        /// </summary>
+        internal static string EgsEcfEditorApp_LesserThenTwoFilesOpened {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp_LesserThenTwoFilesOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No valid file tab selected!.
         /// </summary>
         internal static string EgsEcfEditorApp_NoTabSelected {

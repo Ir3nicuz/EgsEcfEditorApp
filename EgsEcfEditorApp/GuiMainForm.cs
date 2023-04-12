@@ -551,10 +551,21 @@ namespace EgsEcfEditorApp
         // Content handling
         private void CompareAndMergeFiles()
         {
-            CompareMergeDialog.ShowDialog(this, FileViewPanel.TabPages.Cast<EcfTabPage>().ToList());
-            foreach(EcfTabPage tab in CompareMergeDialog.ChangedFileTabs)
+            if (TryGetSelectedTab(out EcfTabPage ecfTab))
             {
-                tab.UpdateAllViews();
+                List<EcfTabPage> presentEcfTabs = FileViewPanel.TabPages.Cast<EcfTabPage>().ToList();
+                if (presentEcfTabs.Count >= 2)
+                {
+                    CompareMergeDialog.ShowDialog(this, presentEcfTabs, ecfTab);
+                    foreach (EcfTabPage tab in CompareMergeDialog.ChangedFileTabs)
+                    {
+                        tab.UpdateAllViews();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, TextRecources.EgsEcfEditorApp_LesserThenTwoFilesOpened, TitleRecources.Generic_Warning, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
         private void CopyElements(object sender, CopyPasteClickedEventArgs evt)

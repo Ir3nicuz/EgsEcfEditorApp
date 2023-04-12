@@ -444,6 +444,9 @@
   <data name="EgsEcfEditorApp_CreateEcfFileFailed" xml:space="preserve">
     <value>File could not be created!</value>
   </data>
+  <data name="EgsEcfEditorApp_LesserThenTwoFilesOpened" xml:space="preserve">
+    <value>Lesser then two files opened!</value>
+  </data>
   <data name="EgsEcfEditorApp_NoTabSelected" xml:space="preserve">
     <value>No valid file tab selected!</value>
   </data>

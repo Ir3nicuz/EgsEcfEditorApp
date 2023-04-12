@@ -75,7 +75,7 @@ The tool is capable of comparing two `.ecf` files, listing the differences and o
 ### Tech Tree Editor
 The tool is capable of editing the "TechTree" which is based on several properties spreaded over different files and file elements.
 
-### Template Handling Support
+### Item Handling Support
 :wrench: Not implemented yet :wrench:
 
 ## Tool Overview

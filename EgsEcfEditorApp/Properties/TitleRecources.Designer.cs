@@ -430,6 +430,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item listing.
+        /// </summary>
+        internal static string EcfItemListingView_Header {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search value.
+        /// </summary>
+        internal static string EcfItemListingView_SearchValueHeader {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_SearchValueHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter view.
         /// </summary>
         internal static string EcfParameterView_Header {

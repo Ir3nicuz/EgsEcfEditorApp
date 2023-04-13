@@ -1312,6 +1312,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not implemented yet! :).
+        /// </summary>
+        internal static string Generic_NotImplementedYet {
+            get {
+                return ResourceManager.GetString("Generic_NotImplementedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to of.
         /// </summary>
         internal static string Generic_Of {

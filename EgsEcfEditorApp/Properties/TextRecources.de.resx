@@ -534,6 +534,9 @@
   <data name="Generic_NoSuitableSelection" xml:space="preserve">
     <value>Kein geeignetes Element ausgewählt</value>
   </data>
+  <data name="Generic_NotImplementedYet" xml:space="preserve">
+    <value>Noch nicht implementiert! :)</value>
+  </data>
   <data name="Generic_Of" xml:space="preserve">
     <value>von</value>
   </data>

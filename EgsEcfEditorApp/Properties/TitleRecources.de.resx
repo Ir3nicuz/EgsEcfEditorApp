@@ -240,6 +240,12 @@
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Werte / Gruppen</value>
   </data>
+  <data name="EcfItemListingView_Header" xml:space="preserve">
+    <value>Item Auflistung</value>
+  </data>
+  <data name="EcfItemListingView_SearchValueHeader" xml:space="preserve">
+    <value>Suchwert</value>
+  </data>
   <data name="EcfParameterView_Header" xml:space="preserve">
     <value>Parameteransicht</value>
   </data>

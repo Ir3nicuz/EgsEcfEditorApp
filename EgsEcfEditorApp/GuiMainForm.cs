@@ -117,11 +117,14 @@ namespace EgsEcfEditorApp
         private void FileViewPanel_ItemHandlingSupportOperationClicked(object sender, ItemHandlingSupportOperationEventArgs evt)
         {
 
-
+            new EcfItemListingView().Show(this, "Test!", new List<EcfParameter>());
 
             switch (evt.Operation)
             {
-                default: MessageBox.Show(this, "not implemented yet! :)", evt.SourceItem.ToString()); break;
+                default: 
+                    MessageBox.Show(this, string.Format("{0} : {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
+                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                    break;
             }
         }
         private void BasicFileOperations_NewFileClicked(object sender, EventArgs evt)
@@ -758,11 +761,13 @@ namespace EcfFileViews
         }
         private void ContentOperations_UndoClicked(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
+                TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ContentOperations_RedoClicked(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
+                TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ContentOperations_AddClicked(object sender, EventArgs evt)
         {
@@ -823,15 +828,18 @@ namespace EcfFileViews
         }
         private void ContentOperations_ChangeComplexClicked(object sender, EventArgs evt)
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
+                TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ContentOperations_MoveUpClicked(object sender, EventArgs evt)
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
+                TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ContentOperations_MoveDownClicked(object sender, EventArgs evt)
         {
-            MessageBox.Show(this, "not implemented yet! :)");
+            MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
+                TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ContentOperations_CopyClicked(object sender, EventArgs evt)
         {

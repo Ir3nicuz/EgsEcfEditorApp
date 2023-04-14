@@ -273,6 +273,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_ListParameters {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ListParameters", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_ListTemplates {
             get {
                 object obj = ResourceManager.GetObject("Icon_ListTemplates", resourceCulture);

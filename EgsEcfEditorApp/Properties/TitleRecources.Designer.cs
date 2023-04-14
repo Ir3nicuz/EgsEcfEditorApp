@@ -475,6 +475,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List parameter using items.
+        /// </summary>
+        internal static string EcfParameterView_ListParameterUsers {
+            get {
+                return ResourceManager.GetString("EcfParameterView_ListParameterUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List value using items.
         /// </summary>
         internal static string EcfParameterView_ListValueUsers {

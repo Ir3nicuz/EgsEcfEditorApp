@@ -117,12 +117,16 @@ namespace EgsEcfEditorApp
         private void FileViewPanel_ItemHandlingSupportOperationClicked(object sender, ItemHandlingSupportOperationEventArgs evt)
         {
 
+
+
             new EcfItemListingView().Show(this, "Test!", new List<EcfParameter>());
+
+
 
             switch (evt.Operation)
             {
                 default: 
-                    MessageBox.Show(this, string.Format("{0} : {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
+                    MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information); 
                     break;
             }
@@ -1678,6 +1682,7 @@ namespace EcfFileViews
                 DeleteTemplate,
                 AddToTemplateDefinition,
 
+                ListParameterUsers,
                 ListParameterValueUsers,
             }
 
@@ -2472,8 +2477,10 @@ namespace EcfFileViews
             ParameterContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
             ParameterContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
             ParameterContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListValueUsers, IconRecources.Icon_ListValues, (sender, evt) => ParameterContextMenuListValueUsersItem_Click(sender, evt));
-
+            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListParameterUsers, IconRecources.Icon_ListParameters,
+                (sender, evt) => ParameterContextMenuListParameterUsersItem_Click(sender, evt));
+            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListValueUsers, IconRecources.Icon_ListValues, 
+                (sender, evt) => ParameterContextMenuListValueUsersItem_Click(sender, evt));
 
             ToolContainer.Add(ParameterSorter);
             View.Controls.Add(Grid);
@@ -2521,6 +2528,10 @@ namespace EcfFileViews
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
+        }
+        private void ParameterContextMenuListParameterUsersItem_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListParameterUsers, SelectedParameters.FirstOrDefault()));
         }
         private void ParameterContextMenuListValueUsersItem_Click(object sender, EventArgs evt)
         {

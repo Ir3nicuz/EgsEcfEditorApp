@@ -41,8 +41,10 @@ namespace EcfFileViews
             this.HasValueColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.AllowBlankColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.IsForceEscapedColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.GridPanel = new System.Windows.Forms.Panel();
             this.ButtonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
+            this.GridPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -115,11 +117,11 @@ namespace EcfFileViews
             this.IsForceEscapedColumn});
             this.Grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.Grid.Location = new System.Drawing.Point(0, 0);
+            this.Grid.Location = new System.Drawing.Point(3, 3);
             this.Grid.Name = "Grid";
             this.Grid.ReadOnly = true;
             this.Grid.ShowEditingIcon = false;
-            this.Grid.Size = new System.Drawing.Size(784, 332);
+            this.Grid.Size = new System.Drawing.Size(778, 326);
             this.Grid.TabIndex = 1;
             // 
             // NameColumn
@@ -168,12 +170,23 @@ namespace EcfFileViews
             this.IsForceEscapedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.IsForceEscapedColumn.Width = 62;
             // 
+            // GridPanel
+            // 
+            this.GridPanel.AutoSize = true;
+            this.GridPanel.Controls.Add(this.Grid);
+            this.GridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GridPanel.Location = new System.Drawing.Point(0, 0);
+            this.GridPanel.Name = "GridPanel";
+            this.GridPanel.Padding = new System.Windows.Forms.Padding(3);
+            this.GridPanel.Size = new System.Drawing.Size(784, 332);
+            this.GridPanel.TabIndex = 2;
+            // 
             // DeprecatedDefinitionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 361);
-            this.Controls.Add(this.Grid);
+            this.Controls.Add(this.GridPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -185,6 +198,7 @@ namespace EcfFileViews
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
+            this.GridPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,5 +217,6 @@ namespace EcfFileViews
         private System.Windows.Forms.DataGridViewCheckBoxColumn HasValueColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn AllowBlankColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsForceEscapedColumn;
+        private System.Windows.Forms.Panel GridPanel;
     }
 }

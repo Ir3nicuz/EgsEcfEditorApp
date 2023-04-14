@@ -379,6 +379,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_ListParameters.png" />
     <None Include="Resources\Icon_ListValues.png" />
     <None Include="Resources\Icon_ListTemplates.png" />
     <None Include="Resources\Icon_ListItems.png" />

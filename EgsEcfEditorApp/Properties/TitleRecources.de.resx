@@ -255,8 +255,11 @@
   <data name="EcfParameterView_Header_OverwritingParameters" xml:space="preserve">
     <value>überschrieben</value>
   </data>
+  <data name="EcfParameterView_ListParameterUsers" xml:space="preserve">
+    <value>Liste Parameter-Nutzer</value>
+  </data>
   <data name="EcfParameterView_ListValueUsers" xml:space="preserve">
-    <value>Liste Wert-nutzer</value>
+    <value>Liste Wert-Nutzer</value>
   </data>
   <data name="EcfParameterView_ParameterNameColumn" xml:space="preserve">
     <value>Parameter Name</value>

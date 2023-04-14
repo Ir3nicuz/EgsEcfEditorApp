@@ -29,16 +29,21 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.CloseButton = new System.Windows.Forms.Button();
             this.SearchValueHeaderLabel = new System.Windows.Forms.Label();
-            this.ItemListingGrid = new EcfWinFormControls.EcfDataGridView();
             this.ItemListingGridPanel = new System.Windows.Forms.Panel();
+            this.ItemListingGrid = new EcfWinFormControls.EcfDataGridView();
+            this.ListingGridColumn_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ListingGridColumn_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ListingGridColumn_Item = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ListingGridColumn_Parameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SearchValueTextBox = new System.Windows.Forms.TextBox();
             this.SearchValuePanel = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).BeginInit();
             this.ItemListingGridPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).BeginInit();
             this.SearchValuePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,30 +81,72 @@ namespace EgsEcfEditorApp
             this.SearchValueHeaderLabel.Text = "header";
             this.SearchValueHeaderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // ItemListingGrid
-            // 
-            this.ItemListingGrid.AllowUserToAddRows = false;
-            this.ItemListingGrid.AllowUserToDeleteRows = false;
-            this.ItemListingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.ItemListingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ItemListingGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ItemListingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.ItemListingGrid.Location = new System.Drawing.Point(3, 3);
-            this.ItemListingGrid.Name = "ItemListingGrid";
-            this.ItemListingGrid.ShowEditingIcon = false;
-            this.ItemListingGrid.Size = new System.Drawing.Size(794, 415);
-            this.ItemListingGrid.TabIndex = 2;
-            // 
             // ItemListingGridPanel
             // 
             this.ItemListingGridPanel.AutoSize = true;
             this.ItemListingGridPanel.Controls.Add(this.ItemListingGrid);
             this.ItemListingGridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ItemListingGridPanel.Location = new System.Drawing.Point(0, 0);
+            this.ItemListingGridPanel.Location = new System.Drawing.Point(0, 26);
             this.ItemListingGridPanel.Name = "ItemListingGridPanel";
             this.ItemListingGridPanel.Padding = new System.Windows.Forms.Padding(3);
-            this.ItemListingGridPanel.Size = new System.Drawing.Size(800, 421);
+            this.ItemListingGridPanel.Size = new System.Drawing.Size(800, 395);
             this.ItemListingGridPanel.TabIndex = 3;
+            // 
+            // ItemListingGrid
+            // 
+            this.ItemListingGrid.AllowUserToAddRows = false;
+            this.ItemListingGrid.AllowUserToDeleteRows = false;
+            this.ItemListingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ItemListingGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.ItemListingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ItemListingGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ListingGridColumn_Number,
+            this.ListingGridColumn_File,
+            this.ListingGridColumn_Item,
+            this.ListingGridColumn_Parameter});
+            this.ItemListingGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ItemListingGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.ItemListingGrid.Location = new System.Drawing.Point(3, 3);
+            this.ItemListingGrid.Name = "ItemListingGrid";
+            this.ItemListingGrid.ReadOnly = true;
+            this.ItemListingGrid.ShowEditingIcon = false;
+            this.ItemListingGrid.Size = new System.Drawing.Size(794, 389);
+            this.ItemListingGrid.TabIndex = 2;
+            // 
+            // ListingGridColumn_Number
+            // 
+            this.ListingGridColumn_Number.HeaderText = "nr";
+            this.ListingGridColumn_Number.Name = "ListingGridColumn_Number";
+            this.ListingGridColumn_Number.ReadOnly = true;
+            this.ListingGridColumn_Number.Width = 41;
+            // 
+            // ListingGridColumn_File
+            // 
+            this.ListingGridColumn_File.HeaderText = "file";
+            this.ListingGridColumn_File.Name = "ListingGridColumn_File";
+            this.ListingGridColumn_File.ReadOnly = true;
+            this.ListingGridColumn_File.Width = 45;
+            // 
+            // ListingGridColumn_Item
+            // 
+            this.ListingGridColumn_Item.HeaderText = "item";
+            this.ListingGridColumn_Item.Name = "ListingGridColumn_Item";
+            this.ListingGridColumn_Item.ReadOnly = true;
+            this.ListingGridColumn_Item.Width = 51;
+            // 
+            // ListingGridColumn_Parameter
+            // 
+            this.ListingGridColumn_Parameter.HeaderText = "parameter";
+            this.ListingGridColumn_Parameter.Name = "ListingGridColumn_Parameter";
+            this.ListingGridColumn_Parameter.ReadOnly = true;
+            this.ListingGridColumn_Parameter.Width = 79;
             // 
             // SearchValueTextBox
             // 
@@ -133,15 +180,15 @@ namespace EgsEcfEditorApp
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.SearchValuePanel);
             this.Controls.Add(this.ItemListingGridPanel);
+            this.Controls.Add(this.SearchValuePanel);
             this.Controls.Add(this.ButtonPanel);
             this.Name = "EcfItemListingView";
             this.Text = "EcfItemListingDialog";
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).EndInit();
             this.ItemListingGridPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).EndInit();
             this.SearchValuePanel.ResumeLayout(false);
             this.SearchValuePanel.PerformLayout();
             this.ResumeLayout(false);
@@ -158,5 +205,9 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Panel ItemListingGridPanel;
         private System.Windows.Forms.TextBox SearchValueTextBox;
         private System.Windows.Forms.TableLayoutPanel SearchValuePanel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Number;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_File;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Item;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Parameter;
     }
 }

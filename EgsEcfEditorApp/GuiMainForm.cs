@@ -116,15 +116,27 @@ namespace EgsEcfEditorApp
         [Obsolete("needs operation logic")]
         private void FileViewPanel_ItemHandlingSupportOperationClicked(object sender, ItemHandlingSupportOperationEventArgs evt)
         {
-
-
-
-            new EcfItemListingView().Show(this, "Test!", new List<EcfParameter>());
-
-
-
             switch (evt.Operation)
             {
+                case ItemOperations.ListTemplateUsers:
+                case ItemOperations.ListItemUsingTemplates:
+                case ItemOperations.ListParameterUsers:
+
+                    TryGetSelectedTab(out EcfTabPage ecf1);
+                    new EcfItemListingView().Show(this, "Test!", ecf1.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList());
+                    break;
+
+                case ItemOperations.ListParameterValueUsers:
+                    TryGetSelectedTab(out EcfTabPage ecf2);
+                    new EcfItemListingView().Show(this, "Test!", ecf2.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().FirstOrDefault()
+                        .ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList());
+                    break;
+
+                case ItemOperations.AddToTemplateDefinition:
+                case ItemOperations.AddTemplate:
+                case ItemOperations.DeleteTemplate:
+                case ItemOperations.ShowLinkedTemplate:
+
                 default: 
                     MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information); 

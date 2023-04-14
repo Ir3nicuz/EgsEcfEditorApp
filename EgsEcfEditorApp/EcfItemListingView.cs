@@ -2,7 +2,6 @@
 using EgsEcfParser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
@@ -22,6 +21,11 @@ namespace EgsEcfEditorApp
             Icon = IconRecources.Icon_AppBranding;
 
             SearchValueHeaderLabel.Text = string.Format("{0}:", TitleRecources.EcfItemListingView_SearchValueHeader);
+            
+            ListingGridColumn_Number.HeaderText = TitleRecources.Generic_Number_Short;
+            ListingGridColumn_File.HeaderText = TitleRecources.Generic_File;
+            ListingGridColumn_Item.HeaderText = TitleRecources.Generic_Item;
+            ListingGridColumn_Parameter.HeaderText = TitleRecources.Generic_Parameter;
 
             CloseButton.Text = TitleRecources.Generic_Close;
         }
@@ -64,21 +68,44 @@ namespace EgsEcfEditorApp
         }
         private void RefreshGridView(List<EcfBlock> itemList)
         {
-            string fileTest = itemList?.FirstOrDefault()?.EcfFile.FileName;
-            string pathTest = itemList?.FirstOrDefault()?.GetFullPath();
-            string parameterTest = null;
+            ItemListingGrid.SuspendLayout();
+            ItemListingGrid.Rows.Clear();
 
+            ListingGridColumn_Parameter.Visible = false;
 
+            int lineCounter = 1;
+            itemList.ForEach(item =>
+            {
+                ItemListingGrid.Rows.Add(lineCounter, 
+                    item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
+                    item.GetFullPath());
+                lineCounter++;
+            });
 
+            ItemListingGrid.AutoResizeColumns();
+            ItemListingGrid.ClearSelection();
+            ItemListingGrid.ResumeLayout();
         }
         private void RefreshGridView(List<EcfParameter> itemList)
         {
-            string fileTest = itemList?.FirstOrDefault()?.EcfFile.FileName;
-            string pathTest = itemList?.FirstOrDefault()?.Parent.GetFullPath();
-            string parameterTest = itemList?.FirstOrDefault()?.Key;
+            ItemListingGrid.SuspendLayout();
+            ItemListingGrid.Rows.Clear();
 
+            ListingGridColumn_Parameter.Visible = true;
 
+            int lineCounter = 1;
+            itemList.ForEach(item =>
+            {
+                ItemListingGrid.Rows.Add(lineCounter, 
+                    item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
+                    item.Parent?.GetFullPath() ?? TitleRecources.Generic_Replacement_Empty, 
+                    item.Key);
+                lineCounter++;
+            });
 
+            ItemListingGrid.AutoResizeColumns();
+            ItemListingGrid.ClearSelection();
+            ItemListingGrid.ResumeLayout();
         }
     }
 }

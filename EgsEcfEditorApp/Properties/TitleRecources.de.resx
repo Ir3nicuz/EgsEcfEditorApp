@@ -480,6 +480,9 @@
   <data name="Generic_Errors" xml:space="preserve">
     <value>Fehler</value>
   </data>
+  <data name="Generic_File" xml:space="preserve">
+    <value>Datei</value>
+  </data>
   <data name="Generic_Group" xml:space="preserve">
     <value>Gruppe</value>
   </data>
@@ -491,6 +494,9 @@
   </data>
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Ist optional</value>
+  </data>
+  <data name="Generic_Item" xml:space="preserve">
+    <value>Item</value>
   </data>
   <data name="Generic_Level" xml:space="preserve">
     <value>Level</value>
@@ -512,6 +518,9 @@
   </data>
   <data name="Generic_No" xml:space="preserve">
     <value>Nein</value>
+  </data>
+  <data name="Generic_Number_Short" xml:space="preserve">
+    <value>Nr.</value>
   </data>
   <data name="Generic_Ok" xml:space="preserve">
     <value>Ok</value>

@@ -1150,6 +1150,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        internal static string Generic_File {
+            get {
+                return ResourceManager.GetString("Generic_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group.
         /// </summary>
         internal static string Generic_Group {
@@ -1182,6 +1191,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_IsOptional {
             get {
                 return ResourceManager.GetString("Generic_IsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        internal static string Generic_Item {
+            get {
+                return ResourceManager.GetString("Generic_Item", resourceCulture);
             }
         }
         
@@ -1245,6 +1263,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_No {
             get {
                 return ResourceManager.GetString("Generic_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No..
+        /// </summary>
+        internal static string Generic_Number_Short {
+            get {
+                return ResourceManager.GetString("Generic_Number_Short", resourceCulture);
             }
         }
         

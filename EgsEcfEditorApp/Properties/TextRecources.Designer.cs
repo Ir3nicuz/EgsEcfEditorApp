@@ -466,6 +466,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The selected file is not opened!.
+        /// </summary>
+        internal static string EcfItemListingView_SelectedFileNotOpened {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_SelectedFileNotOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Like wise search to reduce the dropdown list.
         /// </summary>
         internal static string EcfItemSelectorDialog_ToolTip_SearchInfo {

@@ -8,6 +8,10 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfItemListingView : Form
     {
+        public event EventHandler<ItemRowClickedEventArgs> ItemRowClicked;
+
+        private List<EcfStructureItem> RowItems { get; } = new List<EcfStructureItem>();
+
         public EcfItemListingView()
         {
             InitializeComponent();
@@ -32,6 +36,13 @@ namespace EgsEcfEditorApp
         private void CloseButton_Click(object sender, EventArgs evt)
         {
             Close();
+        }
+        private void ItemListingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs evt)
+        {
+            if (evt.RowIndex >= 0 && evt.RowIndex < RowItems.Count)
+            {
+                ItemRowClicked?.Invoke(this, new ItemRowClickedEventArgs(RowItems[evt.RowIndex]));
+            }
         }
 
         // publics
@@ -70,6 +81,7 @@ namespace EgsEcfEditorApp
         {
             ItemListingGrid.SuspendLayout();
             ItemListingGrid.Rows.Clear();
+            RowItems.Clear();
 
             ListingGridColumn_Parameter.Visible = false;
 
@@ -79,6 +91,7 @@ namespace EgsEcfEditorApp
                 ItemListingGrid.Rows.Add(lineCounter, 
                     item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
                     item.GetFullPath());
+                RowItems.Add(item);
                 lineCounter++;
             });
 
@@ -90,6 +103,7 @@ namespace EgsEcfEditorApp
         {
             ItemListingGrid.SuspendLayout();
             ItemListingGrid.Rows.Clear();
+            RowItems.Clear();
 
             ListingGridColumn_Parameter.Visible = true;
 
@@ -100,12 +114,24 @@ namespace EgsEcfEditorApp
                     item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
                     item.Parent?.GetFullPath() ?? TitleRecources.Generic_Replacement_Empty, 
                     item.Key);
+                RowItems.Add(item);
                 lineCounter++;
             });
 
             ItemListingGrid.AutoResizeColumns();
             ItemListingGrid.ClearSelection();
             ItemListingGrid.ResumeLayout();
+        }
+
+        // subclasses
+        public class ItemRowClickedEventArgs : EventArgs
+        {
+            public EcfStructureItem RowItem { get; }
+
+            public ItemRowClickedEventArgs(EcfStructureItem rowItem) : base()
+            {
+                RowItem = rowItem;
+            }
         }
     }
 }

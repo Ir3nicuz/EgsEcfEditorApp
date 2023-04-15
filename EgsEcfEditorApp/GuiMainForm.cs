@@ -123,12 +123,16 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ListParameterUsers:
 
                     TryGetSelectedTab(out EcfTabPage ecf1);
-                    new EcfItemListingView().Show(this, "Test!", ecf1.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList());
+                    EcfItemListingView view1 = new EcfItemListingView();
+                    view1.ItemRowClicked += ItemListingView_ItemRowClicked;
+                    view1.Show(this, "Test!", ecf1.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList());
                     break;
 
                 case ItemOperations.ListParameterValueUsers:
                     TryGetSelectedTab(out EcfTabPage ecf2);
-                    new EcfItemListingView().Show(this, "Test!", ecf2.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().FirstOrDefault()
+                    EcfItemListingView view2 = new EcfItemListingView();
+                    view2.ItemRowClicked += ItemListingView_ItemRowClicked;
+                    view2.Show(this, "Test!", ecf2.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().FirstOrDefault()
                         .ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList());
                     break;
 
@@ -142,6 +146,20 @@ namespace EgsEcfEditorApp
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information); 
                     break;
             }
+        }
+        private void ItemListingView_ItemRowClicked(object sender, EcfItemListingView.ItemRowClickedEventArgs evt)
+        {
+            EcfStructureItem itemToShow = evt.RowItem;
+            EcfTabPage tabPageToShow = FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(tab => tab.File == itemToShow.EcfFile);
+            if (tabPageToShow == null)
+            {
+                MessageBox.Show(this, string.Format("{0} : {1}", 
+                    TextRecources.EcfItemListingView_SelectedFileNotOpened, itemToShow?.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty), 
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            FileViewPanel.SelectedTab = tabPageToShow;
+            tabPageToShow.ShowSpecificItem(itemToShow);
         }
         private void BasicFileOperations_NewFileClicked(object sender, EventArgs evt)
         {

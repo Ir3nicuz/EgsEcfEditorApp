@@ -252,6 +252,9 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Removes the selected value group row</value>
   </data>
+  <data name="EcfItemListingView_SelectedFileNotOpened" xml:space="preserve">
+    <value>The selected file is not opened!</value>
+  </data>
   <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like wise search to reduce the dropdown list</value>
   </data>

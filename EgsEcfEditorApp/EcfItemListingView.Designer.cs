@@ -119,6 +119,7 @@ namespace EgsEcfEditorApp
             this.ItemListingGrid.ShowEditingIcon = false;
             this.ItemListingGrid.Size = new System.Drawing.Size(794, 389);
             this.ItemListingGrid.TabIndex = 2;
+            this.ItemListingGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ItemListingGrid_CellDoubleClick);
             // 
             // ListingGridColumn_Number
             // 

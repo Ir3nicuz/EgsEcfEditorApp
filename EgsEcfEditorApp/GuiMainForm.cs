@@ -34,6 +34,7 @@ using static EcfToolBarControls.EcfToolBarCheckComboBox;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
 using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
+using static EgsEcfEditorApp.EcfItemListingView;
 
 namespace EgsEcfEditorApp
 {
@@ -147,7 +148,7 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        private void ItemListingView_ItemRowClicked(object sender, EcfItemListingView.ItemRowClickedEventArgs evt)
+        private void ItemListingView_ItemRowClicked(object sender, ItemRowClickedEventArgs evt)
         {
             EcfStructureItem itemToShow = evt.RowItem;
             EcfTabPage tabPageToShow = FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(tab => tab.File == itemToShow.EcfFile);
@@ -2159,15 +2160,18 @@ namespace EcfFileViews
              * 
              */
 
-
-
-
             ContextMenuItemListTemplateUsers.Enabled = true;
             ContextMenuItemListItemUsingTemplates.Enabled = true;
             ContextMenuItemShowLinkedTemplate.Enabled = true;
             ContextMenuItemAddTemplate.Enabled = true;
             ContextMenuItemDeleteTemplate.Enabled = true;
             ContextMenuItemAddToTemplateDefinition.Enabled = true;
+
+
+
+
+
+
 
 
 

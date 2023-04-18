@@ -24,8 +24,6 @@ namespace EgsEcfEditorApp
             Text = TitleRecources.EcfItemListingView_Header;
             Icon = IconRecources.Icon_AppBranding;
 
-            SearchValueHeaderLabel.Text = string.Format("{0}:", TitleRecources.EcfItemListingView_SearchValueHeader);
-            
             ListingGridColumn_Number.HeaderText = TitleRecources.Generic_Number_Short;
             ListingGridColumn_File.HeaderText = TitleRecources.Generic_File;
             ListingGridColumn_Item.HeaderText = TitleRecources.Generic_Item;
@@ -54,28 +52,27 @@ namespace EgsEcfEditorApp
         {
             Show(parent, null, itemList);
         }
-        public void Show(IWin32Window parent, string searchValue, List<EcfBlock> itemList)
+        public void Show(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
         {
-            RefreshSearchValue(searchValue);
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
             RefreshGridView(itemList);
             Show(parent);
         }
-        public void Show(IWin32Window parent, string searchValue, List<EcfParameter> itemList)
+        public void Show(IWin32Window parent, string searchDescription, List<EcfParameter> itemList)
         {
-            RefreshSearchValue(searchValue);
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
             RefreshGridView(itemList);
             Show(parent);
         }
 
         // privates
-        private void RefreshSearchValue(string searchValue)
+        private void RefreshInfoDescription(string searchDescription, int hitCount)
         {
-            bool isVisible = !string.IsNullOrEmpty(searchValue);
-            if (isVisible)
+            SearchHitsLabel.Text = string.Format("{0} {1}", hitCount, TitleRecources.Generic_SearchHits);
+            if (!string.IsNullOrEmpty(searchDescription))
             {
-                SearchValueTextBox.Text = searchValue;
+                Text = string.Format("{0} - {1}", TitleRecources.EcfItemListingView_Header, searchDescription);
             }
-            SearchValuePanel.Visible = isVisible;
         }
         private void RefreshGridView(List<EcfBlock> itemList)
         {

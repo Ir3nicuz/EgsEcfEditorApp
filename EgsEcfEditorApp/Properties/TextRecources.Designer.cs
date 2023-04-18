@@ -466,6 +466,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Parameters with value.
+        /// </summary>
+        internal static string EcfItemListingView_AllParametersWithValue {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_AllParametersWithValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The selected file is not opened!.
         /// </summary>
         internal static string EcfItemListingView_SelectedFileNotOpened {

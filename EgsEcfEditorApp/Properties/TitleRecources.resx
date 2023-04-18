@@ -243,9 +243,6 @@
   <data name="EcfItemListingView_Header" xml:space="preserve">
     <value>Item listing</value>
   </data>
-  <data name="EcfItemListingView_SearchValueHeader" xml:space="preserve">
-    <value>Search value</value>
-  </data>
   <data name="EcfParameterView_Header" xml:space="preserve">
     <value>Parameter view</value>
   </data>
@@ -575,6 +572,9 @@
   </data>
   <data name="Generic_Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="Generic_SearchHits" xml:space="preserve">
+    <value>Hits</value>
   </data>
   <data name="Generic_Type" xml:space="preserve">
     <value>Type</value>

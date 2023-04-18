@@ -29,37 +29,24 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CloseButton = new System.Windows.Forms.Button();
-            this.SearchValueHeaderLabel = new System.Windows.Forms.Label();
             this.ItemListingGridPanel = new System.Windows.Forms.Panel();
+            this.ButtonInfoPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ItemListingGrid = new EcfWinFormControls.EcfDataGridView();
             this.ListingGridColumn_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_Item = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_Parameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SearchValueTextBox = new System.Windows.Forms.TextBox();
-            this.SearchValuePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ButtonPanel.SuspendLayout();
+            this.SearchHitsLabel = new System.Windows.Forms.Label();
             this.ItemListingGridPanel.SuspendLayout();
+            this.ButtonInfoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).BeginInit();
-            this.SearchValuePanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // ButtonPanel
-            // 
-            this.ButtonPanel.AutoSize = true;
-            this.ButtonPanel.Controls.Add(this.CloseButton);
-            this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ButtonPanel.Location = new System.Drawing.Point(0, 421);
-            this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(800, 29);
-            this.ButtonPanel.TabIndex = 0;
             // 
             // CloseButton
             // 
+            this.CloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CloseButton.AutoSize = true;
             this.CloseButton.Location = new System.Drawing.Point(722, 3);
             this.CloseButton.Name = "CloseButton";
@@ -69,42 +56,48 @@ namespace EgsEcfEditorApp
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // SearchValueHeaderLabel
-            // 
-            this.SearchValueHeaderLabel.AutoSize = true;
-            this.SearchValueHeaderLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SearchValueHeaderLabel.Location = new System.Drawing.Point(3, 0);
-            this.SearchValueHeaderLabel.Name = "SearchValueHeaderLabel";
-            this.SearchValueHeaderLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.SearchValueHeaderLabel.Size = new System.Drawing.Size(40, 26);
-            this.SearchValueHeaderLabel.TabIndex = 0;
-            this.SearchValueHeaderLabel.Text = "header";
-            this.SearchValueHeaderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // ItemListingGridPanel
             // 
             this.ItemListingGridPanel.AutoSize = true;
             this.ItemListingGridPanel.Controls.Add(this.ItemListingGrid);
             this.ItemListingGridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ItemListingGridPanel.Location = new System.Drawing.Point(0, 26);
+            this.ItemListingGridPanel.Location = new System.Drawing.Point(0, 0);
             this.ItemListingGridPanel.Name = "ItemListingGridPanel";
             this.ItemListingGridPanel.Padding = new System.Windows.Forms.Padding(3);
-            this.ItemListingGridPanel.Size = new System.Drawing.Size(800, 395);
+            this.ItemListingGridPanel.Size = new System.Drawing.Size(800, 421);
             this.ItemListingGridPanel.TabIndex = 3;
+            // 
+            // ButtonInfoPanel
+            // 
+            this.ButtonInfoPanel.AutoSize = true;
+            this.ButtonInfoPanel.ColumnCount = 2;
+            this.ButtonInfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ButtonInfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ButtonInfoPanel.Controls.Add(this.CloseButton, 1, 0);
+            this.ButtonInfoPanel.Controls.Add(this.SearchHitsLabel, 0, 0);
+            this.ButtonInfoPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ButtonInfoPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.ButtonInfoPanel.Location = new System.Drawing.Point(0, 421);
+            this.ButtonInfoPanel.Name = "ButtonInfoPanel";
+            this.ButtonInfoPanel.RowCount = 1;
+            this.ButtonInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ButtonInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.ButtonInfoPanel.Size = new System.Drawing.Size(800, 29);
+            this.ButtonInfoPanel.TabIndex = 5;
             // 
             // ItemListingGrid
             // 
             this.ItemListingGrid.AllowUserToAddRows = false;
             this.ItemListingGrid.AllowUserToDeleteRows = false;
             this.ItemListingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ItemListingGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ItemListingGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.ItemListingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ItemListingGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ListingGridColumn_Number,
@@ -117,7 +110,7 @@ namespace EgsEcfEditorApp
             this.ItemListingGrid.Name = "ItemListingGrid";
             this.ItemListingGrid.ReadOnly = true;
             this.ItemListingGrid.ShowEditingIcon = false;
-            this.ItemListingGrid.Size = new System.Drawing.Size(794, 389);
+            this.ItemListingGrid.Size = new System.Drawing.Size(794, 415);
             this.ItemListingGrid.TabIndex = 2;
             this.ItemListingGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ItemListingGrid_CellDoubleClick);
             // 
@@ -149,32 +142,16 @@ namespace EgsEcfEditorApp
             this.ListingGridColumn_Parameter.ReadOnly = true;
             this.ListingGridColumn_Parameter.Width = 79;
             // 
-            // SearchValueTextBox
+            // SearchHitsLabel
             // 
-            this.SearchValueTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SearchValueTextBox.Location = new System.Drawing.Point(49, 3);
-            this.SearchValueTextBox.Name = "SearchValueTextBox";
-            this.SearchValueTextBox.ReadOnly = true;
-            this.SearchValueTextBox.Size = new System.Drawing.Size(748, 20);
-            this.SearchValueTextBox.TabIndex = 2;
-            this.SearchValueTextBox.Text = "searchValue";
-            // 
-            // SearchValuePanel
-            // 
-            this.SearchValuePanel.AutoSize = true;
-            this.SearchValuePanel.ColumnCount = 2;
-            this.SearchValuePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.SearchValuePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SearchValuePanel.Controls.Add(this.SearchValueHeaderLabel, 0, 0);
-            this.SearchValuePanel.Controls.Add(this.SearchValueTextBox, 1, 0);
-            this.SearchValuePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SearchValuePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.SearchValuePanel.Location = new System.Drawing.Point(0, 0);
-            this.SearchValuePanel.Name = "SearchValuePanel";
-            this.SearchValuePanel.RowCount = 1;
-            this.SearchValuePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SearchValuePanel.Size = new System.Drawing.Size(800, 26);
-            this.SearchValuePanel.TabIndex = 4;
+            this.SearchHitsLabel.AutoSize = true;
+            this.SearchHitsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SearchHitsLabel.Location = new System.Drawing.Point(3, 0);
+            this.SearchHitsLabel.Name = "SearchHitsLabel";
+            this.SearchHitsLabel.Size = new System.Drawing.Size(394, 29);
+            this.SearchHitsLabel.TabIndex = 1;
+            this.SearchHitsLabel.Text = "??? hits";
+            this.SearchHitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // EcfItemListingView
             // 
@@ -182,33 +159,27 @@ namespace EgsEcfEditorApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.ItemListingGridPanel);
-            this.Controls.Add(this.SearchValuePanel);
-            this.Controls.Add(this.ButtonPanel);
+            this.Controls.Add(this.ButtonInfoPanel);
             this.Name = "EcfItemListingView";
             this.Text = "EcfItemListingDialog";
-            this.ButtonPanel.ResumeLayout(false);
-            this.ButtonPanel.PerformLayout();
             this.ItemListingGridPanel.ResumeLayout(false);
+            this.ButtonInfoPanel.ResumeLayout(false);
+            this.ButtonInfoPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).EndInit();
-            this.SearchValuePanel.ResumeLayout(false);
-            this.SearchValuePanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
         private System.Windows.Forms.Button CloseButton;
-        private System.Windows.Forms.Label SearchValueHeaderLabel;
         private EcfWinFormControls.EcfDataGridView ItemListingGrid;
         private System.Windows.Forms.Panel ItemListingGridPanel;
-        private System.Windows.Forms.TextBox SearchValueTextBox;
-        private System.Windows.Forms.TableLayoutPanel SearchValuePanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_File;
         private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Item;
         private System.Windows.Forms.DataGridViewTextBoxColumn ListingGridColumn_Parameter;
+        private System.Windows.Forms.TableLayoutPanel ButtonInfoPanel;
+        private System.Windows.Forms.Label SearchHitsLabel;
     }
 }

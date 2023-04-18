@@ -114,39 +114,9 @@ namespace EgsEcfEditorApp
         {
             PasteElements(sender, evt);
         }
-        [Obsolete("needs operation logic")]
         private void FileViewPanel_ItemHandlingSupportOperationClicked(object sender, ItemHandlingSupportOperationEventArgs evt)
         {
-            switch (evt.Operation)
-            {
-                case ItemOperations.ListTemplateUsers:
-                case ItemOperations.ListItemUsingTemplates:
-                case ItemOperations.ListParameterUsers:
-
-                    TryGetSelectedTab(out EcfTabPage ecf1);
-                    EcfItemListingView view1 = new EcfItemListingView();
-                    view1.ItemRowClicked += ItemListingView_ItemRowClicked;
-                    view1.Show(this, "Test!", ecf1.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList());
-                    break;
-
-                case ItemOperations.ListParameterValueUsers:
-                    TryGetSelectedTab(out EcfTabPage ecf2);
-                    EcfItemListingView view2 = new EcfItemListingView();
-                    view2.ItemRowClicked += ItemListingView_ItemRowClicked;
-                    view2.Show(this, "Test!", ecf2.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().FirstOrDefault()
-                        .ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList());
-                    break;
-
-                case ItemOperations.AddToTemplateDefinition:
-                case ItemOperations.AddTemplate:
-                case ItemOperations.DeleteTemplate:
-                case ItemOperations.ShowLinkedTemplate:
-
-                default: 
-                    MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
-                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information); 
-                    break;
-            }
+            PerformItemHandlingSupportOperation(sender, evt);
         }
         private void ItemListingView_ItemRowClicked(object sender, ItemRowClickedEventArgs evt)
         {
@@ -622,6 +592,44 @@ namespace EgsEcfEditorApp
                     break;
                 default:
                     break;
+            }
+        }
+        [Obsolete("needs operation logic")]
+        private void PerformItemHandlingSupportOperation(object sender, ItemHandlingSupportOperationEventArgs evt)
+        {
+            switch (evt.Operation)
+            {
+                case ItemOperations.ListTemplateUsers:
+                case ItemOperations.ListItemUsingTemplates:
+                case ItemOperations.ListParameterUsers: 
+                case ItemOperations.ListParameterValueUsers: ShowParameterValueUsers(evt.SourceItem as EcfParameter); break;
+                case ItemOperations.AddToTemplateDefinition:
+                case ItemOperations.AddTemplate:
+                case ItemOperations.DeleteTemplate:
+                case ItemOperations.ShowLinkedTemplate:
+
+                default:
+                    MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
+                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+            }
+        }
+        private void ShowParameterValueUsers(EcfParameter sourceParameter)
+        {
+            if (sourceParameter.HasValue())
+            {
+                List<EcfParameter> paramList = FileViewPanel.TabPages.Cast<EcfTabPage>().SelectMany(page =>
+                page.File.GetDeepItemList<EcfParameter>().Where(parameter => ValueGroupListEquals(parameter.ValueGroups, sourceParameter.ValueGroups))).ToList();
+
+                EcfItemListingView parameterView = new EcfItemListingView();
+                parameterView.ItemRowClicked += ItemListingView_ItemRowClicked;
+                parameterView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllParametersWithValue, string.Join(", ", sourceParameter.GetAllValues())), 
+                    paramList.Cast<EcfParameter>().ToList());
+            }
+            else
+            {
+                MessageBox.Show(this, string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, sourceParameter.Key, TextRecources.Generic_HasNoValue), 
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         private void StartTechTreeEditor()

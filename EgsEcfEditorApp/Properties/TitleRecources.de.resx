@@ -469,7 +469,7 @@
     <value>Element</value>
   </data>
   <data name="Generic_Elements" xml:space="preserve">
-    <value>Elementw</value>
+    <value>Elemente</value>
   </data>
   <data name="Generic_Error" xml:space="preserve">
     <value>Fehler</value>
@@ -491,9 +491,6 @@
   </data>
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Ist optional</value>
-  </data>
-  <data name="Generic_Item" xml:space="preserve">
-    <value>Item</value>
   </data>
   <data name="Generic_Level" xml:space="preserve">
     <value>Level</value>

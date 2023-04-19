@@ -599,9 +599,9 @@ namespace EgsEcfEditorApp
         {
             switch (evt.Operation)
             {
-                case ItemOperations.ListTemplateUsers:
-                case ItemOperations.ListItemUsingTemplates:
-                case ItemOperations.ListParameterUsers: 
+                case ItemOperations.ListTemplateUsers: ShowTemplateUsers(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.ListItemUsingTemplates: ShowItemUsingTemplates(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.ListParameterUsers: ShowParameterUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ListParameterValueUsers: ShowParameterValueUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.AddToTemplateDefinition:
                 case ItemOperations.AddTemplate:
@@ -614,17 +614,48 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
+        [Obsolete("needs or query for direct linked templates, is reftarget the suitable settings reference?, TemplateRoot Parameter settings reference?")]
+        private void ShowTemplateUsers(EcfBlock sourceItem)
+        {
+            List<EcfBlock> itemList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningIngredients).SelectMany(page =>
+                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item => 
+                item.HasParameter("TemplateRoot", out EcfParameter parameter) && parameter.ContainsValue(sourceItem.RefTarget))).ToList();
+
+            EcfItemListingView itemView = new EcfItemListingView();
+            itemView.ItemRowClicked += ItemListingView_ItemRowClicked;
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceItem.BuildIdentification()), itemList);
+        }
+        [Obsolete("is reftarget the suitable settings reference?")]
+        private void ShowItemUsingTemplates(EcfBlock sourceItem)
+        {
+            List<EcfBlock> templateList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
+                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => template.GetDeepChildList<EcfParameter>().Any(parameter => 
+                parameter.Key.Equals(sourceItem.RefTarget)))).ToList();
+
+            EcfItemListingView templateView = new EcfItemListingView();
+            templateView.ItemRowClicked += ItemListingView_ItemRowClicked;
+            templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesWithItem, sourceItem.BuildIdentification()), templateList);
+        }
+        private void ShowParameterUsers(EcfParameter sourceParameter)
+        {
+            List<EcfBlock> itemList = FileViewPanel.TabPages.Cast<EcfTabPage>().SelectMany(page =>
+                page.File.GetDeepItemList<EcfBlock>().Where(item => item.HasParameter(sourceParameter.Key, out _))).ToList();
+
+            EcfItemListingView itemView = new EcfItemListingView();
+            itemView.ItemRowClicked += ItemListingView_ItemRowClicked;
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllItemsWithParameter, sourceParameter.Key), itemList);
+        }
         private void ShowParameterValueUsers(EcfParameter sourceParameter)
         {
             if (sourceParameter.HasValue())
             {
                 List<EcfParameter> paramList = FileViewPanel.TabPages.Cast<EcfTabPage>().SelectMany(page =>
-                page.File.GetDeepItemList<EcfParameter>().Where(parameter => ValueGroupListEquals(parameter.ValueGroups, sourceParameter.ValueGroups))).ToList();
+                    page.File.GetDeepItemList<EcfParameter>().Where(parameter => ValueGroupListEquals(parameter.ValueGroups, sourceParameter.ValueGroups))).ToList();
 
                 EcfItemListingView parameterView = new EcfItemListingView();
                 parameterView.ItemRowClicked += ItemListingView_ItemRowClicked;
-                parameterView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllParametersWithValue, string.Join(", ", sourceParameter.GetAllValues())), 
-                    paramList.Cast<EcfParameter>().ToList());
+                parameterView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllParametersWithValue, 
+                    string.Join(", ", sourceParameter.GetAllValues())), paramList);
             }
             else
             {
@@ -2121,8 +2152,8 @@ namespace EcfFileViews
             EcfBlock TemplateSourceItem = node?.Item as EcfBlock;
 
             bool isSpecificItem = TemplateSourceItem?.IsRoot() ?? false;
-            bool showTemplatesSpecificItems = (File?.Definition?.DefinesTemplates ?? false) && isSpecificItem;
-            bool showIngredientsSpecificItems = (File?.Definition?.DefinesIngredients ?? false) && isSpecificItem;
+            bool showTemplatesSpecificItems = (File?.Definition?.IsDefiningTemplates ?? false) && isSpecificItem;
+            bool showIngredientsSpecificItems = (File?.Definition?.IsDefiningIngredients ?? false) && isSpecificItem;
 
 
 
@@ -2141,11 +2172,12 @@ namespace EcfFileViews
              * UsedByItems
              * Source Template Id Name: Name
              * Target Template Parameter Name: TemplateRoot
-             * Walk Ingredients Files Parameter Values
+             * Or Target Target Item Id Name: Name
+             * Walk Ingredients Files Parameter Values and root block name
              * 
              * FindTemplate
              * PreCheck: (hasParamter: TemplateRoot)
-             * Source Template Parameter Name: TemplateRoot
+             * Source Template Parameter Name: TemplateRoot or Item Id Name: Name
              * Target Template Id Attribute Name: Name
              * Walk Template Files Parameter Names
              * 

@@ -305,9 +305,9 @@ namespace EgsEcfParser
             private static FormatDefinition BuildFormatDefinition(XmlNode configNode, string filePathAndName, string gameMode, string fileType)
             {
                 XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
-                bool definesIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesIngredients)?
+                bool isDefiningIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesIngredients)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                bool definesTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
+                bool isDefiningTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
@@ -357,7 +357,7 @@ namespace EgsEcfParser
                 List<ItemDefinition> blockParameters = BuildItemList(configNode, XmlSettings.XChapterBlockParameters);
                 List<ItemDefinition> parameterAttributes = BuildItemList(configNode, XmlSettings.XChapterParameterAttributes);
 
-                return new FormatDefinition(filePathAndName, gameMode, fileType, definesIngredients, definesTemplates,
+                return new FormatDefinition(filePathAndName, gameMode, fileType, isDefiningIngredients, isDefiningTemplates,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
@@ -3216,8 +3216,8 @@ namespace EgsEcfParser
         public string GameMode { get; }
         public string FileType { get; }
 
-        public bool DefinesIngredients { get; }
-        public bool DefinesTemplates { get; }
+        public bool IsDefiningIngredients { get; }
+        public bool IsDefiningTemplates { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
         public ReadOnlyCollection<StringPairDefinition> MultiLineCommentPairs { get; }
@@ -3250,7 +3250,7 @@ namespace EgsEcfParser
         public StringPairDefinition WritingBlockIdentifierPair { get;}
         public StringPairDefinition WritingEscapeIdentifiersPair { get; }
 
-        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool definesIngredients, bool definesTemplates,
+        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool isDefiningIngredients, bool isDefiningTemplates,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
@@ -3265,8 +3265,8 @@ namespace EgsEcfParser
             GameMode = gameMode;
             FileType = fileType;
 
-            DefinesIngredients = definesIngredients;
-            DefinesTemplates = definesTemplates;
+            IsDefiningIngredients = isDefiningIngredients;
+            IsDefiningTemplates = isDefiningTemplates;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
             MultiLineCommentPairs = multiLineCommentPairs.AsReadOnly();
@@ -3312,8 +3312,8 @@ namespace EgsEcfParser
             GameMode = template.GameMode;
             FileType = template.FileType;
 
-            DefinesIngredients = template.DefinesIngredients;
-            DefinesTemplates = template.DefinesTemplates;
+            IsDefiningIngredients = template.IsDefiningIngredients;
+            IsDefiningTemplates = template.IsDefiningTemplates;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
             MultiLineCommentPairs = template.MultiLineCommentPairs.Select(pair => new StringPairDefinition(pair)).ToList().AsReadOnly();

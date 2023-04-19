@@ -492,9 +492,6 @@
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Is optional</value>
   </data>
-  <data name="Generic_Item" xml:space="preserve">
-    <value>Item</value>
-  </data>
   <data name="Generic_Level" xml:space="preserve">
     <value>Level</value>
   </data>

@@ -1186,15 +1186,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item.
-        /// </summary>
-        internal static string Generic_Item {
-            get {
-                return ResourceManager.GetString("Generic_Item", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Level.
         /// </summary>
         internal static string Generic_Level {

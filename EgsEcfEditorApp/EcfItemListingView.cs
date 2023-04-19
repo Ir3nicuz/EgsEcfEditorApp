@@ -26,7 +26,7 @@ namespace EgsEcfEditorApp
 
             ListingGridColumn_Number.HeaderText = TitleRecources.Generic_Number_Short;
             ListingGridColumn_File.HeaderText = TitleRecources.Generic_File;
-            ListingGridColumn_Item.HeaderText = TitleRecources.Generic_Item;
+            ListingGridColumn_Element.HeaderText = TitleRecources.Generic_Element;
             ListingGridColumn_Parameter.HeaderText = TitleRecources.Generic_Parameter;
 
             CloseButton.Text = TitleRecources.Generic_Close;

@@ -252,8 +252,17 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Entfernt die selektierte Wert Gruppe</value>
   </data>
+  <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
+    <value>Alle Elemente mit Template</value>
+  </data>
+  <data name="EcfItemListingView_AllItemsWithParameter" xml:space="preserve">
+    <value>Alle Elemente mit Parameter</value>
+  </data>
   <data name="EcfItemListingView_AllParametersWithValue" xml:space="preserve">
     <value>Alle Parameter mit Wert</value>
+  </data>
+  <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
+    <value>Alle Templates mit Item</value>
   </data>
   <data name="EcfItemListingView_SelectedFileNotOpened" xml:space="preserve">
     <value>Die gewählte Datei ist nicht geöffnet!</value>

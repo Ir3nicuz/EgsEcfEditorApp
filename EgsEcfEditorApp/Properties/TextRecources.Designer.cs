@@ -466,11 +466,38 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All items with template.
+        /// </summary>
+        internal static string EcfItemListingView_AllElementsWithTemplate {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_AllElementsWithTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with parameter.
+        /// </summary>
+        internal static string EcfItemListingView_AllItemsWithParameter {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_AllItemsWithParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Parameters with value.
         /// </summary>
         internal static string EcfItemListingView_AllParametersWithValue {
             get {
                 return ResourceManager.GetString("EcfItemListingView_AllParametersWithValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All templates with item.
+        /// </summary>
+        internal static string EcfItemListingView_AllTemplatesWithItem {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_AllTemplatesWithItem", resourceCulture);
             }
         }
         

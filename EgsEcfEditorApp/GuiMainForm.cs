@@ -614,16 +614,20 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        [Obsolete("needs or query for direct linked templates, is reftarget the suitable settings reference?, TemplateRoot Parameter settings reference?")]
-        private void ShowTemplateUsers(EcfBlock sourceItem)
+        [Obsolete("is reftarget the suitable settings reference?, TemplateRoot Parameter settings reference?")]
+        private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
-            List<EcfBlock> itemList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningIngredients).SelectMany(page =>
+            string templateParameterName = "TemplateRoot";
+            string sourceTemplateName = sourceTemplate.Id;
+
+            List<EcfBlock> itemList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => !page.File.Definition.IsDefiningTemplates).SelectMany(page =>
                 page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item => 
-                item.HasParameter("TemplateRoot", out EcfParameter parameter) && parameter.ContainsValue(sourceItem.RefTarget))).ToList();
+                string.Equals(item.RefTarget, sourceTemplateName) || (item.HasParameter(templateParameterName, out EcfParameter parameter) && parameter.ContainsValue(sourceTemplateName))
+                )).ToList();
 
             EcfItemListingView itemView = new EcfItemListingView();
             itemView.ItemRowClicked += ItemListingView_ItemRowClicked;
-            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceItem.BuildIdentification()), itemList);
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildIdentification()), itemList);
         }
         [Obsolete("is reftarget the suitable settings reference?")]
         private void ShowItemUsingTemplates(EcfBlock sourceItem)
@@ -2151,76 +2155,83 @@ namespace EcfFileViews
         {
             EcfBlock TemplateSourceItem = node?.Item as EcfBlock;
 
-            bool isSpecificItem = TemplateSourceItem?.IsRoot() ?? false;
-            bool showTemplatesSpecificItems = (File?.Definition?.IsDefiningTemplates ?? false) && isSpecificItem;
-            bool showIngredientsSpecificItems = (File?.Definition?.IsDefiningIngredients ?? false) && isSpecificItem;
+            bool isValidItem = TemplateSourceItem?.IsRoot() ?? false;
+            bool isTemplateItem = (File?.Definition?.IsDefiningTemplates ?? false) && isValidItem;
+            bool isNonTemplateItem = !isTemplateItem;
+            bool isIngredientItems = (File?.Definition?.IsDefiningIngredients ?? false) && isValidItem;
 
+            if (isTemplateItem)
+            {
+                /*
+                 * 
+                 * UsedByItems
+                 * Source Template Id Name: Name
+                 * Target Template Parameter Name: TemplateRoot
+                 * Or Target Target Item Id Name: Name
+                 * Walk Ingredients Files Parameter Values and root block name
+                 * 
+                 */
 
+                ContextMenuItemListTemplateUsers.Enabled = true;
+            }
+            ContextMenuItemListTemplateUsers.Visible = isTemplateItem;
 
+            if (isNonTemplateItem)
+            {
+                /*
+                 * 
+                 * UsedByTemplates
+                 * Source Item Id Name: Name
+                 * Walk Template Files Parameter Names
+                 * 
+                 * FindTemplate
+                 * PreCheck: (hasParamter: TemplateRoot)
+                 * Source Template Parameter Name: TemplateRoot or Item Id Name: Name
+                 * Target Template Id Attribute Name: Name
+                 * Walk Template Files Parameter Names
+                 * 
+                 * AddTemplate 
+                 * PreCheck: (hasNotParameter: TemplateRoot)
+                 * Variants: (Addexisting or new from existing or complete new)
+                 * Target Template Parameter Name: TemplateRoot
+                 * Target Template Id Attribute Name: Name
+                 * EcfBlock Default Parameter, values
+                 * Add EcfBlock to Template File
+                 * Add Ingredients Item Parameter
+                 * 
+                 * DeleteTemplate 
+                 * PreCheck: (hasParameter: TemplateRoot)
+                 * Variants: (UsedByItems > 1 -> warning -> remove from all)
+                 * Target Template Parameter Name: TemplateRoot
+                 * Target Template Id Attribute Name: Name
+                 * Remove EcfBlock from Template File
+                 * Remove Ingredients Item Parameter 
+                 * 
+                 */
 
-            /*
-             * AddToTemplateDefinition
-             * PreCheck: (not present at least one file)
-             * Variants: (addToAll, addToSelected)
-             * Source Item Id Name: Name
-             * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
-             * 
-             * UsedByTemplates
-             * Source Item Id Name: Name
-             * Walk Template Files Parameter Names
-             * 
-             * UsedByItems
-             * Source Template Id Name: Name
-             * Target Template Parameter Name: TemplateRoot
-             * Or Target Target Item Id Name: Name
-             * Walk Ingredients Files Parameter Values and root block name
-             * 
-             * FindTemplate
-             * PreCheck: (hasParamter: TemplateRoot)
-             * Source Template Parameter Name: TemplateRoot or Item Id Name: Name
-             * Target Template Id Attribute Name: Name
-             * Walk Template Files Parameter Names
-             * 
-             * AddTemplate 
-             * PreCheck: (hasNotParameter: TemplateRoot)
-             * Variants: (Addexisting or new from existing or complete new)
-             * Target Template Parameter Name: TemplateRoot
-             * Target Template Id Attribute Name: Name
-             * EcfBlock Default Parameter, values
-             * Add EcfBlock to Template File
-             * Add Ingredients Item Parameter
-             * 
-             * DeleteTemplate 
-             * PreCheck: (hasParameter: TemplateRoot)
-             * Variants: (UsedByItems > 1 -> warning -> remove from all)
-             * Target Template Parameter Name: TemplateRoot
-             * Target Template Id Attribute Name: Name
-             * Remove EcfBlock from Template File
-             * Remove Ingredients Item Parameter 
-             * 
-             */
+                ContextMenuItemListItemUsingTemplates.Enabled = true;
+                ContextMenuItemShowLinkedTemplate.Enabled = true;
+                ContextMenuItemAddTemplate.Enabled = true;
+                ContextMenuItemDeleteTemplate.Enabled = true;
+            }
+            ContextMenuItemListItemUsingTemplates.Visible = isNonTemplateItem;
+            ContextMenuItemShowLinkedTemplate.Visible = isNonTemplateItem;
+            ContextMenuItemAddTemplate.Visible = isNonTemplateItem;
+            ContextMenuItemDeleteTemplate.Visible = isNonTemplateItem;
 
-            ContextMenuItemListTemplateUsers.Enabled = true;
-            ContextMenuItemListItemUsingTemplates.Enabled = true;
-            ContextMenuItemShowLinkedTemplate.Enabled = true;
-            ContextMenuItemAddTemplate.Enabled = true;
-            ContextMenuItemDeleteTemplate.Enabled = true;
-            ContextMenuItemAddToTemplateDefinition.Enabled = true;
-
-
-
-
-
-
-
-
-
-            ContextMenuItemListTemplateUsers.Visible = showTemplatesSpecificItems;
-            ContextMenuItemListItemUsingTemplates.Visible = showIngredientsSpecificItems;
-            ContextMenuItemShowLinkedTemplate.Visible = showIngredientsSpecificItems;
-            ContextMenuItemAddTemplate.Visible = showIngredientsSpecificItems;
-            ContextMenuItemDeleteTemplate.Visible = showIngredientsSpecificItems;
-            ContextMenuItemAddToTemplateDefinition.Visible = showIngredientsSpecificItems;
+            if (isIngredientItems)
+            {
+                /*
+                 * AddToTemplateDefinition
+                 * PreCheck: (not present at least one file)
+                 * Variants: (addToAll, addToSelected)
+                 * Source Item Id Name: Name
+                 * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
+                */
+                
+                ContextMenuItemAddToTemplateDefinition.Enabled = true;
+            }
+            ContextMenuItemAddToTemplateDefinition.Visible = isIngredientItems;
         }
         private void TrySelectSimilarNode(EcfTreeNode oldNode, List<EcfTreeNode> newNodes)
         {

@@ -823,7 +823,7 @@ namespace EgsEcfEditorApp
             {
                 switch (item)
                 {
-                    case EcfBlock block: return block.BuildIdentification();
+                    case EcfBlock block: return block.BuildRootId();
                     case EcfParameter param: return string.Format("{0} {1}", 
                         TitleRecources.Generic_Parameter, param.Key);
                     case EcfComment comment: return string.Format("{0} {1}", 

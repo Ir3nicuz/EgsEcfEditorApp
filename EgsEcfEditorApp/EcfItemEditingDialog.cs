@@ -498,7 +498,7 @@ namespace EcfFileViews
             ParameterItem_ActivateViewHeader();
             ParameterItem_ActivateKeyComboBox();
 
-            ParameterItemParentTextBox.Text = ParentBlock?.BuildIdentification();
+            ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId();
 
             ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
 
@@ -685,7 +685,7 @@ namespace EcfFileViews
         private void BlockItem_UpdateParametersInheritance(EcfBlock inheritor)
         {
             BlockItemParametersPanel.UpdateParameterInheritance(inheritor);
-            BlockItemInheritorTextBox.Text = inheritor?.BuildIdentification() ?? string.Empty;
+            BlockItemInheritorTextBox.Text = inheritor?.BuildRootId() ?? string.Empty;
         }
         private void BlockItem_PreActivationChecks_Adding()
         {
@@ -1176,7 +1176,7 @@ namespace EcfFileViews
                                 && value.Equals(block.GetAttributeFirstValue(idRow.ItemDef.Name))))
                             {
                                 errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
-                                    value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                                    value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildRootId()));
                             }
                         }
                     }
@@ -1195,7 +1195,7 @@ namespace EcfFileViews
                                     && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
                                 {
                                     errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
-                                        value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildIdentification()));
+                                        value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildRootId()));
                                 }
                             }
                         }
@@ -1218,7 +1218,7 @@ namespace EcfFileViews
                                 block.GetAttributeFirstValue(targetRefRow.FormDef.BlockReferenceSourceAttribute).Equals(oldTargetValue)))
                             {
                                 errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheOldNameAttributeValue,
-                                    oldTargetValue, TextRecources.EcfItemEditingDialog_IsStillReferencedBy, block.BuildIdentification()));
+                                    oldTargetValue, TextRecources.EcfItemEditingDialog_IsStillReferencedBy, block.BuildRootId()));
                             }
                         }
                     }
@@ -1238,12 +1238,12 @@ namespace EcfFileViews
                         if (targetBlockCount < 1)
                         {
                             errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
-                                sourceRefRow.Inheritor?.BuildIdentification(), TextRecources.EcfItemEditingDialog_CouldNotBeFoundInTheItemList));
+                                sourceRefRow.Inheritor?.BuildRootId(), TextRecources.EcfItemEditingDialog_CouldNotBeFoundInTheItemList));
                         }
                         else if (targetBlockCount > 1)
                         {
                             errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
-                                sourceRefRow.Inheritor?.BuildIdentification(), TextRecources.EcfItemEditingDialog_HasNoUniqueIdentifier));
+                                sourceRefRow.Inheritor?.BuildRootId(), TextRecources.EcfItemEditingDialog_HasNoUniqueIdentifier));
                         }
                     }
                 }

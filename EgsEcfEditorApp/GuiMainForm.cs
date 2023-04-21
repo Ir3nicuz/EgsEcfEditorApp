@@ -332,7 +332,6 @@ namespace EgsEcfEditorApp
             FileViewPanel.PasteClicked += FileViewPanel_PasteClicked;
             FileViewPanel.ItemHandlingSupportOperationClicked += FileViewPanel_ItemHandlingSupportOperationClicked;
         }
-
         private bool AppClosing()
         {
             bool cancelClosing = false;
@@ -614,31 +613,19 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        [Obsolete("is reftarget the suitable settings reference?, TemplateRoot Parameter settings reference?")]
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
-            string templateParameterName = "TemplateRoot";
-            string sourceTemplateName = sourceTemplate.Id;
-
-            List<EcfBlock> itemList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => !page.File.Definition.IsDefiningTemplates).SelectMany(page =>
-                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item => 
-                string.Equals(item.RefTarget, sourceTemplateName) || (item.HasParameter(templateParameterName, out EcfParameter parameter) && parameter.ContainsValue(sourceTemplateName))
-                )).ToList();
-
+            List<EcfBlock> itemList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), sourceTemplate);
             EcfItemListingView itemView = new EcfItemListingView();
             itemView.ItemRowClicked += ItemListingView_ItemRowClicked;
-            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildIdentification()), itemList);
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildRootId()), itemList);
         }
-        [Obsolete("is reftarget the suitable settings reference?")]
         private void ShowItemUsingTemplates(EcfBlock sourceItem)
         {
-            List<EcfBlock> templateList = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
-                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => template.GetDeepChildList<EcfParameter>().Any(parameter => 
-                parameter.Key.Equals(sourceItem.RefTarget)))).ToList();
-
+            List<EcfBlock> templateList = GetTemplateListByIngredient(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), sourceItem);
             EcfItemListingView templateView = new EcfItemListingView();
             templateView.ItemRowClicked += ItemListingView_ItemRowClicked;
-            templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesWithItem, sourceItem.BuildIdentification()), templateList);
+            templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesWithItem, sourceItem.BuildRootId()), templateList);
         }
         private void ShowParameterUsers(EcfParameter sourceParameter)
         {
@@ -1328,7 +1315,7 @@ namespace EcfFileViews
                 inheritors.ForEach(inheritor =>
                 {
                     foundBlocks.Add(inheritor);
-                    problems.Add(string.Format("{0} {1} {2}", block.BuildIdentification(), TextRecources.Generic_IsReferencedBy, inheritor.BuildIdentification()));
+                    problems.Add(string.Format("{0} {1} {2}", block.BuildRootId(), TextRecources.Generic_IsReferencedBy, inheritor.BuildRootId()));
                 });
             });
             inheritingBlocks = foundBlocks;
@@ -2157,8 +2144,7 @@ namespace EcfFileViews
 
             bool isValidItem = TemplateSourceItem?.IsRoot() ?? false;
             bool isTemplateItem = (File?.Definition?.IsDefiningTemplates ?? false) && isValidItem;
-            bool isNonTemplateItem = !isTemplateItem;
-            bool isIngredientItems = (File?.Definition?.IsDefiningIngredients ?? false) && isValidItem;
+            bool isItemItems = (File?.Definition?.IsDefiningItems ?? false) && isValidItem;
 
             if (isTemplateItem)
             {
@@ -2176,7 +2162,7 @@ namespace EcfFileViews
             }
             ContextMenuItemListTemplateUsers.Visible = isTemplateItem;
 
-            if (isNonTemplateItem)
+            if (isItemItems)
             {
                 /*
                  * 
@@ -2213,14 +2199,7 @@ namespace EcfFileViews
                 ContextMenuItemShowLinkedTemplate.Enabled = true;
                 ContextMenuItemAddTemplate.Enabled = true;
                 ContextMenuItemDeleteTemplate.Enabled = true;
-            }
-            ContextMenuItemListItemUsingTemplates.Visible = isNonTemplateItem;
-            ContextMenuItemShowLinkedTemplate.Visible = isNonTemplateItem;
-            ContextMenuItemAddTemplate.Visible = isNonTemplateItem;
-            ContextMenuItemDeleteTemplate.Visible = isNonTemplateItem;
 
-            if (isIngredientItems)
-            {
                 /*
                  * AddToTemplateDefinition
                  * PreCheck: (not present at least one file)
@@ -2228,10 +2207,14 @@ namespace EcfFileViews
                  * Source Item Id Name: Name
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
                 */
-                
+
                 ContextMenuItemAddToTemplateDefinition.Enabled = true;
             }
-            ContextMenuItemAddToTemplateDefinition.Visible = isIngredientItems;
+            ContextMenuItemListItemUsingTemplates.Visible = isItemItems;
+            ContextMenuItemShowLinkedTemplate.Visible = isItemItems;
+            ContextMenuItemAddTemplate.Visible = isItemItems;
+            ContextMenuItemDeleteTemplate.Visible = isItemItems;
+            ContextMenuItemAddToTemplateDefinition.Visible = isItemItems;
         }
         private void TrySelectSimilarNode(EcfTreeNode oldNode, List<EcfTreeNode> newNodes)
         {
@@ -2343,7 +2326,7 @@ namespace EcfFileViews
             {
                 if (treeFilter?.IsDataBlocksActive ?? true)
                 {
-                    node = new EcfTreeNode(block, block.BuildIdentification());
+                    node = new EcfTreeNode(block, block.BuildRootId());
                     foreach (EcfStructureItem childItem in block.ChildItems)
                     {
                         if (TryBuildNode(out EcfTreeNode childNode, childItem, treeFilter, parameterFilter))
@@ -2782,7 +2765,7 @@ namespace EcfFileViews
         }
         private void BuildParameterRow(EcfParameter parameter, bool isInherited, EcfParameterRow overwrittenRow)
         {
-            string parentName = (parameter.Parent as EcfBlock)?.BuildIdentification();
+            string parentName = (parameter.Parent as EcfBlock)?.BuildRootId();
             ParameterRows.Add(new EcfParameterRow(ParameterRows.Count + 1, parentName, parameter, isInherited, overwrittenRow));
         }
         private void UpdateSorterInvoke()
@@ -3148,7 +3131,7 @@ namespace EcfFileViews
                 ElementProperties.Nodes.Add(BuildValueNode(TitleRecources.Generic_DataType, block.DataType, false));
                 ElementProperties.Nodes.Add(BuildValueNode(TitleRecources.Generic_PostMark, block.PostMark, true));
                 ElementProperties.Nodes.Add(BuildValueNode(TitleRecources.Generic_Inherited,
-                    block.Inheritor != null ? block.Inheritor.BuildIdentification() : TitleRecources.Generic_No, false));
+                    block.Inheritor != null ? block.Inheritor.BuildRootId() : TitleRecources.Generic_No, false));
             }
             private void BuildParameterDefinitionNode(EcfParameter parameter)
             {
@@ -4683,29 +4666,29 @@ namespace EcfToolBarControls
         }
     }
     public class EcfToolBarLabel : Label
-{
-    public bool IsForcingBoldStyle { get; }
-
-    public EcfToolBarLabel(string text, bool forceBold) : base()
     {
-        Text = text;
-        IsForcingBoldStyle = forceBold;
+        public bool IsForcingBoldStyle { get; }
 
-        SetStyle(ControlStyles.Selectable, false);
-        TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
-        FontChanged += ToolBarLabel_FontChanged;
-
-        OnFontChanged(null);
-    }
-
-    private void ToolBarLabel_FontChanged(object sender, EventArgs evt)
-    {
-        if (IsForcingBoldStyle)
+        public EcfToolBarLabel(string text, bool forceBold) : base()
         {
-            Font = new Font(Font, FontStyle.Bold);
+            Text = text;
+            IsForcingBoldStyle = forceBold;
+
+            SetStyle(ControlStyles.Selectable, false);
+            TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            FontChanged += ToolBarLabel_FontChanged;
+
+            OnFontChanged(null);
         }
-    }
+
+        private void ToolBarLabel_FontChanged(object sender, EventArgs evt)
+        {
+            if (IsForcingBoldStyle)
+            {
+                Font = new Font(Font, FontStyle.Bold);
+            }
+        }
 }
 }
 

@@ -209,7 +209,11 @@ namespace EgsEcfParser
                 public static string XChapterBlockParameters { get; } = "BlockParameters";
                 public static string XChapterParameterAttributes { get; } = "ParameterAttributes";
 
-                public static string XElementDefinesIngredients { get; } = "DefinesIngredients";
+                public static string XElementBlockIdAttribute { get; } = "BlockIdAttribute";
+                public static string XElementBlockNameAttribute { get; } = "BlockNameAttribute";
+                public static string XElementBlockReferenceSourceAttribute { get; } = "BlockReferenceSourceAttribute";
+                public static string XElementBlockReferenceTargetAttribute { get; } = "BlockReferenceTargetAttribute";
+                public static string XElementDefinesItems { get; } = "DefinesItems";
                 public static string XElementDefinesTemplates { get; } = "DefinesTemplates";
                 public static string XElementSingleLineCommentStart { get; } = "SingleLineCommentStart";
                 public static string XElementMultiLineCommentPair { get; } = "MultiLineCommentPair";
@@ -221,9 +225,6 @@ namespace EgsEcfParser
                 public static string XElementValueGroupSeperator { get; } = "ValueGroupSeperator";
                 public static string XElementValueFractionalSeperator { get; } = "ValueFractionalSeperator";
                 public static string XElementMagicSpacer { get; } = "MagicSpacer";
-                public static string XElementBlockIdentificationAttribute { get; } = "BlockIdentificationAttribute";
-                public static string XElementBlockReferenceSourceAttribute { get; } = "BlockReferenceSourceAttribute";
-                public static string XElementBlockReferenceTargetAttribute { get; } = "BlockReferenceTargetAttribute";
                 public static string XElementEscapeIdentifierPair { get; } = "EscapeIdentifierPair";
                 public static string XElementParamter { get; } = "Param";
 
@@ -305,7 +306,15 @@ namespace EgsEcfParser
             private static FormatDefinition BuildFormatDefinition(XmlNode configNode, string filePathAndName, string gameMode, string fileType)
             {
                 XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
-                bool isDefiningIngredients = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesIngredients)?
+                string blockIdAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockIdAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockNameAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockNameAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceSourceAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceTargetAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool isDefiningItems = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesItems)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 bool isDefiningTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
@@ -334,12 +343,6 @@ namespace EgsEcfParser
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 string magicSpacer = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementMagicSpacer)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockIdentificationAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockIdentificationAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceSourceAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceTargetAttribute = RepairXmlControlLiterals(formatterNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 if (!IsKeyValid(itemSeperator)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementItemSeperator)); }
                 if (!IsKeyValid(itemValueSeperator)) { throw new ArgumentException(string.Format("Element {0} not valid", XmlSettings.XElementItemValueSeperator)); }
@@ -357,12 +360,13 @@ namespace EgsEcfParser
                 List<ItemDefinition> blockParameters = BuildItemList(configNode, XmlSettings.XChapterBlockParameters);
                 List<ItemDefinition> parameterAttributes = BuildItemList(configNode, XmlSettings.XChapterParameterAttributes);
 
-                return new FormatDefinition(filePathAndName, gameMode, fileType, isDefiningIngredients, isDefiningTemplates,
+                return new FormatDefinition(filePathAndName, gameMode, fileType,
+                    blockIdAttribute, blockNameAttribute, blockReferenceSourceAttribute, blockReferenceTargetAttribute,
+                    isDefiningItems, isDefiningTemplates,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
                     valueGroupSeperator, valueFractionalSeperator, magicSpacer,
-                    blockIdentificationAttribute, blockReferenceSourceAttribute, blockReferenceTargetAttribute,
                     blockTypePreMarks, blockTypePostMarks,
                     rootBlockTypes, rootBlockAttributes,
                     childBlockTypes, childBlockAttributes,
@@ -391,7 +395,11 @@ namespace EgsEcfParser
                     writer.WriteComment("Content Altering Function Settings");
                     {
                         writer.WriteStartElement(XmlSettings.XChapterContentAltering);
-                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesIngredients, "true");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockIdAttribute, "Id");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockNameAttribute, "Name");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceSourceAttribute, "Ref");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesItems, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
                         writer.WriteEndElement();
                     }
@@ -413,9 +421,6 @@ namespace EgsEcfParser
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementValueGroupSeperator, ";");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementValueFractionalSeperator, ".");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementMagicSpacer, " ");
-                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockIdentificationAttribute, "Id");
-                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceSourceAttribute, "Ref");
-                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
                         writer.WriteComment("Copy Parameter if more needed, First is used at file write");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementSingleLineCommentStart, "#");
                         CreateXmlPairValueItem(writer, XmlSettings.XElementBlockIdentifierPair, "{", "}");
@@ -622,7 +627,7 @@ namespace EgsEcfParser
             bool isReferenced = block.RefTarget != null && blockList.Any(listedBlock => block.RefTarget.Equals(listedBlock.RefSource));
             return blockList.Where(listedBlock => !listedBlock.Equals(block) &&
                 ((block.Id?.Equals(listedBlock.Id) ?? false) || (isReferenced && block.RefTarget.Equals(listedBlock.RefTarget))))
-                .Select(listedBlock => new EcfError(errorGroup, EcfErrors.BlockIdNotUnique, listedBlock.BuildIdentification())).ToList();
+                .Select(listedBlock => new EcfError(errorGroup, EcfErrors.BlockIdNotUnique, listedBlock.BuildRootId())).ToList();
         }
         public static EcfError CheckBlockReferenceValid(EcfBlock block, List<EcfBlock> blockList, out EcfBlock inheriter, EcfErrorGroups errorGroup)
         {
@@ -856,6 +861,23 @@ namespace EgsEcfParser
                 return new EcfBlock(block);
             }
             return null;
+        }
+        public static List<EcfBlock> GetTemplateListByIngredient(List<EgsEcfFile> files, EcfBlock ingredientItem)
+        {
+            return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => 
+                    template.GetDeepChildList<EcfParameter>().Any(parameter =>
+                        parameter.Key.Equals(ingredientItem.Name))
+                )).ToList();
+        }
+        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template)
+        {
+            return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
+                    string.Equals(item.Name, template.Name) ||
+                    (item.HasParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, out EcfParameter parameter) &&
+                    parameter.ContainsValue(template.Name))
+                )).ToList();
         }
     }
 
@@ -1112,7 +1134,7 @@ namespace EgsEcfParser
             }
             else
             {
-                block.AddError(new EcfError(EcfErrorGroups.Creating, EcfErrors.BlockNotCreateable, block.BuildIdentification()));
+                block.AddError(new EcfError(EcfErrorGroups.Creating, EcfErrors.BlockNotCreateable, block.BuildRootId()));
             }
         }
         private void CreateBlockStartLine(StreamWriter writer, EcfBlock block, int indent)
@@ -2547,6 +2569,7 @@ namespace EgsEcfParser
         public string PostMark { get; private set; }
 
         public string Id { get; private set; } = null;
+        public string Name { get; private set; } = null;
         public string RefTarget { get; private set; } = null;
         public string RefSource { get; private set; } = null;
         public EcfBlock Inheritor { get; set; } = null;
@@ -2619,7 +2642,7 @@ namespace EgsEcfParser
         public override string ToString()
         {
             return string.Format("{0}: {1}, name: {2}, childs: {3}, attributes: {4}, errors: {5}",
-                DefaultName, DataType, GetAttributeFirstValue("Name"), ChildItems.Count.ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
+                DefaultName, DataType, Name, ChildItems.Count.ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
         }
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
@@ -2667,7 +2690,7 @@ namespace EgsEcfParser
                 {
                     name.Insert(0, " / ");
                 }
-                name.Insert(0, item.BuildIdentification());
+                name.Insert(0, item.BuildRootId());
                 item = item.Parent as EcfBlock;
             }
             return name.ToString();
@@ -2940,7 +2963,7 @@ namespace EgsEcfParser
             }
             return Inheritor?.IsInheritingParameter(paramName, out parameter) ?? false;
         }
-        public string BuildIdentification()
+        public string BuildRootId()
         {
             StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
             if (!IsRoot())
@@ -3019,9 +3042,13 @@ namespace EgsEcfParser
             FormatDefinition definition = EcfFile?.Definition;
             if (definition != null)
             {
-                if (attribute.Key.Equals(definition.BlockIdentificationAttribute))
+                if (attribute.Key.Equals(definition.BlockIdAttribute))
                 {
                     Id = attribute.GetFirstValue();
+                }
+                else if (attribute.Key.Equals(definition.BlockNameAttribute))
+                {
+                    Name = attribute.GetFirstValue();
                 }
                 else if (attribute.Key.Equals(definition.BlockReferenceTargetAttribute))
                 {
@@ -3035,7 +3062,8 @@ namespace EgsEcfParser
         }
         private void UpdateIdentification()
         {
-            Id = GetAttributeFirstValue(EcfFile?.Definition.BlockIdentificationAttribute);
+            Id = GetAttributeFirstValue(EcfFile?.Definition.BlockIdAttribute);
+            Name = GetAttributeFirstValue(EcfFile?.Definition.BlockNameAttribute);
             RefTarget = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceTargetAttribute);
             RefSource = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceSourceAttribute);
         }
@@ -3216,7 +3244,12 @@ namespace EgsEcfParser
         public string GameMode { get; }
         public string FileType { get; }
 
-        public bool IsDefiningIngredients { get; }
+        public string BlockIdAttribute { get; }
+        public string BlockNameAttribute { get; }
+        public string BlockReferenceSourceAttribute { get; }
+        public string BlockReferenceTargetAttribute { get; }
+
+        public bool IsDefiningItems { get; }
         public bool IsDefiningTemplates { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
@@ -3231,9 +3264,6 @@ namespace EgsEcfParser
         public string ValueGroupSeperator { get; }
         public string ValueFractionalSeperator { get; }
         public string MagicSpacer { get; }
-        public string BlockIdentificationAttribute { get; }
-        public string BlockReferenceSourceAttribute { get; }
-        public string BlockReferenceTargetAttribute { get; }
 
         public ReadOnlyCollection<string> ProhibitedValuePhrases { get; }
 
@@ -3250,12 +3280,13 @@ namespace EgsEcfParser
         public StringPairDefinition WritingBlockIdentifierPair { get;}
         public StringPairDefinition WritingEscapeIdentifiersPair { get; }
 
-        public FormatDefinition(string filePathAndName, string gameMode, string fileType, bool isDefiningIngredients, bool isDefiningTemplates,
+        public FormatDefinition(string filePathAndName, string gameMode, string fileType,
+            string blockIdAttribute, string blockNameAttribute, string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
+            bool isDefiningItems, bool isDefiningTemplates,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
             string valueGroupSeperator, string valueFractionalSeperator, string magicSpacer,
-            string blockIdentificationAttribute, string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
             List<BlockValueDefinition> blockTypePreMarks, List<BlockValueDefinition> blockTypePostMarks,
             List<BlockValueDefinition> rootBlockTypes, List<ItemDefinition> rootBlockAttributes,
             List<BlockValueDefinition> childBlockTypes, List<ItemDefinition> childBlockAttributes,
@@ -3265,7 +3296,11 @@ namespace EgsEcfParser
             GameMode = gameMode;
             FileType = fileType;
 
-            IsDefiningIngredients = isDefiningIngredients;
+            BlockIdAttribute = blockIdAttribute;
+            BlockNameAttribute = blockNameAttribute;
+            BlockReferenceSourceAttribute = blockReferenceSourceAttribute;
+            BlockReferenceTargetAttribute = blockReferenceTargetAttribute;
+            IsDefiningItems = isDefiningItems;
             IsDefiningTemplates = isDefiningTemplates;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
@@ -3280,9 +3315,6 @@ namespace EgsEcfParser
             ValueGroupSeperator = valueGroupSeperator;
             ValueFractionalSeperator = valueFractionalSeperator;
             MagicSpacer = magicSpacer;
-            BlockIdentificationAttribute = blockIdentificationAttribute;
-            BlockReferenceSourceAttribute = blockReferenceSourceAttribute;
-            BlockReferenceTargetAttribute = blockReferenceTargetAttribute;
 
             HashSet<string> prohibitedPhrases = new HashSet<string>();
             foreach (string start in SingleLineCommentStarts) { prohibitedPhrases.Add(start); }
@@ -3312,7 +3344,11 @@ namespace EgsEcfParser
             GameMode = template.GameMode;
             FileType = template.FileType;
 
-            IsDefiningIngredients = template.IsDefiningIngredients;
+            BlockIdAttribute = template.BlockIdAttribute;
+            BlockNameAttribute = template.BlockNameAttribute;
+            BlockReferenceSourceAttribute = template.BlockReferenceSourceAttribute;
+            BlockReferenceTargetAttribute = template.BlockReferenceTargetAttribute;
+            IsDefiningItems = template.IsDefiningItems;
             IsDefiningTemplates = template.IsDefiningTemplates;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
@@ -3327,9 +3363,6 @@ namespace EgsEcfParser
             ValueGroupSeperator = template.ValueGroupSeperator;
             ValueFractionalSeperator = template.ValueFractionalSeperator;
             MagicSpacer = template.MagicSpacer;
-            BlockIdentificationAttribute = template.BlockIdentificationAttribute;
-            BlockReferenceSourceAttribute = template.BlockReferenceSourceAttribute;
-            BlockReferenceTargetAttribute = template.BlockReferenceTargetAttribute;
 
             ProhibitedValuePhrases = template.ProhibitedValuePhrases.ToList().AsReadOnly();
 

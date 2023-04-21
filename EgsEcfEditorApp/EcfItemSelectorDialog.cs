@@ -145,7 +145,7 @@ namespace EcfFileViews
                 {
                     case EcfAttribute attr: return attr.Key;
                     case EcfParameter param: return param.Key;
-                    case EcfBlock block: return block.BuildIdentification();
+                    case EcfBlock block: return block.BuildRootId();
                     default: return string.Format("\"{0}\"", Convert.ToString(item));
                 }
             }

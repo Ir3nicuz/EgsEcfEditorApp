@@ -70,7 +70,7 @@ namespace EgsEcfEditorApp
         public DialogResult ShowDialog(IWin32Window parent, EcfBlock actualElement, List<EcfBlock> availableElements, int unlockLevel, int unlockCost)
         {
             SelectedElement = actualElement;
-            ElementNameTextBox.Text = SelectedElement?.BuildIdentification() ?? string.Empty;
+            ElementNameTextBox.Text = SelectedElement?.BuildRootId() ?? string.Empty;
             UnlockLevelNumUpDown.Value = unlockLevel;
             UnlockCostNumUpDown.Value = unlockCost;
 
@@ -96,7 +96,7 @@ namespace EgsEcfEditorApp
         private void SetSelectedElement(EcfBlock element)
         {
             SelectedElement = element;
-            ElementNameTextBox.Text = element?.BuildIdentification() ?? string.Empty;
+            ElementNameTextBox.Text = element?.BuildRootId() ?? string.Empty;
         }
     }
 }

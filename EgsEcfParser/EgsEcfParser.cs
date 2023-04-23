@@ -624,22 +624,24 @@ namespace EgsEcfParser
         }
         public static List<EcfError> CheckBlockUniqueness(EcfBlock block, List<EcfBlock> blockList, EcfErrorGroups errorGroup)
         {
-            bool isReferenced = block.RefTarget != null && blockList.Any(listedBlock => block.RefTarget.Equals(listedBlock.RefSource));
+            string idValue = block.GetId();
+            string refTargetValue = block.GetRefTarget();
+            bool isReferenced = refTargetValue != null && blockList.Any(listedBlock => refTargetValue.Equals(listedBlock.GetRefSource()));
             return blockList.Where(listedBlock => !listedBlock.Equals(block) &&
-                ((block.Id?.Equals(listedBlock.Id) ?? false) || (isReferenced && block.RefTarget.Equals(listedBlock.RefTarget))))
+                ((idValue?.Equals(listedBlock.GetId()) ?? false) || (isReferenced && refTargetValue.Equals(listedBlock.GetRefTarget()))))
                 .Select(listedBlock => new EcfError(errorGroup, EcfErrors.BlockIdNotUnique, listedBlock.BuildRootId())).ToList();
         }
         public static EcfError CheckBlockReferenceValid(EcfBlock block, List<EcfBlock> blockList, out EcfBlock inheriter, EcfErrorGroups errorGroup)
         {
-            string reference = block.RefSource;
-            if (reference == null) {
+            string referenceValue = block.GetRefSource();
+            if (referenceValue == null) {
                 inheriter = null;
                 return null; 
             }
-            inheriter = blockList.FirstOrDefault(parentBlock => parentBlock.RefTarget?.Equals(reference) ?? false);
+            inheriter = blockList.FirstOrDefault(parentBlock => parentBlock.GetRefTarget()?.Equals(referenceValue) ?? false);
             if (inheriter == null)
             {
-                return new EcfError(errorGroup, EcfErrors.BlockInheritorMissing, reference);
+                return new EcfError(errorGroup, EcfErrors.BlockInheritorMissing, referenceValue);
             }
             return null;
         }
@@ -864,19 +866,21 @@ namespace EgsEcfParser
         }
         public static List<EcfBlock> GetTemplateListByIngredient(List<EgsEcfFile> files, EcfBlock ingredientItem)
         {
+            string nameValue = ingredientItem.GetName();
             return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => 
                     template.GetDeepChildList<EcfParameter>().Any(parameter =>
-                        parameter.Key.Equals(ingredientItem.Name))
+                        parameter.Key.Equals(nameValue))
                 )).ToList();
         }
         public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template)
         {
+            string nameValue = template.GetName();
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
-                    string.Equals(item.Name, template.Name) ||
-                    (item.HasParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, out EcfParameter parameter) &&
-                    parameter.ContainsValue(template.Name))
+                    string.Equals(item.GetName(), nameValue) ||
+                    (item.HasParameter("TemplateRoot", out EcfParameter parameter) &&
+                    parameter.ContainsValue(nameValue))
                 )).ToList();
         }
     }
@@ -2568,10 +2572,6 @@ namespace EgsEcfParser
         public string DataType { get; private set; }
         public string PostMark { get; private set; }
 
-        public string Id { get; private set; } = null;
-        public string Name { get; private set; } = null;
-        public string RefTarget { get; private set; } = null;
-        public string RefSource { get; private set; } = null;
         public EcfBlock Inheritor { get; set; } = null;
 
         public string OpenerLineParsingData { get; set; } = null;
@@ -2620,9 +2620,6 @@ namespace EgsEcfParser
             DataType = template.DataType;
             PostMark = template.PostMark;
 
-            Id = template.Id;
-            RefTarget = template.RefTarget;
-            RefSource = template.RefSource;
             Inheritor = template.Inheritor;
 
             OpenerLineParsingData = template.OpenerLineParsingData;
@@ -2633,6 +2630,22 @@ namespace EgsEcfParser
         }
 
         // publics
+        public string GetId()
+        {
+            return GetAttributeFirstValue(EcfFile?.Definition.BlockIdAttribute);
+        }
+        public string GetName()
+        {
+            return GetAttributeFirstValue(EcfFile?.Definition.BlockNameAttribute);
+        }
+        public string GetRefTarget()
+        {
+            return GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceTargetAttribute);
+        }
+        public string GetRefSource()
+        {
+            return GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceSourceAttribute);
+        }
         public void UpdateTypeData(string preMark, string blockType, string postMark)
         {
             PreMark = preMark;
@@ -2642,7 +2655,7 @@ namespace EgsEcfParser
         public override string ToString()
         {
             return string.Format("{0}: {1}, name: {2}, childs: {3}, attributes: {4}, errors: {5}",
-                DefaultName, DataType, Name, ChildItems.Count.ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
+                DefaultName, DataType, GetName(), ChildItems.Count.ToString(), Attributes.Count.ToString(), Errors.Count.ToString());
         }
         public override List<EcfError> GetDeepErrorList(bool includeStructure)
         {
@@ -2735,7 +2748,7 @@ namespace EgsEcfParser
             RemoveErrors(EcfErrors.BlockInheritorMissing);
             if (Inheritor != null && !blockList.Contains(Inheritor))
             {
-                return AddError(new EcfError(EcfErrorGroups.Editing, EcfErrors.BlockInheritorMissing, RefSource));
+                return AddError(new EcfError(EcfErrorGroups.Editing, EcfErrors.BlockInheritorMissing, GetRefSource()));
             }
             return true;
         }
@@ -2880,7 +2893,6 @@ namespace EgsEcfParser
             if (attribute != null)
             {
                 attribute.UpdateStructureData(EcfFile, this, StructureLevel);
-                SetIdentification(attribute);
                 InternalAttributes.Add(attribute);
                 EcfFile?.SetUnsavedDataFlag();
                 return true;
@@ -3029,7 +3041,6 @@ namespace EgsEcfParser
         public void ClearAttributes()
         {
             InternalAttributes.Clear();
-            UpdateIdentification();
         }
         public bool IsParsingRawDataUseable()
         {
@@ -3037,36 +3048,6 @@ namespace EgsEcfParser
         }
 
         // private
-        private void SetIdentification(EcfAttribute attribute)
-        {
-            FormatDefinition definition = EcfFile?.Definition;
-            if (definition != null)
-            {
-                if (attribute.Key.Equals(definition.BlockIdAttribute))
-                {
-                    Id = attribute.GetFirstValue();
-                }
-                else if (attribute.Key.Equals(definition.BlockNameAttribute))
-                {
-                    Name = attribute.GetFirstValue();
-                }
-                else if (attribute.Key.Equals(definition.BlockReferenceTargetAttribute))
-                {
-                    RefTarget = attribute.GetFirstValue();
-                }
-                else if (attribute.Key.Equals(definition.BlockReferenceSourceAttribute))
-                {
-                    RefSource = attribute.GetFirstValue();
-                }
-            }
-        }
-        private void UpdateIdentification()
-        {
-            Id = GetAttributeFirstValue(EcfFile?.Definition.BlockIdAttribute);
-            Name = GetAttributeFirstValue(EcfFile?.Definition.BlockNameAttribute);
-            RefTarget = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceTargetAttribute);
-            RefSource = GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceSourceAttribute);
-        }
         protected override void OnStructureDataUpdate()
         {
             InternalAttributes.ForEach(attribute => {
@@ -3074,7 +3055,6 @@ namespace EgsEcfParser
                 attribute.UpdateDefinition(IsRoot() ? EcfFile?.Definition.RootBlockAttributes : EcfFile?.Definition.ChildBlockAttributes);
             });
             InternalChildItems.ForEach(child => child.UpdateStructureData(EcfFile, this, StructureLevel));
-            UpdateIdentification();
         }
     }
     public class EcfComment : EcfStructureItem

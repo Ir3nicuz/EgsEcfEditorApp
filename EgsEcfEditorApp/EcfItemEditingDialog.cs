@@ -275,7 +275,7 @@ namespace EcfFileViews
         private void Generic_BuildBlockCompareLists(EgsEcfFile file)
         {
             List<EcfBlock> blocks = file?.GetDeepItemList<EcfBlock>();
-            IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockIdentificationAttribute, out _)).ToList();
+            IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockIdAttribute, out _)).ToList();
             ReferencingBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceSourceAttribute, out _)).ToList();
             ReferencedBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceTargetAttribute, out _)).ToList();
             BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
@@ -1189,7 +1189,7 @@ namespace EcfFileViews
                         string value = nameRow.GetValues().FirstOrDefault();
                         if (value != null)
                         {
-                            if (referencingBlockList != null && referencingBlockList.Any(listedBlock => value.Equals(listedBlock.RefSource)))
+                            if (referencingBlockList != null && referencingBlockList.Any(listedBlock => value.Equals(listedBlock.GetRefSource())))
                             {
                                 foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
                                     && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
@@ -1234,7 +1234,7 @@ namespace EcfFileViews
                     if (sourceRefRow != null && sourceRefRow.IsActive())
                     {
                         string value = sourceRefRow.GetValues().FirstOrDefault();
-                        int targetBlockCount = referencedBlockList.Count(block => block.RefTarget.Equals(value));
+                        int targetBlockCount = referencedBlockList.Count(block => block.GetRefTarget().Equals(value));
                         if (targetBlockCount < 1)
                         {
                             errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
@@ -1396,7 +1396,7 @@ namespace EcfFileViews
                     ItemDef = definition;
                     FormDef = format;
 
-                    IsIdentification = definition.Name.Equals(format.BlockIdentificationAttribute);
+                    IsIdentification = definition.Name.Equals(format.BlockIdAttribute);
                     IsReferenceSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
                     IsReferenceTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
 

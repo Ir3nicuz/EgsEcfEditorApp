@@ -193,18 +193,6 @@ namespace EgsEcfEditorApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Name")]
-        public string EcfTechTreeDialog_AttributeKey_ReferenceName {
-            get {
-                return ((string)(this["EcfTechTreeDialog_AttributeKey_ReferenceName"]));
-            }
-            set {
-                this["EcfTechTreeDialog_AttributeKey_ReferenceName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int EcfTechTreeDialog_DefaultValue_UnlockLevel {
             get {
@@ -224,6 +212,18 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["EcfTechTreeDialog_DefaultValue_UnlockCost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("TemplateRoot")]
+        public string ItemHandlingSupport_ParameterKey_TemplateName {
+            get {
+                return ((string)(this["ItemHandlingSupport_ParameterKey_TemplateName"]));
+            }
+            set {
+                this["ItemHandlingSupport_ParameterKey_TemplateName"] = value;
             }
         }
     }

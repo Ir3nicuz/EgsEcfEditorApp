@@ -700,15 +700,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Referenced Name&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
         /// </summary>
         internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames {

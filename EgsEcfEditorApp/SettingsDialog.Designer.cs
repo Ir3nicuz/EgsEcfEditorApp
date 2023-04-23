@@ -77,14 +77,12 @@ namespace EgsEcfEditorApp
             this.TechTreeParameterKeyUnlockLevelTextBox = new System.Windows.Forms.TextBox();
             this.TechTreeParameterKeyTechTreeParentNameTextBox = new System.Windows.Forms.TextBox();
             this.TechTreeParameterKeyTechTreeNamesTextBox = new System.Windows.Forms.TextBox();
-            this.TechTreeParameterKeyReferenceNameLabel = new System.Windows.Forms.Label();
             this.TechTreeParameterKeyTechTreeNamesLabel = new System.Windows.Forms.Label();
             this.TechTreeParameterKeyTechTreeParentNameLabel = new System.Windows.Forms.Label();
             this.TechTreeParameterKeyUnlockLevelLabel = new System.Windows.Forms.Label();
             this.TechTreeDefaultValueUnlockLevelLabel = new System.Windows.Forms.Label();
             this.TechTreeParameterKeyUnlockCostLabel = new System.Windows.Forms.Label();
             this.TechTreeDefaultValueUnlockCostLabel = new System.Windows.Forms.Label();
-            this.TechTreeParameterKeyReferenceNameTextBox = new System.Windows.Forms.TextBox();
             this.TechTreeDefaultValueUnlockLevelNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
             this.InfoPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -580,26 +578,23 @@ namespace EgsEcfEditorApp
             this.TechTreePanel.ColumnCount = 2;
             this.TechTreePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TechTreePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostNumericUpDown, 1, 6);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostTextBox, 1, 5);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelTextBox, 1, 3);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameTextBox, 1, 2);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesTextBox, 1, 1);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyReferenceNameLabel, 0, 0);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesLabel, 0, 1);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameLabel, 0, 2);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelLabel, 0, 3);
-            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelLabel, 0, 4);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostLabel, 0, 5);
-            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostLabel, 0, 6);
-            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyReferenceNameTextBox, 1, 0);
-            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelNumericUpDown, 1, 4);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostNumericUpDown, 1, 5);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostTextBox, 1, 4);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelTextBox, 1, 2);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameTextBox, 1, 1);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesTextBox, 1, 0);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeNamesLabel, 0, 0);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyTechTreeParentNameLabel, 0, 1);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockLevelLabel, 0, 2);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelLabel, 0, 3);
+            this.TechTreePanel.Controls.Add(this.TechTreeParameterKeyUnlockCostLabel, 0, 4);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockCostLabel, 0, 5);
+            this.TechTreePanel.Controls.Add(this.TechTreeDefaultValueUnlockLevelNumericUpDown, 1, 3);
             this.TechTreePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TechTreePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.TechTreePanel.Location = new System.Drawing.Point(0, 0);
             this.TechTreePanel.Name = "TechTreePanel";
-            this.TechTreePanel.RowCount = 8;
-            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TechTreePanel.RowCount = 7;
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -607,13 +602,14 @@ namespace EgsEcfEditorApp
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TechTreePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TechTreePanel.Size = new System.Drawing.Size(552, 336);
             this.TechTreePanel.TabIndex = 1;
             // 
             // TechTreeDefaultValueUnlockCostNumericUpDown
             // 
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeDefaultValueUnlockCostNumericUpDown.Location = new System.Drawing.Point(279, 159);
+            this.TechTreeDefaultValueUnlockCostNumericUpDown.Location = new System.Drawing.Point(279, 133);
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Name = "TechTreeDefaultValueUnlockCostNumericUpDown";
             this.TechTreeDefaultValueUnlockCostNumericUpDown.Size = new System.Drawing.Size(270, 20);
             this.TechTreeDefaultValueUnlockCostNumericUpDown.TabIndex = 27;
@@ -622,7 +618,7 @@ namespace EgsEcfEditorApp
             // TechTreeParameterKeyUnlockCostTextBox
             // 
             this.TechTreeParameterKeyUnlockCostTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyUnlockCostTextBox.Location = new System.Drawing.Point(279, 133);
+            this.TechTreeParameterKeyUnlockCostTextBox.Location = new System.Drawing.Point(279, 107);
             this.TechTreeParameterKeyUnlockCostTextBox.Name = "TechTreeParameterKeyUnlockCostTextBox";
             this.TechTreeParameterKeyUnlockCostTextBox.Size = new System.Drawing.Size(270, 20);
             this.TechTreeParameterKeyUnlockCostTextBox.TabIndex = 26;
@@ -631,7 +627,7 @@ namespace EgsEcfEditorApp
             // TechTreeParameterKeyUnlockLevelTextBox
             // 
             this.TechTreeParameterKeyUnlockLevelTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyUnlockLevelTextBox.Location = new System.Drawing.Point(279, 81);
+            this.TechTreeParameterKeyUnlockLevelTextBox.Location = new System.Drawing.Point(279, 55);
             this.TechTreeParameterKeyUnlockLevelTextBox.Name = "TechTreeParameterKeyUnlockLevelTextBox";
             this.TechTreeParameterKeyUnlockLevelTextBox.Size = new System.Drawing.Size(270, 20);
             this.TechTreeParameterKeyUnlockLevelTextBox.TabIndex = 24;
@@ -640,7 +636,7 @@ namespace EgsEcfEditorApp
             // TechTreeParameterKeyTechTreeParentNameTextBox
             // 
             this.TechTreeParameterKeyTechTreeParentNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyTechTreeParentNameTextBox.Location = new System.Drawing.Point(279, 55);
+            this.TechTreeParameterKeyTechTreeParentNameTextBox.Location = new System.Drawing.Point(279, 29);
             this.TechTreeParameterKeyTechTreeParentNameTextBox.Name = "TechTreeParameterKeyTechTreeParentNameTextBox";
             this.TechTreeParameterKeyTechTreeParentNameTextBox.Size = new System.Drawing.Size(270, 20);
             this.TechTreeParameterKeyTechTreeParentNameTextBox.TabIndex = 23;
@@ -649,28 +645,17 @@ namespace EgsEcfEditorApp
             // TechTreeParameterKeyTechTreeNamesTextBox
             // 
             this.TechTreeParameterKeyTechTreeNamesTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyTechTreeNamesTextBox.Location = new System.Drawing.Point(279, 29);
+            this.TechTreeParameterKeyTechTreeNamesTextBox.Location = new System.Drawing.Point(279, 3);
             this.TechTreeParameterKeyTechTreeNamesTextBox.Name = "TechTreeParameterKeyTechTreeNamesTextBox";
             this.TechTreeParameterKeyTechTreeNamesTextBox.Size = new System.Drawing.Size(270, 20);
             this.TechTreeParameterKeyTechTreeNamesTextBox.TabIndex = 22;
             this.TechTreeParameterKeyTechTreeNamesTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyTechTreeNamesTextBox_TextChanged);
             // 
-            // TechTreeParameterKeyReferenceNameLabel
-            // 
-            this.TechTreeParameterKeyReferenceNameLabel.AutoSize = true;
-            this.TechTreeParameterKeyReferenceNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyReferenceNameLabel.Location = new System.Drawing.Point(3, 0);
-            this.TechTreeParameterKeyReferenceNameLabel.Name = "TechTreeParameterKeyReferenceNameLabel";
-            this.TechTreeParameterKeyReferenceNameLabel.Size = new System.Drawing.Size(270, 26);
-            this.TechTreeParameterKeyReferenceNameLabel.TabIndex = 0;
-            this.TechTreeParameterKeyReferenceNameLabel.Text = "ref name key";
-            this.TechTreeParameterKeyReferenceNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // TechTreeParameterKeyTechTreeNamesLabel
             // 
             this.TechTreeParameterKeyTechTreeNamesLabel.AutoSize = true;
             this.TechTreeParameterKeyTechTreeNamesLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyTechTreeNamesLabel.Location = new System.Drawing.Point(3, 26);
+            this.TechTreeParameterKeyTechTreeNamesLabel.Location = new System.Drawing.Point(3, 0);
             this.TechTreeParameterKeyTechTreeNamesLabel.Name = "TechTreeParameterKeyTechTreeNamesLabel";
             this.TechTreeParameterKeyTechTreeNamesLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeParameterKeyTechTreeNamesLabel.TabIndex = 1;
@@ -681,7 +666,7 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeParameterKeyTechTreeParentNameLabel.AutoSize = true;
             this.TechTreeParameterKeyTechTreeParentNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyTechTreeParentNameLabel.Location = new System.Drawing.Point(3, 52);
+            this.TechTreeParameterKeyTechTreeParentNameLabel.Location = new System.Drawing.Point(3, 26);
             this.TechTreeParameterKeyTechTreeParentNameLabel.Name = "TechTreeParameterKeyTechTreeParentNameLabel";
             this.TechTreeParameterKeyTechTreeParentNameLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeParameterKeyTechTreeParentNameLabel.TabIndex = 2;
@@ -692,7 +677,7 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeParameterKeyUnlockLevelLabel.AutoSize = true;
             this.TechTreeParameterKeyUnlockLevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyUnlockLevelLabel.Location = new System.Drawing.Point(3, 78);
+            this.TechTreeParameterKeyUnlockLevelLabel.Location = new System.Drawing.Point(3, 52);
             this.TechTreeParameterKeyUnlockLevelLabel.Name = "TechTreeParameterKeyUnlockLevelLabel";
             this.TechTreeParameterKeyUnlockLevelLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeParameterKeyUnlockLevelLabel.TabIndex = 3;
@@ -703,7 +688,7 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeDefaultValueUnlockLevelLabel.AutoSize = true;
             this.TechTreeDefaultValueUnlockLevelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeDefaultValueUnlockLevelLabel.Location = new System.Drawing.Point(3, 104);
+            this.TechTreeDefaultValueUnlockLevelLabel.Location = new System.Drawing.Point(3, 78);
             this.TechTreeDefaultValueUnlockLevelLabel.Name = "TechTreeDefaultValueUnlockLevelLabel";
             this.TechTreeDefaultValueUnlockLevelLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeDefaultValueUnlockLevelLabel.TabIndex = 4;
@@ -714,7 +699,7 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeParameterKeyUnlockCostLabel.AutoSize = true;
             this.TechTreeParameterKeyUnlockCostLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyUnlockCostLabel.Location = new System.Drawing.Point(3, 130);
+            this.TechTreeParameterKeyUnlockCostLabel.Location = new System.Drawing.Point(3, 104);
             this.TechTreeParameterKeyUnlockCostLabel.Name = "TechTreeParameterKeyUnlockCostLabel";
             this.TechTreeParameterKeyUnlockCostLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeParameterKeyUnlockCostLabel.TabIndex = 5;
@@ -725,26 +710,17 @@ namespace EgsEcfEditorApp
             // 
             this.TechTreeDefaultValueUnlockCostLabel.AutoSize = true;
             this.TechTreeDefaultValueUnlockCostLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeDefaultValueUnlockCostLabel.Location = new System.Drawing.Point(3, 156);
+            this.TechTreeDefaultValueUnlockCostLabel.Location = new System.Drawing.Point(3, 130);
             this.TechTreeDefaultValueUnlockCostLabel.Name = "TechTreeDefaultValueUnlockCostLabel";
             this.TechTreeDefaultValueUnlockCostLabel.Size = new System.Drawing.Size(270, 26);
             this.TechTreeDefaultValueUnlockCostLabel.TabIndex = 6;
             this.TechTreeDefaultValueUnlockCostLabel.Text = "unlock cost default value";
             this.TechTreeDefaultValueUnlockCostLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // TechTreeParameterKeyReferenceNameTextBox
-            // 
-            this.TechTreeParameterKeyReferenceNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeParameterKeyReferenceNameTextBox.Location = new System.Drawing.Point(279, 3);
-            this.TechTreeParameterKeyReferenceNameTextBox.Name = "TechTreeParameterKeyReferenceNameTextBox";
-            this.TechTreeParameterKeyReferenceNameTextBox.Size = new System.Drawing.Size(270, 20);
-            this.TechTreeParameterKeyReferenceNameTextBox.TabIndex = 21;
-            this.TechTreeParameterKeyReferenceNameTextBox.TextChanged += new System.EventHandler(this.TechTreeParameterKeyReferenceNameTextBox_TextChanged);
-            // 
             // TechTreeDefaultValueUnlockLevelNumericUpDown
             // 
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Location = new System.Drawing.Point(279, 107);
+            this.TechTreeDefaultValueUnlockLevelNumericUpDown.Location = new System.Drawing.Point(279, 81);
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Name = "TechTreeDefaultValueUnlockLevelNumericUpDown";
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.Size = new System.Drawing.Size(270, 20);
             this.TechTreeDefaultValueUnlockLevelNumericUpDown.TabIndex = 25;
@@ -1038,7 +1014,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.ToolTip Tip;
         private System.Windows.Forms.TabPage TechTreeTabPage;
         private System.Windows.Forms.TableLayoutPanel TechTreePanel;
-        private System.Windows.Forms.Label TechTreeParameterKeyReferenceNameLabel;
         private System.Windows.Forms.TextBox TechTreeParameterKeyUnlockCostTextBox;
         private System.Windows.Forms.TextBox TechTreeParameterKeyUnlockLevelTextBox;
         private System.Windows.Forms.TextBox TechTreeParameterKeyTechTreeParentNameTextBox;
@@ -1049,7 +1024,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Label TechTreeDefaultValueUnlockLevelLabel;
         private System.Windows.Forms.Label TechTreeParameterKeyUnlockCostLabel;
         private System.Windows.Forms.Label TechTreeDefaultValueUnlockCostLabel;
-        private System.Windows.Forms.TextBox TechTreeParameterKeyReferenceNameTextBox;
         private System.Windows.Forms.NumericUpDown TechTreeDefaultValueUnlockCostNumericUpDown;
         private System.Windows.Forms.NumericUpDown TechTreeDefaultValueUnlockLevelNumericUpDown;
     }

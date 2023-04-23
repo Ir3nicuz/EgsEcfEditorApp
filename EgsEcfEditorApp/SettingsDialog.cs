@@ -148,15 +148,6 @@ namespace EgsEcfEditorApp
                 Convert.ToInt32(ErrorViewSorterInitCountComboBox.SelectedItem);
             HasUnsavedData = true;
         }
-        private void TechTreeParameterKeyReferenceNameTextBox_TextChanged(object sender, EventArgs evt)
-        {
-            if (!PresetRunning)
-            {
-                UserSettings.Default.EcfTechTreeDialog_AttributeKey_ReferenceName =
-                    TechTreeParameterKeyReferenceNameTextBox.Text;
-                HasUnsavedData = true;
-            }
-        }
         private void TechTreeParameterKeyTechTreeNamesTextBox_TextChanged(object sender, EventArgs evt)
         {
             if (!PresetRunning)
@@ -278,7 +269,6 @@ namespace EgsEcfEditorApp
         {
             ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_TechTreePanel_Header;
 
-            TechTreeParameterKeyReferenceNameLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName;
             TechTreeParameterKeyTechTreeNamesLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames;
             TechTreeParameterKeyTechTreeParentNameLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName;
             TechTreeParameterKeyUnlockLevelLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel;
@@ -286,7 +276,6 @@ namespace EgsEcfEditorApp
             TechTreeParameterKeyUnlockCostLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost;
             TechTreeDefaultValueUnlockCostLabel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost;
 
-            Tip.SetToolTip(TechTreeParameterKeyReferenceNameTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyReferenceName);
             Tip.SetToolTip(TechTreeParameterKeyTechTreeNamesTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames);
             Tip.SetToolTip(TechTreeParameterKeyTechTreeParentNameTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName);
             Tip.SetToolTip(TechTreeParameterKeyUnlockLevelTextBox, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel);
@@ -415,7 +404,6 @@ namespace EgsEcfEditorApp
         }
         private void PresetTechTreePanel()
         {
-            TechTreeParameterKeyReferenceNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_AttributeKey_ReferenceName;
             TechTreeParameterKeyTechTreeNamesTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
             TechTreeParameterKeyTechTreeParentNameTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName;
             TechTreeParameterKeyUnlockLevelTextBox.Text = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;

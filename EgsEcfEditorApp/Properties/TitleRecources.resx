@@ -330,9 +330,6 @@
   <data name="EcfSettingsDialog_TechTreePanel_Header" xml:space="preserve">
     <value>Tech Tree</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyReferenceName" xml:space="preserve">
-    <value>Parameter Key 'Referenced Name'</value>
-  </data>
   <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames" xml:space="preserve">
     <value>Parameter Key 'Tech Tree Names'</value>
   </data>

@@ -312,9 +312,6 @@
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>Wenn aktiviert, werden auch Elemente mit mindestens einem fehlerhaften Unterelement nicht gespeichert</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyReferenceName" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels der für die Elementbenennung und übergeordnete Referenzierung verwendet wird</value>
-  </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
     <value>Der Name des Parameterschlüssels der die Namen der Technologiebäume, zu denen das Element gehört, enthält</value>
   </data>

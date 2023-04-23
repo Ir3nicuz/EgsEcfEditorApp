@@ -615,7 +615,8 @@ namespace EgsEcfEditorApp
         }
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
-            List<EcfBlock> itemList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), sourceTemplate);
+            List<EcfBlock> itemList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
+                sourceTemplate, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             EcfItemListingView itemView = new EcfItemListingView();
             itemView.ItemRowClicked += ItemListingView_ItemRowClicked;
             itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildRootId()), itemList);

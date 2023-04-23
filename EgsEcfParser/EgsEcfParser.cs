@@ -198,6 +198,7 @@ namespace EgsEcfParser
                 public static string XChapterRoot { get; } = "Settings";
 
                 public static string XChapterFileConfig { get; } = "Config";
+                public static string XChapterContentLinking { get; } = "ContentLinking";
                 public static string XChapterContentAltering { get; } = "ContentAltering";
                 public static string XChapterFormatting { get; } = "Formatting";
                 public static string XChapterBlockTypePreMarks { get; } = "BlockTypePreMarks";
@@ -305,18 +306,22 @@ namespace EgsEcfParser
             }
             private static FormatDefinition BuildFormatDefinition(XmlNode configNode, string filePathAndName, string gameMode, string fileType)
             {
+                XmlNode contentLinkingNode = configNode.SelectSingleNode(XmlSettings.XChapterContentLinking);
+                if (contentLinkingNode == null) { throw new ArgumentException(string.Format("Chapter {0} not found", XmlSettings.XChapterContentLinking)); }
+                string blockIdAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockIdAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockNameAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockNameAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceSourceAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                string blockReferenceTargetAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+
                 XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
-                string blockIdAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockIdAttribute)?
+                if (contentAlteringNode == null) { throw new ArgumentException(string.Format("Chapter {0} not found", XmlSettings.XChapterContentAltering)); }
+                bool isDefiningItems = Convert.ToBoolean(contentAlteringNode.SelectSingleNode(XmlSettings.XElementDefinesItems)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockNameAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockNameAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceSourceAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockReferenceSourceAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                string blockReferenceTargetAttribute = RepairXmlControlLiterals(contentAlteringNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                bool isDefiningItems = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesItems)?
-                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                bool isDefiningTemplates = Convert.ToBoolean(contentAlteringNode?.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
+                bool isDefiningTemplates = Convert.ToBoolean(contentAlteringNode.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
@@ -391,14 +396,20 @@ namespace EgsEcfParser
                     writer.WriteStartElement(XmlSettings.XChapterFileConfig);
                     writer.WriteAttributeString(XmlSettings.XAttributeMode, "Vanilla");
                     writer.WriteAttributeString(XmlSettings.XAttributeType, "BlocksConfig");
-                    // Content Altering Function Settings
-                    writer.WriteComment("Content Altering Function Settings");
+                    // Content Linking Settings
+                    writer.WriteComment("Content Linking Settings");
                     {
-                        writer.WriteStartElement(XmlSettings.XChapterContentAltering);
+                        writer.WriteStartElement(XmlSettings.XChapterContentLinking);
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockIdAttribute, "Id");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockNameAttribute, "Name");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceSourceAttribute, "Ref");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
+                        writer.WriteEndElement();
+                    }
+                    // Content Altering Function Settings
+                    writer.WriteComment("Content Altering Function Settings");
+                    {
+                        writer.WriteStartElement(XmlSettings.XChapterContentAltering);
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesItems, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
                         writer.WriteEndElement();
@@ -869,18 +880,16 @@ namespace EgsEcfParser
             string nameValue = ingredientItem.GetName();
             return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => 
-                    template.GetDeepChildList<EcfParameter>().Any(parameter =>
-                        parameter.Key.Equals(nameValue))
+                    template.GetDeepChildList<EcfParameter>().Any(parameter => parameter.Key.Equals(nameValue))
                 )).ToList();
         }
-        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template)
+        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template, string templateParameterName)
         {
             string nameValue = template.GetName();
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
                     string.Equals(item.GetName(), nameValue) ||
-                    (item.HasParameter("TemplateRoot", out EcfParameter parameter) &&
-                    parameter.ContainsValue(nameValue))
+                    (item.HasParameter(templateParameterName, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
                 )).ToList();
         }
     }

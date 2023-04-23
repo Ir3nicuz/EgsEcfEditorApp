@@ -646,15 +646,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which will be used for element naming and parent referencing.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyReferenceName {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyReferenceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the names of the trees the element belongs to.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames {

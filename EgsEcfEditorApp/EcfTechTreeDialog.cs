@@ -974,7 +974,7 @@ namespace EgsEcfEditorApp
             }
             private void UpdateElementName()
             {
-                string elementName = Element.GetAttributeFirstValue(UserSettings.Default.EcfTechTreeDialog_AttributeKey_ReferenceName);
+                string elementName = Element.GetName();
                 ElementName = elementName ?? TitleRecources.Generic_Replacement_Empty;
                 ToolTip = Element?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty;
             }

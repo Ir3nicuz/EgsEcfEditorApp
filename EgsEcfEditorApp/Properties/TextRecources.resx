@@ -312,9 +312,6 @@
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>If activated, items with at least one invalid sub item will not be saved</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyReferenceName" xml:space="preserve">
-    <value>The name of the parameter key which will be used for element naming and parent referencing</value>
-  </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
     <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
   </data>

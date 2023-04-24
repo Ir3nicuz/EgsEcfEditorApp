@@ -879,8 +879,8 @@ namespace EgsEcfParser
         {
             string nameValue = ingredientItem.GetName();
             return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
-                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => 
-                    template.GetDeepChildList<EcfParameter>().Any(parameter => parameter.Key.Equals(nameValue))
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template =>
+                    template.HasParameter(nameValue, true, out _)
                 )).ToList();
         }
         public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template, string templateParameterName)
@@ -889,7 +889,19 @@ namespace EgsEcfParser
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
                     string.Equals(item.GetName(), nameValue) ||
-                    (item.HasParameter(templateParameterName, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
+                    (item.HasParameter(nameValue, true, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
+                )).ToList();
+        }
+        public static List<EcfBlock> GetTemplateListByUser(List<EgsEcfFile> files, EcfBlock usingItem, string templateParameterName)
+        {
+            string nameValue = usingItem.GetName();
+            string templateNameValue = usingItem.GetParameterFirstValue(templateParameterName);
+            return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template =>
+                {
+                    string templateName = template.GetName();
+                    return string.Equals(templateName, nameValue) || string.Equals(templateName, templateNameValue);
+                }
                 )).ToList();
         }
     }
@@ -2931,11 +2943,14 @@ namespace EgsEcfParser
         }
         public string GetParameterFirstValue(string paramName)
         {
-            return GetParameterFirstValue(paramName, false);
+            return GetParameterFirstValue(paramName, true, false);
         }
-        public string GetParameterFirstValue(string paramName, bool withInheritance)
+        public string GetParameterFirstValue(string paramName, bool withInheritance, bool withSubBlocks)
         {
-            HasParameter(paramName, withInheritance, out EcfParameter parameter);
+            if (!HasParameter(paramName, withInheritance, out EcfParameter parameter) && withSubBlocks)
+            {
+                parameter = GetDeepChildList<EcfParameter>().FirstOrDefault(param => param.Key.Equals(paramName));
+            }
             return parameter?.GetFirstValue();
         }
         public bool HasParameter(string key, out EcfParameter parameter)

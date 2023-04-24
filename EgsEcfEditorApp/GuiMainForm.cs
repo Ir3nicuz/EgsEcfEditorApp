@@ -124,7 +124,7 @@ namespace EgsEcfEditorApp
             EcfTabPage tabPageToShow = FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(tab => tab.File == itemToShow.EcfFile);
             if (tabPageToShow == null)
             {
-                MessageBox.Show(this, string.Format("{0} : {1}", 
+                MessageBox.Show(this, string.Format("{0}: {1}", 
                     TextRecources.EcfItemListingView_SelectedFileNotOpened, itemToShow?.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty), 
                     TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -602,15 +602,43 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ListItemUsingTemplates: ShowItemUsingTemplates(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.ListParameterUsers: ShowParameterUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ListParameterValueUsers: ShowParameterValueUsers(evt.SourceItem as EcfParameter); break;
+                case ItemOperations.ShowLinkedTemplate: ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddToTemplateDefinition:
                 case ItemOperations.AddTemplate:
                 case ItemOperations.DeleteTemplate:
-                case ItemOperations.ShowLinkedTemplate:
 
                 default:
                     MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
+            }
+        }
+        private void ShowLinkedTemplate(EcfBlock sourceItem)
+        {
+            List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
+                sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+            if  (templateList.Count() < 1)
+            {
+                MessageBox.Show(this, string.Format("{0}: {1}",
+                    TextRecources.EcfItemListingView_NoTemplatesForItem, sourceItem.BuildRootId()),
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (templateList.Count() == 1)
+            {
+                EcfStructureItem itemToShow = templateList.FirstOrDefault();
+                EcfTabPage tabPageToShow = FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(tab => tab.File == itemToShow.EcfFile);
+                if (tabPageToShow != null)
+                {
+                    FileViewPanel.SelectedTab = tabPageToShow;
+                    tabPageToShow.ShowSpecificItem(itemToShow);
+                }
+            }
+            else
+            {
+                EcfItemListingView templateView = new EcfItemListingView();
+                templateView.ItemRowClicked += ItemListingView_ItemRowClicked;
+                templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesForItem, sourceItem.BuildRootId()), templateList);
             }
         }
         private void ShowTemplateUsers(EcfBlock sourceTemplate)

@@ -261,8 +261,14 @@
   <data name="EcfItemListingView_AllParametersWithValue" xml:space="preserve">
     <value>All Parameters with value</value>
   </data>
+  <data name="EcfItemListingView_AllTemplatesForItem" xml:space="preserve">
+    <value>All templates for item</value>
+  </data>
   <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
     <value>All templates with item</value>
+  </data>
+  <data name="EcfItemListingView_NoTemplatesForItem" xml:space="preserve">
+    <value>No templates for item</value>
   </data>
   <data name="EcfItemListingView_SelectedFileNotOpened" xml:space="preserve">
     <value>The selected file is not opened!</value>

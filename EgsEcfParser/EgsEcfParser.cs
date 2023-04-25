@@ -199,7 +199,6 @@ namespace EgsEcfParser
 
                 public static string XChapterFileConfig { get; } = "Config";
                 public static string XChapterContentLinking { get; } = "ContentLinking";
-                public static string XChapterContentAltering { get; } = "ContentAltering";
                 public static string XChapterFormatting { get; } = "Formatting";
                 public static string XChapterBlockTypePreMarks { get; } = "BlockTypePreMarks";
                 public static string XChapterBlockTypePostMarks { get; } = "BlockTypePostMarks";
@@ -241,6 +240,7 @@ namespace EgsEcfParser
                 public static string XAttributeForceEscape { get; } = "forceEscape";
                 public static string XAttributeInfo { get; } = "info";
             }
+            
             private static XmlDocument XmlDoc { get; } = new XmlDocument();
 
             public static void LoadDefinitions()
@@ -316,12 +316,9 @@ namespace EgsEcfParser
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 string blockReferenceTargetAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-
-                XmlNode contentAlteringNode = configNode.SelectSingleNode(XmlSettings.XChapterContentAltering);
-                if (contentAlteringNode == null) { throw new ArgumentException(string.Format("Chapter {0} not found", XmlSettings.XChapterContentAltering)); }
-                bool isDefiningItems = Convert.ToBoolean(contentAlteringNode.SelectSingleNode(XmlSettings.XElementDefinesItems)?
+                bool isDefiningItems = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesItems)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
-                bool isDefiningTemplates = Convert.ToBoolean(contentAlteringNode.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
+                bool isDefiningTemplates = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
@@ -404,12 +401,6 @@ namespace EgsEcfParser
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockNameAttribute, "Name");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceSourceAttribute, "Ref");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
-                        writer.WriteEndElement();
-                    }
-                    // Content Altering Function Settings
-                    writer.WriteComment("Content Altering Function Settings");
-                    {
-                        writer.WriteStartElement(XmlSettings.XChapterContentAltering);
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesItems, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
                         writer.WriteEndElement();
@@ -889,7 +880,7 @@ namespace EgsEcfParser
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
                     string.Equals(item.GetName(), nameValue) ||
-                    (item.HasParameter(nameValue, true, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
+                    (item.HasParameter(templateParameterName, true, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
                 )).ToList();
         }
         public static List<EcfBlock> GetTemplateListByUser(List<EgsEcfFile> files, EcfBlock usingItem, string templateParameterName)
@@ -2990,6 +2981,18 @@ namespace EgsEcfParser
         public int RemoveParameter(List<string> keys)
         {
             return keys.Where(key => RemoveParameter(key) == true).Count();
+        }
+        public int RemoveParameterDeep(string key)
+        {
+            int count = RemoveParameter(key) ? 1: 0;
+            count += InternalChildItems.Where(child => child is EcfBlock).Cast<EcfBlock>().Sum(subBlock => subBlock.RemoveParameterDeep(key));
+            return count;
+        }
+        public int RemoveParameterDeep(List<string> keys)
+        {
+            int count = RemoveParameter(keys);
+            count += InternalChildItems.Where(child => child is EcfBlock).Cast<EcfBlock>().Sum(subBlock => subBlock.RemoveParameterDeep(keys));
+            return count;
         }
         public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
         {

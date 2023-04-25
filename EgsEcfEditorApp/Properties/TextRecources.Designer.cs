@@ -529,6 +529,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Still used with.
+        /// </summary>
+        internal static string EcfItemListingView_StillUsedWith {
+            get {
+                return ResourceManager.GetString("EcfItemListingView_StillUsedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Like wise search to reduce the dropdown list.
         /// </summary>
         internal static string EcfItemSelectorDialog_ToolTip_SearchInfo {
@@ -1389,6 +1398,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_Page {
             get {
                 return ResourceManager.GetString("Generic_Page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to removed from.
+        /// </summary>
+        internal static string Generic_RemovedFrom {
+            get {
+                return ResourceManager.GetString("Generic_RemovedFrom", resourceCulture);
             }
         }
     }

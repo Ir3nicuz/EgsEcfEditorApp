@@ -6,13 +6,15 @@ using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
 {
-    public partial class EcfItemListingView : Form
+    public partial class EcfItemListingDialog : Form
     {
         public event EventHandler<ItemRowClickedEventArgs> ItemRowClicked;
 
+        public EcfStructureItem SelectedItem { get; private set; } = null;
+
         private List<EcfStructureItem> RowItems { get; } = new List<EcfStructureItem>();
 
-        public EcfItemListingView()
+        public EcfItemListingDialog()
         {
             InitializeComponent();
             InitForm();
@@ -33,13 +35,20 @@ namespace EgsEcfEditorApp
         }
         private void CloseButton_Click(object sender, EventArgs evt)
         {
+            DialogResult = DialogResult.Abort;
             Close();
         }
         private void ItemListingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs evt)
         {
             if (evt.RowIndex >= 0 && evt.RowIndex < RowItems.Count)
             {
-                ItemRowClicked?.Invoke(this, new ItemRowClickedEventArgs(RowItems[evt.RowIndex]));
+                SelectedItem = RowItems[evt.RowIndex];
+                ItemRowClicked?.Invoke(this, new ItemRowClickedEventArgs(SelectedItem));
+                if (Modal)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
             }
         }
 
@@ -63,6 +72,27 @@ namespace EgsEcfEditorApp
             RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
             RefreshGridView(itemList);
             Show(parent);
+        }
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfBlock> itemList)
+        {
+            return ShowDialog(parent, null, itemList);
+        }
+        public DialogResult ShowDialog(IWin32Window parent, List<EcfParameter> itemList)
+        {
+            return ShowDialog(parent, null, itemList);
+        }
+        public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
+        {
+            
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
+            RefreshGridView(itemList);
+            return ShowDialog(parent);
+        }
+        public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EcfParameter> itemList)
+        {
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
+            RefreshGridView(itemList);
+            return ShowDialog(parent);
         }
 
         // privates
@@ -123,11 +153,11 @@ namespace EgsEcfEditorApp
         // subclasses
         public class ItemRowClickedEventArgs : EventArgs
         {
-            public EcfStructureItem RowItem { get; }
+            public EcfStructureItem EcfItem { get; }
 
             public ItemRowClickedEventArgs(EcfStructureItem rowItem) : base()
             {
-                RowItem = rowItem;
+                EcfItem = rowItem;
             }
         }
     }

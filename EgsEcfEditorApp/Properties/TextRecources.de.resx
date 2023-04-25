@@ -273,6 +273,9 @@
   <data name="EcfItemListingView_SelectedFileNotOpened" xml:space="preserve">
     <value>Die gewählte Datei ist nicht geöffnet!</value>
   </data>
+  <data name="EcfItemListingView_StillUsedWith" xml:space="preserve">
+    <value>Noch verwendet von</value>
+  </data>
   <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like-suche zum Einschränken der Dropdown Liste</value>
   </data>
@@ -560,5 +563,8 @@
   </data>
   <data name="Generic_Page" xml:space="preserve">
     <value>Seite</value>
+  </data>
+  <data name="Generic_RemovedFrom" xml:space="preserve">
+    <value>entfernt von</value>
   </data>
 </root>

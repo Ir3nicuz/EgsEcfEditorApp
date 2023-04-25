@@ -570,6 +570,12 @@
   <data name="Generic_SearchHits" xml:space="preserve">
     <value>Treffer</value>
   </data>
+  <data name="Generic_Success" xml:space="preserve">
+    <value>Erfolg</value>
+  </data>
+  <data name="Generic_Template" xml:space="preserve">
+    <value>Template</value>
+  </data>
   <data name="Generic_Type" xml:space="preserve">
     <value>Typ</value>
   </data>

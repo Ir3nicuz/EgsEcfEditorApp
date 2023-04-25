@@ -1,7 +1,7 @@
 ﻿
 namespace EgsEcfEditorApp
 {
-    partial class EcfItemListingView
+    partial class EcfItemListingDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -29,16 +29,16 @@ namespace EgsEcfEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CloseButton = new System.Windows.Forms.Button();
             this.ItemListingGridPanel = new System.Windows.Forms.Panel();
             this.ItemListingGrid = new EcfWinFormControls.EcfDataGridView();
-            this.ButtonInfoPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SearchHitsLabel = new System.Windows.Forms.Label();
             this.ListingGridColumn_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_Element = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_Parameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ButtonInfoPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.SearchHitsLabel = new System.Windows.Forms.Label();
             this.ItemListingGridPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemListingGrid)).BeginInit();
             this.ButtonInfoPanel.SuspendLayout();
@@ -72,14 +72,14 @@ namespace EgsEcfEditorApp
             this.ItemListingGrid.AllowUserToAddRows = false;
             this.ItemListingGrid.AllowUserToDeleteRows = false;
             this.ItemListingGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ItemListingGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ItemListingGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.ItemListingGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ItemListingGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ListingGridColumn_Number,
@@ -95,6 +95,34 @@ namespace EgsEcfEditorApp
             this.ItemListingGrid.Size = new System.Drawing.Size(794, 415);
             this.ItemListingGrid.TabIndex = 2;
             this.ItemListingGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ItemListingGrid_CellDoubleClick);
+            // 
+            // ListingGridColumn_Number
+            // 
+            this.ListingGridColumn_Number.HeaderText = "nr";
+            this.ListingGridColumn_Number.Name = "ListingGridColumn_Number";
+            this.ListingGridColumn_Number.ReadOnly = true;
+            this.ListingGridColumn_Number.Width = 41;
+            // 
+            // ListingGridColumn_File
+            // 
+            this.ListingGridColumn_File.HeaderText = "file";
+            this.ListingGridColumn_File.Name = "ListingGridColumn_File";
+            this.ListingGridColumn_File.ReadOnly = true;
+            this.ListingGridColumn_File.Width = 45;
+            // 
+            // ListingGridColumn_Element
+            // 
+            this.ListingGridColumn_Element.HeaderText = "item";
+            this.ListingGridColumn_Element.Name = "ListingGridColumn_Element";
+            this.ListingGridColumn_Element.ReadOnly = true;
+            this.ListingGridColumn_Element.Width = 51;
+            // 
+            // ListingGridColumn_Parameter
+            // 
+            this.ListingGridColumn_Parameter.HeaderText = "parameter";
+            this.ListingGridColumn_Parameter.Name = "ListingGridColumn_Parameter";
+            this.ListingGridColumn_Parameter.ReadOnly = true;
+            this.ListingGridColumn_Parameter.Width = 79;
             // 
             // ButtonInfoPanel
             // 
@@ -124,34 +152,6 @@ namespace EgsEcfEditorApp
             this.SearchHitsLabel.TabIndex = 1;
             this.SearchHitsLabel.Text = "??? hits";
             this.SearchHitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ListingGridColumn_Number
-            // 
-            this.ListingGridColumn_Number.HeaderText = "nr";
-            this.ListingGridColumn_Number.Name = "ListingGridColumn_Number";
-            this.ListingGridColumn_Number.ReadOnly = true;
-            this.ListingGridColumn_Number.Width = 41;
-            // 
-            // ListingGridColumn_File
-            // 
-            this.ListingGridColumn_File.HeaderText = "file";
-            this.ListingGridColumn_File.Name = "ListingGridColumn_File";
-            this.ListingGridColumn_File.ReadOnly = true;
-            this.ListingGridColumn_File.Width = 45;
-            // 
-            // ListingGridColumn_Element
-            // 
-            this.ListingGridColumn_Element.HeaderText = "item";
-            this.ListingGridColumn_Element.Name = "ListingGridColumn_Element";
-            this.ListingGridColumn_Element.ReadOnly = true;
-            this.ListingGridColumn_Element.Width = 51;
-            // 
-            // ListingGridColumn_Parameter
-            // 
-            this.ListingGridColumn_Parameter.HeaderText = "parameter";
-            this.ListingGridColumn_Parameter.Name = "ListingGridColumn_Parameter";
-            this.ListingGridColumn_Parameter.ReadOnly = true;
-            this.ListingGridColumn_Parameter.Width = 79;
             // 
             // EcfItemListingView
             // 

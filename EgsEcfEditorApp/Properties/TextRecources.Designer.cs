@@ -466,6 +466,42 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No templates for item.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_NoTemplatesForItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplatesForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only remove Template (Yes) or delete completely (No)?.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected file is not opened!.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_SelectedFileNotOpened {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_SelectedFileNotOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to still used with.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_StillUsedWith {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_StillUsedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All items with template.
         /// </summary>
         internal static string EcfItemListingView_AllElementsWithTemplate {
@@ -507,33 +543,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemListingView_AllTemplatesWithItem {
             get {
                 return ResourceManager.GetString("EcfItemListingView_AllTemplatesWithItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No templates for item.
-        /// </summary>
-        internal static string EcfItemListingView_NoTemplatesForItem {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_NoTemplatesForItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The selected file is not opened!.
-        /// </summary>
-        internal static string EcfItemListingView_SelectedFileNotOpened {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_SelectedFileNotOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Still used with.
-        /// </summary>
-        internal static string EcfItemListingView_StillUsedWith {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_StillUsedWith", resourceCulture);
             }
         }
         

@@ -375,9 +375,6 @@
   <data name="EcfTreeView_AddToTemplateDefinition" xml:space="preserve">
     <value>Add to template definition</value>
   </data>
-  <data name="EcfTreeView_DeleteTemplate" xml:space="preserve">
-    <value>Delete template</value>
-  </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>tree items</value>
   </data>
@@ -389,6 +386,9 @@
   </data>
   <data name="EcfTreeView_ListTemplateUsers" xml:space="preserve">
     <value>List template users</value>
+  </data>
+  <data name="EcfTreeView_RemoveTemplate" xml:space="preserve">
+    <value>Remove template</value>
   </data>
   <data name="EcfTreeView_ShowLinkedTemplate" xml:space="preserve">
     <value>Show linked template</value>
@@ -488,6 +488,9 @@
   </data>
   <data name="Generic_IsOptional" xml:space="preserve">
     <value>Is optional</value>
+  </data>
+  <data name="Generic_Item" xml:space="preserve">
+    <value>Item</value>
   </data>
   <data name="Generic_Level" xml:space="preserve">
     <value>Level</value>

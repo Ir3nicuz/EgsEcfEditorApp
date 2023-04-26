@@ -252,6 +252,18 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Entfernt die selektierte Wert Gruppe</value>
   </data>
+  <data name="EcfItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
+    <value>Keine Templates für Item</value>
+  </data>
+  <data name="EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
+    <value>Template nur entfernen (Ja) oder komplett löschen (Nein)?</value>
+  </data>
+  <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
+    <value>Die gewählte Datei ist nicht geöffnet!</value>
+  </data>
+  <data name="EcfItemHandlingSupport_StillUsedWith" xml:space="preserve">
+    <value>noch verwendet von</value>
+  </data>
   <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
     <value>Alle Elemente mit Template</value>
   </data>
@@ -266,15 +278,6 @@
   </data>
   <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
     <value>Alle Templates mit Item</value>
-  </data>
-  <data name="EcfItemListingView_NoTemplatesForItem" xml:space="preserve">
-    <value>Keine Templates für Item</value>
-  </data>
-  <data name="EcfItemListingView_SelectedFileNotOpened" xml:space="preserve">
-    <value>Die gewählte Datei ist nicht geöffnet!</value>
-  </data>
-  <data name="EcfItemListingView_StillUsedWith" xml:space="preserve">
-    <value>Noch verwendet von</value>
   </data>
   <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like-suche zum Einschränken der Dropdown Liste</value>

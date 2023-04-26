@@ -835,15 +835,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete template.
-        /// </summary>
-        internal static string EcfTreeView_DeleteTemplate {
-            get {
-                return ResourceManager.GetString("EcfTreeView_DeleteTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to tree items.
         /// </summary>
         internal static string EcfTreeView_FilterSelector_Elements {
@@ -876,6 +867,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfTreeView_ListTemplateUsers {
             get {
                 return ResourceManager.GetString("EcfTreeView_ListTemplateUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove template.
+        /// </summary>
+        internal static string EcfTreeView_RemoveTemplate {
+            get {
+                return ResourceManager.GetString("EcfTreeView_RemoveTemplate", resourceCulture);
             }
         }
         
@@ -1173,6 +1173,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_IsOptional {
             get {
                 return ResourceManager.GetString("Generic_IsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        internal static string Generic_Item {
+            get {
+                return ResourceManager.GetString("Generic_Item", resourceCulture);
             }
         }
         

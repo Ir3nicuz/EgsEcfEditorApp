@@ -126,7 +126,7 @@ namespace EgsEcfEditorApp
             if (tabPageToShow == null)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}", 
-                    TextRecources.EcfItemListingView_SelectedFileNotOpened, itemToShow?.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty), 
+                    TextRecources.EcfItemHandlingSupport_SelectedFileNotOpened, itemToShow?.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty), 
                     TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
@@ -604,7 +604,7 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ListParameterUsers: ShowParameterUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ListParameterValueUsers: ShowParameterValueUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ShowLinkedTemplate: ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
-                case ItemOperations.DeleteTemplate: DeleteTemplateOfItem(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.RemoveTemplate: RemoveTemplateOfItem(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddToTemplateDefinition:
                 case ItemOperations.AddTemplate:
 
@@ -632,16 +632,16 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        private void DeleteTemplateOfItem(EcfBlock sourceItem)
+        private void RemoveTemplateOfItem(EcfBlock sourceItem)
         {
+            string messageText;
             // get Templates from open files for the sourceItem
             List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                 sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             if (templateList.Count() < 1)
             {
-                MessageBox.Show(this, string.Format("{0}: {1}",
-                    TextRecources.EcfItemListingView_NoTemplatesForItem, sourceItem.BuildRootId()),
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                messageText = string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());
+                MessageBox.Show(this, messageText, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             // fetch the needed template from the found templates
@@ -649,8 +649,8 @@ namespace EgsEcfEditorApp
             if (templateList.Count() > 1)
             {
                 EcfItemListingDialog templateSelector = new EcfItemListingDialog();
-                string selectorText = string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesForItem, sourceItem.BuildRootId());
-                if (templateSelector.ShowDialog(this, selectorText, templateList) != DialogResult.OK)
+                messageText = string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesForItem, sourceItem.BuildRootId());
+                if (templateSelector.ShowDialog(this, messageText, templateList) != DialogResult.OK)
                 {
                     return;
                 }
@@ -660,12 +660,28 @@ namespace EgsEcfEditorApp
             {
                 templateToRemove = templateList.FirstOrDefault();
             }
+            // remove or delete?
+            if (sourceItem.HasParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, out EcfParameter templateParameter) && 
+                templateParameter.ContainsValue(templateToRemove.GetName()))
+            {
+                if (MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion, TitleRecources.Generic_Attention, 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    templateParameter.ClearValues();
+                    templateParameter.AddValue(string.Empty);
+                    messageText = string.Format("{2} {0} {3} {4} {1}!", templateToRemove.GetName(), sourceItem.GetName(),
+                        TitleRecources.Generic_Template, TextRecources.Generic_RemovedFrom, TitleRecources.Generic_Item);
+                    MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
             // check cross usage of template
             List<EcfBlock> userList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                 templateToRemove, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             if (userList.Count() > 1)
             {
-                List<string> problems = userList.Select(user => string.Format("{0}: {1}", TextRecources.EcfItemListingView_StillUsedWith, user.BuildRootId())).ToList();
+                List<string> problems = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
+                    TextRecources.EcfItemHandlingSupport_StillUsedWith, user.BuildRootId())).ToList();
                 if (ShowOperationSafetyQuestionDialog(this, problems) != DialogResult.Yes)
                 {
                     return;
@@ -675,11 +691,13 @@ namespace EgsEcfEditorApp
             templateToRemove.EcfFile.RemoveItem(templateToRemove);
             userList.ForEach(user =>
             {
-                user.RemoveParameterDeep(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                templateParameter = user.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                templateParameter.ClearValues();
+                templateParameter.AddValue(string.Empty);
             });
-            string message = string.Format("{2} {0} {3} {4} {1}!", templateToRemove.GetName(), templateToRemove.EcfFile.FileName,
+            messageText = string.Format("{2} {0} {3} {4} {1}!", templateToRemove.GetName(), templateToRemove.EcfFile.FileName,
                 TitleRecources.Generic_Template, TextRecources.Generic_RemovedFrom, TitleRecources.Generic_File);
-            MessageBox.Show(this, message, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
@@ -688,7 +706,7 @@ namespace EgsEcfEditorApp
             if  (templateList.Count() < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
-                    TextRecources.EcfItemListingView_NoTemplatesForItem, sourceItem.BuildRootId()),
+                    TextRecources.EcfItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId()),
                     TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
@@ -1372,6 +1390,7 @@ namespace EcfFileViews
 
             List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
             problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
+            problems.AddRange(CheckInterFileLinks(blocksToRemove));
 
             if (ShowOperationSafetyQuestionDialog(this, problems) == DialogResult.Yes)
             {
@@ -1402,11 +1421,11 @@ namespace EcfFileViews
             return parameters.Where(parameter => mandatoryParameters.Contains(parameter.Key))
                 .Select(parameter => string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
         }
-        private List<string> CheckBlockReferences(List<EcfBlock> blockToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
+        private List<string> CheckBlockReferences(List<EcfBlock> blocksToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
         {
             List<string> problems = new List<string>();
             HashSet<EcfBlock> foundBlocks = new HashSet<EcfBlock>();
-            blockToCheck.ForEach(block =>
+            blocksToCheck.ForEach(block =>
             {
                 List<EcfBlock> inheritors = completeBlockList.Where(listedBlock => block.Equals(listedBlock.Inheritor)).ToList();
                 inheritors.ForEach(inheritor =>
@@ -1416,6 +1435,27 @@ namespace EcfFileViews
                 });
             });
             inheritingBlocks = foundBlocks;
+            return problems;
+        }
+        [Obsolete("needs logic")]
+        private List<string> CheckInterFileLinks(List<EcfBlock> blocksToCheck)
+        {
+            List<EgsEcfFile> openedFiles = null;
+            List<string> problems = new List<string>();
+            blocksToCheck.ForEach(block =>
+            {
+                if (block.EcfFile?.Definition.IsDefiningItems ?? false)
+                {
+                    
+                }
+                if (block.EcfFile?.Definition.IsDefiningTemplates ?? false)
+                {
+                    List<EcfBlock> userList = GetUserListByTemplate(openedFiles, block,
+                        UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                    problems.AddRange(userList.Select(user => string.Format("{2} {0} {3} {4} {1}", block.BuildRootId(), user.BuildRootId(),
+                        TitleRecources.Generic_Template, TextRecources.EcfItemHandlingSupport_StillUsedWith, TitleRecources.Generic_Item)).ToList());
+                }
+            });
             return problems;
         }
         private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
@@ -1822,8 +1862,9 @@ namespace EcfFileViews
                 ListTemplateUsers,
                 ListItemUsingTemplates,
                 ShowLinkedTemplate,
+
                 AddTemplate,
-                DeleteTemplate,
+                RemoveTemplate,
                 AddToTemplateDefinition,
 
                 ListParameterUsers,
@@ -2021,7 +2062,7 @@ namespace EcfFileViews
         private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; }
         private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; }
         private ToolStripMenuItem ContextMenuItemAddTemplate { get; }
-        private ToolStripMenuItem ContextMenuItemDeleteTemplate { get; }
+        private ToolStripMenuItem ContextMenuItemRemoveTemplate { get; }
         private ToolStripMenuItem ContextMenuItemAddToTemplateDefinition { get; }
         private List<EcfTreeNode> RootTreeNodes { get; } = new List<EcfTreeNode>();
         private List<EcfTreeNode> AllTreeNodes { get; } = new List<EcfTreeNode>();
@@ -2068,14 +2109,14 @@ namespace EcfFileViews
             ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_ListTemplates);
             ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate);
             ContextMenuItemAddTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddTemplate, IconRecources.Icon_AddTemplate);
-            ContextMenuItemDeleteTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_DeleteTemplate, IconRecources.Icon_DeleteTemplate);
+            ContextMenuItemRemoveTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_RemoveTemplate, IconRecources.Icon_DeleteTemplate);
             ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition);
 
             TreeContextMenu.Items.Add(ContextMenuItemListTemplateUsers);
             TreeContextMenu.Items.Add(ContextMenuItemListItemUsingTemplates);
             TreeContextMenu.Items.Add(ContextMenuItemShowLinkedTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemAddTemplate);
-            TreeContextMenu.Items.Add(ContextMenuItemDeleteTemplate);
+            TreeContextMenu.Items.Add(ContextMenuItemRemoveTemplate);
             TreeContextMenu.Items.Add(ContextMenuItemAddToTemplateDefinition);
 
             InitEvents();
@@ -2194,9 +2235,9 @@ namespace EcfFileViews
         {
             ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.AddTemplate, SelectedItems.FirstOrDefault()));
         }
-        private void ContextMenuItemDeleteTemplate_Click(object sender, EventArgs evt)
+        private void ContextMenuItemRemoveTemplate_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.DeleteTemplate, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.RemoveTemplate, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemAddToTemplateDefinition_Click(object sender, EventArgs evt)
         {
@@ -2217,7 +2258,7 @@ namespace EcfFileViews
             ContextMenuItemListItemUsingTemplates.Click += ContextMenuItemListItemUsingTemplates_Click;
             ContextMenuItemShowLinkedTemplate.Click += ContextMenuItemShowLinkedTemplate_Click;
             ContextMenuItemAddTemplate.Click += ContextMenuItemAddTemplate_Click;
-            ContextMenuItemDeleteTemplate.Click += ContextMenuItemDeleteTemplate_Click;
+            ContextMenuItemRemoveTemplate.Click += ContextMenuItemRemoveTemplate_Click;
             ContextMenuItemAddToTemplateDefinition.Click += ContextMenuItemAddToTemplateDefinition_Click;
         }
         private void PrepareOptionalMenuItems(EcfTreeNode node)
@@ -2232,7 +2273,7 @@ namespace EcfFileViews
             ContextMenuItemListItemUsingTemplates.Visible = isItemItems;
             ContextMenuItemShowLinkedTemplate.Visible = isItemItems;
             ContextMenuItemAddTemplate.Visible = isItemItems;
-            ContextMenuItemDeleteTemplate.Visible = isItemItems;
+            ContextMenuItemRemoveTemplate.Visible = isItemItems;
             ContextMenuItemAddToTemplateDefinition.Visible = isItemItems;
         }
         private void TrySelectSimilarNode(EcfTreeNode oldNode, List<EcfTreeNode> newNodes)

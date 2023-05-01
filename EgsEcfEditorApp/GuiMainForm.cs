@@ -605,19 +605,10 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ListParameterValueUsers: ShowParameterValueUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ShowLinkedTemplate: ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.RemoveTemplate: RemoveTemplateOfItem(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.AddTemplate: AddTemplateToItem(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddToTemplateDefinition:
-                case ItemOperations.AddTemplate:
 
                 /*
-                 * AddTemplate 
-                 * PreCheck: (hasNotParameter: TemplateRoot)
-                 * Variants: (Addexisting or new from existing or complete new)
-                 * Target Template Parameter Name: TemplateRoot
-                 * Target Template Id Attribute Name: Name
-                 * EcfBlock Default Parameter, values
-                 * Add EcfBlock to Template File
-                 * Add Ingredients Item Parameter
-                 * 
                  * AddToTemplateDefinition
                  * PreCheck: (not present at least one file)
                  * Variants: (addToAll, addToSelected)
@@ -625,12 +616,42 @@ namespace EgsEcfEditorApp
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
                     */
 
-
                 default:
                     MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
             }
+        }
+        private void AddTemplateToItem(EcfBlock sourceItem)
+        {
+            
+            
+            
+            
+            
+            
+            /*
+             * * AddTemplate 
+                 * Precheck: 
+                 *  - has already template? 
+                 *      -> change question or direct creating
+                 * Creating and changing Variants:
+                 *  - addexisting
+                 *      -> show selector from template list
+                 *      -> update TemplateRoot with name
+                 *  - create new from existing
+                 *      -> show selector from template list
+                 *      -> load parameters from existing
+                 *      -> show editing dialog
+                 *      -> show template file selector if necessary
+                 *      -> create template by attribute name
+                 *      -> Update TemplateRoot with nothing
+                 *  - complete new
+                 *      -> show editing dialog
+                 *      -> show template file selector if necessary
+                 *      -> create template by attribute name
+                 *      -> Update TemplateRoot with nothing
+             */
         }
         private void RemoveTemplateOfItem(EcfBlock sourceItem)
         {
@@ -1390,7 +1411,7 @@ namespace EcfFileViews
 
             List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
             problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
-            problems.AddRange(CheckInterFileLinks(blocksToRemove));
+            problems.AddRange(CheckInterFileDependencies(blocksToRemove));
 
             if (ShowOperationSafetyQuestionDialog(this, problems) == DialogResult.Yes)
             {
@@ -1437,16 +1458,17 @@ namespace EcfFileViews
             inheritingBlocks = foundBlocks;
             return problems;
         }
-        [Obsolete("needs logic")]
-        private List<string> CheckInterFileLinks(List<EcfBlock> blocksToCheck)
+        private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
         {
-            List<EgsEcfFile> openedFiles = null;
+            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
             List<string> problems = new List<string>();
             blocksToCheck.ForEach(block =>
             {
                 if (block.EcfFile?.Definition.IsDefiningItems ?? false)
                 {
-                    
+                    List<EcfBlock> templateList = GetTemplateListByIngredient(openedFiles, block);
+                    problems.AddRange(templateList.Select(template => string.Format("{2} {0} {3} {4} {1}", block.BuildRootId(), template.BuildRootId(),
+                        TitleRecources.Generic_Item, TextRecources.EcfItemHandlingSupport_StillUsedWith, TitleRecources.Generic_Template)).ToList());
                 }
                 if (block.EcfFile?.Definition.IsDefiningTemplates ?? false)
                 {

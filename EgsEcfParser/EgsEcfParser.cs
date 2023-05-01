@@ -871,7 +871,7 @@ namespace EgsEcfParser
             string nameValue = ingredientItem.GetName();
             return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template =>
-                    template.HasParameter(nameValue, true, out _)
+                    template.HasParameter(nameValue, false, true, out _)
                 )).ToList();
         }
         public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template, string templateParameterName)
@@ -880,7 +880,7 @@ namespace EgsEcfParser
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
                     string.Equals(item.GetName(), nameValue) ||
-                    (item.HasParameter(templateParameterName, true, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
+                    (item.HasParameter(templateParameterName, true, false, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
                 )).ToList();
         }
         public static List<EcfBlock> GetTemplateListByUser(List<EgsEcfFile> files, EcfBlock usingItem, string templateParameterName)
@@ -2938,22 +2938,23 @@ namespace EgsEcfParser
         }
         public string GetParameterFirstValue(string paramName, bool withInheritance, bool withSubBlocks)
         {
-            if (!HasParameter(paramName, withInheritance, out EcfParameter parameter) && withSubBlocks)
-            {
-                parameter = GetDeepChildList<EcfParameter>().FirstOrDefault(param => param.Key.Equals(paramName));
-            }
+            HasParameter(paramName, withInheritance, withSubBlocks, out EcfParameter parameter);
             return parameter?.GetFirstValue();
         }
         public bool HasParameter(string key, out EcfParameter parameter)
         {
-            return HasParameter(key, false, out parameter);
+            return HasParameter(key, false, false, out parameter);
         }
-        public bool HasParameter(string key, bool withInheritance, out EcfParameter parameter)
+        public bool HasParameter(string key, bool withInheritance, bool withSubBlocks, out EcfParameter parameter)
         {
             parameter = InternalChildItems.Where(item => item is EcfParameter).Cast<EcfParameter>().FirstOrDefault(param => param.Key.Equals(key));
+            if (parameter == null && withSubBlocks)
+            {
+                parameter = GetDeepChildList<EcfParameter>().FirstOrDefault(param => param.Key.Equals(key));
+            }
             if (parameter == null && withInheritance && Inheritor != null)
             {
-                Inheritor.HasParameter(key, true, out parameter);
+                Inheritor.HasParameter(key, true, false, out parameter);
             }
             return parameter != null;
         }

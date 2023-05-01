@@ -121,7 +121,7 @@ namespace EgsEcfEditorApp
         }
         private void ItemListingView_ShowItem(object sender, ItemRowClickedEventArgs evt)
         {
-            EcfStructureItem itemToShow = evt.EcfItem;
+            EcfStructureItem itemToShow = evt.StructureItem;
             EcfTabPage tabPageToShow = FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(tab => tab.File == itemToShow.EcfFile);
             if (tabPageToShow == null)
             {
@@ -622,33 +622,34 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
+        [Obsolete("needs logic")]
         private void AddTemplateToItem(EcfBlock sourceItem)
         {
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             /*
              * * AddTemplate 
                  * Precheck: 
-                 *  - has already template? 
+                 *  - has already template? ---> Messagebox yes/no
                  *      -> change question or direct creating
-                 * Creating and changing Variants:
+                 * Creating and changing Variants: ---> EcfOptionSelector <------ NEW Dialog!
                  *  - addexisting
-                 *      -> show selector from template list
+                 *      -> show selector from template list ---> EcfItemSelector
                  *      -> update TemplateRoot with name
                  *  - create new from existing
-                 *      -> show selector from template list
+                 *      -> show selector from template list ---> EcfItemSelector
                  *      -> load parameters from existing
-                 *      -> show editing dialog
-                 *      -> show template file selector if necessary
+                 *      -> show editing dialog ---> EcfItemEditor
+                 *      -> show template file selector if necessary ---> EcfItemListing
                  *      -> create template by attribute name
                  *      -> Update TemplateRoot with nothing
                  *  - complete new
-                 *      -> show editing dialog
-                 *      -> show template file selector if necessary
+                 *      -> show editing dialog ---> EcfItemEditor
+                 *      -> show template file selector if necessary ---> EcfItemListing
                  *      -> create template by attribute name
                  *      -> Update TemplateRoot with nothing
              */
@@ -675,7 +676,7 @@ namespace EgsEcfEditorApp
                 {
                     return;
                 }
-                templateToRemove = templateSelector.SelectedItem as EcfBlock;
+                templateToRemove = templateSelector.SelectedStructureItem as EcfBlock;
             }
             else
             {

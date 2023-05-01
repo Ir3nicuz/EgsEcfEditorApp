@@ -10,9 +10,11 @@ namespace EgsEcfEditorApp
     {
         public event EventHandler<ItemRowClickedEventArgs> ItemRowClicked;
 
-        public EcfStructureItem SelectedItem { get; private set; } = null;
+        public EgsEcfFile SelectedFileItem { get; private set; } = null;
+        public EcfStructureItem SelectedStructureItem { get; private set; } = null;
 
-        private List<EcfStructureItem> RowItems { get; } = new List<EcfStructureItem>();
+        private List<EgsEcfFile> FileItems { get; } = new List<EgsEcfFile>();
+        private List<EcfStructureItem> StructureItems { get; } = new List<EcfStructureItem>();
 
         public EcfItemListingDialog()
         {
@@ -40,10 +42,12 @@ namespace EgsEcfEditorApp
         }
         private void ItemListingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs evt)
         {
-            if (evt.RowIndex >= 0 && evt.RowIndex < RowItems.Count)
+            if (evt.RowIndex >= 0)
             {
-                SelectedItem = RowItems[evt.RowIndex];
-                ItemRowClicked?.Invoke(this, new ItemRowClickedEventArgs(SelectedItem));
+                SelectedFileItem = (evt.RowIndex < FileItems.Count) ? FileItems[evt.RowIndex] : null;
+                SelectedStructureItem = (evt.RowIndex < StructureItems.Count) ? StructureItems[evt.RowIndex] : null;
+
+                ItemRowClicked?.Invoke(this, new ItemRowClickedEventArgs(SelectedFileItem, SelectedStructureItem));
                 if (Modal)
                 {
                     DialogResult = DialogResult.OK;
@@ -53,6 +57,10 @@ namespace EgsEcfEditorApp
         }
 
         // publics
+        public void Show(IWin32Window parent, List<EgsEcfFile> itemList)
+        {
+            Show(parent, null, itemList);
+        }
         public void Show(IWin32Window parent, List<EcfBlock> itemList)
         {
             Show(parent, null, itemList);
@@ -60,6 +68,12 @@ namespace EgsEcfEditorApp
         public void Show(IWin32Window parent, List<EcfParameter> itemList)
         {
             Show(parent, null, itemList);
+        }
+        public void Show(IWin32Window parent, string searchDescription, List<EgsEcfFile> itemList)
+        {
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
+            RefreshGridView(itemList);
+            Show(parent);
         }
         public void Show(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
         {
@@ -73,6 +87,10 @@ namespace EgsEcfEditorApp
             RefreshGridView(itemList);
             Show(parent);
         }
+        public DialogResult ShowDialog(IWin32Window parent, List<EgsEcfFile> itemList)
+        {
+            return ShowDialog(parent, null, itemList);
+        }
         public DialogResult ShowDialog(IWin32Window parent, List<EcfBlock> itemList)
         {
             return ShowDialog(parent, null, itemList);
@@ -81,9 +99,14 @@ namespace EgsEcfEditorApp
         {
             return ShowDialog(parent, null, itemList);
         }
+        public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EgsEcfFile> itemList)
+        {
+            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
+            RefreshGridView(itemList);
+            return ShowDialog(parent);
+        }
         public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
         {
-            
             RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
             RefreshGridView(itemList);
             return ShowDialog(parent);
@@ -104,12 +127,35 @@ namespace EgsEcfEditorApp
                 Text = string.Format("{0} - {1}", TitleRecources.EcfItemListingView_Header, searchDescription);
             }
         }
+        private void RefreshGridView(List<EgsEcfFile> itemList)
+        {
+            ItemListingGrid.SuspendLayout();
+            ItemListingGrid.Rows.Clear();
+            FileItems.Clear();
+
+            ListingGridColumn_Element.Visible = false;
+            ListingGridColumn_Parameter.Visible = false;
+
+            int lineCounter = 1;
+            itemList.ForEach(item =>
+            {
+                ItemListingGrid.Rows.Add(lineCounter,
+                    item?.FileName ?? TitleRecources.Generic_Replacement_Empty);
+                FileItems.Add(item);
+                lineCounter++;
+            });
+
+            ItemListingGrid.AutoResizeColumns();
+            ItemListingGrid.ClearSelection();
+            ItemListingGrid.ResumeLayout();
+        }
         private void RefreshGridView(List<EcfBlock> itemList)
         {
             ItemListingGrid.SuspendLayout();
             ItemListingGrid.Rows.Clear();
-            RowItems.Clear();
+            StructureItems.Clear();
 
+            ListingGridColumn_Element.Visible = true;
             ListingGridColumn_Parameter.Visible = false;
 
             int lineCounter = 1;
@@ -118,7 +164,7 @@ namespace EgsEcfEditorApp
                 ItemListingGrid.Rows.Add(lineCounter, 
                     item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
                     item.GetFullPath());
-                RowItems.Add(item);
+                StructureItems.Add(item);
                 lineCounter++;
             });
 
@@ -130,8 +176,9 @@ namespace EgsEcfEditorApp
         {
             ItemListingGrid.SuspendLayout();
             ItemListingGrid.Rows.Clear();
-            RowItems.Clear();
+            StructureItems.Clear();
 
+            ListingGridColumn_Element.Visible = true;
             ListingGridColumn_Parameter.Visible = true;
 
             int lineCounter = 1;
@@ -141,7 +188,7 @@ namespace EgsEcfEditorApp
                     item.EcfFile?.FileName ?? TitleRecources.Generic_Replacement_Empty, 
                     item.Parent?.GetFullPath() ?? TitleRecources.Generic_Replacement_Empty, 
                     item.Key);
-                RowItems.Add(item);
+                StructureItems.Add(item);
                 lineCounter++;
             });
 
@@ -153,11 +200,13 @@ namespace EgsEcfEditorApp
         // subclasses
         public class ItemRowClickedEventArgs : EventArgs
         {
-            public EcfStructureItem EcfItem { get; }
+            public EgsEcfFile FileItem { get; }
+            public EcfStructureItem StructureItem { get; }
 
-            public ItemRowClickedEventArgs(EcfStructureItem rowItem) : base()
+            public ItemRowClickedEventArgs(EgsEcfFile fileItem, EcfStructureItem structureItem) : base()
             {
-                EcfItem = rowItem;
+                StructureItem = structureItem;
+                FileItem = fileItem;
             }
         }
     }

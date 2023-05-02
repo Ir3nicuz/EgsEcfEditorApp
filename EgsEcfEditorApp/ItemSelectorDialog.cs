@@ -26,7 +26,7 @@ namespace EcfFileViews
 
             SearchLabel.Text = TitleRecources.Generic_Search;
         }
-        private void EcfItemSelectorDialog_Activated(object sender, EventArgs evt)
+        private void ItemSelectorDialog_Activated(object sender, EventArgs evt)
         {
             SearchTextBox.Focus();
             SearchTextBox.SelectAll();

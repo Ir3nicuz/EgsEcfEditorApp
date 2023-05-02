@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
 {
-    public partial class EcfTextInputDialog : Form
+    public partial class TextInputDialog : Form
     {
-        public EcfTextInputDialog(string caption)
+        public TextInputDialog(string caption)
         {
             InitializeComponent();
             InitForm(caption);
@@ -40,9 +40,9 @@ namespace EgsEcfEditorApp
                 evt.Handled = true;
             }
         }
-        private void EcfTextInputDialog_Activated(object sender, EventArgs evt)
+        private void TextInputDialog_Activated(object sender, EventArgs evt)
         {
-            OkButton.Focus();
+            InputTextBox.SelectAll();
         }
 
         // publics
@@ -59,11 +59,6 @@ namespace EgsEcfEditorApp
         public string GetText()
         {
             return InputTextBox.Text;
-        }
-
-        private void EcfTextInputDialog_Activated_1(object sender, EventArgs e)
-        {
-            InputTextBox.SelectAll();
         }
     }
 }

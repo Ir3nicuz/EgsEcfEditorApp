@@ -119,11 +119,11 @@
     <Compile Include="EcfTechTreeItemEditorDialog.Designer.cs">
       <DependentUpon>EcfTechTreeItemEditorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="EcfTextInputDialog.cs">
+    <Compile Include="TextInputDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EcfTextInputDialog.Designer.cs">
-      <DependentUpon>EcfTextInputDialog.cs</DependentUpon>
+    <Compile Include="TextInputDialog.Designer.cs">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsDialog.cs">
       <SubType>Form</SubType>
@@ -207,8 +207,8 @@
     <EmbeddedResource Include="EcfTechTreeItemEditorDialog.resx">
       <DependentUpon>EcfTechTreeItemEditorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EcfTextInputDialog.resx">
-      <DependentUpon>EcfTextInputDialog.cs</DependentUpon>
+    <EmbeddedResource Include="TextInputDialog.resx">
+      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionSelectorDialog.resx">
       <DependentUpon>OptionSelectorDialog.cs</DependentUpon>

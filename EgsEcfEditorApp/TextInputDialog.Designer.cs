@@ -1,7 +1,7 @@
 ﻿
 namespace EgsEcfEditorApp
 {
-    partial class EcfTextInputDialog
+    partial class TextInputDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -78,7 +78,7 @@ namespace EgsEcfEditorApp
             this.OkButton.UseVisualStyleBackColor = true;
             this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
-            // EcfTextInputDialog
+            // TextInputDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -88,11 +88,11 @@ namespace EgsEcfEditorApp
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "EcfTextInputDialog";
+            this.Name = "TextInputDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfTextInputDialog";
-            this.Activated += new System.EventHandler(this.EcfTextInputDialog_Activated_1);
+            this.Activated += new System.EventHandler(this.TextInputDialog_Activated);
             this.ButtonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -20,7 +20,7 @@ namespace EgsEcfEditorApp
         
         private ItemSelectorDialog FileTabSelector { get; } = new ItemSelectorDialog();
         private TreeAlteratingTools TreeTools { get; } = new TreeAlteratingTools();
-        private EcfTextInputDialog TreeNameSelector { get; } = new EcfTextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
+        private TextInputDialog TreeNameSelector { get; } = new TextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
         protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
         protected ContextMenuStrip TechTreeOperationMenu { get; } = new ContextMenuStrip();
         private ToolStripMenuItem NodeChangeItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple);

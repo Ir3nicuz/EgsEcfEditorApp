@@ -129,7 +129,7 @@ namespace EcfFileViews
             this.SearchLabel.Text = "search";
             this.SearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // EcfItemSelectorDialog
+            // ItemSelectorDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -139,11 +139,11 @@ namespace EcfFileViews
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "EcfItemSelectorDialog";
+            this.Name = "ItemSelectorDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EcfItemSelectorDialog";
-            this.Activated += new System.EventHandler(this.EcfItemSelectorDialog_Activated);
+            this.Activated += new System.EventHandler(this.ItemSelectorDialog_Activated);
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             this.SelectionPanel.ResumeLayout(false);

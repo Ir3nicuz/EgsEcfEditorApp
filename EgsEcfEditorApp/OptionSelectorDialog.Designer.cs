@@ -32,6 +32,7 @@ namespace EgsEcfEditorApp
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
+            this.OptionPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ButtonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,11 +71,21 @@ namespace EgsEcfEditorApp
             this.OkButton.UseVisualStyleBackColor = true;
             this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
+            // OptionPanel
+            // 
+            this.OptionPanel.AutoSize = true;
+            this.OptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.OptionPanel.Location = new System.Drawing.Point(238, 99);
+            this.OptionPanel.Name = "OptionPanel";
+            this.OptionPanel.Size = new System.Drawing.Size(278, 167);
+            this.OptionPanel.TabIndex = 1;
+            // 
             // OptionSelectorDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.OptionPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -95,5 +106,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button OkButton;
+        private System.Windows.Forms.FlowLayoutPanel OptionPanel;
     }
 }

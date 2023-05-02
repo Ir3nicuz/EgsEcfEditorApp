@@ -36,6 +36,7 @@ using static Helpers.FileHandling;
 using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
 using static EgsEcfEditorApp.EcfItemListingDialog;
 using static Helpers.GenericDialogs;
+using static EgsEcfEditorApp.OptionSelectorDialog;
 
 namespace EgsEcfEditorApp
 {
@@ -628,6 +629,11 @@ namespace EgsEcfEditorApp
 
 
 
+            OptionSelectorDialog dialog = new OptionSelectorDialog();
+            if (dialog.ShowDialog(this, "wähl mal was!", sourceItem.ChildItems.Take(5).Select(child => new OptionItem(child)).ToArray()) == DialogResult.OK)
+            {
+                MessageBox.Show(this, (dialog.SelectedOption.Item as EcfStructureItem)?.ToString());
+            }
 
 
 

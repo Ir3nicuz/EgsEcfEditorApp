@@ -312,6 +312,7 @@ This errors occur during content editing in the tool at operations which would c
 This errors occur during content writing at hitting `save`. This error depends on the error handling settings. It only reports elements that should be written but according to the settings no writeable data is available/permitted. It states if an element is not written because it contains an error and no fallback data from parsing could be found.
 
 ## Planned Major Features
+- "Custom changed" Property for ecf items (storage, handling, display and usage) 
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - Element, Parameter, Comment moving
 - Undo / Redo

@@ -3,13 +3,15 @@ using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using static EcfFileViews.ItemSelectorDialog;
 
 namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeItemEditorDialog : Form
     {
-        private EcfItemSelectorDialog ElementPicker { get; } = new EcfItemSelectorDialog();
+        private ItemSelectorDialog ElementPicker { get; } = new ItemSelectorDialog();
         private List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
         private EcfBlock SelectedElement { get; set; } = null;
 
@@ -57,9 +59,10 @@ namespace EgsEcfEditorApp
         }
         private void ElementNameTextBox_Click(object sender, EventArgs evt)
         {
-            if (ElementPicker.ShowDialog(this, TitleRecources.EcfTechTreeItemEditorDialog_ElementPickerHeader, AvailableElements.ToArray()) == DialogResult.OK)
+            if (ElementPicker.ShowDialog(this, TitleRecources.EcfTechTreeItemEditorDialog_ElementPickerHeader, 
+                AvailableElements.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
             {
-                if (ElementPicker.SelectedItem is EcfBlock element)
+                if (ElementPicker.SelectedItem.Item is EcfBlock element)
                 {
                     SetSelectedElement(element);
                 }

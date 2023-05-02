@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EcfFileViews.ItemSelectorDialog;
 using static EgsEcfParser.EcfFormatChecking;
 using static Helpers.EnumLocalisation;
 
@@ -47,7 +48,7 @@ namespace EcfFileViews
         private List<EcfBlock> IdentifyingBlockList { get; set; } = null;
         private List<EcfBlock> ReferencedBlockList { get; set; } = null;
         private List<EcfBlock> ReferencingBlockList { get; set; } = null;
-        private EcfItemSelectorDialog ItemSelector { get; set; } = new EcfItemSelectorDialog();
+        private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog();
 
         private ParameterPanel ParameterItemValuesPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Value);
         private ParameterPanel ParameterMatrixPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Matrix);
@@ -466,9 +467,9 @@ namespace EcfFileViews
                     throw new ArgumentException("no addable parameter left");
                 }
 
-                if (ItemSelector.ShowDialog(this, addableParameter.ToArray()) == DialogResult.OK)
+                if (ItemSelector.ShowDialog(this, addableParameter.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
                 {
-                    PresetParameterCheckedKey = Convert.ToString(ItemSelector.SelectedItem);
+                    PresetParameterCheckedKey = Convert.ToString(ItemSelector.SelectedItem.Item);
                     return;
                 }
                 throw new ArgumentException("Parameter selecting aborted");
@@ -658,9 +659,9 @@ namespace EcfFileViews
                 if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(typeToCheck)))
                 {
                     MessageBox.Show(this, typeUnknownText, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    if (ItemSelector.ShowDialog(this, definition.Select(type => type.Value).ToArray()) == DialogResult.OK)
+                    if (ItemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
                     {
-                        return Convert.ToString(ItemSelector.SelectedItem);
+                        return Convert.ToString(ItemSelector.SelectedItem.Item);
                     }
                     throw new InvalidOperationException("No editing without Definition");
                 }
@@ -972,7 +973,7 @@ namespace EcfFileViews
             private Button RemoveValueButton { get; } = new Button();
             private EcfDataGridView Grid { get; } = new EcfDataGridView();
 
-            private EcfItemSelectorDialog ItemSelector { get; set; } = new EcfItemSelectorDialog();
+            private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog();
             public List<EcfBlock> ReferencedBlockList { get; set; } = null;
 
             private int PrefixColumnCount { get; } = 3;
@@ -1015,9 +1016,9 @@ namespace EcfFileViews
                 if (ReferencedBlockList != null && evt.RowIndex > -1 && Grid.Rows[evt.RowIndex] is AttributeRow row
                     && row.IsReferenceSource && evt.ColumnIndex != ActivationColumn.Index)
                 {
-                    if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                    if (ItemSelector.ShowDialog(this, ReferencedBlockList.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
                     {
-                        EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
+                        EcfBlock inheritor = ItemSelector.SelectedItem.Item as EcfBlock;
                         row.SetActive(true);
                         row.SetInheritor(inheritor);
                         InheritorChanged?.Invoke(inheritor, null);
@@ -1034,9 +1035,9 @@ namespace EcfFileViews
                     {
                         if (activ)
                         {
-                            if (ItemSelector.ShowDialog(this, ReferencedBlockList.ToArray()) == DialogResult.OK)
+                            if (ItemSelector.ShowDialog(this, ReferencedBlockList.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
                             {
-                                EcfBlock inheritor = ItemSelector.SelectedItem as EcfBlock;
+                                EcfBlock inheritor = ItemSelector.SelectedItem.Item as EcfBlock;
                                 row.SetInheritor(inheritor);
                                 InheritorChanged?.Invoke(inheritor, null);
                             }

@@ -547,15 +547,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Like wise search to reduce the dropdown list.
-        /// </summary>
-        internal static string EcfItemSelectorDialog_ToolTip_SearchInfo {
-            get {
-                return ResourceManager.GetString("EcfItemSelectorDialog_ToolTip_SearchInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Marked Parameters are inherited to the selected tree element.
         /// </summary>
         internal static string EcfParameterView_ToolTip_InheritedColumn {
@@ -1416,6 +1407,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_RemovedFrom {
             get {
                 return ResourceManager.GetString("Generic_RemovedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like wise search to reduce the dropdown list.
+        /// </summary>
+        internal static string ItemSelectorDialog_ToolTip_SearchInfo {
+            get {
+                return ResourceManager.GetString("ItemSelectorDialog_ToolTip_SearchInfo", resourceCulture);
             }
         }
     }

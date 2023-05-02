@@ -1,17 +1,16 @@
 ﻿using EgsEcfEditorApp.Properties;
-using EgsEcfParser;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace EcfFileViews
 {
-    public partial class EcfItemSelectorDialog : Form
+    public partial class ItemSelectorDialog : Form
     {
-        public object SelectedItem { get; set; } = default;
-        private object[] FullItemList { get; set; } = null;
+        public SelectorItem SelectedItem { get; private set; } = null;
+        private SelectorItem[] FullItemList { get; set; } = null;
 
-        public EcfItemSelectorDialog()
+        public ItemSelectorDialog()
         {
             InitializeComponent();
             InitForm();
@@ -44,12 +43,12 @@ namespace EcfFileViews
         }
         private void ItemSelectorComboBox_SelectedIndexChanged(object sender, EventArgs evt)
         {
-            SelectedItem = (ItemSelectorComboBox.SelectedItem as ComboBoxItem)?.Item;
+            SelectedItem = ItemSelectorComboBox.SelectedItem as SelectorItem;
             UpdateOkButton();
         }
         private void SearchTextBox_MouseHover(object sender, EventArgs evt)
         {
-            Tip.SetToolTip(SearchTextBox, TextRecources.EcfItemSelectorDialog_ToolTip_SearchInfo);
+            Tip.SetToolTip(SearchTextBox, TextRecources.ItemSelectorDialog_ToolTip_SearchInfo);
         }
         private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs evt)
         {
@@ -62,46 +61,43 @@ namespace EcfFileViews
         }
 
         // publics
-        public DialogResult ShowDialog(IWin32Window parent, object[] items)
+        public DialogResult ShowDialog(IWin32Window parent, SelectorItem[] items)
         {
             return ShowDialog(parent, TitleRecources.Generic_PickItem, items);
         }
-        public DialogResult ShowDialog(IWin32Window parent, string header, object[] items)
+        public DialogResult ShowDialog(IWin32Window parent, string header, SelectorItem[] items)
         {
             Text = header;
-            FullItemList = items;
+            FullItemList = items.ToArray();
             OkButton.Enabled = false;
             UpdateItemSelector();
             return ShowDialog(parent);
         }
 
         // private
-        private ComboBoxItem[] FilterList(object[] items)
+        private SelectorItem[] FilterList(SelectorItem[] items)
         {
             if (SearchTextBox.Text.Equals(string.Empty))
             {
-                return items?.Select(item => new ComboBoxItem(item)).ToArray();
+                return items;
             }
-            else
-            {
-                return items?.Select(item => new ComboBoxItem(item)).Where(item => item.DisplayText.Contains(SearchTextBox.Text)).ToArray();
-            }
+            return items?.Where(item => item.DisplayText.Contains(SearchTextBox.Text)).ToArray();
         }
         private void UpdateItemSelector()
         {
-            ComboBoxItem[] items = FilterList(FullItemList);
+            SelectorItem[] items = FilterList(FullItemList);
             ItemSelectorComboBox.BeginUpdate();
             ItemSelectorComboBox.Items.Clear();
             if (items == null)
             {
-                ItemSelectorComboBox.Items.Add("null");
+                ItemSelectorComboBox.Items.Add(TitleRecources.Generic_Replacement_Empty);
             }
             else
             {
                 ItemSelectorComboBox.Items.AddRange(items);
                 if (ItemSelectorComboBox.Items.Count > 0)
                 {
-                    ItemSelectorComboBox.SelectedItem = ItemSelectorComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => item.Item == SelectedItem);
+                    ItemSelectorComboBox.SelectedItem = ItemSelectorComboBox.Items.Cast<SelectorItem>().FirstOrDefault(item => item.Item == SelectedItem);
                     if (ItemSelectorComboBox.SelectedIndex < 0)
                     {
                         ItemSelectorComboBox.SelectedIndex = 0;
@@ -128,26 +124,20 @@ namespace EcfFileViews
             }
         }
 
-        private class ComboBoxItem : IComparable<ComboBoxItem>
+        public class SelectorItem : IComparable<SelectorItem>
         {
             public string DisplayText { get; }
             public object Item { get; }
 
-            public ComboBoxItem(object item)
+            public SelectorItem(object item)
             {
                 Item = item;
-                DisplayText = BuildDisplayText(item);
+                DisplayText = string.Format("\"{0}\"", Convert.ToString(item));
             }
-
-            private string BuildDisplayText(object item)
+            public SelectorItem(object item, string displayText)
             {
-                switch (item)
-                {
-                    case EcfAttribute attr: return attr.Key;
-                    case EcfParameter param: return param.Key;
-                    case EcfBlock block: return block.BuildRootId();
-                    default: return string.Format("\"{0}\"", Convert.ToString(item));
-                }
+                Item = item;
+                DisplayText = displayText;
             }
 
             public override string ToString()
@@ -155,7 +145,7 @@ namespace EcfFileViews
                 return DisplayText;
             }
 
-            public int CompareTo(ComboBoxItem other)
+            public int CompareTo(SelectorItem other)
             {
                 if (DisplayText == null || other.DisplayText == null) { return 0; }
                 return DisplayText.CompareTo(other.DisplayText);

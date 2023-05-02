@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static EcfFileViews.ItemSelectorDialog;
 
 namespace EgsEcfEditorApp
 {
@@ -17,7 +18,7 @@ namespace EgsEcfEditorApp
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         protected List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
         
-        private EcfItemSelectorDialog FileTabSelector { get; } = new EcfItemSelectorDialog();
+        private ItemSelectorDialog FileTabSelector { get; } = new ItemSelectorDialog();
         private TreeAlteratingTools TreeTools { get; } = new TreeAlteratingTools();
         private EcfTextInputDialog TreeNameSelector { get; } = new EcfTextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
         protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
@@ -232,9 +233,9 @@ namespace EgsEcfEditorApp
                     if (typeSpecificFileTabs.Count > 1)
                     {
                         string header = string.Format("{0}: {1}", TextRecources.EcfTechTreeDialog_SelectFileForType, openedTabFileType);
-                        DialogResult result = FileTabSelector.ShowDialog(this, header, typeSpecificFileTabs.ToArray());
+                        DialogResult result = FileTabSelector.ShowDialog(this, header, typeSpecificFileTabs.Select(page => new SelectorItem(page, page.File.FileName)).ToArray());
                         if (result != DialogResult.OK) { return result; }
-                        if (FileTabSelector.SelectedItem is EcfTabPage selectedPage) { UniqueFileTabs.Add(selectedPage); }
+                        if (FileTabSelector.SelectedItem.Item is EcfTabPage selectedPage) { UniqueFileTabs.Add(selectedPage); }
                     }
                     else
                     {

@@ -95,11 +95,17 @@
     <Compile Include="EcfItemListingDialog.Designer.cs">
       <DependentUpon>EcfItemListingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="EcfItemSelectorDialog.cs">
+    <Compile Include="ItemSelectorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EcfItemSelectorDialog.Designer.cs">
-      <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
+    <Compile Include="ItemSelectorDialog.Designer.cs">
+      <DependentUpon>ItemSelectorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionSelectorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionSelectorDialog.Designer.cs">
+      <DependentUpon>OptionSelectorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="EcfTechTreeDialog.cs">
       <SubType>Form</SubType>
@@ -192,8 +198,8 @@
     <EmbeddedResource Include="EcfItemListingDialog.resx">
       <DependentUpon>EcfItemListingDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EcfItemSelectorDialog.resx">
-      <DependentUpon>EcfItemSelectorDialog.cs</DependentUpon>
+    <EmbeddedResource Include="ItemSelectorDialog.resx">
+      <DependentUpon>ItemSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EcfTechTreeDialog.resx">
       <DependentUpon>EcfTechTreeDialog.cs</DependentUpon>
@@ -203,6 +209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EcfTextInputDialog.resx">
       <DependentUpon>EcfTextInputDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionSelectorDialog.resx">
+      <DependentUpon>OptionSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>

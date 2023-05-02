@@ -279,9 +279,6 @@
   <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
     <value>Alle Templates mit Item</value>
   </data>
-  <data name="EcfItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
-    <value>Like-suche zum Einschränken der Dropdown Liste</value>
-  </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Markierte Parameter werden in das gewählte Baumelement vererbt</value>
   </data>
@@ -569,5 +566,8 @@
   </data>
   <data name="Generic_RemovedFrom" xml:space="preserve">
     <value>entfernt von</value>
+  </data>
+  <data name="ItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
+    <value>Like-suche zum Einschränken der Dropdown Liste</value>
   </data>
 </root>

@@ -1,7 +1,7 @@
 ﻿
 namespace EcfFileViews
 {
-    partial class EcfItemSelectorDialog
+    partial class ItemSelectorDialog
     {
         /// <summary>
         /// Required designer variable.

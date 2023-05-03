@@ -1,5 +1,5 @@
-﻿using EgsEcfEditorApp.Properties;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,23 +7,37 @@ namespace EgsEcfEditorApp
 {
     public partial class OptionSelectorDialog : Form
     {
+        public string OkButtonText
+        {
+            get
+            {
+                return OkButton.Text;
+            }
+            set
+            {
+                OkButton.Text = value;
+            }
+        }
+        public string AbortButtonText
+        {
+            get
+            {
+                return AbortButton.Text;
+            }
+            set
+            {
+                AbortButton.Text = value;
+            }
+        }
         public OptionItem SelectedOption { get; private set; } = null;
         private OptionItem[] OptionItemList { get; set; } = null;
 
         public OptionSelectorDialog()
         {
             InitializeComponent();
-            InitForm();
         }
 
         // events
-        private void InitForm()
-        {
-            Icon = IconRecources.Icon_AppBranding;
-
-            AbortButton.Text = TitleRecources.Generic_Abort;
-            OkButton.Text = TitleRecources.Generic_Ok;
-        }
         private void AbortButton_Click(object sender, EventArgs evt)
         {
             DialogResult = DialogResult.Abort;
@@ -38,11 +52,15 @@ namespace EgsEcfEditorApp
         {
             UpdateSelectedOption(sender as RadioButton);
         }
+        private void Option_MouseDoubleClick(object sender, MouseEventArgs evt)
+        {
+            DialogResult = DialogResult.OK;
+            Close();
+        }
 
         // publics
-        public DialogResult ShowDialog(IWin32Window parent, string header, OptionItem[] options)
+        public DialogResult ShowDialog(IWin32Window parent, OptionItem[] options)
         {
-            Text = header;
             OptionItemList = options.ToArray();
             UpdateOptionPanel(options);
             return ShowDialog(parent);
@@ -55,15 +73,17 @@ namespace EgsEcfEditorApp
             OptionPanel.Controls.Clear();
             foreach(OptionItem option in options)
             {
-                RadioButton button = new RadioButton()
+                DoubleClickRadioButton button = new DoubleClickRadioButton()
                 {
                     AutoSize = true,
                     Text = option.DisplayText,
                 };
                 button.CheckedChanged += Option_CheckedChanged;
+                button.MouseDoubleClick += Option_MouseDoubleClick;
                 OptionPanel.Controls.Add(button);
             }
         }
+
         private void UpdateSelectedOption(RadioButton optionButton)
         {
             if (optionButton != null && optionButton.Checked)
@@ -87,6 +107,21 @@ namespace EgsEcfEditorApp
             {
                 Item = item;
                 DisplayText = displayText;
+            }
+        }
+        public class DoubleClickRadioButton : RadioButton
+        {
+            [EditorBrowsable(EditorBrowsableState.Always), Browsable(true)]
+            public new event MouseEventHandler MouseDoubleClick;
+
+            public DoubleClickRadioButton() : base()
+            {
+                SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, true);
+            }
+
+            protected override void OnMouseDoubleClick(MouseEventArgs evt)
+            {
+                MouseDoubleClick?.Invoke(this, evt);
             }
         }
     }

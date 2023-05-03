@@ -36,7 +36,6 @@ namespace EcfFileViews
             this.ItemSelectorComboBox = new System.Windows.Forms.ComboBox();
             this.SelectionPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
-            this.SearchLabel = new System.Windows.Forms.Label();
             this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonPanel.SuspendLayout();
             this.SelectionPanel.SuspendLayout();
@@ -49,7 +48,7 @@ namespace EcfFileViews
             this.ButtonPanel.Controls.Add(this.OkButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ButtonPanel.Location = new System.Drawing.Point(0, 82);
+            this.ButtonPanel.Location = new System.Drawing.Point(0, 52);
             this.ButtonPanel.Name = "ButtonPanel";
             this.ButtonPanel.Size = new System.Drawing.Size(434, 29);
             this.ButtonPanel.TabIndex = 0;
@@ -82,7 +81,7 @@ namespace EcfFileViews
             this.ItemSelectorComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ItemSelectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ItemSelectorComboBox.FormattingEnabled = true;
-            this.ItemSelectorComboBox.Location = new System.Drawing.Point(3, 57);
+            this.ItemSelectorComboBox.Location = new System.Drawing.Point(3, 29);
             this.ItemSelectorComboBox.Name = "ItemSelectorComboBox";
             this.ItemSelectorComboBox.Size = new System.Drawing.Size(428, 21);
             this.ItemSelectorComboBox.Sorted = true;
@@ -94,46 +93,34 @@ namespace EcfFileViews
             this.SelectionPanel.AutoSize = true;
             this.SelectionPanel.ColumnCount = 1;
             this.SelectionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SelectionPanel.Controls.Add(this.ItemSelectorComboBox, 0, 2);
-            this.SelectionPanel.Controls.Add(this.SearchTextBox, 0, 1);
-            this.SelectionPanel.Controls.Add(this.SearchLabel, 0, 0);
+            this.SelectionPanel.Controls.Add(this.ItemSelectorComboBox, 0, 1);
+            this.SelectionPanel.Controls.Add(this.SearchTextBox, 0, 0);
             this.SelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SelectionPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.SelectionPanel.Location = new System.Drawing.Point(0, 0);
             this.SelectionPanel.Name = "SelectionPanel";
-            this.SelectionPanel.RowCount = 3;
-            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.SelectionPanel.Size = new System.Drawing.Size(434, 82);
+            this.SelectionPanel.RowCount = 2;
+            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.SelectionPanel.Size = new System.Drawing.Size(434, 52);
             this.SelectionPanel.TabIndex = 2;
             // 
             // SearchTextBox
             // 
             this.SearchTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SearchTextBox.Location = new System.Drawing.Point(3, 30);
+            this.SearchTextBox.Location = new System.Drawing.Point(3, 3);
             this.SearchTextBox.Name = "SearchTextBox";
             this.SearchTextBox.Size = new System.Drawing.Size(428, 20);
             this.SearchTextBox.TabIndex = 2;
             this.SearchTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchTextBox_KeyPress);
             this.SearchTextBox.MouseHover += new System.EventHandler(this.SearchTextBox_MouseHover);
             // 
-            // SearchLabel
-            // 
-            this.SearchLabel.AutoSize = true;
-            this.SearchLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SearchLabel.Location = new System.Drawing.Point(3, 0);
-            this.SearchLabel.Name = "SearchLabel";
-            this.SearchLabel.Size = new System.Drawing.Size(428, 27);
-            this.SearchLabel.TabIndex = 3;
-            this.SearchLabel.Text = "search";
-            this.SearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // ItemSelectorDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 111);
+            this.ClientSize = new System.Drawing.Size(434, 81);
             this.Controls.Add(this.SelectionPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -161,7 +148,6 @@ namespace EcfFileViews
         private System.Windows.Forms.ComboBox ItemSelectorComboBox;
         private System.Windows.Forms.TableLayoutPanel SelectionPanel;
         private System.Windows.Forms.TextBox SearchTextBox;
-        private System.Windows.Forms.Label SearchLabel;
         private System.Windows.Forms.ToolTip Tip;
     }
 }

@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.ObjectModel;
-using System.Windows.Forms.VisualStyles;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using EgsEcfEditorApp.Properties;
@@ -20,7 +19,7 @@ using EcfToolBarControls;
 using EcfFileViewTools;
 using EgsEcfParser;
 using EcfFileViews;
-using EcfWinFormControls;
+using CustomControls;
 using static EcfFileViews.EcfBaseView;
 using static EcfFileViews.EcfFileOpenDialog;
 using static EcfFileViews.EcfItemEditingDialog;
@@ -35,8 +34,8 @@ using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
 using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
 using static EgsEcfEditorApp.EcfItemListingDialog;
-using static Helpers.GenericDialogs;
 using static EgsEcfEditorApp.OptionSelectorDialog;
+using static GenericDialogs.GenericDialogs;
 
 namespace EgsEcfEditorApp
 {
@@ -629,8 +628,14 @@ namespace EgsEcfEditorApp
 
 
 
-            OptionSelectorDialog dialog = new OptionSelectorDialog();
-            if (dialog.ShowDialog(this, "wähl mal was!", sourceItem.ChildItems.Take(5).Select(child => new OptionItem(child)).ToArray()) == DialogResult.OK)
+            OptionSelectorDialog dialog = new OptionSelectorDialog()
+            {
+                Text = "wähl mal was!",
+                Icon = IconRecources.Icon_AppBranding,
+                OkButtonText = TitleRecources.Generic_Ok,
+                AbortButtonText = TitleRecources.Generic_Abort,
+            };
+            if (dialog.ShowDialog(this, sourceItem.ChildItems.Take(15).Select(child => new OptionItem(child)).ToArray()) == DialogResult.OK)
             {
                 MessageBox.Show(this, (dialog.SelectedOption.Item as EcfStructureItem)?.ToString());
             }
@@ -710,7 +715,7 @@ namespace EgsEcfEditorApp
             {
                 List<string> problems = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
                     TextRecources.EcfItemHandlingSupport_StillUsedWith, user.BuildRootId())).ToList();
-                if (ShowOperationSafetyQuestionDialog(this, problems) != DialogResult.Yes)
+                if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) != DialogResult.Yes)
                 {
                     return;
                 }
@@ -1420,7 +1425,7 @@ namespace EcfFileViews
             problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
             problems.AddRange(CheckInterFileDependencies(blocksToRemove));
 
-            if (ShowOperationSafetyQuestionDialog(this, problems) == DialogResult.Yes)
+            if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());
@@ -1436,7 +1441,7 @@ namespace EcfFileViews
         private void RemoveParameterItem(List<EcfParameter> parameters)
         {
             List<string> problems = CheckMandatoryParameters(parameters);
-            if (ShowOperationSafetyQuestionDialog(this, problems) == DialogResult.Yes)
+            if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());
@@ -2594,7 +2599,7 @@ namespace EcfFileViews
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter ParameterSorter { get; }
-        private EcfDataGridView Grid { get; } = new EcfDataGridView();
+        private OptimizedDataGridView Grid { get; } = new OptimizedDataGridView();
         private ContextMenuStrip ParameterContextMenu { get; } = new ContextMenuStrip();
         private List<EcfParameterRow> ParameterRows { get; } = new List<EcfParameterRow>();
         private List<EcfParameterRow> SelectedRows { get; } = new List<EcfParameterRow>();
@@ -3279,7 +3284,7 @@ namespace EcfFileViews
         private Panel View { get; } = new Panel();
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter ErrorSorter { get; }
-        private EcfDataGridView Grid { get; } = new EcfDataGridView();
+        private OptimizedDataGridView Grid { get; } = new OptimizedDataGridView();
         private ContextMenuStrip ErrorContextMenu { get; } = new ContextMenuStrip();
         private ToolStripMenuItem ContextMenuItemShowInEditor { get; }
         private ToolStripMenuItem ContextMenuItemShowInFile { get; }
@@ -3811,7 +3816,14 @@ namespace EcfFileViewTools
             UncheckedItems = InternalUncheckedItems.AsReadOnly();
 
             LikeInput = (EcfToolBarTextBox)Add(new EcfToolBarTextBox(likeToolTip));
-            ItemSelector = (EcfToolBarCheckComboBox)Add(new EcfToolBarCheckComboBox(typeName, itemSelectorTooltip));
+            EcfToolBarCheckComboBox box = new EcfToolBarCheckComboBox()
+            {
+                NameText = typeName,
+                ToolTipText = itemSelectorTooltip,
+                OfText = TextRecources.Generic_Of,
+                ChangeAllText = TextRecources.Generic_ChangeAll,
+            };
+            ItemSelector = (EcfToolBarCheckComboBox)Add(box);
 
             LikeInput.KeyPress += LikeInput_KeyPress;
             LikeInput.TextChanged += LikeInput_TextChanged;
@@ -4144,781 +4156,6 @@ namespace EcfFileViewTools
     }
 }
 
-// generic tool bar controls
-namespace EcfToolBarControls
-{
-    public class EcfToolContainer : FlowLayoutPanel
-    {
-        public EcfToolContainer()
-        {
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
-        }
-
-        public void Add(EcfToolBox toolGroup)
-        {
-            Controls.Add(toolGroup);
-        }
-    }
-    public abstract class EcfToolBox : FlowLayoutPanel
-    {
-        public EcfToolBox() : base()
-        {
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Margin = new Padding(Margin.Left, 0, Margin.Right, 0);
-        }
-        protected Control Add(Control control)
-        {
-            control.AutoSize = true;
-            control.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            control.Dock = DockStyle.Fill;
-            Controls.Add(control);
-            return control;
-        }
-    }
-    public class EcfToolBarCheckComboBox : Panel
-    {
-        public event EventHandler SelectionChangeCommitted;
-
-        private bool IsResultBoxUnderCursor { get; set; } = false;
-
-        private ToolTip Tip { get; } = new ToolTip();
-        private TextBox ResultBox { get; } = new TextBox();
-        private DropDownButton DropButton { get; }
-        private DropDownList ItemList { get; }
-
-        public string ToolTipText { get; }
-        public string LocalisedOf { get; }
-        public string LocalisedName { get; }
-        public int MaxDropDownItems { get; set; } = 10;
-
-        public EcfToolBarCheckComboBox(string TypeText, string toolTip)
-        {
-            ToolTipText = toolTip;
-            LocalisedOf = TextRecources.Generic_Of;
-            LocalisedName = TypeText;
-            
-            ResultBox.ReadOnly = true;
-            ResultBox.Margin = new Padding(0);
-            ResultBox.Location = new Point(0, 0);
-
-            DropButton = new DropDownButton(ResultBox.Height);
-
-            ItemList = new DropDownList(TextRecources.Generic_ChangeAll)
-            {
-                AnchorControl = this
-            };
-
-            ResultBox.MouseHover += ResultBox_MouseHover;
-            ResultBox.Click += ResultBox_Click;
-            ResultBox.MouseEnter += ResultBox_MouseEnter;
-            ResultBox.MouseLeave += ResultBox_MouseLeave;
-            DropButton.DropStateChanged += DropButton_DropStateChanged;
-            ItemList.ItemStateChanged += ItemList_ItemStateChanged;
-            ItemList.DropDownFocusLost += ItemList_DropDownFocusLost;
-
-            Controls.Add(ResultBox);
-            Controls.Add(DropButton);
-        }
-
-        // events
-        private void ResultBox_MouseHover(object sender, EventArgs evt)
-        {
-            Tip.SetToolTip(ResultBox, ToolTipText);
-        }
-        private void ResultBox_Click(object sender, EventArgs evt)
-        {
-            DropButton.Switch();
-        }
-        private void ResultBox_MouseEnter(object sender, EventArgs evt)
-        {
-            IsResultBoxUnderCursor = true;
-        }
-        private void ResultBox_MouseLeave(object sender, EventArgs evt)
-        {
-            IsResultBoxUnderCursor = false;
-        }
-        private void ItemList_DropDownFocusLost(object sender, EventArgs evt)
-        {
-            if (!DropButton.IsUnderCursor && !IsResultBoxUnderCursor)
-            {
-                DropButton.Reset();
-            }
-        }
-        private void DropButton_DropStateChanged(object sender, EventArgs evt)
-        {
-            if (DropButton.State == ComboBoxState.Pressed)
-            {
-                ItemList.ShowPopup(this);
-            }
-            else
-            {
-                ItemList.Hide();
-                SelectionChangeCommitted?.Invoke(this, null);
-            }
-        }
-        private void ItemList_ItemStateChanged(object sender, ItemCheckEventArgs evt)
-        {
-            UpdateResult();
-        }
-
-        // private
-        private void UpdateResult()
-        {
-            ResultBox.Text = ToString();
-            int width = TextRenderer.MeasureText(ResultBox.Text, ResultBox.Font).Width;
-            if (width > ResultBox.Width)
-            {
-                ResultBox.Width = width;
-                DropButton.Location = new Point(width, 0);
-                Size = new Size(width + DropButton.Width, ResultBox.Height);
-                MinimumSize = Size;
-                MaximumSize = Size;
-            }
-        }
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            ItemList.Dispose();
-            base.Dispose(disposing);
-        }
-
-        // public
-        public void Reset()
-        {
-            ItemList.Reset();
-        }
-        public override string ToString()
-        {
-            return string.Format("{0} {1} {2} {3}", GetCheckedItems().Count, LocalisedOf, GetItems().Count, LocalisedName);
-        }
-        public string GetResult()
-        {
-            return ResultBox.Text;
-        }
-        public List<CheckableItem> GetItems()
-        {
-            return ItemList.GetItems();
-        }
-        public List<CheckableItem> GetCheckedItems()
-        {
-            return ItemList.GetCheckedItems();
-        }
-        public List<CheckableItem> GetUncheckedItems()
-        {
-            return ItemList.GetUncheckedItems();
-        }
-        public void SetItems(List<CheckableItem> items)
-        {
-            if (items != null)
-            {
-                ItemList.SetItems(items);
-                UpdateResult();
-            }
-        }
-        public bool IsItemChecked(string itemId)
-        {
-            return ItemList.GetCheckedItems().Any(item => item.Id.Equals(itemId));
-        }
-
-        private class DropDownList : Form
-        {
-            public event ItemCheckEventHandler ItemStateChanged;
-            public event EventHandler DropDownFocusLost;
-
-            public Control AnchorControl { get; set; } = null;
-            public string LocalisedChangeAll { get; }
-
-            private CheckedListBox ItemList { get; } = new CheckedListBox();
-
-            public DropDownList(string changAllText) : base()
-            {
-                AnchorControl = this;
-
-                AutoSize = true;
-                AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                FormBorderStyle = FormBorderStyle.None;
-                LocalisedChangeAll = changAllText;
-                ShowInTaskbar = false;
-                StartPosition = FormStartPosition.Manual;
-
-                ItemList.IntegralHeight = true;
-                ItemList.CheckOnClick = true;
-                ItemList.Margin = new Padding(0);
-                ItemList.ItemCheck += ItemList_ItemCheck;
-                ItemList.LostFocus += ItemList_LostFocus; ;
-
-                Controls.Add(ItemList);
-            }
-
-            // events
-            private void ItemList_LostFocus(object sender, EventArgs evt)
-            {
-                DropDownFocusLost?.Invoke(this, null);
-            }
-            private void ItemList_ItemCheck(object sender, ItemCheckEventArgs evt)
-            {
-                if (ItemList.Items[evt.Index] is CheckableItem item)
-                {
-                    item.State = (evt.NewValue == CheckState.Checked);
-                    if (evt.Index == 0)
-                    {
-                        ChangeAllStates(item.State);
-                    }
-                    ItemStateChanged?.Invoke(item, evt);
-                }
-            }
-
-            // publics
-            public void Reset()
-            {
-                ItemList.SetItemChecked(0, true);
-                ResetAllStates();
-            }
-            public void SetItems(List<CheckableItem> items)
-            {
-                ItemList.BeginUpdate();
-                ItemList.Items.Clear();
-                ItemList.Items.Add(new CheckableItem(string.Format("#{0}", LocalisedChangeAll), true));
-                ItemList.Items.AddRange(items.ToArray());
-                Reset();
-                ResizeDropDown();
-                ItemList.EndUpdate();
-            }
-            public void ShowPopup(IWin32Window parent)
-            {
-                if (AnchorControl is EcfToolBarCheckComboBox box)
-                {
-                    Location = box.PointToScreen(new Point(0, box.Height));
-                    Width = Math.Max(Width, box.Width);
-                }
-                Show(parent);
-            }
-            public List<CheckableItem> GetItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).ToList();
-            }
-            public List<CheckableItem> GetCheckedItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == true).ToList();
-            }
-            public List<CheckableItem> GetUncheckedItems()
-            {
-                return ItemList.Items.Cast<CheckableItem>().Skip(1).Where(item => item.State == false).ToList();
-            }
-
-            // privates
-            private void ResetAllStates()
-            {
-                for (int i = 1; i < ItemList.Items.Count; i++)
-                {
-                    if (ItemList.Items[i] is CheckableItem item)
-                    {
-                        ItemList.SetItemChecked(i, item.InitState);
-                    }
-                }
-            }
-            private void ChangeAllStates(bool state)
-            {
-                for (int i = 1; i < ItemList.Items.Count; i++)
-                {
-                    ItemList.SetItemChecked(i, state);
-                }
-            }
-            private void ResizeDropDown()
-            {
-                if (AnchorControl is EcfToolBarCheckComboBox box && ItemList.Items.Count > 0)
-                {
-                    int itemCount = Math.Min(ItemList.Items.Count, box.MaxDropDownItems);
-                    int height = (ItemList.GetItemHeight(0) + 5) * itemCount;
-
-                    int width = 0;
-                    using (Graphics gfx = ItemList.CreateGraphics())
-                    {
-                        gfx.PageUnit = GraphicsUnit.Pixel;
-                        foreach (CheckableItem item in ItemList.Items)
-                        {
-                            width = Math.Max(width, (int)gfx.MeasureString(item.Display, ItemList.Font).Width);
-                        }
-                        if (ItemList.Items.Count > box.MaxDropDownItems)
-                        {
-                            width += SystemInformation.VerticalScrollBarWidth;
-                        }
-                        width += CheckBoxRenderer.GetGlyphSize(gfx, CheckBoxState.CheckedNormal).Width + 5;
-                        width = Math.Max(width, box.Width);
-                    }
-
-                    ItemList.Size = new Size(width, height);
-                }
-            }
-        }
-        public class CheckableItem
-        {
-            public string Id { get; }
-            public string Display { get; }
-            public bool InitState { get; }
-            public bool State { get; set; }
-
-            public CheckableItem(string id, string displayName, bool initState)
-            {
-                Id = id;
-                Display = displayName;
-                State = initState;
-                InitState = initState;
-            }
-            public CheckableItem(string displayName, bool initState) : this(displayName, displayName, initState)
-            {
-
-            }
-
-            public override string ToString()
-            {
-                return Display;
-            }
-        }
-        private class DropDownButton : ButtonBase
-        {
-            public event EventHandler DropStateChanged;
-
-            public bool IsUnderCursor { get; private set; } = false;
-            public ComboBoxState State { get; private set; } = ComboBoxState.Normal;
-
-            public DropDownButton(int height) : base()
-            {
-                Margin = new Padding(0);
-                Size = new Size(height, height);
-            }
-
-            public void Reset()
-            {
-                if (!State.Equals(ComboBoxState.Normal))
-                {
-                    State = ComboBoxState.Normal;
-                    DropStateChanged?.Invoke(this, null);
-                    Invalidate();
-                }
-            }
-            public void Drop()
-            {
-                if (!State.Equals(ComboBoxState.Pressed))
-                {
-                    State = ComboBoxState.Pressed;
-                    DropStateChanged?.Invoke(this, null);
-                    Invalidate();
-                }
-            }
-            public void Switch()
-            {
-                State = State.Equals(ComboBoxState.Normal) ? ComboBoxState.Pressed : ComboBoxState.Normal;
-                DropStateChanged?.Invoke(this, null);
-                Invalidate();
-            }
-
-            protected override void OnPaint(PaintEventArgs evt)
-            {
-                ComboBoxRenderer.DrawDropDownButton(evt.Graphics, evt.ClipRectangle, State);
-            }
-            protected override void OnClick(EventArgs evt)
-            {
-                ComboBoxState oldState = State;
-                switch (State)
-                {
-                    case ComboBoxState.Normal: State = ComboBoxState.Pressed; break;
-                    default: State = ComboBoxState.Normal; break;
-                }
-                if (!State.Equals(oldState))
-                {
-                    DropStateChanged?.Invoke(this, null);
-                    Invalidate();
-                }
-            }
-            protected override void OnMouseEnter(EventArgs evt)
-            {
-                IsUnderCursor = true;
-            }
-            protected override void OnMouseLeave(EventArgs evt)
-            {
-                IsUnderCursor = false;
-            }
-        }
-    }
-    public class EcfToolBarTextBox : TextBox
-    {
-        private string ToolTipText { get; }
-        private ToolTip Tip { get; } = new ToolTip();
-
-        public EcfToolBarTextBox(string toolTip) : base()
-        {
-            ToolTipText = toolTip;
-
-            MouseHover += TextBox_MouseHover;
-        }
-
-        private void TextBox_MouseHover(object sender, EventArgs evt)
-        {
-            Tip.SetToolTip(this, ToolTipText);
-        }
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public class EcfToolBarButton : Button
-    {
-        private ToolTip Tip { get; } = new ToolTip();
-        
-        public EcfToolBarButton(string toolTip, Image image, string text) : base()
-        {
-            SetStyle(ControlStyles.Selectable, false);
-            Tip.SetToolTip(this, toolTip);
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-
-            if (image != null)
-            {
-                FlatStyle = FlatStyle.Flat;
-                FlatAppearance.BorderSize = 0;
-                Image = image;
-            }
-            Text = text;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public class EcfToolBarRadioButton : RadioButton
-    {
-        private ToolTip Tip { get; } = new ToolTip();
-
-        public EcfToolBarRadioButton(string toolTip, Image image, string text) : base()
-        {
-            SetStyle(ControlStyles.Selectable, false);
-            Tip.SetToolTip(this, toolTip);
-
-            Appearance = Appearance.Button;
-            if (image != null)
-            {
-                FlatStyle = FlatStyle.Flat;
-                FlatAppearance.BorderSize = 0;
-                FlatAppearance.BorderColor = SystemColors.ControlDark;
-                FlatAppearance.CheckedBackColor = Color.Transparent;
-                FlatAppearance.MouseOverBackColor = Color.Transparent;
-                FlatAppearance.MouseDownBackColor = Color.Transparent;
-                Image = image;
-            }
-            else if (text != null)
-            {
-                Text = text;
-            }
-
-            CheckedChanged += EcfToolBarRadioButton_CheckedChanged;
-        }
-
-        // events
-        private void EcfToolBarRadioButton_CheckedChanged(object sender, EventArgs evt)
-        {
-            FlatAppearance.BorderSize = Checked ? 1 : 0;
-        }
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public abstract class EcfToolBarCheckBox : CheckBox
-    {
-        private ToolTip Tip { get; } = new ToolTip();
-
-        public EcfToolBarCheckBox(string toolTip) : base()
-        {
-            SetStyle(ControlStyles.Selectable, false);
-            Tip.SetToolTip(this, toolTip);
-
-            AutoCheck = true;
-
-            Appearance = Appearance.Button;
-            FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderSize = 0;
-            FlatAppearance.CheckedBackColor = Color.Transparent;
-            FlatAppearance.MouseOverBackColor = Color.Transparent;
-            FlatAppearance.MouseDownBackColor = Color.Transparent;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public class EcfToolBarTwoStateCheckBox : EcfToolBarCheckBox
-    {
-        private Image CheckedImage { get; }
-        private Image UncheckedImage { get; }
-
-        public EcfToolBarTwoStateCheckBox(string toolTip, Image checkedImage, Image uncheckedImage) : base(toolTip)
-        {
-            CheckedImage = checkedImage;
-            UncheckedImage = uncheckedImage;
-            Image = UncheckedImage;
-            
-            CheckStateChanged += ToolBarTwoStateCheckBox_CheckStateChanged;
-
-            Reset();
-        }
-
-        // events
-        private void ToolBarTwoStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
-        {
-            Image = Checked ? CheckedImage : UncheckedImage;
-        }
-
-        // public
-        public void Reset()
-        {
-            Checked = false;
-        }
-    }
-    public class EcfToolBarThreeStateCheckBox : EcfToolBarCheckBox
-    {
-        private Image IndeterminateImage { get; }
-        private Image CheckedImage { get; }
-        private Image UncheckedImage { get; }
-
-        public EcfToolBarThreeStateCheckBox(string toolTip, Image indeterminateImage, Image checkedImage, Image uncheckedImage) : base(toolTip)
-        {
-            IndeterminateImage = indeterminateImage;
-            CheckedImage = checkedImage;
-            UncheckedImage = uncheckedImage;
-
-            ThreeState = true;
-
-            CheckStateChanged += ToolBarThreeStateCheckBox_CheckStateChanged;
-
-            Reset();
-        }
-
-        // events
-        private void ToolBarThreeStateCheckBox_CheckStateChanged(object sender, EventArgs evt)
-        {
-            switch (CheckState)
-            {
-                case CheckState.Checked: Image = CheckedImage; break;
-                case CheckState.Unchecked: Image = UncheckedImage; break;
-                default: Image = IndeterminateImage; break;
-            }
-        }
-
-        // publics
-        public void Reset()
-        {
-            CheckState = CheckState.Indeterminate;
-        }
-    }
-    public class EcfToolBarNumericUpDown : NumericUpDown
-    {
-        private ToolTip Tip { get; } = new ToolTip();
-
-        public EcfToolBarNumericUpDown(string toolTip) : base()
-        {
-            SetStyle(ControlStyles.Selectable, false);
-
-            Tip.SetToolTip(this, toolTip);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public class EcfToolBarComboBox : ComboBox
-    {
-        private ToolTip Tip { get; } = new ToolTip();
-
-        public EcfToolBarComboBox(string toolTip) : base()
-        {
-            SetStyle(ControlStyles.Selectable, false);
-            Tip.SetToolTip(this, toolTip);
-
-            DropDownStyle = ComboBoxStyle.DropDownList;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Tip.Dispose();
-            base.Dispose(disposing);
-        }
-    }
-    public class EcfToolBarLabel : Label
-    {
-        public bool IsForcingBoldStyle { get; }
-
-        public EcfToolBarLabel(string text, bool forceBold) : base()
-        {
-            Text = text;
-            IsForcingBoldStyle = forceBold;
-
-            SetStyle(ControlStyles.Selectable, false);
-            TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
-            FontChanged += ToolBarLabel_FontChanged;
-
-            OnFontChanged(null);
-        }
-
-        private void ToolBarLabel_FontChanged(object sender, EventArgs evt)
-        {
-            if (IsForcingBoldStyle)
-            {
-                Font = new Font(Font, FontStyle.Bold);
-            }
-        }
-}
-}
-
-// winforms extension wrapper
-namespace EcfWinFormControls
-{
-    public class EcfDataGridView : DataGridView
-    {
-
-        public EcfDataGridView() : base()
-        {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-
-            AllowUserToAddRows = false;
-            AllowUserToDeleteRows = false;
-            AllowUserToOrderColumns = false;
-            AllowUserToResizeColumns = true;
-            AllowDrop = false;
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            EditMode = DataGridViewEditMode.EditProgrammatically;
-            ShowEditingIcon = false;
-        }
-    }
-    public class EcfTreeView : TreeView
-    {
-        private List<EcfTreeView> LinkedTreeViews { get; } = new List<EcfTreeView>();
-
-        public EcfTreeView() : base()
-        {
-            
-        }
-
-        // publics
-        public void LinkTreeView(EcfTreeView treeView)
-        {
-            if (treeView == this)
-            {
-                throw new ArgumentException("Cannot link a TreeView to itself!", "treeView");
-            }
-
-            if (!LinkedTreeViews.Contains(treeView))
-            {
-                LinkedTreeViews.Add(treeView);
-                treeView.LinkTreeView(this);
-                for (int i = 0; i < LinkedTreeViews.Count; i++)
-                {
-                    var linkedTreeView = LinkedTreeViews[i];
-                    if (linkedTreeView != treeView)
-                    {
-                        linkedTreeView.LinkTreeView(treeView);
-                    }
-                }
-            }
-        }
-
-
-        // privates
-        protected override void WndProc(ref Message message)
-        {
-            if (message.Msg == User32.WM_DOUBLECLICK)
-            {
-                OnDoubleClick(new EventArgs());
-                message.Result = IntPtr.Zero;
-                return;
-            }
-
-            base.WndProc(ref message);
-
-            if (message.Msg == User32.WM_VSCROLL || message.Msg == User32.WM_MOUSEWHEEL)
-            {
-                foreach (EcfTreeView linkedTreeView in LinkedTreeViews)
-                {
-                    SetScrollPositions(this, linkedTreeView);
-                    Message copiedMessage = new Message
-                    {
-                        HWnd = linkedTreeView.Handle,
-                        LParam = message.LParam,
-                        Msg = message.Msg,
-                        Result = message.Result,
-                        WParam = message.WParam,
-                    };
-                    linkedTreeView.RecieveWndProc(ref copiedMessage);
-                }
-            }
-        }
-        private void RecieveWndProc(ref Message message)
-        {
-            base.WndProc(ref message);
-        }
-        private static void SetScrollPositions(EcfTreeView source, EcfTreeView dest)
-        {
-            int horizontal = User32.GetScrollPos(source.Handle, Orientation.Horizontal);
-            int vertical = User32.GetScrollPos(source.Handle, Orientation.Vertical);
-            User32.SetScrollPos(dest.Handle, Orientation.Horizontal, horizontal, true);
-            User32.SetScrollPos(dest.Handle, Orientation.Vertical, vertical, true);
-        }
-
-        private static class User32
-        {
-            public const int WM_VSCROLL = 0x115;
-            public const int WM_MOUSEWHEEL = 0x020A;
-            public const int WM_DOUBLECLICK = 0x0203;
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetScrollPos(IntPtr hWnd, Orientation nBar);
-
-            [DllImport("user32.dll")]
-            public static extern int SetScrollPos(IntPtr hWnd, Orientation nBar, int nPos, bool bRedraw);
-        }
-    }
-    public class EcfProgressBar : ProgressBar
-    {
-        public string BarText { get; set; } = string.Empty;
-
-        public EcfProgressBar() : base()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
-        }
-
-        protected override void OnPaint(PaintEventArgs evt)
-        {
-            Rectangle barArea = ClientRectangle;
-            Graphics gfx = evt.Graphics;
-            gfx.PageUnit = GraphicsUnit.Pixel;
-
-            ProgressBarRenderer.DrawHorizontalBar(gfx, barArea);
-            barArea.Inflate(-3, -3);
-            Font barTextFont = new Font(Font.FontFamily, barArea.Height - 3, GraphicsUnit.Pixel);
-            if (Value > 0)
-            {
-                Rectangle chunkArea = new Rectangle(barArea.X, barArea.Y, (int)((float)Value / Maximum * barArea.Width), barArea.Height);
-                ProgressBarRenderer.DrawHorizontalChunks(gfx, chunkArea);
-            }
-            string barText = string.Format("{0} {1} / {2}", BarText, Value, Maximum);
-            float barTextStart = (barArea.Width - gfx.MeasureString(barText, barTextFont).Width) / 2;
-            gfx.DrawString(barText, barTextFont, SystemBrushes.ControlText, barTextStart, 1);
-        }
-    }
-}
-
 // helferlein
 namespace Helpers
 {
@@ -5025,23 +4262,6 @@ namespace Helpers
                 gfx.DrawImage(image, new Rectangle(xGap, yGap, edgeLength, edgeLength));
             }
             return bmp;
-        }
-    }
-    public static class GenericDialogs
-    {
-        public static DialogResult ShowOperationSafetyQuestionDialog(IWin32Window parent, List<string> problems)
-        {
-            if (problems.Count < 1) { return DialogResult.Yes; }
-
-            StringBuilder message = new StringBuilder(TextRecources.Generic_ContinueOperationWithErrorsQuestion);
-            message.Append(Environment.NewLine);
-            problems.ForEach(problem =>
-            {
-                message.Append(Environment.NewLine);
-                message.Append(problem);
-            });
-
-            return MessageBox.Show(parent, message.ToString(), TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
         }
     }
 }

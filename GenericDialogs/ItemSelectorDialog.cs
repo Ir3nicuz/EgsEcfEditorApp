@@ -1,5 +1,4 @@
-﻿using EgsEcfEditorApp.Properties;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,25 +6,39 @@ namespace EcfFileViews
 {
     public partial class ItemSelectorDialog : Form
     {
+        public string OkButtonText
+        {
+            get
+            {
+                return OkButton.Text;
+            }
+            set
+            {
+                OkButton.Text = value;
+            }
+        }
+        public string AbortButtonText
+        {
+            get
+            {
+                return AbortButton.Text;
+            }
+            set
+            {
+                AbortButton.Text = value;
+            }
+        }
+        public string SearchToolTipText { get; set; } = string.Empty;
+        public string DefaultItemText { get; set; } = string.Empty;
         public SelectorItem SelectedItem { get; private set; } = null;
         private SelectorItem[] FullItemList { get; set; } = null;
 
         public ItemSelectorDialog()
         {
             InitializeComponent();
-            InitForm();
         }
 
         // events
-        private void InitForm()
-        {
-            Icon = IconRecources.Icon_AppBranding;
-
-            AbortButton.Text = TitleRecources.Generic_Abort;
-            OkButton.Text = TitleRecources.Generic_Ok;
-
-            SearchLabel.Text = TitleRecources.Generic_Search;
-        }
         private void ItemSelectorDialog_Activated(object sender, EventArgs evt)
         {
             SearchTextBox.Focus();
@@ -48,7 +61,7 @@ namespace EcfFileViews
         }
         private void SearchTextBox_MouseHover(object sender, EventArgs evt)
         {
-            Tip.SetToolTip(SearchTextBox, TextRecources.ItemSelectorDialog_ToolTip_SearchInfo);
+            Tip.SetToolTip(SearchTextBox, SearchToolTipText);
         }
         private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs evt)
         {
@@ -63,11 +76,6 @@ namespace EcfFileViews
         // publics
         public DialogResult ShowDialog(IWin32Window parent, SelectorItem[] items)
         {
-            return ShowDialog(parent, TitleRecources.Generic_PickItem, items);
-        }
-        public DialogResult ShowDialog(IWin32Window parent, string header, SelectorItem[] items)
-        {
-            Text = header;
             FullItemList = items.ToArray();
             OkButton.Enabled = false;
             UpdateItemSelector();
@@ -90,7 +98,7 @@ namespace EcfFileViews
             ItemSelectorComboBox.Items.Clear();
             if (items == null)
             {
-                ItemSelectorComboBox.Items.Add(TitleRecources.Generic_Replacement_Empty);
+                ItemSelectorComboBox.Items.Add(DefaultItemText);
             }
             else
             {

@@ -95,18 +95,6 @@
     <Compile Include="EcfItemListingDialog.Designer.cs">
       <DependentUpon>EcfItemListingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ItemSelectorDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemSelectorDialog.Designer.cs">
-      <DependentUpon>ItemSelectorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OptionSelectorDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OptionSelectorDialog.Designer.cs">
-      <DependentUpon>OptionSelectorDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="EcfTechTreeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,12 +106,6 @@
     </Compile>
     <Compile Include="EcfTechTreeItemEditorDialog.Designer.cs">
       <DependentUpon>EcfTechTreeItemEditorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TextInputDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextInputDialog.Designer.cs">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsDialog.cs">
       <SubType>Form</SubType>
@@ -198,20 +180,11 @@
     <EmbeddedResource Include="EcfItemListingDialog.resx">
       <DependentUpon>EcfItemListingDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemSelectorDialog.resx">
-      <DependentUpon>ItemSelectorDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EcfTechTreeDialog.resx">
       <DependentUpon>EcfTechTreeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EcfTechTreeItemEditorDialog.resx">
       <DependentUpon>EcfTechTreeItemEditorDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextInputDialog.resx">
-      <DependentUpon>TextInputDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionSelectorDialog.resx">
-      <DependentUpon>OptionSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
@@ -260,9 +233,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
+      <Project>{5b5b7727-ec03-47a3-a450-53ae1b2df418}</Project>
+      <Name>CustomControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EcfToolBarControls\EcfToolBarControls.csproj">
+      <Project>{6f0d1b3a-5981-417f-bd08-d28c5f464e8a}</Project>
+      <Name>EcfToolBarControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EgsEcfParser\EgsEcfParser.csproj">
       <Project>{6c8ba0c6-ce17-43d9-bce4-223392d65a02}</Project>
       <Name>EgsEcfParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericDialogs\GenericDialogs.csproj">
+      <Project>{21f03e9f-2dd7-443b-acc9-4d219d3360b3}</Project>
+      <Name>GenericDialogs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

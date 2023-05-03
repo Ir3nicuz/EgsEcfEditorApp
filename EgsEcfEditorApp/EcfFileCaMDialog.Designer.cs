@@ -41,9 +41,9 @@ namespace EgsEcfEditorApp
             this.SecondFileDetailsBorderPanel = new System.Windows.Forms.Panel();
             this.SecondFileDetailsView = new System.Windows.Forms.RichTextBox();
             this.FirstFileTreeBorderPanel = new System.Windows.Forms.GroupBox();
-            this.FirstFileTreeView = new EcfWinFormControls.EcfTreeView();
+            this.FirstFileTreeView = new LinkableTreeView();
             this.SecondFileTreeBorderPanel = new System.Windows.Forms.GroupBox();
-            this.SecondFileTreeView = new EcfWinFormControls.EcfTreeView();
+            this.SecondFileTreeView = new LinkableTreeView();
             this.CompareAndMergePanel.SuspendLayout();
             this.FirstFileDetailsBorderPanel.SuspendLayout();
             this.SecondFileDetailsBorderPanel.SuspendLayout();
@@ -279,8 +279,8 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TableLayoutPanel CompareAndMergePanel;
         private System.Windows.Forms.ComboBox FirstFileComboBox;
         private System.Windows.Forms.ComboBox SecondFileComboBox;
-        private EcfWinFormControls.EcfTreeView FirstFileTreeView;
-        private EcfWinFormControls.EcfTreeView SecondFileTreeView;
+        private LinkableTreeView FirstFileTreeView;
+        private LinkableTreeView SecondFileTreeView;
         private EcfToolBarControls.EcfToolContainer ActionContainer;
         private EcfToolBarControls.EcfToolContainer SecondFileSelectionContainer;
         private EcfToolBarControls.EcfToolContainer FirstFileSelectionContainer;

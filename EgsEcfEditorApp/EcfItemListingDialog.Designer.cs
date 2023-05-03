@@ -1,4 +1,6 @@
 ﻿
+using CustomControls;
+
 namespace EgsEcfEditorApp
 {
     partial class EcfItemListingDialog
@@ -32,7 +34,7 @@ namespace EgsEcfEditorApp
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CloseButton = new System.Windows.Forms.Button();
             this.ItemListingGridPanel = new System.Windows.Forms.Panel();
-            this.ItemListingGrid = new EcfWinFormControls.EcfDataGridView();
+            this.ItemListingGrid = new OptimizedDataGridView();
             this.ListingGridColumn_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ListingGridColumn_Element = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -173,7 +175,7 @@ namespace EgsEcfEditorApp
 
         #endregion
         private System.Windows.Forms.Button CloseButton;
-        private EcfWinFormControls.EcfDataGridView ItemListingGrid;
+        private OptimizedDataGridView ItemListingGrid;
         private System.Windows.Forms.Panel ItemListingGridPanel;
         private System.Windows.Forms.TableLayoutPanel ButtonInfoPanel;
         private System.Windows.Forms.Label SearchHitsLabel;

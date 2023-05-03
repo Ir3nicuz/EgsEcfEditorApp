@@ -32,7 +32,7 @@ namespace EgsEcfEditorApp
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
-            this.OptionPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.OptionPanel = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,15 +44,15 @@ namespace EgsEcfEditorApp
             this.ButtonPanel.Controls.Add(this.OkButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ButtonPanel.Location = new System.Drawing.Point(0, 421);
+            this.ButtonPanel.Location = new System.Drawing.Point(0, 132);
             this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(800, 29);
+            this.ButtonPanel.Size = new System.Drawing.Size(384, 29);
             this.ButtonPanel.TabIndex = 0;
             // 
             // AbortButton
             // 
             this.AbortButton.AutoSize = true;
-            this.AbortButton.Location = new System.Drawing.Point(722, 3);
+            this.AbortButton.Location = new System.Drawing.Point(306, 3);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 0;
@@ -63,7 +63,7 @@ namespace EgsEcfEditorApp
             // OkButton
             // 
             this.OkButton.AutoSize = true;
-            this.OkButton.Location = new System.Drawing.Point(641, 3);
+            this.OkButton.Location = new System.Drawing.Point(225, 3);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 1;
@@ -73,18 +73,22 @@ namespace EgsEcfEditorApp
             // 
             // OptionPanel
             // 
-            this.OptionPanel.AutoSize = true;
-            this.OptionPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.OptionPanel.Location = new System.Drawing.Point(238, 99);
+            this.OptionPanel.AutoScroll = true;
+            this.OptionPanel.ColumnCount = 1;
+            this.OptionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.OptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OptionPanel.Location = new System.Drawing.Point(0, 0);
             this.OptionPanel.Name = "OptionPanel";
-            this.OptionPanel.Size = new System.Drawing.Size(278, 167);
+            this.OptionPanel.RowCount = 1;
+            this.OptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.OptionPanel.Size = new System.Drawing.Size(384, 132);
             this.OptionPanel.TabIndex = 1;
             // 
             // OptionSelectorDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(384, 161);
             this.Controls.Add(this.OptionPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -92,7 +96,7 @@ namespace EgsEcfEditorApp
             this.MinimizeBox = false;
             this.Name = "OptionSelectorDialog";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptionSelectorDialog";
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
@@ -106,6 +110,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.FlowLayoutPanel ButtonPanel;
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button OkButton;
-        private System.Windows.Forms.FlowLayoutPanel OptionPanel;
+        private System.Windows.Forms.TableLayoutPanel OptionPanel;
     }
 }

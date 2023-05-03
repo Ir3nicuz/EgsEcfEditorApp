@@ -1,28 +1,43 @@
-﻿using EgsEcfEditorApp.Properties;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace EgsEcfEditorApp
 {
     public partial class TextInputDialog : Form
     {
-        public TextInputDialog(string caption)
+        public string OkButtonText { 
+            get
+            {
+                return OkButton.Text;
+            }
+            set
+            {
+                OkButton.Text = value;
+            } 
+        }
+        public string AbortButtonText
+        {
+            get
+            {
+                return AbortButton.Text;
+            }
+            set
+            {
+                AbortButton.Text = value;
+            }
+        }
+
+        public string InputText { get; private set; } = null;
+
+        public TextInputDialog()
         {
             InitializeComponent();
-            InitForm(caption);
         }
 
         // events
-        private void InitForm(string caption)
-        {
-            Icon = IconRecources.Icon_AppBranding;
-            Text = caption;
-
-            OkButton.Text = TitleRecources.Generic_Ok;
-            AbortButton.Text = TitleRecources.Generic_Abort;
-        }
         private void OkButton_Click(object sender, EventArgs evt)
         {
+            InputText = InputTextBox.Text;
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -35,6 +50,7 @@ namespace EgsEcfEditorApp
         {
             if (evt.KeyChar == (char)Keys.Enter)
             {
+                InputText = InputTextBox.Text;
                 DialogResult = DialogResult.OK;
                 Close();
                 evt.Handled = true;
@@ -53,12 +69,9 @@ namespace EgsEcfEditorApp
         }
         public DialogResult ShowDialog(IWin32Window parent, string initText)
         {
+            InputText = initText;
             InputTextBox.Text = initText;
             return ShowDialog(parent);
-        }
-        public string GetText()
-        {
-            return InputTextBox.Text;
         }
     }
 }

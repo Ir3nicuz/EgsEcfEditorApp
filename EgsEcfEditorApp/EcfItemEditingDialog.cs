@@ -1,4 +1,4 @@
-﻿using EcfWinFormControls;
+﻿using CustomControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
 using System;
@@ -48,7 +48,15 @@ namespace EcfFileViews
         private List<EcfBlock> IdentifyingBlockList { get; set; } = null;
         private List<EcfBlock> ReferencedBlockList { get; set; } = null;
         private List<EcfBlock> ReferencingBlockList { get; set; } = null;
-        private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog();
+        private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog()
+        {
+            Icon = IconRecources.Icon_AppBranding,
+            Text = TitleRecources.Generic_PickItem,
+            OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+            SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
+            DefaultItemText = TitleRecources.Generic_Replacement_Empty,
+        };
 
         private ParameterPanel ParameterItemValuesPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Value);
         private ParameterPanel ParameterMatrixPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Matrix);
@@ -971,9 +979,17 @@ namespace EcfFileViews
             private FlowLayoutPanel ButtonPanel { get; } = new FlowLayoutPanel();
             private Button AddValueButton { get; } = new Button();
             private Button RemoveValueButton { get; } = new Button();
-            private EcfDataGridView Grid { get; } = new EcfDataGridView();
+            private OptimizedDataGridView Grid { get; } = new OptimizedDataGridView();
 
-            private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog();
+            private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog()
+            {
+                Icon = IconRecources.Icon_AppBranding,
+                Text = TitleRecources.Generic_PickItem,
+                OkButtonText = TitleRecources.Generic_Ok,
+                AbortButtonText = TitleRecources.Generic_Abort,
+                SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
+                DefaultItemText = TitleRecources.Generic_Replacement_Empty,
+            };
             public List<EcfBlock> ReferencedBlockList { get; set; } = null;
 
             private int PrefixColumnCount { get; } = 3;
@@ -1524,7 +1540,7 @@ namespace EcfFileViews
             private Button RemoveValueButton { get; } = new Button();
             private Button AddGroupButton { get; } = new Button();
             private Button RemoveGroupButton { get; } = new Button();
-            private EcfDataGridView Grid { get; } = new EcfDataGridView();
+            private OptimizedDataGridView Grid { get; } = new OptimizedDataGridView();
 
             private ItemDefinition ParameterValuesDefinition { get; set; } = null;
 

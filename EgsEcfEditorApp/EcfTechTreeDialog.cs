@@ -18,9 +18,21 @@ namespace EgsEcfEditorApp
         public HashSet<EcfTabPage> ChangedFileTabs { get; } = new HashSet<EcfTabPage>();
         protected List<EcfTabPage> UniqueFileTabs { get; } = new List<EcfTabPage>();
         
-        private ItemSelectorDialog FileTabSelector { get; } = new ItemSelectorDialog();
+        private ItemSelectorDialog FileTabSelector { get; } = new ItemSelectorDialog()
+        {
+            Icon = IconRecources.Icon_AppBranding,
+            OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+            SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
+            DefaultItemText = TitleRecources.Generic_Replacement_Empty,
+        };
         private TreeAlteratingTools TreeTools { get; } = new TreeAlteratingTools();
-        private TextInputDialog TreeNameSelector { get; } = new TextInputDialog(TitleRecources.EcfTechTreeDialog_TreeNameInputHeader);
+        private TextInputDialog TreeNameSelector { get; } = new TextInputDialog() { 
+            Text= TitleRecources.EcfTechTreeDialog_TreeNameInputHeader, 
+            Icon = IconRecources.Icon_AppBranding,
+            OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+        };
         protected EcfTechTreeItemEditorDialog TreeItemEditor { get; } = new EcfTechTreeItemEditorDialog();
         protected ContextMenuStrip TechTreeOperationMenu { get; } = new ContextMenuStrip();
         private ToolStripMenuItem NodeChangeItem { get; } = new ToolStripMenuItem(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple);
@@ -205,7 +217,7 @@ namespace EgsEcfEditorApp
             while (result == DialogResult.OK && !treeNameValid)
             {
                 result = TreeNameSelector.ShowDialog(this, treeName);
-                treeName = TreeNameSelector.GetText();
+                treeName = TreeNameSelector.InputText;
                 treeNameValid = !string.IsNullOrEmpty(treeName) || 
                     !TechTreePageContainer.TabPages.Cast<EcfTechTree>().Where(tree => tree != editedTree).Any(tree => tree.TreeName.Equals(treeName));
                 if (result == DialogResult.OK && !treeNameValid)
@@ -232,8 +244,8 @@ namespace EgsEcfEditorApp
                     List<EcfTabPage> typeSpecificFileTabs = openedFileTabs.Where(tab => tab.File.Definition.FileType.Equals(openedTabFileType)).ToList();
                     if (typeSpecificFileTabs.Count > 1)
                     {
-                        string header = string.Format("{0}: {1}", TextRecources.EcfTechTreeDialog_SelectFileForType, openedTabFileType);
-                        DialogResult result = FileTabSelector.ShowDialog(this, header, typeSpecificFileTabs.Select(page => new SelectorItem(page, page.File.FileName)).ToArray());
+                        FileTabSelector.Text = string.Format("{0}: {1}", TextRecources.EcfTechTreeDialog_SelectFileForType, openedTabFileType);
+                        DialogResult result = FileTabSelector.ShowDialog(this, typeSpecificFileTabs.Select(page => new SelectorItem(page, page.File.FileName)).ToArray());
                         if (result != DialogResult.OK) { return result; }
                         if (FileTabSelector.SelectedItem.Item is EcfTabPage selectedPage) { UniqueFileTabs.Add(selectedPage); }
                     }

@@ -11,7 +11,15 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfTechTreeItemEditorDialog : Form
     {
-        private ItemSelectorDialog ElementPicker { get; } = new ItemSelectorDialog();
+        private ItemSelectorDialog ElementPicker { get; } = new ItemSelectorDialog() 
+        {
+            Text = TitleRecources.EcfTechTreeItemEditorDialog_ElementPickerHeader,
+            Icon = IconRecources.Icon_AppBranding,
+            OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+            SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
+            DefaultItemText = TitleRecources.Generic_Replacement_Empty,
+        };
         private List<EcfBlock> AvailableElements { get; } = new List<EcfBlock>();
         private EcfBlock SelectedElement { get; set; } = null;
 
@@ -59,8 +67,7 @@ namespace EgsEcfEditorApp
         }
         private void ElementNameTextBox_Click(object sender, EventArgs evt)
         {
-            if (ElementPicker.ShowDialog(this, TitleRecources.EcfTechTreeItemEditorDialog_ElementPickerHeader, 
-                AvailableElements.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
+            if (ElementPicker.ShowDialog(this, AvailableElements.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
             {
                 if (ElementPicker.SelectedItem.Item is EcfBlock element)
                 {

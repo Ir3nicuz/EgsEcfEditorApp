@@ -2,6 +2,7 @@
 using EgsEcfParser;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -141,6 +142,36 @@ namespace EgsEcfEditorApp
         {
             DialogResult = result;
             Close();
+        }
+
+        // classes
+        public class TextProgressBar : ProgressBar
+        {
+            public string BarText { get; set; } = string.Empty;
+
+            public TextProgressBar() : base()
+            {
+                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            }
+
+            protected override void OnPaint(PaintEventArgs evt)
+            {
+                Rectangle barArea = ClientRectangle;
+                Graphics gfx = evt.Graphics;
+                gfx.PageUnit = GraphicsUnit.Pixel;
+
+                ProgressBarRenderer.DrawHorizontalBar(gfx, barArea);
+                barArea.Inflate(-3, -3);
+                Font barTextFont = new Font(Font.FontFamily, barArea.Height - 3, GraphicsUnit.Pixel);
+                if (Value > 0)
+                {
+                    Rectangle chunkArea = new Rectangle(barArea.X, barArea.Y, (int)((float)Value / Maximum * barArea.Width), barArea.Height);
+                    ProgressBarRenderer.DrawHorizontalChunks(gfx, chunkArea);
+                }
+                string barText = string.Format("{0} {1} / {2}", BarText, Value, Maximum);
+                float barTextStart = (barArea.Width - gfx.MeasureString(barText, barTextFont).Width) / 2;
+                gfx.DrawString(barText, barTextFont, SystemBrushes.ControlText, barTextStart, 1);
+            }
         }
     }
 }

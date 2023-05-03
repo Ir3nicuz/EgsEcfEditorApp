@@ -32,7 +32,7 @@ namespace EgsEcfEditorApp
             this.AbortButton = new System.Windows.Forms.Button();
             this.FilePathAndNameTextBox = new System.Windows.Forms.TextBox();
             this.ProgressPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ProgressIndicator = new EcfWinFormControls.EcfProgressBar();
+            this.ProgressIndicator = new TextProgressBar();
             this.ProgressPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,6 +115,6 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.TableLayoutPanel ProgressPanel;
         private System.Windows.Forms.TextBox FilePathAndNameTextBox;
-        private EcfWinFormControls.EcfProgressBar ProgressIndicator;
+        private TextProgressBar ProgressIndicator;
     }
 }

@@ -12,6 +12,7 @@ using static EcfCAMTools.CompareSelectionTools;
 using static Helpers.ImageAjustments;
 using static EgsEcfParser.EcfStructureTools;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace EgsEcfEditorApp
 {
@@ -830,6 +831,93 @@ namespace EgsEcfEditorApp
                         TitleRecources.Generic_Comment, comment.GetIndexInStructureLevel<EcfComment>().ToString());
                     default: return "---";
                 }
+            }
+        }
+        public class LinkableTreeView : TreeView
+        {
+            private List<LinkableTreeView> LinkedTreeViews { get; } = new List<LinkableTreeView>();
+
+            public LinkableTreeView() : base()
+            {
+
+            }
+
+            // publics
+            public void LinkTreeView(LinkableTreeView treeView)
+            {
+                if (treeView == this)
+                {
+                    throw new ArgumentException("Cannot link a TreeView to itself!", "treeView");
+                }
+
+                if (!LinkedTreeViews.Contains(treeView))
+                {
+                    LinkedTreeViews.Add(treeView);
+                    treeView.LinkTreeView(this);
+                    for (int i = 0; i < LinkedTreeViews.Count; i++)
+                    {
+                        var linkedTreeView = LinkedTreeViews[i];
+                        if (linkedTreeView != treeView)
+                        {
+                            linkedTreeView.LinkTreeView(treeView);
+                        }
+                    }
+                }
+            }
+
+
+            // privates
+            protected override void WndProc(ref Message message)
+            {
+                if (message.Msg == User32.WM_DOUBLECLICK)
+                {
+                    OnDoubleClick(new EventArgs());
+                    message.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref message);
+
+                if (message.Msg == User32.WM_VSCROLL || message.Msg == User32.WM_MOUSEWHEEL)
+                {
+                    foreach (LinkableTreeView linkedTreeView in LinkedTreeViews)
+                    {
+                        SetScrollPositions(this, linkedTreeView);
+                        Message copiedMessage = new Message
+                        {
+                            HWnd = linkedTreeView.Handle,
+                            LParam = message.LParam,
+                            Msg = message.Msg,
+                            Result = message.Result,
+                            WParam = message.WParam,
+                        };
+                        linkedTreeView.RecieveWndProc(ref copiedMessage);
+                    }
+                }
+            }
+            private void RecieveWndProc(ref Message message)
+            {
+                base.WndProc(ref message);
+            }
+            private static void SetScrollPositions(LinkableTreeView source, LinkableTreeView dest)
+            {
+                int horizontal = User32.GetScrollPos(source.Handle, Orientation.Horizontal);
+                int vertical = User32.GetScrollPos(source.Handle, Orientation.Vertical);
+                User32.SetScrollPos(dest.Handle, Orientation.Horizontal, horizontal, true);
+                User32.SetScrollPos(dest.Handle, Orientation.Vertical, vertical, true);
+            }
+
+            private static class User32
+            {
+                public const int WM_VSCROLL = 0x115;
+                public const int WM_MOUSEWHEEL = 0x020A;
+                public const int WM_DOUBLECLICK = 0x0203;
+
+                [DllImport("user32.dll", CharSet = CharSet.Auto)]
+                public static extern int GetScrollPos(IntPtr hWnd, Orientation nBar);
+
+                [DllImport("user32.dll")]
+                public static extern int SetScrollPos(IntPtr hWnd, Orientation nBar, int nPos, bool bRedraw);
             }
         }
     }

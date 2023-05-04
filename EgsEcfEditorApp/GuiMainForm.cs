@@ -1581,7 +1581,7 @@ namespace EcfFileViews
         }
         private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
         {
-            if (ItemEditor.ShowDialog(this, File, Modes.Parameter, parentBlock) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, File, OperationModes.Parameter, parentBlock) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 parentBlock.AddChild(createdItem, preceedingItem);

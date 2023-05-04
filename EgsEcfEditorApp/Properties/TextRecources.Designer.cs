@@ -304,38 +304,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No definition available for.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoDefinitionAvailableFor {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionAvailableFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No definition could be found for parameters.
         /// </summary>
         internal static string EcfItemEditingDialog_NoDefinitionForParameters {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForParameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No definition could be found for the data type of this element.
-        /// </summary>
-        internal static string EcfItemEditingDialog_NoDefinitionForThisDataType {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisDataType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No definition could be found for the post mark of this element.
-        /// </summary>
-        internal static string EcfItemEditingDialog_NoDefinitionForThisPostMark {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisPostMark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No definition could be found for the pre mark of this element.
-        /// </summary>
-        internal static string EcfItemEditingDialog_NoDefinitionForThisPreMark {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForThisPreMark", resourceCulture);
             }
         }
         

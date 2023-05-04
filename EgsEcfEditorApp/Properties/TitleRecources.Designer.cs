@@ -412,15 +412,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the item type to be added.
-        /// </summary>
-        internal static string EcfItemEditingDialog_Header_SelectItem {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_Header_SelectItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Values / Groups.
         /// </summary>
         internal static string EcfItemEditingDialog_ParameterItem_ValuesLabel {

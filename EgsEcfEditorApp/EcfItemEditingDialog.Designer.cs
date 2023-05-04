@@ -32,15 +32,8 @@ namespace EcfFileViews
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
-            this.BackButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
             this.ViewPanel = new System.Windows.Forms.TabControl();
-            this.SelectItemView = new System.Windows.Forms.TabPage();
-            this.SelectItemViewPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SelectCommentItemButton = new System.Windows.Forms.Button();
-            this.SelectParameterItemButton = new System.Windows.Forms.Button();
-            this.SelectChildBlockItemButton = new System.Windows.Forms.Button();
-            this.SelectRootBlockItemButton = new System.Windows.Forms.Button();
             this.CommentItemView = new System.Windows.Forms.TabPage();
             this.CommentItemRichTextBox = new System.Windows.Forms.RichTextBox();
             this.ParameterItemView = new System.Windows.Forms.TabPage();
@@ -74,8 +67,6 @@ namespace EcfFileViews
             this.MessagePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ButtonPanel.SuspendLayout();
             this.ViewPanel.SuspendLayout();
-            this.SelectItemView.SuspendLayout();
-            this.SelectItemViewPanel.SuspendLayout();
             this.CommentItemView.SuspendLayout();
             this.ParameterItemView.SuspendLayout();
             this.ParameterItemViewPanel.SuspendLayout();
@@ -92,7 +83,6 @@ namespace EcfFileViews
             this.ButtonPanel.AutoSize = true;
             this.ButtonPanel.Controls.Add(this.AbortButton);
             this.ButtonPanel.Controls.Add(this.OkButton);
-            this.ButtonPanel.Controls.Add(this.BackButton);
             this.ButtonPanel.Controls.Add(this.ResetButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
@@ -123,21 +113,10 @@ namespace EcfFileViews
             this.OkButton.UseVisualStyleBackColor = true;
             this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
-            // BackButton
-            // 
-            this.BackButton.AutoSize = true;
-            this.BackButton.Location = new System.Drawing.Point(944, 3);
-            this.BackButton.Name = "BackButton";
-            this.BackButton.Size = new System.Drawing.Size(75, 23);
-            this.BackButton.TabIndex = 2;
-            this.BackButton.Text = "back";
-            this.BackButton.UseVisualStyleBackColor = true;
-            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
-            // 
             // ResetButton
             // 
             this.ResetButton.AutoSize = true;
-            this.ResetButton.Location = new System.Drawing.Point(863, 3);
+            this.ResetButton.Location = new System.Drawing.Point(944, 3);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(75, 23);
             this.ResetButton.TabIndex = 3;
@@ -147,7 +126,6 @@ namespace EcfFileViews
             // 
             // ViewPanel
             // 
-            this.ViewPanel.Controls.Add(this.SelectItemView);
             this.ViewPanel.Controls.Add(this.CommentItemView);
             this.ViewPanel.Controls.Add(this.ParameterItemView);
             this.ViewPanel.Controls.Add(this.BlockItemView);
@@ -159,85 +137,6 @@ namespace EcfFileViews
             this.ViewPanel.SelectedIndex = 0;
             this.ViewPanel.Size = new System.Drawing.Size(1184, 632);
             this.ViewPanel.TabIndex = 1;
-            // 
-            // SelectItemView
-            // 
-            this.SelectItemView.Controls.Add(this.SelectItemViewPanel);
-            this.SelectItemView.Location = new System.Drawing.Point(4, 24);
-            this.SelectItemView.Name = "SelectItemView";
-            this.SelectItemView.Size = new System.Drawing.Size(1176, 604);
-            this.SelectItemView.TabIndex = 0;
-            this.SelectItemView.Text = "SelectItemView";
-            this.SelectItemView.UseVisualStyleBackColor = true;
-            // 
-            // SelectItemViewPanel
-            // 
-            this.SelectItemViewPanel.AutoSize = true;
-            this.SelectItemViewPanel.ColumnCount = 1;
-            this.SelectItemViewPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SelectItemViewPanel.Controls.Add(this.SelectCommentItemButton, 0, 0);
-            this.SelectItemViewPanel.Controls.Add(this.SelectParameterItemButton, 0, 1);
-            this.SelectItemViewPanel.Controls.Add(this.SelectChildBlockItemButton, 0, 2);
-            this.SelectItemViewPanel.Controls.Add(this.SelectRootBlockItemButton, 0, 3);
-            this.SelectItemViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectItemViewPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.SelectItemViewPanel.Location = new System.Drawing.Point(0, 0);
-            this.SelectItemViewPanel.Name = "SelectItemViewPanel";
-            this.SelectItemViewPanel.RowCount = 4;
-            this.SelectItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.SelectItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.SelectItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.SelectItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.SelectItemViewPanel.Size = new System.Drawing.Size(1176, 604);
-            this.SelectItemViewPanel.TabIndex = 6;
-            // 
-            // SelectCommentItemButton
-            // 
-            this.SelectCommentItemButton.AutoSize = true;
-            this.SelectCommentItemButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectCommentItemButton.Location = new System.Drawing.Point(3, 3);
-            this.SelectCommentItemButton.Name = "SelectCommentItemButton";
-            this.SelectCommentItemButton.Size = new System.Drawing.Size(1170, 145);
-            this.SelectCommentItemButton.TabIndex = 0;
-            this.SelectCommentItemButton.Text = "button1";
-            this.SelectCommentItemButton.UseVisualStyleBackColor = true;
-            this.SelectCommentItemButton.Click += new System.EventHandler(this.SelectCommentItemButton_Click);
-            // 
-            // SelectParameterItemButton
-            // 
-            this.SelectParameterItemButton.AutoSize = true;
-            this.SelectParameterItemButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectParameterItemButton.Location = new System.Drawing.Point(3, 154);
-            this.SelectParameterItemButton.Name = "SelectParameterItemButton";
-            this.SelectParameterItemButton.Size = new System.Drawing.Size(1170, 145);
-            this.SelectParameterItemButton.TabIndex = 1;
-            this.SelectParameterItemButton.Text = "button2";
-            this.SelectParameterItemButton.UseVisualStyleBackColor = true;
-            this.SelectParameterItemButton.Click += new System.EventHandler(this.SelectParameterItemButton_Click);
-            // 
-            // SelectChildBlockItemButton
-            // 
-            this.SelectChildBlockItemButton.AutoSize = true;
-            this.SelectChildBlockItemButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectChildBlockItemButton.Location = new System.Drawing.Point(3, 305);
-            this.SelectChildBlockItemButton.Name = "SelectChildBlockItemButton";
-            this.SelectChildBlockItemButton.Size = new System.Drawing.Size(1170, 145);
-            this.SelectChildBlockItemButton.TabIndex = 2;
-            this.SelectChildBlockItemButton.Text = "button3";
-            this.SelectChildBlockItemButton.UseVisualStyleBackColor = true;
-            this.SelectChildBlockItemButton.Click += new System.EventHandler(this.SelectChildBlockItemButton_Click);
-            // 
-            // SelectRootBlockItemButton
-            // 
-            this.SelectRootBlockItemButton.AutoSize = true;
-            this.SelectRootBlockItemButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectRootBlockItemButton.Location = new System.Drawing.Point(3, 456);
-            this.SelectRootBlockItemButton.Name = "SelectRootBlockItemButton";
-            this.SelectRootBlockItemButton.Size = new System.Drawing.Size(1170, 145);
-            this.SelectRootBlockItemButton.TabIndex = 3;
-            this.SelectRootBlockItemButton.Text = "button4";
-            this.SelectRootBlockItemButton.UseVisualStyleBackColor = true;
-            this.SelectRootBlockItemButton.Click += new System.EventHandler(this.SelectRootBlockItemButton_Click);
             // 
             // CommentItemView
             // 
@@ -638,10 +537,6 @@ namespace EcfFileViews
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             this.ViewPanel.ResumeLayout(false);
-            this.SelectItemView.ResumeLayout(false);
-            this.SelectItemView.PerformLayout();
-            this.SelectItemViewPanel.ResumeLayout(false);
-            this.SelectItemViewPanel.PerformLayout();
             this.CommentItemView.ResumeLayout(false);
             this.ParameterItemView.ResumeLayout(false);
             this.ParameterItemView.PerformLayout();
@@ -670,11 +565,9 @@ namespace EcfFileViews
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.TabControl ViewPanel;
-        private System.Windows.Forms.TabPage SelectItemView;
         private System.Windows.Forms.TabPage CommentItemView;
         private System.Windows.Forms.TabPage ParameterItemView;
         private System.Windows.Forms.TabPage BlockItemView;
-        private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.FlowLayoutPanel MessagePanel;
         private System.Windows.Forms.TableLayoutPanel ParameterItemViewPanel;
         private System.Windows.Forms.TableLayoutPanel ParameterItemKeyPanel;
@@ -702,11 +595,6 @@ namespace EcfFileViews
         private System.Windows.Forms.ComboBox BlockItemPostMarkComboBox;
         private System.Windows.Forms.Label ParameterItemParentLabel;
         private System.Windows.Forms.TextBox ParameterItemParentTextBox;
-        private System.Windows.Forms.TableLayoutPanel SelectItemViewPanel;
-        private System.Windows.Forms.Button SelectCommentItemButton;
-        private System.Windows.Forms.Button SelectParameterItemButton;
-        private System.Windows.Forms.Button SelectChildBlockItemButton;
-        private System.Windows.Forms.Button SelectRootBlockItemButton;
         private System.Windows.Forms.RichTextBox CommentItemRichTextBox;
         private System.Windows.Forms.TabPage ParameterMatrixView;
     }

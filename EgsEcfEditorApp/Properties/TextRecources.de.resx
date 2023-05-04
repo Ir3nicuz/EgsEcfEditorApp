@@ -198,17 +198,11 @@
   <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
     <value>Es ist kein hinzufügbarer Parameter vorhanden</value>
   </data>
+  <data name="EcfItemEditingDialog_NoDefinitionAvailableFor" xml:space="preserve">
+    <value>Keine Definition vorhanden für</value>
+  </data>
   <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
     <value>Für Parameter ist keine Definition vorhanden</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisDataType" xml:space="preserve">
-    <value>Für den Datentyp dieses Elementes ist keine Definition vorhanden</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisPostMark" xml:space="preserve">
-    <value>Für das Nachzeichen dieses Elementes ist keine Definition vorhanden</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisPreMark" xml:space="preserve">
-    <value>Für das Vorzeichen dieses Elementes ist keine Definition vorhanden</value>
   </data>
   <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
     <value>Kein editierbares Element ausgewählt</value>

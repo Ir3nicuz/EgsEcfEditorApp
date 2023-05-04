@@ -198,17 +198,11 @@
   <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
     <value>No addable parameter available</value>
   </data>
+  <data name="EcfItemEditingDialog_NoDefinitionAvailableFor" xml:space="preserve">
+    <value>No definition available for</value>
+  </data>
   <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
     <value>No definition could be found for parameters</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisDataType" xml:space="preserve">
-    <value>No definition could be found for the data type of this element</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisPostMark" xml:space="preserve">
-    <value>No definition could be found for the post mark of this element</value>
-  </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForThisPreMark" xml:space="preserve">
-    <value>No definition could be found for the pre mark of this element</value>
   </data>
   <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
     <value>No editable item type selected</value>

@@ -234,9 +234,6 @@
   <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
     <value>Basiselement bearbeiten</value>
   </data>
-  <data name="EcfItemEditingDialog_Header_SelectItem" xml:space="preserve">
-    <value>Wähle den Element Typ der erzeugt werden soll</value>
-  </data>
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Werte / Gruppen</value>
   </data>

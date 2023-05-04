@@ -19,24 +19,22 @@ namespace EcfFileViews
     {
         public EcfStructureItem ResultItem { get; private set; } = null;
 
-        [Flags]
-        public enum Modes
+        public enum OperationModes
         {
-            None = 0,
-            Comment = 1 << 0,
-            Parameter = 1 << 1,
-            RootBlock = 1 << 2,
-            ChildBlock = 1 << 3,
-            ParameterMatrix = 1 << 4,
+            None,
+            Comment,
+            Parameter,
+            RootBlock,
+            ChildBlock,
+            ParameterMatrix,
         }
 
         private EcfComment PresetComment { get; set; } = null;
         private EcfParameter PresetParameter { get; set; } = null;
         private EcfBlock PresetBlock { get; set; } = null;
-        private EcfBlock ParentBlock { get; set; }
+        private EcfBlock ParentBlock { get; set; } = null;
         private EgsEcfFile File { get; set; } = null;
-        private Modes CreationModes { get; set; } = Modes.None;
-        private Modes SelectedItemType { get; set; } = Modes.None;
+        private OperationModes OperationMode { get; set; } = OperationModes.None;
         private ItemDefinition ParameterDefinition { get; set; } = null;
         private string PresetParameterCheckedKey { get; set; } = null;
         private ParameterKeyComparer ParamKeyComparer { get; } = new ParameterKeyComparer();
@@ -83,10 +81,8 @@ namespace EcfFileViews
 
             OkButton.Text = TitleRecources.Generic_Ok;
             AbortButton.Text = TitleRecources.Generic_Abort;
-            BackButton.Text = TitleRecources.Generic_BackButton;
             ResetButton.Text = TitleRecources.Generic_Reset;
 
-            SelectItem_InitView();
             CommentItem_InitView();
             ParameterItem_InitView();
             BlockItem_InitView();
@@ -99,19 +95,15 @@ namespace EcfFileViews
         }
         private void ResetButton_Click(object sender, EventArgs evt)
         {
-            switch (SelectedItemType)
+            switch (OperationMode)
             {
-                case Modes.Comment: CommentItem_UpdateView(); break;
-                case Modes.Parameter: ParameterItem_UpdateView(); break;
-                case Modes.ChildBlock: BlockItem_UpdateView(); break;
-                case Modes.RootBlock: BlockItem_UpdateView(); break;
-                case Modes.ParameterMatrix: ParameterMatrix_UpdateView(); break;
+                case OperationModes.Comment: CommentItem_UpdateView(); break;
+                case OperationModes.Parameter: ParameterItem_UpdateView(); break;
+                case OperationModes.ChildBlock: BlockItem_UpdateView(); break;
+                case OperationModes.RootBlock: BlockItem_UpdateView(); break;
+                case OperationModes.ParameterMatrix: ParameterMatrix_UpdateView(); break;
                 default: break;
             }
-        }
-        private void BackButton_Click(object sender, EventArgs evt)
-        {
-            SelectItem_ActivateView();
         }
         private void OkButton_Click(object sender, EventArgs evt)
         {
@@ -120,23 +112,6 @@ namespace EcfFileViews
         private void EcfItemEditingDialog_Activated(object sender, EventArgs evt)
         {
             Generic_SetFocus();
-        }
-        // selector
-        private void SelectCommentItemButton_Click(object sender, EventArgs evt)
-        {
-            CommentItem_ActivateView();
-        }
-        private void SelectParameterItemButton_Click(object sender, EventArgs evt)
-        {
-            ParameterItem_ActivateView();
-        }
-        private void SelectChildBlockItemButton_Click(object sender, EventArgs evt)
-        {
-            BlockItem_ActivateView(Modes.ChildBlock);
-        }
-        private void SelectRootBlockItemButton_Click(object sender, EventArgs evt)
-        {
-            BlockItem_ActivateView(Modes.RootBlock);
         }
         // parameter
         private void ParameterItemKeyComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
@@ -157,7 +132,7 @@ namespace EcfFileViews
             ParentBlock = null;
             File = file;
             PresetComment = presetComment;
-            CreationModes = Modes.Comment;
+            OperationMode = OperationModes.Comment;
 
             CommentItem_ActivateView();
 
@@ -169,14 +144,15 @@ namespace EcfFileViews
             ParentBlock = presetParameter?.Parent as EcfBlock;
             File = file;
             PresetParameter = presetParameter;
-            CreationModes = Modes.Parameter;
+            OperationMode = OperationModes.Parameter;
 
             try
             {
                 ParameterItem_PreActivationChecks_Editing();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
             ParameterItem_ActivateView();
@@ -190,17 +166,18 @@ namespace EcfFileViews
             File = file;
             Generic_BuildBlockCompareLists(file);
             PresetBlock = presetBlock;
-            CreationModes = presetBlock.IsRoot() ? Modes.RootBlock : Modes.ChildBlock;
+            OperationMode = presetBlock.IsRoot() ? OperationModes.RootBlock : OperationModes.ChildBlock;
 
             try
             {
                 BlockItem_PreActivationChecks_Editing();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            BlockItem_ActivateView(CreationModes);
+            BlockItem_ActivateView();
 
             return ShowDialog(parent);
         }
@@ -210,38 +187,41 @@ namespace EcfFileViews
             ParentBlock = null;
             File = file;
             PresetParameter = null;
-            CreationModes = Modes.ParameterMatrix;
+            OperationMode = OperationModes.ParameterMatrix;
 
             try
             {
                 ParameterMatrix_PreActivationChecks(parameters);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
             ParameterMatrix_ActivateView(parameters);
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, Modes createable, EcfBlock parentBlock)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, OperationModes creationMode, EcfBlock parentBlock)
         {
             ResultItem = null;
             ParentBlock = parentBlock;
             File = file;
             Generic_BuildBlockCompareLists(file);
             Generic_ClearPresets();
-            CreationModes = createable;
+            OperationMode = creationMode;
 
             try
             {
-                Generic_PreActivationChecks_AddingMulti();
+                Generic_PreActivationChecks_Adding();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            
+            Generic_ActivateView();
+
             return ShowDialog(parent);
         }
         
@@ -249,13 +229,13 @@ namespace EcfFileViews
         // generics
         private void Generic_SetFocus()
         {
-            switch (SelectedItemType)
+            switch (OperationMode)
             {
-                case Modes.Comment:
+                case OperationModes.Comment:
                     CommentItemRichTextBox.Focus();
                     CommentItemRichTextBox.SelectAll();
                     break;
-                case Modes.Parameter:
+                case OperationModes.Parameter:
                     ParameterItemValuesPanel.TryFocusFirstCell();
                     break;
                 default:
@@ -289,33 +269,38 @@ namespace EcfFileViews
             ReferencedBlockList = blocks?.Where(block => block.HasAttribute(file.Definition.BlockReferenceTargetAttribute, out _)).ToList();
             BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
         }
-        private void Generic_PreActivationChecks_AddingMulti()
+        private void Generic_PreActivationChecks_Adding()
         {
-            ParameterItem_PreActivationChecks_Adding();
-            BlockItem_PreActivationChecks_Adding();
-            if (CreationModes == Modes.None)
+            switch (OperationMode)
             {
-                throw new InvalidOperationException("No item type to add left");
+                case OperationModes.Comment: break;
+                case OperationModes.Parameter: ParameterItem_PreActivationChecks_Adding(); break;
+                case OperationModes.RootBlock: 
+                case OperationModes.ChildBlock: BlockItem_PreActivationChecks_Adding(); break;
+                default: throw new ArgumentException(string.Format("Mode {0} not allowed for creation ...that shouldn't happen :)", OperationMode.ToString()));
             }
-            switch (CreationModes)
+        }
+        private void Generic_ActivateView()
+        {
+            switch (OperationMode)
             {
-                case Modes.Comment: CommentItem_ActivateView(); break;
-                case Modes.Parameter: ParameterItem_ActivateView(); break;
-                case Modes.RootBlock: BlockItem_ActivateView(Modes.RootBlock); break;
-                case Modes.ChildBlock: BlockItem_ActivateView(Modes.ChildBlock); break;
-                default: SelectItem_ActivateView(); break;
+                case OperationModes.Comment: CommentItem_ActivateView(); break;
+                case OperationModes.Parameter: ParameterItem_ActivateView(); break;
+                case OperationModes.RootBlock:
+                case OperationModes.ChildBlock: BlockItem_ActivateView(); break;
+                default: break;
             }
         }
         private List<string> Generic_ValidateInputs()
         {
-            switch (SelectedItemType)
+            switch (OperationMode)
             {
-                case Modes.Comment: return CommentItem_ValidateInputs();
-                case Modes.Parameter: return ParameterItem_ValidateInputs();
-                case Modes.RootBlock: return BlockItem_ValidateInputs();
-                case Modes.ChildBlock: return BlockItem_ValidateInputs();
-                case Modes.ParameterMatrix: return ParameterMatrix_ValidateInputs();
-                default: throw new ArgumentException(string.Format("No creator defined for item type {0}...that shouldn't happen", SelectedItemType.ToString()));
+                case OperationModes.Comment: return CommentItem_ValidateInputs();
+                case OperationModes.Parameter: return ParameterItem_ValidateInputs();
+                case OperationModes.RootBlock: return BlockItem_ValidateInputs();
+                case OperationModes.ChildBlock: return BlockItem_ValidateInputs();
+                case OperationModes.ParameterMatrix: return ParameterMatrix_ValidateInputs();
+                default: throw new ArgumentException(string.Format("No creator defined for item type {0}...that shouldn't happen", OperationMode.ToString()));
             }
         }
         private void Generic_ShowValidationErrors(List<string> errors)
@@ -332,43 +317,15 @@ namespace EcfFileViews
         }
         private EcfStructureItem Generic_PrepareResultItem()
         {
-            switch (SelectedItemType)
+            switch (OperationMode)
             {
-                case Modes.Comment: return CommentItem_PrepareResultItem();
-                case Modes.Parameter: return ParameterItem_PrepareResultItem();
-                case Modes.RootBlock: return BlockItem_PrepareResultItem();
-                case Modes.ChildBlock: return BlockItem_PrepareResultItem();
-                case Modes.ParameterMatrix: return ParameterMatrix_PrepareResultItem();
-                default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen", SelectedItemType.ToString()));
+                case OperationModes.Comment: return CommentItem_PrepareResultItem();
+                case OperationModes.Parameter: return ParameterItem_PrepareResultItem();
+                case OperationModes.RootBlock: return BlockItem_PrepareResultItem();
+                case OperationModes.ChildBlock: return BlockItem_PrepareResultItem();
+                case OperationModes.ParameterMatrix: return ParameterMatrix_PrepareResultItem();
+                default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen", OperationMode.ToString()));
             }
-        }
-
-        // selecting section
-        private void SelectItem_InitView()
-        {
-            SelectCommentItemButton.Text = TitleRecources.Generic_Comment;
-            SelectParameterItemButton.Text = TitleRecources.Generic_Parameter;
-            SelectChildBlockItemButton.Text = TitleRecources.Generic_ChildElement;
-            SelectRootBlockItemButton.Text = TitleRecources.Generic_RootElement;
-        }
-        private void SelectItem_ActivateView()
-        {
-            BackButton.Enabled = false;
-            ResetButton.Enabled = false;
-            SelectedItemType = Modes.None;
-
-            Text = TitleRecources.EcfItemEditingDialog_Header_SelectItem;
-
-            SelectCommentItemButton.Enabled = CreationModes.HasFlag(Modes.Comment);
-            SelectParameterItemButton.Enabled = CreationModes.HasFlag(Modes.Parameter);
-            SelectChildBlockItemButton.Enabled = CreationModes.HasFlag(Modes.ChildBlock);
-            SelectRootBlockItemButton.Enabled = CreationModes.HasFlag(Modes.RootBlock);
-
-            // hack to prevent tab switch with tab key
-            ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(SelectItemView);
-
-            OkButton.Focus();
         }
 
         // comment section
@@ -378,9 +335,7 @@ namespace EcfFileViews
         }
         private void CommentItem_ActivateView()
         {
-            BackButton.Enabled = CreationModes != Modes.Comment;
             ResetButton.Enabled = PresetComment != null;
-            SelectedItemType = Modes.Comment;
 
             CommentItem_ActivateViewHeader();
 
@@ -486,23 +441,16 @@ namespace EcfFileViews
         }
         private void ParameterItem_PreActivationChecks_Adding()
         {
-            if (CreationModes.HasFlag(Modes.Parameter))
-            {
-                if (ParentBlock == null) { CreationModes &= ~Modes.Parameter; return; }
-
-                List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
-                if (definedParameters.Count < 1) { CreationModes &= ~Modes.Parameter; return; }
-
-                List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => 
-                    child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-                if (addableParameters.Count < 1) { CreationModes &= ~Modes.Parameter; return; }
-            }
+            if (ParentBlock == null) { throw new ArgumentException("No Parameter adding without parent element"); }
+            List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
+            if (definedParameters.Count < 1) { throw new ArgumentException("No addable Parameter defined"); }
+            List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => 
+                child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
+            if (addableParameters.Count < 1) { throw new ArgumentException("No addable Parameter left"); }
         }
         private void ParameterItem_ActivateView()
         {
-            BackButton.Enabled = CreationModes != Modes.Parameter;
             ResetButton.Enabled = PresetParameter != null;
-            SelectedItemType = Modes.Parameter;
 
             ParameterItem_ActivateViewHeader();
             ParameterItem_ActivateKeyComboBox();
@@ -642,53 +590,75 @@ namespace EcfFileViews
         }
         private void BlockItem_PreActivationChecks_Editing()
         {
-            PresetBlockCheckedPreMark = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.BlockTypePreMarks, PresetBlock.PreMark,
-                TextRecources.EcfItemEditingDialog_NoDefinitionForThisPreMark);
+            PresetBlockCheckedPreMark = BlockItem_PreActivationChecks_EditingDefinition(
+                File.Definition.BlockTypePreMarks, PresetBlock.PreMark, TitleRecources.Generic_PreMark);
 
-            if (CreationModes == Modes.ChildBlock)
+            if (OperationMode == OperationModes.ChildBlock)
             {
-                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.ChildBlockTypes, PresetBlock.DataType,
-                    TextRecources.EcfItemEditingDialog_NoDefinitionForThisDataType);
+                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
+                    File.Definition.ChildBlockTypes, PresetBlock.DataType, TitleRecources.Generic_DataType);
             }
-            else if (CreationModes == Modes.RootBlock)
+            else if (OperationMode == OperationModes.RootBlock)
             {
-                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.RootBlockTypes, PresetBlock.DataType,
-                    TextRecources.EcfItemEditingDialog_NoDefinitionForThisDataType);
+                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
+                    File.Definition.RootBlockTypes, PresetBlock.DataType, TitleRecources.Generic_DataType);
             }
 
-            PresetBlockCheckedPostMark = BlockItem_PreActivationChecks_Editing_DataType(File.Definition.BlockTypePostMarks, PresetBlock.PostMark,
-                TextRecources.EcfItemEditingDialog_NoDefinitionForThisPostMark);
+            PresetBlockCheckedPostMark = BlockItem_PreActivationChecks_EditingDefinition(
+                File.Definition.BlockTypePostMarks, PresetBlock.PostMark, TitleRecources.Generic_PostMark);
         }
-        private string BlockItem_PreActivationChecks_Editing_DataType(
-            ReadOnlyCollection<BlockValueDefinition> definition, string typeToCheck, string typeUnknownText)
+        private string BlockItem_PreActivationChecks_EditingDefinition(
+            ReadOnlyCollection<BlockValueDefinition> definition, string dataToCheck, string dataTypeName)
         {
             if (definition.Count > 0)
             {
-                if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(typeToCheck)))
+                if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(dataToCheck)))
                 {
-                    MessageBox.Show(this, typeUnknownText, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck), 
+                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     if (ItemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
                     {
                         return Convert.ToString(ItemSelector.SelectedItem.Item);
                     }
-                    throw new InvalidOperationException("No editing without Definition");
+                    throw new InvalidOperationException("No block editing without " + dataTypeName);
                 }
             }
-            return typeToCheck;
+            return dataToCheck;
         }
-        private void BlockItem_UpdateDefinition(Modes selectedBlockType)
+        private void BlockItem_PreActivationChecks_Adding()
         {
-            switch (selectedBlockType)
+            if (File.Definition.BlockTypePostMarks.Count < 1)
             {
-                case Modes.ChildBlock:
+                throw new ArgumentException("No Block adding without post mark definition");
+            }
+            if (OperationMode == OperationModes.ChildBlock)
+            {
+                if (File.Definition.ChildBlockTypes.Count < 1)
+                {
+                    throw new ArgumentException("No Child Block adding without Child Block type definition");
+                }
+            }
+            if (OperationMode == OperationModes.RootBlock)
+            {
+                if (File.Definition.RootBlockTypes.Count < 1)
+                {
+                    throw new ArgumentException("No Root Block adding without Root Block type definition");
+                }
+            }
+        }
+        private void BlockItem_UpdateDefinition()
+        {
+            switch (OperationMode)
+            {
+                case OperationModes.ChildBlock:
                     BlockTypeDefinitions = File.Definition.ChildBlockTypes.ToList();
                     BlockAttributeDefinitions = File.Definition.ChildBlockAttributes.ToList();
                     break;
-                case Modes.RootBlock:
+                case OperationModes.RootBlock:
                     BlockTypeDefinitions = File.Definition.RootBlockTypes.ToList();
                     BlockAttributeDefinitions = File.Definition.RootBlockAttributes.ToList();
                     break;
-                default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen :)", selectedBlockType.ToString()));
+                default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen :)", OperationMode.ToString()));
             }
         }
         private void BlockItem_UpdateParametersInheritance(EcfBlock inheritor)
@@ -696,38 +666,13 @@ namespace EcfFileViews
             BlockItemParametersPanel.UpdateParameterInheritance(inheritor);
             BlockItemInheritorTextBox.Text = inheritor?.BuildRootId() ?? string.Empty;
         }
-        private void BlockItem_PreActivationChecks_Adding()
+        private void BlockItem_ActivateView()
         {
-            if (File.Definition.BlockTypePostMarks.Count < 1)
-            {
-                CreationModes &= ~Modes.ChildBlock;
-                CreationModes &= ~Modes.RootBlock;
-                return;
-            }
-            if (CreationModes.HasFlag(Modes.ChildBlock))
-            {
-                if (File.Definition.ChildBlockTypes.Count < 1)
-                {
-                    CreationModes &= ~Modes.ChildBlock;
-                }
-            }
-            if (CreationModes.HasFlag(Modes.RootBlock))
-            {
-                if (File.Definition.RootBlockTypes.Count < 1)
-                {
-                    CreationModes &= ~Modes.RootBlock;
-                }
-            }
-        }
-        private void BlockItem_ActivateView(Modes selectedBlockType)
-        {
-            BackButton.Enabled = CreationModes != selectedBlockType;
             ResetButton.Enabled = PresetBlock != null;
-            SelectedItemType = selectedBlockType;
 
             BlockItem_ActivateViewHeader();
 
-            BlockItem_UpdateDefinition(selectedBlockType);
+            BlockItem_UpdateDefinition();
 
             BlockItem_PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
 
@@ -741,7 +686,7 @@ namespace EcfFileViews
         {
             if (PresetBlock != null) 
             {
-                if (SelectedItemType == Modes.ChildBlock)
+                if (OperationMode == OperationModes.ChildBlock)
                 {
                     Text = TitleRecources.EcfItemEditingDialog_Header_EditChildBlock;
                 }
@@ -752,7 +697,7 @@ namespace EcfFileViews
             }
             else
             {
-                if (SelectedItemType == Modes.ChildBlock)
+                if (OperationMode == OperationModes.ChildBlock)
                 {
                     Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
                 }
@@ -895,9 +840,7 @@ namespace EcfFileViews
         }
         private void ParameterMatrix_ActivateView(List<EcfParameter> parameters)
         {
-            BackButton.Enabled = false;
             ResetButton.Enabled = true;
-            SelectedItemType = Modes.ParameterMatrix;
 
             Text = TitleRecources.EcfItemEditingDialog_Header_EditParameterMatrix;
 

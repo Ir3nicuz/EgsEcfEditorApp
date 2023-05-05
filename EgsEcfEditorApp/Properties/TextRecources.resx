@@ -180,6 +180,9 @@
   <data name="EcfInfoView_NoDefinition" xml:space="preserve">
     <value>No definition found</value>
   </data>
+  <data name="EcfItemEditingDialog_BlockEditingAborted" xml:space="preserve">
+    <value>Block editing aborted</value>
+  </data>
   <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
     <value>Comment item with empty comment is not allowed</value>
   </data>
@@ -195,32 +198,50 @@
   <data name="EcfItemEditingDialog_IsStillReferencedBy" xml:space="preserve">
     <value>is still referenced by</value>
   </data>
-  <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
-    <value>No addable parameter available</value>
+  <data name="EcfItemEditingDialog_NoAddableParameterAvailable" xml:space="preserve">
+    <value>No addable Parameter available</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition" xml:space="preserve">
+    <value>Block adding not allowed without PostMark definition</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition" xml:space="preserve">
+    <value>Child Block adding not allowed without a type definition</value>
   </data>
   <data name="EcfItemEditingDialog_NoDefinitionAvailableFor" xml:space="preserve">
     <value>No definition available for</value>
   </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
-    <value>No definition could be found for parameters</value>
+  <data name="EcfItemEditingDialog_NoDefinitionFoundForParameter" xml:space="preserve">
+    <value>No definition could be found for parameter</value>
   </data>
-  <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
-    <value>No editable item type selected</value>
+  <data name="EcfItemEditingDialog_NoParameterAddingWithoutDefinitions" xml:space="preserve">
+    <value>Parameter adding not allowed without definitions</value>
   </data>
-  <data name="EcfItemEditingDialog_NoEditWithoutParameter" xml:space="preserve">
-    <value>Parameter editing not possible without parameter definition</value>
+  <data name="EcfItemEditingDialog_NoParameterAddingWithoutParent" xml:space="preserve">
+    <value>Parameter adding not allowed without parent element</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoParameterEditingWithoutDefinitions" xml:space="preserve">
+    <value>Parameter editing not allowed without definitions</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoParameterEditingWithoutParent" xml:space="preserve">
+    <value>Parameter editing not allowed without parent element</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition" xml:space="preserve">
+    <value>Root Block adding not allowed without a type definition</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoSelectableParameterAvailable" xml:space="preserve">
+    <value>No selectable Parameter available</value>
   </data>
   <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
     <value>not selected</value>
   </data>
+  <data name="EcfItemEditingDialog_ParameterEditingAborted" xml:space="preserve">
+    <value>Parameter editing aborted</value>
+  </data>
   <data name="EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed" xml:space="preserve">
     <value>The parameter matrix editing feature not allow unknown parameters</value>
   </data>
-  <data name="EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed" xml:space="preserve">
+  <data name="EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed" xml:space="preserve">
     <value>The parameter matrix editing feature not allow parameters without values</value>
-  </data>
-  <data name="EcfItemEditingDialog_ParameterNotDefined" xml:space="preserve">
-    <value>No definition could be found for this parameter</value>
   </data>
   <data name="EcfItemEditingDialog_TheIdAttributeValue" xml:space="preserve">
     <value>The attribute id value</value>

@@ -36,6 +36,7 @@ using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
 using static EgsEcfEditorApp.EcfItemListingDialog;
 using static EgsEcfEditorApp.OptionSelectorDialog;
 using static GenericDialogs.GenericDialogs;
+using EgsEcfEditorApp;
 
 namespace EgsEcfEditorApp
 {
@@ -628,17 +629,8 @@ namespace EgsEcfEditorApp
 
 
 
-            OptionSelectorDialog dialog = new OptionSelectorDialog()
-            {
-                Text = "wähl mal was!",
-                Icon = IconRecources.Icon_AppBranding,
-                OkButtonText = TitleRecources.Generic_Ok,
-                AbortButtonText = TitleRecources.Generic_Abort,
-            };
-            if (dialog.ShowDialog(this, sourceItem.ChildItems.Take(15).Select(child => new OptionItem(child)).ToArray()) == DialogResult.OK)
-            {
-                MessageBox.Show(this, (dialog.SelectedOption.Item as EcfStructureItem)?.ToString());
-            }
+            
+            
 
 
 
@@ -910,6 +902,13 @@ namespace EcfFileViews
 
         public EgsEcfFile File { get; }
         private EcfItemEditingDialog ItemEditor { get; }
+        private OptionSelectorDialog ItemTypeSelectorDialog { get; } = new OptionSelectorDialog()
+        {
+            Text = TitleRecources.EcfItemEditingDialog_Header_ElementSelector,
+            Icon = IconRecources.Icon_AppBranding,
+            OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+        };
 
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfFilterControl FilterControl { get; }
@@ -1514,22 +1513,36 @@ namespace EcfFileViews
         }
         private void AddTreeItemTo(EcfStructureItem item)
         {
-            Modes addable;
+            OptionItem[] itemTypes;
             if (item == null)
             {
-                addable = Modes.Comment | Modes.RootBlock;
+                itemTypes = new OptionItem[]
+                {
+                    new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+                    new OptionItem(OperationModes.RootBlock, TitleRecources.Generic_RootElement),
+                };
             }
             else if (item is EcfBlock)
             {
-                addable = Modes.Comment | Modes.ChildBlock | Modes.Parameter;
+                itemTypes = new OptionItem[]
+                {
+                    new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+                    new OptionItem(OperationModes.Parameter, TitleRecources.Generic_Parameter),
+                    new OptionItem(OperationModes.ChildBlock, TitleRecources.Generic_ChildElement),
+                };
             }
             else
             {
                 AddTreeItemAfter(item);
                 return;
             }
+            if (ItemTypeSelectorDialog.ShowDialog(this, itemTypes) != DialogResult.OK)
+            {
+                return;
+            }
+            OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item as EcfBlock;
-            if (ItemEditor.ShowDialog(this, File, addable, parent) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 if (item == null)
@@ -1550,17 +1563,31 @@ namespace EcfFileViews
         }
         private void AddTreeItemAfter(EcfStructureItem item)
         {
-            Modes addable;
+            OptionItem[] itemTypes;
             if (item == null || item.IsRoot())
             {
-                addable = Modes.Comment | Modes.RootBlock;
+                itemTypes = new OptionItem[]
+                {
+                    new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+                    new OptionItem(OperationModes.RootBlock, TitleRecources.Generic_RootElement),
+                };
             }
             else
             {
-                addable = Modes.Comment | Modes.Parameter | Modes.ChildBlock;
+                itemTypes = new OptionItem[]
+                {
+                    new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+                    new OptionItem(OperationModes.Parameter, TitleRecources.Generic_Parameter),
+                    new OptionItem(OperationModes.ChildBlock, TitleRecources.Generic_ChildElement),
+                };
             }
+            if (ItemTypeSelectorDialog.ShowDialog(this, itemTypes) != DialogResult.OK)
+            {
+                return;
+            }
+            OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item?.Parent as EcfBlock;
-            if (ItemEditor.ShowDialog(this, File, addable, parent) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 if (item == null || parent == null)

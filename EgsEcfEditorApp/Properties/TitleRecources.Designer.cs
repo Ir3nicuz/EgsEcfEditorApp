@@ -412,6 +412,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select element type.
+        /// </summary>
+        internal static string EcfItemEditingDialog_Header_ElementSelector {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_Header_ElementSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Values / Groups.
         /// </summary>
         internal static string EcfItemEditingDialog_ParameterItem_ValuesLabel {

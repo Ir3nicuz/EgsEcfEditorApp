@@ -407,46 +407,42 @@ namespace EcfFileViews
         }
         private void ParameterItem_PreActivationChecks_Editing()
         {
-            if (ParentBlock == null) { throw new ArgumentException("No Parameter Editing without parent element"); }
+            if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutParent); }
 
             List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
             if (definedParameters.Count < 1)
             {
-                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_NoDefinitionForParameters,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                throw new InvalidOperationException("No editing without Definition");
+                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutDefinitions);
             }
 
             if (!definedParameters.Contains(PresetParameter.Key))
             {
-                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_ParameterNotDefined,
+                MessageBox.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemEditingDialog_NoDefinitionFoundForParameter, PresetParameter?.Key ?? string.Empty),
                     TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
-                List<string> addableParameter = definedParameters.Except(ParentBlock.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-                if (addableParameter.Count < 1)
+                List<string> selectableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
+                if (selectableParameters.Count < 1)
                 {
-                    MessageBox.Show(this, TextRecources.EcfItemEditingDialog_NoAddableParameter,
-                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    throw new ArgumentException("no addable parameter left");
+                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoSelectableParameterAvailable);
                 }
 
-                if (ItemSelector.ShowDialog(this, addableParameter.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
+                if (ItemSelector.ShowDialog(this, selectableParameters.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
                 {
                     PresetParameterCheckedKey = Convert.ToString(ItemSelector.SelectedItem.Item);
                     return;
                 }
-                throw new ArgumentException("Parameter selecting aborted");
+                throw new ArgumentException(TextRecources.EcfItemEditingDialog_ParameterEditingAborted);
             }
             PresetParameterCheckedKey = PresetParameter.Key;
         }
         private void ParameterItem_PreActivationChecks_Adding()
         {
-            if (ParentBlock == null) { throw new ArgumentException("No Parameter adding without parent element"); }
+            if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutParent); }
             List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
-            if (definedParameters.Count < 1) { throw new ArgumentException("No addable Parameter defined"); }
+            if (definedParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutDefinitions); }
             List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => 
                 child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-            if (addableParameters.Count < 1) { throw new ArgumentException("No addable Parameter left"); }
+            if (addableParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoAddableParameterAvailable); }
         }
         private void ParameterItem_ActivateView()
         {
@@ -614,13 +610,13 @@ namespace EcfFileViews
             {
                 if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(dataToCheck)))
                 {
-                    MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck), 
+                    MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck ?? string.Empty), 
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     if (ItemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
                     {
                         return Convert.ToString(ItemSelector.SelectedItem.Item);
                     }
-                    throw new InvalidOperationException("No block editing without " + dataTypeName);
+                    throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_BlockEditingAborted);
                 }
             }
             return dataToCheck;
@@ -629,20 +625,20 @@ namespace EcfFileViews
         {
             if (File.Definition.BlockTypePostMarks.Count < 1)
             {
-                throw new ArgumentException("No Block adding without post mark definition");
+                throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition);
             }
             if (OperationMode == OperationModes.ChildBlock)
             {
                 if (File.Definition.ChildBlockTypes.Count < 1)
                 {
-                    throw new ArgumentException("No Child Block adding without Child Block type definition");
+                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition);
                 }
             }
             if (OperationMode == OperationModes.RootBlock)
             {
                 if (File.Definition.RootBlockTypes.Count < 1)
                 {
-                    throw new ArgumentException("No Root Block adding without Root Block type definition");
+                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition);
                 }
             }
         }
@@ -827,15 +823,11 @@ namespace EcfFileViews
         {
             if (parameters.Any(parameter => parameter.Definition == null))
             {
-                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                throw new InvalidOperationException("No matrix editing without Definition");
+                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed);
             }
             if (parameters.Any(parameter => !parameter.Definition.HasValue))
             {
-                MessageBox.Show(this, TextRecources.EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                throw new InvalidOperationException("No matrix editing for parameters without values");
+                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed);
             }
         }
         private void ParameterMatrix_ActivateView(List<EcfParameter> parameters)

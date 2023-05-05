@@ -234,6 +234,9 @@
   <data name="EcfItemEditingDialog_Header_EditRootBlock" xml:space="preserve">
     <value>Edit root block item</value>
   </data>
+  <data name="EcfItemEditingDialog_Header_ElementSelector" xml:space="preserve">
+    <value>Select element type</value>
+  </data>
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Values / Groups</value>
   </data>

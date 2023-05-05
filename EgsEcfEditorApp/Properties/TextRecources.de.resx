@@ -180,6 +180,9 @@
   <data name="EcfInfoView_NoDefinition" xml:space="preserve">
     <value>Keine Definition gefunden</value>
   </data>
+  <data name="EcfItemEditingDialog_BlockEditingAborted" xml:space="preserve">
+    <value>Element Bearbeitung abgebrochen</value>
+  </data>
   <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
     <value>Kommentar Element ohne Inhalt is nicht erlaubt</value>
   </data>
@@ -195,32 +198,50 @@
   <data name="EcfItemEditingDialog_IsStillReferencedBy" xml:space="preserve">
     <value>wird immer noch referenziert von</value>
   </data>
-  <data name="EcfItemEditingDialog_NoAddableParameter" xml:space="preserve">
-    <value>Es ist kein hinzufügbarer Parameter vorhanden</value>
+  <data name="EcfItemEditingDialog_NoAddableParameterAvailable" xml:space="preserve">
+    <value>Kein hinzufügbarer Parameter vorhanden</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition" xml:space="preserve">
+    <value>Hinzufügen von Elementen ist ohne PostMark Definition nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition" xml:space="preserve">
+    <value>Hinzufügen von Unterelementen ist ohne Type Definition nicht erlaubt</value>
   </data>
   <data name="EcfItemEditingDialog_NoDefinitionAvailableFor" xml:space="preserve">
     <value>Keine Definition vorhanden für</value>
   </data>
-  <data name="EcfItemEditingDialog_NoDefinitionForParameters" xml:space="preserve">
-    <value>Für Parameter ist keine Definition vorhanden</value>
+  <data name="EcfItemEditingDialog_NoDefinitionFoundForParameter" xml:space="preserve">
+    <value>Keine Definition vorhanden für Parameter</value>
   </data>
-  <data name="EcfItemEditingDialog_NoEditableItemSelected" xml:space="preserve">
-    <value>Kein editierbares Element ausgewählt</value>
+  <data name="EcfItemEditingDialog_NoParameterAddingWithoutDefinitions" xml:space="preserve">
+    <value>Hinzufügen von Parametern ist ohne Definitionen nicht erlaubt</value>
   </data>
-  <data name="EcfItemEditingDialog_NoEditWithoutParameter" xml:space="preserve">
-    <value>Parameter Bearbeitung ohne eine Parameter Definition nicht möglich</value>
+  <data name="EcfItemEditingDialog_NoParameterAddingWithoutParent" xml:space="preserve">
+    <value>Hinzufügen von Parametern ist ohne übergeordnetem Element nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoParameterEditingWithoutDefinitions" xml:space="preserve">
+    <value>Bearbeiten von Parametern ist ohne Definitionen nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoParameterEditingWithoutParent" xml:space="preserve">
+    <value>Bearbeiten von Parametern ist ohne übergeordnetem Element nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition" xml:space="preserve">
+    <value>Hinzufügen von Basiselementen ist ohne Type Definition nicht erlaubt</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoSelectableParameterAvailable" xml:space="preserve">
+    <value>Kein wählbarer Parameter vorhanden</value>
   </data>
   <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
     <value>nicht ausgewählt</value>
   </data>
+  <data name="EcfItemEditingDialog_ParameterEditingAborted" xml:space="preserve">
+    <value>Parameter Bearbeitung abgebrochen</value>
+  </data>
   <data name="EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed" xml:space="preserve">
     <value>Die Parameter Matrix editier Funktion erlaubt keine unbekannten Parameter</value>
   </data>
-  <data name="EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed" xml:space="preserve">
+  <data name="EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed" xml:space="preserve">
     <value>Die Parameter Matrix editier Funktion erlaubt keine Parameter ohne Werte</value>
-  </data>
-  <data name="EcfItemEditingDialog_ParameterNotDefined" xml:space="preserve">
-    <value>Für diesen Parameter ist keine Definition vorhanden</value>
   </data>
   <data name="EcfItemEditingDialog_TheIdAttributeValue" xml:space="preserve">
     <value>Der Wert des Id Attribut</value>

@@ -250,6 +250,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block editing aborted.
+        /// </summary>
+        internal static string EcfItemEditingDialog_BlockEditingAborted {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_BlockEditingAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment item with empty comment is not allowed.
         /// </summary>
         internal static string EcfItemEditingDialog_CommentItemError_Empty {
@@ -295,11 +304,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No addable parameter available.
+        ///   Looks up a localized string similar to No addable Parameter available.
         /// </summary>
-        internal static string EcfItemEditingDialog_NoAddableParameter {
+        internal static string EcfItemEditingDialog_NoAddableParameterAvailable {
             get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoAddableParameter", resourceCulture);
+                return ResourceManager.GetString("EcfItemEditingDialog_NoAddableParameterAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block adding not allowed without PostMark definition.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Child Block adding not allowed without a type definition.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition", resourceCulture);
             }
         }
         
@@ -313,29 +340,65 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No definition could be found for parameters.
+        ///   Looks up a localized string similar to No definition could be found for parameter.
         /// </summary>
-        internal static string EcfItemEditingDialog_NoDefinitionForParameters {
+        internal static string EcfItemEditingDialog_NoDefinitionFoundForParameter {
             get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionForParameters", resourceCulture);
+                return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionFoundForParameter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No editable item type selected.
+        ///   Looks up a localized string similar to Parameter adding not allowed without definitions.
         /// </summary>
-        internal static string EcfItemEditingDialog_NoEditableItemSelected {
+        internal static string EcfItemEditingDialog_NoParameterAddingWithoutDefinitions {
             get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoEditableItemSelected", resourceCulture);
+                return ResourceManager.GetString("EcfItemEditingDialog_NoParameterAddingWithoutDefinitions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter editing not possible without parameter definition.
+        ///   Looks up a localized string similar to Parameter adding not allowed without parent element.
         /// </summary>
-        internal static string EcfItemEditingDialog_NoEditWithoutParameter {
+        internal static string EcfItemEditingDialog_NoParameterAddingWithoutParent {
             get {
-                return ResourceManager.GetString("EcfItemEditingDialog_NoEditWithoutParameter", resourceCulture);
+                return ResourceManager.GetString("EcfItemEditingDialog_NoParameterAddingWithoutParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter editing not allowed without definitions.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoParameterEditingWithoutDefinitions {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoParameterEditingWithoutDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter editing not allowed without parent element.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoParameterEditingWithoutParent {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoParameterEditingWithoutParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root Block adding not allowed without a type definition.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No selectable Parameter available.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoSelectableParameterAvailable {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoSelectableParameterAvailable", resourceCulture);
             }
         }
         
@@ -345,6 +408,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemEditingDialog_NotSelected {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_NotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter editing aborted.
+        /// </summary>
+        internal static string EcfItemEditingDialog_ParameterEditingAborted {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterEditingAborted", resourceCulture);
             }
         }
         
@@ -360,18 +432,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The parameter matrix editing feature not allow parameters without values.
         /// </summary>
-        internal static string EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed {
+        internal static string EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed {
             get {
-                return ResourceManager.GetString("EcfItemEditingDialog_ParameterMatrixForValueslessParametersNotAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No definition could be found for this parameter.
-        /// </summary>
-        internal static string EcfItemEditingDialog_ParameterNotDefined {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_ParameterNotDefined", resourceCulture);
+                return ResourceManager.GetString("EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed", resourceCulture);
             }
         }
         

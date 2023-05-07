@@ -126,6 +126,15 @@
   <data name="EcfFileViewTools.EcfStructureFilter+SelectableItems.Parameters" xml:space="preserve">
     <value>Parameter</value>
   </data>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsCopy" xml:space="preserve">
+    <value>Neues Template aus vorhandenem erzeugen</value>
+  </data>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsEmpty" xml:space="preserve">
+    <value>Neues leeres Template erzeugen</value>
+  </data>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting" xml:space="preserve">
+    <value>Vorhandenes Template aus Liste wählen</value>
+  </data>
   <data name="EgsEcfParser.EcfErrorGroups.Creating" xml:space="preserve">
     <value>Schreibfehler</value>
   </data>

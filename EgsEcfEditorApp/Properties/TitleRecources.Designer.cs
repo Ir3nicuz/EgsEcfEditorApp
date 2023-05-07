@@ -430,6 +430,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select option how to add the template.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_AddTemplateOptionSelector {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddTemplateOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item listing.
         /// </summary>
         internal static string EcfItemListingView_Header {

@@ -88,6 +88,33 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new template as copy from existing.
+        /// </summary>
+        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_CreateNewAsCopy {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new empty template.
+        /// </summary>
+        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_CreateNewAsEmpty {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select existing template from list.
+        /// </summary>
+        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_SelectExisting {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating error.
         /// </summary>
         internal static string EgsEcfParser_EcfErrorGroups_Creating {

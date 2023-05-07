@@ -240,6 +240,9 @@
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Werte / Gruppen</value>
   </data>
+  <data name="EcfItemHandlingSupport_Header_AddTemplateOptionSelector" xml:space="preserve">
+    <value>Option zum Hinzufügen des Template auswählen</value>
+  </data>
   <data name="EcfItemListingView_Header" xml:space="preserve">
     <value>Item Auflistung</value>
   </data>

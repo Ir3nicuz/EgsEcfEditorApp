@@ -2658,12 +2658,73 @@ namespace EgsEcfParser
         {
             return GetAttributeFirstValue(EcfFile?.Definition.BlockReferenceSourceAttribute);
         }
+        public bool SetId(string value)
+        {
+            EcfAttribute attribute = FindOrCreateAttribute(EcfFile?.Definition.BlockIdAttribute);
+            attribute?.ClearValues();
+            attribute?.AddValue(value);
+            return attribute != null;
+        }
+        public bool SetName(string value)
+        {
+            EcfAttribute attribute = FindOrCreateAttribute(EcfFile?.Definition.BlockNameAttribute);
+            attribute?.ClearValues();
+            attribute?.AddValue(value);
+            return attribute != null;
+        }
+        public bool SetRefTarget(string value)
+        {
+            EcfAttribute attribute = FindOrCreateAttribute(EcfFile?.Definition.BlockReferenceTargetAttribute);
+            attribute?.ClearValues();
+            attribute?.AddValue(value);
+            return attribute != null;
+        }
+        public bool SetRefSource(string value)
+        {
+            EcfAttribute attribute = FindOrCreateAttribute(EcfFile?.Definition.BlockReferenceSourceAttribute);
+            attribute?.ClearValues();
+            attribute?.AddValue(value);
+            return attribute != null;
+        }
         public void UpdateTypeData(string preMark, string blockType, string postMark)
         {
             PreMark = preMark;
             DataType = blockType;
             PostMark = postMark;
         }
+        public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
+        {
+            if (HasParameter(paramName, out parameter))
+            {
+                return true;
+            }
+            return Inheritor?.IsInheritingParameter(paramName, out parameter) ?? false;
+        }
+        public string BuildRootId()
+        {
+            StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
+            if (!IsRoot())
+            {
+                identification.Append(" ");
+                identification.Append(GetIndexInStructureLevel<EcfBlock>());
+            }
+            foreach (EcfAttribute attr in Attributes)
+            {
+                identification.Append(", ");
+                identification.Append(attr.Key);
+                if (attr.HasValue())
+                {
+                    identification.Append(": ");
+                    identification.Append(attr.GetFirstValue());
+                }
+            }
+            return identification.ToString();
+        }
+        public bool IsParsingRawDataUseable()
+        {
+            return !string.IsNullOrEmpty(OpenerLineParsingData) && !string.IsNullOrEmpty(CloserLineParsingData);
+        }
+
         public override string ToString()
         {
             return string.Format("{0}: {1}, name: {2}, childs: {3}, attributes: {4}, errors: {5}",
@@ -2732,6 +2793,15 @@ namespace EgsEcfParser
             errorCount += InternalAttributes.Sum(attr => attr.Revalidate());
             return errorCount;
         }
+        protected override void OnStructureDataUpdate()
+        {
+            InternalAttributes.ForEach(attribute => {
+                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
+                attribute.UpdateDefinition(IsRoot() ? EcfFile?.Definition.RootBlockAttributes : EcfFile?.Definition.ChildBlockAttributes);
+            });
+            InternalChildItems.ForEach(child => child.UpdateStructureData(EcfFile, this, StructureLevel));
+        }
+
         public int RevalidateDataType()
         {
             FormatDefinition definition = EcfFile?.Definition;
@@ -2790,6 +2860,11 @@ namespace EgsEcfParser
 
             RemoveErrors(EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
             return AddError(CheckAttributesValid(InternalAttributes, IsRoot() ? definition.RootBlockAttributes : definition.ChildBlockAttributes, EcfErrorGroups.Editing));
+        }
+        
+        public EcfBlock GetFirstChildBlock()
+        {
+            return InternalChildItems.Where(child => child is EcfBlock).Cast<EcfBlock>().FirstOrDefault();
         }
         public List<T> GetDeepChildList<T>() where T : EcfBaseItem
         {
@@ -2900,6 +2975,73 @@ namespace EgsEcfParser
                 return AddChild(childs, index + 1);
             }
         }
+        public bool RemoveChild(EcfStructureItem childItem)
+        {
+            if (childItem != null)
+            {
+                InternalChildItems.Remove(childItem);
+                EcfFile?.SetUnsavedDataFlag();
+                return true;
+            }
+            return false;
+        }
+        public int RemoveChild(List<EcfStructureItem> childItems)
+        {
+            int count = 0;
+            childItems?.ForEach(child => {
+                if (RemoveChild(child))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveChild(List<EcfParameter> parameters)
+        {
+            int count = 0;
+            parameters?.ForEach(parameter => {
+                if (RemoveChild(parameter))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+        public int RemoveChild(List<EcfBlock> blocks)
+        {
+            int count = 0;
+            blocks?.ForEach(block => {
+                if (RemoveChild(block))
+                {
+                    count++;
+                }
+            });
+            return count;
+        }
+
+        public string GetAttributeFirstValue(string attrName)
+        {
+            return InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName))?.GetFirstValue();
+        }
+        public bool HasAttribute(string attrName, out EcfAttribute attribute)
+        {
+            attribute = InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName));
+            return attribute != null;
+        }
+        public EcfAttribute FindOrCreateAttribute(string key)
+        {
+            if (!HasAttribute(key, out EcfAttribute attribute))
+            {
+                FormatDefinition definition = EcfFile?.Definition;
+                if (definition == null) { throw new InvalidOperationException("Attribute creation is only possible with file reference"); }
+                ReadOnlyCollection<ItemDefinition> attributeDefinition = IsRoot() ? definition.RootBlockAttributes : definition.ChildBlockAttributes;
+                if (!attributeDefinition.Any(attr => attr.Name.Equals(key))) { throw new InvalidOperationException(string.Format("Attribute key '{0}' is not allowed", key)); }
+
+                attribute = new EcfAttribute(key);
+                AddChild(attribute);
+            }
+            return attribute;
+        }
         public bool AddAttribute(EcfAttribute attribute)
         {
             if (attribute != null)
@@ -2923,15 +3065,11 @@ namespace EgsEcfParser
             });
             return count;
         }
-        public string GetAttributeFirstValue(string attrName)
+        public void ClearAttributes()
         {
-            return InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName))?.GetFirstValue();
+            InternalAttributes.Clear();
         }
-        public bool HasAttribute(string attrName, out EcfAttribute attribute)
-        {
-            attribute = InternalAttributes.FirstOrDefault(attr => attr.Key.Equals(attrName));
-            return attribute != null;
-        }
+
         public string GetParameterFirstValue(string paramName)
         {
             return GetParameterFirstValue(paramName, true, false);
@@ -2994,95 +3132,6 @@ namespace EgsEcfParser
             int count = RemoveParameter(keys);
             count += InternalChildItems.Where(child => child is EcfBlock).Cast<EcfBlock>().Sum(subBlock => subBlock.RemoveParameterDeep(keys));
             return count;
-        }
-        public bool IsInheritingParameter(string paramName, out EcfParameter parameter)
-        {
-            if (HasParameter(paramName, out parameter))
-            {
-                return true;
-            }
-            return Inheritor?.IsInheritingParameter(paramName, out parameter) ?? false;
-        }
-        public string BuildRootId()
-        {
-            StringBuilder identification = new StringBuilder(DataType ?? string.Empty);
-            if (!IsRoot())
-            {
-                identification.Append(" ");
-                identification.Append(GetIndexInStructureLevel<EcfBlock>());
-            }
-            foreach (EcfAttribute attr in Attributes)
-            {
-                identification.Append(", ");
-                identification.Append(attr.Key);
-                if (attr.HasValue())
-                {
-                    identification.Append(": ");
-                    identification.Append(attr.GetFirstValue());
-                }
-            }
-            return identification.ToString();
-        }
-        public bool RemoveChild(EcfStructureItem childItem)
-        {
-            if (childItem != null)
-            {
-                InternalChildItems.Remove(childItem);
-                EcfFile?.SetUnsavedDataFlag();
-                return true;
-            }
-            return false;
-        }
-        public int RemoveChild(List<EcfStructureItem> childItems)
-        {
-            int count = 0;
-            childItems?.ForEach(child => {
-                if (RemoveChild(child))
-                {
-                    count++;
-                }
-            });
-            return count;
-        }
-        public int RemoveChild(List<EcfParameter> parameters)
-        {
-            int count = 0;
-            parameters?.ForEach(parameter => {
-                if (RemoveChild(parameter))
-                {
-                    count++;
-                }
-            });
-            return count;
-        }
-        public int RemoveChild(List<EcfBlock> blocks)
-        {
-            int count = 0;
-            blocks?.ForEach(block => {
-                if (RemoveChild(block))
-                {
-                    count++;
-                }
-            });
-            return count;
-        }
-        public void ClearAttributes()
-        {
-            InternalAttributes.Clear();
-        }
-        public bool IsParsingRawDataUseable()
-        {
-            return !string.IsNullOrEmpty(OpenerLineParsingData) && !string.IsNullOrEmpty(CloserLineParsingData);
-        }
-
-        // private
-        protected override void OnStructureDataUpdate()
-        {
-            InternalAttributes.ForEach(attribute => {
-                attribute.UpdateStructureData(EcfFile, this, StructureLevel);
-                attribute.UpdateDefinition(IsRoot() ? EcfFile?.Definition.RootBlockAttributes : EcfFile?.Definition.ChildBlockAttributes);
-            });
-            InternalChildItems.ForEach(child => child.UpdateStructureData(EcfFile, this, StructureLevel));
         }
     }
     public class EcfComment : EcfStructureItem

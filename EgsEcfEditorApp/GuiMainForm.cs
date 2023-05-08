@@ -84,6 +84,7 @@ namespace EgsEcfEditorApp
             OkButtonText = TitleRecources.Generic_Ok,
             AbortButtonText = TitleRecources.Generic_Abort,
         };
+        private EcfItemEditingDialog EditItemDialog { get; } = new EcfItemEditingDialog();
 
         public GuiMainForm()
         {
@@ -650,37 +651,71 @@ namespace EgsEcfEditorApp
         [Obsolete("needs logic")]
         private void AddTemplateToItem(EcfBlock sourceItem)
         {
+            string messageText;
+            EcfBlock templateToAdd;
+
             List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                 sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             // if no template present
             if (templateList.Count < 1)
             {
+                // option selection how to add the template
                 EditOptionSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddTemplateOptionSelector;
-                if (EditOptionSelectorDialog.ShowDialog(this, AddTemplateEditOptionItems) == DialogResult.OK)
+                if (EditOptionSelectorDialog.ShowDialog(this, AddTemplateEditOptionItems) != DialogResult.OK) { return; }
+                SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
+                    page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
+                switch ((AddTemplateEditOptions)EditOptionSelectorDialog.SelectedOption.Item)
                 {
-                    
+                    case AddTemplateEditOptions.SelectExisting:
+                        EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddExistingTemplateSelector;
+                        if (EditItemSelectorDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
+                        templateToAdd = EditItemSelectorDialog.SelectedItem.Item as EcfBlock;
+                        EcfParameter templateRoot = sourceItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                        templateRoot.ClearValues();
+                        templateRoot.AddValue(templateToAdd.GetName());
+                        messageText = string.Format("{2} {0} {3} {4} {1}!", templateToAdd.BuildRootId(), sourceItem.BuildRootId(),
+                            TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
+                        MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    case AddTemplateEditOptions.CreateNewAsCopy:
+                        EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector;
+                        if (EditItemSelectorDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
+                        EcfBlock templateToCopy = EditItemSelectorDialog.SelectedItem.Item as EcfBlock;
+                        templateToAdd = new EcfBlock(templateToCopy);
+                        templateToAdd.SetName(sourceItem.GetName());
+                        if (EditItemDialog.ShowDialog(this, templateToAdd.EcfFile, templateToAdd) != DialogResult.OK) { return; }
+                        if (EditItemDialog.ShowDialog(this, templateToAdd.EcfFile, templateToAdd.GetFirstChildBlock()) != DialogResult.OK) { return; }
+                        // check files to save -> selector if necessary
+                        // check name not in file
+                        // write template to file
+                        // check template name != item name
+                        //  ->yes, set name in TemplateRoot
+                        //  ->no, set TemplateRoot to nothing
 
-                    switch ((AddTemplateEditOptions)EditOptionSelectorDialog.SelectedOption.Item)
-                    {
-                        case AddTemplateEditOptions.SelectExisting:
-                            EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddExistingTemplateSelector;
-                            // cross file handling?
-                            SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
-                                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
-                            if (EditItemSelectorDialog.ShowDialog(this, templates) == DialogResult.OK)
-                            {
 
-                            }
-                            break;
-                        case AddTemplateEditOptions.CreateNewAsCopy: 
-                            
-                            break;
-                        case AddTemplateEditOptions.CreateNewAsEmpty: 
-                            
-                            break;
-                        default: break;
-                    }
+
+                        messageText = string.Format("{2} {0} {3} {4} {1}!", templateToAdd.BuildRootId(), sourceItem.BuildRootId(),
+                            TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
+                        MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    case AddTemplateEditOptions.CreateNewAsEmpty:
+
+
+                        /*  
+                    * -> want to create empty?
+                    *  -> create new template
+                    *  -> set template name from item
+                    *  -> open editor
+                    *  -> write template to file, file selector if necessary
+                    *  -> check template name != item name
+                    *   -> yes, set name in TemplateRoot
+                    *   -> no, set TemplateRoot to nothing
+                    *  -> end
+                    *  
+                */
+                        break;
+                    default: break;
                 }
                 return;
             }
@@ -755,32 +790,8 @@ namespace EgsEcfEditorApp
                  *      -> write template to file, file selector if necessary
                  *      -> replace name in template root
                  *      -> end
-                 *     
-                 * -> want to select existing?
-                 *  -> ItemSelector
-                 *  -> set name in template root
-                 *  -> end
-                 * -> want to create from another?
-                 *  -> Itemselector
-                 *  -> copy template
-                 *  -> set template name from item
-                 *  -> open editor
-                 *  -> write template to file, file selector if necessary
-                 *  -> check template name != item name
-                 *   -> yes, set name in TemplateRoot
-                 *   -> no, set TemplateRoot to nothing
-                 *  -> end
-                 * -> want to create empty?
-                 *  -> create new template
-                 *  -> set template name from item
-                 *  -> open editor
-                 *  -> write template to file, file selector if necessary
-                 *  -> check template name != item name
-                 *   -> yes, set name in TemplateRoot
-                 *   -> no, set TemplateRoot to nothing
-                 *  -> end
-                 *  
-             */
+                 */
+            
         }
         private void RemoveTemplateOfItem(EcfBlock sourceItem)
         {
@@ -1026,7 +1037,7 @@ namespace EcfFileViews
         public event EventHandler<ItemHandlingSupportOperationEventArgs> ItemHandlingSupportOperationClicked;
 
         public EgsEcfFile File { get; }
-        private EcfItemEditingDialog ItemEditor { get; }
+        private EcfItemEditingDialog ItemEditor { get; } = new EcfItemEditingDialog();
         private OptionSelectorDialog ItemTypeSelectorDialog { get; } = new OptionSelectorDialog()
         {
             Text = TitleRecources.EcfItemEditingDialog_Header_ElementSelector,
@@ -1064,7 +1075,6 @@ namespace EcfFileViews
         public EcfTabPage(EgsEcfFile file, EcfTabContainer container) : base()
         {
             File = file;
-            ItemEditor = new EcfItemEditingDialog(file);
 
             FilterControl = new EcfFilterControl(File.Definition.GameMode, File.Definition.FileType);
             TreeFilter = new EcfStructureFilter(container.TreeViewFilterCommentInitActive, container.TreeViewFilterParameterInitActive, container.TreeViewFilterDataBlocksInitActive);

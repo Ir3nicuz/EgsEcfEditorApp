@@ -1339,6 +1339,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to added to.
+        /// </summary>
+        internal static string Generic_AddedTo {
+            get {
+                return ResourceManager.GetString("Generic_AddedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change all.
         /// </summary>
         internal static string Generic_ChangeAll {

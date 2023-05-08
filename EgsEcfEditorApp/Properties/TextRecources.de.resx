@@ -543,6 +543,9 @@
   <data name="EgsEcfEditorApp_ToolTip_TechTreeEditor" xml:space="preserve">
     <value>Erzeugt eine Vorschauansicht für den TechTree basierend auf den geöffneten Dateien und ermöglicht diverse Änderungen</value>
   </data>
+  <data name="Generic_AddedTo" xml:space="preserve">
+    <value>hinzugefügt zu</value>
+  </data>
   <data name="Generic_ChangeAll" xml:space="preserve">
     <value>Alle ändern</value>
   </data>

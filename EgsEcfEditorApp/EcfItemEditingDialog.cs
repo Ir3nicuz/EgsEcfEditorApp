@@ -49,7 +49,6 @@ namespace EcfFileViews
         private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog()
         {
             Icon = IconRecources.Icon_AppBranding,
-            Text = TitleRecources.Generic_PickItem,
             OkButtonText = TitleRecources.Generic_Ok,
             AbortButtonText = TitleRecources.Generic_Abort,
             SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
@@ -62,26 +61,24 @@ namespace EcfFileViews
         private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
         private ParameterPanel BlockItemParametersPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Block);
 
-        public EcfItemEditingDialog(EgsEcfFile file)
+        public EcfItemEditingDialog()
         {
             InitializeComponent();
-            InitForm(file);
+            InitForm();
         }
 
         // events
         // unspecific
-        private void InitForm(EgsEcfFile file)
+        private void InitForm()
         {
             Icon = IconRecources.Icon_AppBranding;
-            File = file;
+            OkButton.Text = TitleRecources.Generic_Ok;
+            AbortButton.Text = TitleRecources.Generic_Abort;
+            ResetButton.Text = TitleRecources.Generic_Reset;
 
             // Hack to hide tabs
             ViewPanel.SizeMode = TabSizeMode.Fixed;
             ViewPanel.ItemSize = new Size(0, 1);
-
-            OkButton.Text = TitleRecources.Generic_Ok;
-            AbortButton.Text = TitleRecources.Generic_Abort;
-            ResetButton.Text = TitleRecources.Generic_Reset;
 
             CommentItem_InitView();
             ParameterItem_InitView();
@@ -113,37 +110,35 @@ namespace EcfFileViews
         {
             Generic_SetFocus();
         }
-        // parameter
         private void ParameterItemKeyComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
             ParameterItem_UpdateDefinition(Convert.ToString(ParameterItemKeyComboBox.SelectedItem));
             ParameterItemValuesPanel.UpdateParameterValues(ParameterDefinition, PresetParameter);
         }
-        // block
         private void BlockItemAttributesPanel_InheritorChanged(object sender, EventArgs evt)
         {
             BlockItem_UpdateParametersInheritance(sender as EcfBlock);
         }
 
         // publics
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfComment presetComment)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfComment comment)
         {
             ResultItem = null;
             ParentBlock = null;
             File = file;
-            PresetComment = presetComment;
+            PresetComment = comment;
             OperationMode = OperationModes.Comment;
 
             CommentItem_ActivateView();
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfParameter presetParameter)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfParameter parameter)
         {
             ResultItem = null;
-            ParentBlock = presetParameter?.Parent as EcfBlock;
+            ParentBlock = parameter?.Parent as EcfBlock;
             File = file;
-            PresetParameter = presetParameter;
+            PresetParameter = parameter;
             OperationMode = OperationModes.Parameter;
 
             try
@@ -159,14 +154,14 @@ namespace EcfFileViews
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfBlock presetBlock)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfBlock block)
         {
             ResultItem = null;
             ParentBlock = null;
             File = file;
             Generic_BuildBlockCompareLists(file);
-            PresetBlock = presetBlock;
-            OperationMode = presetBlock.IsRoot() ? OperationModes.RootBlock : OperationModes.ChildBlock;
+            PresetBlock = block;
+            OperationMode = (block?.IsRoot() ?? true) ? OperationModes.RootBlock : OperationModes.ChildBlock;
 
             try
             {
@@ -426,6 +421,7 @@ namespace EcfFileViews
                     throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoSelectableParameterAvailable);
                 }
 
+                ItemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, TitleRecources.Generic_Parameter);
                 if (ItemSelector.ShowDialog(this, selectableParameters.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
                 {
                     PresetParameterCheckedKey = Convert.ToString(ItemSelector.SelectedItem.Item);
@@ -556,16 +552,12 @@ namespace EcfFileViews
             BlockItemInheritorLabel.Text = TitleRecources.Generic_Inherited;
             BlockItemCommentLabel.Text = TitleRecources.Generic_Comment;
 
-            BlockItem_PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
-            BlockItem_PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
-
             BlockItemViewPanel.Controls.Add(BlockItemAttributesPanel, 0, 1);
             BlockItemViewPanel.SetColumnSpan(BlockItemAttributesPanel, 2);
             BlockItemAttributesPanel.InheritorChanged += BlockItemAttributesPanel_InheritorChanged;
 
             BlockItemViewPanel.Controls.Add(BlockItemParametersPanel, 0, 2);
             BlockItemViewPanel.SetColumnSpan(BlockItemParametersPanel, 2);
-            BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
         }
         private void BlockItem_PrepareTypeDataComboBox(ComboBox box, List<BlockValueDefinition> definitions)
         {
@@ -587,21 +579,21 @@ namespace EcfFileViews
         private void BlockItem_PreActivationChecks_Editing()
         {
             PresetBlockCheckedPreMark = BlockItem_PreActivationChecks_EditingDefinition(
-                File.Definition.BlockTypePreMarks, PresetBlock.PreMark, TitleRecources.Generic_PreMark);
+                File.Definition.BlockTypePreMarks, PresetBlock?.PreMark, TitleRecources.Generic_PreMark);
 
             if (OperationMode == OperationModes.ChildBlock)
             {
                 PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
-                    File.Definition.ChildBlockTypes, PresetBlock.DataType, TitleRecources.Generic_DataType);
+                    File.Definition.ChildBlockTypes, PresetBlock?.DataType, TitleRecources.Generic_DataType);
             }
             else if (OperationMode == OperationModes.RootBlock)
             {
                 PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
-                    File.Definition.RootBlockTypes, PresetBlock.DataType, TitleRecources.Generic_DataType);
+                    File.Definition.RootBlockTypes, PresetBlock?.DataType, TitleRecources.Generic_DataType);
             }
 
             PresetBlockCheckedPostMark = BlockItem_PreActivationChecks_EditingDefinition(
-                File.Definition.BlockTypePostMarks, PresetBlock.PostMark, TitleRecources.Generic_PostMark);
+                File.Definition.BlockTypePostMarks, PresetBlock?.PostMark, TitleRecources.Generic_PostMark);
         }
         private string BlockItem_PreActivationChecks_EditingDefinition(
             ReadOnlyCollection<BlockValueDefinition> definition, string dataToCheck, string dataTypeName)
@@ -612,6 +604,7 @@ namespace EcfFileViews
                 {
                     MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck ?? string.Empty), 
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ItemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, dataTypeName);
                     if (ItemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
                     {
                         return Convert.ToString(ItemSelector.SelectedItem.Item);
@@ -670,8 +663,11 @@ namespace EcfFileViews
 
             BlockItem_UpdateDefinition();
 
+            BlockItem_PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
             BlockItem_PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
+            BlockItem_PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
 
+            BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
             BlockItem_UpdateView();
 
             // hack to prevent tab switch with tab key

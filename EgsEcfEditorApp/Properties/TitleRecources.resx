@@ -240,8 +240,14 @@
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Values / Groups</value>
   </data>
+  <data name="EcfItemHandlingSupport_Header_AddExistingTemplateSelector" xml:space="preserve">
+    <value>Select existing template to be attached</value>
+  </data>
   <data name="EcfItemHandlingSupport_Header_AddTemplateOptionSelector" xml:space="preserve">
     <value>Select option how to add the template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector" xml:space="preserve">
+    <value>Select existing template to be copied</value>
   </data>
   <data name="EcfItemListingView_Header" xml:space="preserve">
     <value>Item listing</value>

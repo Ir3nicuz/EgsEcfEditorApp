@@ -1,7 +1,7 @@
 ﻿
 namespace EcfFileViews
 {
-    partial class EcfItemEditingDialog
+    partial class EcfItemEditingDialogNew
     {
         /// <summary>
         /// Required designer variable.
@@ -65,10 +65,6 @@ namespace EcfFileViews
             this.BlockItemCommentTextBox = new System.Windows.Forms.TextBox();
             this.ParameterMatrixView = new System.Windows.Forms.TabPage();
             this.MessagePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.BlockItemTabPanel = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.BlockItemParentLabel = new System.Windows.Forms.Label();
-            this.BlockItemParentTextBox = new System.Windows.Forms.TextBox();
             this.ButtonPanel.SuspendLayout();
             this.ViewPanel.SuspendLayout();
             this.CommentItemView.SuspendLayout();
@@ -80,7 +76,6 @@ namespace EcfFileViews
             this.BlockItemViewPanel.SuspendLayout();
             this.BlockItemTypePanel.SuspendLayout();
             this.BlockItemAddDataPanel.SuspendLayout();
-            this.BlockItemTabPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonPanel
@@ -332,7 +327,6 @@ namespace EcfFileViews
             // 
             // BlockItemView
             // 
-            this.BlockItemView.Controls.Add(this.BlockItemTabPanel);
             this.BlockItemView.Controls.Add(this.BlockItemViewPanel);
             this.BlockItemView.Location = new System.Drawing.Point(4, 24);
             this.BlockItemView.Name = "BlockItemView";
@@ -349,14 +343,15 @@ namespace EcfFileViews
             this.BlockItemViewPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.BlockItemViewPanel.Controls.Add(this.BlockItemTypePanel, 0, 0);
             this.BlockItemViewPanel.Controls.Add(this.BlockItemAddDataPanel, 1, 0);
+            this.BlockItemViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemViewPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.BlockItemViewPanel.Location = new System.Drawing.Point(218, 74);
+            this.BlockItemViewPanel.Location = new System.Drawing.Point(0, 0);
             this.BlockItemViewPanel.Name = "BlockItemViewPanel";
             this.BlockItemViewPanel.RowCount = 3;
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.BlockItemViewPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BlockItemViewPanel.Size = new System.Drawing.Size(1179, 619);
+            this.BlockItemViewPanel.Size = new System.Drawing.Size(1176, 604);
             this.BlockItemViewPanel.TabIndex = 0;
             // 
             // BlockItemTypePanel
@@ -379,7 +374,7 @@ namespace EcfFileViews
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemTypePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.BlockItemTypePanel.Size = new System.Drawing.Size(347, 86);
+            this.BlockItemTypePanel.Size = new System.Drawing.Size(346, 84);
             this.BlockItemTypePanel.TabIndex = 2;
             // 
             // BlockItemDataTypeLabel
@@ -400,7 +395,7 @@ namespace EcfFileViews
             this.BlockItemDataTypeComboBox.FormattingEnabled = true;
             this.BlockItemDataTypeComboBox.Location = new System.Drawing.Point(141, 31);
             this.BlockItemDataTypeComboBox.Name = "BlockItemDataTypeComboBox";
-            this.BlockItemDataTypeComboBox.Size = new System.Drawing.Size(203, 21);
+            this.BlockItemDataTypeComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemDataTypeComboBox.TabIndex = 2;
             // 
             // BlockItemPreMarkLabel
@@ -421,7 +416,7 @@ namespace EcfFileViews
             this.BlockItemPreMarkComboBox.FormattingEnabled = true;
             this.BlockItemPreMarkComboBox.Location = new System.Drawing.Point(141, 3);
             this.BlockItemPreMarkComboBox.Name = "BlockItemPreMarkComboBox";
-            this.BlockItemPreMarkComboBox.Size = new System.Drawing.Size(203, 21);
+            this.BlockItemPreMarkComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemPreMarkComboBox.TabIndex = 1;
             // 
             // BlockItemPostMarkLabel
@@ -430,7 +425,7 @@ namespace EcfFileViews
             this.BlockItemPostMarkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemPostMarkLabel.Location = new System.Drawing.Point(3, 56);
             this.BlockItemPostMarkLabel.Name = "BlockItemPostMarkLabel";
-            this.BlockItemPostMarkLabel.Size = new System.Drawing.Size(132, 30);
+            this.BlockItemPostMarkLabel.Size = new System.Drawing.Size(132, 28);
             this.BlockItemPostMarkLabel.TabIndex = 3;
             this.BlockItemPostMarkLabel.Text = "postmark";
             this.BlockItemPostMarkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -442,7 +437,7 @@ namespace EcfFileViews
             this.BlockItemPostMarkComboBox.FormattingEnabled = true;
             this.BlockItemPostMarkComboBox.Location = new System.Drawing.Point(141, 59);
             this.BlockItemPostMarkComboBox.Name = "BlockItemPostMarkComboBox";
-            this.BlockItemPostMarkComboBox.Size = new System.Drawing.Size(203, 21);
+            this.BlockItemPostMarkComboBox.Size = new System.Drawing.Size(202, 21);
             this.BlockItemPostMarkComboBox.TabIndex = 4;
             // 
             // BlockItemAddDataPanel
@@ -451,30 +446,28 @@ namespace EcfFileViews
             this.BlockItemAddDataPanel.ColumnCount = 2;
             this.BlockItemAddDataPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.BlockItemAddDataPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemParentTextBox, 1, 0);
-            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemParentLabel, 0, 0);
+            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemInheritorLabel, 0, 0);
+            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemInheritorTextBox, 1, 0);
             this.BlockItemAddDataPanel.Controls.Add(this.BlockItemCommentLabel, 0, 2);
             this.BlockItemAddDataPanel.Controls.Add(this.BlockItemCommentTextBox, 1, 2);
-            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemInheritorLabel, 0, 1);
-            this.BlockItemAddDataPanel.Controls.Add(this.BlockItemInheritorTextBox, 1, 1);
             this.BlockItemAddDataPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemAddDataPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.BlockItemAddDataPanel.Location = new System.Drawing.Point(356, 3);
+            this.BlockItemAddDataPanel.Location = new System.Drawing.Point(355, 3);
             this.BlockItemAddDataPanel.Name = "BlockItemAddDataPanel";
             this.BlockItemAddDataPanel.RowCount = 3;
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.BlockItemAddDataPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.BlockItemAddDataPanel.Size = new System.Drawing.Size(820, 86);
+            this.BlockItemAddDataPanel.Size = new System.Drawing.Size(818, 84);
             this.BlockItemAddDataPanel.TabIndex = 3;
             // 
             // BlockItemInheritorLabel
             // 
             this.BlockItemInheritorLabel.AutoSize = true;
             this.BlockItemInheritorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemInheritorLabel.Location = new System.Drawing.Point(3, 28);
+            this.BlockItemInheritorLabel.Location = new System.Drawing.Point(3, 0);
             this.BlockItemInheritorLabel.Name = "BlockItemInheritorLabel";
-            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(158, 28);
+            this.BlockItemInheritorLabel.Size = new System.Drawing.Size(157, 28);
             this.BlockItemInheritorLabel.TabIndex = 4;
             this.BlockItemInheritorLabel.Text = "inher";
             this.BlockItemInheritorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -482,10 +475,10 @@ namespace EcfFileViews
             // BlockItemInheritorTextBox
             // 
             this.BlockItemInheritorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemInheritorTextBox.Location = new System.Drawing.Point(167, 31);
+            this.BlockItemInheritorTextBox.Location = new System.Drawing.Point(166, 3);
             this.BlockItemInheritorTextBox.Name = "BlockItemInheritorTextBox";
             this.BlockItemInheritorTextBox.ReadOnly = true;
-            this.BlockItemInheritorTextBox.Size = new System.Drawing.Size(650, 20);
+            this.BlockItemInheritorTextBox.Size = new System.Drawing.Size(649, 20);
             this.BlockItemInheritorTextBox.TabIndex = 5;
             // 
             // BlockItemCommentLabel
@@ -494,7 +487,7 @@ namespace EcfFileViews
             this.BlockItemCommentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BlockItemCommentLabel.Location = new System.Drawing.Point(3, 56);
             this.BlockItemCommentLabel.Name = "BlockItemCommentLabel";
-            this.BlockItemCommentLabel.Size = new System.Drawing.Size(158, 30);
+            this.BlockItemCommentLabel.Size = new System.Drawing.Size(157, 28);
             this.BlockItemCommentLabel.TabIndex = 1;
             this.BlockItemCommentLabel.Text = "comment";
             this.BlockItemCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -502,9 +495,9 @@ namespace EcfFileViews
             // BlockItemCommentTextBox
             // 
             this.BlockItemCommentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(167, 59);
+            this.BlockItemCommentTextBox.Location = new System.Drawing.Point(166, 59);
             this.BlockItemCommentTextBox.Name = "BlockItemCommentTextBox";
-            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(650, 20);
+            this.BlockItemCommentTextBox.Size = new System.Drawing.Size(649, 20);
             this.BlockItemCommentTextBox.TabIndex = 3;
             // 
             // ParameterMatrixView
@@ -524,45 +517,6 @@ namespace EcfFileViews
             this.MessagePanel.Name = "MessagePanel";
             this.MessagePanel.Size = new System.Drawing.Size(1184, 0);
             this.MessagePanel.TabIndex = 1;
-            // 
-            // BlockItemTabPanel
-            // 
-            this.BlockItemTabPanel.Controls.Add(this.tabPage1);
-            this.BlockItemTabPanel.Location = new System.Drawing.Point(12, 136);
-            this.BlockItemTabPanel.Name = "BlockItemTabPanel";
-            this.BlockItemTabPanel.SelectedIndex = 0;
-            this.BlockItemTabPanel.Size = new System.Drawing.Size(200, 100);
-            this.BlockItemTabPanel.TabIndex = 1;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(192, 74);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // BlockItemParentLabel
-            // 
-            this.BlockItemParentLabel.AutoSize = true;
-            this.BlockItemParentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParentLabel.Location = new System.Drawing.Point(3, 0);
-            this.BlockItemParentLabel.Name = "BlockItemParentLabel";
-            this.BlockItemParentLabel.Size = new System.Drawing.Size(158, 28);
-            this.BlockItemParentLabel.TabIndex = 6;
-            this.BlockItemParentLabel.Text = "parent";
-            this.BlockItemParentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // BlockItemParentTextBox
-            // 
-            this.BlockItemParentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BlockItemParentTextBox.Location = new System.Drawing.Point(167, 3);
-            this.BlockItemParentTextBox.Name = "BlockItemParentTextBox";
-            this.BlockItemParentTextBox.ReadOnly = true;
-            this.BlockItemParentTextBox.Size = new System.Drawing.Size(650, 20);
-            this.BlockItemParentTextBox.TabIndex = 7;
             // 
             // EcfItemEditingDialog
             // 
@@ -600,7 +554,6 @@ namespace EcfFileViews
             this.BlockItemTypePanel.PerformLayout();
             this.BlockItemAddDataPanel.ResumeLayout(false);
             this.BlockItemAddDataPanel.PerformLayout();
-            this.BlockItemTabPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -644,9 +597,5 @@ namespace EcfFileViews
         private System.Windows.Forms.TextBox ParameterItemParentTextBox;
         private System.Windows.Forms.RichTextBox CommentItemRichTextBox;
         private System.Windows.Forms.TabPage ParameterMatrixView;
-        private System.Windows.Forms.TabControl BlockItemTabPanel;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TextBox BlockItemParentTextBox;
-        private System.Windows.Forms.Label BlockItemParentLabel;
     }
 }

@@ -109,7 +109,7 @@ namespace EgsEcfEditorApp
                 DisplayText = displayText;
             }
         }
-        public class DoubleClickRadioButton : RadioButton
+        private class DoubleClickRadioButton : RadioButton
         {
             [EditorBrowsable(EditorBrowsableState.Always), Browsable(true)]
             public new event MouseEventHandler MouseDoubleClick;
@@ -117,6 +117,8 @@ namespace EgsEcfEditorApp
             public DoubleClickRadioButton() : base()
             {
                 SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, true);
+
+                AutoSize = true;
             }
 
             protected override void OnMouseDoubleClick(MouseEventArgs evt)

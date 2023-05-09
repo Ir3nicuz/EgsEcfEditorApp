@@ -83,6 +83,12 @@
     <Compile Include="EcfFileSaveDialog.Designer.cs">
       <DependentUpon>EcfFileSaveDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EcfItemEditingDialogOld.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EcfItemEditingDialogOld.Designer.cs">
+      <DependentUpon>EcfItemEditingDialogOld.cs</DependentUpon>
+    </Compile>
     <Compile Include="EcfItemEditingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EcfFileOpenDialog.resx">
       <DependentUpon>EcfFileOpenDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EcfItemEditingDialogOld.resx">
+      <DependentUpon>EcfItemEditingDialogOld.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EcfItemEditingDialog.resx">
       <DependentUpon>EcfItemEditingDialog.cs</DependentUpon>

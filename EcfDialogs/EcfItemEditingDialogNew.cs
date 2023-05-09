@@ -15,7 +15,7 @@ using static Helpers.EnumLocalisation;
 
 namespace EcfFileViews
 {
-    public partial class EcfItemEditingDialog : Form
+    public partial class EcfItemEditingDialogNew : Form
     {
         public EcfStructureItem ResultItem { get; private set; } = null;
 
@@ -61,7 +61,7 @@ namespace EcfFileViews
         private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
         private ParameterPanel BlockItemParametersPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Block);
 
-        public EcfItemEditingDialog()
+        public EcfItemEditingDialogNew()
         {
             InitializeComponent();
             InitForm();
@@ -124,7 +124,7 @@ namespace EcfFileViews
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfComment comment)
         {
             ResultItem = null;
-            ParentBlock = comment?.Parent as EcfBlock;
+            ParentBlock = null;
             File = file;
             PresetComment = comment;
             OperationMode = OperationModes.Comment;
@@ -157,7 +157,7 @@ namespace EcfFileViews
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfBlock block)
         {
             ResultItem = null;
-            ParentBlock = block?.Parent as EcfBlock;
+            ParentBlock = null;
             File = file;
             Generic_BuildBlockCompareLists(file);
             PresetBlock = block;
@@ -447,7 +447,7 @@ namespace EcfFileViews
             ParameterItem_ActivateViewHeader();
             ParameterItem_ActivateKeyComboBox();
 
-            ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
+            ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId();
 
             ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
 
@@ -549,7 +549,6 @@ namespace EcfFileViews
             BlockItemPreMarkLabel.Text = TitleRecources.Generic_PreMark;
             BlockItemDataTypeLabel.Text = TitleRecources.Generic_DataType;
             BlockItemPostMarkLabel.Text = TitleRecources.Generic_PostMark;
-            BlockItemParentLabel.Text = TitleRecources.Generic_ParentElement;
             BlockItemInheritorLabel.Text = TitleRecources.Generic_Inherited;
             BlockItemCommentLabel.Text = TitleRecources.Generic_Comment;
 
@@ -702,6 +701,9 @@ namespace EcfFileViews
         }
         private void BlockItem_UpdateView()
         {
+            // comments
+            BlockItemCommentTextBox.Text = PresetBlock != null ? string.Join(" / ", PresetBlock.Comments) : string.Empty;
+
             // marks und type
             if (PresetBlock != null)
             {
@@ -710,14 +712,7 @@ namespace EcfFileViews
                 BlockItemPostMarkComboBox.SelectedItem = BlockItemPostMarkComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => item.Value == PresetBlockCheckedPostMark);
             }
 
-            // parent
-            BlockItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
-
-            // inheritance
             EcfBlock inheritorBlock = PresetBlock?.Inheritor;
-
-            // comments
-            BlockItemCommentTextBox.Text = PresetBlock != null ? string.Join(" / ", PresetBlock.Comments) : string.Empty;
 
             // attributes
             BlockItemAttributesPanel.GenerateAttributes(File.Definition, BlockAttributeDefinitions.AsReadOnly());
@@ -2267,26 +2262,6 @@ namespace EcfFileViews
                     }
                 }
 
-            }
-        }
-        private class BlockItemPanel : TableLayoutPanel
-        {
-            
-
-            public BlockItemPanel()
-            {
-                AutoSize = true;
-                ColumnCount = 2;
-                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-                Controls.Add(this.BlockItemTypePanel, 0, 0);
-                Controls.Add(this.BlockItemAddDataPanel, 1, 0);
-                GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-                Dock = DockStyle.Fill;
-                RowCount = 3;
-                RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             }
         }
     }

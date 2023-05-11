@@ -313,6 +313,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item adding not possible without ecf file reference.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoAddingWithoutFile {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoAddingWithoutFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block adding not allowed without PostMark definition.
         /// </summary>
         internal static string EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition {
@@ -345,6 +354,24 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemEditingDialog_NoDefinitionFoundForParameter {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_NoDefinitionFoundForParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No editable item reference provided.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoEditableItemProvided {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoEditableItemProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item editing not possible without ecf file reference.
+        /// </summary>
+        internal static string EcfItemEditingDialog_NoEditingWithoutFile {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_NoEditingWithoutFile", resourceCulture);
             }
         }
         

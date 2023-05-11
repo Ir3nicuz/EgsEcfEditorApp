@@ -19,18 +19,11 @@ namespace EcfFileViews
     {
         public EcfStructureItem ResultItem { get; private set; } = null;
 
-        public enum OperationModes
-        {
-            None,
-            Comment,
-            Parameter,
-            RootBlock,
-            ChildBlock,
-            ParameterMatrix,
-        }
+        private CommentItemPanel CommentView { get; } = new CommentItemPanel();
+        private ParameterItemPanel ParameterView { get; } = new ParameterItemPanel();
+        private BlockItemPanel BlockView { get; } = new BlockItemPanel();
+        private ParameterMatrixPanel MatrixView { get; } = new ParameterMatrixPanel();
 
-        private OperationModes OperationMode { get; set; } = OperationModes.None;
-        
         private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog()
         {
             Icon = IconRecources.Icon_AppBranding,
@@ -40,6 +33,14 @@ namespace EcfFileViews
             DefaultItemText = TitleRecources.Generic_Replacement_Empty,
         };
 
+        public enum CreationModes
+        {
+            Comment,
+            Parameter,
+            RootBlock,
+            ChildBlock,
+        }
+
         public EcfItemEditingDialog()
         {
             InitializeComponent();
@@ -47,17 +48,12 @@ namespace EcfFileViews
         }
 
         // events
-        // unspecific
         private void InitForm()
         {
             Icon = IconRecources.Icon_AppBranding;
             OkButton.Text = TitleRecources.Generic_Ok;
             AbortButton.Text = TitleRecources.Generic_Abort;
             ResetButton.Text = TitleRecources.Generic_Reset;
-
-            // Hack to hide tabs
-            ViewPanel.SizeMode = TabSizeMode.Fixed;
-            ViewPanel.ItemSize = new Size(0, 1);
         }
         private void AbortButton_Click(object sender, EventArgs evt)
         {
@@ -89,169 +85,129 @@ namespace EcfFileViews
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfComment comment)
         {
             ResultItem = null;
-            ParentBlock = comment?.Parent as EcfBlock;
-            File = file;
-            PresetComment = comment;
-            OperationMode = OperationModes.Comment;
 
-            CommentItem_ActivateView();
+            CommentView.PresetData(comment);
 
-            if (PresetComment != null)
-            {
-                Text = TitleRecources.EcfItemEditingDialog_Header_EditComment;
-            }
-            else
-            {
-                Text = TitleRecources.EcfItemEditingDialog_Header_AddComment;
-            }
-            ResetButton.Enabled = PresetComment != null;
-
-            // hack to prevent tab switch with tab key
-            ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(CommentItemView);
+            Text = TitleRecources.EcfItemEditingDialog_Header_EditComment;
+            ResetButton.Enabled = true;
+            ViewPanel.Controls.Clear();
+            ViewPanel.Controls.Add(CommentView);
 
             return ShowDialog(parent);
         }
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfParameter parameter)
         {
             ResultItem = null;
-            ParentBlock = parameter?.Parent as EcfBlock;
-            File = file;
-            PresetParameter = parameter;
-            OperationMode = OperationModes.Parameter;
-
+            
             try
             {
-                ParameterItem_PreActivationChecks_Editing();
+                ParameterView.PresetData(file, parameter, ItemSelector);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            ParameterItem_ActivateView();
 
-            if (PresetParameter != null)
-            {
-                Text = TitleRecources.EcfItemEditingDialog_Header_EditParameter;
-            }
-            else
-            {
-                Text = TitleRecources.EcfItemEditingDialog_Header_AddParameter;
-            }
-            ResetButton.Enabled = PresetParameter != null;
-
-            // hack to prevent tab switch with tab key
-            ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(ParameterItemView);
+            Text = TitleRecources.EcfItemEditingDialog_Header_EditParameter;
+            ResetButton.Enabled = true;
+            ViewPanel.Controls.Clear();
+            ViewPanel.Controls.Add(ParameterView);
 
             return ShowDialog(parent);
         }
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfBlock block)
         {
             ResultItem = null;
-            ParentBlock = block?.Parent as EcfBlock;
-            File = file;
-            PresetBlock = block;
-            OperationMode = (block?.IsRoot() ?? true) ? OperationModes.RootBlock : OperationModes.ChildBlock;
-
+            
             try
             {
-                BlockItem_PreActivationChecks_Editing();
+                BlockView.PresetData(file, block, ItemSelector);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            BlockItem_ActivateView();
 
-            if (PresetBlock != null)
+            if (block.IsRoot())
             {
-                if (PanelMode == BlockItemPanelModes.ChildBlock)
-                {
-                    Text = TitleRecources.EcfItemEditingDialog_Header_EditChildBlock;
-                }
-                else
-                {
-                    Text = TitleRecources.EcfItemEditingDialog_Header_EditRootBlock;
-                }
+                Text = TitleRecources.EcfItemEditingDialog_Header_EditRootBlock;
             }
             else
             {
-                if (PanelMode == BlockItemPanelModes.ChildBlock)
-                {
-                    Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
-                }
-                else
-                {
-                    Text = TitleRecources.EcfItemEditingDialog_Header_AddRootBlock;
-                }
+                Text = TitleRecources.EcfItemEditingDialog_Header_EditChildBlock;
             }
-            ResetButton.Enabled = PresetBlock != null;
-
-            // hack to prevent tab switch with tab key
-            ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(BlockItemView);
+            ResetButton.Enabled = true;
+            ViewPanel.Controls.Clear();
+            ViewPanel.Controls.Add(BlockView);
 
             return ShowDialog(parent);
         }
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, List<EcfParameter> parameters)
         {
             ResultItem = null;
-            ParentBlock = null;
-            File = file;
-            PresetParameter = null;
-            OperationMode = OperationModes.ParameterMatrix;
-
+            
             try
             {
-                ParameterMatrix_PreActivationChecks(parameters);
+                MatrixView.PresetData(file, parameters);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            ParameterMatrix_ActivateView(parameters);
 
             Text = TitleRecources.EcfItemEditingDialog_Header_EditParameterMatrix;
             ResetButton.Enabled = true;
-
-            // hack to prevent tab switch with tab key
-            ViewPanel.TabPages.Clear();
-            ViewPanel.TabPages.Add(ParameterMatrixView);
+            ViewPanel.Controls.Clear();
+            ViewPanel.Controls.Add(MatrixView);
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, OperationModes creationMode, EcfBlock parentBlock)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, CreationModes mode, EcfBlock parentBlock)
         {
             ResultItem = null;
-            ParentBlock = parentBlock;
-            File = file;
-            Generic_ClearPresets();
-            OperationMode = creationMode;
 
+            ResetButton.Enabled = false;
+            ViewPanel.Controls.Clear();
             try
             {
-                Generic_PreActivationChecks_Adding();
+                switch (mode)
+                {
+                    case CreationModes.Comment:
+                        Text = TitleRecources.EcfItemEditingDialog_Header_AddComment;
+                        CommentView.PresetData(null);
+                        ViewPanel.Controls.Add(CommentView);
+                        break;
+                    case CreationModes.Parameter:
+                        Text = TitleRecources.EcfItemEditingDialog_Header_AddParameter;
+                        ParameterView.PresetData(file, parentBlock);
+                        ViewPanel.Controls.Add(ParameterView);
+                        break;
+                    case CreationModes.RootBlock:
+                        Text = TitleRecources.EcfItemEditingDialog_Header_AddRootBlock;
+                        BlockView.PresetData(file, parentBlock);
+                        ViewPanel.Controls.Add(BlockView);
+                        break;
+                    case CreationModes.ChildBlock:
+                        Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
+                        BlockView.PresetData(file, parentBlock);
+                        ViewPanel.Controls.Add(BlockView);
+                        break;
+                    default: Text = "Blame the Coder!"; break;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return DialogResult.Abort;
             }
-            Generic_ActivateView();
-
-            // header text?
-            // reset button?
-            // tab adding?
 
             return ShowDialog(parent);
         }
         
         // privates
-        // generics
         private void Generic_SetFocus()
         {
             switch (OperationMode)
@@ -279,34 +235,6 @@ namespace EcfFileViews
             ResultItem = Generic_PrepareResultItem();
             DialogResult = DialogResult.OK;
             Close();
-        }
-        private void Generic_ClearPresets()
-        {
-            PresetComment = null;
-            PresetParameter = null;
-            PresetBlock = null;
-        }
-        private void Generic_PreActivationChecks_Adding()
-        {
-            switch (OperationMode)
-            {
-                case OperationModes.Comment: break;
-                case OperationModes.Parameter: ParameterItem_PreActivationChecks_Adding(); break;
-                case OperationModes.RootBlock: 
-                case OperationModes.ChildBlock: BlockItem_PreActivationChecks_Adding(); break;
-                default: throw new ArgumentException(string.Format("Mode {0} not allowed for creation ...that shouldn't happen :)", OperationMode.ToString()));
-            }
-        }
-        private void Generic_ActivateView()
-        {
-            switch (OperationMode)
-            {
-                case OperationModes.Comment: CommentItem_ActivateView(); break;
-                case OperationModes.Parameter: ParameterItem_ActivateView(); break;
-                case OperationModes.RootBlock:
-                case OperationModes.ChildBlock: BlockItem_ActivateView(); break;
-                default: break;
-            }
         }
         private List<string> Generic_ValidateInputs()
         {
@@ -342,118 +270,6 @@ namespace EcfFileViews
                 case OperationModes.ChildBlock: return BlockItem_PrepareResultItem();
                 case OperationModes.ParameterMatrix: return ParameterMatrix_PrepareResultItem();
                 default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen", OperationMode.ToString()));
-            }
-        }
-
-        // prechecks
-        private void ParameterItem_PreActivationChecks_Editing()
-        {
-            if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutParent); }
-
-            List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
-            if (definedParameters.Count < 1)
-            {
-                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutDefinitions);
-            }
-
-            if (!definedParameters.Contains(PresetParameter.Key))
-            {
-                MessageBox.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemEditingDialog_NoDefinitionFoundForParameter, PresetParameter?.Key ?? string.Empty),
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                List<string> selectableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-                if (selectableParameters.Count < 1)
-                {
-                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoSelectableParameterAvailable);
-                }
-
-                ItemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, TitleRecources.Generic_Parameter);
-                if (ItemSelector.ShowDialog(this, selectableParameters.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
-                {
-                    PresetParameterCheckedKey = Convert.ToString(ItemSelector.SelectedItem.Item);
-                    return;
-                }
-                throw new ArgumentException(TextRecources.EcfItemEditingDialog_ParameterEditingAborted);
-            }
-            PresetParameterCheckedKey = PresetParameter.Key;
-        }
-        private void ParameterItem_PreActivationChecks_Adding()
-        {
-            if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutParent); }
-            List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
-            if (definedParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutDefinitions); }
-            List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => 
-                child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
-            if (addableParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoAddableParameterAvailable); }
-        }
-        private void BlockItem_PreActivationChecks_Editing()
-        {
-            PresetBlockCheckedPreMark = BlockItem_PreActivationChecks_EditingDefinition(
-                File.Definition.BlockTypePreMarks, PresetBlock?.PreMark, TitleRecources.Generic_PreMark);
-
-            if (OperationMode == OperationModes.ChildBlock)
-            {
-                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
-                    File.Definition.ChildBlockTypes, PresetBlock?.DataType, TitleRecources.Generic_DataType);
-            }
-            else if (OperationMode == OperationModes.RootBlock)
-            {
-                PresetBlockCheckedDataType = BlockItem_PreActivationChecks_EditingDefinition(
-                    File.Definition.RootBlockTypes, PresetBlock?.DataType, TitleRecources.Generic_DataType);
-            }
-
-            PresetBlockCheckedPostMark = BlockItem_PreActivationChecks_EditingDefinition(
-                File.Definition.BlockTypePostMarks, PresetBlock?.PostMark, TitleRecources.Generic_PostMark);
-        }
-        private string BlockItem_PreActivationChecks_EditingDefinition(
-            ReadOnlyCollection<BlockValueDefinition> definition, string dataToCheck, string dataTypeName)
-        {
-            if (definition.Count > 0)
-            {
-                if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(dataToCheck)))
-                {
-                    MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck ?? string.Empty), 
-                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    ItemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, dataTypeName);
-                    if (ItemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
-                    {
-                        return Convert.ToString(ItemSelector.SelectedItem.Item);
-                    }
-                    throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_BlockEditingAborted);
-                }
-            }
-            return dataToCheck;
-        }
-        private void BlockItem_PreActivationChecks_Adding()
-        {
-            if (File.Definition.BlockTypePostMarks.Count < 1)
-            {
-                throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition);
-            }
-            if (OperationMode == OperationModes.ChildBlock)
-            {
-                if (File.Definition.ChildBlockTypes.Count < 1)
-                {
-                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition);
-                }
-            }
-            if (OperationMode == OperationModes.RootBlock)
-            {
-                if (File.Definition.RootBlockTypes.Count < 1)
-                {
-                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition);
-                }
-            }
-        }
-        private void ParameterMatrix_PreActivationChecks(List<EcfParameter> parameters)
-        {
-            if (parameters.Any(parameter => parameter.Definition == null))
-            {
-                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed);
-            }
-            if (parameters.Any(parameter => !parameter.Definition.HasValue))
-            {
-                throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed);
             }
         }
 
@@ -1848,6 +1664,449 @@ namespace EcfFileViews
 
             }
         }
+        private class BlockPanel : TableLayoutPanel
+        {
+            BlockItemPanelModes PanelMode { get; set; } = BlockItemPanelModes.None;
+            private EgsEcfFile File { get; set; } = null;
+            private EcfBlock PresetBlock { get; set; } = null;
+            private EcfBlock ParentBlock { get; set; } = null;
+            private string PresetBlockCheckedPreMark { get; set; } = null;
+            private string PresetBlockCheckedDataType { get; set; } = null;
+            private string PresetBlockCheckedPostMark { get; set; } = null;
+            private List<ItemDefinition> BlockAttributeDefinitions { get; set; } = null;
+            private List<BlockValueDefinition> BlockTypeDefinitions { get; set; } = null;
+            private List<EcfBlock> IdentifyingBlockList { get; set; } = null;
+            private List<EcfBlock> ReferencedBlockList { get; set; } = null;
+            private List<EcfBlock> ReferencingBlockList { get; set; } = null;
+
+            private TableLayoutPanel BlockItemTypePanel { get; } = new TableLayoutPanel();
+            private TableLayoutPanel BlockItemAddDataPanel { get; } = new TableLayoutPanel();
+
+            private Label BlockItemPreMarkLabel { get; } = new Label();
+            private ComboBox BlockItemPreMarkComboBox { get; } = new ComboBox();
+            private Label BlockItemDataTypeLabel { get; } = new Label();
+            private ComboBox BlockItemDataTypeComboBox { get; } = new ComboBox();
+            private Label BlockItemPostMarkLabel { get; } = new Label();
+            private ComboBox BlockItemPostMarkComboBox { get; } = new ComboBox();
+
+            private Label BlockItemParentLabel { get; } = new Label();
+            private TextBox BlockItemParentTextBox { get; } = new TextBox();
+            private Label BlockItemInheritorLabel { get; } = new Label();
+            private TextBox BlockItemInheritorTextBox { get; } = new TextBox();
+            private Label BlockItemCommentLabel { get; } = new Label();
+            private TextBox BlockItemCommentTextBox { get; } = new TextBox();
+
+            private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
+            private ParameterPanel BlockItemParametersPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Block);
+
+            private ParameterKeyComparer ParamKeyComparer { get; } = new ParameterKeyComparer();
+
+            private enum BlockItemPanelModes
+            {
+                None,
+                RootBlock,
+                ChildBlock,
+            }
+
+            public BlockPanel()
+            {
+                InitForms();
+                InitEvents();
+            }
+
+            // events
+            private void BlockItemAttributesPanel_InheritorChanged(object sender, EventArgs evt)
+            {
+                UpdateInheritance(sender as EcfBlock);
+            }
+
+            // public
+            public void PresetData(EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
+            {
+                File = file;
+                PresetBlock = block;
+                ParentBlock = block?.Parent as EcfBlock;
+                PanelMode = (block?.IsRoot() ?? true) ? BlockItemPanelModes.RootBlock : BlockItemPanelModes.ChildBlock;
+
+                ValidatePresetData_Editing(itemSelector);
+
+                UpdateDefinition();
+                UpdateBlockCompareLists();
+
+                PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
+                PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
+                PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
+
+                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
+                ResetData();
+            }
+            public void PresetData(EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
+            {
+                File = file;
+                PresetBlock = null;
+                ParentBlock = parentBlock;
+                PanelMode = isRoot ? BlockItemPanelModes.RootBlock : BlockItemPanelModes.ChildBlock;
+
+                ValidatePresetData_Adding();
+
+                UpdateDefinition();
+                UpdateBlockCompareLists();
+
+                PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
+                PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
+                PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
+
+                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
+                ResetData();
+            }
+            public void ResetData()
+            {
+                // marks und type
+                if (PresetBlock != null)
+                {
+                    BlockItemPreMarkComboBox.SelectedItem = BlockItemPreMarkComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedPreMark));
+                    BlockItemDataTypeComboBox.SelectedItem = BlockItemDataTypeComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedDataType));
+                    BlockItemPostMarkComboBox.SelectedItem = BlockItemPostMarkComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedPostMark));
+                }
+
+                // parent
+                BlockItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
+
+                // inheritance
+                EcfBlock inheritorBlock = PresetBlock?.Inheritor;
+
+                // comments
+                BlockItemCommentTextBox.Text = PresetBlock != null ? string.Join(" / ", PresetBlock.Comments) : string.Empty;
+
+                // attributes
+                BlockItemAttributesPanel.GenerateAttributes(File.Definition, BlockAttributeDefinitions.AsReadOnly());
+                BlockItemAttributesPanel.UpdateAttributes(PresetBlock, inheritorBlock);
+
+                // parameter
+                BlockItemParametersPanel.UpdateParameterMatrix(PresetBlock);
+                UpdateInheritance(inheritorBlock);
+            }
+            public List<string> ValidateResultData()
+            {
+                List<string> errors = new List<string>();
+                errors.AddRange(ValidateTypeData());
+                errors.AddRange(BlockItemAttributesPanel.ValidateIdName(IdentifyingBlockList, ReferencingBlockList, ReferencedBlockList, PresetBlock));
+                errors.AddRange(BlockItemAttributesPanel.ValidateRefTarget(ReferencingBlockList, PresetBlock));
+                errors.AddRange(BlockItemAttributesPanel.ValidateRefSource(ReferencedBlockList));
+                errors.AddRange(BlockItemAttributesPanel.ValidateAttributeValues());
+                errors.AddRange(BlockItemParametersPanel.ValidateParameterMatrix());
+                return errors;
+            }
+            public EcfBlock GetResultData()
+            {
+                List<EcfParameter> activeParameters = BlockItemParametersPanel.PrepareResultParameters();
+                List<EcfAttribute> attributes = BlockItemAttributesPanel.PrepareResultAttributes();
+                if (PresetBlock == null)
+                {
+                    PresetBlock = new EcfBlock(
+                        (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
+                        (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
+                        (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
+                        attributes, activeParameters);
+                    PresetBlock.UpdateStructureData(File, null, -1);
+                    foreach (EcfParameter parameter in activeParameters)
+                    {
+                        parameter.Revalidate();
+                    }
+                }
+                else
+                {
+                    PresetBlock.UpdateTypeData(
+                        (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
+                        (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
+                        (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value);
+                    PrepareResultParameterData(PresetBlock, activeParameters);
+                    PresetBlock.ClearAttributes();
+                    PresetBlock.AddAttribute(attributes);
+                    PresetBlock.ClearComments();
+                    PresetBlock.RemoveErrors(EcfErrors.BlockIdNotUnique, EcfErrors.BlockInheritorMissing,
+                        EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown,
+                        EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown,
+                        EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown,
+                        EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled,
+                        EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
+                }
+                PresetBlock.Inheritor = BlockItemAttributesPanel.GetInheritor();
+                if (!string.Empty.Equals(BlockItemCommentTextBox.Text))
+                {
+                    PresetBlock.AddComment(BlockItemCommentTextBox.Text);
+                }
+                return PresetBlock;
+            }
+
+            // private
+            private void InitForms()
+            {
+                BlockItemPreMarkLabel.AutoSize = true;
+                BlockItemPreMarkLabel.Dock = DockStyle.Fill;
+                BlockItemPreMarkLabel.Text = TitleRecources.Generic_PreMark;
+                BlockItemPreMarkLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemPreMarkComboBox.Dock = DockStyle.Fill;
+                BlockItemPreMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                BlockItemPreMarkComboBox.FormattingEnabled = true;
+
+                BlockItemDataTypeLabel.AutoSize = true;
+                BlockItemDataTypeLabel.Dock = DockStyle.Fill;
+                BlockItemDataTypeLabel.Text = TitleRecources.Generic_DataType;
+                BlockItemDataTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemDataTypeComboBox.Dock = DockStyle.Fill;
+                BlockItemDataTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                BlockItemDataTypeComboBox.FormattingEnabled = true;
+
+                BlockItemPostMarkLabel.AutoSize = true;
+                BlockItemPostMarkLabel.Dock = DockStyle.Fill;
+                BlockItemPostMarkLabel.Text = TitleRecources.Generic_PostMark;
+                BlockItemPostMarkLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemPostMarkComboBox.Dock = DockStyle.Fill;
+                BlockItemPostMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                BlockItemPostMarkComboBox.FormattingEnabled = true;
+
+                BlockItemTypePanel.AutoSize = true;
+                BlockItemTypePanel.ColumnCount = 2;
+                BlockItemTypePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+                BlockItemTypePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+                BlockItemTypePanel.Controls.Add(BlockItemPreMarkLabel, 0, 0);
+                BlockItemTypePanel.Controls.Add(BlockItemPreMarkComboBox, 1, 0);
+                BlockItemTypePanel.Controls.Add(BlockItemDataTypeLabel, 0, 1);
+                BlockItemTypePanel.Controls.Add(BlockItemDataTypeComboBox, 1, 1);
+                BlockItemTypePanel.Controls.Add(BlockItemPostMarkLabel, 0, 2);
+                BlockItemTypePanel.Controls.Add(BlockItemPostMarkComboBox, 1, 2);
+                BlockItemTypePanel.Dock = DockStyle.Fill;
+                BlockItemTypePanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+                BlockItemTypePanel.RowCount = 3;
+                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+
+                BlockItemParentLabel.AutoSize = true;
+                BlockItemParentLabel.Dock = DockStyle.Fill;
+                BlockItemParentLabel.Text = TitleRecources.Generic_ParentElement;
+                BlockItemParentLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemParentTextBox.Dock = DockStyle.Fill;
+                BlockItemParentTextBox.ReadOnly = true;
+
+                BlockItemInheritorLabel.AutoSize = true;
+                BlockItemInheritorLabel.Dock = DockStyle.Fill;
+                BlockItemInheritorLabel.Text = TitleRecources.Generic_Inherited;
+                BlockItemInheritorLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemInheritorTextBox.Dock = DockStyle.Fill;
+                BlockItemInheritorTextBox.ReadOnly = true;
+
+                BlockItemCommentLabel.AutoSize = true;
+                BlockItemCommentLabel.Dock = DockStyle.Fill;
+                BlockItemCommentLabel.Text = TitleRecources.Generic_Comment;
+                BlockItemCommentLabel.TextAlign = ContentAlignment.MiddleLeft;
+
+                BlockItemCommentTextBox.Dock = DockStyle.Fill;
+
+                BlockItemAddDataPanel.AutoSize = true;
+                BlockItemAddDataPanel.ColumnCount = 2;
+                BlockItemAddDataPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+                BlockItemAddDataPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+                BlockItemAddDataPanel.Controls.Add(BlockItemParentLabel, 0, 0);
+                BlockItemAddDataPanel.Controls.Add(BlockItemParentTextBox, 1, 0);
+                BlockItemAddDataPanel.Controls.Add(BlockItemInheritorLabel, 0, 1);
+                BlockItemAddDataPanel.Controls.Add(BlockItemInheritorTextBox, 1, 1);
+                BlockItemAddDataPanel.Controls.Add(BlockItemCommentLabel, 0, 2);
+                BlockItemAddDataPanel.Controls.Add(BlockItemCommentTextBox, 1, 2);
+                BlockItemAddDataPanel.Dock = DockStyle.Fill;
+                BlockItemAddDataPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+                BlockItemAddDataPanel.RowCount = 3;
+                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+
+                AutoSize = true;
+                ColumnCount = 2;
+                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+                Controls.Add(BlockItemTypePanel, 0, 0);
+                Controls.Add(BlockItemAddDataPanel, 1, 0);
+                GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+                Dock = DockStyle.Fill;
+                RowCount = 3;
+                RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+
+                Controls.Add(BlockItemAttributesPanel, 0, 1);
+                SetColumnSpan(BlockItemAttributesPanel, 2);
+
+                Controls.Add(BlockItemParametersPanel, 0, 2);
+                SetColumnSpan(BlockItemParametersPanel, 2);
+            }
+            private void InitEvents()
+            {
+                BlockItemAttributesPanel.InheritorChanged += BlockItemAttributesPanel_InheritorChanged;
+            }
+            private void ValidatePresetData_Editing(ItemSelectorDialog itemSelector)
+            {
+                if (File == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditingWithoutFile); }
+                if (PresetBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditableItemProvided); }
+
+                PresetBlockCheckedPreMark = ValidatePresetData_EditingDefinition(File.Definition.BlockTypePreMarks,
+                    PresetBlock?.PreMark, TitleRecources.Generic_PreMark, itemSelector);
+
+                if (PanelMode == BlockItemPanelModes.ChildBlock)
+                {
+                    PresetBlockCheckedDataType = ValidatePresetData_EditingDefinition(File.Definition.ChildBlockTypes,
+                        PresetBlock?.DataType, TitleRecources.Generic_DataType, itemSelector);
+                }
+                else if (PanelMode == BlockItemPanelModes.RootBlock)
+                {
+                    PresetBlockCheckedDataType = ValidatePresetData_EditingDefinition(File.Definition.RootBlockTypes,
+                        PresetBlock?.DataType, TitleRecources.Generic_DataType, itemSelector);
+                }
+
+                PresetBlockCheckedPostMark = ValidatePresetData_EditingDefinition(File.Definition.BlockTypePostMarks,
+                    PresetBlock?.PostMark, TitleRecources.Generic_PostMark, itemSelector);
+            }
+            private string ValidatePresetData_EditingDefinition(ReadOnlyCollection<BlockValueDefinition> definition,
+                string dataToCheck, string dataTypeName, ItemSelectorDialog itemSelector)
+            {
+                if (definition.Count > 0)
+                {
+                    if (definition.Any(type => !type.IsOptional) && !definition.Any(mark => mark.Value.Equals(dataToCheck)))
+                    {
+                        MessageBox.Show(this, string.Format("{0} {1} \"{2}\"", TextRecources.EcfItemEditingDialog_NoDefinitionAvailableFor, dataTypeName, dataToCheck ?? string.Empty),
+                            TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        itemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, dataTypeName);
+                        if (itemSelector.ShowDialog(this, definition.Select(type => new SelectorItem(type.Value)).ToArray()) == DialogResult.OK)
+                        {
+                            return Convert.ToString(itemSelector.SelectedItem.Item);
+                        }
+                        throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_BlockEditingAborted);
+                    }
+                }
+                return dataToCheck;
+            }
+            private void ValidatePresetData_Adding()
+            {
+                if (File == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoAddingWithoutFile); }
+
+                if (File.Definition.BlockTypePostMarks.Count < 1)
+                {
+                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition);
+                }
+                if (PanelMode == BlockItemPanelModes.ChildBlock)
+                {
+                    if (File.Definition.ChildBlockTypes.Count < 1)
+                    {
+                        throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoChildBlockAddingWithoutTypeDefinition);
+                    }
+                }
+                if (PanelMode == BlockItemPanelModes.RootBlock)
+                {
+                    if (File.Definition.RootBlockTypes.Count < 1)
+                    {
+                        throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition);
+                    }
+                }
+            }
+            private void PrepareTypeDataComboBox(ComboBox box, List<BlockValueDefinition> definitions)
+            {
+                box.BeginUpdate();
+                box.Items.Clear();
+                box.Sorted = true;
+                box.Items.AddRange(definitions.Where(mark => !mark.IsOptional).Select(mark => new ComboBoxItem(mark.Value)).ToArray());
+                if (box.Items.Count == 0)
+                {
+                    box.Items.AddRange(definitions.Where(mark => mark.IsOptional).Select(mark => new ComboBoxItem(mark.Value)).ToArray());
+                    box.Sorted = false;
+                    box.Items.Insert(0, new ComboBoxItem(null));
+                }
+                box.Sorted = false;
+                box.Enabled = box.Items.Count > 1;
+                box.SelectedItem = box.Items[0];
+                box.EndUpdate();
+            }
+            private void UpdateBlockCompareLists()
+            {
+                List<EcfBlock> blocks = File?.GetDeepItemList<EcfBlock>();
+                IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockIdAttribute, out _)).ToList();
+                ReferencingBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockReferenceSourceAttribute, out _)).ToList();
+                ReferencedBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockReferenceTargetAttribute, out _)).ToList();
+                BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
+            }
+            private void UpdateInheritance(EcfBlock inheritor)
+            {
+                BlockItemParametersPanel.UpdateParameterInheritance(inheritor);
+                BlockItemInheritorTextBox.Text = inheritor?.BuildRootId() ?? string.Empty;
+            }
+            private void UpdateDefinition()
+            {
+                switch (PanelMode)
+                {
+                    case BlockItemPanelModes.ChildBlock:
+                        BlockTypeDefinitions = File.Definition.ChildBlockTypes.ToList();
+                        BlockAttributeDefinitions = File.Definition.ChildBlockAttributes.ToList();
+                        break;
+                    case BlockItemPanelModes.RootBlock:
+                        BlockTypeDefinitions = File.Definition.RootBlockTypes.ToList();
+                        BlockAttributeDefinitions = File.Definition.RootBlockAttributes.ToList();
+                        break;
+                    default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen :)", PanelMode.ToString()));
+                }
+            }
+            private List<string> ValidateTypeData()
+            {
+                List<string> errors = new List<string>();
+                if (File.Definition.BlockTypePreMarks.Count > 0 && BlockItemPreMarkComboBox.SelectedIndex < 0)
+                {
+                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_PreMark, TextRecources.EcfItemEditingDialog_NotSelected));
+                }
+                if (BlockTypeDefinitions.Count > 0 && BlockItemDataTypeComboBox.SelectedIndex < 0)
+                {
+                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_DataType, TextRecources.EcfItemEditingDialog_NotSelected));
+                }
+                if (File.Definition.BlockTypePostMarks.Count > 0 && BlockItemPostMarkComboBox.SelectedIndex < 0)
+                {
+                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_PostMark, TextRecources.EcfItemEditingDialog_NotSelected));
+                }
+                return errors;
+            }
+            private void PrepareResultParameterData(EcfBlock block, List<EcfParameter> activeParameters)
+            {
+                List<EcfParameter> presentParameters = block.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList();
+
+                List<EcfParameter> doubledParameters = presentParameters.Except(presentParameters.Distinct(ParamKeyComparer)).ToList();
+                List<EcfParameter> removedParameters = presentParameters.Except(activeParameters, ParamKeyComparer).ToList();
+                removedParameters.RemoveAll(parameter => parameter.Definition == null);
+                List<EcfParameter> createdParameters = activeParameters.Except(presentParameters, ParamKeyComparer).ToList();
+
+                block.RemoveChild(doubledParameters);
+                block.RemoveChild(removedParameters);
+                block.AddChild(createdParameters);
+
+                foreach (EcfParameter parameter in createdParameters)
+                {
+                    parameter.Revalidate();
+                }
+            }
+
+            // subclasses
+            private class ParameterKeyComparer : IEqualityComparer<EcfParameter>
+            {
+                public bool Equals(EcfParameter x, EcfParameter y)
+                {
+                    return x.Key.Equals(y.Key);
+                }
+                public int GetHashCode(EcfParameter obj)
+                {
+                    return obj.Key.GetHashCode();
+                }
+            }
+        }
         private class CommentItemPanel : RichTextBox
         {
             private EcfComment PresetComment { get; set; } = null;
@@ -1857,18 +2116,14 @@ namespace EcfFileViews
                 InitForms();
             }
 
-            // private
-            private void InitForms()
+            // public
+            public void PresetData(EcfComment comment)
             {
-                AcceptsTab = true;
-                Dock = DockStyle.Fill;
-                Text = "";
+                PresetComment = comment;
+                ValidatePresetData();
+                ResetData();
             }
-            private void ActivateView()
-            {
-                UpdateView();
-            }
-            private void UpdateView()
+            public void ResetData()
             {
                 if (PresetComment == null)
                 {
@@ -1879,7 +2134,7 @@ namespace EcfFileViews
                     Lines = PresetComment.Comments.ToArray();
                 }
             }
-            private List<string> ValidateInputs()
+            public List<string> ValidateResultData()
             {
                 List<string> errors = new List<string>();
                 if (Lines.Any(line => line.Equals(string.Empty)))
@@ -1888,7 +2143,7 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            private EcfComment PrepareResultItem()
+            public EcfComment GetResultData()
             {
                 if (PresetComment == null)
                 {
@@ -1900,6 +2155,18 @@ namespace EcfFileViews
                     PresetComment.AddComment(Lines.ToList());
                 }
                 return PresetComment;
+            }
+
+            // private
+            private void InitForms()
+            {
+                AcceptsTab = true;
+                Dock = DockStyle.Fill;
+                Text = "";
+            }
+            private void ValidatePresetData()
+            {
+                if (PresetComment == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditableItemProvided); }
             }
         }
         private class ParameterItemPanel : TableLayoutPanel
@@ -1938,6 +2205,81 @@ namespace EcfFileViews
             {
                 UpdateDefinition(Convert.ToString(ParameterItemKeyComboBox.SelectedItem));
                 ParameterItemValuesPanel.UpdateParameterValues(ParameterDefinition, PresetParameter);
+            }
+
+            // public
+            public void PresetData(EgsEcfFile file, EcfParameter parameter, ItemSelectorDialog itemSelector)
+            {
+                File = file;
+                PresetParameter = parameter;
+                ParentBlock = parameter?.Parent as EcfBlock;
+
+                ValidatePresetData_Editing(itemSelector);
+
+                PrepareKeyComboBox();
+
+                ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
+                ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
+
+                ResetData();
+            }
+            public void PresetData(EgsEcfFile file, EcfBlock parentBlock)
+            {
+                File = file;
+                PresetParameter = null;
+                ParentBlock = parentBlock;
+
+                ValidatePresetData_Adding();
+
+                PrepareKeyComboBox();
+
+                ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
+                ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
+
+                ResetData();
+            }
+            public void ResetData()
+            {
+                // comments
+                ParameterItemCommentTextBox.Text = PresetParameter != null ? string.Join(" / ", PresetParameter.Comments) : string.Empty;
+
+                // values
+                ParameterItemValuesPanel.UpdateParameterValues(ParameterDefinition, PresetParameter);
+
+                // attributes
+                ParameterItemAttributesPanel.UpdateAttributes(PresetParameter, null);
+            }
+            public List<string> ValidateResultData()
+            {
+                List<string> errors = new List<string>();
+                errors.AddRange(ParameterItemValuesPanel.ValidateParameterValues(File.Definition));
+                errors.AddRange(ParameterItemAttributesPanel.ValidateAttributeValues());
+                return errors;
+            }
+            public EcfParameter GetResultData()
+            {
+                List<EcfValueGroup> valueGroups = ParameterItemValuesPanel.PrepareResultValues();
+                List<EcfAttribute> attributes = ParameterItemAttributesPanel.PrepareResultAttributes();
+                if (PresetParameter == null)
+                {
+                    PresetParameter = new EcfParameter(Convert.ToString(ParameterItemKeyComboBox.SelectedItem), valueGroups, attributes);
+                }
+                else
+                {
+                    PresetParameter.UpdateKey(Convert.ToString(ParameterItemKeyComboBox.SelectedItem));
+                    PresetParameter.ClearValues();
+                    PresetParameter.AddValue(valueGroups);
+                    PresetParameter.ClearAttributes();
+                    PresetParameter.AddAttribute(attributes);
+                    PresetParameter.ClearComments();
+                    PresetParameter.RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled,
+                        EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
+                }
+                if (!string.Empty.Equals(ParameterItemCommentTextBox.Text))
+                {
+                    PresetParameter.AddComment(ParameterItemCommentTextBox.Text);
+                }
+                return PresetParameter;
             }
 
             // private
@@ -2036,16 +2378,50 @@ namespace EcfFileViews
             {
                 ParameterItemKeyComboBox.SelectionChangeCommitted += ParameterItemKeyComboBox_SelectionChangeCommitted;
             }
-            private void ActivateView()
+            private void ValidatePresetData_Editing(ItemSelectorDialog itemSelector)
             {
-                ActivateKeyComboBox();
+                if (File == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditingWithoutFile); }
+                if (PresetParameter == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditableItemProvided); }
+                if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutParent); }
 
-                ParameterItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
-                ParameterItemAttributesPanel.GenerateAttributes(File.Definition, File.Definition.ParameterAttributes);
+                List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
+                if (definedParameters.Count < 1)
+                {
+                    throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_NoParameterEditingWithoutDefinitions);
+                }
 
-                UpdateView();
+                if (!definedParameters.Contains(PresetParameter.Key))
+                {
+                    MessageBox.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemEditingDialog_NoDefinitionFoundForParameter, PresetParameter?.Key ?? string.Empty),
+                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                    List<string> selectableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
+                    if (selectableParameters.Count < 1)
+                    {
+                        throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoSelectableParameterAvailable);
+                    }
+
+                    itemSelector.Text = string.Format("{0}: {1}", TitleRecources.Generic_PickItem, TitleRecources.Generic_Parameter);
+                    if (itemSelector.ShowDialog(this, selectableParameters.Select(param => new SelectorItem(param)).ToArray()) == DialogResult.OK)
+                    {
+                        PresetParameterCheckedKey = Convert.ToString(itemSelector.SelectedItem.Item);
+                        return;
+                    }
+                    throw new ArgumentException(TextRecources.EcfItemEditingDialog_ParameterEditingAborted);
+                }
+                PresetParameterCheckedKey = PresetParameter.Key;
             }
-            private void ActivateKeyComboBox()
+            private void ValidatePresetData_Adding()
+            {
+                if (File == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoAddingWithoutFile); }
+                if (ParentBlock == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutParent); }
+                List<string> definedParameters = File.Definition.BlockParameters.Select(param => param.Name).ToList();
+                if (definedParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoParameterAddingWithoutDefinitions); }
+                List<string> addableParameters = definedParameters.Except(ParentBlock.ChildItems.Where(child =>
+                    child is EcfParameter).Cast<EcfParameter>().Select(param => param.Key)).ToList();
+                if (addableParameters.Count < 1) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoAddableParameterAvailable); }
+            }
+            private void PrepareKeyComboBox()
             {
                 ParameterItemKeyComboBox.BeginUpdate();
                 ParameterItemKeyComboBox.Items.Clear();
@@ -2076,399 +2452,33 @@ namespace EcfFileViews
                 ParameterItemInfoTextBox.Text = ParameterDefinition.Info;
                 return true;
             }
-            private void UpdateView()
-            {
-                // comments
-                ParameterItemCommentTextBox.Text = PresetParameter != null ? string.Join(" / ", PresetParameter.Comments) : string.Empty;
-
-                // values
-                ParameterItemValuesPanel.UpdateParameterValues(ParameterDefinition, PresetParameter);
-
-                // attributes
-                ParameterItemAttributesPanel.UpdateAttributes(PresetParameter, null);
-            }
-            private List<string> ValidateInputs()
-            {
-                List<string> errors = new List<string>();
-                errors.AddRange(ParameterItemValuesPanel.ValidateParameterValues(File.Definition));
-                errors.AddRange(ParameterItemAttributesPanel.ValidateAttributeValues());
-                return errors;
-            }
-            private EcfParameter PrepareResultItem()
-            {
-                List<EcfValueGroup> valueGroups = ParameterItemValuesPanel.PrepareResultValues();
-                List<EcfAttribute> attributes = ParameterItemAttributesPanel.PrepareResultAttributes();
-                if (PresetParameter == null)
-                {
-                    PresetParameter = new EcfParameter(Convert.ToString(ParameterItemKeyComboBox.SelectedItem), valueGroups, attributes);
-                }
-                else
-                {
-                    PresetParameter.UpdateKey(Convert.ToString(ParameterItemKeyComboBox.SelectedItem));
-                    PresetParameter.ClearValues();
-                    PresetParameter.AddValue(valueGroups);
-                    PresetParameter.ClearAttributes();
-                    PresetParameter.AddAttribute(attributes);
-                    PresetParameter.ClearComments();
-                    PresetParameter.RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled,
-                        EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
-                }
-                if (!string.Empty.Equals(ParameterItemCommentTextBox.Text))
-                {
-                    PresetParameter.AddComment(ParameterItemCommentTextBox.Text);
-                }
-                return PresetParameter;
-            }
         }
-        private class BlockItemPanel : TableLayoutPanel
+        private class BlockItemPanel : TabControl
         {
-            BlockItemPanelModes PanelMode { get; set; } = BlockItemPanelModes.None;
-            private EgsEcfFile File { get; set; } = null;
-            private EcfBlock PresetBlock { get; set; } = null;
-            private EcfBlock ParentBlock { get; set; } = null;
-            private string PresetBlockCheckedPreMark { get; set; } = null;
-            private string PresetBlockCheckedDataType { get; set; } = null;
-            private string PresetBlockCheckedPostMark { get; set; } = null;
-            private List<ItemDefinition> BlockAttributeDefinitions { get; set; } = null;
-            private List<BlockValueDefinition> BlockTypeDefinitions { get; set; } = null;
-            private List<EcfBlock> IdentifyingBlockList { get; set; } = null;
-            private List<EcfBlock> ReferencedBlockList { get; set; } = null;
-            private List<EcfBlock> ReferencingBlockList { get; set; } = null;
-
-            private TableLayoutPanel BlockItemTypePanel { get; } = new TableLayoutPanel();
-            private TableLayoutPanel BlockItemAddDataPanel { get; } = new TableLayoutPanel();
-
-            private Label BlockItemPreMarkLabel { get; } = new Label();
-            private ComboBox BlockItemPreMarkComboBox { get; } = new ComboBox();
-            private Label BlockItemDataTypeLabel { get; } = new Label();
-            private ComboBox BlockItemDataTypeComboBox { get; } = new ComboBox();
-            private Label BlockItemPostMarkLabel { get; } = new Label();
-            private ComboBox BlockItemPostMarkComboBox { get; } = new ComboBox();
-
-            private Label BlockItemParentLabel { get; } = new Label();
-            private TextBox BlockItemParentTextBox { get; } = new TextBox();
-            private Label BlockItemInheritorLabel { get; } = new Label();
-            private TextBox BlockItemInheritorTextBox { get; } = new TextBox();
-            private Label BlockItemCommentLabel { get; } = new Label();
-            private TextBox BlockItemCommentTextBox { get; } = new TextBox();
-
-            private AttributesPanel BlockItemAttributesPanel { get; } = new AttributesPanel();
-            private ParameterPanel BlockItemParametersPanel { get; } = new ParameterPanel(ParameterPanel.ParameterModes.Block);
-
-            private ParameterKeyComparer ParamKeyComparer { get; } = new ParameterKeyComparer();
-
-            private enum BlockItemPanelModes
-            {
-                None,
-                RootBlock,
-                ChildBlock,
-            }
-
-            public BlockItemPanel()
+            public BlockItemPanel() : base()
             {
                 InitForms();
-                InitEvents();
             }
 
-            // events
-            private void BlockItemAttributesPanel_InheritorChanged(object sender, EventArgs evt)
+            // public
+            public void PresetData(EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
             {
-                UpdateInheritance(sender as EcfBlock);
+                
+            }
+            public void PresetData(EgsEcfFile file, EcfBlock parentBlock)
+            {
+
             }
 
             // private
             private void InitForms()
             {
-                BlockItemPreMarkLabel.AutoSize = true;
-                BlockItemPreMarkLabel.Dock = DockStyle.Fill;
-                BlockItemPreMarkLabel.Text = TitleRecources.Generic_PreMark;
-                BlockItemPreMarkLabel.TextAlign = ContentAlignment.MiddleLeft;
-
-                BlockItemPreMarkComboBox.Dock = DockStyle.Fill;
-                BlockItemPreMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-                BlockItemPreMarkComboBox.FormattingEnabled = true;
-
-                BlockItemDataTypeLabel.AutoSize = true;
-                BlockItemDataTypeLabel.Dock = DockStyle.Fill;
-                BlockItemDataTypeLabel.Text = TitleRecources.Generic_DataType;
-                BlockItemDataTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
-
-                BlockItemDataTypeComboBox.Dock = DockStyle.Fill;
-                BlockItemDataTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-                BlockItemDataTypeComboBox.FormattingEnabled = true;
-
-                BlockItemPostMarkLabel.AutoSize = true;
-                BlockItemPostMarkLabel.Dock = DockStyle.Fill;
-                BlockItemPostMarkLabel.Text = TitleRecources.Generic_PostMark;
-                BlockItemPostMarkLabel.TextAlign = ContentAlignment.MiddleLeft;
-                
-                BlockItemPostMarkComboBox.Dock = DockStyle.Fill;
-                BlockItemPostMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-                BlockItemPostMarkComboBox.FormattingEnabled = true;
-
-                BlockItemTypePanel.AutoSize = true;
-                BlockItemTypePanel.ColumnCount = 2;
-                BlockItemTypePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-                BlockItemTypePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-                BlockItemTypePanel.Controls.Add(BlockItemPreMarkLabel, 0, 0);
-                BlockItemTypePanel.Controls.Add(BlockItemPreMarkComboBox, 1, 0);
-                BlockItemTypePanel.Controls.Add(BlockItemDataTypeLabel, 0, 1);
-                BlockItemTypePanel.Controls.Add(BlockItemDataTypeComboBox, 1, 1);
-                BlockItemTypePanel.Controls.Add(BlockItemPostMarkLabel, 0, 2);
-                BlockItemTypePanel.Controls.Add(BlockItemPostMarkComboBox, 1, 2);
-                BlockItemTypePanel.Dock = DockStyle.Fill;
-                BlockItemTypePanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-                BlockItemTypePanel.RowCount = 3;
-                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-                BlockItemTypePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-                
-                BlockItemParentLabel.AutoSize = true;
-                BlockItemParentLabel.Dock = DockStyle.Fill;
-                BlockItemParentLabel.Text = TitleRecources.Generic_ParentElement;
-                BlockItemParentLabel.TextAlign = ContentAlignment.MiddleLeft;
-                
-                BlockItemParentTextBox.Dock = DockStyle.Fill;
-                BlockItemParentTextBox.ReadOnly = true;
-                 
-                BlockItemInheritorLabel.AutoSize = true;
-                BlockItemInheritorLabel.Dock = DockStyle.Fill;
-                BlockItemInheritorLabel.Text = TitleRecources.Generic_Inherited;
-                BlockItemInheritorLabel.TextAlign = ContentAlignment.MiddleLeft;
-                 
-                BlockItemInheritorTextBox.Dock = DockStyle.Fill;
-                BlockItemInheritorTextBox.ReadOnly = true;
-                
-                BlockItemCommentLabel.AutoSize = true;
-                BlockItemCommentLabel.Dock = DockStyle.Fill;
-                BlockItemCommentLabel.Text = TitleRecources.Generic_Comment;
-                BlockItemCommentLabel.TextAlign = ContentAlignment.MiddleLeft;
-                
-                BlockItemCommentTextBox.Dock = DockStyle.Fill;
-
-                BlockItemAddDataPanel.AutoSize = true;
-                BlockItemAddDataPanel.ColumnCount = 2;
-                BlockItemAddDataPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-                BlockItemAddDataPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-                BlockItemAddDataPanel.Controls.Add(BlockItemParentLabel, 0, 0);
-                BlockItemAddDataPanel.Controls.Add(BlockItemParentTextBox, 1, 0);
-                BlockItemAddDataPanel.Controls.Add(BlockItemInheritorLabel, 0, 1);
-                BlockItemAddDataPanel.Controls.Add(BlockItemInheritorTextBox, 1, 1);
-                BlockItemAddDataPanel.Controls.Add(BlockItemCommentLabel, 0, 2);
-                BlockItemAddDataPanel.Controls.Add(BlockItemCommentTextBox, 1, 2);
-                BlockItemAddDataPanel.Dock = DockStyle.Fill;
-                BlockItemAddDataPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-                BlockItemAddDataPanel.RowCount = 3;
-                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-                BlockItemAddDataPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-
-                AutoSize = true;
-                ColumnCount = 2;
-                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-                Controls.Add(BlockItemTypePanel, 0, 0);
-                Controls.Add(BlockItemAddDataPanel, 1, 0);
-                GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+                Controls.Add(new TabPage());
                 Dock = DockStyle.Fill;
-                RowCount = 3;
-                RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
-                RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-
-                Controls.Add(BlockItemAttributesPanel, 0, 1);
-                SetColumnSpan(BlockItemAttributesPanel, 2);
-
-                Controls.Add(BlockItemParametersPanel, 0, 2);
-                SetColumnSpan(BlockItemParametersPanel, 2);
-            }
-            private void InitEvents()
-            {
-                BlockItemAttributesPanel.InheritorChanged += BlockItemAttributesPanel_InheritorChanged;
-            }
-            private void ActivateView()
-            {
-                UpdateDefinition();
-                UpdateBlockCompareLists();
-
-                PrepareTypeDataComboBox(BlockItemPreMarkComboBox, File.Definition.BlockTypePreMarks.ToList());
-                PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
-                PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
-
-                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
-                UpdateView();
-            }
-            private void PrepareTypeDataComboBox(ComboBox box, List<BlockValueDefinition> definitions)
-            {
-                box.BeginUpdate();
-                box.Items.Clear();
-                box.Sorted = true;
-                box.Items.AddRange(definitions.Where(mark => !mark.IsOptional).Select(mark => new ComboBoxItem(mark.Value)).ToArray());
-                if (box.Items.Count == 0)
-                {
-                    box.Items.AddRange(definitions.Where(mark => mark.IsOptional).Select(mark => new ComboBoxItem(mark.Value)).ToArray());
-                    box.Sorted = false;
-                    box.Items.Insert(0, new ComboBoxItem(null));
-                }
-                box.Sorted = false;
-                box.Enabled = box.Items.Count > 1;
-                box.SelectedItem = box.Items[0];
-                box.EndUpdate();
-            }
-            private void UpdateBlockCompareLists()
-            {
-                List<EcfBlock> blocks = File?.GetDeepItemList<EcfBlock>();
-                IdentifyingBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockIdAttribute, out _)).ToList();
-                ReferencingBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockReferenceSourceAttribute, out _)).ToList();
-                ReferencedBlockList = blocks?.Where(block => block.HasAttribute(File.Definition.BlockReferenceTargetAttribute, out _)).ToList();
-                BlockItemAttributesPanel.ReferencedBlockList = ReferencedBlockList;
-            }
-            private void UpdateView()
-            {
-                // marks und type
-                if (PresetBlock != null)
-                {
-                    BlockItemPreMarkComboBox.SelectedItem = BlockItemPreMarkComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedPreMark));
-                    BlockItemDataTypeComboBox.SelectedItem = BlockItemDataTypeComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedDataType));
-                    BlockItemPostMarkComboBox.SelectedItem = BlockItemPostMarkComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(item => string.Equals(item.Value, PresetBlockCheckedPostMark));
-                }
-
-                // parent
-                BlockItemParentTextBox.Text = ParentBlock?.BuildRootId() ?? string.Empty;
-
-                // inheritance
-                EcfBlock inheritorBlock = PresetBlock?.Inheritor;
-
-                // comments
-                BlockItemCommentTextBox.Text = PresetBlock != null ? string.Join(" / ", PresetBlock.Comments) : string.Empty;
-
-                // attributes
-                BlockItemAttributesPanel.GenerateAttributes(File.Definition, BlockAttributeDefinitions.AsReadOnly());
-                BlockItemAttributesPanel.UpdateAttributes(PresetBlock, inheritorBlock);
-
-                // parameter
-                BlockItemParametersPanel.UpdateParameterMatrix(PresetBlock);
-                UpdateInheritance(inheritorBlock);
-            }
-            private void UpdateInheritance(EcfBlock inheritor)
-            {
-                BlockItemParametersPanel.UpdateParameterInheritance(inheritor);
-                BlockItemInheritorTextBox.Text = inheritor?.BuildRootId() ?? string.Empty;
-            }
-            private void UpdateDefinition()
-            {
-                switch (PanelMode)
-                {
-                    case BlockItemPanelModes.ChildBlock:
-                        BlockTypeDefinitions = File.Definition.ChildBlockTypes.ToList();
-                        BlockAttributeDefinitions = File.Definition.ChildBlockAttributes.ToList();
-                        break;
-                    case BlockItemPanelModes.RootBlock:
-                        BlockTypeDefinitions = File.Definition.RootBlockTypes.ToList();
-                        BlockAttributeDefinitions = File.Definition.RootBlockAttributes.ToList();
-                        break;
-                    default: throw new ArgumentException(string.Format("No creator defined for item type {0}....that shouldn't happen :)", PanelMode.ToString()));
-                }
-            }
-            private List<string> ValidateInputs()
-            {
-                List<string> errors = new List<string>();
-                errors.AddRange(ValidateTypeData());
-                errors.AddRange(BlockItemAttributesPanel.ValidateIdName(IdentifyingBlockList, ReferencingBlockList, ReferencedBlockList, PresetBlock));
-                errors.AddRange(BlockItemAttributesPanel.ValidateRefTarget(ReferencingBlockList, PresetBlock));
-                errors.AddRange(BlockItemAttributesPanel.ValidateRefSource(ReferencedBlockList));
-                errors.AddRange(BlockItemAttributesPanel.ValidateAttributeValues());
-                errors.AddRange(BlockItemParametersPanel.ValidateParameterMatrix());
-                return errors;
-            }
-            private List<string> ValidateTypeData()
-            {
-                List<string> errors = new List<string>();
-                if (File.Definition.BlockTypePreMarks.Count > 0 && BlockItemPreMarkComboBox.SelectedIndex < 0)
-                {
-                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_PreMark, TextRecources.EcfItemEditingDialog_NotSelected));
-                }
-                if (BlockTypeDefinitions.Count > 0 && BlockItemDataTypeComboBox.SelectedIndex < 0)
-                {
-                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_DataType, TextRecources.EcfItemEditingDialog_NotSelected));
-                }
-                if (File.Definition.BlockTypePostMarks.Count > 0 && BlockItemPostMarkComboBox.SelectedIndex < 0)
-                {
-                    errors.Add(string.Format("{0} {1}", TitleRecources.Generic_PostMark, TextRecources.EcfItemEditingDialog_NotSelected));
-                }
-                return errors;
-            }
-            private EcfBlock PrepareResultItem()
-            {
-                List<EcfParameter> activeParameters = BlockItemParametersPanel.PrepareResultParameters();
-                List<EcfAttribute> attributes = BlockItemAttributesPanel.PrepareResultAttributes();
-                if (PresetBlock == null)
-                {
-                    PresetBlock = new EcfBlock(
-                        (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
-                        (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
-                        (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
-                        attributes, activeParameters);
-                    PresetBlock.UpdateStructureData(File, null, -1);
-                    foreach (EcfParameter parameter in activeParameters)
-                    {
-                        parameter.Revalidate();
-                    }
-                }
-                else
-                {
-                    PresetBlock.UpdateTypeData(
-                        (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
-                        (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
-                        (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value);
-                    PrepareResultParameterUpdate(PresetBlock, activeParameters);
-                    PresetBlock.ClearAttributes();
-                    PresetBlock.AddAttribute(attributes);
-                    PresetBlock.ClearComments();
-                    PresetBlock.RemoveErrors(EcfErrors.BlockIdNotUnique, EcfErrors.BlockInheritorMissing,
-                        EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown,
-                        EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown,
-                        EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown,
-                        EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled,
-                        EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
-                }
-                PresetBlock.Inheritor = BlockItemAttributesPanel.GetInheritor();
-                if (!string.Empty.Equals(BlockItemCommentTextBox.Text))
-                {
-                    PresetBlock.AddComment(BlockItemCommentTextBox.Text);
-                }
-                return PresetBlock;
-            }
-            private void PrepareResultParameterUpdate(EcfBlock block, List<EcfParameter> activeParameters)
-            {
-                List<EcfParameter> presentParameters = block.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList();
-
-                List<EcfParameter> doubledParameters = presentParameters.Except(presentParameters.Distinct(ParamKeyComparer)).ToList();
-                List<EcfParameter> removedParameters = presentParameters.Except(activeParameters, ParamKeyComparer).ToList();
-                removedParameters.RemoveAll(parameter => parameter.Definition == null);
-                List<EcfParameter> createdParameters = activeParameters.Except(presentParameters, ParamKeyComparer).ToList();
-
-                block.RemoveChild(doubledParameters);
-                block.RemoveChild(removedParameters);
-                block.AddChild(createdParameters);
-
-                foreach (EcfParameter parameter in createdParameters)
-                {
-                    parameter.Revalidate();
-                }
-            }
-
-            // subclasses
-            private class ParameterKeyComparer : IEqualityComparer<EcfParameter>
-            {
-                public bool Equals(EcfParameter x, EcfParameter y)
-                {
-                    return x.Key.Equals(y.Key);
-                }
-                public int GetHashCode(EcfParameter obj)
-                {
-                    return obj.Key.GetHashCode();
-                }
+                SelectedIndex = 0;
+                
+                
+                
             }
         }
         private class ParameterMatrixPanel : ParameterPanel
@@ -2480,21 +2490,25 @@ namespace EcfFileViews
 
             }
 
-            //private
-            private void ActivateView(List<EcfParameter> parameters)
+            // public
+            public void PresetData(EgsEcfFile file, List<EcfParameter> parameters)
             {
+                File = file;
+
+                ValidatePresetData(parameters);
+
                 GenerateParameterMatrix(File.Definition, parameters);
-                UpdateView();
+                ResetData();
             }
-            private void UpdateView()
+            public void ResetData()
             {
                 UpdateParameterMatrix();
             }
-            private List<string> ValidateInputs()
+            public List<string> ValidateResultData()
             {
                 return ValidateParameterMatrix();
             }
-            private List<EcfParameter> PrepareResultItem()
+            public List<EcfParameter> GetResultData()
             {
                 List<EcfParameter> editedParameters = PrepareResultParameters();
 
@@ -2504,6 +2518,22 @@ namespace EcfFileViews
                 }
 
                 return editedParameters;
+            }
+
+            // private 
+            private void ValidatePresetData(List<EcfParameter> parameters)
+            {
+                if (File == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditingWithoutFile); }
+                if (parameters == null) { throw new ArgumentException(TextRecources.EcfItemEditingDialog_NoEditableItemProvided); }
+
+                if (parameters.Any(parameter => parameter.Definition == null))
+                {
+                    throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForUnknownParametersNotAllowed);
+                }
+                if (parameters.Any(parameter => !parameter.Definition.HasValue))
+                {
+                    throw new InvalidOperationException(TextRecources.EcfItemEditingDialog_ParameterMatrixForValuelessParametersNotAllowed);
+                }
             }
         }
     }

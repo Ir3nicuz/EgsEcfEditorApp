@@ -201,6 +201,9 @@
   <data name="EcfItemEditingDialog_NoAddableParameterAvailable" xml:space="preserve">
     <value>Kein hinzufügbarer Parameter vorhanden</value>
   </data>
+  <data name="EcfItemEditingDialog_NoAddingWithoutFile" xml:space="preserve">
+    <value>Das Hinzufügen eines Elementes ist ohne Datei Referenz nicht möglich</value>
+  </data>
   <data name="EcfItemEditingDialog_NoBlockAddingWithoutPostMarkDefinition" xml:space="preserve">
     <value>Hinzufügen von Elementen ist ohne PostMark Definition nicht erlaubt</value>
   </data>
@@ -212,6 +215,12 @@
   </data>
   <data name="EcfItemEditingDialog_NoDefinitionFoundForParameter" xml:space="preserve">
     <value>Keine Definition vorhanden für Parameter</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditableItemProvided" xml:space="preserve">
+    <value>Kein bearbeitbares Element an Dialog übergeben</value>
+  </data>
+  <data name="EcfItemEditingDialog_NoEditingWithoutFile" xml:space="preserve">
+    <value>Das Bearbeiten eines Elementes ist ohne Datei Referenz nicht möglich</value>
   </data>
   <data name="EcfItemEditingDialog_NoParameterAddingWithoutDefinitions" xml:space="preserve">
     <value>Hinzufügen von Parametern ist ohne Definitionen nicht erlaubt</value>

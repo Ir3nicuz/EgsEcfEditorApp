@@ -180,11 +180,11 @@
   <data name="EcfInfoView_NoDefinition" xml:space="preserve">
     <value>No definition found</value>
   </data>
+  <data name="EcfItemEditingDialog_AnyCommentLineEmpty" xml:space="preserve">
+    <value>At least one comment line is empty</value>
+  </data>
   <data name="EcfItemEditingDialog_BlockEditingAborted" xml:space="preserve">
     <value>Block editing aborted</value>
-  </data>
-  <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
-    <value>Comment item with empty comment is not allowed</value>
   </data>
   <data name="EcfItemEditingDialog_CouldNotBeFoundInTheItemList" xml:space="preserve">
     <value>could not be found in the item list</value>
@@ -242,6 +242,9 @@
   </data>
   <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
     <value>not selected</value>
+  </data>
+  <data name="EcfItemEditingDialog_OperationModeNotSuitableForAdding" xml:space="preserve">
+    <value>Operation mode not suitable for adding operation</value>
   </data>
   <data name="EcfItemEditingDialog_ParameterEditingAborted" xml:space="preserve">
     <value>Parameter editing aborted</value>

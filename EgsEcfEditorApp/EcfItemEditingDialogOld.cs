@@ -367,7 +367,7 @@ namespace EcfFileViews
             List<string> errors = new List<string>();
             if (CommentItemRichTextBox.Lines.Any(line => line.Equals(string.Empty)))
             {
-                errors.Add(TextRecources.EcfItemEditingDialog_CommentItemError_Empty);
+                errors.Add(TextRecources.EcfItemEditingDialog_AnyCommentLineEmpty);
             }
             return errors;
         }

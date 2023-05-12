@@ -250,20 +250,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At least one comment line is empty.
+        /// </summary>
+        internal static string EcfItemEditingDialog_AnyCommentLineEmpty {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_AnyCommentLineEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block editing aborted.
         /// </summary>
         internal static string EcfItemEditingDialog_BlockEditingAborted {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_BlockEditingAborted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comment item with empty comment is not allowed.
-        /// </summary>
-        internal static string EcfItemEditingDialog_CommentItemError_Empty {
-            get {
-                return ResourceManager.GetString("EcfItemEditingDialog_CommentItemError_Empty", resourceCulture);
             }
         }
         
@@ -435,6 +435,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemEditingDialog_NotSelected {
             get {
                 return ResourceManager.GetString("EcfItemEditingDialog_NotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation mode not suitable for adding operation.
+        /// </summary>
+        internal static string EcfItemEditingDialog_OperationModeNotSuitableForAdding {
+            get {
+                return ResourceManager.GetString("EcfItemEditingDialog_OperationModeNotSuitableForAdding", resourceCulture);
             }
         }
         

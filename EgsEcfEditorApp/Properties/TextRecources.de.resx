@@ -180,11 +180,11 @@
   <data name="EcfInfoView_NoDefinition" xml:space="preserve">
     <value>Keine Definition gefunden</value>
   </data>
+  <data name="EcfItemEditingDialog_AnyCommentLineEmpty" xml:space="preserve">
+    <value>Mindestens eine Zeile ist ohne Inhalt</value>
+  </data>
   <data name="EcfItemEditingDialog_BlockEditingAborted" xml:space="preserve">
     <value>Element Bearbeitung abgebrochen</value>
-  </data>
-  <data name="EcfItemEditingDialog_CommentItemError_Empty" xml:space="preserve">
-    <value>Kommentar Element ohne Inhalt is nicht erlaubt</value>
   </data>
   <data name="EcfItemEditingDialog_CouldNotBeFoundInTheItemList" xml:space="preserve">
     <value>konnte in der Element Liste nicht gefunden werden</value>
@@ -242,6 +242,9 @@
   </data>
   <data name="EcfItemEditingDialog_NotSelected" xml:space="preserve">
     <value>nicht ausgewählt</value>
+  </data>
+  <data name="EcfItemEditingDialog_OperationModeNotSuitableForAdding" xml:space="preserve">
+    <value>Operation mode für das Hinzufügen nicht geeignet</value>
   </data>
   <data name="EcfItemEditingDialog_ParameterEditingAborted" xml:space="preserve">
     <value>Parameter Bearbeitung abgebrochen</value>

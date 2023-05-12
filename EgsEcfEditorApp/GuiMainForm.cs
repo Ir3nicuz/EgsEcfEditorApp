@@ -684,7 +684,6 @@ namespace EgsEcfEditorApp
                         templateToAdd = new EcfBlock(templateToCopy);
                         templateToAdd.SetName(sourceItem.GetName());
                         if (EditItemDialog.ShowDialog(this, templateToAdd.EcfFile, templateToAdd) != DialogResult.OK) { return; }
-                        if (EditItemDialog.ShowDialog(this, templateToAdd.EcfFile, templateToAdd.GetFirstChildBlock()) != DialogResult.OK) { return; }
                         // check files to save -> selector if necessary
                         // check name not in file
                         // write template to file
@@ -1047,14 +1046,14 @@ namespace EcfFileViews
         };
         private OptionItem[] AddRootItemTypeOptions { get; } = new OptionItem[]
         {
-            new OptionItem(CreationModes.Comment, TitleRecources.Generic_Comment),
-            new OptionItem(CreationModes.RootBlock, TitleRecources.Generic_RootElement),
+            new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+            new OptionItem(OperationModes.RootBlock, TitleRecources.Generic_RootElement),
         };
         private OptionItem[] AddChildItemTypeOptions { get; } = new OptionItem[]
         {
-            new OptionItem(CreationModes.Comment, TitleRecources.Generic_Comment),
-            new OptionItem(CreationModes.Parameter, TitleRecources.Generic_Parameter),
-            new OptionItem(CreationModes.ChildBlock, TitleRecources.Generic_ChildElement),
+            new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
+            new OptionItem(OperationModes.Parameter, TitleRecources.Generic_Parameter),
+            new OptionItem(OperationModes.ChildBlock, TitleRecources.Generic_ChildElement),
         };
 
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
@@ -1677,7 +1676,7 @@ namespace EcfFileViews
             {
                 return;
             }
-            CreationModes selectedItemType = (CreationModes)ItemTypeSelectorDialog.SelectedOption.Item;
+            OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item as EcfBlock;
             if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
             {
@@ -1713,7 +1712,7 @@ namespace EcfFileViews
             {
                 return;
             }
-            CreationModes selectedItemType = (CreationModes)ItemTypeSelectorDialog.SelectedOption.Item;
+            OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item?.Parent as EcfBlock;
             if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
             {
@@ -1736,7 +1735,7 @@ namespace EcfFileViews
         }
         private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
         {
-            if (ItemEditor.ShowDialog(this, File, CreationModes.Parameter, parentBlock) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, File, OperationModes.Parameter, parentBlock) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 parentBlock.AddChild(createdItem, preceedingItem);
@@ -1778,7 +1777,7 @@ namespace EcfFileViews
         {
             if (item is EcfComment comment)
             {
-                if (ItemEditor.ShowDialog(this, File, comment) == DialogResult.OK)
+                if (ItemEditor.ShowDialog(this, comment) == DialogResult.OK)
                 {
                     UpdateAllViews();
                 }

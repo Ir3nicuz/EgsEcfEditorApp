@@ -400,4 +400,7 @@
     <None Include="Resources\Icon_AllUnequalItemsSet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /y "$(TargetDir)" "$(SolutionDir)..\..\$(ProjectName)_ReleasePackage\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

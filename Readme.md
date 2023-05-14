@@ -202,7 +202,7 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_CompareAndMerge.png" title="icon" width="16" height="16"/> compares two files, displays differences and offer merge options (see [Compare and Merge](#compare-and-merge))
 - <img src="EgsEcfEditorApp\Resources\Icon_TechTreeEditor.png" title="icon" width="16" height="16"/> displays the tech tree editor (see [Tech Tree Editor](#tech-tree-editor))
 - <img src="EgsEcfEditorApp\Resources\Icon_ReloadDefinitions.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [File Content Definition](#file-content-definition))
-- <img src="EgsEcfEditorApp\Resources\Icon_ReplaceDefinition.png" title="icon" width="16" height="16"/> reloads the `.xml` definitions (see [Item Handling Support](#item-handling-support))
+- <img src="EgsEcfEditorApp\Resources\Icon_ReplaceDefinition.png" title="icon" width="16" height="16"/> replaces the `.xml` definition in selected file (see [Item Handling Support](#item-handling-support))
 - <img src="EgsEcfEditorApp\Resources\Icon_CheckDefinition.png" title="icon" width="16" height="16"/> checks the `.xml` definitions (see [File Content Definition](#file-content-definition))
 
 #### Filter and Sorting Operations

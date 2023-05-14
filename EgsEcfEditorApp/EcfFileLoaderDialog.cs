@@ -10,9 +10,11 @@ namespace EgsEcfEditorApp
 {
     public partial class EcfFileLoaderDialog : Form
     {
-        private EgsEcfFile File { get; set; } = null;
-        private BackgroundWorker Worker { get; } = new BackgroundWorker();
+        private WorkItem Item { get; set; } = null;
         private Progress<int> ProgressInterface { get; } = new Progress<int>();
+
+        private BackgroundWorker FileLoadWorker { get; } = new BackgroundWorker();
+        private BackgroundWorker DefinitionReplaceWorker { get; } = new BackgroundWorker();
 
         public EcfFileLoaderDialog()
         {
@@ -37,19 +39,24 @@ namespace EgsEcfEditorApp
         }
         private void InitWorker()
         {
-            Worker.WorkerReportsProgress = true;
-            Worker.WorkerSupportsCancellation = true;
+            FileLoadWorker.WorkerReportsProgress = true;
+            FileLoadWorker.WorkerSupportsCancellation = true;
+            FileLoadWorker.DoWork += FileLoadWorker_DoWork;
+            FileLoadWorker.ProgressChanged += Worker_ProgressChanged;
+            FileLoadWorker.RunWorkerCompleted += Worker_RunWorkerCompleted;
 
-            Worker.DoWork += Worker_DoWork;
-            Worker.ProgressChanged += Worker_ProgressChanged;
-            Worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            DefinitionReplaceWorker.WorkerReportsProgress = true;
+            DefinitionReplaceWorker.WorkerSupportsCancellation = true;
+            DefinitionReplaceWorker.DoWork += DefinitionReplaceWorker_DoWork;
+            DefinitionReplaceWorker.ProgressChanged += Worker_ProgressChanged;
+            DefinitionReplaceWorker.RunWorkerCompleted += Worker_RunWorkerCompleted;
 
             ProgressInterface.ProgressChanged += ProgressInterface_ProgressChanged;
         }
         private void ProgressDialog_FormClosing(object sender, FormClosingEventArgs evt)
         {
-            if (DialogResult != DialogResult.OK) { File.LoadAbortPending = true; }
-            if (Worker.IsBusy) { evt.Cancel = true; }
+            if (DialogResult != DialogResult.OK) { Item.File.LoadAbortPending = true; }
+            if (FileLoadWorker.IsBusy || DefinitionReplaceWorker.IsBusy) { evt.Cancel = true; }
         }
         private void AbortButton_Click(object sender, EventArgs evt)
         {
@@ -63,12 +70,20 @@ namespace EgsEcfEditorApp
         {
             UpdateProgress(evt.ProgressPercentage);
         }
-        private void Worker_DoWork(object sender, DoWorkEventArgs evt)
+        private void FileLoadWorker_DoWork(object sender, DoWorkEventArgs evt)
         {
-            if (evt.Argument is EgsEcfFile file)
+            if (evt.Argument is WorkItem workItem)
             {
-                file.Load(ProgressInterface);
-                evt.Cancel = File.LoadAbortPending;
+                workItem.File.Load(ProgressInterface);
+                evt.Cancel = workItem.File.LoadAbortPending;
+            }
+        }
+        private void DefinitionReplaceWorker_DoWork(object sender, DoWorkEventArgs evt)
+        {
+            if (evt.Argument is WorkItem workItem)
+            {
+                workItem.File.ReplaceDefinition(workItem.Definition, ProgressInterface);
+                evt.Cancel = workItem.File.LoadAbortPending;
             }
         }
         private void ProgressInterface_ProgressChanged(object sender, int line)
@@ -79,23 +94,30 @@ namespace EgsEcfEditorApp
         // public
         public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file)
         {
-            File = file;
-            PrepareProgress(file);
-            Worker.RunWorkerAsync(file);
+            Item = new WorkItem(file, null);
+            PrepareProgress();
+            FileLoadWorker.RunWorkerAsync(Item);
             return ShowDialog(parent);
         }
-        public void PrepareProgress(EgsEcfFile file)
+        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, FormatDefinition newDefinition)
+        {
+            Item = new WorkItem(file, newDefinition);
+            PrepareProgress();
+            DefinitionReplaceWorker.RunWorkerAsync(Item);
+            return ShowDialog(parent);
+        }
+        public void PrepareProgress()
         {
             if (InvokeRequired)
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    PrepareProgressInvoked(file);
+                    PrepareProgressInvoked(Item.File);
                 });
             }
             else
             {
-                PrepareProgressInvoked(file);
+                PrepareProgressInvoked(Item.File);
             }
         }
         public void UpdateProgress(int value)
@@ -145,7 +167,18 @@ namespace EgsEcfEditorApp
         }
 
         // classes
-        public class TextProgressBar : ProgressBar
+        private class WorkItem
+        {
+            public EgsEcfFile File { get; }
+            public FormatDefinition Definition { get; }
+
+            public WorkItem(EgsEcfFile file, FormatDefinition definition)
+            {
+                File = file;
+                Definition = definition;
+            }
+        }
+        private class TextProgressBar : ProgressBar
         {
             public string BarText { get; set; } = string.Empty;
 

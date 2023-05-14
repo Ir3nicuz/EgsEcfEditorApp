@@ -282,6 +282,12 @@
   <data name="EcfItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
     <value>Add template failed</value>
   </data>
+  <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
+    <value>Add to Template Definition failed</value>
+  </data>
+  <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
+    <value>Replacement of Definition failed</value>
+  </data>
   <data name="EcfItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
     <value>The item has already a template attached</value>
   </data>
@@ -296,6 +302,9 @@
   </data>
   <data name="EcfItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
     <value>Remove template failed</value>
+  </data>
+  <data name="EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
+    <value>Save file before the Definition is replaced and the file is reloaded?</value>
   </data>
   <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
     <value>The selected file is not opened!</value>
@@ -553,7 +562,10 @@
     <value>Reloads the content from the file</value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_ReloadDefinitions" xml:space="preserve">
-    <value>Reloads the format definition data</value>
+    <value>Reloads the format definition data from the XML files</value>
+  </data>
+  <data name="EgsEcfEditorApp_ToolTip_ReplaceDefinition" xml:space="preserve">
+    <value>Replaces the Definition of the selected file with the latest loaded Definition and reread the content of the file with this Definition  </value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_Save" xml:space="preserve">
     <value>Saves the selected file</value>

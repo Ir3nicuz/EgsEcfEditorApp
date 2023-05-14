@@ -473,6 +473,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_ReplaceDefinition {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ReplaceDefinition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_SaveAllFiles {
             get {
                 object obj = ResourceManager.GetObject("Icon_SaveAllFiles", resourceCulture);

@@ -556,6 +556,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to Template Definition failed.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AddToTemplateDefinitionFailed {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AddToTemplateDefinitionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replacement of Definition failed.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_DefinitionReplacementFailed {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_DefinitionReplacementFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The item has already a template attached.
         /// </summary>
         internal static string EcfItemHandlingSupport_ElementHasAlreadyTemplate {
@@ -597,6 +615,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemHandlingSupport_RemoveTemplateFailed {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_RemoveTemplateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file before the Definition is replaced and the file is reloaded?.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion", resourceCulture);
             }
         }
         
@@ -1366,11 +1393,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reloads the format definition data.
+        ///   Looks up a localized string similar to Reloads the format definition data from the XML files.
         /// </summary>
         internal static string EgsEcfEditorApp_ToolTip_ReloadDefinitions {
             get {
                 return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_ReloadDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaces the Definition of the selected file with the latest loaded Definition and reread the content of the file with this Definition  .
+        /// </summary>
+        internal static string EgsEcfEditorApp_ToolTip_ReplaceDefinition {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp_ToolTip_ReplaceDefinition", resourceCulture);
             }
         }
         

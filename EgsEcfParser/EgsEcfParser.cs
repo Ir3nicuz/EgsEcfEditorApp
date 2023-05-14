@@ -43,6 +43,11 @@ namespace EgsEcfParser
             XmlLoading.LoadDefinitions();
             return Definitions.Where(def => def.GameMode.Equals(gameMode)).ToList();
         }
+        public static FormatDefinition GetDefinition(string gameMode, string fileType)
+        {
+            XmlLoading.LoadDefinitions();
+            return Definitions.FirstOrDefault(def => string.Equals(gameMode, def.GameMode) && string.Equals(fileType, def.FileType));
+        }
         public static Encoding GetFileEncoding(string filePathAndName)
         {
             try
@@ -114,6 +119,7 @@ namespace EgsEcfParser
                 default: return "\r\n";
             }
         }
+        
         public static List<ItemDefinition> FindDeprecatedItemDefinitions(EgsEcfFile file)
         {
             List<ItemDefinition> deprecatedItems = new List<ItemDefinition>();
@@ -141,7 +147,6 @@ namespace EgsEcfParser
             catch (Exception) { }
             return deprecatedItems;
         }
-
         private static void RemoveDeprecatedItemDefinitions(EcfStructureItem item,
             List<ItemDefinition> rootBlockAttributes, List<ItemDefinition> childBlockAttributes,
             List<ItemDefinition> blockParameters, List<ItemDefinition> parameterAttributes)
@@ -931,22 +936,6 @@ namespace EgsEcfParser
         }
 
         // file handling
-        public List<EcfError> GetErrorList()
-        {
-            List<EcfError> errors = new List<EcfError>(StructuralErrors);
-            errors.AddRange(ItemList.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList(true)));
-            return errors;
-        }
-        public List<T> GetDeepItemList<T>() where T : EcfStructureItem
-        {
-            return GetDeepItemList<T>(InternalItemList);
-        }
-        public static List<T> GetDeepItemList<T>(List<EcfStructureItem> itemList) where T : EcfStructureItem
-        {
-            List<T> list = new List<T>(itemList.Where(item => item is T).Cast<T>());
-            list.AddRange(itemList.Where(item => item is EcfBlock).Cast<EcfBlock>().SelectMany(block => block.GetDeepChildList<T>()).ToList());
-            return list;
-        }
         public void Load()
         {
             Load(null);
@@ -1001,6 +990,34 @@ namespace EgsEcfParser
             {
                 HasUnsavedData = true;
             }
+        }
+        public void ReplaceDefinition(FormatDefinition definition)
+        {
+            ReplaceDefinition(definition, null);
+        }
+        public void ReplaceDefinition(FormatDefinition definition, IProgress<int> lineProgress)
+        {
+            if (HasUnsavedData) { throw new InvalidOperationException("Definition replacement not allowed with unsaved data"); }
+            Definition = new FormatDefinition(definition);
+            Load(lineProgress);
+        }
+
+        // item handling
+        public List<EcfError> GetErrorList()
+        {
+            List<EcfError> errors = new List<EcfError>(StructuralErrors);
+            errors.AddRange(ItemList.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList(true)));
+            return errors;
+        }
+        public List<T> GetDeepItemList<T>() where T : EcfStructureItem
+        {
+            return GetDeepItemList<T>(InternalItemList);
+        }
+        public static List<T> GetDeepItemList<T>(List<EcfStructureItem> itemList) where T : EcfStructureItem
+        {
+            List<T> list = new List<T>(itemList.Where(item => item is T).Cast<T>());
+            list.AddRange(itemList.Where(item => item is EcfBlock).Cast<EcfBlock>().SelectMany(block => block.GetDeepChildList<T>()).ToList());
+            return list;
         }
         public bool AddItem(EcfStructureItem item)
         {

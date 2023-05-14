@@ -105,8 +105,67 @@ namespace EgsEcfEditorApp
             RestoreFilterSettings();
             RestoreDefinitionSettings();
 
-            InitGuiControls();
+            InitControls();
             InitEvents();
+        }
+        private void InitControls()
+        {
+            AppControlsPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            AppControlsPanel.AutoSize = true;
+            AppControlsPanel.Dock = DockStyle.Top;
+            AppControlsPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+
+            AppControlsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.8f));
+            AppControlsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.2f));
+            AppControlsPanel.ColumnCount = 2;
+            AppControlsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 1.0f));
+            AppControlsPanel.RowCount = 1;
+
+            FileOperationContainer.Dock = DockStyle.Fill;
+
+            SettingsOperationContainer.Dock = DockStyle.Fill;
+            SettingsOperationContainer.FlowDirection = FlowDirection.RightToLeft;
+
+            FileViewPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            FileViewPanel.Dock = DockStyle.Fill;
+
+            FileOperationContainer.Add(BasicFileOperations);
+            FileOperationContainer.Add(ExtendedFileOperations);
+
+            SettingsOperationContainer.Add(SettingOperations);
+
+            AppControlsPanel.Controls.Add(FileOperationContainer, 0, 0);
+            AppControlsPanel.Controls.Add(SettingsOperationContainer, 1, 0);
+
+            Controls.Add(FileViewPanel);
+            Controls.Add(AppControlsPanel);
+        }
+        private void InitEvents()
+        {
+            BasicFileOperations.NewFileClicked += BasicFileOperations_NewFileClicked;
+            BasicFileOperations.OpenFileClicked += BasicFileOperations_OpenFileClicked;
+            BasicFileOperations.ReloadFileClicked += BasicFileOperations_ReloadFileClicked;
+            BasicFileOperations.SaveFileClicked += BasicFileOperations_SaveFileClicked;
+            BasicFileOperations.SaveAsFileClicked += BasicFileOperations_SaveAsFileClicked;
+            BasicFileOperations.SaveAllFilesClicked += BasicFileOperations_SaveAllFilesClicked;
+            BasicFileOperations.CloseFileClicked += BasicFileOperations_CloseFileClicked;
+            BasicFileOperations.CloseAllFilesClicked += BasicFileOperations_CloseAllFilesClicked;
+
+            ExtendedFileOperations.ReloadDefinitionsClicked += ExtendedFileOperations_ReloadDefinitionsClicked;
+            ExtendedFileOperations.ReplaceDefinitionClicked += ExtendedFileOperations_ReplaceDefinitionClicked;
+            ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
+            ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
+            ExtendedFileOperations.TechTreeEditorClicked += ExtendedFileOperations_TechTreeEditorClicked;
+
+            SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
+            SettingOperations.OpenSettingsDialogClicked += SettingOperations_OpenSettingsDialogClicked;
+
+            FileViewPanel.TreeViewResized += FileViewPanel_TreeViewResized;
+            FileViewPanel.InfoViewResized += FileViewPanel_InfoViewResized;
+            FileViewPanel.ErrorViewResized += FileViewPanel_ErrorViewResized;
+            FileViewPanel.CopyClicked += FileViewPanel_CopyClicked;
+            FileViewPanel.PasteClicked += FileViewPanel_PasteClicked;
+            FileViewPanel.ItemHandlingSupportOperationClicked += FileViewPanel_ItemHandlingSupportOperationClicked;
         }
         private void GuiMainForm_FormClosing(object sender, FormClosingEventArgs evt)
         {
@@ -193,7 +252,11 @@ namespace EgsEcfEditorApp
         }
         private void ExtendedFileOperations_ReloadDefinitionsClicked(object sender, EventArgs evt)
         {
-            ReloadDefinitions();
+            TryReloadDefinitions();
+        }
+        private void ExtendedFileOperations_ReplaceDefinitionClicked(object sender, EventArgs evt)
+        {
+            ReplaceDefinitionInPage();
         }
         private void ExtendedFileOperations_CheckDefinitionClicked(object sender, EventArgs evt)
         {
@@ -300,71 +363,13 @@ namespace EgsEcfEditorApp
             }
         }
 
-        // App Handling
-        private void InitGuiControls()
-        {
-            AppControlsPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            AppControlsPanel.AutoSize = true;
-            AppControlsPanel.Dock = DockStyle.Top;
-            AppControlsPanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-
-            AppControlsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.8f));
-            AppControlsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.2f));
-            AppControlsPanel.ColumnCount = 2;
-            AppControlsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 1.0f));
-            AppControlsPanel.RowCount = 1;
-
-            FileOperationContainer.Dock = DockStyle.Fill;
-
-            SettingsOperationContainer.Dock = DockStyle.Fill;
-            SettingsOperationContainer.FlowDirection = FlowDirection.RightToLeft;
-
-            FileViewPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            FileViewPanel.Dock = DockStyle.Fill;
-
-            FileOperationContainer.Add(BasicFileOperations);
-            FileOperationContainer.Add(ExtendedFileOperations);
-
-            SettingsOperationContainer.Add(SettingOperations);
-
-            AppControlsPanel.Controls.Add(FileOperationContainer, 0, 0);
-            AppControlsPanel.Controls.Add(SettingsOperationContainer, 1, 0);
-            
-            Controls.Add(FileViewPanel);
-            Controls.Add(AppControlsPanel);
-        }
-        private void InitEvents()
-        {
-            BasicFileOperations.NewFileClicked += BasicFileOperations_NewFileClicked;
-            BasicFileOperations.OpenFileClicked += BasicFileOperations_OpenFileClicked;
-            BasicFileOperations.ReloadFileClicked += BasicFileOperations_ReloadFileClicked;
-            BasicFileOperations.SaveFileClicked += BasicFileOperations_SaveFileClicked;
-            BasicFileOperations.SaveAsFileClicked += BasicFileOperations_SaveAsFileClicked;
-            BasicFileOperations.SaveAllFilesClicked += BasicFileOperations_SaveAllFilesClicked;
-            BasicFileOperations.CloseFileClicked += BasicFileOperations_CloseFileClicked;
-            BasicFileOperations.CloseAllFilesClicked += BasicFileOperations_CloseAllFilesClicked;
-
-            ExtendedFileOperations.ReloadDefinitionsClicked += ExtendedFileOperations_ReloadDefinitionsClicked;
-            ExtendedFileOperations.CheckDefinitionClicked += ExtendedFileOperations_CheckDefinitionClicked;
-            ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
-            ExtendedFileOperations.TechTreeEditorClicked += ExtendedFileOperations_TechTreeEditorClicked;
-
-            SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
-            SettingOperations.OpenSettingsDialogClicked += SettingOperations_OpenSettingsDialogClicked;
-
-            FileViewPanel.TreeViewResized += FileViewPanel_TreeViewResized;
-            FileViewPanel.InfoViewResized += FileViewPanel_InfoViewResized;
-            FileViewPanel.ErrorViewResized += FileViewPanel_ErrorViewResized;
-            FileViewPanel.CopyClicked += FileViewPanel_CopyClicked;
-            FileViewPanel.PasteClicked += FileViewPanel_PasteClicked;
-            FileViewPanel.ItemHandlingSupportOperationClicked += FileViewPanel_ItemHandlingSupportOperationClicked;
-        }
+        // FileHandling
         private bool AppClosing()
         {
             bool cancelClosing = false;
             if (FileViewPanel.TabPages.Cast<EcfTabPage>().Any(tab => tab.File.HasUnsavedData))
             {
-                cancelClosing = MessageBox.Show(this, TextRecources.EgsEcfEditorApp_CloseAppWithUnsaved, TitleRecources.Generic_Attention, 
+                cancelClosing = MessageBox.Show(this, TextRecources.EgsEcfEditorApp_CloseAppWithUnsaved, TitleRecources.Generic_Attention,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes;
             }
             if (!cancelClosing)
@@ -386,8 +391,6 @@ namespace EgsEcfEditorApp
             MessageBox.Show(this, TextRecources.EgsEcfEditorApp_NoTabSelected, TitleRecources.Generic_Warning, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             return false;
         }
-
-        // FileHandling
         private void NewEcfFile()
         {
             try
@@ -433,10 +436,10 @@ namespace EgsEcfEditorApp
         }
         private void ReloadEcfFile()
         {
-            if (TryGetSelectedTab(out EcfTabPage tab))
+            if (TryGetSelectedTab(out EcfTabPage ecfPage))
             {
                 bool cancelOverride = false;
-                if (tab.File.HasUnsavedData)
+                if (ecfPage.File.HasUnsavedData)
                 {
                     cancelOverride = MessageBox.Show(this, TextRecources.EgsEcfEditorApp_OverrideTabWithUnsaved, TitleRecources.Generic_Attention,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes;
@@ -445,11 +448,11 @@ namespace EgsEcfEditorApp
                 {
                     try
                     {
-                        if (FileLoader.ShowDialog(this, tab.File) != DialogResult.OK) { return; }
+                        if (FileLoader.ShowDialog(this, ecfPage.File) != DialogResult.OK) { return; }
 
-                        tab.UpdateTabDescription();
-                        tab.ResetFilter();
-                        tab.UpdateAllViews();
+                        ecfPage.UpdateTabDescription();
+                        ecfPage.ResetFilter();
+                        ecfPage.UpdateAllViews();
                     }
                     catch (Exception ex)
                     {
@@ -460,16 +463,16 @@ namespace EgsEcfEditorApp
         }
         private void SaveEcfFile()
         {
-            if (TryGetSelectedTab(out EcfTabPage ecf) && ecf.File.HasUnsavedData)
+            if (TryGetSelectedTab(out EcfTabPage ecfPage) && ecfPage.File.HasUnsavedData)
             {
                 try
                 {
-                    ecf.File.Save(
+                    ecfPage.File.Save(
                         UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
                         UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
                         UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
-                    ecf.UpdateTabDescription();
-                    ecf.UpdateErrorView();
+                    ecfPage.UpdateTabDescription();
+                    ecfPage.UpdateErrorView();
                 }
                 catch (Exception ex)
                 {
@@ -479,21 +482,21 @@ namespace EgsEcfEditorApp
         }
         private void SaveAsEcfFile()
         {
-            if (TryGetSelectedTab(out EcfTabPage ecf))
+            if (TryGetSelectedTab(out EcfTabPage ecfPage))
             {
                 SaveDialog.SetInitDirectory(FindFileDialogInitDirectory());
-                SaveDialog.SetInitFileName(ecf.File.FileName);
+                SaveDialog.SetInitFileName(ecfPage.File.FileName);
                 if (SaveDialog.ShowDialogSaveAs(this) == DialogResult.OK)
                 {
                     AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(SaveDialog.FilePathAndName);
                     try
                     {
-                        ecf.File.Save(SaveDialog.FilePathAndName, 
+                        ecfPage.File.Save(SaveDialog.FilePathAndName, 
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
-                        ecf.UpdateTabDescription();
-                        ecf.UpdateErrorView();
+                        ecfPage.UpdateTabDescription();
+                        ecfPage.UpdateErrorView();
                     }
                     catch (Exception ex)
                     {
@@ -508,14 +511,14 @@ namespace EgsEcfEditorApp
             {
                 foreach (TabPage tab in FileViewPanel.TabPages)
                 {
-                    if (tab is EcfTabPage ecf && ecf.File.HasUnsavedData)
+                    if (tab is EcfTabPage ecfPage && ecfPage.File.HasUnsavedData)
                     {
-                        ecf.File.Save(
+                        ecfPage.File.Save(
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_WriteOnlyValidItems, 
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_InvalidateParentsOnError,
                             UserSettings.Default.EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData);
-                        ecf.UpdateTabDescription();
-                        ecf.UpdateErrorView();
+                        ecfPage.UpdateTabDescription();
+                        ecfPage.UpdateErrorView();
                     }
                 }
             }
@@ -526,24 +529,24 @@ namespace EgsEcfEditorApp
         }
         private void CloseEcfFile()
         {
-            if (TryGetSelectedTab(out EcfTabPage tab))
+            if (TryGetSelectedTab(out EcfTabPage ecfPage))
             {
                 bool cancelClosing = false;
-                if (tab.File.HasUnsavedData)
+                if (ecfPage.File.HasUnsavedData)
                 {
                     cancelClosing = MessageBox.Show(this, TextRecources.EgsEcfEditorApp_CloseTabWithUnsaved, TitleRecources.Generic_Attention,
                         MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes;
                 }
                 if (!cancelClosing)
                 {
-                    FileViewPanel.Remove(tab);
+                    FileViewPanel.Remove(ecfPage);
                 }
             }
         }
         private void CloseAllEcfFiles()
         {
             bool cancelClosing = false;
-            if (FileViewPanel.TabPages.Cast<EcfTabPage>().Any(tab => tab.File.HasUnsavedData))
+            if (FileViewPanel.TabPages.Cast<EcfTabPage>().Any(ecfPage => ecfPage.File.HasUnsavedData))
             {
                 cancelClosing = MessageBox.Show(this, TextRecources.EgsEcfEditorApp_CloseAllTabsWithUnsaved, TitleRecources.Generic_Attention,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes;
@@ -555,18 +558,17 @@ namespace EgsEcfEditorApp
         }
 
         // definition handling
-        private void ReloadDefinitions()
+        private void TryReloadDefinitions()
         {
             try
             {
-                EcfDefinitionHandling.ReloadDefinitions();
-                MessageBox.Show(this, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsSuccess, 
+                ReloadDefinitions();
+                MessageBox.Show(this, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsSuccess,
                     TitleRecources.Generic_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, string.Format("{0}{1}{1}{2}", TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsFailed, Environment.NewLine, ex.Message), 
-                    TitleRecources.Generic_Warning, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsFailed);
             }
         }
         private void CheckDefinition()
@@ -576,7 +578,41 @@ namespace EgsEcfEditorApp
                 DeprecatedDefinitions.ShowDialog(this, tab.File);
             }
         }
-        
+        private void ReplaceDefinitionInPage()
+        {
+            if (TryGetSelectedTab(out EcfTabPage ecfPage))
+            {
+                try
+                {
+                    ReplaceDefinitionInFile(ecfPage.File);
+                    ecfPage.UpdateErrorView();
+                }
+                catch (Exception ex)
+                {
+                    ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_DefinitionReplacementFailed);
+                }
+            }
+        }
+        private void ReplaceDefinitionInFile(EgsEcfFile file)
+        {
+            FormatDefinition newDefinition = GetDefinition(file.Definition.GameMode, file.Definition.FileType);
+            if (newDefinition != null)
+            {
+                if (file.HasUnsavedData)
+                {
+                    switch (MessageBox.Show(this, 
+                        string.Format("{0}{1}{1}{2}", TextRecources.EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion, Environment.NewLine, file.FileName),
+                        TitleRecources.Generic_Attention, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
+                    {
+                        case DialogResult.Yes: file.Save(); break;
+                        case DialogResult.Cancel: return;
+                        default: break;
+                    }
+                }
+                if (FileLoader.ShowDialog(this, file, newDefinition) != DialogResult.OK) { return; }
+            }
+        }
+
         // Content handling
         private void CompareAndMergeFiles()
         {
@@ -615,7 +651,6 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        [Obsolete("needs operation logic")]
         private void PerformItemHandlingSupportOperation(object sender, ItemHandlingSupportOperationEventArgs evt)
         {
             switch (evt.Operation)
@@ -627,20 +662,49 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ShowLinkedTemplate: ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.RemoveTemplate: RemoveTemplateOfItem(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddTemplate: AddTemplateToItem(evt.SourceItem as EcfBlock); break;
-                case ItemOperations.AddToTemplateDefinition:
-
-                /*
-                 * AddToTemplateDefinition
-                 * PreCheck: (not present at least one file)
-                 * Variants: (addToAll, addToSelected)
-                 * Source Item Id Name: Name
-                 * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
-                    */
-
+                case ItemOperations.AddToTemplateDefinition: AddItemToTemplateDefinition(evt.SourceItem as EcfBlock); break;
                 default:
                     MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
+            }
+        }
+        [Obsolete("needs more logic")]
+        private void AddItemToTemplateDefinition(EcfBlock sourceItem)
+        {
+            
+
+
+            /*
+             * 
+             * 
+             * 
+                 * PreCheck: definitons files available
+                 * Variants: (addToAll, addToSelected)
+                 * Source Item Id Name: Name
+                 * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
+                 * 
+                 * 
+                 * 
+                 * 
+                 * 
+                 * 
+                    */
+
+            try
+            {
+                ReloadDefinitions();
+                List<EcfTabPage> fileTabsToUpdate = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).ToList();
+                foreach (EcfTabPage filePage in fileTabsToUpdate)
+                {
+                    ReplaceDefinitionInFile(filePage.File);
+                    filePage.UpdateAllViews();
+                }
+            }
+            catch (Exception ex)
+            {
+                // text recources change?
+                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_AddToTemplateDefinitionFailed);
             }
         }
         private void AddTemplateToItem(EcfBlock sourceItem)
@@ -3684,6 +3748,7 @@ namespace EcfFileViewTools
         public event EventHandler CompareAndMergeClicked;
         public event EventHandler TechTreeEditorClicked;
         public event EventHandler ReloadDefinitionsClicked;
+        public event EventHandler ReplaceDefinitionClicked;
         public event EventHandler CheckDefinitionClicked;
 
         public EcfExtendedFileOperations() : base()
@@ -3694,6 +3759,8 @@ namespace EcfFileViewTools
                 .Click += (sender, evt) => TechTreeEditorClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReloadDefinitions, IconRecources.Icon_ReloadDefinitions, null))
                 .Click += (sender, evt) => ReloadDefinitionsClicked?.Invoke(sender, evt);
+            Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_ReplaceDefinition, IconRecources.Icon_ReplaceDefinition, null))
+                .Click += (sender, evt) => ReplaceDefinitionClicked?.Invoke(sender, evt);
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_CheckDefinition, IconRecources.Icon_CheckDefinition, null))
                 .Click += (sender, evt) => CheckDefinitionClicked?.Invoke(sender, evt);
         }

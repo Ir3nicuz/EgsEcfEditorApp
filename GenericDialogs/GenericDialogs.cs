@@ -21,5 +21,18 @@ namespace GenericDialogs
 
             return MessageBox.Show(parent, message.ToString(), header, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
         }
+        public static void ShowExceptionMessageDialog(IWin32Window parent, Exception ex, string title, string preDescription = null)
+        {
+            string message;
+            if (string.IsNullOrEmpty(preDescription))
+            {
+                message = ex.Message;
+            }
+            else
+            {
+                message = string.Format("{0}{1}{1}{2}", preDescription, Environment.NewLine, ex.Message);
+            }
+            MessageBox.Show(parent, message, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
     }
 }

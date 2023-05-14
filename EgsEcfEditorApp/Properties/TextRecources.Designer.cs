@@ -547,6 +547,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add template failed.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AddTemplateFailed {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AddTemplateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No templates for item.
         /// </summary>
         internal static string EcfItemHandlingSupport_NoTemplatesForItem {
@@ -561,6 +570,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove template failed.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_RemoveTemplateFailed {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_RemoveTemplateFailed", resourceCulture);
             }
         }
         

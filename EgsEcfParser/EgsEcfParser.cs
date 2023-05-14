@@ -3102,7 +3102,8 @@ namespace EgsEcfParser
             {
                 FormatDefinition definition = EcfFile?.Definition;
                 if (definition == null) { throw new InvalidOperationException("Parameter creation is only possible with file reference"); }
-                if (!definition.BlockParameters.Any(param => param.Name.Equals(key))) { throw new InvalidOperationException(string.Format("Parameter key '{0}' is not allowed", key)); }
+                if (!definition.BlockParameters.Any(param => param.Name.Equals(key))) { 
+                    throw new InvalidOperationException(string.Format("Parameter key '{0}' is not defined for '{1}'", key, definition.FileType)); }
 
                 parameter = new EcfParameter(key);
                 AddChild(parameter);

@@ -279,11 +279,17 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Removes the selected value group row</value>
   </data>
+  <data name="EcfItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
+    <value>Add template failed</value>
+  </data>
   <data name="EcfItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
     <value>No templates for item</value>
   </data>
   <data name="EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
     <value>Only remove Template (Yes) or delete completely (No)?</value>
+  </data>
+  <data name="EcfItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
+    <value>Remove template failed</value>
   </data>
   <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
     <value>The selected file is not opened!</value>

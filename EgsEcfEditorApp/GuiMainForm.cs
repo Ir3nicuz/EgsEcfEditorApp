@@ -685,10 +685,6 @@ namespace EgsEcfEditorApp
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
                  * 
                  * 
-                 * 
-                 * 
-                 * 
-                 * 
                     */
 
             try

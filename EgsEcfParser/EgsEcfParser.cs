@@ -3134,6 +3134,10 @@ namespace EgsEcfParser
             count += InternalChildItems.Where(child => child is EcfBlock).Cast<EcfBlock>().Sum(subBlock => subBlock.RemoveParameterDeep(keys));
             return count;
         }
+        public void ClearParameters()
+        {
+            InternalChildItems.RemoveAll(child => child is EcfParameter);
+        }
     }
     public class EcfComment : EcfStructureItem
     {

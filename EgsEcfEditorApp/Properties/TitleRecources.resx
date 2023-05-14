@@ -249,6 +249,9 @@
   <data name="EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Select existing template to be copied</value>
   </data>
+  <data name="EcfItemHandlingSupport_Header_TargetTemplateFileSelector" xml:space="preserve">
+    <value>Select target template file</value>
+  </data>
   <data name="EcfItemListingView_Header" xml:space="preserve">
     <value>Item listing</value>
   </data>

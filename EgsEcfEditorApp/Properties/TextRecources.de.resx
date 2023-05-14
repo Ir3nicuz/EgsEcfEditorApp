@@ -282,6 +282,12 @@
   <data name="EcfItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
     <value>Hinzufügen des Templates fehlgeschlagen</value>
   </data>
+  <data name="EcfItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
+    <value>Das Element hat bereits ein Template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
+    <value>Es ist keine Template Datei geöffnet</value>
+  </data>
   <data name="EcfItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
     <value>Keine Templates für Item</value>
   </data>

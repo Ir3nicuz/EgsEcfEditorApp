@@ -457,6 +457,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select target template file.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_TargetTemplateFileSelector {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_TargetTemplateFileSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item listing.
         /// </summary>
         internal static string EcfItemListingView_Header {

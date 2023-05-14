@@ -556,6 +556,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The item has already a template attached.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_ElementHasAlreadyTemplate {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_ElementHasAlreadyTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No template file is opened.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_NoTemplateFileOpened {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplateFileOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No templates for item.
         /// </summary>
         internal static string EcfItemHandlingSupport_NoTemplatesForItem {

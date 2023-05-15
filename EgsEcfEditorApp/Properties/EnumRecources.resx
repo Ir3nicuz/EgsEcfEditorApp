@@ -135,6 +135,12 @@
   <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting" xml:space="preserve">
     <value>Select existing template from list</value>
   </data>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.AllDefinitions" xml:space="preserve">
+    <value>Add to all template Definition files</value>
+  </data>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.SelectDefinition" xml:space="preserve">
+    <value>Add to specific template Definition file</value>
+  </data>
   <data name="EgsEcfParser.EcfErrorGroups.Creating" xml:space="preserve">
     <value>Creating error</value>
   </data>

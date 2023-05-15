@@ -235,7 +235,7 @@
     <value>Parameter editing not allowed without parent element</value>
   </data>
   <data name="EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition" xml:space="preserve">
-    <value>Root Block adding not allowed without a type definition</value>
+    <value>Root block adding not allowed without a type definition</value>
   </data>
   <data name="EcfItemEditingDialog_NoSelectableParameterAvailable" xml:space="preserve">
     <value>No selectable Parameter available</value>
@@ -283,13 +283,16 @@
     <value>Add template failed</value>
   </data>
   <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
-    <value>Add to Template Definition failed</value>
+    <value>Add to Template definition failed</value>
   </data>
   <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
-    <value>Replacement of Definition failed</value>
+    <value>Replacement of definition failed</value>
   </data>
   <data name="EcfItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
     <value>The item has already a template attached</value>
+  </data>
+  <data name="EcfItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
+    <value>No template definition file found</value>
   </data>
   <data name="EcfItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
     <value>No template file is opened</value>
@@ -298,13 +301,13 @@
     <value>No templates for item</value>
   </data>
   <data name="EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
-    <value>Only remove Template (Yes) or delete completely (No)?</value>
+    <value>Only remove template (Yes) or delete completely (No)?</value>
   </data>
   <data name="EcfItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
     <value>Remove template failed</value>
   </data>
   <data name="EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
-    <value>Save file before the Definition is replaced and the file is reloaded?</value>
+    <value>Save file before the definition is replaced and the file is reloaded?</value>
   </data>
   <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
     <value>The selected file is not opened!</value>
@@ -313,7 +316,7 @@
     <value>still used with</value>
   </data>
   <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
-    <value>Shall the Definition of the already opened template files be updated?</value>
+    <value>Shall the definition of the already opened template files be updated?</value>
   </data>
   <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
     <value>All items with template</value>
@@ -331,10 +334,10 @@
     <value>All templates with item</value>
   </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
-    <value>Marked Parameters are inherited to the selected tree element</value>
+    <value>Marked parameters are inherited to the selected tree element</value>
   </data>
   <data name="EcfParameterView_ToolTip_OverwritingColumn" xml:space="preserve">
-    <value>Marked Parameters overwriting an inherited parameter</value>
+    <value>Marked parameters overwriting an inherited parameter</value>
   </data>
   <data name="EcfParameterView_ToolTip_ParameterCountSelector" xml:space="preserve">
     <value>Count of parameters shown at once</value>
@@ -568,7 +571,7 @@
     <value>Reloads the format definition data from the XML files</value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_ReplaceDefinition" xml:space="preserve">
-    <value>Replaces the Definition of the selected file with the latest loaded Definition and reread the content of the file with this Definition  </value>
+    <value>Replaces the definition of the selected file with the latest loaded definition and reread the content of the file with this definition  </value>
   </data>
   <data name="EgsEcfEditorApp_ToolTip_Save" xml:space="preserve">
     <value>Saves the selected file</value>

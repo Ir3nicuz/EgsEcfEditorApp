@@ -57,10 +57,6 @@ namespace EgsEcfEditorApp
         }
 
         // publics
-        public void Show(IWin32Window parent, List<EgsEcfFile> itemList)
-        {
-            Show(parent, null, itemList);
-        }
         public void Show(IWin32Window parent, List<EcfBlock> itemList)
         {
             Show(parent, null, itemList);
@@ -68,12 +64,6 @@ namespace EgsEcfEditorApp
         public void Show(IWin32Window parent, List<EcfParameter> itemList)
         {
             Show(parent, null, itemList);
-        }
-        public void Show(IWin32Window parent, string searchDescription, List<EgsEcfFile> itemList)
-        {
-            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
-            RefreshGridView(itemList);
-            Show(parent);
         }
         public void Show(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
         {
@@ -87,10 +77,6 @@ namespace EgsEcfEditorApp
             RefreshGridView(itemList);
             Show(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, List<EgsEcfFile> itemList)
-        {
-            return ShowDialog(parent, null, itemList);
-        }
         public DialogResult ShowDialog(IWin32Window parent, List<EcfBlock> itemList)
         {
             return ShowDialog(parent, null, itemList);
@@ -98,12 +84,6 @@ namespace EgsEcfEditorApp
         public DialogResult ShowDialog(IWin32Window parent, List<EcfParameter> itemList)
         {
             return ShowDialog(parent, null, itemList);
-        }
-        public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EgsEcfFile> itemList)
-        {
-            RefreshInfoDescription(searchDescription, itemList?.Count ?? 0);
-            RefreshGridView(itemList);
-            return ShowDialog(parent);
         }
         public DialogResult ShowDialog(IWin32Window parent, string searchDescription, List<EcfBlock> itemList)
         {
@@ -127,35 +107,12 @@ namespace EgsEcfEditorApp
                 Text = string.Format("{0} - {1}", TitleRecources.EcfItemListingView_Header, searchDescription);
             }
         }
-        private void RefreshGridView(List<EgsEcfFile> itemList)
-        {
-            ItemListingGrid.SuspendLayout();
-            ItemListingGrid.Rows.Clear();
-            FileItems.Clear();
-
-            ListingGridColumn_Element.Visible = false;
-            ListingGridColumn_Parameter.Visible = false;
-
-            int lineCounter = 1;
-            itemList.ForEach(item =>
-            {
-                ItemListingGrid.Rows.Add(lineCounter,
-                    item?.FileName ?? TitleRecources.Generic_Replacement_Empty);
-                FileItems.Add(item);
-                lineCounter++;
-            });
-
-            ItemListingGrid.AutoResizeColumns();
-            ItemListingGrid.ClearSelection();
-            ItemListingGrid.ResumeLayout();
-        }
         private void RefreshGridView(List<EcfBlock> itemList)
         {
             ItemListingGrid.SuspendLayout();
             ItemListingGrid.Rows.Clear();
             StructureItems.Clear();
 
-            ListingGridColumn_Element.Visible = true;
             ListingGridColumn_Parameter.Visible = false;
 
             int lineCounter = 1;
@@ -178,7 +135,6 @@ namespace EgsEcfEditorApp
             ItemListingGrid.Rows.Clear();
             StructureItems.Clear();
 
-            ListingGridColumn_Element.Visible = true;
             ListingGridColumn_Parameter.Visible = true;
 
             int lineCounter = 1;
@@ -205,8 +161,8 @@ namespace EgsEcfEditorApp
 
             public ItemRowClickedEventArgs(EgsEcfFile fileItem, EcfStructureItem structureItem) : base()
             {
-                StructureItem = structureItem;
                 FileItem = fileItem;
+                StructureItem = structureItem;
             }
         }
     }

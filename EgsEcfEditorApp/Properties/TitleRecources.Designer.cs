@@ -448,6 +448,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select add to template definition option.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select existing template to be copied.
         /// </summary>
         internal static string EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector {

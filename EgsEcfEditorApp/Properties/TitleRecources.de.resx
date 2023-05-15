@@ -246,6 +246,9 @@
   <data name="EcfItemHandlingSupport_Header_AddTemplateOptionSelector" xml:space="preserve">
     <value>Option zum Hinzufügen des Template auswählen</value>
   </data>
+  <data name="EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
+    <value>Option zum Hinzufügen zur Template Definition wählen</value>
+  </data>
   <data name="EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Vorhandenes Template zum Kopieren wählen</value>
   </data>

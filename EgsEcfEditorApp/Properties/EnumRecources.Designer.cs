@@ -115,6 +115,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to all template Definition files.
+        /// </summary>
+        internal static string EgsEcfEditorApp_GuiMainForm_AddToTemplateDefinitionOptions_AllDefinitions {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.AllDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to specific template Definition file.
+        /// </summary>
+        internal static string EgsEcfEditorApp_GuiMainForm_AddToTemplateDefinitionOptions_SelectDefinition {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.SelectDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating error.
         /// </summary>
         internal static string EgsEcfParser_EcfErrorGroups_Creating {

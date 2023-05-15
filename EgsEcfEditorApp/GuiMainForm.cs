@@ -60,31 +60,43 @@ namespace EgsEcfEditorApp
         private SettingsDialog SettingsDialog { get; } = new SettingsDialog();
         private EcfFileCAMDialog CompareMergeDialog { get; } = new EcfFileCAMDialog();
         private EcfTechTreeDialog TechTreeDialog { get; } = new EcfTechTreeDialog();
-        private OptionSelectorDialog EditOptionSelectorDialog { get; } = new OptionSelectorDialog()
+        private EcfItemEditingDialog EditItemDialog { get; } = new EcfItemEditingDialog();
+
+        private OptionSelectorDialog OptionsDialog { get; } = new OptionSelectorDialog()
         {
             Icon = IconRecources.Icon_AppBranding,
             OkButtonText = TitleRecources.Generic_Ok,
             AbortButtonText = TitleRecources.Generic_Abort,
         };
-        private enum AddTemplateEditOptions
-        {
-            SelectExisting,
-            CreateNewAsCopy,
-            CreateNewAsEmpty,
-        }
         private OptionItem[] AddTemplateEditOptionItems { get; } = new OptionItem[]
         {
             new OptionItem(AddTemplateEditOptions.SelectExisting, GetLocalizedEnum(AddTemplateEditOptions.SelectExisting)),
             new OptionItem(AddTemplateEditOptions.CreateNewAsCopy, GetLocalizedEnum(AddTemplateEditOptions.CreateNewAsCopy)),
             new OptionItem(AddTemplateEditOptions.CreateNewAsEmpty, GetLocalizedEnum(AddTemplateEditOptions.CreateNewAsEmpty)),
         };
-        private ItemSelectorDialog EditItemSelectorDialog { get; } = new ItemSelectorDialog()
+        private OptionItem[] AddToTemplateDefinitionOptionItems { get; } = new OptionItem[]
+        {
+            new OptionItem(AddToTemplateDefinitionOptions.AllDefinitions, GetLocalizedEnum(AddToTemplateDefinitionOptions.AllDefinitions)),
+            new OptionItem(AddToTemplateDefinitionOptions.SelectDefinition, GetLocalizedEnum(AddToTemplateDefinitionOptions.SelectDefinition)),
+        };
+        private ItemSelectorDialog ItemsDialog { get; } = new ItemSelectorDialog()
         {
             Icon = IconRecources.Icon_AppBranding,
             OkButtonText = TitleRecources.Generic_Ok,
             AbortButtonText = TitleRecources.Generic_Abort,
         };
-        private EcfItemEditingDialog EditItemDialog { get; } = new EcfItemEditingDialog();
+
+        private enum AddTemplateEditOptions
+        {
+            SelectExisting,
+            CreateNewAsCopy,
+            CreateNewAsEmpty,
+        }
+        private enum AddToTemplateDefinitionOptions
+        {
+            AllDefinitions,
+            SelectDefinition,
+        }
 
         public GuiMainForm()
         {
@@ -675,21 +687,36 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                List<FormatDefinition> templateDefinitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningTemplates).ToList();
+                List<FormatDefinition> templateDefinitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningItems).ToList();
                 if (templateDefinitions.Count < 1)
                 {
-
+                    MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_NoTemplateDefinitionFileFound,
+                        TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-                
-                /*
-                 * PreCheck: definitons files available
-                 * Variants: (addToAll, addToSelected)
+                if (templateDefinitions.Count > 1)
+                {
+                    OptionsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector;
+                    if (OptionsDialog.ShowDialog(this, AddToTemplateDefinitionOptionItems) != DialogResult.OK) { return; }
+                    switch((AddToTemplateDefinitionOptions)OptionsDialog.SelectedOption.Item)
+                    {
+                        case AddToTemplateDefinitionOptions.AllDefinitions: break;
+                        case AddToTemplateDefinitionOptions.SelectDefinition: 
+                            if (ItemsDialog.ShowDialog(this, templateDefinitions.Select(def => new SelectorItem(def, def.FilePathAndName)).ToArray()) != DialogResult.OK) { return; }
+                            templateDefinitions.Clear();
+                            templateDefinitions.Add((FormatDefinition)ItemsDialog.SelectedItem.Item);
+                            break;
+                        default: return;
+                    }
+                }
+                foreach (FormatDefinition templateDefinition in templateDefinitions)
+                {
+                    /*
+                     * prüfen, ob nicht bereits enthalten
                  * Source Item Id Name: Name
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
                     */
-
-
+                }
 
                 ReloadDefinitions();
 
@@ -697,7 +724,7 @@ namespace EgsEcfEditorApp
                 if (fileTabsToUpdate.Count > 0)
                 {
                     if (MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         foreach (EcfTabPage filePage in fileTabsToUpdate)
                         {
@@ -735,9 +762,9 @@ namespace EgsEcfEditorApp
                     sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
                 if (templateList.Count < 1)
                 {
-                    EditOptionSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddTemplateOptionSelector;
-                    if (EditOptionSelectorDialog.ShowDialog(this, AddTemplateEditOptionItems) != DialogResult.OK) { return; }
-                    switch ((AddTemplateEditOptions)EditOptionSelectorDialog.SelectedOption.Item)
+                    OptionsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddTemplateOptionSelector;
+                    if (OptionsDialog.ShowDialog(this, AddTemplateEditOptionItems) != DialogResult.OK) { return; }
+                    switch ((AddTemplateEditOptions)OptionsDialog.SelectedOption.Item)
                     {
                         case AddTemplateEditOptions.SelectExisting: AddTemplateToItem_SelectFromExisting(sourceItem); break;
                         case AddTemplateEditOptions.CreateNewAsCopy: AddTemplateToItem_CreateCopy(sourceItem, presentTemplateFiles); break;
@@ -759,9 +786,9 @@ namespace EgsEcfEditorApp
             SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
                 page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
-            EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddExistingTemplateSelector;
-            if (EditItemSelectorDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
-            EcfBlock templateToAdd = EditItemSelectorDialog.SelectedItem.Item as EcfBlock;
+            ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddExistingTemplateSelector;
+            if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
+            EcfBlock templateToAdd = ItemsDialog.SelectedItem.Item as EcfBlock;
             EcfParameter templateRoot = sourceItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             templateRoot.ClearValues();
             templateRoot.AddValue(templateToAdd.GetName());
@@ -776,9 +803,9 @@ namespace EgsEcfEditorApp
             SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
                 page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
-            EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector;
-            if (EditItemSelectorDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
-            EcfBlock templateToCopy = EditItemSelectorDialog.SelectedItem.Item as EcfBlock;
+            ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector;
+            if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
+            EcfBlock templateToCopy = ItemsDialog.SelectedItem.Item as EcfBlock;
             EcfBlock templateToAdd = new EcfBlock(templateToCopy);
             templateToAdd.SetName(sourceItem.GetName());
 
@@ -823,9 +850,9 @@ namespace EgsEcfEditorApp
             EgsEcfFile targetFile;
             if (presentTemplateFiles.Length > 1)
             {
-                EditItemSelectorDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_TargetTemplateFileSelector;
-                if (EditItemSelectorDialog.ShowDialog(this, presentTemplateFiles) != DialogResult.OK) { return false; }
-                targetFile = (EgsEcfFile)EditItemSelectorDialog.SelectedItem.Item;
+                ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_TargetTemplateFileSelector;
+                if (ItemsDialog.ShowDialog(this, presentTemplateFiles) != DialogResult.OK) { return false; }
+                targetFile = (EgsEcfFile)ItemsDialog.SelectedItem.Item;
             }
             else
             {

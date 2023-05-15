@@ -412,7 +412,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Root Block adding not allowed without a type definition.
+        ///   Looks up a localized string similar to Root block adding not allowed without a type definition.
         /// </summary>
         internal static string EcfItemEditingDialog_NoRootBlockAddingWithoutTypeDefinition {
             get {
@@ -556,7 +556,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add to Template Definition failed.
+        ///   Looks up a localized string similar to Add to Template definition failed.
         /// </summary>
         internal static string EcfItemHandlingSupport_AddToTemplateDefinitionFailed {
             get {
@@ -565,7 +565,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replacement of Definition failed.
+        ///   Looks up a localized string similar to Replacement of definition failed.
         /// </summary>
         internal static string EcfItemHandlingSupport_DefinitionReplacementFailed {
             get {
@@ -579,6 +579,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemHandlingSupport_ElementHasAlreadyTemplate {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_ElementHasAlreadyTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No template definition file found.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_NoTemplateDefinitionFileFound {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplateDefinitionFileFound", resourceCulture);
             }
         }
         
@@ -601,7 +610,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only remove Template (Yes) or delete completely (No)?.
+        ///   Looks up a localized string similar to Only remove template (Yes) or delete completely (No)?.
         /// </summary>
         internal static string EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
             get {
@@ -619,7 +628,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save file before the Definition is replaced and the file is reloaded?.
+        ///   Looks up a localized string similar to Save file before the definition is replaced and the file is reloaded?.
         /// </summary>
         internal static string EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion {
             get {
@@ -646,7 +655,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shall the Definition of the already opened template files be updated?.
+        ///   Looks up a localized string similar to Shall the definition of the already opened template files be updated?.
         /// </summary>
         internal static string EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion {
             get {
@@ -700,7 +709,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Marked Parameters are inherited to the selected tree element.
+        ///   Looks up a localized string similar to Marked parameters are inherited to the selected tree element.
         /// </summary>
         internal static string EcfParameterView_ToolTip_InheritedColumn {
             get {
@@ -709,7 +718,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Marked Parameters overwriting an inherited parameter.
+        ///   Looks up a localized string similar to Marked parameters overwriting an inherited parameter.
         /// </summary>
         internal static string EcfParameterView_ToolTip_OverwritingColumn {
             get {
@@ -1411,7 +1420,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replaces the Definition of the selected file with the latest loaded Definition and reread the content of the file with this Definition  .
+        ///   Looks up a localized string similar to Replaces the definition of the selected file with the latest loaded definition and reread the content of the file with this definition  .
         /// </summary>
         internal static string EgsEcfEditorApp_ToolTip_ReplaceDefinition {
             get {

@@ -646,6 +646,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shall the Definition of the already opened template files be updated?.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All items with template.
         /// </summary>
         internal static string EcfItemListingView_AllElementsWithTemplate {
@@ -801,9 +810,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Defines the game version which definitions will be used.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_GameVersionFolder {
+        internal static string EcfSettingsDialog_ToolTip_GameMode {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_GameVersionFolder", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_GameMode", resourceCulture);
             }
         }
         

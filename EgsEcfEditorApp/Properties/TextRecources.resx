@@ -312,6 +312,9 @@
   <data name="EcfItemHandlingSupport_StillUsedWith" xml:space="preserve">
     <value>still used with</value>
   </data>
+  <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
+    <value>Shall the Definition of the already opened template files be updated?</value>
+  </data>
   <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
     <value>All items with template</value>
   </data>
@@ -363,7 +366,7 @@
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the error view</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_GameVersionFolder" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_GameMode" xml:space="preserve">
     <value>Defines the game version which definitions will be used</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">

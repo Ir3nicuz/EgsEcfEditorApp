@@ -639,9 +639,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Game version.
         /// </summary>
-        internal static string EcfSettingsDialog_GeneralPanel_GameVersion {
+        internal static string EcfSettingsDialog_GeneralPanel_GameMode {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_GameVersion", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_GameMode", resourceCulture);
             }
         }
         

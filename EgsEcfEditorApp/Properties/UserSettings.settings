@@ -26,7 +26,7 @@
     <Setting Name="EgsEcfControls_TreeViewFilterDataBlocksInitActive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="EgsEcfEditorApp_ActiveGameVersion" Type="System.String" Scope="User">
+    <Setting Name="EgsEcfEditorApp_ActiveGameMode" Type="System.String" Scope="User">
       <Value Profile="(Default)">Vanilla</Value>
     </Setting>
     <Setting Name="EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData" Type="System.Boolean" Scope="User">

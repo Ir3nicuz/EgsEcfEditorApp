@@ -81,10 +81,10 @@ namespace EcfFileViews
         }
 
         // publics
-        public DialogResult ShowDialogNewFile(IWin32Window parent, string gameVersion)
+        public DialogResult ShowDialogNewFile(IWin32Window parent, string gameMode)
         {
             Files.Clear();
-            Definitions = GetSupportedFileTypes(gameVersion);
+            Definitions = GetSupportedFileTypes(gameMode);
             RefreshFormatDefinitionBox();
             SetAppearanceNewFile();
             DialogResult result = CreateFile(parent);
@@ -92,10 +92,10 @@ namespace EcfFileViews
             UpdateControls(Files.FirstOrDefault());
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialogOpenFile(IWin32Window parent, string gameVersion)
+        public DialogResult ShowDialogOpenFile(IWin32Window parent, string gameMode)
         {
             Files.Clear();
-            Definitions = GetSupportedFileTypes(gameVersion);
+            Definitions = GetSupportedFileTypes(gameMode);
             RefreshFormatDefinitionBox();
             SetAppearanceOpenFile();
             DialogResult result = FindFiles(parent);

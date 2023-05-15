@@ -44,8 +44,8 @@ namespace EgsEcfEditorApp
             this.SettingPanelsTabControl = new System.Windows.Forms.TabControl();
             this.GeneralTabPage = new System.Windows.Forms.TabPage();
             this.GeneralSettingsPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.GameVersionLabel = new System.Windows.Forms.Label();
-            this.GameVersionComboBox = new System.Windows.Forms.ComboBox();
+            this.GameModeLabel = new System.Windows.Forms.Label();
+            this.GameModeComboBox = new System.Windows.Forms.ComboBox();
             this.CreationTabPage = new System.Windows.Forms.TabPage();
             this.CreationPanel = new System.Windows.Forms.TableLayoutPanel();
             this.WriteOnlyValidItemsCheckBox = new System.Windows.Forms.CheckBox();
@@ -226,8 +226,8 @@ namespace EgsEcfEditorApp
             this.GeneralSettingsPanel.ColumnCount = 2;
             this.GeneralSettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.GeneralSettingsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GeneralSettingsPanel.Controls.Add(this.GameVersionLabel, 0, 0);
-            this.GeneralSettingsPanel.Controls.Add(this.GameVersionComboBox, 1, 0);
+            this.GeneralSettingsPanel.Controls.Add(this.GameModeLabel, 0, 0);
+            this.GeneralSettingsPanel.Controls.Add(this.GameModeComboBox, 1, 0);
             this.GeneralSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GeneralSettingsPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.GeneralSettingsPanel.Location = new System.Drawing.Point(3, 3);
@@ -240,26 +240,26 @@ namespace EgsEcfEditorApp
             // 
             // GameVersionLabel
             // 
-            this.GameVersionLabel.AutoSize = true;
-            this.GameVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GameVersionLabel.Location = new System.Drawing.Point(3, 0);
-            this.GameVersionLabel.Name = "GameVersionLabel";
-            this.GameVersionLabel.Size = new System.Drawing.Size(267, 27);
-            this.GameVersionLabel.TabIndex = 0;
-            this.GameVersionLabel.Text = "game version";
-            this.GameVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GameModeLabel.AutoSize = true;
+            this.GameModeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GameModeLabel.Location = new System.Drawing.Point(3, 0);
+            this.GameModeLabel.Name = "GameVersionLabel";
+            this.GameModeLabel.Size = new System.Drawing.Size(267, 27);
+            this.GameModeLabel.TabIndex = 0;
+            this.GameModeLabel.Text = "game version";
+            this.GameModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // GameVersionComboBox
             // 
-            this.GameVersionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GameVersionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.GameVersionComboBox.FormattingEnabled = true;
-            this.GameVersionComboBox.Location = new System.Drawing.Point(276, 3);
-            this.GameVersionComboBox.Name = "GameVersionComboBox";
-            this.GameVersionComboBox.Size = new System.Drawing.Size(267, 21);
-            this.GameVersionComboBox.Sorted = true;
-            this.GameVersionComboBox.TabIndex = 1;
-            this.GameVersionComboBox.SelectionChangeCommitted += new System.EventHandler(this.GameVersionFolderComboBox_SelectionChangeCommitted);
+            this.GameModeComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GameModeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.GameModeComboBox.FormattingEnabled = true;
+            this.GameModeComboBox.Location = new System.Drawing.Point(276, 3);
+            this.GameModeComboBox.Name = "GameVersionComboBox";
+            this.GameModeComboBox.Size = new System.Drawing.Size(267, 21);
+            this.GameModeComboBox.Sorted = true;
+            this.GameModeComboBox.TabIndex = 1;
+            this.GameModeComboBox.SelectionChangeCommitted += new System.EventHandler(this.GameVersionFolderComboBox_SelectionChangeCommitted);
             // 
             // CreationTabPage
             // 
@@ -976,8 +976,8 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.TabPage SorterTabPage;
         private System.Windows.Forms.Panel SettingsBorderPanel;
         private System.Windows.Forms.TableLayoutPanel GeneralSettingsPanel;
-        private System.Windows.Forms.Label GameVersionLabel;
-        private System.Windows.Forms.ComboBox GameVersionComboBox;
+        private System.Windows.Forms.Label GameModeLabel;
+        private System.Windows.Forms.ComboBox GameModeComboBox;
         private System.Windows.Forms.TableLayoutPanel CreationPanel;
         private System.Windows.Forms.CheckBox WriteOnlyValidItemsCheckBox;
         private System.Windows.Forms.CheckBox InvalidateParentsOnErrorCheckBox;

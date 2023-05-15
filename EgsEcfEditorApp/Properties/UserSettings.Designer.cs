@@ -122,12 +122,12 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Vanilla")]
-        public string EgsEcfEditorApp_ActiveGameVersion {
+        public string EgsEcfEditorApp_ActiveGameMode {
             get {
-                return ((string)(this["EgsEcfEditorApp_ActiveGameVersion"]));
+                return ((string)(this["EgsEcfEditorApp_ActiveGameMode"]));
             }
             set {
-                this["EgsEcfEditorApp_ActiveGameVersion"] = value;
+                this["EgsEcfEditorApp_ActiveGameMode"] = value;
             }
         }
         

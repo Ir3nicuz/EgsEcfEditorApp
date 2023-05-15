@@ -95,8 +95,8 @@ namespace EgsEcfEditorApp
         // Panel events
         private void GameVersionFolderComboBox_SelectionChangeCommitted(object sender, EventArgs evt)
         {
-            UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = 
-                Convert.ToString(GameVersionComboBox.SelectedItem);
+            UserSettings.Default.EgsEcfEditorApp_ActiveGameMode = 
+                Convert.ToString(GameModeComboBox.SelectedItem);
             HasUnsavedData = true;
         }
         private void WriteOnlyValidItemsCheckBox_Click(object sender, EventArgs evt)
@@ -225,9 +225,9 @@ namespace EgsEcfEditorApp
         {
             ChapterSelectorTreeView.Nodes[index].Text = TitleRecources.EcfSettingsDialog_GeneralPanel_Header;
 
-            GameVersionLabel.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameVersion;
+            GameModeLabel.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameMode;
 
-            Tip.SetToolTip(GameVersionComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameVersionFolder);
+            Tip.SetToolTip(GameModeComboBox, TextRecources.EcfSettingsDialog_ToolTip_GameMode);
         }
         private void InitCreationPanel(int index)
         {
@@ -328,10 +328,10 @@ namespace EgsEcfEditorApp
         }
         private void PrepareGeneralPanel()
         {
-            GameVersionComboBox.BeginUpdate();
-            GameVersionComboBox.Items.Clear();
-            GameVersionComboBox.Items.AddRange(GetGameModes().ToArray());
-            GameVersionComboBox.EndUpdate();
+            GameModeComboBox.BeginUpdate();
+            GameModeComboBox.Items.Clear();
+            GameModeComboBox.Items.AddRange(GetGameModes().ToArray());
+            GameModeComboBox.EndUpdate();
         }
         private void PrepareSorterPanel()
         {
@@ -363,10 +363,10 @@ namespace EgsEcfEditorApp
         }
         private void PresetGeneralPanel()
         {
-            GameVersionComboBox.SelectedItem = UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion;
-            if (GameVersionComboBox.SelectedIndex < 0)
+            GameModeComboBox.SelectedItem = UserSettings.Default.EgsEcfEditorApp_ActiveGameMode;
+            if (GameModeComboBox.SelectedIndex < 0)
             {
-                GameVersionComboBox.SelectedIndex = 0;
+                GameModeComboBox.SelectedIndex = 0;
             }
         }
         private void PresetCreationPanel()

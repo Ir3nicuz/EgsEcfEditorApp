@@ -1,43 +1,43 @@
-﻿using Microsoft.Win32;
+﻿using CustomControls;
+using EcfFileViews;
+using EcfFileViewTools;
+using EcfToolBarControls;
+using EgsEcfEditorApp;
+using EgsEcfEditorApp.Properties;
+using EgsEcfParser;
+using Microsoft.Win32;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing.Drawing2D;
-using EgsEcfEditorApp.Properties;
-using EcfToolBarControls;
-using EcfFileViewTools;
-using EgsEcfParser;
-using EcfFileViews;
-using CustomControls;
 using static EcfFileViews.EcfBaseView;
 using static EcfFileViews.EcfFileOpenDialog;
 using static EcfFileViews.EcfItemEditingDialog;
-using static EcfFileViews.EcfTabPage.CopyPasteClickedEventArgs;
 using static EcfFileViews.EcfTabPage;
+using static EcfFileViews.EcfTabPage.CopyPasteClickedEventArgs;
+using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
+using static EcfFileViews.ItemSelectorDialog;
 using static EcfFileViewTools.EcfFilterControl;
 using static EcfFileViewTools.EcfSorter;
-using static EgsEcfParser.EcfDefinitionHandling;
-using static EgsEcfParser.EcfStructureTools;
 using static EcfToolBarControls.EcfToolBarCheckComboBox;
-using static Helpers.EnumLocalisation;
-using static Helpers.FileHandling;
-using static EcfFileViews.EcfTabPage.ItemHandlingSupportOperationEventArgs;
 using static EgsEcfEditorApp.EcfItemListingDialog;
 using static EgsEcfEditorApp.OptionSelectorDialog;
+using static EgsEcfParser.EcfDefinitionHandling;
+using static EgsEcfParser.EcfStructureTools;
 using static GenericDialogs.GenericDialogs;
-using EgsEcfEditorApp;
-using static EcfFileViews.ItemSelectorDialog;
+using static Helpers.EnumLocalisation;
+using static Helpers.FileHandling;
 
 namespace EgsEcfEditorApp
 {
@@ -157,7 +157,7 @@ namespace EgsEcfEditorApp
             ExtendedFileOperations.CompareAndMergeClicked += ExtendedFileOperations_CompareAndMergeClicked;
             ExtendedFileOperations.TechTreeEditorClicked += ExtendedFileOperations_TechTreeEditorClicked;
 
-            SettingOperations.GameVersionClicked += SettingOperations_GameVersionClicked;
+            SettingOperations.GameModeClicked += SettingOperations_GameModeClicked;
             SettingOperations.OpenSettingsDialogClicked += SettingOperations_OpenSettingsDialogClicked;
 
             FileViewPanel.TreeViewResized += FileViewPanel_TreeViewResized;
@@ -270,9 +270,9 @@ namespace EgsEcfEditorApp
         {
             StartTechTreeEditor();
         }
-        private void SettingOperations_GameVersionClicked(object sender, EventArgs evt)
+        private void SettingOperations_GameModeClicked(object sender, EventArgs evt)
         {
-            UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = Convert.ToString(sender);
+            UserSettings.Default.EgsEcfEditorApp_ActiveGameMode = Convert.ToString(sender);
         }
         private void SettingOperations_OpenSettingsDialogClicked(object sender, EventArgs evt)
         {
@@ -349,12 +349,12 @@ namespace EgsEcfEditorApp
             TemplateFileName = InternalSettings.Default.EgsEcfEditorApp_FileHandling_DefinitionTemplateFileName;
             try
             {
-                List<string> gameVersions = GetGameModes();
-                if (!gameVersions.Contains(UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion))
+                List<string> gameModes = GetGameModes();
+                if (!gameModes.Contains(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode))
                 {
-                    UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion = gameVersions.FirstOrDefault();
+                    UserSettings.Default.EgsEcfEditorApp_ActiveGameMode = gameModes.FirstOrDefault();
                 }
-                SettingOperations.SetGameVersion(UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion);
+                SettingOperations.SetGameMode(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode);
             }
             catch (Exception ex)
             {
@@ -397,7 +397,7 @@ namespace EgsEcfEditorApp
             {
                 OpenDialog.SetInitDirectory(FindFileDialogInitDirectory());
                 OpenDialog.SetInitFileName(TitleRecources.EcfFileDialog_CreateFileName);
-                if (OpenDialog.ShowDialogNewFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) == DialogResult.OK)
+                if (OpenDialog.ShowDialogNewFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameMode) == DialogResult.OK)
                 {
                     EcfFileSetting fileSetting = OpenDialog.Files.FirstOrDefault();
                     AppSettings.Default.EgsEcfEditorApp_LastVisitedDirectory = Path.GetDirectoryName(fileSetting.PathAndName);
@@ -416,7 +416,7 @@ namespace EgsEcfEditorApp
             {
                 OpenDialog.SetInitDirectory(FindFileDialogInitDirectory());
                 OpenDialog.SetInitFileName(string.Empty);
-                if (OpenDialog.ShowDialogOpenFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameVersion) != DialogResult.OK) { 
+                if (OpenDialog.ShowDialogOpenFile(this, UserSettings.Default.EgsEcfEditorApp_ActiveGameMode) != DialogResult.OK) { 
                     return; 
                 }
 
@@ -584,7 +584,8 @@ namespace EgsEcfEditorApp
             {
                 try
                 {
-                    ReplaceDefinitionInFile(ecfPage.File);
+                    ReplaceDefinitionInFile(ecfPage.File, UserSettings.Default.EgsEcfEditorApp_ActiveGameMode);
+                    ecfPage.UpdateFilterPresets();
                     ecfPage.UpdateErrorView();
                 }
                 catch (Exception ex)
@@ -593,9 +594,9 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void ReplaceDefinitionInFile(EgsEcfFile file)
+        private void ReplaceDefinitionInFile(EgsEcfFile file, string forcedGameMode = null)
         {
-            FormatDefinition newDefinition = GetDefinition(file.Definition.GameMode, file.Definition.FileType);
+            FormatDefinition newDefinition = GetDefinition(forcedGameMode ?? file.Definition.GameMode, file.Definition.FileType);
             if (newDefinition != null)
             {
                 if (file.HasUnsavedData)
@@ -672,36 +673,44 @@ namespace EgsEcfEditorApp
         [Obsolete("needs more logic")]
         private void AddItemToTemplateDefinition(EcfBlock sourceItem)
         {
-            
-
-
-            /*
-             * 
-             * 
-             * 
+            try
+            {
+                GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningTemplates);
+                /*
                  * PreCheck: definitons files available
                  * Variants: (addToAll, addToSelected)
                  * Source Item Id Name: Name
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
-                 * 
-                 * 
                     */
 
-            try
-            {
+
+
                 ReloadDefinitions();
+
                 List<EcfTabPage> fileTabsToUpdate = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).ToList();
-                foreach (EcfTabPage filePage in fileTabsToUpdate)
+                if (fileTabsToUpdate.Count > 0)
                 {
-                    ReplaceDefinitionInFile(filePage.File);
-                    filePage.UpdateAllViews();
+                    if (MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
+                    TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        foreach (EcfTabPage filePage in fileTabsToUpdate)
+                        {
+                            ReplaceDefinitionInFile(filePage.File);
+                            filePage.UpdateFilterPresets();
+                            filePage.UpdateAllViews();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // text recources change?
                 ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_AddToTemplateDefinitionFailed);
+                return;
             }
+
+            string messageText = string.Format("{1} {0} {2} {3}!", sourceItem.GetName(),
+                TitleRecources.Generic_Item, TextRecources.Generic_AddedTo, TitleRecources.Generic_Definitions);
+            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void AddTemplateToItem(EcfBlock sourceItem)
         {
@@ -1125,9 +1134,9 @@ namespace EcfFileViews
         {
             File = file;
 
-            FilterControl = new EcfFilterControl(File.Definition.GameMode, File.Definition.FileType);
+            FilterControl = new EcfFilterControl(File.Definition);
             TreeFilter = new EcfStructureFilter(container.TreeViewFilterCommentInitActive, container.TreeViewFilterParameterInitActive, container.TreeViewFilterDataBlocksInitActive);
-            ParameterFilter = new EcfParameterFilter(File.Definition.BlockParameters.Select(item => item.Name).ToList());
+            ParameterFilter = new EcfParameterFilter(File.Definition);
             ContentOperations = new EcfContentOperations();
 
             FileViewPanel = new EcfFileContainer();
@@ -1140,12 +1149,99 @@ namespace EcfFileViews
             InfoView.Width = container.InfoViewInitWidth;
             ErrorView.Height = container.ErrorViewInitHeight;
 
-            AddControls();
-            SetEventHandlers();
+            InitControls();
+            InitEvents();
             UpdateAllViews();
         }
 
         // events
+        private void InitControls()
+        {
+            ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            TreeView.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            ParameterView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            InfoView.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
+            ErrorView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+
+            ToolContainer.Dock = DockStyle.Top;
+            TreeView.Dock = DockStyle.Left;
+            ParameterView.Dock = DockStyle.Fill;
+            InfoView.Dock = DockStyle.Right;
+            ErrorView.Dock = DockStyle.Bottom;
+
+            Controls.Add(FileViewPanel);
+            FileViewPanel.Add(ParameterView);
+            FileViewPanel.Add(ErrorView);
+            FileViewPanel.Add(InfoView);
+            FileViewPanel.Add(TreeView);
+
+            FileViewPanel.Add(ToolContainer);
+            ToolContainer.Add(FilterControl);
+            ToolContainer.Add(TreeFilter);
+            ToolContainer.Add(ParameterFilter);
+            ToolContainer.Add(ContentOperations);
+
+            FilterControl.Add(TreeFilter);
+            FilterControl.Add(ParameterFilter);
+        }
+        private void InitEvents()
+        {
+            FilterControl.ApplyFilterClicked += AnyFilterControl_ApplyFilterFired;
+            FilterControl.ClearFilterClicked += FilterControl_ClearFilterClicked;
+
+            TreeFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
+
+            ParameterFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
+
+            ContentOperations.UndoClicked += ContentOperations_UndoClicked;
+            ContentOperations.RedoClicked += ContentOperations_RedoClicked;
+            ContentOperations.AddClicked += ContentOperations_AddClicked;
+            ContentOperations.RemoveClicked += ContentOperations_RemoveClicked;
+            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSimpleClicked;
+            ContentOperations.ChangeComplexClicked += ContentOperations_ChangeComplexClicked;
+            ContentOperations.MoveUpClicked += ContentOperations_MoveUpClicked;
+            ContentOperations.MoveDownClicked += ContentOperations_MoveDownClicked;
+            ContentOperations.CopyClicked += ContentOperations_CopyClicked;
+            ContentOperations.PasteClicked += ContentOperations_PasteClicked;
+
+            TreeView.ViewResized += (sender, evt) => TreeViewResized(sender, evt);
+            InfoView.ViewResized += (sender, evt) => InfoViewResized(sender, evt);
+            ErrorView.ViewResized += (sender, evt) => ErrorViewResized(sender, evt);
+
+            TreeView.ItemsSelected += TreeView_ItemsSelected;
+            TreeView.DisplayedDataChanged += TreeView_DisplayedDataChanged;
+            ParameterView.ParametersSelected += ParameterView_ParametersSelected;
+            ParameterView.DisplayedDataChanged += ParameterView_DisplayedDataChanged;
+
+            TreeView.NodeDoubleClicked += TreeView_NodeDoubleClicked;
+            TreeView.ChangeItemClicked += TreeView_ChangeItemClicked;
+            TreeView.AddToItemClicked += TreeView_AddToItemClicked;
+            TreeView.AddAfterItemClicked += TreeView_AddAfterItemClicked;
+            TreeView.CopyItemClicked += TreeView_CopyItemClicked;
+            TreeView.PasteToItemClicked += TreeView_PasteToItemClicked;
+            TreeView.PasteAfterItemClicked += TreeView_PasteAfterItemClicked;
+            TreeView.RemoveItemClicked += TreeView_RemoveItemClicked;
+            TreeView.DelKeyPressed += TreeView_DelKeyPressed;
+            TreeView.CopyKeyPressed += TreeView_CopyKeyPressed;
+            TreeView.PasteKeyPressed += TreeView_PasteKeyPressed;
+
+            TreeView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
+
+            ParameterView.CellDoubleClicked += ParameterView_CellDoubleClicked;
+            ParameterView.ChangeItemClicked += ParameterView_ChangeItemClicked;
+            ParameterView.AddAfterItemClicked += ParameterView_AddAfterItemClicked;
+            ParameterView.CopyItemClicked += ParameterView_CopyItemClicked;
+            ParameterView.PasteAfterItemClicked += ParameterView_PasteAfterItemClicked;
+            ParameterView.RemoveItemClicked += ParameterView_RemoveItemClicked;
+            ParameterView.DelKeyPressed += ParameterView_DelKeyPressed;
+            ParameterView.CopyKeyPressed += ParameterView_CopyKeyPressed;
+            ParameterView.PasteKeyPressed += ParameterView_PasteKeyPressed;
+
+            ParameterView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
+
+            ErrorView.ShowInEditorClicked += ErrorView_ShowInEditorClicked;
+            ErrorView.ShowInFileClicked += ErrorView_ShowInFileClicked;
+        }
         private void TreeView_ItemsSelected(object sender, EventArgs evt)
         {
             LastFocusedView = TreeView;
@@ -1463,6 +1559,20 @@ namespace EcfFileViews
                 UpdateTabDescriptionInvoked();
             }
         }
+        public void UpdateFilterPresets()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdateFilterPresetsInvoked();
+                });
+            }
+            else
+            {
+                UpdateFilterPresetsInvoked();
+            }
+        }
         public void ReselectTreeView()
         {
             if (InvokeRequired)
@@ -1594,6 +1704,10 @@ namespace EcfFileViews
         {
             Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
             ToolTipText = Path.Combine(File.FilePath, File.FileName);
+        }
+        private void UpdateFilterPresetsInvoked()
+        {
+            FilterControl.UpdatePresets(File.Definition);
         }
 
         // Reselecting / filtering
@@ -1970,95 +2084,6 @@ namespace EcfFileViews
             }
             UpdateAllViews();
             return itemCount;
-        }
-
-        // helper
-        private void AddControls()
-        {
-            ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            TreeView.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            ParameterView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            InfoView.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-            ErrorView.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-            ToolContainer.Dock = DockStyle.Top;
-            TreeView.Dock = DockStyle.Left;
-            ParameterView.Dock = DockStyle.Fill;
-            InfoView.Dock = DockStyle.Right;
-            ErrorView.Dock = DockStyle.Bottom;
-
-            Controls.Add(FileViewPanel);
-            FileViewPanel.Add(ParameterView);
-            FileViewPanel.Add(ErrorView);
-            FileViewPanel.Add(InfoView);
-            FileViewPanel.Add(TreeView);
-
-            FileViewPanel.Add(ToolContainer);
-            ToolContainer.Add(FilterControl);
-            ToolContainer.Add(TreeFilter);
-            ToolContainer.Add(ParameterFilter);
-            ToolContainer.Add(ContentOperations);
-
-            FilterControl.Add(TreeFilter);
-            FilterControl.Add(ParameterFilter);
-        }
-        private void SetEventHandlers()
-        {
-            FilterControl.ApplyFilterClicked += AnyFilterControl_ApplyFilterFired;
-            FilterControl.ClearFilterClicked += FilterControl_ClearFilterClicked;
-
-            TreeFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
-
-            ParameterFilter.ApplyFilterRequested += AnyFilterControl_ApplyFilterFired;
-
-            ContentOperations.UndoClicked += ContentOperations_UndoClicked;
-            ContentOperations.RedoClicked += ContentOperations_RedoClicked;
-            ContentOperations.AddClicked += ContentOperations_AddClicked;
-            ContentOperations.RemoveClicked += ContentOperations_RemoveClicked;
-            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSimpleClicked;
-            ContentOperations.ChangeComplexClicked += ContentOperations_ChangeComplexClicked;
-            ContentOperations.MoveUpClicked += ContentOperations_MoveUpClicked;
-            ContentOperations.MoveDownClicked += ContentOperations_MoveDownClicked;
-            ContentOperations.CopyClicked += ContentOperations_CopyClicked;
-            ContentOperations.PasteClicked += ContentOperations_PasteClicked;
-
-            TreeView.ViewResized += (sender, evt) => TreeViewResized(sender, evt);
-            InfoView.ViewResized += (sender, evt) => InfoViewResized(sender, evt);
-            ErrorView.ViewResized += (sender, evt) => ErrorViewResized(sender, evt);
-
-            TreeView.ItemsSelected += TreeView_ItemsSelected;
-            TreeView.DisplayedDataChanged += TreeView_DisplayedDataChanged;
-            ParameterView.ParametersSelected += ParameterView_ParametersSelected;
-            ParameterView.DisplayedDataChanged += ParameterView_DisplayedDataChanged;
-
-            TreeView.NodeDoubleClicked += TreeView_NodeDoubleClicked;
-            TreeView.ChangeItemClicked += TreeView_ChangeItemClicked;
-            TreeView.AddToItemClicked += TreeView_AddToItemClicked;
-            TreeView.AddAfterItemClicked += TreeView_AddAfterItemClicked;
-            TreeView.CopyItemClicked += TreeView_CopyItemClicked;
-            TreeView.PasteToItemClicked += TreeView_PasteToItemClicked;
-            TreeView.PasteAfterItemClicked += TreeView_PasteAfterItemClicked;
-            TreeView.RemoveItemClicked += TreeView_RemoveItemClicked;
-            TreeView.DelKeyPressed += TreeView_DelKeyPressed;
-            TreeView.CopyKeyPressed += TreeView_CopyKeyPressed;
-            TreeView.PasteKeyPressed += TreeView_PasteKeyPressed;
-
-            TreeView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
-
-            ParameterView.CellDoubleClicked += ParameterView_CellDoubleClicked;
-            ParameterView.ChangeItemClicked += ParameterView_ChangeItemClicked;
-            ParameterView.AddAfterItemClicked += ParameterView_AddAfterItemClicked;
-            ParameterView.CopyItemClicked += ParameterView_CopyItemClicked;
-            ParameterView.PasteAfterItemClicked += ParameterView_PasteAfterItemClicked;
-            ParameterView.RemoveItemClicked += ParameterView_RemoveItemClicked;
-            ParameterView.DelKeyPressed += ParameterView_DelKeyPressed;
-            ParameterView.CopyKeyPressed += ParameterView_CopyKeyPressed;
-            ParameterView.PasteKeyPressed += ParameterView_PasteKeyPressed;
-
-            ParameterView.ItemHandlingSupportOperationClicked += (sender, evt) => ItemHandlingSupportOperationClicked(sender, evt);
-
-            ErrorView.ShowInEditorClicked += ErrorView_ShowInEditorClicked;
-            ErrorView.ShowInFileClicked += ErrorView_ShowInFileClicked;
         }
 
         // classes
@@ -3763,56 +3788,56 @@ namespace EcfFileViewTools
     }
     public class EcfSettingOperations : EcfToolBox
     {
-        public event EventHandler GameVersionClicked;
+        public event EventHandler GameModeClicked;
         public event EventHandler OpenSettingsDialogClicked;
 
-        private EcfToolBarLabel GameVersion { get; }
+        private EcfToolBarLabel GameModeLabel { get; }
 
-        private ContextMenuStrip GameVersionMenu { get; } = new ContextMenuStrip();
+        private ContextMenuStrip GameModeDropMenu { get; } = new ContextMenuStrip();
 
         public EcfSettingOperations() : base()
         {
-            GameVersion = Add(new EcfToolBarLabel("", true)) as EcfToolBarLabel;
+            GameModeLabel = Add(new EcfToolBarLabel("", true)) as EcfToolBarLabel;
             Add(new EcfToolBarButton(TextRecources.EgsEcfEditorApp_ToolTip_OpenSettingsDialog, IconRecources.Icon_Settings, null))
                 .Click += (sender, evt) => OpenSettingsDialogClicked?.Invoke(sender, evt);
 
-            GameVersion.MouseClick += GameVersion_MouseClick;
-            GameVersionMenu.ItemClicked += GameVersionMenu_ItemClicked;
+            GameModeLabel.MouseClick += GameMode_MouseClick;
+            GameModeDropMenu.ItemClicked += GameModeMenu_ItemClicked;
         }
 
         // events
-        private void GameVersionMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs evt)
+        private void GameModeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs evt)
         {
-            SetGameVersionInvoked(evt.ClickedItem.Text);
-            GameVersionClicked?.Invoke(evt.ClickedItem.Text, null);
+            SetGameModeInvoked(evt.ClickedItem.Text);
+            GameModeClicked?.Invoke(evt.ClickedItem.Text, null);
         }
-        private void GameVersion_MouseClick(object sender, MouseEventArgs evt)
+        private void GameMode_MouseClick(object sender, MouseEventArgs evt)
         {
-            GameVersionMenu.Items.Clear();
-            GameVersionMenu.Items.AddRange(GetGameModes().Select(mode => new ToolStripMenuItem(mode)).ToArray());
-            GameVersionMenu.Show(GameVersion, evt.Location);
+            GameModeDropMenu.Items.Clear();
+            GameModeDropMenu.Items.AddRange(GetGameModes().Select(mode => new ToolStripMenuItem(mode)).ToArray());
+            GameModeDropMenu.Show(GameModeLabel, evt.Location);
         }
 
         // publics
-        public void SetGameVersion(string version)
+        public void SetGameMode(string gameMode)
         {
             if (InvokeRequired)
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    SetGameVersionInvoked(version);
+                    SetGameModeInvoked(gameMode);
                 });
             }
             else
             {
-                SetGameVersionInvoked(version);
+                SetGameModeInvoked(gameMode);
             }
         }
 
         // private 
-        private void SetGameVersionInvoked(string version)
+        private void SetGameModeInvoked(string gameMode)
         {
-            GameVersion.Text = version;
+            GameModeLabel.Text = gameMode;
         }
     }
     public class EcfContentOperations : EcfToolBox
@@ -3862,6 +3887,8 @@ namespace EcfFileViewTools
 
         private List<EcfBaseFilter> AttachedFilters { get; } = new List<EcfBaseFilter>();
 
+        private EcfToolBarLabel GameModeLabel { get; } = new EcfToolBarLabel("", true);
+        private EcfToolBarLabel FileTypeLabel { get; } = new EcfToolBarLabel("", true);
         private EcfToolBarButton ApplyFilterButton { get; } = new EcfToolBarButton(TextRecources.EcfTabPage_ToolTip_FilterApplyButton, IconRecources.Icon_ApplyFilter, null);
         private EcfToolBarButton ClearFilterButton { get; } = new EcfToolBarButton(TextRecources.EcfTabPage_ToolTip_FilterClearButton, IconRecources.Icon_ClearFilter, null);
         private EcfToolBarThreeStateCheckBox ErrorDisplaySelector { get; } = new EcfToolBarThreeStateCheckBox(
@@ -3875,14 +3902,16 @@ namespace EcfFileViewTools
             ShowOnlyNonFaultyItems,
         }
 
-        public EcfFilterControl(string gameMode, string fileType) : base()
+        public EcfFilterControl(FormatDefinition definition) : base()
         {
-            Add(new EcfToolBarLabel(gameMode, true));
-            Add(new EcfToolBarLabel(fileType, true));
+            Add(GameModeLabel);
+            Add(FileTypeLabel);
 
             Add(ApplyFilterButton).Click += ApplyFilterButton_Click;
             Add(ClearFilterButton).Click += ClearFilterButton_Click;
             Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
+
+            InvokeUpdatePresets(definition);
         }
 
         // events
@@ -3933,6 +3962,11 @@ namespace EcfFileViewTools
         public bool AnyFilterSet()
         {
             return ErrorDisplayMode != ErrorDisplayModes.ShowAllItems || AttachedFilters.Any(filter => filter.AnyFilterSet());
+        }
+        public void UpdatePresets(FormatDefinition definition)
+        {
+            InvokeUpdatePresets(definition);
+            AttachedFilters.ForEach(filter => filter.UpdatePresets(definition));
         }
 
         // privates
@@ -4001,6 +4035,25 @@ namespace EcfFileViewTools
         {
             ApplyFilterButton.Enabled = false;
             ErrorDisplaySelector.Enabled = false;
+        }
+        private void InvokeUpdatePresets(FormatDefinition definition)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdatePresetsInvoked(definition);
+                });
+            }
+            else
+            {
+                UpdatePresetsInvoked(definition);
+            }
+        }
+        private void UpdatePresetsInvoked(FormatDefinition definition)
+        {
+            GameModeLabel.Text = definition.GameMode;
+            FileTypeLabel.Text = definition.FileType;
         }
     }
     public abstract class EcfBaseFilter : EcfToolBox
@@ -4107,6 +4160,20 @@ namespace EcfFileViewTools
         {
             return !IsLikeText.Equals(string.Empty) || UncheckedItems.Count > 0;
         }
+        public void UpdatePresets(FormatDefinition definition)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    UpdatePresetsInvoked(definition);
+                });
+            }
+            else
+            {
+                UpdatePresetsInvoked(definition);
+            }
+        }
 
         protected virtual void ResetInvoked()
         {
@@ -4124,6 +4191,10 @@ namespace EcfFileViewTools
         {
             LikeInput.Enabled = false;
             ItemSelector.Enabled = false;
+        }
+        protected virtual void UpdatePresetsInvoked(FormatDefinition definition)
+        {
+
         }
 
         private void LoadItems()
@@ -4196,15 +4267,14 @@ namespace EcfFileViewTools
         {
             base.DisableInvoked();
         }
+
     }
     public class EcfParameterFilter : EcfBaseFilter
     {
-        public EcfParameterFilter(List<string> items) : base(
+        public EcfParameterFilter(FormatDefinition definition) : base(
             TextRecources.EcfTabPage_ToolTip_ParameterLikeInput, TitleRecources.Generic_Parameters, TextRecources.EcfTabPage_ToolTip_ParameterSelector)
         {
-            ItemSelector.SetItems(items.OrderBy(item => item).Select(item => new CheckableItem(item, true)).ToList());
-
-            Reset();
+            UpdateItemSelector(definition);
         }
 
         public bool IsParameterVisible(EcfParameter parameter)
@@ -4213,10 +4283,22 @@ namespace EcfFileViewTools
                 && IsParameterValueLike(parameter.GetAllValues(), IsLikeText);
         }
 
+        protected override void UpdatePresetsInvoked(FormatDefinition definition)
+        {
+            base.UpdatePresetsInvoked(definition);
+            UpdateItemSelector(definition);
+        }
+        
         private bool IsParameterValueLike(ReadOnlyCollection<string> values, string isLike)
         {
             if (string.IsNullOrEmpty(isLike) || values.Count < 1) { return true; }
             return values.Any(value => value.Contains(isLike));
+        }
+        private void UpdateItemSelector(FormatDefinition definition)
+        {
+            List<string> items = definition.BlockParameters.Select(item => item.Name).ToList();
+            ItemSelector.SetItems(items.OrderBy(item => item).Select(item => new CheckableItem(item, true)).ToList());
+            Reset();
         }
     }
     public class EcfSorter : EcfToolBox

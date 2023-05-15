@@ -309,7 +309,7 @@
   <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive" xml:space="preserve">
     <value>Tree view 'parameters' initially visible</value>
   </data>
-  <data name="EcfSettingsDialog_GeneralPanel_GameVersion" xml:space="preserve">
+  <data name="EcfSettingsDialog_GeneralPanel_GameMode" xml:space="preserve">
     <value>Game version</value>
   </data>
   <data name="EcfSettingsDialog_GeneralPanel_Header" xml:space="preserve">

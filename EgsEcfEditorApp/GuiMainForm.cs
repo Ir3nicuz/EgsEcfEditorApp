@@ -675,7 +675,13 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningTemplates);
+                List<FormatDefinition> templateDefinitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningTemplates).ToList();
+                if (templateDefinitions.Count < 1)
+                {
+
+                    return;
+                }
+                
                 /*
                  * PreCheck: definitons files available
                  * Variants: (addToAll, addToSelected)

@@ -1483,129 +1483,81 @@ namespace EcfFileViews
         // public
         public void ShowSpecificItem(EcfStructureItem item)
         {
-            if (InvokeRequired)
+            if (!IsUpdating)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    ShowSpecificItemInvoked(item);
-                });
-            }
-            else
-            {
-                ShowSpecificItemInvoked(item);
+                IsUpdating = true;
+                FilterControl.SetSpecificItem(item);
+                if (FindRootItem(item) is EcfBlock block) { item = block; }
+                TreeView.ShowSpecificItem(item);
+                ParameterView.ShowSpecificItem(item);
+                InfoView.ShowSpecificItem(item);
+                ErrorView.UpdateView();
+                IsUpdating = false;
             }
         }
         public void UpdateAllViews()
         {
-            if (InvokeRequired)
+            if (FilterControl.SpecificItem != null)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateAllViewsInvoked();
-                });
+                ShowSpecificItem(FilterControl.SpecificItem);
             }
-            else
+            else if (!IsUpdating)
             {
-                UpdateAllViewsInvoked();
+                IsUpdating = true;
+                TreeView.UpdateView(FilterControl, TreeFilter, ParameterFilter);
+                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
+                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
+                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
+                ErrorView.UpdateView();
+                UpdateTabDescription();
+                IsUpdating = false;
             }
         }
         public void UpdateParameterView()
         {
-            if (InvokeRequired)
+            if (!IsUpdating)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateParameterViewInvoked();
-                });
-            }
-            else
-            {
-                UpdateParameterViewInvoked();
+                IsUpdating = true;
+                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
+                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
+                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
+                IsUpdating = false;
             }
         }
         public void UpdateInfoView()
         {
-            if (InvokeRequired)
+            if (!IsUpdating)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateInfoViewInvoked();
-                });
-            }
-            else
-            {
-                UpdateInfoViewInvoked();
+                IsUpdating = true;
+                InfoView.UpdateView(ParameterView.SelectedParameters.FirstOrDefault());
+                IsUpdating = false;
             }
         }
         public void UpdateErrorView()
         {
-            if (InvokeRequired)
+            if (!IsUpdating)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateErrorViewInvoked();
-                });
-            }
-            else
-            {
-                UpdateErrorViewInvoked();
+                IsUpdating = true;
+                ErrorView.UpdateView();
+                IsUpdating = false;
             }
         }
         public void UpdateTabDescription()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateTabDescriptionInvoked();
-                });
-            }
-            else
-            {
-                UpdateTabDescriptionInvoked();
-            }
+            Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
+            ToolTipText = Path.Combine(File.FilePath, File.FileName);
         }
         public void UpdateFilterPresets()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdateFilterPresetsInvoked();
-                });
-            }
-            else
-            {
-                UpdateFilterPresetsInvoked();
-            }
+            FilterControl.UpdatePresets(File.Definition);
         }
         public void ReselectTreeView()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ReselectTreeViewInvoked();
-                });
-            }
-            else
-            {
-                ReselectTreeViewInvoked();
-            }
+            TreeView.TryReselect();
         }
         public void ReselectParameterView()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ReselectParameterViewInvoked();
-                });
-            }
-            else
-            {
-                ReselectParameterViewInvoked();
-            }
+            ParameterView.TryReselect();
         }
         public int PasteTo(EcfStructureItem target, List<EcfStructureItem> source)
         {
@@ -1644,89 +1596,7 @@ namespace EcfFileViews
             FilterControl.Reset();
         }
 
-        // view updating
-        private void ShowSpecificItemInvoked(EcfStructureItem item)
-        {
-            if (!IsUpdating)
-            {
-                IsUpdating = true;
-                FilterControl.SetSpecificItem(item);
-                if (FindRootItem(item) is EcfBlock block) { item = block; }
-                TreeView.ShowSpecificItem(item);
-                ParameterView.ShowSpecificItem(item);
-                InfoView.ShowSpecificItem(item);
-                ErrorView.UpdateView();
-                IsUpdating = false;
-            }
-        }
-        private void UpdateAllViewsInvoked()
-        {
-            if (FilterControl.SpecificItem != null)
-            {
-                ShowSpecificItemInvoked(FilterControl.SpecificItem);
-            }
-            else if (!IsUpdating)
-            {
-                IsUpdating = true;
-                TreeView.UpdateView(FilterControl, TreeFilter, ParameterFilter);
-                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
-                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
-                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
-                ErrorView.UpdateView();
-                UpdateTabDescriptionInvoked();
-                IsUpdating = false;
-            }
-        }
-        private void UpdateParameterViewInvoked()
-        {
-            if (!IsUpdating)
-            {
-                IsUpdating = true;
-                EcfStructureItem firstSelectedItem = TreeView.SelectedItems.FirstOrDefault();
-                ParameterView.UpdateView(ParameterFilter, firstSelectedItem);
-                InfoView.UpdateView(firstSelectedItem, ParameterView.SelectedParameters.FirstOrDefault());
-                IsUpdating = false;
-            }
-        }
-        private void UpdateInfoViewInvoked()
-        {
-            if (!IsUpdating)
-            {
-                IsUpdating = true;
-                InfoView.UpdateView(ParameterView.SelectedParameters.FirstOrDefault());
-                IsUpdating = false;
-            }
-        }
-        private void UpdateErrorViewInvoked()
-        {
-            if (!IsUpdating)
-            {
-                IsUpdating = true;
-                ErrorView.UpdateView();
-                IsUpdating = false;
-            }
-        }
-        private void UpdateTabDescriptionInvoked()
-        {
-            Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
-            ToolTipText = Path.Combine(File.FilePath, File.FileName);
-        }
-        private void UpdateFilterPresetsInvoked()
-        {
-            FilterControl.UpdatePresets(File.Definition);
-        }
-
-        // Reselecting / filtering
-        private void ReselectTreeViewInvoked()
-        {
-            TreeView.TryReselect();
-        }
-        private void ReselectParameterViewInvoked()
-        {
-            ParameterView.TryReselect();
-        }
-
-        // content operation
+        // private
         private void RemoveTreeItem(List<EcfStructureItem> items)
         {
             List<string> problems = new List<string>();
@@ -2398,8 +2268,8 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 BuildNodesTree(filterControl, structureFilter, parameterFilter);
-                UpdateSorterInvoke();
-                RefreshViewInvoke();
+                UpdateSorter();
+                RefreshView();
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
@@ -2426,8 +2296,8 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 BuildNodesTree(item);
-                UpdateSorterInvoke();
-                RefreshViewInvoke();
+                UpdateSorter();
+                RefreshView();
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
@@ -2678,33 +2548,9 @@ namespace EcfFileViews
             }
             return node != null;
         }
-        private void UpdateSorterInvoke()
+        private void UpdateSorter()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    StructureSorter.SetOverallItemCount(RootTreeNodes.Count);
-                });
-            }
-            else
-            {
-                StructureSorter.SetOverallItemCount(RootTreeNodes.Count);
-            }
-        }
-        private void RefreshViewInvoke()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    RefreshView();
-                });
-            }
-            else
-            {
-                RefreshView();
-            }
+            StructureSorter.SetOverallItemCount(RootTreeNodes.Count);
         }
         private void RefreshView()
         {
@@ -2921,7 +2767,7 @@ namespace EcfFileViews
             if (!IsUpdating)
             {
                 IsUpdating = true;
-                RefreshViewInvoke();
+                RefreshView();
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
@@ -2942,8 +2788,8 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 BuildGridViewRows(filter, item);
-                UpdateSorterInvoke();
-                RefreshViewInvoke();
+                UpdateSorter();
+                RefreshView();
                 IsUpdating = false;
                 DisplayedDataChanged?.Invoke(this, null);
             }
@@ -2974,8 +2820,8 @@ namespace EcfFileViews
         {
             IsUpdating = true;
             BuildGridViewRows(null, item);
-            UpdateSorterInvoke();
-            RefreshViewInvoke();
+            UpdateSorter();
+            RefreshView();
             IsUpdating = false;
             DisplayedDataChanged?.Invoke(this, null);
         }
@@ -3097,33 +2943,9 @@ namespace EcfFileViews
             string parentName = (parameter.Parent as EcfBlock)?.BuildRootId();
             ParameterRows.Add(new EcfParameterRow(ParameterRows.Count + 1, parentName, parameter, isInherited, overwrittenRow));
         }
-        private void UpdateSorterInvoke()
+        private void UpdateSorter()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ParameterSorter.SetOverallItemCount(ParameterRows.Count);
-                });
-            }
-            else
-            {
-                ParameterSorter.SetOverallItemCount(ParameterRows.Count);
-            }
-        }
-        private void RefreshViewInvoke()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    RefreshView();
-                });
-            }
-            else
-            {
-                RefreshView();
-            }
+            ParameterSorter.SetOverallItemCount(ParameterRows.Count);
         }
         private void RefreshView()
         {
@@ -3298,11 +3120,11 @@ namespace EcfFileViews
                 IsUpdating = true;
                 if (item is EcfBlock block)
                 {
-                    RefreshViewInvoke(block);
+                    RefreshView(block);
                 }
                 else if (item is EcfParameter parameter)
                 {
-                    RefreshViewInvoke(parameter);
+                    RefreshView(parameter);
                 }
                 IsUpdating = false;
             }
@@ -3312,8 +3134,8 @@ namespace EcfFileViews
             if (!IsUpdating)
             {
                 IsUpdating = true;
-                RefreshViewInvoke(item as EcfBlock);
-                RefreshViewInvoke(parameter ?? item as EcfParameter);
+                RefreshView(item as EcfBlock);
+                RefreshView(parameter ?? item as EcfParameter);
                 IsUpdating = false;
             }
         }
@@ -3330,34 +3152,6 @@ namespace EcfFileViews
         }
 
         // privares
-        private void RefreshViewInvoke(EcfBlock block)
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    RefreshView(block);
-                });
-            }
-            else
-            {
-                RefreshView(block);
-            }
-        }
-        private void RefreshViewInvoke(EcfParameter parameter)
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    RefreshView(parameter);
-                });
-            }
-            else
-            {
-                RefreshView(parameter);
-            }
-        }
         private void RefreshView(EcfBlock block)
         {
             View.SuspendLayout();
@@ -3571,7 +3365,7 @@ namespace EcfFileViews
             if (!IsUpdating)
             {
                 IsUpdating = true;
-                RefreshViewInvoke();
+                RefreshView();
                 IsUpdating = false;
             }
         }
@@ -3602,8 +3396,8 @@ namespace EcfFileViews
             {
                 IsUpdating = true;
                 BuildGridViewRows();
-                UpdateSorterInvoke();
-                RefreshViewInvoke();
+                UpdateSorter();
+                RefreshView();
                 IsUpdating = false;
             }
         }
@@ -3650,33 +3444,9 @@ namespace EcfFileViews
                 ErrorRows.Add(new EcfErrorRow(preSortedErrors.IndexOf(error) + 1, error));
             }
         }
-        private void UpdateSorterInvoke()
+        private void UpdateSorter()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ErrorSorter.SetOverallItemCount(ErrorRows.Count);
-                });
-            }
-            else
-            {
-                ErrorSorter.SetOverallItemCount(ErrorRows.Count);
-            }
-        }
-        private void RefreshViewInvoke()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    RefreshView();
-                });
-            }
-            else
-            {
-                RefreshView();
-            }
+            ErrorSorter.SetOverallItemCount(ErrorRows.Count);
         }
         private void RefreshView()
         {
@@ -3814,7 +3584,7 @@ namespace EcfFileViewTools
         // events
         private void GameModeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs evt)
         {
-            SetGameModeInvoked(evt.ClickedItem.Text);
+            SetGameMode(evt.ClickedItem.Text);
             GameModeClicked?.Invoke(evt.ClickedItem.Text, null);
         }
         private void GameMode_MouseClick(object sender, MouseEventArgs evt)
@@ -3826,22 +3596,6 @@ namespace EcfFileViewTools
 
         // publics
         public void SetGameMode(string gameMode)
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    SetGameModeInvoked(gameMode);
-                });
-            }
-            else
-            {
-                SetGameModeInvoked(gameMode);
-            }
-        }
-
-        // private 
-        private void SetGameModeInvoked(string gameMode)
         {
             GameModeLabel.Text = gameMode;
         }
@@ -3917,7 +3671,7 @@ namespace EcfFileViewTools
             Add(ClearFilterButton).Click += ClearFilterButton_Click;
             Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
 
-            InvokeUpdatePresets(definition);
+            UpdatePresets(definition);
         }
 
         // events
@@ -3951,18 +3705,21 @@ namespace EcfFileViewTools
         }
         public void Disable()
         {
-            InvokeDisable();
+            ApplyFilterButton.Enabled = false;
+            ErrorDisplaySelector.Enabled = false;
             AttachedFilters.ForEach(filter => filter.Disable());
         }
         public void Enable()
         {
-            InvokeEnable();
+            ApplyFilterButton.Enabled = true;
+            ErrorDisplaySelector.Enabled = true;
             AttachedFilters.ForEach(filter => filter.Enable());
         }
         public void Reset()
         {
             SetSpecificItem(null);
-            InvokeReset();
+            ErrorDisplaySelector.Reset();
+            LoadErrorDisplayState();
             AttachedFilters.ForEach(filter => filter.Reset());
         }
         public bool AnyFilterSet()
@@ -3971,7 +3728,8 @@ namespace EcfFileViewTools
         }
         public void UpdatePresets(FormatDefinition definition)
         {
-            InvokeUpdatePresets(definition);
+            GameModeLabel.Text = definition.GameMode;
+            FileTypeLabel.Text = definition.FileType;
             AttachedFilters.ForEach(filter => filter.UpdatePresets(definition));
         }
 
@@ -3984,82 +3742,6 @@ namespace EcfFileViewTools
                 case CheckState.Unchecked: ErrorDisplayMode = ErrorDisplayModes.ShowOnlyNonFaultyItems; break;
                 default: ErrorDisplayMode = ErrorDisplayModes.ShowAllItems; break;
             }
-        }
-        private void InvokeReset()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ResetInvoked();
-                });
-            }
-            else
-            {
-                ResetInvoked();
-            }
-        }
-        private void ResetInvoked()
-        {
-            ErrorDisplaySelector.Reset();
-            LoadErrorDisplayState();
-        }
-        private void InvokeEnable()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    EnableInvoked();
-                });
-            }
-            else
-            {
-                EnableInvoked();
-            }
-        }
-        private void EnableInvoked()
-        {
-            ApplyFilterButton.Enabled = true;
-            ErrorDisplaySelector.Enabled = true;
-        }
-        private void InvokeDisable()
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    DisableInvoked();
-                });
-            }
-            else
-            {
-                DisableInvoked();
-            }
-        }
-        private void DisableInvoked()
-        {
-            ApplyFilterButton.Enabled = false;
-            ErrorDisplaySelector.Enabled = false;
-        }
-        private void InvokeUpdatePresets(FormatDefinition definition)
-        {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdatePresetsInvoked(definition);
-                });
-            }
-            else
-            {
-                UpdatePresetsInvoked(definition);
-            }
-        }
-        private void UpdatePresetsInvoked(FormatDefinition definition)
-        {
-            GameModeLabel.Text = definition.GameMode;
-            FileTypeLabel.Text = definition.FileType;
         }
     }
     public abstract class EcfBaseFilter : EcfToolBox
@@ -4114,47 +3796,23 @@ namespace EcfFileViewTools
             LoadItems();
         }
 
-        public void Reset()
+        // publics
+        public virtual void Reset()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    ResetInvoked();
-                });
-            }
-            else
-            {
-                ResetInvoked();
-            }
+            LikeInput.Clear();
+            IsLikeText = string.Empty;
+            ItemSelector.Reset();
+            LoadItems();
         }
-        public void Enable()
+        public virtual void Enable()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    EnableInvoked();
-                });
-            }
-            else
-            {
-                EnableInvoked();
-            }
+            LikeInput.Enabled = true;
+            ItemSelector.Enabled = true;
         }
-        public void Disable()
+        public virtual void Disable()
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    DisableInvoked();
-                });
-            }
-            else
-            {
-                DisableInvoked();
-            }
+            LikeInput.Enabled = false;
+            ItemSelector.Enabled = false;
         }
         public bool IsLike(string text)
         {
@@ -4166,43 +3824,12 @@ namespace EcfFileViewTools
         {
             return !IsLikeText.Equals(string.Empty) || UncheckedItems.Count > 0;
         }
-        public void UpdatePresets(FormatDefinition definition)
+        public virtual void UpdatePresets(FormatDefinition definition)
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    UpdatePresetsInvoked(definition);
-                });
-            }
-            else
-            {
-                UpdatePresetsInvoked(definition);
-            }
+            
         }
 
-        protected virtual void ResetInvoked()
-        {
-            LikeInput.Clear();
-            IsLikeText = string.Empty;
-            ItemSelector.Reset();
-            LoadItems();
-        }
-        protected virtual void EnableInvoked()
-        {
-            LikeInput.Enabled = true;
-            ItemSelector.Enabled = true;
-        }
-        protected virtual void DisableInvoked()
-        {
-            LikeInput.Enabled = false;
-            ItemSelector.Enabled = false;
-        }
-        protected virtual void UpdatePresetsInvoked(FormatDefinition definition)
-        {
-
-        }
-
+        // privates
         private void LoadItems()
         {
             InternalCheckedItems.Clear();
@@ -4247,9 +3874,10 @@ namespace EcfFileViewTools
         }
 
         // publics
-        public override bool AnyFilterSet()
+        public override void Reset()
         {
-            return base.AnyFilterSet();
+            base.Reset();
+            LoadItemSelectionStates();
         }
 
         // privates
@@ -4259,21 +3887,6 @@ namespace EcfFileViewTools
             IsParametersActive = ItemSelector.IsItemChecked(SelectableItems.Parameters.ToString());
             IsDataBlocksActive = ItemSelector.IsItemChecked(SelectableItems.DataBlocks.ToString());
         }
-        
-        protected override void ResetInvoked()
-        {
-            base.ResetInvoked();
-            LoadItemSelectionStates();
-        }
-        protected override void EnableInvoked()
-        {
-            base.EnableInvoked();
-        }
-        protected override void DisableInvoked()
-        {
-            base.DisableInvoked();
-        }
-
     }
     public class EcfParameterFilter : EcfBaseFilter
     {
@@ -4283,18 +3896,19 @@ namespace EcfFileViewTools
             UpdateItemSelector(definition);
         }
 
+        // publics
         public bool IsParameterVisible(EcfParameter parameter)
         {
             return (parameter.ContainsError(EcfErrors.ParameterUnknown) || CheckedItems.Contains(parameter.Key))
                 && IsParameterValueLike(parameter.GetAllValues(), IsLikeText);
         }
-
-        protected override void UpdatePresetsInvoked(FormatDefinition definition)
+        public override void UpdatePresets(FormatDefinition definition)
         {
-            base.UpdatePresetsInvoked(definition);
+            base.UpdatePresets(definition);
             UpdateItemSelector(definition);
         }
         
+        // privates
         private bool IsParameterValueLike(ReadOnlyCollection<string> values, string isLike)
         {
             if (string.IsNullOrEmpty(isLike) || values.Count < 1) { return true; }

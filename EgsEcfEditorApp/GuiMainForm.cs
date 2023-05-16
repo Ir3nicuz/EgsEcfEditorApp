@@ -44,7 +44,7 @@ namespace EgsEcfEditorApp
     public partial class GuiMainForm : Form
     {
         private List<EcfStructureItem> CopyClipboard { get; set; } = null;
-
+        
         private EcfToolContainer FileOperationContainer { get; } = new EcfToolContainer();
         private EcfBasicFileOperations BasicFileOperations { get; } = new EcfBasicFileOperations();
         private EcfExtendedFileOperations ExtendedFileOperations { get; } = new EcfExtendedFileOperations();
@@ -713,6 +713,7 @@ namespace EgsEcfEditorApp
                 foreach (FormatDefinition templateDefinition in templateDefinitions)
                 {
                     /*
+                     * 
                      * 
                      * prüfen, ob nicht bereits enthalten
                         * Source Item Id Name: Name

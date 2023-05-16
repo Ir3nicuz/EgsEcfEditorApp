@@ -709,11 +709,12 @@ namespace EgsEcfEditorApp
                         default: return;
                     }
                 }
+                ItemDefinition newDefinitionItem = new ItemDefinition(sourceItem.GetName(), true, true, true, true, "auto-created");
                 foreach (FormatDefinition templateDefinition in templateDefinitions)
                 {
                     /*
                      * prüfen, ob nicht bereits enthalten
-                 * Source Item Id Name: Name
+                        * Source Item Id Name: Name
                  * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
                     */
                 }

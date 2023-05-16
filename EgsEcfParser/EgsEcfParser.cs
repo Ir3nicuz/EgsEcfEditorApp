@@ -3491,6 +3491,16 @@ namespace EgsEcfParser
         public bool IsForceEscaped { get; }
         public string Info { get; }
 
+        public ItemDefinition(string name, bool isOptional, bool hasValue, bool allowBlank, bool isForceEscaped, string info)
+        {
+            if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }
+            Name = name;
+            IsOptional = isOptional;
+            HasValue = hasValue;
+            AllowBlank = allowBlank;
+            IsForceEscaped = isForceEscaped;
+            Info = info ?? "";
+        }
         public ItemDefinition(string name, string isOptional, string hasValue, string allowBlank, string isForceEscaped, string info)
         {
             if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }

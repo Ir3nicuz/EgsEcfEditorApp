@@ -5,6 +5,7 @@ using EcfToolBarControls;
 using EgsEcfEditorApp;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
+using GenericDialogs;
 using Microsoft.Win32;
 using System;
 using System.Collections;
@@ -83,6 +84,14 @@ namespace EgsEcfEditorApp
         {
             Icon = IconRecources.Icon_AppBranding,
             OkButtonText = TitleRecources.Generic_Ok,
+            AbortButtonText = TitleRecources.Generic_Abort,
+        };
+        private ErrorListingDialog ErrorQuestionDialog { get; } = new ErrorListingDialog()
+        {
+            Text = TitleRecources.Generic_Attention,
+            Icon = IconRecources.Icon_AppBranding,
+            YesButtonText = TitleRecources.Generic_Yes,
+            NoButtonText = TitleRecources.Generic_No,
             AbortButtonText = TitleRecources.Generic_Abort,
         };
 
@@ -953,7 +962,7 @@ namespace EgsEcfEditorApp
                 {
                     List<string> problems = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
                         TextRecources.EcfItemHandlingSupport_StillUsedWith, user.BuildRootId())).ToList();
-                    if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) != DialogResult.Yes)
+                    if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) != DialogResult.Yes)
                     {
                         return;
                     }
@@ -1171,6 +1180,14 @@ namespace EcfFileViews
             new OptionItem(OperationModes.Comment, TitleRecources.Generic_Comment),
             new OptionItem(OperationModes.Parameter, TitleRecources.Generic_Parameter),
             new OptionItem(OperationModes.ChildBlock, TitleRecources.Generic_ChildElement),
+        };
+        private ErrorListingDialog ErrorQuestionDialog { get; } = new ErrorListingDialog()
+        {
+            Text = TitleRecources.Generic_Attention,
+            Icon = IconRecources.Icon_AppBranding,
+            YesButtonText = TitleRecources.Generic_Yes,
+            NoButtonText = TitleRecources.Generic_No,
+            AbortButtonText = TitleRecources.Generic_Abort,
         };
 
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
@@ -1661,7 +1678,7 @@ namespace EcfFileViews
             problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
             problems.AddRange(CheckInterFileDependencies(blocksToRemove));
 
-            if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
+            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());
@@ -1677,7 +1694,7 @@ namespace EcfFileViews
         private void RemoveParameterItem(List<EcfParameter> parameters)
         {
             List<string> problems = CheckMandatoryParameters(parameters);
-            if (ShowOperationSafetyQuestionDialog(this, TitleRecources.Generic_Attention, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
+            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());

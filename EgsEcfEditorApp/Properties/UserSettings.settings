@@ -53,5 +53,20 @@
     <Setting Name="ItemHandlingSupport_ParameterKey_TemplateName" Type="System.String" Scope="User">
       <Value Profile="(Default)">TemplateRoot</Value>
     </Setting>
+    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsOptional" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionHasValue" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionInfo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tool-Added</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

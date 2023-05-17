@@ -73,7 +73,7 @@ namespace EcfFileViews
                 row.Cells.Add(new DataGridViewTextBoxCell() { Value = definition.Info });
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.IsOptional });
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.HasValue });
-                row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.AllowBlank });
+                row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.IsAllowingBlank });
                 row.Cells.Add(new DataGridViewCheckBoxCell() { Value = definition.IsForceEscaped });
                 Grid.Rows.Add(row);
             });

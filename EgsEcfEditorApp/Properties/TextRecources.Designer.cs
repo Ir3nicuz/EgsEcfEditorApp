@@ -19,7 +19,7 @@ namespace EgsEcfEditorApp.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class TextRecources {
@@ -1524,6 +1524,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_HasNoValue {
             get {
                 return ResourceManager.GetString("Generic_HasNoValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is already present in.
+        /// </summary>
+        internal static string Generic_IsAlreadyPresentIn {
+            get {
+                return ResourceManager.GetString("Generic_IsAlreadyPresentIn", resourceCulture);
             }
         }
         

@@ -12,7 +12,7 @@ namespace EgsEcfEditorApp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
     internal sealed partial class UserSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static UserSettings defaultInstance = ((UserSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new UserSettings())));
@@ -224,6 +224,66 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["ItemHandlingSupport_ParameterKey_TemplateName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefaultValue_DefinitionIsOptional {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsOptional"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefaultValue_DefinitionIsOptional"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefaultValue_DefinitionHasValue {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionHasValue"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefaultValue_DefinitionHasValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
+        public string ItemHandlingSupport_DefaultValue_DefinitionInfo {
+            get {
+                return ((string)(this["ItemHandlingSupport_DefaultValue_DefinitionInfo"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefaultValue_DefinitionInfo"] = value;
             }
         }
     }

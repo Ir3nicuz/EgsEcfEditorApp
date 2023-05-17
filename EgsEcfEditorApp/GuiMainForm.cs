@@ -597,7 +597,7 @@ namespace EgsEcfEditorApp
                 try
                 {
                     ReplaceDefinitionInFile(ecfPage.File, UserSettings.Default.EgsEcfEditorApp_ActiveGameMode);
-                    ecfPage.UpdateFilterPresets();
+                    ecfPage.UpdateDefinitionPresets();
                     ecfPage.UpdateErrorView();
                 }
                 catch (Exception ex)
@@ -709,16 +709,16 @@ namespace EgsEcfEditorApp
                         default: return;
                     }
                 }
-                ItemDefinition newDefinitionItem = new ItemDefinition(sourceItem.GetName(), true, true, true, true, "auto-created");
+                int addedCount = 0;
+                ItemDefinition newDefinitionItem = new ItemDefinition(sourceItem.GetName(), 
+                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional, 
+                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue, 
+                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank, 
+                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped, 
+                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo);
                 foreach (FormatDefinition templateDefinition in templateDefinitions)
                 {
-                    /*
-                     * 
-                     * 
-                     * prüfen, ob nicht bereits enthalten
-                        * Source Item Id Name: Name
-                 * Xml Parameter Default Settings: optional="true" hasValue="true" allowBlank= "false" forceEscape="false" info=""
-                    */
+                    AddItemToDefinitionFile(templateDefinition, newDefinitionItem);
                 }
 
                 ReloadDefinitions();
@@ -732,21 +732,20 @@ namespace EgsEcfEditorApp
                         foreach (EcfTabPage filePage in fileTabsToUpdate)
                         {
                             ReplaceDefinitionInFile(filePage.File);
-                            filePage.UpdateFilterPresets();
+                            filePage.UpdateDefinitionPresets();
                             filePage.UpdateAllViews();
                         }
                     }
                 }
+
+                string messageText = string.Format("{2} {0} {3} {1} {4}!", sourceItem.GetName(), addedCount,
+                    TitleRecources.Generic_Item, TextRecources.Generic_AddedTo, TitleRecources.Generic_Definitions);
+                MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_AddToTemplateDefinitionFailed);
-                return;
             }
-
-            string messageText = string.Format("{1} {0} {2} {3}!", sourceItem.GetName(),
-                TitleRecources.Generic_Item, TextRecources.Generic_AddedTo, TitleRecources.Generic_Definitions);
-            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void AddTemplateToItem(EcfBlock sourceItem)
         {
@@ -1577,9 +1576,9 @@ namespace EcfFileViews
             Text = string.Format("{0}{1}", File.FileName, File.HasUnsavedData ? " *" : "");
             ToolTipText = Path.Combine(File.FilePath, File.FileName);
         }
-        public void UpdateFilterPresets()
+        public void UpdateDefinitionPresets()
         {
-            FilterControl.UpdatePresets(File.Definition);
+            FilterControl.UpdateDefinitionPresets(File.Definition);
         }
         public void ReselectTreeView()
         {
@@ -3701,7 +3700,7 @@ namespace EcfFileViewTools
             Add(ClearFilterButton).Click += ClearFilterButton_Click;
             Add(ErrorDisplaySelector).Click += ChangeErrorDisplayButton_Click;
 
-            UpdatePresets(definition);
+            UpdateDefinitionPresets(definition);
         }
 
         // events
@@ -3756,11 +3755,11 @@ namespace EcfFileViewTools
         {
             return ErrorDisplayMode != ErrorDisplayModes.ShowAllItems || AttachedFilters.Any(filter => filter.AnyFilterSet());
         }
-        public void UpdatePresets(FormatDefinition definition)
+        public void UpdateDefinitionPresets(FormatDefinition definition)
         {
             GameModeLabel.Text = definition.GameMode;
             FileTypeLabel.Text = definition.FileType;
-            AttachedFilters.ForEach(filter => filter.UpdatePresets(definition));
+            AttachedFilters.ForEach(filter => filter.UpdateDefinitionPresets(definition));
         }
 
         // privates
@@ -3854,7 +3853,7 @@ namespace EcfFileViewTools
         {
             return !IsLikeText.Equals(string.Empty) || UncheckedItems.Count > 0;
         }
-        public virtual void UpdatePresets(FormatDefinition definition)
+        public virtual void UpdateDefinitionPresets(FormatDefinition definition)
         {
             
         }
@@ -3932,9 +3931,9 @@ namespace EcfFileViewTools
             return (parameter.ContainsError(EcfErrors.ParameterUnknown) || CheckedItems.Contains(parameter.Key))
                 && IsParameterValueLike(parameter.GetAllValues(), IsLikeText);
         }
-        public override void UpdatePresets(FormatDefinition definition)
+        public override void UpdateDefinitionPresets(FormatDefinition definition)
         {
-            base.UpdatePresets(definition);
+            base.UpdateDefinitionPresets(definition);
             UpdateItemSelector(definition);
         }
         

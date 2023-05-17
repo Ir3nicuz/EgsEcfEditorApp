@@ -732,7 +732,7 @@ namespace EgsEcfParser
             {
                 errors.Add(new EcfError(errorGroup, EcfErrors.ValueNull, errorInfo ?? "Value null"));
             }
-            else if (!(itemDef?.AllowBlank ?? false) && value.Equals(string.Empty))
+            else if (!(itemDef?.IsAllowingBlank ?? false) && value.Equals(string.Empty))
             {
                 errors.Add(new EcfError(errorGroup, EcfErrors.ValueEmpty, errorInfo ?? "Value empty"));
             }
@@ -3487,31 +3487,31 @@ namespace EgsEcfParser
         public string Name { get; }
         public bool IsOptional { get; }
         public bool HasValue { get; }
-        public bool AllowBlank { get; }
+        public bool IsAllowingBlank { get; }
         public bool IsForceEscaped { get; }
         public string Info { get; }
 
-        public ItemDefinition(string name, bool isOptional, bool hasValue, bool allowBlank, bool isForceEscaped, string info)
+        public ItemDefinition(string name, bool isOptional, bool hasValue, bool isAllowingBlank, bool isForceEscaped, string info)
         {
             if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }
             Name = name;
             IsOptional = isOptional;
             HasValue = hasValue;
-            AllowBlank = allowBlank;
+            IsAllowingBlank = isAllowingBlank;
             IsForceEscaped = isForceEscaped;
             Info = info ?? "";
         }
-        public ItemDefinition(string name, string isOptional, string hasValue, string allowBlank, string isForceEscaped, string info)
+        public ItemDefinition(string name, string isOptional, string hasValue, string isAllowingBlank, string isForceEscaped, string info)
         {
             if (!IsKeyValid(name)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'name' parameter", name)); }
             if (!bool.TryParse(isOptional, out bool optional)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'isOptional' parameter", isOptional)); }
             if (!bool.TryParse(hasValue, out bool value)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'hasValue' parameter", hasValue)); }
-            if (!bool.TryParse(allowBlank, out bool blank)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'canBlank' parameter", allowBlank)); }
+            if (!bool.TryParse(isAllowingBlank, out bool blank)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'canBlank' parameter", isAllowingBlank)); }
             if (!bool.TryParse(isForceEscaped, out bool forceEscaped)) { throw new ArgumentException(string.Format("'{0}' is not a valid 'forceEscape' parameter", isForceEscaped)); }
             Name = name;
             IsOptional = optional;
             HasValue = value;
-            AllowBlank = blank;
+            IsAllowingBlank = blank;
             IsForceEscaped = forceEscaped;
             Info = info ?? "";
         }
@@ -3520,7 +3520,7 @@ namespace EgsEcfParser
             Name = template.Name;
             IsOptional = template.IsOptional;
             HasValue = template.HasValue;
-            AllowBlank = template.AllowBlank;
+            IsAllowingBlank = template.IsAllowingBlank;
             IsForceEscaped = template.IsForceEscaped;
             Info = template.Info;
         }

@@ -682,7 +682,6 @@ namespace EgsEcfEditorApp
                     break;
             }
         }
-        [Obsolete("needs more logic")]
         private void AddItemToTemplateDefinition(EcfBlock sourceItem)
         {
             try
@@ -709,16 +708,24 @@ namespace EgsEcfEditorApp
                         default: return;
                     }
                 }
-                int addedCount = 0;
                 ItemDefinition newDefinitionItem = new ItemDefinition(sourceItem.GetName(), 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo);
+                List<FormatDefinition> modifiedDefinitions = new List<FormatDefinition>();
+                List<FormatDefinition> unmodifiedDefinitions = new List<FormatDefinition>();
                 foreach (FormatDefinition templateDefinition in templateDefinitions)
                 {
-                    AddItemToDefinitionFile(templateDefinition, newDefinitionItem);
+                    if (AddItemToDefinitionFile(templateDefinition, newDefinitionItem))
+                    {
+                        modifiedDefinitions.Add(templateDefinition);
+                    }
+                    else 
+                    { 
+                        unmodifiedDefinitions.Add(templateDefinition);
+                    }
                 }
 
                 ReloadDefinitions();
@@ -738,9 +745,21 @@ namespace EgsEcfEditorApp
                     }
                 }
 
-                string messageText = string.Format("{2} {0} {3} {1} {4}!", sourceItem.GetName(), addedCount,
-                    TitleRecources.Generic_Item, TextRecources.Generic_AddedTo, TitleRecources.Generic_Definitions);
-                MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                StringBuilder messageText = new StringBuilder();
+                messageText.AppendLine(string.Format("{0} {1}", TitleRecources.Generic_Item, newDefinitionItem.Name));
+                if (modifiedDefinitions.Count > 0)
+                {
+                    messageText.AppendLine();
+                    messageText.AppendLine(string.Format("{0}:", TextRecources.Generic_AddedTo));
+                    messageText.AppendLine(string.Join(Environment.NewLine, modifiedDefinitions.Select(def => def.FilePathAndName)));
+                }
+                if (unmodifiedDefinitions.Count > 0)
+                {
+                    messageText.AppendLine();
+                    messageText.AppendLine(string.Format("{0}:", TextRecources.Generic_IsAlreadyPresentIn));
+                    messageText.AppendLine(string.Join(Environment.NewLine, unmodifiedDefinitions.Select(def => def.FilePathAndName)));
+                }
+                MessageBox.Show(this, messageText.ToString(), TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

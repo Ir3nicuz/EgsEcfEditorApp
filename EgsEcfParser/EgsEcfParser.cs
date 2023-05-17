@@ -15,7 +15,7 @@ namespace EgsEcfParser
     public static class EcfDefinitionHandling
     {
         public static string DefaultBaseFolder { get; set; } = "EcfFileDefinitions";
-        public static string TemplateFileName { get; set; } = "VanillaEcfDefinition_BlocksConfig.xml";
+        public static string TemplateFileName { get; set; } = "VanillaEcfDefinition_BlocksConfig_DefaultTemplate.xml";
 
         private static List<FormatDefinition> Definitions { get; } = new List<FormatDefinition>();
         private static string ActualDefinitionsFolder { get; set; } = null;
@@ -28,6 +28,7 @@ namespace EgsEcfParser
             CrLf,
         }
 
+        // public
         public static void ReloadDefinitions()
         {
             ActualDefinitionsFolder = null;
@@ -119,7 +120,16 @@ namespace EgsEcfParser
                 default: return "\r\n";
             }
         }
-        
+        public static bool AddItemToDefinitionFile(FormatDefinition definition, ItemDefinition newItem)
+        {
+
+
+
+
+            return true;
+        }
+
+        // private
         public static List<ItemDefinition> FindDeprecatedItemDefinitions(EgsEcfFile file)
         {
             List<ItemDefinition> deprecatedItems = new List<ItemDefinition>();

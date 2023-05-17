@@ -32,21 +32,25 @@ namespace EgsEcfParser
         public static void ReloadDefinitions()
         {
             ActualDefinitionsFolder = null;
-            XmlLoading.LoadDefinitions();
+            XmlHandling.LoadDefinitionsFromFiles();
+        }
+        public static bool SaveBlockParameterToDefinitionFile(FormatDefinition definition, ItemDefinition newBlockParameter)
+        {
+            return XmlHandling.SaveBlockParameterToDefinitionFile(definition, newBlockParameter);
         }
         public static List<string> GetGameModes()
         {
-            XmlLoading.LoadDefinitions();
+            XmlHandling.LoadDefinitionsFromFiles();
             return Definitions.Select(def => def.GameMode).Distinct().ToList();
         }
         public static List<FormatDefinition> GetSupportedFileTypes(string gameMode)
         {
-            XmlLoading.LoadDefinitions();
+            XmlHandling.LoadDefinitionsFromFiles();
             return Definitions.Where(def => def.GameMode.Equals(gameMode)).ToList();
         }
         public static FormatDefinition GetDefinition(string gameMode, string fileType)
         {
-            XmlLoading.LoadDefinitions();
+            XmlHandling.LoadDefinitionsFromFiles();
             return Definitions.FirstOrDefault(def => string.Equals(gameMode, def.GameMode) && string.Equals(fileType, def.FileType));
         }
         public static Encoding GetFileEncoding(string filePathAndName)
@@ -120,14 +124,6 @@ namespace EgsEcfParser
                 default: return "\r\n";
             }
         }
-        public static bool AddItemToDefinitionFile(FormatDefinition definition, ItemDefinition newItem)
-        {
-
-
-
-
-            return true;
-        }
 
         // private
         public static List<ItemDefinition> FindDeprecatedItemDefinitions(EgsEcfFile file)
@@ -135,7 +131,7 @@ namespace EgsEcfParser
             List<ItemDefinition> deprecatedItems = new List<ItemDefinition>();
             try
             {
-                XmlLoading.LoadDefinitions();
+                XmlHandling.LoadDefinitionsFromFiles();
                 FormatDefinition definition = Definitions.FirstOrDefault(def => def.GameMode.Equals(file.Definition.GameMode) && def.FileType.Equals(file.Definition.FileType));
                 List<ItemDefinition> rootBlockAttributes = definition.RootBlockAttributes.ToList();
                 List<ItemDefinition> childBlockAttributes = definition.ChildBlockAttributes.ToList();
@@ -143,7 +139,7 @@ namespace EgsEcfParser
                 List<ItemDefinition> parameterAttributes = definition.ParameterAttributes.ToList();
                 foreach (EcfStructureItem item in file.GetDeepItemList<EcfStructureItem>())
                 {
-                    RemoveDeprecatedItemDefinitions(item, rootBlockAttributes, childBlockAttributes, blockParameters, parameterAttributes);
+                    RemoveDefinitionsFromLists(item, rootBlockAttributes, childBlockAttributes, blockParameters, parameterAttributes);
                     if (rootBlockAttributes.Count == 0 && childBlockAttributes.Count == 0 && blockParameters.Count == 0 && parameterAttributes.Count == 0)
                     {
                         break;
@@ -157,7 +153,7 @@ namespace EgsEcfParser
             catch (Exception) { }
             return deprecatedItems;
         }
-        private static void RemoveDeprecatedItemDefinitions(EcfStructureItem item,
+        private static void RemoveDefinitionsFromLists(EcfStructureItem item,
             List<ItemDefinition> rootBlockAttributes, List<ItemDefinition> childBlockAttributes,
             List<ItemDefinition> blockParameters, List<ItemDefinition> parameterAttributes)
         {
@@ -204,7 +200,7 @@ namespace EgsEcfParser
             return i;
         }
 
-        private static class XmlLoading
+        private static class XmlHandling
         {
             private static class XmlSettings
             {
@@ -241,7 +237,7 @@ namespace EgsEcfParser
                 public static string XElementValueFractionalSeperator { get; } = "ValueFractionalSeperator";
                 public static string XElementMagicSpacer { get; } = "MagicSpacer";
                 public static string XElementEscapeIdentifierPair { get; } = "EscapeIdentifierPair";
-                public static string XElementParamter { get; } = "Param";
+                public static string XElementParameter { get; } = "Param";
 
                 public static string XAttributeMode { get; } = "mode";
                 public static string XAttributeType { get; } = "type";
@@ -249,16 +245,17 @@ namespace EgsEcfParser
                 public static string XAttributeOpener { get; } = "opener";
                 public static string XAttributeCloser { get; } = "closer";
                 public static string XAttributeName { get; } = "name";
-                public static string XAttributeOptional { get; } = "optional";
+                public static string XAttributeIsOptional { get; } = "optional";
                 public static string XAttributeHasValue { get; } = "hasValue";
-                public static string XAttributeAllowBlank { get; } = "allowBlank";
-                public static string XAttributeForceEscape { get; } = "forceEscape";
+                public static string XAttributeIsAllowingBlank { get; } = "allowBlank";
+                public static string XAttributeIsForceEscaped { get; } = "forceEscape";
                 public static string XAttributeInfo { get; } = "info";
             }
             
             private static XmlDocument XmlDoc { get; } = new XmlDocument();
 
-            public static void LoadDefinitions()
+            // public
+            public static void LoadDefinitionsFromFiles()
             {
                 if (string.IsNullOrEmpty(ActualDefinitionsFolder) || !ActualDefinitionsFolder.Equals(DefaultBaseFolder))
                 {
@@ -303,7 +300,12 @@ namespace EgsEcfParser
                     }
                 }
             }
+            public static bool SaveBlockParameterToDefinitionFile(FormatDefinition definition, ItemDefinition parameterItem)
+            {
+                return SaveXmlParameterToDefinitionFile(definition, XmlSettings.XChapterBlockParameters, parameterItem);
+            }
 
+            // private
             private static void ReadDefinitionFile(string filePathAndName)
             {
                 XmlDoc.Load(filePathAndName);
@@ -394,6 +396,29 @@ namespace EgsEcfParser
             {
                 return xmlString?.Replace("\\t", "\t").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\v", "\v");
             }
+            private static bool SaveXmlParameterToDefinitionFile(FormatDefinition definition, string xChapter, ItemDefinition parameterItem)
+            {
+                XmlDoc.Load(definition.FilePathAndName);
+                bool somethingCreated = false;
+                foreach (XmlNode configNode in XmlDoc.SelectNodes(string.Format("//{0}", XmlSettings.XChapterFileConfig)))
+                {
+                    if (!(configNode.SelectSingleNode(xChapter) is XmlNode chapter))
+                    {
+                        chapter = CreateXmlChapter(XmlDoc, xChapter);
+                        configNode.InsertAfter(chapter, configNode.LastChild);
+                        somethingCreated = true;
+                    }
+                    if (!(chapter.SelectNodes(XmlSettings.XElementParameter).Cast<XmlNode>().FirstOrDefault(param =>
+                        string.Equals(param.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value, parameterItem.Name)) is XmlNode parameter))
+                    {
+                        parameter = CreateXmlParameterItem(XmlDoc, parameterItem);
+                        chapter.InsertAfter(parameter, chapter.LastChild);
+                        somethingCreated = true;
+                    }
+                }
+                if (somethingCreated) { XmlDoc.Save(definition.FilePathAndName); }
+                return somethingCreated;
+            }
 
             private static void CreateXmlTemplate(string filePathAndName)
             {
@@ -463,9 +488,9 @@ namespace EgsEcfParser
                     // root block Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterRootBlockAttributes); ;
-                        CreateXmlParameterItem(writer, "Id", true, true, false, false);
-                        CreateXmlParameterItem(writer, "Name", false, true, false, false);
-                        CreateXmlParameterItem(writer, "Ref", true, true, false, false);
+                        CreateXmlParameterItem(writer, "Id", true, true, false, false, "");
+                        CreateXmlParameterItem(writer, "Name", false, true, false, false, "");
+                        CreateXmlParameterItem(writer, "Ref", true, true, false, false, "");
                         writer.WriteEndElement();
                     }
                     // Child block types
@@ -477,23 +502,23 @@ namespace EgsEcfParser
                     // child block Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterChildBlockAttributes);
-                        CreateXmlParameterItem(writer, "DropOnDestroy", true, false, false, false);
+                        CreateXmlParameterItem(writer, "DropOnDestroy", true, false, false, false, "");
                         writer.WriteEndElement();
                     }
                     // block parameters
                     {
                         writer.WriteStartElement(XmlSettings.XChapterBlockParameters);
-                        CreateXmlParameterItem(writer, "Material", true, true, false, false);
-                        CreateXmlParameterItem(writer, "Shape", true, true, false, false);
-                        CreateXmlParameterItem(writer, "Mesh", true, true, false, false);
+                        CreateXmlParameterItem(writer, "Material", true, true, false, false, "");
+                        CreateXmlParameterItem(writer, "Shape", true, true, false, false, "");
+                        CreateXmlParameterItem(writer, "Mesh", true, true, false, false, "");
                         writer.WriteEndElement();
                     }
                     // parameter Attributes
                     {
                         writer.WriteStartElement(XmlSettings.XChapterParameterAttributes);
-                        CreateXmlParameterItem(writer, "type", true, true, false, false);
-                        CreateXmlParameterItem(writer, "display", true, true, false, false);
-                        CreateXmlParameterItem(writer, "formatter", true, true, false, false);
+                        CreateXmlParameterItem(writer, "type", true, true, false, false, "");
+                        CreateXmlParameterItem(writer, "display", true, true, false, false, "");
+                        CreateXmlParameterItem(writer, "formatter", true, true, false, false, "");
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();
@@ -515,28 +540,50 @@ namespace EgsEcfParser
             }
             private static void CreateXmlOptionalValueItem(XmlWriter writer, string value, bool isOptional)
             {
-                writer.WriteStartElement(XmlSettings.XElementParamter);
+                writer.WriteStartElement(XmlSettings.XElementParameter);
                 writer.WriteAttributeString(XmlSettings.XAttributeValue, value);
-                writer.WriteAttributeString(XmlSettings.XAttributeOptional, isOptional.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeIsOptional, isOptional.ToString().ToLower());
                 writer.WriteEndElement();
             }
             private static void CreateXmlTypeItem(XmlWriter writer, string name, bool isOptional)
             {
-                writer.WriteStartElement(XmlSettings.XElementParamter);
+                writer.WriteStartElement(XmlSettings.XElementParameter);
                 writer.WriteAttributeString(XmlSettings.XAttributeName, name);
-                writer.WriteAttributeString(XmlSettings.XAttributeOptional, isOptional.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeIsOptional, isOptional.ToString().ToLower());
                 writer.WriteEndElement();
             }
-            private static void CreateXmlParameterItem(XmlWriter writer, string name, bool isOptional, bool hasValue, bool canBlank, bool isFordeEcaped)
+            private static void CreateXmlParameterItem(XmlWriter writer, string name, bool isOptional, bool hasValue, bool isAllowingBlank, bool isForceEscaped, string info)
             {
-                writer.WriteStartElement(XmlSettings.XElementParamter);
+                writer.WriteStartElement(XmlSettings.XElementParameter);
                 writer.WriteAttributeString(XmlSettings.XAttributeName, name);
-                writer.WriteAttributeString(XmlSettings.XAttributeOptional, isOptional.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeIsOptional, isOptional.ToString().ToLower());
                 writer.WriteAttributeString(XmlSettings.XAttributeHasValue, hasValue.ToString().ToLower());
-                writer.WriteAttributeString(XmlSettings.XAttributeAllowBlank, canBlank.ToString().ToLower());
-                writer.WriteAttributeString(XmlSettings.XAttributeForceEscape, isFordeEcaped.ToString().ToLower());
-                writer.WriteAttributeString(XmlSettings.XAttributeInfo, "");
+                writer.WriteAttributeString(XmlSettings.XAttributeIsAllowingBlank, isAllowingBlank.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeIsForceEscaped, isForceEscaped.ToString().ToLower());
+                writer.WriteAttributeString(XmlSettings.XAttributeInfo, info);
                 writer.WriteEndElement();
+            }
+            private static XmlNode CreateXmlChapter(XmlDocument xmlDoc, string xChapter)
+            {
+                XmlNode chapter = xmlDoc.CreateNode(XmlNodeType.Element, xChapter, "");
+                return chapter;
+            }
+            private static XmlNode CreateXmlParameterItem(XmlDocument xmlDoc, ItemDefinition newItem)
+            {
+                XmlNode parameter = xmlDoc.CreateNode(XmlNodeType.Element, XmlSettings.XElementParameter, "");
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeName, newItem.Name));
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeIsOptional, newItem.IsOptional.ToString().ToLower()));
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeHasValue, newItem.HasValue.ToString().ToLower()));
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeIsAllowingBlank, newItem.IsAllowingBlank.ToString().ToLower()));
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeIsForceEscaped, newItem.IsForceEscaped.ToString().ToLower()));
+                parameter.Attributes.Append(CreateXmlAttribute(xmlDoc, XmlSettings.XAttributeInfo, newItem.Info));
+                return parameter;
+            }
+            private static XmlAttribute CreateXmlAttribute(XmlDocument xmlDoc, string name, string value)
+            {
+                XmlAttribute attribute = xmlDoc.CreateAttribute(name);
+                attribute.Value = value;
+                return attribute;
             }
 
             private static List<string> BuildStringList(XmlNode formatterNode, string xElement)
@@ -565,12 +612,12 @@ namespace EgsEcfParser
             private static List<BlockValueDefinition> BuildMarkList(XmlNode fileNode, string xChapter)
             {
                 List<BlockValueDefinition> preMarks = new List<BlockValueDefinition>();
-                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
+                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParameter))
                 {
                     preMarks.Add(
                         new BlockValueDefinition(
                             RepairXmlControlLiterals(node.Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value),
-                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value,
+                            node.Attributes?.GetNamedItem(XmlSettings.XAttributeIsOptional)?.Value,
                             false));
                 }
                 return preMarks;
@@ -578,11 +625,11 @@ namespace EgsEcfParser
             private static List<BlockValueDefinition> BuildBlockTypeList(XmlNode fileNode, string xChapter)
             {
                 List<BlockValueDefinition> blockTypes = new List<BlockValueDefinition>();
-                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
+                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParameter))
                 {
                     blockTypes.Add(new BlockValueDefinition(
                         node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
-                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeIsOptional)?.Value
                         ));
                 }
                 return blockTypes;
@@ -590,14 +637,14 @@ namespace EgsEcfParser
             private static List<ItemDefinition> BuildItemList(XmlNode fileNode, string xChapter)
             {
                 List<ItemDefinition> parameters = new List<ItemDefinition>();
-                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParamter))
+                foreach (XmlNode node in fileNode.SelectSingleNode(xChapter)?.SelectNodes(XmlSettings.XElementParameter))
                 {
                     parameters.Add(new ItemDefinition(
                         node.Attributes?.GetNamedItem(XmlSettings.XAttributeName)?.Value,
-                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeOptional)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeIsOptional)?.Value,
                         node.Attributes?.GetNamedItem(XmlSettings.XAttributeHasValue)?.Value,
-                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeAllowBlank)?.Value,
-                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeForceEscape)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeIsAllowingBlank)?.Value,
+                        node.Attributes?.GetNamedItem(XmlSettings.XAttributeIsForceEscaped)?.Value,
                         node.Attributes?.GetNamedItem(XmlSettings.XAttributeInfo)?.Value
                         ));
                 }

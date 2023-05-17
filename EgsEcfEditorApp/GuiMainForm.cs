@@ -615,7 +615,7 @@ namespace EgsEcfEditorApp
                 {
                     switch (MessageBox.Show(this, 
                         string.Format("{0}{1}{1}{2}", TextRecources.EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion, Environment.NewLine, file.FileName),
-                        TitleRecources.Generic_Attention, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
+                        TitleRecources.Generic_Attention, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                     {
                         case DialogResult.Yes: file.Save(); break;
                         case DialogResult.Cancel: return;
@@ -686,7 +686,8 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                List<FormatDefinition> templateDefinitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => def.IsDefiningItems).ToList();
+                List<FormatDefinition> templateDefinitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(def => 
+                    def.IsDefiningTemplates).ToList();
                 if (templateDefinitions.Count < 1)
                 {
                     MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_NoTemplateDefinitionFileFound,
@@ -708,7 +709,7 @@ namespace EgsEcfEditorApp
                         default: return;
                     }
                 }
-                ItemDefinition newDefinitionItem = new ItemDefinition(sourceItem.GetName(), 
+                ItemDefinition newDefinitionParameter = new ItemDefinition(sourceItem.GetName(), 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue, 
                     UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank, 
@@ -718,7 +719,7 @@ namespace EgsEcfEditorApp
                 List<FormatDefinition> unmodifiedDefinitions = new List<FormatDefinition>();
                 foreach (FormatDefinition templateDefinition in templateDefinitions)
                 {
-                    if (AddItemToDefinitionFile(templateDefinition, newDefinitionItem))
+                    if (SaveBlockParameterToDefinitionFile(templateDefinition, newDefinitionParameter))
                     {
                         modifiedDefinitions.Add(templateDefinition);
                     }
@@ -728,25 +729,28 @@ namespace EgsEcfEditorApp
                     }
                 }
 
-                ReloadDefinitions();
-
-                List<EcfTabPage> fileTabsToUpdate = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).ToList();
-                if (fileTabsToUpdate.Count > 0)
+                if (modifiedDefinitions.Count > 0)
                 {
-                    if (MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
-                        TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    ReloadDefinitions();
+
+                    List<EcfTabPage> fileTabsToUpdate = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).ToList();
+                    if (fileTabsToUpdate.Count > 0)
                     {
-                        foreach (EcfTabPage filePage in fileTabsToUpdate)
+                        if (MessageBox.Show(this, TextRecources.EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
+                            TitleRecources.Generic_Attention, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            ReplaceDefinitionInFile(filePage.File);
-                            filePage.UpdateDefinitionPresets();
-                            filePage.UpdateAllViews();
+                            foreach (EcfTabPage filePage in fileTabsToUpdate)
+                            {
+                                ReplaceDefinitionInFile(filePage.File);
+                                filePage.UpdateDefinitionPresets();
+                                filePage.UpdateAllViews();
+                            }
                         }
                     }
                 }
 
                 StringBuilder messageText = new StringBuilder();
-                messageText.AppendLine(string.Format("{0} {1}", TitleRecources.Generic_Item, newDefinitionItem.Name));
+                messageText.AppendLine(string.Format("{0} {1}", TitleRecources.Generic_Item, newDefinitionParameter.Name));
                 if (modifiedDefinitions.Count > 0)
                 {
                     messageText.AppendLine();

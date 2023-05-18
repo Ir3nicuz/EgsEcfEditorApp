@@ -324,6 +324,27 @@
   <data name="EcfSettingsDialog_InfoPanel_Header" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue" xml:space="preserve">
+    <value>Standard Definition 'Hat Wert'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
+    <value>Standard Definition 'Leer erlaubt'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo" xml:space="preserve">
+    <value>Standard Definition 'Info'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+    <value>Standard Definition 'Erzwingt Escape'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional" xml:space="preserve">
+    <value>Standard Definition 'Ist Optional'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_Header" xml:space="preserve">
+    <value>Item Handling Support</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot" xml:space="preserve">
+    <value>Parameter Schlüssel 'Template Root'</value>
+  </data>
   <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Fehleransicht Elementanzahl Vorauswahl</value>
   </data>

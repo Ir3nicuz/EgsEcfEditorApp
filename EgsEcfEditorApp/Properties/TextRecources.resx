@@ -360,6 +360,21 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'hasValue' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'allowBlank' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionInfo" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'info' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+    <value />
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'optional' field</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
     <value>The default value if an element has no unlock cost value specified</value>
   </data>
@@ -380,6 +395,9 @@
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
     <value>The name of the parameter key which contains the tech tree parent element name</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot" xml:space="preserve">
+    <value>The name of the parameter key which contains the template name value in case of template double use</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
     <value>The name of the parameter key which contains the unlock cost value</value>

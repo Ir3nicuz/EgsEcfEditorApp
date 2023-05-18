@@ -360,6 +360,21 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>Wenn aktiviert, werden Elemente versuchen die Originaldaten zu verwenden wenn die Editordaten fehlerhaft sind</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'hasValue' bei erzeugten Template Zutaten Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'allowBlank' bei erzeugten Template Zutaten Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionInfo" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'info' bei erzeugten Template Zutaten Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+    <value />
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'optional' bei erzeugten Template Zutaten Definitions Einträgen</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
     <value>Der Standardwert der verwendet wird wenn das Element keinen Freischalt Kosten Wert enthält</value>
   </data>
@@ -380,6 +395,9 @@
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
     <value>Der Name des Parameterschlüssels der den Namen des übergeordneten Technologiebaum Elementes enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels welcher den Namen des Template Elementes enthält, für den Fall das ein Template wiederverwendet wird</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
     <value>Der Name des Parameterschlüssels der den Freischalt Kosten Wert enthält</value>

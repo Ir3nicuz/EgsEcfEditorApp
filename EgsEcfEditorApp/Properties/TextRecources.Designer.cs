@@ -790,6 +790,51 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;info&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionInfo {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The default value if an element has no unlock cost value specified.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_DefaultValueUnlockCost {
@@ -849,6 +894,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName {
             get {
                 return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the template name value in case of template double use.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot", resourceCulture);
             }
         }
         

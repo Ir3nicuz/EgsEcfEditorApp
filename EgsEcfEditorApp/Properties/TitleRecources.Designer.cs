@@ -19,7 +19,7 @@ namespace EgsEcfEditorApp.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class TitleRecources {
@@ -678,6 +678,69 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfSettingsDialog_InfoPanel_Header {
             get {
                 return ResourceManager.GetString("EcfSettingsDialog_InfoPanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Definition &apos;Has Value&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Definition &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Definition &apos;Info&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Definition &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Definition &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Handling Support.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Template Root&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot", resourceCulture);
             }
         }
         

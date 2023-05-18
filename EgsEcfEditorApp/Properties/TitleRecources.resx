@@ -324,6 +324,27 @@
   <data name="EcfSettingsDialog_InfoPanel_Header" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue" xml:space="preserve">
+    <value>Default Definition 'Has Value'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
+    <value>Default Definition 'Is Allowing Blank'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo" xml:space="preserve">
+    <value>Default Definition 'Info'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+    <value>Default Definition 'Is Force Escaped'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional" xml:space="preserve">
+    <value>Default Definition 'Is Optional'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_Header" xml:space="preserve">
+    <value>Item Handling Support</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot" xml:space="preserve">
+    <value>Parameter Key 'Template Root'</value>
+  </data>
   <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Error view item count preset</value>
   </data>

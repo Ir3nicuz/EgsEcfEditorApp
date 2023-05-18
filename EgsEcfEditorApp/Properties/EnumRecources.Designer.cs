@@ -133,11 +133,11 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to is referenced by.
+        ///   Looks up a localized string similar to is inherited by.
         /// </summary>
-        internal static string EgsEcfParser_EcfDependencies_IsReferencedBy {
+        internal static string EgsEcfParser_EcfDependencies_IsInheritedBy {
             get {
-                return ResourceManager.GetString("EgsEcfParser.EcfDependencies.IsReferencedBy", resourceCulture);
+                return ResourceManager.GetString("EgsEcfParser.EcfDependencies.IsInheritedBy", resourceCulture);
             }
         }
         

@@ -32,14 +32,15 @@
             this.AbortButton = new System.Windows.Forms.Button();
             this.NoButton = new System.Windows.Forms.Button();
             this.YesButton = new System.Windows.Forms.Button();
-            this.QuestionLabel = new System.Windows.Forms.Label();
-            this.QuestionIcon = new System.Windows.Forms.PictureBox();
-            this.QuestionPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.MessageLabel = new System.Windows.Forms.Label();
+            this.MessageIcon = new System.Windows.Forms.PictureBox();
+            this.MessagePanel = new System.Windows.Forms.TableLayoutPanel();
             this.ErrorRichTextBox = new System.Windows.Forms.RichTextBox();
             this.ErrorPanel = new System.Windows.Forms.Panel();
+            this.OkButton = new System.Windows.Forms.Button();
             this.ButtonPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.QuestionIcon)).BeginInit();
-            this.QuestionPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MessageIcon)).BeginInit();
+            this.MessagePanel.SuspendLayout();
             this.ErrorPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,6 +51,7 @@
             this.ButtonPanel.Controls.Add(this.AbortButton);
             this.ButtonPanel.Controls.Add(this.NoButton);
             this.ButtonPanel.Controls.Add(this.YesButton);
+            this.ButtonPanel.Controls.Add(this.OkButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.ButtonPanel.Location = new System.Drawing.Point(0, 332);
@@ -90,44 +92,44 @@
             this.YesButton.UseVisualStyleBackColor = true;
             this.YesButton.Click += new System.EventHandler(this.YesButton_Click);
             // 
-            // QuestionLabel
+            // MessageLabel
             // 
-            this.QuestionLabel.AutoSize = true;
-            this.QuestionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.QuestionLabel.Location = new System.Drawing.Point(109, 0);
-            this.QuestionLabel.Name = "QuestionLabel";
-            this.QuestionLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.QuestionLabel.Size = new System.Drawing.Size(472, 56);
-            this.QuestionLabel.TabIndex = 1;
-            this.QuestionLabel.Text = "question ";
+            this.MessageLabel.AutoSize = true;
+            this.MessageLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MessageLabel.Location = new System.Drawing.Point(109, 0);
+            this.MessageLabel.Name = "MessageLabel";
+            this.MessageLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.MessageLabel.Size = new System.Drawing.Size(472, 56);
+            this.MessageLabel.TabIndex = 1;
+            this.MessageLabel.Text = "message";
             // 
-            // QuestionIcon
+            // MessageIcon
             // 
-            this.QuestionIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.QuestionIcon.Location = new System.Drawing.Point(3, 3);
-            this.QuestionIcon.Name = "QuestionIcon";
-            this.QuestionIcon.Padding = new System.Windows.Forms.Padding(3);
-            this.QuestionIcon.Size = new System.Drawing.Size(100, 50);
-            this.QuestionIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.QuestionIcon.TabIndex = 4;
-            this.QuestionIcon.TabStop = false;
+            this.MessageIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MessageIcon.Location = new System.Drawing.Point(3, 3);
+            this.MessageIcon.Name = "MessageIcon";
+            this.MessageIcon.Padding = new System.Windows.Forms.Padding(3);
+            this.MessageIcon.Size = new System.Drawing.Size(100, 50);
+            this.MessageIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.MessageIcon.TabIndex = 4;
+            this.MessageIcon.TabStop = false;
             // 
-            // QuestionPanel
+            // MessagePanel
             // 
-            this.QuestionPanel.AutoSize = true;
-            this.QuestionPanel.ColumnCount = 2;
-            this.QuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.QuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.QuestionPanel.Controls.Add(this.QuestionIcon, 0, 0);
-            this.QuestionPanel.Controls.Add(this.QuestionLabel, 1, 0);
-            this.QuestionPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.QuestionPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.QuestionPanel.Location = new System.Drawing.Point(0, 0);
-            this.QuestionPanel.Name = "QuestionPanel";
-            this.QuestionPanel.RowCount = 1;
-            this.QuestionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.QuestionPanel.Size = new System.Drawing.Size(584, 56);
-            this.QuestionPanel.TabIndex = 5;
+            this.MessagePanel.AutoSize = true;
+            this.MessagePanel.ColumnCount = 2;
+            this.MessagePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.MessagePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MessagePanel.Controls.Add(this.MessageIcon, 0, 0);
+            this.MessagePanel.Controls.Add(this.MessageLabel, 1, 0);
+            this.MessagePanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.MessagePanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.MessagePanel.Location = new System.Drawing.Point(0, 0);
+            this.MessagePanel.Name = "MessagePanel";
+            this.MessagePanel.RowCount = 1;
+            this.MessagePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MessagePanel.Size = new System.Drawing.Size(584, 56);
+            this.MessagePanel.TabIndex = 5;
             // 
             // ErrorRichTextBox
             // 
@@ -153,15 +155,25 @@
             this.ErrorPanel.Size = new System.Drawing.Size(584, 276);
             this.ErrorPanel.TabIndex = 7;
             // 
+            // OkButton
+            // 
+            this.OkButton.AutoSize = true;
+            this.OkButton.Location = new System.Drawing.Point(263, 3);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(75, 23);
+            this.OkButton.TabIndex = 3;
+            this.OkButton.Text = "ok";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
+            // 
             // ErrorListingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 361);
             this.Controls.Add(this.ErrorPanel);
-            this.Controls.Add(this.QuestionPanel);
+            this.Controls.Add(this.MessagePanel);
             this.Controls.Add(this.ButtonPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ErrorListingDialog";
@@ -172,9 +184,9 @@
             this.ResizeEnd += new System.EventHandler(this.ErrorListingDialog_ResizeEnd);
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.QuestionIcon)).EndInit();
-            this.QuestionPanel.ResumeLayout(false);
-            this.QuestionPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MessageIcon)).EndInit();
+            this.MessagePanel.ResumeLayout(false);
+            this.MessagePanel.PerformLayout();
             this.ErrorPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -187,10 +199,11 @@
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.Button NoButton;
         private System.Windows.Forms.Button YesButton;
-        private System.Windows.Forms.Label QuestionLabel;
-        private System.Windows.Forms.PictureBox QuestionIcon;
-        private System.Windows.Forms.TableLayoutPanel QuestionPanel;
+        private System.Windows.Forms.Label MessageLabel;
+        private System.Windows.Forms.PictureBox MessageIcon;
+        private System.Windows.Forms.TableLayoutPanel MessagePanel;
         private System.Windows.Forms.RichTextBox ErrorRichTextBox;
         private System.Windows.Forms.Panel ErrorPanel;
+        private System.Windows.Forms.Button OkButton;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using static EgsEcfParser.EcfDefinitionHandling;
@@ -658,19 +659,20 @@ namespace EgsEcfParser
         {
             return !string.IsNullOrEmpty(key);
         }
+
         public static List<EcfError> CheckBlockPreMark(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes, EcfErrorGroups errorGroup)
         {
             return CheckBlockDataType(dataType, definedDataTypes, errorGroup, EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown);
         }
         public static List<EcfError> CheckBlockDataType(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes, EcfErrorGroups errorGroup)
         {
-            return CheckBlockDataType(dataType, definedDataTypes, errorGroup, EcfErrors.BlockDataTypeMissing , EcfErrors.BlockDataTypeUnknown);
+            return CheckBlockDataType(dataType, definedDataTypes, errorGroup, EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown);
         }
         public static List<EcfError> CheckBlockPostMark(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes, EcfErrorGroups errorGroup)
         {
             return CheckBlockDataType(dataType, definedDataTypes, errorGroup, EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown);
         }
-        public static List<EcfError> CheckBlockDataType(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes, 
+        public static List<EcfError> CheckBlockDataType(string dataType, ReadOnlyCollection<BlockValueDefinition> definedDataTypes,
             EcfErrorGroups errorGroup, EcfErrors missingError, EcfErrors unknownError)
         {
             List<EcfError> errors = new List<EcfError>();
@@ -700,7 +702,7 @@ namespace EgsEcfParser
             string referenceValue = block.GetRefSource();
             if (referenceValue == null) {
                 inheriter = null;
-                return null; 
+                return null;
             }
             inheriter = blockList.FirstOrDefault(parentBlock => parentBlock.GetRefTarget()?.Equals(referenceValue) ?? false);
             if (inheriter == null)
@@ -785,7 +787,7 @@ namespace EgsEcfParser
         public static List<EcfError> CheckValueValid(string value, ItemDefinition itemDef, FormatDefinition formatDef, string errorInfo, EcfErrorGroups errorGroup)
         {
             List<EcfError> errors = new List<EcfError>();
-            if (value == null) 
+            if (value == null)
             {
                 errors.Add(new EcfError(errorGroup, EcfErrors.ValueNull, errorInfo ?? "Value null"));
             }
@@ -803,7 +805,21 @@ namespace EgsEcfParser
             }
             return errors;
         }
-        public static List<EcfDependency> CheckInterFileDependencies(List<EgsEcfFile> filesToCheck, List<EcfBlock> blocksToCheck, string templateRootKey)
+
+        public static List<EcfDependency> FindBlockReferences(List<EcfBlock> completeBlockList, List<EcfBlock> blocksToCheck)
+        {
+            List<EcfDependency> dependencies = new List<EcfDependency>();
+            blocksToCheck.ForEach(block =>
+            {
+                List<EcfBlock> inheritors = completeBlockList.Where(listedBlock => block.Equals(listedBlock.Inheritor)).ToList();
+                inheritors.ForEach(inheritor =>
+                {
+                    dependencies.Add(new EcfDependency(EcfDependencies.IsInheritedBy, block, inheritor));
+                });
+            });
+            return dependencies;
+        }
+        public static List<EcfDependency> FindInterFileDependencies(List<EgsEcfFile> filesToCheck, List<EcfBlock> blocksToCheck, string templateRootKey)
         {
             List<EcfDependency> dependencies = new List<EcfDependency>();
             blocksToCheck.ForEach(block =>
@@ -2047,7 +2063,7 @@ namespace EgsEcfParser
     public enum EcfDependencies
     {
         IsUsedWith,
-        IsReferencedBy,
+        IsInheritedBy,
     }
     public class EcfDependency
     {

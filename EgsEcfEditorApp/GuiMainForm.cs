@@ -37,7 +37,6 @@ using static EgsEcfEditorApp.OptionSelectorDialog;
 using static EgsEcfParser.EcfDefinitionHandling;
 using static EgsEcfParser.EcfStructureTools;
 using static EgsEcfParser.EcfFormatChecking;
-using static GenericDialogs.GenericDialogs;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
 
@@ -87,10 +86,11 @@ namespace EgsEcfEditorApp
             OkButtonText = TitleRecources.Generic_Ok,
             AbortButtonText = TitleRecources.Generic_Abort,
         };
-        private ErrorListingDialog ErrorQuestionDialog { get; } = new ErrorListingDialog()
+        private ErrorListingDialog ErrorDialog { get; } = new ErrorListingDialog()
         {
             Text = TitleRecources.Generic_Attention,
             Icon = IconRecources.Icon_AppBranding,
+            OkButtonText= TitleRecources.Generic_Ok,
             YesButtonText = TitleRecources.Generic_Yes,
             NoButtonText = TitleRecources.Generic_No,
             AbortButtonText = TitleRecources.Generic_Abort,
@@ -429,7 +429,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_CreateEcfFileFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_CreateEcfFileFailed, ex);
             }
         }
         private void OpenEcfFile()
@@ -453,7 +453,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_OpenEcfFileFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_OpenEcfFileFailed, ex);
             }
         }
         private void ReloadEcfFile()
@@ -478,7 +478,7 @@ namespace EgsEcfEditorApp
                     }
                     catch (Exception ex)
                     {
-                        ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_ReloadEcfFileFailed);
+                        ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_ReloadEcfFileFailed, ex);
                     }
                 }
             }
@@ -498,7 +498,7 @@ namespace EgsEcfEditorApp
                 }
                 catch (Exception ex)
                 {
-                    ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed);
+                    ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed, ex);
                 }
             }
         }
@@ -522,7 +522,7 @@ namespace EgsEcfEditorApp
                     }
                     catch (Exception ex)
                     {
-                        ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed);
+                        ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed, ex);
                     }
                 }
             }
@@ -546,7 +546,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_SaveEcfFileFailed, ex);
             }
         }
         private void CloseEcfFile()
@@ -590,7 +590,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsFailed, ex);
             }
         }
         private void CheckDefinition()
@@ -612,7 +612,7 @@ namespace EgsEcfEditorApp
                 }
                 catch (Exception ex)
                 {
-                    ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_DefinitionReplacementFailed);
+                    ErrorDialog.ShowDialog(this, TextRecources.EcfItemHandlingSupport_DefinitionReplacementFailed, ex);
                 }
             }
         }
@@ -777,7 +777,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_AddToTemplateDefinitionFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EcfItemHandlingSupport_AddToTemplateDefinitionFailed, ex);
             }
         }
         private void AddTemplateToItem(EcfBlock sourceItem)
@@ -813,7 +813,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_AddTemplateFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EcfItemHandlingSupport_AddTemplateFailed, ex);
             }
         }
         private void AddTemplateToItem_SelectFromExisting(EcfBlock sourceItem)
@@ -964,7 +964,7 @@ namespace EgsEcfEditorApp
                 {
                     List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
                         TextRecources.EcfItemHandlingSupport_StillUsedWith, user.BuildRootId())).ToList();
-                    if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) != DialogResult.Yes)
+                    if (ErrorDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) != DialogResult.Yes)
                     {
                         return;
                     }
@@ -984,7 +984,7 @@ namespace EgsEcfEditorApp
             }
             catch (Exception ex)
             {
-                ShowExceptionMessageDialog(this, ex, TitleRecources.Generic_Warning, TextRecources.EcfItemHandlingSupport_RemoveTemplateFailed);
+                ErrorDialog.ShowDialog(this, TextRecources.EcfItemHandlingSupport_RemoveTemplateFailed, ex);
             }
         }
         private void ShowLinkedTemplate(EcfBlock sourceItem)
@@ -1674,11 +1674,11 @@ namespace EcfFileViews
             List<EcfBlock> allBlocks = File.GetDeepItemList<EcfBlock>();
 
             List<EcfParameter> parametersToRemove = items.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
-            errors.AddRange(CheckMandatoryParameters(parametersToRemove));
+            errors.AddRange(CheckParametersMandatory(parametersToRemove));
 
             List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
-            errors.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
-            errors.AddRange(CheckBlockDependencies(blocksToRemove));
+            errors.AddRange(CheckBlockReferences(allBlocks, blocksToRemove, out HashSet<EcfBlock> inheritingBlocks));
+            errors.AddRange(CheckInterFileDependencies(blocksToRemove));
 
             if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
             {
@@ -1695,7 +1695,7 @@ namespace EcfFileViews
         }
         private void RemoveParameterItem(List<EcfParameter> parameters)
         {
-            List<string> errors = CheckMandatoryParameters(parameters);
+            List<string> errors = CheckParametersMandatory(parameters);
             if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
@@ -1703,39 +1703,27 @@ namespace EcfFileViews
                 UpdateAllViews();
             }
         }
-        [Obsolete("managed by parser checking tools?")]
-        private List<string> CheckMandatoryParameters(List<EcfParameter> parameters)
+        private List<string> CheckParametersMandatory(List<EcfParameter> parameters)
         {
-            List<string> mandatoryParameters = File.Definition.BlockParameters.Where(parameter => !parameter.IsOptional).Select(parameter => parameter.Name).ToList();
-            return parameters.Where(parameter => mandatoryParameters.Contains(parameter.Key))
-                .Select(parameter => string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
+            return parameters.Where(parameter => !(parameter.Definition?.IsOptional ?? true)).Select(parameter =>
+                string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
         }
-        [Obsolete("managed by parser checking tools?")]
-        private List<string> CheckBlockReferences(List<EcfBlock> blocksToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
+        private List<string> CheckBlockReferences(List<EcfBlock> completeBlockList, List<EcfBlock> blocksToCheck, out HashSet<EcfBlock> inheritingBlocks)
         {
             List<string> errors = new List<string>();
-            HashSet<EcfBlock> foundBlocks = new HashSet<EcfBlock>();
-            blocksToCheck.ForEach(block =>
-            {
 
-                //CheckBlockReferenceValid(block, completeBlockList, out EcfBlock inheritor, EcfErrorGroups.Editing);
+            List<EcfDependency> dependencies = FindBlockReferences(completeBlockList, blocksToCheck);
+            errors.AddRange(dependencies.Select(dependency => string.Format("{0} {1} {2}", 
+                dependency.SourceItem?.BuildRootId(), GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
 
+            inheritingBlocks = dependencies.Select(dependency => dependency.TargetItem).ToHashSet();
 
-
-                List<EcfBlock> inheritors = completeBlockList.Where(listedBlock => block.Equals(listedBlock.Inheritor)).ToList();
-                inheritors.ForEach(inheritor =>
-                {
-                    foundBlocks.Add(inheritor);
-                    errors.Add(string.Format("{0} {1} {2}", block.BuildRootId(), TextRecources.Generic_IsReferencedBy, inheritor.BuildRootId()));
-                });
-            });
-            inheritingBlocks = foundBlocks;
             return errors;
         }
-        private List<string> CheckBlockDependencies(List<EcfBlock> blocksToCheck)
+        private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
         {
             List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            List<EcfDependency> errors = CheckInterFileDependencies(filesToCheck, blocksToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+            List<EcfDependency> errors = FindInterFileDependencies(filesToCheck, blocksToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
             return errors.Select(error => string.Format("{0} {1} {2}", 
                 error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty, 
                 GetLocalizedEnum(error.Type), 

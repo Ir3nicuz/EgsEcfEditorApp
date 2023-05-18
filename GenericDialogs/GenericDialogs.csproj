@@ -49,7 +49,6 @@
     <Compile Include="ErrorListingDialog.Designer.cs">
       <DependentUpon>ErrorListingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GenericDialogs.cs" />
     <Compile Include="ItemSelectorDialog.cs">
       <SubType>Form</SubType>
     </Compile>

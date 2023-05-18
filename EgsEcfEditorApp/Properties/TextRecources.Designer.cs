@@ -1537,15 +1537,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to is referenced by.
-        /// </summary>
-        internal static string Generic_IsReferencedBy {
-            get {
-                return ResourceManager.GetString("Generic_IsReferencedBy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No suitable item selected.
         /// </summary>
         internal static string Generic_NoSuitableSelection {

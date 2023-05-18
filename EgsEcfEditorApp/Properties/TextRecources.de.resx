@@ -609,9 +609,6 @@
   <data name="Generic_IsNotOptional" xml:space="preserve">
     <value>ist nicht optional</value>
   </data>
-  <data name="Generic_IsReferencedBy" xml:space="preserve">
-    <value>wird referenziert von</value>
-  </data>
   <data name="Generic_NoSuitableSelection" xml:space="preserve">
     <value>Kein geeignetes Element ausgewählt</value>
   </data>

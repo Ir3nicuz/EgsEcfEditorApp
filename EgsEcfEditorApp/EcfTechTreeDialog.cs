@@ -541,6 +541,7 @@ namespace EgsEcfEditorApp
             }
 
             // private
+            [Obsolete("profits from generic exception dialog")]
             private void ShowUpdateErrorMessage(string message)
             {
                 MessageBox.Show(this, string.Format("{0}:{1}{1}{2}", TextRecources.EcfTechTreeDialog_ElementSettingsUpdateError, Environment.NewLine, message),

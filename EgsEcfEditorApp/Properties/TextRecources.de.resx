@@ -591,9 +591,6 @@
   <data name="Generic_ChangeAll" xml:space="preserve">
     <value>Alle ändern</value>
   </data>
-  <data name="Generic_ContinueImpossibleWithErrors" xml:space="preserve">
-    <value>Das Fortsetzen ist nicht möglich aufgrund von Fehlern</value>
-  </data>
   <data name="Generic_ContinueOperationWithErrorsQuestion" xml:space="preserve">
     <value>Das Fortsetzen des aktuellen Vorgangs führt zu Fehlern. Dennoch fortfahren?</value>
   </data>

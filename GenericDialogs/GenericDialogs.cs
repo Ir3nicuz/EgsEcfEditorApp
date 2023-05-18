@@ -7,6 +7,7 @@ namespace GenericDialogs
 {
     public static class GenericDialogs
     {
+        [Obsolete("profits from generic exception dialog")]
         public static void ShowExceptionMessageDialog(IWin32Window parent, Exception ex, string title, string preDescription = null)
         {
             string message;

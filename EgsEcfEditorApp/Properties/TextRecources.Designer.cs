@@ -1483,15 +1483,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Continuing is not possible due to errors.
-        /// </summary>
-        internal static string Generic_ContinueImpossibleWithErrors {
-            get {
-                return ResourceManager.GetString("Generic_ContinueImpossibleWithErrors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Continuing the current operation will result in errors. Still continue?.
         /// </summary>
         internal static string Generic_ContinueOperationWithErrorsQuestion {

@@ -36,6 +36,7 @@ using static EgsEcfEditorApp.EcfItemListingDialog;
 using static EgsEcfEditorApp.OptionSelectorDialog;
 using static EgsEcfParser.EcfDefinitionHandling;
 using static EgsEcfParser.EcfStructureTools;
+using static EgsEcfParser.EcfFormatChecking;
 using static GenericDialogs.GenericDialogs;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
@@ -893,6 +894,7 @@ namespace EgsEcfEditorApp
                 targetFile = (EgsEcfFile)presentTemplateFiles.FirstOrDefault().Item;
             }
             if (EditItemDialog.ShowDialog(this, targetFile, templateToAdd) != DialogResult.OK) { return false; }
+            templateToAdd.Revalidate();
             targetFile.AddItem(templateToAdd);
             return true;
         }
@@ -960,9 +962,9 @@ namespace EgsEcfEditorApp
                     templateToRemove, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
                 if (userList.Count() > 1)
                 {
-                    List<string> problems = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
+                    List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
                         TextRecources.EcfItemHandlingSupport_StillUsedWith, user.BuildRootId())).ToList();
-                    if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) != DialogResult.Yes)
+                    if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) != DialogResult.Yes)
                     {
                         return;
                     }
@@ -1521,7 +1523,7 @@ namespace EcfFileViews
         {
             TreeFilter.Reset();
             ParameterFilter.Reset();
-            ShowSpecificItem(ErrorView.SelectedError.Item);
+            ShowSpecificItem(ErrorView.SelectedError.SourceItem);
         }
         private void ErrorView_ShowInFileClicked(object sender, EventArgs evt)
         {
@@ -1668,17 +1670,17 @@ namespace EcfFileViews
         // private
         private void RemoveTreeItem(List<EcfStructureItem> items)
         {
-            List<string> problems = new List<string>();
+            List<string> errors = new List<string>();
             List<EcfBlock> allBlocks = File.GetDeepItemList<EcfBlock>();
 
             List<EcfParameter> parametersToRemove = items.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
-            problems.AddRange(CheckMandatoryParameters(parametersToRemove));
+            errors.AddRange(CheckMandatoryParameters(parametersToRemove));
 
             List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
-            problems.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
-            problems.AddRange(CheckInterFileDependencies(blocksToRemove));
+            errors.AddRange(CheckBlockReferences(blocksToRemove, allBlocks, out HashSet<EcfBlock> inheritingBlocks));
+            errors.AddRange(CheckBlockDependencies(blocksToRemove));
 
-            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
+            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());
@@ -1693,57 +1695,52 @@ namespace EcfFileViews
         }
         private void RemoveParameterItem(List<EcfParameter> parameters)
         {
-            List<string> problems = CheckMandatoryParameters(parameters);
-            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, problems) == DialogResult.Yes)
+            List<string> errors = CheckMandatoryParameters(parameters);
+            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
             {
                 HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
                 changedParents.ToList().ForEach(block => block.RevalidateParameters());
                 UpdateAllViews();
             }
         }
+        [Obsolete("managed by parser checking tools?")]
         private List<string> CheckMandatoryParameters(List<EcfParameter> parameters)
         {
             List<string> mandatoryParameters = File.Definition.BlockParameters.Where(parameter => !parameter.IsOptional).Select(parameter => parameter.Name).ToList();
             return parameters.Where(parameter => mandatoryParameters.Contains(parameter.Key))
                 .Select(parameter => string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
         }
+        [Obsolete("managed by parser checking tools?")]
         private List<string> CheckBlockReferences(List<EcfBlock> blocksToCheck, List<EcfBlock> completeBlockList, out HashSet<EcfBlock> inheritingBlocks)
         {
-            List<string> problems = new List<string>();
+            List<string> errors = new List<string>();
             HashSet<EcfBlock> foundBlocks = new HashSet<EcfBlock>();
             blocksToCheck.ForEach(block =>
             {
+
+                //CheckBlockReferenceValid(block, completeBlockList, out EcfBlock inheritor, EcfErrorGroups.Editing);
+
+
+
                 List<EcfBlock> inheritors = completeBlockList.Where(listedBlock => block.Equals(listedBlock.Inheritor)).ToList();
                 inheritors.ForEach(inheritor =>
                 {
                     foundBlocks.Add(inheritor);
-                    problems.Add(string.Format("{0} {1} {2}", block.BuildRootId(), TextRecources.Generic_IsReferencedBy, inheritor.BuildRootId()));
+                    errors.Add(string.Format("{0} {1} {2}", block.BuildRootId(), TextRecources.Generic_IsReferencedBy, inheritor.BuildRootId()));
                 });
             });
             inheritingBlocks = foundBlocks;
-            return problems;
+            return errors;
         }
-        private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
+        private List<string> CheckBlockDependencies(List<EcfBlock> blocksToCheck)
         {
-            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            List<string> problems = new List<string>();
-            blocksToCheck.ForEach(block =>
-            {
-                if (block.EcfFile?.Definition.IsDefiningItems ?? false)
-                {
-                    List<EcfBlock> templateList = GetTemplateListByIngredient(openedFiles, block);
-                    problems.AddRange(templateList.Select(template => string.Format("{2} {0} {3} {4} {1}", block.BuildRootId(), template.BuildRootId(),
-                        TitleRecources.Generic_Item, TextRecources.EcfItemHandlingSupport_StillUsedWith, TitleRecources.Generic_Template)).ToList());
-                }
-                if (block.EcfFile?.Definition.IsDefiningTemplates ?? false)
-                {
-                    List<EcfBlock> userList = GetUserListByTemplate(openedFiles, block,
-                        UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
-                    problems.AddRange(userList.Select(user => string.Format("{2} {0} {3} {4} {1}", block.BuildRootId(), user.BuildRootId(),
-                        TitleRecources.Generic_Template, TextRecources.EcfItemHandlingSupport_StillUsedWith, TitleRecources.Generic_Item)).ToList());
-                }
-            });
-            return problems;
+            List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+            List<EcfDependency> errors = CheckInterFileDependencies(filesToCheck, blocksToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+            return errors.Select(error => string.Format("{0} {1} {2}", 
+                error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty, 
+                GetLocalizedEnum(error.Type), 
+                error.TargetItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty
+                )).ToList();
         }
         private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
         {
@@ -1798,6 +1795,7 @@ namespace EcfFileViews
                 {
                     parent?.AddChild(createdItem, null);
                 }
+                createdItem.Revalidate();
                 if (createdItem is EcfBlock)
                 {
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
@@ -1834,6 +1832,7 @@ namespace EcfFileViews
                 {
                     parent.AddChild(createdItem, item);
                 }
+                createdItem.Revalidate();
                 if (createdItem is EcfBlock)
                 {
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
@@ -1848,6 +1847,7 @@ namespace EcfFileViews
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 parentBlock.AddChild(createdItem, preceedingItem);
+                createdItem.Revalidate();
                 parentBlock.RevalidateParameters();
                 UpdateAllViews();
             }
@@ -1888,6 +1888,7 @@ namespace EcfFileViews
             {
                 if (ItemEditor.ShowDialog(this, comment) == DialogResult.OK)
                 {
+                    comment.Revalidate();
                     UpdateAllViews();
                 }
                 return true;
@@ -1896,6 +1897,7 @@ namespace EcfFileViews
             {
                 if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
                 {
+                    parameter.Revalidate();
                     if (parameter.Parent is EcfBlock block)
                     {
                         block.RevalidateParameters();
@@ -1908,6 +1910,7 @@ namespace EcfFileViews
             {
                 if (ItemEditor.ShowDialog(this, File, block) == DialogResult.OK)
                 {
+                    block.Revalidate();
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
                     completeBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(completeBlockList));
                     completeBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(completeBlockList));
@@ -1921,6 +1924,7 @@ namespace EcfFileViews
         {
             if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
             {
+                parameter.Revalidate();
                 if (parameter.Parent is EcfBlock block)
                 {
                     block.RevalidateParameters();
@@ -1932,6 +1936,10 @@ namespace EcfFileViews
         {
             if (ItemEditor.ShowDialog(this, File, parameters) == DialogResult.OK)
             {
+                foreach (EcfParameter parameter in parameters)
+                {
+                    parameter.Revalidate();
+                }
                 UpdateAllViews();
             }
         }
@@ -3367,7 +3375,7 @@ namespace EcfFileViews
             {
                 StringBuilder entry = new StringBuilder(GetLocalizedEnum(error.Type));
                 entry.Append(": ");
-                entry.Append(error.Info);
+                entry.Append(error.Info ?? string.Empty);
                 return entry.ToString();
             }
         }
@@ -3561,8 +3569,8 @@ namespace EcfFileViews
                 ErrorGroupCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Group) };
                 ErrorTypeCell = new DataGridViewTextBoxCell() { Value = GetLocalizedEnum(error.Type) };
                 LineNumberCell = new DataGridViewTextBoxCell() { Value = error.IsFromParsing() ? error.LineInFile.ToString() : string.Empty };
-                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.Item?.GetFullPath() ?? string.Empty };
-                ErrorInfoCell = new DataGridViewTextBoxCell() { Value = error.Info };
+                ElementNameCell = new DataGridViewTextBoxCell() { Value = error.SourceItem?.GetFullPath() ?? string.Empty };
+                ErrorInfoCell = new DataGridViewTextBoxCell() { Value = error.Info ?? string.Empty };
 
                 Cells.Add(ErrorNumberCell);
                 Cells.Add(ErrorGroupCell);

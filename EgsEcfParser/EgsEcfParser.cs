@@ -803,6 +803,24 @@ namespace EgsEcfParser
             }
             return errors;
         }
+        public static List<EcfDependency> CheckInterFileDependencies(List<EgsEcfFile> filesToCheck, List<EcfBlock> blocksToCheck, string templateRootKey)
+        {
+            List<EcfDependency> dependencies = new List<EcfDependency>();
+            blocksToCheck.ForEach(block =>
+            {
+                if (block.EcfFile?.Definition.IsDefiningItems ?? false)
+                {
+                    List<EcfBlock> templateList = GetTemplateListByIngredient(filesToCheck, block);
+                    dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, block, template)));
+                }
+                if (block.EcfFile?.Definition.IsDefiningTemplates ?? false)
+                {
+                    List<EcfBlock> userList = GetUserListByTemplate(filesToCheck, block, templateRootKey);
+                    dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, block, user)));
+                }
+            });
+            return dependencies;
+        }
 
         private static IKeyItemComparer KeyItemComparer { get; } = new IKeyItemComparer();
         private class IKeyItemComparer : IEqualityComparer<EcfKeyValueItem>
@@ -1935,12 +1953,12 @@ namespace EgsEcfParser
         public string Info { get; }
         public EcfErrorGroups Group { get; private set; }
         public int LineInFile { get; set; } = 0;
-        public EcfStructureItem Item { get; set; } = null;
+        public EcfStructureItem SourceItem { get; set; } = null;
 
         public EcfError(EcfErrorGroups group, EcfErrors type, string info)
         {
             Type = type;
-            Info = info ?? "null";
+            Info = info;
             Group = group;
         }
         public EcfError(EcfErrorGroups group, EcfErrors type, string info, int lineInFile) : this(group, type, info)
@@ -1948,16 +1966,17 @@ namespace EgsEcfParser
             LineInFile = lineInFile;
         }
 
-        // copyconstructor
-        public EcfError(EcfError template, EcfStructureItem reference)
+        // copy constructor
+        public EcfError(EcfError template)
         {
             Type = template.Type;
             Info = template.Info;
             Group = template.Group;
             LineInFile = template.LineInFile;
-            Item = reference;
+            SourceItem = template.SourceItem;
         }
 
+        // public
         public bool IsFromParsing()
         {
             return Group == EcfErrorGroups.Structural || Group == EcfErrorGroups.Interpretation;
@@ -1975,11 +1994,11 @@ namespace EgsEcfParser
             {
                 errorText.Append("At '");
             }
-            errorText.Append(Item != null ? Item.GetFullPath() : "unknown");
+            errorText.Append(SourceItem?.GetFullPath() ?? "unknown");
             errorText.Append("' occured error ");
             errorText.Append(Type.ToString());
             errorText.Append(", additional info: '");
-            errorText.Append(Info);
+            errorText.Append(Info ?? "null");
             errorText.Append("'");
             return errorText.ToString();
         }
@@ -2021,6 +2040,41 @@ namespace EgsEcfParser
         private static string ToString(EcfErrors ecfError, string textData)
         {
             return string.Format("{0} in: '{1}'", ecfError, textData);
+        }
+    }
+
+    // ecf dependency handling
+    public enum EcfDependencies
+    {
+        IsUsedWith,
+        IsReferencedBy,
+    }
+    public class EcfDependency
+    {
+        public EcfDependencies Type { get; }
+        public EcfBlock SourceItem { get; } = null;
+        public EcfBlock TargetItem { get; } = null;
+
+        public EcfDependency(EcfDependencies type, EcfBlock sourceItem, EcfBlock targetItem)
+        {
+            Type = type;
+            SourceItem = sourceItem;
+            TargetItem = targetItem;
+        }
+
+        // copy constructor
+        public EcfDependency(EcfDependency template)
+        {
+            Type = template.Type;
+            SourceItem = template.SourceItem;
+            TargetItem = template.TargetItem;
+        }
+
+        // public
+        public override string ToString()
+        {
+            return string.Format("'{0}' {1} '{2}'", 
+                SourceItem?.GetFullPath() ?? "unknown", Type.ToString(), TargetItem?.GetFullPath() ?? "unknown");
         }
     }
 
@@ -2082,7 +2136,14 @@ namespace EgsEcfParser
             Errors = InternalErrors.AsReadOnly();
             Comments = InternalComments.AsReadOnly();
 
-            AddError(template.Errors.Cast<EcfError>().Select(error => new EcfError(error, this)).ToList());
+            AddError(template.Errors.Cast<EcfError>().Select(error => 
+            {
+                EcfError newError = new EcfError(error)
+                {
+                    SourceItem = this,
+                };
+                return newError;
+            }).ToList());
             AddComment(template.InternalComments);
         }
 
@@ -2134,7 +2195,7 @@ namespace EgsEcfParser
         {
             if (error != null)
             {
-                error.Item = this;
+                error.SourceItem = this;
                 InternalErrors.Add(error);
                 return true;
             }

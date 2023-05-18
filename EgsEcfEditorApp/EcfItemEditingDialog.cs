@@ -1,13 +1,13 @@
 ﻿using CustomControls;
 using EgsEcfEditorApp.Properties;
 using EgsEcfParser;
+using GenericDialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using static EcfFileViews.ItemSelectorDialog;
 using static EgsEcfParser.EcfFormatChecking;
@@ -28,6 +28,14 @@ namespace EcfFileViews
             AbortButtonText = TitleRecources.Generic_Abort,
             SearchToolTipText = TextRecources.ItemSelectorDialog_ToolTip_SearchInfo,
             DefaultItemText = TitleRecources.Generic_Replacement_Empty,
+        };
+        private ErrorListingDialog ErrorDialog { get; } = new ErrorListingDialog()
+        {
+            Text = TitleRecources.Generic_Attention,
+            Icon = IconRecources.Icon_AppBranding,
+            YesButtonText = TitleRecources.Generic_Yes,
+            NoButtonText = TitleRecources.Generic_No,
+            AbortButtonText = TitleRecources.Generic_Abort,
         };
 
         private CommentItemPanel CommentView { get; } = new CommentItemPanel();
@@ -230,16 +238,15 @@ namespace EcfFileViews
         }
         private void ValidateAndPrepareResult()
         {
-            List<string> errors = ValidateResultData();
-            if (errors.Count > 0)
+            if (ErrorDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, ValidateResultData()) != DialogResult.Yes)
             {
-                ShowValidationErrors(errors);
                 return;
             }
-            PrepareResultItem();
+            ComputeResultItem();
             DialogResult = DialogResult.OK;
             Close();
         }
+        [Obsolete("needs inter file logic")]
         private List<string> ValidateResultData()
         {
             switch (OperationMode)
@@ -252,19 +259,7 @@ namespace EcfFileViews
                 default: return new List<string>() { string.Format("No validator defined for item type {0} ...that shouldn't happen", OperationMode.ToString()) }; 
             }
         }
-        private void ShowValidationErrors(List<string> errors)
-        {
-            StringBuilder message = new StringBuilder(TextRecources.Generic_ContinueImpossibleWithErrors);
-            message.Append(Environment.NewLine);
-            errors.ForEach(error =>
-            {
-                message.Append(Environment.NewLine);
-                message.Append(error);
-            });
-
-            MessageBox.Show(this, message.ToString(), TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-        private void PrepareResultItem()
+        private void ComputeResultItem()
         {
             switch (OperationMode)
             {
@@ -610,7 +605,7 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            public List<EcfAttribute> PrepareResultAttributes()
+            public List<EcfAttribute> ComputeResultAttributes()
             {
                 List<EcfAttribute> attributes = new List<EcfAttribute>();
                 foreach (DataGridViewRow row in Grid.Rows)
@@ -1172,7 +1167,7 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            public List<EcfValueGroup> PrepareResultValues()
+            public List<EcfValueGroup> ComputeResultValues()
             {
                 List<EcfValueGroup> valueGroups = new List<EcfValueGroup>();
                 if (ParameterValuesDefinition.HasValue)
@@ -1187,7 +1182,7 @@ namespace EcfFileViews
                 }
                 return valueGroups;
             }
-            public List<EcfParameter> PrepareResultParameters()
+            public List<EcfParameter> ComputeResultParameters()
             {
                 List<EcfParameter> parameters = new List<EcfParameter>();
                 foreach (DataGridViewRow row in Grid.Rows)
@@ -1824,8 +1819,8 @@ namespace EcfFileViews
             }
             public EcfBlock ComputeResultData()
             {
-                List<EcfParameter> activeParameters = BlockItemParametersPanel.PrepareResultParameters();
-                List<EcfAttribute> attributes = BlockItemAttributesPanel.PrepareResultAttributes();
+                List<EcfParameter> activeParameters = BlockItemParametersPanel.ComputeResultParameters();
+                List<EcfAttribute> attributes = BlockItemAttributesPanel.ComputeResultAttributes();
                 if (ResultBlock == null)
                 {
                     ResultBlock = new EcfBlock(
@@ -1845,16 +1840,10 @@ namespace EcfFileViews
                         (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
                         (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
                         (BlockItemPostMarkComboBox.SelectedItem as ComboBoxItem)?.Value);
-                    PrepareResultParameterData(ResultBlock, activeParameters);
+                    ComputeResultParameterData(ResultBlock, activeParameters);
                     ResultBlock.ClearAttributes();
                     ResultBlock.AddAttribute(attributes);
                     ResultBlock.ClearComments();
-                    ResultBlock.RemoveErrors(EcfErrors.BlockIdNotUnique, EcfErrors.BlockInheritorMissing,
-                        EcfErrors.BlockPreMarkMissing, EcfErrors.BlockPreMarkUnknown,
-                        EcfErrors.BlockDataTypeMissing, EcfErrors.BlockDataTypeUnknown,
-                        EcfErrors.BlockPostMarkMissing, EcfErrors.BlockPostMarkUnknown,
-                        EcfErrors.ParameterMissing, EcfErrors.ParameterDoubled,
-                        EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled);
                 }
                 ResultBlock.Inheritor = BlockItemAttributesPanel.GetInheritor();
                 if (!string.Empty.Equals(BlockItemCommentTextBox.Text))
@@ -2108,7 +2097,7 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            private void PrepareResultParameterData(EcfBlock block, List<EcfParameter> activeParameters)
+            private void ComputeResultParameterData(EcfBlock block, List<EcfParameter> activeParameters)
             {
                 List<EcfParameter> presentParameters = block.ChildItems.Where(child => child is EcfParameter).Cast<EcfParameter>().ToList();
 
@@ -2301,8 +2290,8 @@ namespace EcfFileViews
             }
             public EcfParameter ComputeResultData()
             {
-                List<EcfValueGroup> valueGroups = ParameterItemValuesPanel.PrepareResultValues();
-                List<EcfAttribute> attributes = ParameterItemAttributesPanel.PrepareResultAttributes();
+                List<EcfValueGroup> valueGroups = ParameterItemValuesPanel.ComputeResultValues();
+                List<EcfAttribute> attributes = ParameterItemAttributesPanel.ComputeResultAttributes();
                 if (ResultParameter == null)
                 {
                     ResultParameter = new EcfParameter(Convert.ToString(ParameterItemKeyComboBox.SelectedItem), valueGroups, attributes);
@@ -2315,8 +2304,6 @@ namespace EcfFileViews
                     ResultParameter.ClearAttributes();
                     ResultParameter.AddAttribute(attributes);
                     ResultParameter.ClearComments();
-                    ResultParameter.RemoveErrors(EcfErrors.ParameterUnknown, EcfErrors.AttributeMissing, EcfErrors.AttributeDoubled,
-                        EcfErrors.ValueGroupEmpty, EcfErrors.ValueNull, EcfErrors.ValueEmpty, EcfErrors.ValueContainsProhibitedPhrases);
                 }
                 if (!string.Empty.Equals(ParameterItemCommentTextBox.Text))
                 {
@@ -2551,12 +2538,12 @@ namespace EcfFileViews
             }
             public List<string> ValidateResultData()
             {
-                List<string> problems = new List<string>();
+                List<string> errors = new List<string>();
                 foreach (Control tabPage in Controls)
                 {
-                    problems.AddRange(tabPage.Controls.Cast<BlockPanel>().FirstOrDefault().ValidateResultData());
+                    errors.AddRange(tabPage.Controls.Cast<BlockPanel>().FirstOrDefault().ValidateResultData());
                 }
-                return problems;
+                return errors;
             }
             public EcfBlock ComputeResultData()
             {
@@ -2611,11 +2598,7 @@ namespace EcfFileViews
             }
             public List<EcfParameter> ComputeResultData()
             {
-                ResultMatrix = PrepareResultParameters();
-                foreach (EcfParameter parameter in ResultMatrix)
-                {
-                    parameter.Revalidate();
-                }
+                ResultMatrix = ComputeResultParameters();
                 return ResultMatrix;
             }
 

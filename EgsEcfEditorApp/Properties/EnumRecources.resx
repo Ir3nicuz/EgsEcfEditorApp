@@ -141,6 +141,12 @@
   <data name="EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.SelectDefinition" xml:space="preserve">
     <value>Add to specific template Definition file</value>
   </data>
+  <data name="EgsEcfParser.EcfDependencies.IsReferencedBy" xml:space="preserve">
+    <value>is referenced by</value>
+  </data>
+  <data name="EgsEcfParser.EcfDependencies.IsUsedWith" xml:space="preserve">
+    <value>is used with</value>
+  </data>
   <data name="EgsEcfParser.EcfErrorGroups.Creating" xml:space="preserve">
     <value>Creating error</value>
   </data>

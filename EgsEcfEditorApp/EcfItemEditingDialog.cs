@@ -124,14 +124,14 @@ namespace EcfFileViews
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, EcfBlock block)
+        public DialogResult ShowDialog(IWin32Window parent, List<EgsEcfFile> openedFiles, EgsEcfFile file, EcfBlock block)
         {
             ResultItem = null;
             ResultMatrix = null;
 
             try
             {
-                BlockView.PresetData(file, block, ItemSelector);
+                BlockView.PresetData(openedFiles, file, block, ItemSelector);
             }
             catch (Exception ex)
             {
@@ -202,12 +202,12 @@ namespace EcfFileViews
                         break;
                     case OperationModes.RootBlock:
                         Text = TitleRecources.EcfItemEditingDialog_Header_AddRootBlock;
-                        BlockView.PresetData(file, true, parentBlock);
+                        BlockView.PresetData(null, file, true, parentBlock);
                         ViewPanel.Controls.Add(BlockView);
                         break;
                     case OperationModes.ChildBlock:
                         Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
-                        BlockView.PresetData(file, false, parentBlock);
+                        BlockView.PresetData(null, file, false, parentBlock);
                         ViewPanel.Controls.Add(BlockView);
                         break;
                     default:
@@ -246,7 +246,6 @@ namespace EcfFileViews
             DialogResult = DialogResult.OK;
             Close();
         }
-        [Obsolete("needs inter file logic")]
         private List<string> ValidateResultData()
         {
             switch (OperationMode)
@@ -528,8 +527,7 @@ namespace EcfFileViews
                         string value = idRow.GetValues().FirstOrDefault();
                         if (value != null)
                         {
-                            foreach (EcfBlock block in identifyingBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
-                                && value.Equals(block.GetAttributeFirstValue(idRow.ItemDef.Name))))
+                            foreach (EcfBlock block in identifyingBlockList.Where(block => !(presetBlock?.Equals(block) ?? false) && value.Equals(block.GetName())))
                             {
                                 errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheIdAttributeValue,
                                     value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildRootId()));
@@ -547,8 +545,7 @@ namespace EcfFileViews
                         {
                             if (referencingBlockList != null && referencingBlockList.Any(listedBlock => value.Equals(listedBlock.GetRefSource())))
                             {
-                                foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false)
-                                    && value.Equals(block.GetAttributeFirstValue(nameRow.ItemDef.Name))))
+                                foreach (EcfBlock block in referencedBlockList.Where(block => !(presetBlock?.Equals(block) ?? false) && value.Equals(block.GetName())))
                                 {
                                     errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheNameAttributeValue,
                                         value, TextRecources.EcfItemEditingDialog_IsAlreadyUsedBy, block.BuildRootId()));
@@ -567,11 +564,10 @@ namespace EcfFileViews
                     AttributeRow targetRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
                     if (targetRefRow != null)
                     {
-                        string oldTargetValue = presetBlock.GetAttributeFirstValue(targetRefRow.FormDef.BlockReferenceTargetAttribute);
+                        string oldTargetValue = presetBlock.GetRefTarget();
                         if (oldTargetValue != null && !oldTargetValue.Equals(targetRefRow.GetValues().FirstOrDefault()))
                         {
-                            foreach (EcfBlock block in referencingBlockList.Where(block => 
-                                block.GetAttributeFirstValue(targetRefRow.FormDef.BlockReferenceSourceAttribute).Equals(oldTargetValue)))
+                            foreach (EcfBlock block in referencingBlockList.Where(block => string.Equals(block.GetRefSource(), oldTargetValue)))
                             {
                                 errors.Add(string.Format("{0} '{1}' {2} {3}", TextRecources.EcfItemEditingDialog_TheOldNameAttributeValue,
                                     oldTargetValue, TextRecources.EcfItemEditingDialog_IsStillReferencedBy, block.BuildRootId()));
@@ -600,6 +596,25 @@ namespace EcfFileViews
                         {
                             errors.Add(string.Format("{0} '{1}' {2}", TextRecources.EcfItemEditingDialog_TheReferencedItem,
                                 sourceRefRow.Inheritor?.BuildRootId(), TextRecources.EcfItemEditingDialog_HasNoUniqueIdentifier));
+                        }
+                    }
+                }
+                return errors;
+            }
+            public List<string> ValidateInterFileDependencies(List<EgsEcfFile> filesToCheck, EcfBlock presetBlock)
+            {
+                List<string> errors = new List<string>();
+                if (filesToCheck != null && presetBlock != null)
+                {
+                    AttributeRow nameRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsName);
+                    if (nameRow != null)
+                    {
+                        string oldName = presetBlock.GetName();
+                        if (!string.IsNullOrEmpty(oldName) && !oldName.Equals(nameRow?.GetValues().FirstOrDefault()))
+                        {
+                            errors.AddRange(FindInterFileDependencies(filesToCheck,
+                                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, nameRow.FormDef, oldName).Select(dependency =>
+                                string.Format("{0} {1} {2} {3}", presetBlock.DataType, oldName, GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
                         }
                     }
                 }
@@ -731,11 +746,10 @@ namespace EcfFileViews
                 public ItemDefinition ItemDef { get; }
 
                 public bool IsIdentification { get; } = false;
+                public bool IsName { get; } = false;
                 public bool IsReferenceSource { get; } = false;
                 public bool IsReferenceTarget { get; } = false;
                 public EcfBlock Inheritor { get; private set; } = null;
-
-                private string ReferenceTargetAttribute { get; } = string.Empty;
 
                 private int PrefixColumnCount { get; } = 0;
                 private DataGridViewCheckBoxCell ActivationCell { get; } = new DataGridViewCheckBoxCell();
@@ -753,10 +767,9 @@ namespace EcfFileViews
                     FormDef = format;
 
                     IsIdentification = definition.Name.Equals(format.BlockIdAttribute);
+                    IsName = definition.Name.Equals(format.BlockNameAttribute);
                     IsReferenceSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
                     IsReferenceTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
-
-                    ReferenceTargetAttribute = format.BlockReferenceTargetAttribute;
 
                     ActivationCell.ReadOnly = !definition.IsOptional;
                     if (ActivationCell.ReadOnly) { ActivationCell.Style.BackColor = Color.LightGray; }
@@ -781,7 +794,7 @@ namespace EcfFileViews
                     Inheritor = inheritor;
                     if (inheritor != null)
                     {
-                        SetValues(inheritor?.GetAttributeFirstValue(ReferenceTargetAttribute));
+                        SetValues(inheritor.GetRefTarget());
                     }
                     else
                     {
@@ -1675,6 +1688,7 @@ namespace EcfFileViews
         private class BlockPanel : TableLayoutPanel
         {
             BlockItemPanelModes PanelMode { get; set; } = BlockItemPanelModes.None;
+            private List<EgsEcfFile> Files { get; set; } = null;
             private EgsEcfFile File { get; set; } = null;
             public EcfBlock ResultBlock { get; private set; } = null;
             private EcfBlock ParentBlock { get; set; } = null;
@@ -1721,17 +1735,17 @@ namespace EcfFileViews
                 InitControls();
                 InitEvents();
             }
-            public BlockPanel(EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector) : this()
+            public BlockPanel(List<EgsEcfFile> openedFiles, EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector) : this()
             {
                 InitControls();
                 InitEvents();
-                PresetData(file, block, itemSelector);
+                PresetData(openedFiles, file, block, itemSelector);
             }
-            public BlockPanel(EgsEcfFile file, bool isRoot, EcfBlock parentBlock) : this()
+            public BlockPanel(List<EgsEcfFile> openedFiles, EgsEcfFile file, bool isRoot, EcfBlock parentBlock) : this()
             {
                 InitControls();
                 InitEvents();
-                PresetData(file, isRoot, parentBlock);
+                PresetData(openedFiles, file, isRoot, parentBlock);
             }
 
             // events
@@ -1741,8 +1755,9 @@ namespace EcfFileViews
             }
 
             // public
-            public void PresetData(EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
+            public void PresetData(List<EgsEcfFile> openedFiles, EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
             {
+                Files = openedFiles.ToList();
                 File = file;
                 ResultBlock = block;
                 ParentBlock = block?.Parent as EcfBlock;
@@ -1760,8 +1775,9 @@ namespace EcfFileViews
                 BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, File.Definition.BlockParameters);
                 ResetData();
             }
-            public void PresetData(EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
+            public void PresetData(List<EgsEcfFile> openedFiles, EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
             {
+                Files = openedFiles.ToList();
                 File = file;
                 ResultBlock = null;
                 ParentBlock = parentBlock;
@@ -1814,6 +1830,7 @@ namespace EcfFileViews
                 errors.AddRange(BlockItemAttributesPanel.ValidateRefTarget(ReferencingBlockList, ResultBlock));
                 errors.AddRange(BlockItemAttributesPanel.ValidateRefSource(ReferencedBlockList));
                 errors.AddRange(BlockItemAttributesPanel.ValidateAttributeValues());
+                errors.AddRange(BlockItemAttributesPanel.ValidateInterFileDependencies(Files, ResultBlock));
                 errors.AddRange(BlockItemParametersPanel.ValidateParameterMatrix());
                 return errors;
             }
@@ -2507,25 +2524,25 @@ namespace EcfFileViews
             }
 
             // public
-            public void PresetData(EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
+            public void PresetData(List<EgsEcfFile> openedFiles, EgsEcfFile file, EcfBlock block, ItemSelectorDialog itemSelector)
             {
                 SuspendLayout();
-                RootPanel.PresetData(file, block, itemSelector);
+                RootPanel.PresetData(openedFiles, file, block, itemSelector);
                 Controls.Clear();
                 Controls.Add(RootTab);
                 block.GetDeepChildList<EcfBlock>().ForEach(childBlock =>
                 {
                     TabPage childTab = new TabPage(string.Format("{0} {1}", TitleRecources.Generic_ChildElement, Controls.Count));
-                    childTab.Controls.Add(new BlockPanel(file, childBlock, itemSelector));
+                    childTab.Controls.Add(new BlockPanel(openedFiles, file, childBlock, itemSelector));
                     Controls.Add(childTab);
                 });
                 ResetData();
                 ResumeLayout(true);
             }
-            public void PresetData(EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
+            public void PresetData(List<EgsEcfFile> openedFiles, EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
             {
                 SuspendLayout();
-                RootPanel.PresetData(file, isRoot, parentBlock);
+                RootPanel.PresetData(openedFiles, file, isRoot, parentBlock);
                 ResetData();
                 ResumeLayout(true);
             }

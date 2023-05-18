@@ -794,7 +794,7 @@ namespace EgsEcfEditorApp
                 }
 
                 List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
                 if (templateList.Count < 1)
                 {
                     OptionsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddTemplateOptionSelector;
@@ -893,7 +893,8 @@ namespace EgsEcfEditorApp
             {
                 targetFile = (EgsEcfFile)presentTemplateFiles.FirstOrDefault().Item;
             }
-            if (EditItemDialog.ShowDialog(this, targetFile, templateToAdd) != DialogResult.OK) { return false; }
+            List<EgsEcfFile> openedFiles = FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+            if (EditItemDialog.ShowDialog(this, openedFiles, targetFile, templateToAdd) != DialogResult.OK) { return false; }
             templateToAdd.Revalidate();
             targetFile.AddItem(templateToAdd);
             return true;
@@ -919,7 +920,7 @@ namespace EgsEcfEditorApp
                 string messageText;
                 // get Templates from open files for the sourceItem
                 List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
                 if (templateList.Count() < 1)
                 {
                     messageText = string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());
@@ -959,7 +960,7 @@ namespace EgsEcfEditorApp
                 }
                 // check cross usage of template
                 List<EcfBlock> userList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
-                    templateToRemove, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, templateToRemove);
                 if (userList.Count() > 1)
                 {
                     List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
@@ -990,7 +991,7 @@ namespace EgsEcfEditorApp
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
             List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
-                sourceItem, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
             if  (templateList.Count < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
@@ -1018,7 +1019,7 @@ namespace EgsEcfEditorApp
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
             List<EcfBlock> userList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
-                sourceTemplate, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceTemplate);
             EcfItemListingDialog itemView = new EcfItemListingDialog();
             itemView.ItemRowClicked += ItemListingView_ShowItem;
             itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildRootId()), userList);
@@ -1723,7 +1724,7 @@ namespace EcfFileViews
         private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
         {
             List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            List<EcfDependency> errors = FindInterFileDependencies(filesToCheck, blocksToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+            List<EcfDependency> errors = FindInterFileDependencies(filesToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, blocksToCheck);
             return errors.Select(error => string.Format("{0} {1} {2}", 
                 error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty, 
                 GetLocalizedEnum(error.Type), 
@@ -1896,7 +1897,8 @@ namespace EcfFileViews
             }
             else if (item is EcfBlock block)
             {
-                if (ItemEditor.ShowDialog(this, File, block) == DialogResult.OK)
+                List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+                if (ItemEditor.ShowDialog(this, openedFiles, File, block) == DialogResult.OK)
                 {
                     block.Revalidate();
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();

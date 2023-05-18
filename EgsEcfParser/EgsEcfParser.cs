@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using static EgsEcfParser.EcfDefinitionHandling;
@@ -819,22 +818,30 @@ namespace EgsEcfParser
             });
             return dependencies;
         }
-        public static List<EcfDependency> FindInterFileDependencies(List<EgsEcfFile> filesToCheck, List<EcfBlock> blocksToCheck, string templateRootKey)
+        public static List<EcfDependency> FindInterFileDependencies(List<EgsEcfFile> filesToCheck, string templateRootKey, List<EcfBlock> blocksToCheck)
+        {
+            return blocksToCheck.SelectMany(block => FindInterFileDependencies(filesToCheck, templateRootKey, block)).ToList();
+        }
+        public static List<EcfDependency> FindInterFileDependencies(List<EgsEcfFile> filesToCheck, string templateRootKey, EcfBlock blockToCheck)
+        {
+            return FindInterFileDependencies(filesToCheck, templateRootKey, blockToCheck?.EcfFile?.Definition, blockToCheck.GetName(), blockToCheck);
+        }
+        public static List<EcfDependency> FindInterFileDependencies(List<EgsEcfFile> filesToCheck, 
+            string templateRootKey, FormatDefinition formatDef, string itemName, EcfBlock sourceRef = null)
         {
             List<EcfDependency> dependencies = new List<EcfDependency>();
-            blocksToCheck.ForEach(block =>
+            
+            if (formatDef?.IsDefiningItems ?? false)
             {
-                if (block.EcfFile?.Definition.IsDefiningItems ?? false)
-                {
-                    List<EcfBlock> templateList = GetTemplateListByIngredient(filesToCheck, block);
-                    dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, block, template)));
-                }
-                if (block.EcfFile?.Definition.IsDefiningTemplates ?? false)
-                {
-                    List<EcfBlock> userList = GetUserListByTemplate(filesToCheck, block, templateRootKey);
-                    dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, block, user)));
-                }
-            });
+                List<EcfBlock> templateList = GetTemplateListByIngredient(filesToCheck, itemName);
+                dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, template)));
+            }
+            if (formatDef?.IsDefiningTemplates ?? false)
+            {
+                List<EcfBlock> userList = GetUserListByTemplate(filesToCheck, templateRootKey, itemName);
+                dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, user)));
+            }
+            
             return dependencies;
         }
 
@@ -942,6 +949,7 @@ namespace EgsEcfParser
             }
             return true;
         }
+        
         public static EcfStructureItem CopyStructureItem(EcfStructureItem template)
         {
             if (template is EcfComment comment)
@@ -962,24 +970,31 @@ namespace EgsEcfParser
             }
             return null;
         }
+        
         public static List<EcfBlock> GetTemplateListByIngredient(List<EgsEcfFile> files, EcfBlock ingredientItem)
         {
-            string nameValue = ingredientItem.GetName();
+            return GetTemplateListByIngredient(files, ingredientItem.GetName());
+        }
+        public static List<EcfBlock> GetTemplateListByIngredient(List<EgsEcfFile> files, string itemName)
+        {
             return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template =>
-                    template.HasParameter(nameValue, false, true, out _)
+                    template.HasParameter(itemName, false, true, out _)
                 )).ToList();
         }
-        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, EcfBlock template, string templateParameterName)
+        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, string templateParameterName, EcfBlock template)
         {
-            string nameValue = template.GetName();
+            return GetUserListByTemplate(files, templateParameterName, template.GetName());
+        }
+        public static List<EcfBlock> GetUserListByTemplate(List<EgsEcfFile> files, string templateParameterName, string templateName)
+        {
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
                 file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
-                    string.Equals(item.GetName(), nameValue) ||
-                    (item.HasParameter(templateParameterName, true, false, out EcfParameter parameter) && parameter.ContainsValue(nameValue))
+                    string.Equals(item.GetName(), templateName) ||
+                    (item.HasParameter(templateParameterName, true, false, out EcfParameter parameter) && parameter.ContainsValue(templateName))
                 )).ToList();
         }
-        public static List<EcfBlock> GetTemplateListByUser(List<EgsEcfFile> files, EcfBlock usingItem, string templateParameterName)
+        public static List<EcfBlock> GetTemplateListByUser(List<EgsEcfFile> files, string templateParameterName, EcfBlock usingItem)
         {
             string nameValue = usingItem.GetName();
             string templateNameValue = usingItem.GetParameterFirstValue(templateParameterName);

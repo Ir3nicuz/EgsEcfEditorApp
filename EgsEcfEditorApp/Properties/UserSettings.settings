@@ -68,5 +68,8 @@
     <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionInfo" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tool-Added</Value>
     </Setting>
+    <Setting Name="ItemHandlingSupport_ParameterKey_Blocks" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Blocks</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

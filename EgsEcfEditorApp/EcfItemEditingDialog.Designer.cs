@@ -40,9 +40,9 @@ namespace EcfFileViews
             // ButtonPanel
             // 
             this.ButtonPanel.AutoSize = true;
+            this.ButtonPanel.Controls.Add(this.ResetButton);
             this.ButtonPanel.Controls.Add(this.AbortButton);
             this.ButtonPanel.Controls.Add(this.OkButton);
-            this.ButtonPanel.Controls.Add(this.ResetButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.ButtonPanel.Location = new System.Drawing.Point(0, 632);
@@ -53,7 +53,7 @@ namespace EcfFileViews
             // AbortButton
             // 
             this.AbortButton.AutoSize = true;
-            this.AbortButton.Location = new System.Drawing.Point(1106, 3);
+            this.AbortButton.Location = new System.Drawing.Point(1025, 3);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 0;
@@ -64,7 +64,7 @@ namespace EcfFileViews
             // OkButton
             // 
             this.OkButton.AutoSize = true;
-            this.OkButton.Location = new System.Drawing.Point(1025, 3);
+            this.OkButton.Location = new System.Drawing.Point(944, 3);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 1;
@@ -75,7 +75,7 @@ namespace EcfFileViews
             // ResetButton
             // 
             this.ResetButton.AutoSize = true;
-            this.ResetButton.Location = new System.Drawing.Point(944, 3);
+            this.ResetButton.Location = new System.Drawing.Point(1106, 3);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(75, 23);
             this.ResetButton.TabIndex = 3;

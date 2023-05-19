@@ -565,6 +565,60 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All block groups with build block.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllBlockGroupsWithBlock {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllBlockGroupsWithBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with template.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllElementsWithTemplate {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllElementsWithTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with parameter.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllItemsWithParameter {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllItemsWithParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Parameters with value.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllParametersWithValue {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllParametersWithValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All templates for item.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllTemplatesForItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllTemplatesForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All templates with item.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_AllTemplatesWithItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_AllTemplatesWithItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replacement of definition failed.
         /// </summary>
         internal static string EcfItemHandlingSupport_DefinitionReplacementFailed {
@@ -660,51 +714,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All items with template.
-        /// </summary>
-        internal static string EcfItemListingView_AllElementsWithTemplate {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_AllElementsWithTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All items with parameter.
-        /// </summary>
-        internal static string EcfItemListingView_AllItemsWithParameter {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_AllItemsWithParameter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All Parameters with value.
-        /// </summary>
-        internal static string EcfItemListingView_AllParametersWithValue {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_AllParametersWithValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All templates for item.
-        /// </summary>
-        internal static string EcfItemListingView_AllTemplatesForItem {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_AllTemplatesForItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All templates with item.
-        /// </summary>
-        internal static string EcfItemListingView_AllTemplatesWithItem {
-            get {
-                return ResourceManager.GetString("EcfItemListingView_AllTemplatesWithItem", resourceCulture);
             }
         }
         

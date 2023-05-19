@@ -285,6 +285,24 @@
   <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
     <value>Hinzufügen zur Template Definition fehlgeschlagen</value>
   </data>
+  <data name="EcfItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
+    <value>Alle BlockGroups mit Bau Block</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
+    <value>Alle Elemente mit Template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
+    <value>Alle Elemente mit Parameter</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
+    <value>Alle Parameter mit Wert</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
+    <value>Alle Templates für Item</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
+    <value>Alle Templates mit Item</value>
+  </data>
   <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
     <value>Das Ersetzen der Definition ist fehlgeschlagen</value>
   </data>
@@ -317,21 +335,6 @@
   </data>
   <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
     <value>Soll die Definition der bereits geöffneten Template Dateien aktualisiert werden?</value>
-  </data>
-  <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
-    <value>Alle Elemente mit Template</value>
-  </data>
-  <data name="EcfItemListingView_AllItemsWithParameter" xml:space="preserve">
-    <value>Alle Elemente mit Parameter</value>
-  </data>
-  <data name="EcfItemListingView_AllParametersWithValue" xml:space="preserve">
-    <value>Alle Parameter mit Wert</value>
-  </data>
-  <data name="EcfItemListingView_AllTemplatesForItem" xml:space="preserve">
-    <value>Alle Templates für Item</value>
-  </data>
-  <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
-    <value>Alle Templates mit Item</value>
   </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Markierte Parameter werden in das gewählte Baumelement vererbt</value>
@@ -370,7 +373,7 @@
     <value>Der Standardwert der verwendet wird für das Feld 'info' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
-    <value />
+    <value>Der Standardwert der verwendet wird für das Feld 'forceEscape' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
     <value>Der Standardwert der verwendet wird für das Feld 'optional' bei erzeugten Template Zutaten Definitions Einträgen</value>

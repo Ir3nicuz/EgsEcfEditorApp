@@ -286,5 +286,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["ItemHandlingSupport_DefaultValue_DefinitionInfo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Blocks")]
+        public string ItemHandlingSupport_ParameterKey_Blocks {
+            get {
+                return ((string)(this["ItemHandlingSupport_ParameterKey_Blocks"]));
+            }
+            set {
+                this["ItemHandlingSupport_ParameterKey_Blocks"] = value;
+            }
+        }
     }
 }

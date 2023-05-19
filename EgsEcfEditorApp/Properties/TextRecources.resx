@@ -285,6 +285,24 @@
   <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
     <value>Add to Template definition failed</value>
   </data>
+  <data name="EcfItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
+    <value>All block groups with build block</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
+    <value>All items with template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
+    <value>All items with parameter</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
+    <value>All Parameters with value</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
+    <value>All templates for item</value>
+  </data>
+  <data name="EcfItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
+    <value>All templates with item</value>
+  </data>
   <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
     <value>Replacement of definition failed</value>
   </data>
@@ -317,21 +335,6 @@
   </data>
   <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
     <value>Shall the definition of the already opened template files be updated?</value>
-  </data>
-  <data name="EcfItemListingView_AllElementsWithTemplate" xml:space="preserve">
-    <value>All items with template</value>
-  </data>
-  <data name="EcfItemListingView_AllItemsWithParameter" xml:space="preserve">
-    <value>All items with parameter</value>
-  </data>
-  <data name="EcfItemListingView_AllParametersWithValue" xml:space="preserve">
-    <value>All Parameters with value</value>
-  </data>
-  <data name="EcfItemListingView_AllTemplatesForItem" xml:space="preserve">
-    <value>All templates for item</value>
-  </data>
-  <data name="EcfItemListingView_AllTemplatesWithItem" xml:space="preserve">
-    <value>All templates with item</value>
   </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Marked parameters are inherited to the selected tree element</value>
@@ -370,7 +373,7 @@
     <value>The default value at created template definition ingredient items for the 'info' field</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
-    <value />
+    <value>The default value at created template definition ingredient items for the 'forceEscape' field</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
     <value>The default value at created template definition ingredient items for the 'optional' field</value>

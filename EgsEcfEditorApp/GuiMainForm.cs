@@ -686,6 +686,7 @@ namespace EgsEcfEditorApp
                 case ItemOperations.RemoveTemplate: RemoveTemplateOfItem(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddTemplate: AddTemplateToItem(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.AddToTemplateDefinition: AddItemToTemplateDefinition(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.ListBlockUsingBlockGroups: ShowBlockUsingBlockGroups(evt.SourceItem as EcfBlock); break;
                 default:
                     MessageBox.Show(this, string.Format("{0} - {1}", TextRecources.Generic_NotImplementedYet, evt.Operation.ToString()),
                         TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -793,7 +794,7 @@ namespace EgsEcfEditorApp
                     return;
                 }
 
-                List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
+                List<EcfBlock> templateList = GetTemplatesByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                     UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
                 if (templateList.Count < 1)
                 {
@@ -919,7 +920,7 @@ namespace EgsEcfEditorApp
             {
                 string messageText;
                 // get Templates from open files for the sourceItem
-                List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
+                List<EcfBlock> templateList = GetTemplatesByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                     UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
                 if (templateList.Count() < 1)
                 {
@@ -932,7 +933,7 @@ namespace EgsEcfEditorApp
                 if (templateList.Count() > 1)
                 {
                     EcfItemListingDialog templateSelector = new EcfItemListingDialog();
-                    messageText = string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesForItem, sourceItem.BuildRootId());
+                    messageText = string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllTemplatesForItem, sourceItem.BuildRootId());
                     if (templateSelector.ShowDialog(this, messageText, templateList) != DialogResult.OK)
                     {
                         return;
@@ -959,7 +960,7 @@ namespace EgsEcfEditorApp
                     }
                 }
                 // check cross usage of template
-                List<EcfBlock> userList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
+                List<EcfBlock> userList = GetUsersByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(),
                     UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, templateToRemove);
                 if (userList.Count() > 1)
                 {
@@ -990,7 +991,7 @@ namespace EgsEcfEditorApp
         }
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
-            List<EcfBlock> templateList = GetTemplateListByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
+            List<EcfBlock> templateList = GetTemplatesByUser(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
                 UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
             if  (templateList.Count < 1)
             {
@@ -1013,23 +1014,23 @@ namespace EgsEcfEditorApp
             {
                 EcfItemListingDialog templateView = new EcfItemListingDialog();
                 templateView.ItemRowClicked += ItemListingView_ShowItem;
-                templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesForItem, sourceItem.BuildRootId()), templateList);
+                templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllTemplatesForItem, sourceItem.BuildRootId()), templateList);
             }
         }
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
-            List<EcfBlock> userList = GetUserListByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
+            List<EcfBlock> userList = GetUsersByTemplate(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
                 UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceTemplate);
             EcfItemListingDialog itemView = new EcfItemListingDialog();
             itemView.ItemRowClicked += ItemListingView_ShowItem;
-            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllElementsWithTemplate, sourceTemplate.BuildRootId()), userList);
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllElementsWithTemplate, sourceTemplate.BuildRootId()), userList);
         }
         private void ShowItemUsingTemplates(EcfBlock sourceItem)
         {
-            List<EcfBlock> templateList = GetTemplateListByIngredient(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), sourceItem);
+            List<EcfBlock> templateList = GetTemplatesByIngredient(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), sourceItem);
             EcfItemListingDialog templateView = new EcfItemListingDialog();
             templateView.ItemRowClicked += ItemListingView_ShowItem;
-            templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllTemplatesWithItem, sourceItem.BuildRootId()), templateList);
+            templateView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllTemplatesWithItem, sourceItem.BuildRootId()), templateList);
         }
         private void ShowParameterUsers(EcfParameter sourceParameter)
         {
@@ -1038,7 +1039,7 @@ namespace EgsEcfEditorApp
 
             EcfItemListingDialog itemView = new EcfItemListingDialog();
             itemView.ItemRowClicked += ItemListingView_ShowItem;
-            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllItemsWithParameter, sourceParameter.Key), itemList);
+            itemView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllItemsWithParameter, sourceParameter.Key), itemList);
         }
         private void ShowParameterValueUsers(EcfParameter sourceParameter)
         {
@@ -1049,7 +1050,7 @@ namespace EgsEcfEditorApp
 
                 EcfItemListingDialog parameterView = new EcfItemListingDialog();
                 parameterView.ItemRowClicked += ItemListingView_ShowItem;
-                parameterView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemListingView_AllParametersWithValue, 
+                parameterView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllParametersWithValue, 
                     string.Join(", ", sourceParameter.GetAllValues())), paramList);
             }
             else
@@ -1057,6 +1058,14 @@ namespace EgsEcfEditorApp
                 MessageBox.Show(this, string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, sourceParameter.Key, TextRecources.Generic_HasNoValue), 
                     TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+        private void ShowBlockUsingBlockGroups(EcfBlock sourceItem)
+        {
+            List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(FileViewPanel.TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList(), 
+                UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks, sourceItem);
+            EcfItemListingDialog blockGroupView = new EcfItemListingDialog();
+            blockGroupView.ItemRowClicked += ItemListingView_ShowItem;
+            blockGroupView.Show(this, string.Format("{0}: {1}", TextRecources.EcfItemHandlingSupport_AllBlockGroupsWithBlock, sourceItem.BuildRootId()), blockGroupList);
         }
         private void StartTechTreeEditor()
         {
@@ -1724,7 +1733,12 @@ namespace EcfFileViews
         private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
         {
             List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            List<EcfDependency> errors = FindInterFileDependencies(filesToCheck, UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, blocksToCheck);
+            EcfDependencyParameters parameters = new EcfDependencyParameters()
+            {
+                ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
+                ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+            };
+            List<EcfDependency> errors = FindAttributeInterFileDependencies(filesToCheck, parameters, blocksToCheck);
             return errors.Select(error => string.Format("{0} {1} {2}", 
                 error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty, 
                 GetLocalizedEnum(error.Type), 
@@ -1873,6 +1887,7 @@ namespace EcfFileViews
         }
         private bool ChangeTreeItem(EcfStructureItem item)
         {
+            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
             if (item is EcfComment comment)
             {
                 if (ItemEditor.ShowDialog(this, comment) == DialogResult.OK)
@@ -1884,7 +1899,7 @@ namespace EcfFileViews
             }
             else if (item is EcfParameter parameter)
             {
-                if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
+                if (ItemEditor.ShowDialog(this, openedFiles, File, parameter) == DialogResult.OK)
                 {
                     parameter.Revalidate();
                     if (parameter.Parent is EcfBlock block)
@@ -1897,7 +1912,6 @@ namespace EcfFileViews
             }
             else if (item is EcfBlock block)
             {
-                List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
                 if (ItemEditor.ShowDialog(this, openedFiles, File, block) == DialogResult.OK)
                 {
                     block.Revalidate();
@@ -1912,7 +1926,8 @@ namespace EcfFileViews
         }
         private void ChangeParameterItem(EcfParameter parameter)
         {
-            if (ItemEditor.ShowDialog(this, File, parameter) == DialogResult.OK)
+            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+            if (ItemEditor.ShowDialog(this, openedFiles, File, parameter) == DialogResult.OK)
             {
                 parameter.Revalidate();
                 if (parameter.Parent is EcfBlock block)
@@ -1924,7 +1939,8 @@ namespace EcfFileViews
         }
         private void ChangeParameterMatrix(List<EcfParameter> parameters)
         {
-            if (ItemEditor.ShowDialog(this, File, parameters) == DialogResult.OK)
+            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+            if (ItemEditor.ShowDialog(this, openedFiles, File, parameters) == DialogResult.OK)
             {
                 foreach (EcfParameter parameter in parameters)
                 {

@@ -314,6 +314,7 @@ This errors occur during content writing at hitting `save`. This error depends o
 
 ## Planned Major Features
 - "Custom changed" Property for ecf items (storage, handling, display and usage) 
+- Item Handling Support roll out for Entities, Loot/Containers, Factions
 - Element, Parameter, Attribute, Comment mass changing (base on filter/types)
 - Element, Parameter, Comment moving
 - Undo / Redo

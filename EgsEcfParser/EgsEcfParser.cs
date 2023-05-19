@@ -1012,16 +1012,18 @@ namespace EgsEcfParser
             });
             return dependencies;
         }
-        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, EcfDependencyParameters parameters, List<EcfBlock> blocksToCheck)
+        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, 
+            EcfDependencyParameters paramKeys, List<EcfBlock> blocksToCheck)
         {
-            return blocksToCheck.SelectMany(block => FindAttributeInterFileDependencies(filesToCheck, parameters, block)).ToList();
+            return blocksToCheck.SelectMany(block => FindAttributeInterFileDependencies(filesToCheck, paramKeys, block)).ToList();
         }
-        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, EcfDependencyParameters parameters, EcfBlock blockToCheck)
+        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, 
+            EcfDependencyParameters paramKeys, EcfBlock blockToCheck)
         {
-            return FindAttributeInterFileDependencies(filesToCheck, parameters, blockToCheck?.EcfFile?.Definition, blockToCheck.GetName(), blockToCheck);
+            return FindAttributeInterFileDependencies(filesToCheck, paramKeys, blockToCheck?.EcfFile?.Definition, blockToCheck.GetName(), blockToCheck);
         }
         public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters parameters, FormatDefinition formatDef, string itemName, EcfBlock sourceRef = null)
+            EcfDependencyParameters paramKeys, FormatDefinition formatDef, string itemName, EcfBlock sourceRef = null)
         {
             List<EcfDependency> dependencies = new List<EcfDependency>();
 
@@ -1032,29 +1034,29 @@ namespace EgsEcfParser
             }
             if (formatDef?.IsDefiningTemplates ?? false)
             {
-                List<EcfBlock> userList = GetUsersByTemplate(filesToCheck, parameters.ParamKey_TemplateRoot, itemName);
+                List<EcfBlock> userList = GetUsersByTemplate(filesToCheck, paramKeys.ParamKey_TemplateRoot, itemName);
                 dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, user)));
             }
             if (formatDef?.IsDefiningBuildBlocks ?? false)
             {
-                List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(filesToCheck, parameters.ParamKey_Blocks, itemName);
+                List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(filesToCheck, paramKeys.ParamKey_Blocks, itemName);
                 dependencies.AddRange(blockGroupList.Select(blockGroup => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, blockGroup)));
             }
             return dependencies;
         }
         public static List<EcfDependency> FindParameterInterFileDependencies(List<EgsEcfFile> filesToCheck, 
-            EcfDependencyParameters parameters, List<EcfParameter> parametersToCheck)
+            EcfDependencyParameters paramKeys, List<EcfParameter> parametersToCheck)
         {
-            return parametersToCheck.SelectMany(parameter => FindParameterInterFileDependencies(filesToCheck, parameters, parameter)).ToList();
+            return parametersToCheck.SelectMany(parameter => FindParameterInterFileDependencies(filesToCheck, paramKeys, parameter)).ToList();
         }
         public static List<EcfDependency> FindParameterInterFileDependencies(List<EgsEcfFile> filesToCheck, 
-            EcfDependencyParameters parameters, EcfParameter parameterToCheck)
+            EcfDependencyParameters paramKeys, EcfParameter parameterToCheck)
         {
-            return FindParameterInterFileDependencies(filesToCheck, parameters, parameterToCheck?.EcfFile?.Definition, parameterToCheck.ValueGroups.ToList(), parameterToCheck);
+            return FindParameterInterFileDependencies(filesToCheck, paramKeys, parameterToCheck?.EcfFile?.Definition, parameterToCheck.ValueGroups.ToList(), parameterToCheck);
         }
         [Obsolete("needs logic?")]
         public static List<EcfDependency> FindParameterInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters parameters, FormatDefinition formatDef, List<EcfValueGroup> values, EcfParameter sourceRef = null)
+            EcfDependencyParameters paramKeys, FormatDefinition formatDef, List<EcfValueGroup> values, EcfParameter sourceRef = null)
         {
             List<EcfDependency> dependencies = new List<EcfDependency>();
 

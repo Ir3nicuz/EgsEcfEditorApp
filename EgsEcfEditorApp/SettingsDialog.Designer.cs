@@ -30,19 +30,12 @@ namespace EgsEcfEditorApp
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("general");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("creation");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("filter");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("sorter");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("techTree");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("itemHandlingSupport");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("info");
             this.ButtonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ChapterSelectorTreeView = new System.Windows.Forms.TreeView();
-            this.SettingsBorderPanel = new System.Windows.Forms.Panel();
+            this.SettingsBasePanel = new System.Windows.Forms.Panel();
             this.Tip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonPanel.SuspendLayout();
             this.SuspendLayout();
@@ -100,48 +93,26 @@ namespace EgsEcfEditorApp
             this.ChapterSelectorTreeView.HideSelection = false;
             this.ChapterSelectorTreeView.Location = new System.Drawing.Point(0, 0);
             this.ChapterSelectorTreeView.Name = "ChapterSelectorTreeView";
-            treeNode1.Name = "GeneralNode";
-            treeNode1.Text = "general";
-            treeNode2.Name = "CreationNode";
-            treeNode2.Text = "creation";
-            treeNode3.Name = "FilterNode";
-            treeNode3.Text = "filter";
-            treeNode4.Name = "SorterNode";
-            treeNode4.Text = "sorter";
-            treeNode5.Name = "TechTreeNode";
-            treeNode5.Text = "techTree";
-            treeNode6.Name = "ItemHandlingSupportNode";
-            treeNode6.Text = "itemHandlingSupport";
-            treeNode7.Name = "InfoNode";
-            treeNode7.Text = "info";
-            this.ChapterSelectorTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4,
-            treeNode5,
-            treeNode6,
-            treeNode7});
             this.ChapterSelectorTreeView.Size = new System.Drawing.Size(150, 364);
             this.ChapterSelectorTreeView.TabIndex = 1;
             this.ChapterSelectorTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ChapterSelectorTreeView_AfterSelect);
             // 
-            // SettingsBorderPanel
+            // SettingsBasePanel
             // 
-            this.SettingsBorderPanel.AutoSize = true;
-            this.SettingsBorderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsBorderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsBorderPanel.Location = new System.Drawing.Point(150, 0);
-            this.SettingsBorderPanel.Name = "SettingsBorderPanel";
-            this.SettingsBorderPanel.Size = new System.Drawing.Size(562, 364);
-            this.SettingsBorderPanel.TabIndex = 3;
+            this.SettingsBasePanel.AutoSize = true;
+            this.SettingsBasePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsBasePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SettingsBasePanel.Location = new System.Drawing.Point(150, 0);
+            this.SettingsBasePanel.Name = "SettingsBasePanel";
+            this.SettingsBasePanel.Size = new System.Drawing.Size(562, 364);
+            this.SettingsBasePanel.TabIndex = 3;
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(712, 393);
-            this.Controls.Add(this.SettingsBorderPanel);
+            this.Controls.Add(this.SettingsBasePanel);
             this.Controls.Add(this.ChapterSelectorTreeView);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -167,7 +138,7 @@ namespace EgsEcfEditorApp
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.TreeView ChapterSelectorTreeView;
-        private System.Windows.Forms.Panel SettingsBorderPanel;
+        private System.Windows.Forms.Panel SettingsBasePanel;
         private System.Windows.Forms.ToolTip Tip;
     }
 }

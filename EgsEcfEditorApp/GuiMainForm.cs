@@ -56,7 +56,7 @@ namespace EgsEcfEditorApp
 
         private EcfFileOpenDialog OpenDialog { get; } = new EcfFileOpenDialog();
         private EcfFileSaveDialog SaveDialog { get; } = new EcfFileSaveDialog();
-        private DeprecatedDefinitionsDialog DeprecatedDefinitions { get; } = new DeprecatedDefinitionsDialog();
+        private DeprecatedDefinitionsDialog DepriDefiDialog { get; } = new DeprecatedDefinitionsDialog();
         private EcfFileLoaderDialog FileLoader { get; } = new EcfFileLoaderDialog();
         private SettingsDialog SettingsDialog { get; } = new SettingsDialog();
         private EcfFileCAMDialog CompareMergeDialog { get; } = new EcfFileCAMDialog();
@@ -597,7 +597,7 @@ namespace EgsEcfEditorApp
         {
             if (TryGetSelectedTab(out EcfTabPage tab))
             {
-                DeprecatedDefinitions.ShowDialog(this, tab.File);
+                DepriDefiDialog.ShowDialog(this, tab.File);
             }
         }
         private void ReplaceDefinitionInPage()
@@ -2075,6 +2075,8 @@ namespace EcfFileViews
 
                 ListParameterUsers,
                 ListParameterValueUsers,
+
+                ListBlockUsingBlockGroups,
             }
 
             public ItemHandlingSupportOperationEventArgs(ItemOperations operation, EcfStructureItem sourceItem) : base()
@@ -2263,17 +2265,30 @@ namespace EcfFileViews
         private EcfToolContainer ToolContainer { get; } = new EcfToolContainer();
         private EcfSorter StructureSorter { get; }
         private TreeView Tree { get; } = new TreeView();
-        private ContextMenuStrip TreeContextMenu { get; } = new ContextMenuStrip();
-        private ToolStripMenuItem ContextMenuItemListTemplateUsers { get; }
-        private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; }
-        private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; }
-        private ToolStripMenuItem ContextMenuItemAddTemplate { get; }
-        private ToolStripMenuItem ContextMenuItemRemoveTemplate { get; }
-        private ToolStripMenuItem ContextMenuItemAddToTemplateDefinition { get; }
         private List<EcfTreeNode> RootTreeNodes { get; } = new List<EcfTreeNode>();
         private List<EcfTreeNode> AllTreeNodes { get; } = new List<EcfTreeNode>();
         private List<EcfTreeNode> SelectedNodes { get; } = new List<EcfTreeNode>();
         private bool IsSelectionUpdating { get; set; } = false;
+
+        private ContextMenuStrip TreeContextMenu { get; } = new ContextMenuStrip();
+        private ToolStripSeparator ContextMenuSeperatorItemHandlingSupport { get; } = new ToolStripSeparator();
+        private ToolStripMenuItem ContextMenuItemItemHandlingSupport { get; } = 
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_MenuStripItem, IconRecources.Icon_LinkedFiles);
+        private ToolStripMenuItem ContextMenuItemListTemplateUsers { get; } = 
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem, IconRecources.Icon_ListItems);
+        private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; } = 
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem, IconRecources.Icon_ListTemplates);
+        private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; } =
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem, IconRecources.Icon_ShowTemplate);
+        private ToolStripMenuItem ContextMenuItemAddTemplate { get; } =
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_AddTemplateMenuItem, IconRecources.Icon_AddTemplate);
+        private ToolStripMenuItem ContextMenuItemRemoveTemplate { get; } =
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_RemoveTemplateMenuItem, IconRecources.Icon_DeleteTemplate);
+        private ToolStripMenuItem ContextMenuItemAddToTemplateDefinition { get; } =
+            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem, IconRecources.Icon_AddToTemplateDefinition);
+        private ToolStripSeparator ContextMenuSeperatorBlockGroups { get; } = new ToolStripSeparator();
+        private ToolStripMenuItem ContextMenuItemListBlockUsingBlockGroups { get; } =
+            new ToolStripMenuItem(TitleRecources.Generic_Replacement_Empty, IconRecources.Icon_Unknown);
 
         public EcfStructureView(string headline, EgsEcfFile file, ResizeableBorders mode, VisibleItemCount sorterItemCount) : base(headline, file, mode)
         {
@@ -2303,29 +2318,14 @@ namespace EcfFileViews
             View.Controls.Add(ToolContainer);
             Controls.Add(View);
 
-            TreeContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_AddTo, IconRecources.Icon_Add, (sender, evt) => AddToItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, (sender, evt) => PasteToItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
-            TreeContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
+            Tree.NodeMouseClick += Tree_NodeMouseClick;
+            Tree.NodeMouseDoubleClick += Tree_NodeMouseDoubleClick;
+            Tree.KeyPress += Tree_KeyPress;
+            Tree.KeyUp += Tree_KeyUp;
+            Tree.BeforeExpand += Tree_BeforeExpand;
+            Tree.BeforeCollapse += Tree_BeforeCollapse;
 
-            ContextMenuItemListTemplateUsers = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListTemplateUsers, IconRecources.Icon_ListItems);
-            ContextMenuItemListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.EcfTreeView_ListItemUsingTemplates, IconRecources.Icon_ListTemplates);
-            ContextMenuItemShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_ShowLinkedTemplate, IconRecources.Icon_ShowTemplate);
-            ContextMenuItemAddTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddTemplate, IconRecources.Icon_AddTemplate);
-            ContextMenuItemRemoveTemplate = new ToolStripMenuItem(TitleRecources.EcfTreeView_RemoveTemplate, IconRecources.Icon_DeleteTemplate);
-            ContextMenuItemAddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.EcfTreeView_AddToTemplateDefinition, IconRecources.Icon_AddToTemplateDefinition);
-
-            TreeContextMenu.Items.Add(ContextMenuItemListTemplateUsers);
-            TreeContextMenu.Items.Add(ContextMenuItemListItemUsingTemplates);
-            TreeContextMenu.Items.Add(ContextMenuItemShowLinkedTemplate);
-            TreeContextMenu.Items.Add(ContextMenuItemAddTemplate);
-            TreeContextMenu.Items.Add(ContextMenuItemRemoveTemplate);
-            TreeContextMenu.Items.Add(ContextMenuItemAddToTemplateDefinition);
-
-            InitEvents();
+            InitContextMenuStrip();
         }
 
         // publics
@@ -2427,38 +2427,63 @@ namespace EcfFileViews
         }
         private void ContextMenuItemListTemplateUsers_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListTemplateUsers, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.ListTemplateUsers, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemListItemUsingTemplates_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ListItemUsingTemplates, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.ListItemUsingTemplates, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemShowLinkedTemplate_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.ShowLinkedTemplate, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.ShowLinkedTemplate, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemAddTemplate_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.AddTemplate, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.AddTemplate, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemRemoveTemplate_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.RemoveTemplate, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.RemoveTemplate, SelectedItems.FirstOrDefault()));
         }
         private void ContextMenuItemAddToTemplateDefinition_Click(object sender, EventArgs evt)
         {
-            ItemHandlingSupportOperationClicked?.Invoke(this, new ItemHandlingSupportOperationEventArgs(ItemOperations.AddToTemplateDefinition, SelectedItems.FirstOrDefault()));
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.AddToTemplateDefinition, SelectedItems.FirstOrDefault()));
+        }
+        private void ContextMenuItemListBlockUsingBlockGroups_Click(object sender, EventArgs evt)
+        {
+            ItemHandlingSupportOperationClicked?.Invoke(this, 
+                new ItemHandlingSupportOperationEventArgs(ItemOperations.ListBlockUsingBlockGroups, SelectedItems.FirstOrDefault()));
         }
 
         // privates
-        private void InitEvents()
+        private void InitContextMenuStrip()
         {
-            Tree.NodeMouseClick += Tree_NodeMouseClick;
-            Tree.NodeMouseDoubleClick += Tree_NodeMouseDoubleClick;
-            Tree.KeyPress += Tree_KeyPress;
-            Tree.KeyUp += Tree_KeyUp;
-            Tree.BeforeExpand += Tree_BeforeExpand;
-            Tree.BeforeCollapse += Tree_BeforeCollapse;
+            TreeContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(TitleRecources.Generic_AddTo, IconRecources.Icon_Add, (sender, evt) => AddToItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(new ToolStripSeparator());
+            TreeContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, (sender, evt) => PasteToItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(new ToolStripSeparator());
+            TreeContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
+            TreeContextMenu.Items.Add(ContextMenuSeperatorItemHandlingSupport);
+            TreeContextMenu.Items.Add(ContextMenuItemItemHandlingSupport);
+
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListTemplateUsers);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListItemUsingTemplates);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemShowLinkedTemplate);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemAddTemplate);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemRemoveTemplate);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemAddToTemplateDefinition);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuSeperatorBlockGroups);
+            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListBlockUsingBlockGroups);
 
             ContextMenuItemListTemplateUsers.Click += ContextMenuItemListTemplateUsers_Click;
             ContextMenuItemListItemUsingTemplates.Click += ContextMenuItemListItemUsingTemplates_Click;
@@ -2466,6 +2491,7 @@ namespace EcfFileViews
             ContextMenuItemAddTemplate.Click += ContextMenuItemAddTemplate_Click;
             ContextMenuItemRemoveTemplate.Click += ContextMenuItemRemoveTemplate_Click;
             ContextMenuItemAddToTemplateDefinition.Click += ContextMenuItemAddToTemplateDefinition_Click;
+            ContextMenuItemListBlockUsingBlockGroups.Click += ContextMenuItemListBlockUsingBlockGroups_Click;
         }
         private void PrepareOptionalMenuItems(EcfTreeNode node)
         {
@@ -2473,14 +2499,21 @@ namespace EcfFileViews
 
             bool isValidItem = TemplateSourceItem?.IsRoot() ?? false;
             bool isTemplateItem = (File?.Definition?.IsDefiningTemplates ?? false) && isValidItem;
-            bool isItemItems = (File?.Definition?.IsDefiningItems ?? false) && isValidItem;
+            bool isItemItem = (File?.Definition?.IsDefiningItems ?? false) && isValidItem;
+            bool isBuildBlockItem = (File?.Definition?.IsDefiningBuildBlocks ?? false) && isValidItem;
 
             ContextMenuItemListTemplateUsers.Visible = isTemplateItem;
-            ContextMenuItemListItemUsingTemplates.Visible = isItemItems;
-            ContextMenuItemShowLinkedTemplate.Visible = isItemItems;
-            ContextMenuItemAddTemplate.Visible = isItemItems;
-            ContextMenuItemRemoveTemplate.Visible = isItemItems;
-            ContextMenuItemAddToTemplateDefinition.Visible = isItemItems;
+            ContextMenuItemListItemUsingTemplates.Visible = isItemItem;
+            ContextMenuItemShowLinkedTemplate.Visible = isItemItem;
+            ContextMenuItemAddTemplate.Visible = isItemItem;
+            ContextMenuItemRemoveTemplate.Visible = isItemItem;
+            ContextMenuItemAddToTemplateDefinition.Visible = isItemItem;
+            ContextMenuItemListBlockUsingBlockGroups.Visible = isBuildBlockItem;
+
+            ContextMenuSeperatorItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
+            ContextMenuItemItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
+
+            ContextMenuSeperatorBlockGroups.Visible = (isTemplateItem || isItemItem) && isBuildBlockItem;
         }
         private void TrySelectSimilarNode(EcfTreeNode oldNode, List<EcfTreeNode> newNodes)
         {
@@ -2779,23 +2812,15 @@ namespace EcfFileViews
             ToolContainer.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             ToolContainer.Dock = DockStyle.Top;
 
-            InitGridViewColumns();
-            InitGridView();
-
-            ParameterContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListParameterUsers, IconRecources.Icon_ListParameters,
-                (sender, evt) => ParameterContextMenuListParameterUsersItem_Click(sender, evt));
-            ParameterContextMenu.Items.Add(TitleRecources.EcfParameterView_ListValueUsers, IconRecources.Icon_ListValues, 
-                (sender, evt) => ParameterContextMenuListValueUsersItem_Click(sender, evt));
-
             ToolContainer.Add(ParameterSorter);
             View.Controls.Add(Grid);
             View.Controls.Add(ToolContainer);
             Controls.Add(View);
+
+            InitGridViewColumns();
+            InitGridView();
+
+            InitContextMenuStrip();
         }
 
         // events
@@ -2933,6 +2958,25 @@ namespace EcfFileViews
             Grid.Columns.Add(ParameterNameColumn);
             Grid.Columns.Add(ParameterValueColumn);
             Grid.Columns.Add(ParameterCommentColumn);
+        }
+        private void InitContextMenuStrip()
+        {
+            ParameterContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddAfterItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(new ToolStripSeparator());
+            ParameterContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteAfterItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(new ToolStripSeparator());
+            ParameterContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItemClicked?.Invoke(sender, evt));
+            ParameterContextMenu.Items.Add(new ToolStripSeparator());
+            ToolStripMenuItem contextMenuItemItemHandlingSupport =
+                new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_MenuStripItem, IconRecources.Icon_LinkedFiles);
+            ParameterContextMenu.Items.Add(contextMenuItemItemHandlingSupport);
+
+            contextMenuItemItemHandlingSupport.DropDownItems.Add(TitleRecources.EcfParameterView_ListParameterUsers, IconRecources.Icon_ListParameters,
+                (sender, evt) => ParameterContextMenuListParameterUsersItem_Click(sender, evt));
+            contextMenuItemItemHandlingSupport.DropDownItems.Add(TitleRecources.EcfParameterView_ListValueUsers, IconRecources.Icon_ListValues,
+                (sender, evt) => ParameterContextMenuListValueUsersItem_Click(sender, evt));
         }
         private void UpdateSelectedCells(int clickedRow)
         {

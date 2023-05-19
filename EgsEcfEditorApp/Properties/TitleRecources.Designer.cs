@@ -439,11 +439,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add template.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_AddTemplateMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddTemplateMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select option how to add the template.
         /// </summary>
         internal static string EcfItemHandlingSupport_Header_AddTemplateOptionSelector {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddTemplateOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to template definition.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem", resourceCulture);
             }
         }
         
@@ -462,6 +480,51 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector {
             get {
                 return ResourceManager.GetString("EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List item using templates.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List template users.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Handling Suppport.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_MenuStripItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_MenuStripItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove template.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_RemoveTemplateMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_RemoveTemplateMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show linked template.
+        /// </summary>
+        internal static string EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem {
+            get {
+                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem", resourceCulture);
             }
         }
         
@@ -925,24 +988,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add template.
-        /// </summary>
-        internal static string EcfTreeView_AddTemplate {
-            get {
-                return ResourceManager.GetString("EcfTreeView_AddTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add to template definition.
-        /// </summary>
-        internal static string EcfTreeView_AddToTemplateDefinition {
-            get {
-                return ResourceManager.GetString("EcfTreeView_AddToTemplateDefinition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to tree items.
         /// </summary>
         internal static string EcfTreeView_FilterSelector_Elements {
@@ -957,42 +1002,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EcfTreeView_Header {
             get {
                 return ResourceManager.GetString("EcfTreeView_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List item using templates.
-        /// </summary>
-        internal static string EcfTreeView_ListItemUsingTemplates {
-            get {
-                return ResourceManager.GetString("EcfTreeView_ListItemUsingTemplates", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List template users.
-        /// </summary>
-        internal static string EcfTreeView_ListTemplateUsers {
-            get {
-                return ResourceManager.GetString("EcfTreeView_ListTemplateUsers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove template.
-        /// </summary>
-        internal static string EcfTreeView_RemoveTemplate {
-            get {
-                return ResourceManager.GetString("EcfTreeView_RemoveTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show linked template.
-        /// </summary>
-        internal static string EcfTreeView_ShowLinkedTemplate {
-            get {
-                return ResourceManager.GetString("EcfTreeView_ShowLinkedTemplate", resourceCulture);
             }
         }
         

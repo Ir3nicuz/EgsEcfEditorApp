@@ -226,6 +226,8 @@ namespace EgsEcfParser
                 public static string XElementBlockReferenceTargetAttribute { get; } = "BlockReferenceTargetAttribute";
                 public static string XElementDefinesItems { get; } = "DefinesItems";
                 public static string XElementDefinesTemplates { get; } = "DefinesTemplates";
+                public static string XElementDefinesBuildBlocks { get; } = "DefinesBuildBlocks";
+                public static string XElementDefinesBuildBlockGroups { get; } = "DefinesBuildBlockGroups";
                 public static string XElementSingleLineCommentStart { get; } = "SingleLineCommentStart";
                 public static string XElementMultiLineCommentPair { get; } = "MultiLineCommentPair";
                 public static string XElementBlockIdentifierPair { get; } = "BlockIdentifierPair";
@@ -333,9 +335,14 @@ namespace EgsEcfParser
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 string blockReferenceTargetAttribute = RepairXmlControlLiterals(contentLinkingNode.SelectSingleNode(XmlSettings.XElementBlockReferenceTargetAttribute)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                
                 bool isDefiningItems = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesItems)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 bool isDefiningTemplates = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesTemplates)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool isDefiningBuildBlocks = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesBuildBlocks)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool isDefiningBuildBlockGroups = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesBuildBlockGroups)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
@@ -381,7 +388,7 @@ namespace EgsEcfParser
 
                 return new FormatDefinition(filePathAndName, gameMode, fileType,
                     blockIdAttribute, blockNameAttribute, blockReferenceSourceAttribute, blockReferenceTargetAttribute,
-                    isDefiningItems, isDefiningTemplates,
+                    isDefiningItems, isDefiningTemplates, isDefiningBuildBlocks, isDefiningBuildBlockGroups,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
@@ -443,6 +450,8 @@ namespace EgsEcfParser
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementBlockReferenceTargetAttribute, "Name");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesItems, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesBuildBlocks, "true");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesBuildBlockGroups, "false");
                         writer.WriteEndElement();
                     }
                     // Formatting
@@ -3479,6 +3488,8 @@ namespace EgsEcfParser
 
         public bool IsDefiningItems { get; }
         public bool IsDefiningTemplates { get; }
+        public bool IsDefiningBuildBlocks { get; }
+        public bool IsDefiningBuildBlockGroups { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
         public ReadOnlyCollection<StringPairDefinition> MultiLineCommentPairs { get; }
@@ -3510,7 +3521,7 @@ namespace EgsEcfParser
 
         public FormatDefinition(string filePathAndName, string gameMode, string fileType,
             string blockIdAttribute, string blockNameAttribute, string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
-            bool isDefiningItems, bool isDefiningTemplates,
+            bool isDefiningItems, bool isDefiningTemplates, bool isDefiningBuildBlocks, bool isDefiningBuildBlockGroups,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
@@ -3528,8 +3539,11 @@ namespace EgsEcfParser
             BlockNameAttribute = blockNameAttribute;
             BlockReferenceSourceAttribute = blockReferenceSourceAttribute;
             BlockReferenceTargetAttribute = blockReferenceTargetAttribute;
+            
             IsDefiningItems = isDefiningItems;
             IsDefiningTemplates = isDefiningTemplates;
+            IsDefiningBuildBlocks = isDefiningBuildBlocks;
+            IsDefiningBuildBlockGroups = isDefiningBuildBlockGroups;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
             MultiLineCommentPairs = multiLineCommentPairs.AsReadOnly();
@@ -3576,8 +3590,11 @@ namespace EgsEcfParser
             BlockNameAttribute = template.BlockNameAttribute;
             BlockReferenceSourceAttribute = template.BlockReferenceSourceAttribute;
             BlockReferenceTargetAttribute = template.BlockReferenceTargetAttribute;
+            
             IsDefiningItems = template.IsDefiningItems;
             IsDefiningTemplates = template.IsDefiningTemplates;
+            IsDefiningBuildBlocks = template.IsDefiningBuildBlocks;
+            IsDefiningBuildBlockGroups = template.IsDefiningBuildBlockGroups;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
             MultiLineCommentPairs = template.MultiLineCommentPairs.Select(pair => new StringPairDefinition(pair)).ToList().AsReadOnly();

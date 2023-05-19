@@ -243,14 +243,35 @@
   <data name="EcfItemHandlingSupport_Header_AddExistingTemplateSelector" xml:space="preserve">
     <value>Select existing template to be attached</value>
   </data>
+  <data name="EcfItemHandlingSupport_Header_AddTemplateMenuItem" xml:space="preserve">
+    <value>Add template</value>
+  </data>
   <data name="EcfItemHandlingSupport_Header_AddTemplateOptionSelector" xml:space="preserve">
     <value>Select option how to add the template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem" xml:space="preserve">
+    <value>Add to template definition</value>
   </data>
   <data name="EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
     <value>Select add to template definition option</value>
   </data>
   <data name="EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Select existing template to be copied</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem" xml:space="preserve">
+    <value>List item using templates</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem" xml:space="preserve">
+    <value>List template users</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_MenuStripItem" xml:space="preserve">
+    <value>Item Handling Suppport</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_RemoveTemplateMenuItem" xml:space="preserve">
+    <value>Remove template</value>
+  </data>
+  <data name="EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem" xml:space="preserve">
+    <value>Show linked template</value>
   </data>
   <data name="EcfItemHandlingSupport_Header_TargetTemplateFileSelector" xml:space="preserve">
     <value>Select target template file</value>
@@ -405,29 +426,11 @@
   <data name="EcfTechTreeItemEditorDialog_UnlockLevelSetting" xml:space="preserve">
     <value>Unlock level</value>
   </data>
-  <data name="EcfTreeView_AddTemplate" xml:space="preserve">
-    <value>Add template</value>
-  </data>
-  <data name="EcfTreeView_AddToTemplateDefinition" xml:space="preserve">
-    <value>Add to template definition</value>
-  </data>
   <data name="EcfTreeView_FilterSelector_Elements" xml:space="preserve">
     <value>tree items</value>
   </data>
   <data name="EcfTreeView_Header" xml:space="preserve">
     <value>Tree view</value>
-  </data>
-  <data name="EcfTreeView_ListItemUsingTemplates" xml:space="preserve">
-    <value>List item using templates</value>
-  </data>
-  <data name="EcfTreeView_ListTemplateUsers" xml:space="preserve">
-    <value>List template users</value>
-  </data>
-  <data name="EcfTreeView_RemoveTemplate" xml:space="preserve">
-    <value>Remove template</value>
-  </data>
-  <data name="EcfTreeView_ShowLinkedTemplate" xml:space="preserve">
-    <value>Show linked template</value>
   </data>
   <data name="Generic_Abort" xml:space="preserve">
     <value>Abort</value>

@@ -40,6 +40,7 @@ using static EgsEcfParser.EcfFormatChecking;
 using static Helpers.EnumLocalisation;
 using static Helpers.FileHandling;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace EgsEcfEditorApp
 {
@@ -666,10 +667,10 @@ namespace EgsEcfEditorApp
             switch (evt.Mode)
             {
                 case CopyPasteModes.PasteTo:
-                    evt.Source.PasteTo(evt.SelectedItems.FirstOrDefault(), CopyClipboard);
+                    evt.Source.PasteItemsTo(evt.SelectedItems.FirstOrDefault(), CopyClipboard);
                     break;
                 case CopyPasteModes.PasteAfter:
-                    evt.Source.PasteAfter(evt.SelectedItems.LastOrDefault(), CopyClipboard);
+                    evt.Source.PasteItemsAfter(evt.SelectedItems.LastOrDefault(), CopyClipboard);
                     break;
                 default:
                     break;
@@ -708,7 +709,7 @@ namespace EgsEcfEditorApp
                 }
                 if (templateDefinitions.Count > 1)
                 {
-                    OptionsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector;
+                    OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddToTemplateDefinitionOptionSelector;
                     if (OptionsDialog.ShowDialog(this, AddToTemplateDefinitionOptionItems) != DialogResult.OK) { return; }
                     switch((AddToTemplateDefinitionOptions)OptionsDialog.SelectedOption.Item)
                     {
@@ -799,7 +800,7 @@ namespace EgsEcfEditorApp
                     UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
                 if (templateList.Count < 1)
                 {
-                    OptionsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddTemplateOptionSelector;
+                    OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector;
                     if (OptionsDialog.ShowDialog(this, AddTemplateEditOptionItems) != DialogResult.OK) { return; }
                     switch ((AddTemplateEditOptions)OptionsDialog.SelectedOption.Item)
                     {
@@ -823,7 +824,7 @@ namespace EgsEcfEditorApp
             SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
                 page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
-            ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_AddExistingTemplateSelector;
+            ItemsDialog.Text = TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector;
             if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
             EcfBlock templateToAdd = ItemsDialog.SelectedItem.Item as EcfBlock;
             EcfParameter templateRoot = sourceItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
@@ -840,7 +841,7 @@ namespace EgsEcfEditorApp
             SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
                 page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
-            ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector;
+            ItemsDialog.Text = TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector;
             if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
             EcfBlock templateToCopy = ItemsDialog.SelectedItem.Item as EcfBlock;
             EcfBlock templateToAdd = new EcfBlock(templateToCopy);
@@ -887,7 +888,7 @@ namespace EgsEcfEditorApp
             EgsEcfFile targetFile;
             if (presentTemplateFiles.Length > 1)
             {
-                ItemsDialog.Text = TitleRecources.EcfItemHandlingSupport_Header_TargetTemplateFileSelector;
+                ItemsDialog.Text = TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector;
                 if (ItemsDialog.ShowDialog(this, presentTemplateFiles) != DialogResult.OK) { return false; }
                 targetFile = (EgsEcfFile)ItemsDialog.SelectedItem.Item;
             }
@@ -1219,38 +1220,28 @@ namespace EcfFileViews
 
         private EcfBaseView LastFocusedView { get; set; } = null;
 
-
-
-
-
-
         private ContextMenuStrip ItemContextMenu { get; } = new ContextMenuStrip();
-        private ToolStripSeparator ContextMenuSeperatorItemHandlingSupport { get; } = new ToolStripSeparator();
-        private ToolStripMenuItem ContextMenuItemItemHandlingSupport { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_MenuStripItem, IconRecources.Icon_LinkedFiles);
-        private ToolStripMenuItem ContextMenuItemListTemplateUsers { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem, IconRecources.Icon_ListItems);
-        private ToolStripMenuItem ContextMenuItemListItemUsingTemplates { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem, IconRecources.Icon_ListTemplates);
-        private ToolStripMenuItem ContextMenuItemShowLinkedTemplate { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem, IconRecources.Icon_ShowTemplate);
-        private ToolStripMenuItem ContextMenuItemAddTemplate { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_AddTemplateMenuItem, IconRecources.Icon_AddTemplate);
-        private ToolStripMenuItem ContextMenuItemRemoveTemplate { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_RemoveTemplateMenuItem, IconRecources.Icon_DeleteTemplate);
-        private ToolStripMenuItem ContextMenuItemAddToTemplateDefinition { get; } =
-            new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem, IconRecources.Icon_AddToTemplateDefinition);
-        private ToolStripSeparator ContextMenuSeperatorBlockGroups { get; } = new ToolStripSeparator();
-        private ToolStripMenuItem ContextMenuItemListBlockUsingBlockGroups { get; } =
-            new ToolStripMenuItem(TitleRecources.Generic_Replacement_Empty, IconRecources.Icon_Unknown);
+        private ToolStripMenuItem ContextItem_ChangeItem { get; set; } = null;
+        private ToolStripMenuItem ContextItem_AddTo { get; set; } = null;
+        private ToolStripMenuItem ContextItem_AddAfter { get; set; } = null;
+        private ToolStripMenuItem ContextItem_CopyItem { get; set; } = null;
+        private ToolStripMenuItem ContextItem_PasteTo { get; set; } = null;
+        private ToolStripMenuItem ContextItem_PasteAfter { get; set; } = null;
+        private ToolStripMenuItem ContextItem_RemoveItem { get; set; } = null;
+        private ToolStripSeparator ContextSeperator_ItemHandlingSupport { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ItemHandlingSupport { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ListTemplateUsers { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ListItemUsingTemplates { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ShowLinkedTemplate { get; set; } = null;
+        private ToolStripMenuItem ContextItem_AddTemplate { get; set; } = null;
+        private ToolStripMenuItem ContextItem_RemoveTemplate { get; set; } = null;
+        private ToolStripMenuItem ContextItem_AddToTemplateDefinition { get; set; } = null;
+        private ToolStripSeparator ContextSeperator_BlockGroups { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ListBlockUsingBlockGroups { get; set; } = null;
+
         private ContextMenuStrip ErrorContextMenu { get; } = new ContextMenuStrip();
-        private ToolStripMenuItem ContextMenuItemShowInEditor { get; set; } = null;
-        private ToolStripMenuItem ContextMenuItemShowInFile { get; set; } = null;
-
-
-
-
-
+        private ToolStripMenuItem ContextItem_ShowInEditor { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ShowInFile { get; set; } = null;
 
         public EcfTabPage(EgsEcfFile file, EcfTabContainer container) : base()
         {
@@ -1319,14 +1310,14 @@ namespace EcfFileViews
 
             ContentOperations.UndoClicked += ContentOperations_UndoClicked;
             ContentOperations.RedoClicked += ContentOperations_RedoClicked;
-            ContentOperations.AddClicked += ContentOperations_AddClicked;
-            ContentOperations.RemoveClicked += ContentOperations_RemoveClicked;
-            ContentOperations.ChangeSimpleClicked += ContentOperations_ChangeSimpleClicked;
+            ContentOperations.AddClicked += (sender, evt) => AddItemTo();
+            ContentOperations.RemoveClicked += (sender, evt) => RemoveItems();
+            ContentOperations.ChangeSimpleClicked += (sender, evt) => ChangeItems();
             ContentOperations.ChangeComplexClicked += ContentOperations_ChangeComplexClicked;
             ContentOperations.MoveUpClicked += ContentOperations_MoveUpClicked;
             ContentOperations.MoveDownClicked += ContentOperations_MoveDownClicked;
-            ContentOperations.CopyClicked += ContentOperations_CopyClicked;
-            ContentOperations.PasteClicked += ContentOperations_PasteClicked;
+            ContentOperations.CopyClicked += (sender, evt) => CopyItems();
+            ContentOperations.PasteClicked += (sender, evt) => PasteItems(CopyPasteModes.PasteTo);
 
             TreeView.ViewResized += (sender, evt) => TreeViewResized(sender, evt);
             InfoView.ViewResized += (sender, evt) => InfoViewResized(sender, evt);
@@ -1337,64 +1328,72 @@ namespace EcfFileViews
             ParameterView.ParametersSelected += ParameterView_ParametersSelected;
             ParameterView.DisplayedDataChanged += ParameterView_DisplayedDataChanged;
 
-            TreeView.NodeDoubleClicked += TreeView_NodeDoubleClicked;
-            TreeView.DelKeyPressed += TreeView_DelKeyPressed;
-            TreeView.CopyKeyPressed += TreeView_CopyKeyPressed;
-            TreeView.PasteKeyPressed += TreeView_PasteKeyPressed;
+            TreeView.NodeDoubleClicked += (sender, evt) => ChangeItems();
+            TreeView.DelKeyPressed += (sender, evt) => RemoveItems();
+            TreeView.CopyKeyPressed += (sender, evt) => CopyItems();
+            TreeView.PasteKeyPressed += (sender, evt) => PasteItems(CopyPasteModes.PasteTo);
 
-            ParameterView.CellDoubleClicked += ParameterView_CellDoubleClicked;
-            ParameterView.DelKeyPressed += ParameterView_DelKeyPressed;
-            ParameterView.CopyKeyPressed += ParameterView_CopyKeyPressed;
-            ParameterView.PasteKeyPressed += ParameterView_PasteKeyPressed;
+            ParameterView.CellDoubleClicked += (sender, evt) => ChangeItems();
+            ParameterView.DelKeyPressed += (sender, evt) => RemoveItems();
+            ParameterView.CopyKeyPressed += (sender, evt) => CopyItems();
+            ParameterView.PasteKeyPressed += (sender, evt) => PasteItems(CopyPasteModes.PasteAfter);
         }
         [Obsolete("needs logic")]
         private void InitItemContextMenu()
         {
+            ContextItem_ChangeItem = new ToolStripMenuItem(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, (sender, evt) => ChangeItems());
+            ContextItem_AddTo = new ToolStripMenuItem(TitleRecources.Generic_AddTo, IconRecources.Icon_Add, (sender, evt) => AddItemTo());
+            ContextItem_AddAfter = new ToolStripMenuItem(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, (sender, evt) => AddItemAfter());
+            ContextItem_CopyItem = new ToolStripMenuItem(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, (sender, evt) => CopyItems());
+            ContextItem_PasteTo = new ToolStripMenuItem(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, (sender, evt) => PasteItems(CopyPasteModes.PasteTo));
+            ContextItem_PasteAfter = new ToolStripMenuItem(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, (sender, evt) => PasteItems(CopyPasteModes.PasteAfter));
+            ContextItem_RemoveItem = new ToolStripMenuItem(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, (sender, evt) => RemoveItems());
+            ContextSeperator_ItemHandlingSupport = new ToolStripSeparator();
+            ContextItem_ItemHandlingSupport = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_MenuStripItem, IconRecources.Icon_LinkedFiles);
+            ContextItem_ListTemplateUsers = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListTemplateUsers, 
+                IconRecources.Icon_ListItems, ContextMenuItemListTemplateUsers_Click);
+            ContextItem_ListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListItemUsingTemplates, 
+                IconRecources.Icon_ListTemplates, ContextMenuItemListItemUsingTemplates_Click);
+            ContextItem_ShowLinkedTemplate = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ShowLinkedTemplate, 
+                IconRecources.Icon_ShowTemplate, ContextMenuItemShowLinkedTemplate_Click);
+            ContextItem_AddTemplate = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_AddTemplate, 
+                IconRecources.Icon_AddTemplate, ContextMenuItemAddTemplate_Click);
+            ContextItem_RemoveTemplate = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_RemoveTemplate, 
+                IconRecources.Icon_DeleteTemplate, ContextMenuItemRemoveTemplate_Click);
+            ContextItem_AddToTemplateDefinition = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_AddToTemplateDefinition, 
+                IconRecources.Icon_AddToTemplateDefinition, ContextMenuItemAddToTemplateDefinition_Click);
+            ContextSeperator_BlockGroups = new ToolStripSeparator();
+            ContextItem_ListBlockUsingBlockGroups = new ToolStripMenuItem(TitleRecources.Generic_Replacement_Empty, 
+                IconRecources.Icon_Unknown, ContextMenuItemListBlockUsingBlockGroups_Click);
 
-            // tree 
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, TreeView_ChangeItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_AddTo, IconRecources.Icon_Add, TreeView_AddToItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, TreeView_AddAfterItemClicked);
+            ItemContextMenu.Items.Add(ContextItem_ChangeItem);
+            ItemContextMenu.Items.Add(ContextItem_AddTo);
+            ItemContextMenu.Items.Add(ContextItem_AddAfter);
             ItemContextMenu.Items.Add(new ToolStripSeparator());
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, TreeView_CopyItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, TreeView_PasteToItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, TreeView_PasteAfterItemClicked);
+            ItemContextMenu.Items.Add(ContextItem_CopyItem);
+            ItemContextMenu.Items.Add(ContextItem_PasteTo);
+            ItemContextMenu.Items.Add(ContextItem_PasteAfter);
             ItemContextMenu.Items.Add(new ToolStripSeparator());
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, TreeView_RemoveItemClicked);
-            ItemContextMenu.Items.Add(ContextMenuSeperatorItemHandlingSupport);
-            ItemContextMenu.Items.Add(ContextMenuItemItemHandlingSupport);
+            ItemContextMenu.Items.Add(ContextItem_RemoveItem);
+            ItemContextMenu.Items.Add(ContextSeperator_ItemHandlingSupport);
+            ItemContextMenu.Items.Add(ContextItem_ItemHandlingSupport);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListTemplateUsers);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListItemUsingTemplates);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ShowLinkedTemplate);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_AddTemplate);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_RemoveTemplate);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_AddToTemplateDefinition);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextSeperator_BlockGroups);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListBlockUsingBlockGroups);
 
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListTemplateUsers);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListItemUsingTemplates);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemShowLinkedTemplate);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemAddTemplate);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemRemoveTemplate);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemAddToTemplateDefinition);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuSeperatorBlockGroups);
-            ContextMenuItemItemHandlingSupport.DropDownItems.Add(ContextMenuItemListBlockUsingBlockGroups);
-
-            ContextMenuItemListTemplateUsers.Click += ContextMenuItemListTemplateUsers_Click;
-            ContextMenuItemListItemUsingTemplates.Click += ContextMenuItemListItemUsingTemplates_Click;
-            ContextMenuItemShowLinkedTemplate.Click += ContextMenuItemShowLinkedTemplate_Click;
-            ContextMenuItemAddTemplate.Click += ContextMenuItemAddTemplate_Click;
-            ContextMenuItemRemoveTemplate.Click += ContextMenuItemRemoveTemplate_Click;
-            ContextMenuItemAddToTemplateDefinition.Click += ContextMenuItemAddToTemplateDefinition_Click;
-            ContextMenuItemListBlockUsingBlockGroups.Click += ContextMenuItemListBlockUsingBlockGroups_Click;
 
 
 
 
             // param
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Change, IconRecources.Icon_ChangeSimple, ParameterView_ChangeItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, ParameterView_AddAfterItemClicked);
-            ItemContextMenu.Items.Add(new ToolStripSeparator());
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, ParameterView_CopyItemClicked);
-            ItemContextMenu.Items.Add(TitleRecources.Generic_PasteAfter, IconRecources.Icon_Paste, ParameterView_PasteAfterItemClicked);
-            ItemContextMenu.Items.Add(new ToolStripSeparator());
-            ItemContextMenu.Items.Add(TitleRecources.Generic_Remove, IconRecources.Icon_Remove, ParameterView_RemoveItemClicked);
-            ItemContextMenu.Items.Add(new ToolStripSeparator());
+            
             ToolStripMenuItem contextMenuItemItemHandlingSupport =
-                new ToolStripMenuItem(TitleRecources.EcfItemHandlingSupport_Header_MenuStripItem, IconRecources.Icon_LinkedFiles);
+                new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_MenuStripItem, IconRecources.Icon_LinkedFiles);
             ItemContextMenu.Items.Add(contextMenuItemItemHandlingSupport);
 
             contextMenuItemItemHandlingSupport.DropDownItems.Add(TitleRecources.EcfParameterView_ListParameterUsers, IconRecources.Icon_ListParameters,
@@ -1457,13 +1456,13 @@ namespace EcfFileViews
 
         private void InitErrorContextMenu()
         {
-            ContextMenuItemShowInEditor = new ToolStripMenuItem(TitleRecources.EcfErrorView_ShowInEditor, IconRecources.Icon_ShowInEditor,
-                ErrorView_ShowInEditorClicked);
-            ContextMenuItemShowInFile = new ToolStripMenuItem(TitleRecources.EcfErrorView_ShowInFile, IconRecources.Icon_ShowInFile,
-                ErrorView_ShowInFileClicked);
+            ContextItem_ShowInEditor = new ToolStripMenuItem(TitleRecources.EcfErrorView_ShowInEditor, IconRecources.Icon_ShowInEditor,
+                (sender, evt) => ShowErrorItemInEditor());
+            ContextItem_ShowInFile = new ToolStripMenuItem(TitleRecources.EcfErrorView_ShowInFile, IconRecources.Icon_ShowInFile,
+                (sender, evt) => ShowErrorItemInFile());
 
-            ErrorContextMenu.Items.Add(ContextMenuItemShowInEditor);
-            ErrorContextMenu.Items.Add(ContextMenuItemShowInFile);
+            ErrorContextMenu.Items.Add(ContextItem_ShowInEditor);
+            ErrorContextMenu.Items.Add(ContextItem_ShowInFile);
         }
         private void TreeView_ItemsSelected(object sender, EventArgs evt)
         {
@@ -1485,72 +1484,15 @@ namespace EcfFileViews
             ReselectParameterView();
             UpdateInfoView();
         }
-        private void ContentOperations_UndoClicked(object sender, EventArgs e)
+        private void ContentOperations_UndoClicked(object sender, EventArgs evt)
         {
             MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
                 TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        private void ContentOperations_RedoClicked(object sender, EventArgs e)
+        private void ContentOperations_RedoClicked(object sender, EventArgs evt)
         {
             MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
                 TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        private void ContentOperations_AddClicked(object sender, EventArgs evt)
-        {
-            if (LastFocusedView is EcfStructureView treeView)
-            {
-                if (treeView.SelectedItems.LastOrDefault() is EcfStructureItem preceedingItem)
-                {
-                    AddTreeItemTo(preceedingItem);
-                    return;
-                }
-            }
-            else if (LastFocusedView is EcfParameterView parameterView)
-            {
-                if (parameterView.SelectedParameters.LastOrDefault()?.Parent is EcfBlock parentBlock)
-                {
-                    AddParameterItem(parentBlock, null);
-                    return;
-                }
-            }
-            AddTreeItemTo(null);
-        }
-        private void ContentOperations_RemoveClicked(object sender, EventArgs evt)
-        {
-            if (LastFocusedView is EcfStructureView treeView)
-            {
-                List<EcfStructureItem> items = treeView.SelectedItems;
-                if (items.Count > 0)
-                {
-                    RemoveTreeItem(items);
-                    return;
-                }
-            }
-            else if (LastFocusedView is EcfParameterView parameterView)
-            {
-                List<EcfParameter> parameters = parameterView.SelectedParameters;
-                if (parameters.Count > 0)
-                {
-                    RemoveParameterItem(parameters);
-                    return;
-                }
-            }
-            MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-        private void ContentOperations_ChangeSimpleClicked(object sender, EventArgs evt)
-        {
-            if (LastFocusedView is EcfStructureView treeView)
-            {
-                ChangeTreeSelection(treeView.SelectedItems);
-            }
-            else if (LastFocusedView is EcfParameterView parameterView)
-            {
-                ChangeParameterSelection(parameterView.SelectedParameters);
-            }
-            else
-            {
-                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
         }
         private void ContentOperations_ChangeComplexClicked(object sender, EventArgs evt)
         {
@@ -1567,14 +1509,6 @@ namespace EcfFileViews
             MessageBox.Show(this, TextRecources.Generic_NotImplementedYet,
                 TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        private void ContentOperations_CopyClicked(object sender, EventArgs evt)
-        {
-            CopyItems();
-        }
-        private void ContentOperations_PasteClicked(object sender, EventArgs evt)
-        {
-            PasteItems();
-        }
         private void AnyFilterControl_ApplyFilterFired(object sender, EventArgs evt)
         {
             UpdateAllViews();
@@ -1582,119 +1516,6 @@ namespace EcfFileViews
         private void FilterControl_ClearFilterClicked(object sender, EventArgs evt)
         {
             UpdateAllViews();
-        }
-        private void TreeView_NodeDoubleClicked(object sender, TreeNodeMouseClickEventArgs evt)
-        {
-            ChangeTreeSelection(TreeView.SelectedItems);
-        }
-        private void TreeView_ChangeItemClicked(object sender, EventArgs evt)
-        {
-            ChangeTreeSelection(TreeView.SelectedItems);
-        }
-        private void TreeView_AddToItemClicked(object sender, EventArgs evt)
-        {
-            AddTreeItemTo(TreeView.SelectedItems.FirstOrDefault());
-        }
-        private void TreeView_AddAfterItemClicked(object sender, EventArgs evt)
-        {
-            AddTreeItemAfter(TreeView.SelectedItems.FirstOrDefault());
-        }
-        private void TreeView_CopyItemClicked(object sender, EventArgs evt)
-        {
-            CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, TreeView.SelectedItems));
-        }
-        private void TreeView_PasteToItemClicked(object sender, EventArgs evt)
-        {
-            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, TreeView.SelectedItems));
-        }
-        private void TreeView_PasteAfterItemClicked(object sender, EventArgs evt)
-        {
-            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, TreeView.SelectedItems));
-        }
-        private void TreeView_RemoveItemClicked(object sender, EventArgs evt)
-        {
-            RemoveTreeItem(TreeView.SelectedItems);
-        }
-        private void TreeView_DelKeyPressed(object sender, EventArgs evt)
-        {
-            RemoveTreeItem(TreeView.SelectedItems);
-        }
-        private void TreeView_CopyKeyPressed(object sender, EventArgs evt)
-        {
-            CopyItems();
-        }
-        private void TreeView_PasteKeyPressed(object sender, EventArgs evt)
-        {
-            PasteItems();
-        }
-        private void ParameterView_CellDoubleClicked(object sender, DataGridViewCellEventArgs evt)
-        {
-            ChangeParameterSelection(ParameterView.SelectedParameters);
-        }
-        private void ParameterView_ChangeItemClicked(object sender, EventArgs evt)
-        {
-            ChangeParameterSelection(ParameterView.SelectedParameters);
-        }
-        private void ParameterView_AddAfterItemClicked(object sender, EventArgs evt)
-        {
-            EcfParameter preceedingParameter = ParameterView.SelectedParameters.LastOrDefault();
-            EcfBlock parentBlock = preceedingParameter?.Parent as EcfBlock;
-            AddParameterItem(parentBlock, preceedingParameter);
-        }
-        private void ParameterView_CopyItemClicked(object sender, EventArgs evt)
-        {
-            CopyClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.Copy, this, ParameterView.SelectedParameters));
-        }
-        private void ParameterView_PasteAfterItemClicked(object sender, EventArgs evt)
-        {
-            PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, ParameterView.SelectedParameters));
-        }
-        private void ParameterView_RemoveItemClicked(object sender, EventArgs evt)
-        {
-            RemoveParameterItem(ParameterView.SelectedParameters);
-        }
-        private void ParameterView_DelKeyPressed(object sender, EventArgs evt)
-        {
-            RemoveParameterItem(ParameterView.SelectedParameters);
-        }
-        private void ParameterView_CopyKeyPressed(object sender, EventArgs evt)
-        {
-            CopyItems();
-        }
-        private void ParameterView_PasteKeyPressed(object sender, EventArgs evt)
-        {
-            PasteItems();
-        }
-        private void ErrorView_ShowInEditorClicked(object sender, EventArgs evt)
-        {
-            TreeFilter.Reset();
-            ParameterFilter.Reset();
-            ShowSpecificItem(ErrorView.SelectedError.SourceItem);
-        }
-        private void ErrorView_ShowInFileClicked(object sender, EventArgs evt)
-        {
-            string filePathAndName = string.Format("\"{0}\"", Path.Combine(File.FilePath, File.FileName));
-            StringBuilder result = new StringBuilder(1024);
-            try
-            {
-                FindExecutable(filePathAndName, string.Empty, result);
-                string assocApp = result?.ToString();
-                if (string.IsNullOrEmpty(assocApp))
-                {
-                    Process.Start(filePathAndName);
-                }
-                else
-                {
-                    string arguments = string.Format("{0} -n{1}", filePathAndName, ErrorView.SelectedError.LineInFile);
-                    assocApp = string.Format("\"{0}\"", assocApp);
-                    Process.Start(assocApp, arguments);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, string.Format("{0}{1}{1}{2}", TextRecources.Generic_FileCouldNotBeOpened, Environment.NewLine, ex.Message),
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
         }
 
         // public
@@ -1776,7 +1597,7 @@ namespace EcfFileViews
         {
             ParameterView.TryReselect();
         }
-        public int PasteTo(EcfStructureItem target, List<EcfStructureItem> source)
+        public int PasteItemsTo(EcfStructureItem target, List<EcfStructureItem> source)
         {
             int pasteCount = 0;
             if (target != null && source != null && source.Count > 0)
@@ -1787,12 +1608,12 @@ namespace EcfFileViews
                 }
                 else
                 {
-                    PasteAfter(target, source);
+                    PasteItemsAfter(target, source);
                 }
             }
             return pasteCount;
         }
-        public int PasteAfter(EcfStructureItem target, List<EcfStructureItem> source)
+        public int PasteItemsAfter(EcfStructureItem target, List<EcfStructureItem> source)
         {
             int pasteCount = 0;
             if (target != null && source != null && source.Count > 0)
@@ -1840,18 +1661,18 @@ namespace EcfFileViews
             bool isItemItem = (File?.Definition?.IsDefiningItems ?? false) && isValidItem;
             bool isBuildBlockItem = (File?.Definition?.IsDefiningBuildBlocks ?? false) && isValidItem;
 
-            ContextMenuItemListTemplateUsers.Visible = isTemplateItem;
-            ContextMenuItemListItemUsingTemplates.Visible = isItemItem;
-            ContextMenuItemShowLinkedTemplate.Visible = isItemItem;
-            ContextMenuItemAddTemplate.Visible = isItemItem;
-            ContextMenuItemRemoveTemplate.Visible = isItemItem;
-            ContextMenuItemAddToTemplateDefinition.Visible = isItemItem;
-            ContextMenuItemListBlockUsingBlockGroups.Visible = isBuildBlockItem;
+            ContextItem_ListTemplateUsers.Visible = isTemplateItem;
+            ContextItem_ListItemUsingTemplates.Visible = isItemItem;
+            ContextItem_ShowLinkedTemplate.Visible = isItemItem;
+            ContextItem_AddTemplate.Visible = isItemItem;
+            ContextItem_RemoveTemplate.Visible = isItemItem;
+            ContextItem_AddToTemplateDefinition.Visible = isItemItem;
+            ContextItem_ListBlockUsingBlockGroups.Visible = isBuildBlockItem;
 
-            ContextMenuSeperatorItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
-            ContextMenuItemItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
+            ContextSeperator_ItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
+            ContextItem_ItemHandlingSupport.Visible = isTemplateItem || isItemItem || isBuildBlockItem;
 
-            ContextMenuSeperatorBlockGroups.Visible = (isTemplateItem || isItemItem) && isBuildBlockItem;
+            ContextSeperator_BlockGroups.Visible = (isTemplateItem || isItemItem) && isBuildBlockItem;
 
 
 
@@ -1859,116 +1680,48 @@ namespace EcfFileViews
         }
         private void UpdateErrorContextMenu(EcfError error)
         {
-            ContextMenuItemShowInEditor.Visible = error.Group != EcfErrorGroups.Structural;
-            ContextMenuItemShowInFile.Visible = error.IsFromParsing();
+            ContextItem_ShowInEditor.Visible = error.Group != EcfErrorGroups.Structural;
+            ContextItem_ShowInFile.Visible = error.IsFromParsing();
         }
-        private void RemoveTreeItem(List<EcfStructureItem> items)
+        private void AddItemTo()
         {
-            List<string> errors = new List<string>();
-            List<EcfBlock> allBlocks = File.GetDeepItemList<EcfBlock>();
-
-            List<EcfParameter> parametersToRemove = items.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
-            errors.AddRange(CheckParametersMandatory(parametersToRemove));
-
-            List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
-            errors.AddRange(CheckBlockReferences(allBlocks, blocksToRemove, out HashSet<EcfBlock> inheritingBlocks));
-            errors.AddRange(CheckInterFileDependencies(blocksToRemove));
-
-            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
+            if (LastFocusedView is EcfStructureView treeView)
             {
-                HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
-                changedParents.ToList().ForEach(block => block.RevalidateParameters());
-                if (blocksToRemove.Count > 0)
+                if (treeView.SelectedItems.LastOrDefault() is EcfStructureItem preceedingItem)
                 {
-                    allBlocks = allBlocks.Except(blocksToRemove).ToList();
-                    inheritingBlocks.ToList().ForEach(block => block.RevalidateReferenceHighLevel(allBlocks));
-                    allBlocks.ForEach(block => block.RevalidateUniqueness(allBlocks));
+                    AddItemTo(preceedingItem);
+                    return;
                 }
-                UpdateAllViews();
             }
-        }
-        private void RemoveParameterItem(List<EcfParameter> parameters)
-        {
-            List<string> errors = CheckParametersMandatory(parameters);
-            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
+            else if (LastFocusedView is EcfParameterView parameterView)
             {
-                HashSet<EcfBlock> changedParents = RemoveStructureItems(parameters.Cast<EcfStructureItem>().ToList());
-                changedParents.ToList().ForEach(block => block.RevalidateParameters());
-                UpdateAllViews();
-            }
-        }
-        private List<string> CheckParametersMandatory(List<EcfParameter> parameters)
-        {
-            return parameters.Where(parameter => !(parameter.Definition?.IsOptional ?? true)).Select(parameter =>
-                string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
-        }
-        private List<string> CheckBlockReferences(List<EcfBlock> completeBlockList, List<EcfBlock> blocksToCheck, out HashSet<EcfBlock> inheritingBlocks)
-        {
-            List<string> errors = new List<string>();
-
-            List<EcfDependency> dependencies = FindBlockReferences(completeBlockList, blocksToCheck);
-            errors.AddRange(dependencies.Select(dependency => string.Format("{0} {1} {2}", 
-                dependency.SourceItem?.BuildRootId(), GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
-
-            inheritingBlocks = dependencies.Select(dependency => dependency.TargetItem).ToHashSet();
-
-            return errors;
-        }
-        private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
-        {
-            List<string> errors = new List<string>();
-            if (UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
-            {
-                List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-                EcfDependencyParameters parameters = new EcfDependencyParameters()
+                if (parameterView.SelectedParameters.LastOrDefault()?.Parent is EcfBlock parentBlock)
                 {
-                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
-                };
-                List<EcfDependency> dependencies = FindAttributeInterFileDependencies(parameters, filesToCheck, blocksToCheck);
-
-                errors.AddRange(dependencies.Select(error => string.Format("{0} {1} {2}",
-                    error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty,
-                    GetLocalizedEnum(error.Type),
-                    error.TargetItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty
-                    )));
-            }
-            return errors;
-        }
-        private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
-        {
-            HashSet<EcfBlock> changedParents = new HashSet<EcfBlock>();
-            items.ForEach(item =>
-            {
-                if (item.IsRoot())
-                {
-                    File.RemoveItem(item);
+                    AddItemTo(null, parentBlock);
+                    return;
                 }
-                else if (item.Parent is EcfBlock block)
-                {
-                    block.RemoveChild(item);
-                    if (item is EcfParameter)
-                    {
-                        changedParents.Add(block);
-                    }
-                }
-            });
-            return changedParents;
+            }
+            AddItemTo(null);
         }
-        private void AddTreeItemTo(EcfStructureItem item)
+        private void AddItemTo(EcfStructureItem item)
+        {
+            EcfBlock parent = item as EcfBlock;
+            AddItemTo(item, parent);
+        }
+        private void AddItemTo(EcfStructureItem item, EcfBlock parent)
         {
             OptionItem[] itemTypes;
-            if (item == null)
+            if (item == null && parent == null)
             {
                 itemTypes = AddRootItemTypeOptions;
             }
-            else if (item is EcfBlock)
+            else if (item is EcfBlock || parent != null)
             {
                 itemTypes = AddChildItemTypeOptions;
             }
             else
             {
-                AddTreeItemAfter(item);
+                AddItemAfter(item);
                 return;
             }
             if (ItemTypeSelectorDialog.ShowDialog(this, itemTypes) != DialogResult.OK)
@@ -1976,7 +1729,6 @@ namespace EcfFileViews
                 return;
             }
             OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
-            EcfBlock parent = item as EcfBlock;
             if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, selectedItemType, parent) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
@@ -1997,7 +1749,20 @@ namespace EcfFileViews
                 UpdateAllViews();
             }
         }
-        private void AddTreeItemAfter(EcfStructureItem item)
+        private void AddItemAfter()
+        {
+            EcfStructureItem preceedingItem = null;
+            if (LastFocusedView is EcfStructureView treeView)
+            {
+                preceedingItem = treeView.SelectedItems.LastOrDefault();
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                preceedingItem = parameterView.SelectedParameters.LastOrDefault();
+            }
+            AddItemAfter(preceedingItem);
+        }
+        private void AddItemAfter(EcfStructureItem item)
         {
             OptionItem[] itemTypes;
             if (item == null || item.IsRoot())
@@ -2031,21 +1796,29 @@ namespace EcfFileViews
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
                     completeBlockList.ForEach(block => block.RevalidateReferenceRepairing(completeBlockList));
                 }
+                else if (createdItem is EcfParameter)
+                {
+                    parent.RevalidateParameters();
+                }
                 UpdateAllViews();
             }
         }
-        private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
+        private void ChangeItems()
         {
-            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, OperationModes.Parameter, parentBlock) == DialogResult.OK)
+            if (LastFocusedView is EcfStructureView treeView)
             {
-                EcfStructureItem createdItem = ItemEditor.ResultItem;
-                parentBlock.AddChild(createdItem, preceedingItem);
-                createdItem.Revalidate();
-                parentBlock.RevalidateParameters();
-                UpdateAllViews();
+                ChangeItems(treeView.SelectedItems);
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                ChangeItems(parameterView.SelectedParameters.Cast<EcfStructureItem>().ToList());
+            }
+            else
+            {
+                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-        private void ChangeTreeSelection(List<EcfStructureItem> items)
+        private void ChangeItems(List<EcfStructureItem> items)
         {
             if (items.Count > 1 && items.All(item => item is EcfParameter))
             {
@@ -2053,29 +1826,14 @@ namespace EcfFileViews
             }
             else if (items.Count > 0)
             {
-                ChangeTreeItem(items.FirstOrDefault());
+                ChangeItem(items.FirstOrDefault());
             }
             else
             {
                 MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-        private void ChangeParameterSelection(List<EcfParameter> parameters)
-        {
-            if (parameters.Count > 1)
-            {
-                ChangeParameterMatrix(parameters);
-            }
-            else if (parameters.Count > 0)
-            {
-                ChangeParameterItem(parameters.FirstOrDefault());
-            }
-            else
-            {
-                MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-        private bool ChangeTreeItem(EcfStructureItem item)
+        private bool ChangeItem(EcfStructureItem item)
         {
             if (item is EcfComment comment)
             {
@@ -2116,18 +1874,6 @@ namespace EcfFileViews
             }
             return false;
         }
-        private void ChangeParameterItem(EcfParameter parameter)
-        {
-            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, parameter) == DialogResult.OK)
-            {
-                parameter.Revalidate();
-                if (parameter.Parent is EcfBlock block)
-                {
-                    block.RevalidateParameters();
-                }
-                UpdateAllViews();
-            }
-        }
         private void ChangeParameterMatrix(List<EcfParameter> parameters)
         {
             if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, parameters) == DialogResult.OK)
@@ -2153,16 +1899,16 @@ namespace EcfFileViews
             }
             MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-        private void PasteItems()
+        private void PasteItems(CopyPasteModes mode)
         {
             if (LastFocusedView is EcfStructureView treeView)
             {
-                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteTo, this, treeView.SelectedItems));
+                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(mode, this, treeView.SelectedItems));
                 return;
             }
             else if (LastFocusedView is EcfParameterView parameterView)
             {
-                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(CopyPasteModes.PasteAfter, this, parameterView.SelectedParameters));
+                PasteClicked?.Invoke(this, new CopyPasteClickedEventArgs(mode, this, parameterView.SelectedParameters));
                 return;
             }
             MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -2233,6 +1979,149 @@ namespace EcfFileViews
             }
             UpdateAllViews();
             return itemCount;
+        }
+        private void RemoveItems()
+        {
+            if (LastFocusedView is EcfStructureView treeView)
+            {
+                List<EcfStructureItem> items = treeView.SelectedItems;
+                if (items.Count > 0)
+                {
+                    RemoveItems(items);
+                    return;
+                }
+            }
+            else if (LastFocusedView is EcfParameterView parameterView)
+            {
+                List<EcfParameter> parameters = parameterView.SelectedParameters;
+                if (parameters.Count > 0)
+                {
+                    RemoveItems(parameters.Cast<EcfStructureItem>().ToList());
+                    return;
+                }
+            }
+            MessageBox.Show(this, TextRecources.Generic_NoSuitableSelection, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void RemoveItems(List<EcfStructureItem> items)
+        {
+            List<string> errors = new List<string>();
+            List<EcfBlock> allBlocks = File.GetItemList<EcfBlock>();
+            HashSet<EcfBlock> inheritingBlocks = null;
+
+            List<EcfParameter> parametersToRemove = items.Where(item => item is EcfParameter).Cast<EcfParameter>().ToList();
+            if (parametersToRemove.Count > 0)
+            {
+                errors.AddRange(CheckParametersMandatory(parametersToRemove));
+            }
+
+            List<EcfBlock> blocksToRemove = items.Where(item => item is EcfBlock).Cast<EcfBlock>().ToList();
+            if (blocksToRemove.Count > 0)
+            {
+                errors.AddRange(CheckBlockReferences(allBlocks, blocksToRemove, out inheritingBlocks));
+                errors.AddRange(CheckInterFileDependencies(blocksToRemove));
+            }
+
+            if (ErrorQuestionDialog.ShowDialog(this, TextRecources.Generic_ContinueOperationWithErrorsQuestion, errors) == DialogResult.Yes)
+            {
+                HashSet<EcfBlock> changedParents = RemoveStructureItems(items);
+                changedParents.ToList().ForEach(block => block.RevalidateParameters());
+                if (blocksToRemove.Count > 0)
+                {
+                    allBlocks = allBlocks.Except(blocksToRemove).ToList();
+                    inheritingBlocks.ToList().ForEach(block => block.RevalidateReferenceHighLevel(allBlocks));
+                    allBlocks.ForEach(block => block.RevalidateUniqueness(allBlocks));
+                }
+                UpdateAllViews();
+            }
+        }
+        private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
+        {
+            HashSet<EcfBlock> changedParents = new HashSet<EcfBlock>();
+            items.ForEach(item =>
+            {
+                if (item.IsRoot())
+                {
+                    File.RemoveItem(item);
+                }
+                else if (item.Parent is EcfBlock block)
+                {
+                    block.RemoveChild(item);
+                    if (item is EcfParameter)
+                    {
+                        changedParents.Add(block);
+                    }
+                }
+            });
+            return changedParents;
+        }
+        private List<string> CheckParametersMandatory(List<EcfParameter> parameters)
+        {
+            return parameters.Where(parameter => !(parameter.Definition?.IsOptional ?? true)).Select(parameter =>
+                string.Format("{0} {1} {2}", TitleRecources.Generic_Parameter, parameter.Key, TextRecources.Generic_IsNotOptional)).ToList();
+        }
+        private List<string> CheckBlockReferences(List<EcfBlock> completeBlockList, List<EcfBlock> blocksToCheck, out HashSet<EcfBlock> inheritingBlocks)
+        {
+            List<string> errors = new List<string>();
+
+            List<EcfDependency> dependencies = FindBlockReferences(completeBlockList, blocksToCheck);
+            errors.AddRange(dependencies.Select(dependency => string.Format("{0} {1} {2}",
+                dependency.SourceItem?.BuildRootId(), GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
+
+            inheritingBlocks = dependencies.Select(dependency => dependency.TargetItem).ToHashSet();
+
+            return errors;
+        }
+        private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
+        {
+            List<string> errors = new List<string>();
+            if (UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
+            {
+                List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+                EcfDependencyParameters parameters = new EcfDependencyParameters()
+                {
+                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
+                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                };
+                List<EcfDependency> dependencies = FindAttributeInterFileDependencies(parameters, filesToCheck, blocksToCheck);
+
+                errors.AddRange(dependencies.Select(error => string.Format("{0} {1} {2}",
+                    error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty,
+                    GetLocalizedEnum(error.Type),
+                    error.TargetItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty
+                    )));
+            }
+            return errors;
+        }
+        private void ShowErrorItemInEditor()
+        {
+            TreeFilter.Reset();
+            ParameterFilter.Reset();
+            ShowSpecificItem(ErrorView.SelectedError.SourceItem);
+        }
+        private void ShowErrorItemInFile()
+        {
+            string filePathAndName = string.Format("\"{0}\"", Path.Combine(File.FilePath, File.FileName));
+            StringBuilder result = new StringBuilder(1024);
+            try
+            {
+                FindExecutable(filePathAndName, string.Empty, result);
+                string assocApp = result?.ToString();
+                if (string.IsNullOrEmpty(assocApp))
+                {
+                    Process.Start(filePathAndName);
+                }
+                else
+                {
+                    string arguments = string.Format("{0} -n{1}", filePathAndName, ErrorView.SelectedError.LineInFile);
+                    assocApp = string.Format("\"{0}\"", assocApp);
+                    Process.Start(assocApp, arguments);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("{0}{1}{1}{2}", TextRecources.Generic_FileCouldNotBeOpened, Environment.NewLine, ex.Message),
+                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         // classes

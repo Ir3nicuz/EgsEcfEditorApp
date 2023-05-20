@@ -430,114 +430,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select existing template to be attached.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_AddExistingTemplateSelector {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddExistingTemplateSelector", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add template.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_AddTemplateMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddTemplateMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select option how to add the template.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_AddTemplateOptionSelector {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddTemplateOptionSelector", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add to template definition.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select add to template definition option.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select existing template to be copied.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List item using templates.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List template users.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Handling Suppport.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_MenuStripItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_MenuStripItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove template.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_RemoveTemplateMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_RemoveTemplateMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show linked template.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select target template file.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_Header_TargetTemplateFileSelector {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_Header_TargetTemplateFileSelector", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Item listing.
         /// </summary>
         internal static string EcfItemListingView_Header {
@@ -1632,6 +1524,114 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_Yes {
             get {
                 return ResourceManager.GetString("Generic_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select existing template to be attached.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddExistingTemplateSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddExistingTemplateSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add template.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddTemplate {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select option how to add the template.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddTemplateOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddTemplateOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to template definition.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToTemplateDefinition {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToTemplateDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select add to template definition option.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToTemplateDefinitionOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToTemplateDefinitionOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select existing template to be copied.
+        /// </summary>
+        internal static string ItemHandlingSupport_CreateFromCopyTemplateSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_CreateFromCopyTemplateSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List item using templates.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListItemUsingTemplates {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListItemUsingTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List template users.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListTemplateUsers {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListTemplateUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Handling Suppport.
+        /// </summary>
+        internal static string ItemHandlingSupport_MenuStripItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_MenuStripItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove template.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveTemplate {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show linked template.
+        /// </summary>
+        internal static string ItemHandlingSupport_ShowLinkedTemplate {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ShowLinkedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select target template file.
+        /// </summary>
+        internal static string ItemHandlingSupport_TargetTemplateFileSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_TargetTemplateFileSelector", resourceCulture);
             }
         }
     }

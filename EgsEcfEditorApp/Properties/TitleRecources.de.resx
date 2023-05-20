@@ -240,42 +240,6 @@
   <data name="EcfItemEditingDialog_ParameterItem_ValuesLabel" xml:space="preserve">
     <value>Werte / Gruppen</value>
   </data>
-  <data name="EcfItemHandlingSupport_Header_AddExistingTemplateSelector" xml:space="preserve">
-    <value>Vorhandenes Template zum Hinzufügen wählen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_AddTemplateMenuItem" xml:space="preserve">
-    <value>Template hinzufügen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_AddTemplateOptionSelector" xml:space="preserve">
-    <value>Option zum Hinzufügen des Template auswählen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_AddToTemplateDefinitionMenuItem" xml:space="preserve">
-    <value>Zu Template Definition hinzufügen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
-    <value>Option zum Hinzufügen zur Template Definition wählen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_CreateFromCopyTemplateSelector" xml:space="preserve">
-    <value>Vorhandenes Template zum Kopieren wählen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_ListItemUsingTemplatesMenuItem" xml:space="preserve">
-    <value>Liste verwendende Templates</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_ListTemplateUsersMenuItem" xml:space="preserve">
-    <value>Liste Template Nutzer</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_MenuStripItem" xml:space="preserve">
-    <value>Item Handling Suppport</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_RemoveTemplateMenuItem" xml:space="preserve">
-    <value>Template entfernen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_ShowLinkedTemplateMenuItem" xml:space="preserve">
-    <value>Zeige verknüpftes Template</value>
-  </data>
-  <data name="EcfItemHandlingSupport_Header_TargetTemplateFileSelector" xml:space="preserve">
-    <value>Wähle Template Ziel Datei </value>
-  </data>
   <data name="EcfItemListingView_Header" xml:space="preserve">
     <value>Item Auflistung</value>
   </data>
@@ -641,5 +605,41 @@
   </data>
   <data name="Generic_Yes" xml:space="preserve">
     <value>Ja</value>
+  </data>
+  <data name="ItemHandlingSupport_AddExistingTemplateSelector" xml:space="preserve">
+    <value>Vorhandenes Template zum Hinzufügen wählen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplate" xml:space="preserve">
+    <value>Template hinzufügen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplateOptionSelector" xml:space="preserve">
+    <value>Option zum Hinzufügen des Template auswählen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddToTemplateDefinition" xml:space="preserve">
+    <value>Zu Template Definition hinzufügen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
+    <value>Option zum Hinzufügen zur Template Definition wählen</value>
+  </data>
+  <data name="ItemHandlingSupport_CreateFromCopyTemplateSelector" xml:space="preserve">
+    <value>Vorhandenes Template zum Kopieren wählen</value>
+  </data>
+  <data name="ItemHandlingSupport_ListItemUsingTemplates" xml:space="preserve">
+    <value>Liste verwendende Templates</value>
+  </data>
+  <data name="ItemHandlingSupport_ListTemplateUsers" xml:space="preserve">
+    <value>Liste Template Nutzer</value>
+  </data>
+  <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
+    <value>Item Handling Suppport</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveTemplate" xml:space="preserve">
+    <value>Template entfernen</value>
+  </data>
+  <data name="ItemHandlingSupport_ShowLinkedTemplate" xml:space="preserve">
+    <value>Zeige verknüpftes Template</value>
+  </data>
+  <data name="ItemHandlingSupport_TargetTemplateFileSelector" xml:space="preserve">
+    <value>Wähle Template Ziel Datei </value>
   </data>
 </root>

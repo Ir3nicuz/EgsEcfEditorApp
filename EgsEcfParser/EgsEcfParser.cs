@@ -228,6 +228,8 @@ namespace EgsEcfParser
                 public static string XElementDefinesTemplates { get; } = "DefinesTemplates";
                 public static string XElementDefinesBuildBlocks { get; } = "DefinesBuildBlocks";
                 public static string XElementDefinesBuildBlockGroups { get; } = "DefinesBuildBlockGroups";
+                public static string XElementDefinesGlobalMacros { get; } = "DefinesGlobalMacros";
+                public static string XElementDefinesGlobalMacroUsers { get; } = "DefinesGlobalMacroUsers";
                 public static string XElementSingleLineCommentStart { get; } = "SingleLineCommentStart";
                 public static string XElementMultiLineCommentPair { get; } = "MultiLineCommentPair";
                 public static string XElementBlockIdentifierPair { get; } = "BlockIdentifierPair";
@@ -344,6 +346,10 @@ namespace EgsEcfParser
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
                 bool isDefiningBuildBlockGroups = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesBuildBlockGroups)?
                     .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool isDefiningGlobalMacros = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesGlobalMacros)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
+                bool isDefiningGlobalMacroUsers = Convert.ToBoolean(contentLinkingNode.SelectSingleNode(XmlSettings.XElementDefinesGlobalMacroUsers)?
+                    .Attributes?.GetNamedItem(XmlSettings.XAttributeValue)?.Value);
 
                 XmlNode formatterNode = configNode.SelectSingleNode(XmlSettings.XChapterFormatting);
                 if (formatterNode == null) { throw new ArgumentException(string.Format("Chapter {0} not found", XmlSettings.XChapterFormatting)); }
@@ -389,6 +395,7 @@ namespace EgsEcfParser
                 return new FormatDefinition(filePathAndName, gameMode, fileType,
                     blockIdAttribute, blockNameAttribute, blockReferenceSourceAttribute, blockReferenceTargetAttribute,
                     isDefiningItems, isDefiningTemplates, isDefiningBuildBlocks, isDefiningBuildBlockGroups,
+                    isDefiningGlobalMacros, isDefiningGlobalMacroUsers,
                     singleLineCommentStarts, multiLineCommentPairs,
                     blockPairs, escapeIdentifierPairs, outerTrimmingPhrases,
                     itemSeperator, itemValueSeperator, valueSeperator,
@@ -452,6 +459,8 @@ namespace EgsEcfParser
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesTemplates, "false");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesBuildBlocks, "true");
                         CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesBuildBlockGroups, "false");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesGlobalMacros, "false");
+                        CreateXmlSpecificValueItem(writer, XmlSettings.XElementDefinesGlobalMacroUsers, "true");
                         writer.WriteEndElement();
                     }
                     // Formatting
@@ -3609,6 +3618,8 @@ namespace EgsEcfParser
         public bool IsDefiningTemplates { get; }
         public bool IsDefiningBuildBlocks { get; }
         public bool IsDefiningBuildBlockGroups { get; }
+        public bool IsDefiningGlobalMacros { get; }
+        public bool IsDefiningGlobalMacroUsers { get; }
 
         public ReadOnlyCollection<string> SingleLineCommentStarts { get; }
         public ReadOnlyCollection<StringPairDefinition> MultiLineCommentPairs { get; }
@@ -3640,7 +3651,8 @@ namespace EgsEcfParser
 
         public FormatDefinition(string filePathAndName, string gameMode, string fileType,
             string blockIdAttribute, string blockNameAttribute, string blockReferenceSourceAttribute, string blockReferenceTargetAttribute,
-            bool isDefiningItems, bool isDefiningTemplates, bool isDefiningBuildBlocks, bool isDefiningBuildBlockGroups,
+            bool isDefiningItems, bool isDefiningTemplates, bool isDefiningBuildBlocks, bool isDefiningBuildBlockGroups, 
+            bool isDefiningGlobalMacros, bool isDefiningGlobalMacroUsers,
             List<string> singleLineCommentStarts, List<StringPairDefinition> multiLineCommentPairs,
             List<StringPairDefinition> blockPairs, List<StringPairDefinition> escapeIdentifierPairs, List<string> outerTrimmingPhrases,
             string itemSeperator, string itemValueSeperator, string valueSeperator, 
@@ -3663,6 +3675,8 @@ namespace EgsEcfParser
             IsDefiningTemplates = isDefiningTemplates;
             IsDefiningBuildBlocks = isDefiningBuildBlocks;
             IsDefiningBuildBlockGroups = isDefiningBuildBlockGroups;
+            IsDefiningGlobalMacros = isDefiningGlobalMacros;
+            IsDefiningGlobalMacroUsers = isDefiningGlobalMacroUsers;
 
             SingleLineCommentStarts = singleLineCommentStarts.AsReadOnly();
             MultiLineCommentPairs = multiLineCommentPairs.AsReadOnly();
@@ -3714,6 +3728,8 @@ namespace EgsEcfParser
             IsDefiningTemplates = template.IsDefiningTemplates;
             IsDefiningBuildBlocks = template.IsDefiningBuildBlocks;
             IsDefiningBuildBlockGroups = template.IsDefiningBuildBlockGroups;
+            IsDefiningGlobalMacros = template.IsDefiningGlobalMacros;
+            IsDefiningGlobalMacroUsers = template.IsDefiningGlobalMacroUsers;
 
             SingleLineCommentStarts = template.SingleLineCommentStarts.ToList().AsReadOnly();
             MultiLineCommentPairs = template.MultiLineCommentPairs.Select(pair => new StringPairDefinition(pair)).ToList().AsReadOnly();

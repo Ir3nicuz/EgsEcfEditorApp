@@ -165,14 +165,14 @@ namespace EgsEcfEditorApp
 
                 AddSettingsItem(item);
             }
-            protected void AddSettingsItem(SettingsItem item)
+            protected void AddSettingsItem(SettingsTableItem item)
             {
                 Controls.Add(item, 0, ItemsCount);
                 RowStyles.Add(new RowStyle());
                 ItemsCount++;
                 RowCount = ItemsCount;
             }
-            protected void AddSpacer(SettingsItem item = null)
+            protected void AddSpacer(SettingsTableItem item = null)
             {
                 if (item != null)
                 {
@@ -674,10 +674,8 @@ namespace EgsEcfEditorApp
         }
 
         // item classes
-        private abstract class SettingsItem : TableLayoutPanel
+        private abstract class SettingsTableItem : TableLayoutPanel
         {
-            public abstract event EventHandler SettingChanged;
-
             public override string Text
             {
                 get
@@ -727,7 +725,7 @@ namespace EgsEcfEditorApp
 
             protected Label NameTag { get; } = new Label();
 
-            public SettingsItem()
+            public SettingsTableItem()
             {
                 SuspendLayout();
 
@@ -757,6 +755,251 @@ namespace EgsEcfEditorApp
             protected abstract void OnUpdateDataTagAlign(ContentAlignment align);
             protected abstract Font GetFont();
             protected abstract ContentAlignment GetDataTagAlign();
+        }
+        private class TitleSettingsItem : SettingsTableItem
+        {
+            public override bool IsEnabled
+            {
+                get
+                {
+                    return NameTag.Enabled;
+                }
+                set
+                {
+                    NameTag.Enabled = value;
+                }
+            }
+
+            public TitleSettingsItem() : base()
+            {
+                SetColumnSpan(NameTag, 2);
+
+                NameTag.Padding = new Padding(5);
+                NameTag.TextAlign = ContentAlignment.MiddleCenter;
+            }
+
+            // publics
+            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
+            {
+                toolTipContainer?.SetToolTip(NameTag, toolTip);
+            }
+
+            // privates
+            protected override void OnUpdateFont(Font font)
+            {
+
+            }
+            protected override void OnUpdateDataTagAlign(ContentAlignment align)
+            {
+
+            }
+            protected override Font GetFont()
+            {
+                return NameTag.Font;
+            }
+            protected override ContentAlignment GetDataTagAlign()
+            {
+                return NameTag.TextAlign;
+            }
+        }
+        private class LogoSettingsItem : SettingsTableItem
+        {
+            public override bool IsEnabled
+            {
+                get
+                {
+                    return Logo.Enabled;
+                }
+                set
+                {
+                    Logo.Enabled = value;
+                }
+            }
+            public Image Image
+            {
+                get
+                {
+                    return Logo.Image;
+                }
+                set
+                {
+                    Logo.Image = value;
+                }
+            }
+
+            private PictureBox Logo { get; } = new PictureBox();
+
+            public LogoSettingsItem() : base()
+            {
+                Controls.Remove(NameTag);
+
+                Controls.Add(Logo);
+                SetColumnSpan(Logo, 2);
+                Logo.Dock = DockStyle.Fill;
+                Logo.SizeMode = PictureBoxSizeMode.CenterImage;
+            }
+
+            // publics
+            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
+            {
+                toolTipContainer?.SetToolTip(Logo, toolTip);
+            }
+
+            // privates
+            protected override void OnUpdateFont(Font font)
+            {
+
+            }
+            protected override void OnUpdateDataTagAlign(ContentAlignment align)
+            {
+
+            }
+            protected override Font GetFont()
+            {
+                return NameTag.Font;
+            }
+            protected override ContentAlignment GetDataTagAlign()
+            {
+                return NameTag.TextAlign;
+            }
+        }
+        private class TextSettingsItem : SettingsTableItem
+        {
+            public override bool IsEnabled
+            {
+                get
+                {
+                    return DataTag.Enabled;
+                }
+                set
+                {
+                    DataTag.Enabled = value;
+                }
+            }
+            public string Value
+            {
+                get
+                {
+                    return DataTag.Text;
+                }
+                set
+                {
+                    DataTag.Text = value;
+                }
+            }
+
+            private Label DataTag { get; } = new Label();
+
+            public TextSettingsItem() : base()
+            {
+                Controls.Add(DataTag, 1, 0);
+                DataTag.AutoSize = true;
+                DataTag.Dock = DockStyle.Fill;
+                DataTag.Padding = new Padding(3);
+                DataTag.TextAlign = ContentAlignment.MiddleLeft;
+            }
+
+            // publics
+            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
+            {
+                toolTipContainer?.SetToolTip(DataTag, toolTip);
+            }
+
+            // privates
+            protected override void OnUpdateFont(Font font)
+            {
+                DataTag.Font = font;
+            }
+            protected override void OnUpdateDataTagAlign(ContentAlignment align)
+            {
+                DataTag.TextAlign = align;
+            }
+            protected override Font GetFont()
+            {
+                return DataTag.Font;
+            }
+            protected override ContentAlignment GetDataTagAlign()
+            {
+                return DataTag.TextAlign;
+            }
+        }
+        private class LinkSettingsItem : SettingsTableItem
+        {
+            public event LinkLabelLinkClickedEventHandler LinkClicked;
+
+            public override bool IsEnabled
+            {
+                get
+                {
+                    return DataTag.Enabled;
+                }
+                set
+                {
+                    DataTag.Enabled = value;
+                }
+            }
+            public string Value
+            {
+                get
+                {
+                    return DataTag.Text;
+                }
+                set
+                {
+                    DataTag.Text = value;
+                }
+            }
+
+            private LinkLabel DataTag { get; } = new LinkLabel();
+
+            public LinkSettingsItem() : base()
+            {
+                Controls.Add(DataTag, 1, 0);
+                DataTag.AutoSize = true;
+                DataTag.Dock = DockStyle.Fill;
+                DataTag.Padding = new Padding(3);
+                DataTag.TextAlign = ContentAlignment.MiddleLeft;
+                DataTag.LinkClicked += DataTag_LinkClicked;
+            }
+
+            // events
+            private void DataTag_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
+            {
+                LinkClicked?.Invoke(sender, evt);
+            }
+
+            // publics
+            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
+            {
+                toolTipContainer?.SetToolTip(DataTag, toolTip);
+            }
+
+            // privates
+            protected override void OnUpdateFont(Font font)
+            {
+                DataTag.Font = font;
+            }
+            protected override void OnUpdateDataTagAlign(ContentAlignment align)
+            {
+                DataTag.TextAlign = align;
+            }
+            protected override Font GetFont()
+            {
+                return DataTag.Font;
+            }
+            protected override ContentAlignment GetDataTagAlign()
+            {
+                return DataTag.TextAlign;
+            }
+        }
+        private abstract class SettingsItem : SettingsTableItem
+        {
+            public abstract event EventHandler SettingChanged;
+
+            public SettingsItem() : base()
+            {
+                
+            }
         }
         private class TextBoxSettingItem : SettingsItem
         {
@@ -1132,248 +1375,6 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private class TitleSettingsItem : SettingsItem
-        {
-            public override event EventHandler SettingChanged;
-
-            public override bool IsEnabled 
-            { 
-                get 
-                {
-                    return NameTag.Enabled;
-                }
-                set 
-                {
-                    NameTag.Enabled = value;
-                }
-            }
-
-            public TitleSettingsItem() : base()
-            {
-                SetColumnSpan(NameTag, 2);
-
-                NameTag.Padding = new Padding(5);
-                NameTag.TextAlign = ContentAlignment.MiddleCenter;
-            }
-
-            // publics
-            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
-            {
-                toolTipContainer?.SetToolTip(NameTag, toolTip);
-            }
-
-            // privates
-            protected override void OnUpdateFont(Font font)
-            {
-                
-            }
-            protected override void OnUpdateDataTagAlign(ContentAlignment align)
-            {
-                
-            }
-            protected override Font GetFont()
-            {
-                return NameTag.Font;
-            }
-            protected override ContentAlignment GetDataTagAlign()
-            {
-                return NameTag.TextAlign;
-            }
-        }
-        private class LogoSettingsItem : SettingsItem
-        {
-            public override event EventHandler SettingChanged;
-
-            public override bool IsEnabled
-            {
-                get
-                {
-                    return Logo.Enabled;
-                }
-                set
-                {
-                    Logo.Enabled = value;
-                }
-            }
-            public Image Image
-            {
-                get
-                {
-                    return Logo.Image;
-                }
-                set
-                {
-                    Logo.Image = value;
-                }
-            }
-
-            private PictureBox Logo { get; } = new PictureBox();
-
-            public LogoSettingsItem() : base()
-            {
-                Controls.Remove(NameTag);
-                
-                Controls.Add(Logo);
-                SetColumnSpan(Logo, 2);
-                Logo.Dock = DockStyle.Fill;
-                Logo.SizeMode = PictureBoxSizeMode.CenterImage;
-            }
-
-            // publics
-            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
-            {
-                toolTipContainer?.SetToolTip(Logo, toolTip);
-            }
-
-            // privates
-            protected override void OnUpdateFont(Font font)
-            {
-
-            }
-            protected override void OnUpdateDataTagAlign(ContentAlignment align)
-            {
-
-            }
-            protected override Font GetFont()
-            {
-                return NameTag.Font;
-            }
-            protected override ContentAlignment GetDataTagAlign()
-            {
-                return NameTag.TextAlign;
-            }
-        }
-        private class TextSettingsItem : SettingsItem
-        {
-            public override event EventHandler SettingChanged;
-
-            public override bool IsEnabled
-            {
-                get
-                {
-                    return DataTag.Enabled;
-                }
-                set
-                {
-                    DataTag.Enabled = value;
-                }
-            }
-            public string Value
-            {
-                get
-                {
-                    return DataTag.Text;
-                }
-                set
-                {
-                    DataTag.Text = value;
-                }
-            }
-
-            private Label DataTag { get; } = new Label();
-
-            public TextSettingsItem() : base()
-            {
-                Controls.Add(DataTag, 1, 0);
-                DataTag.AutoSize = true;
-                DataTag.Dock = DockStyle.Fill;
-                DataTag.Padding = new Padding(3);
-                DataTag.TextAlign = ContentAlignment.MiddleLeft;
-            }
-
-            // publics
-            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
-            {
-                toolTipContainer?.SetToolTip(DataTag, toolTip);
-            }
-
-            // privates
-            protected override void OnUpdateFont(Font font)
-            {
-                DataTag.Font = font;
-            }
-            protected override void OnUpdateDataTagAlign(ContentAlignment align)
-            {
-                DataTag.TextAlign = align;
-            }
-            protected override Font GetFont()
-            {
-                return DataTag.Font;
-            }
-            protected override ContentAlignment GetDataTagAlign()
-            {
-                return DataTag.TextAlign;
-            }
-        }
-        private class LinkSettingsItem : SettingsItem
-        {
-            public override event EventHandler SettingChanged;
-            public event LinkLabelLinkClickedEventHandler LinkClicked;
-
-            public override bool IsEnabled
-            {
-                get
-                {
-                    return DataTag.Enabled;
-                }
-                set
-                {
-                    DataTag.Enabled = value;
-                }
-            }
-            public string Value
-            {
-                get
-                {
-                    return DataTag.Text;
-                }
-                set
-                {
-                    DataTag.Text = value;
-                }
-            }
-
-            private LinkLabel DataTag { get; } = new LinkLabel();
-
-            public LinkSettingsItem() : base()
-            {
-                Controls.Add(DataTag, 1, 0);
-                DataTag.AutoSize = true;
-                DataTag.Dock = DockStyle.Fill;
-                DataTag.Padding = new Padding(3);
-                DataTag.TextAlign = ContentAlignment.MiddleLeft;
-                DataTag.LinkClicked += DataTag_LinkClicked;
-            }
-
-            // events
-            private void DataTag_LinkClicked(object sender, LinkLabelLinkClickedEventArgs evt)
-            {
-                LinkClicked?.Invoke(sender, evt);
-            }
-
-            // publics
-            public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
-            {
-                toolTipContainer?.SetToolTip(DataTag, toolTip);
-            }
-
-            // privates
-            protected override void OnUpdateFont(Font font)
-            {
-                DataTag.Font = font;
-            }
-            protected override void OnUpdateDataTagAlign(ContentAlignment align)
-            {
-                DataTag.TextAlign = align;
-            }
-            protected override Font GetFont()
-            {
-                return DataTag.Font;
-            }
-            protected override ContentAlignment GetDataTagAlign()
-            {
-                return DataTag.TextAlign;
-            }
-        }
+        
     }
 }

@@ -313,6 +313,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build block not found.
+        /// </summary>
+        internal static string EgsEcfParser_EcfErrors_BuildBlockNotFound {
+            get {
+                return ResourceManager.GetString("EgsEcfParser.EcfErrors.BuildBlockNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingredient item not found.
+        /// </summary>
+        internal static string EgsEcfParser_EcfErrors_IngredientItemNotFound {
+            get {
+                return ResourceManager.GetString("EgsEcfParser.EcfErrors.IngredientItemNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Key null or empty.
         /// </summary>
         internal static string EgsEcfParser_EcfErrors_KeyNullOrEmpty {
@@ -363,6 +381,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string EgsEcfParser_EcfErrors_ParameterWithoutParent {
             get {
                 return ResourceManager.GetString("EgsEcfParser.EcfErrors.ParameterWithoutParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template not found.
+        /// </summary>
+        internal static string EgsEcfParser_EcfErrors_TemplateNotFound {
+            get {
+                return ResourceManager.GetString("EgsEcfParser.EcfErrors.TemplateNotFound", resourceCulture);
             }
         }
         

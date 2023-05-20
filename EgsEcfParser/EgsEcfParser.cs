@@ -813,36 +813,54 @@ namespace EgsEcfParser
             }
             return errors;
         }
-        public static List<EcfError> CheckParameterInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters paramKeys, List<EcfParameter> parametersToCheck)
+        public static List<EcfError> CheckParameterInterFileDependencies(EcfDependencyParameters depenParams,
+            List<EgsEcfFile> filesToCheck, List<EcfParameter> parametersToCheck, EcfErrorGroups errorGroup)
         {
-            return parametersToCheck.SelectMany(parameter => CheckParameterInterFileDependencies(filesToCheck, paramKeys, parameter)).ToList();
+            return parametersToCheck.SelectMany(parameter => CheckParameterInterFileDependencies(depenParams, filesToCheck, parameter, errorGroup)).ToList();
         }
-        public static List<EcfError> CheckParameterInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters paramKeys, EcfParameter parameterToCheck)
+        public static List<EcfError> CheckParameterInterFileDependencies(EcfDependencyParameters depenParams,
+            List<EgsEcfFile> filesToCheck, EcfParameter parameterToCheck, EcfErrorGroups errorGroup)
         {
-            return CheckParameterInterFileDependencies(filesToCheck, paramKeys, parameterToCheck?.EcfFile?.Definition, parameterToCheck.ValueGroups.ToList(), parameterToCheck);
+            if (depenParams.FormatDef == null) { depenParams.FormatDef = parameterToCheck?.EcfFile?.Definition; }
+            if (depenParams.ItemDef == null) { depenParams.ItemDef = parameterToCheck.Definition; }
+            if (depenParams.Parent == null) { depenParams.Parent = parameterToCheck.Parent as EcfBlock; }
+            if (depenParams.IsRoot == null) { depenParams.IsRoot = depenParams.Parent?.IsRoot() ?? true; }
+            if (depenParams.Reference == null) { depenParams.Reference = parameterToCheck; }
+            return CheckParameterInterFileDependencies(depenParams, filesToCheck, parameterToCheck.ValueGroups.ToList(), errorGroup);
         }
-        [Obsolete("needs logic?")]
-        public static List<EcfError> CheckParameterInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters paramKeys, FormatDefinition formatDef, List<EcfValueGroup> values, EcfParameter sourceRef = null)
+        public static List<EcfError> CheckParameterInterFileDependencies(EcfDependencyParameters depenParams,
+            List<EgsEcfFile> filesToCheck, List<EcfValueGroup> groupsToCheck, EcfErrorGroups errorGroup)
         {
             List<EcfError> errors = new List<EcfError>();
 
-            if (formatDef?.IsDefiningItems ?? false)
+            if ((depenParams.FormatDef?.IsDefiningItems ?? false) && string.Equals(depenParams.ItemDef.Name, depenParams.ParamKey_TemplateRoot))
             {
-                // exists the templateroot template?
+                errors.AddRange(CheckTemplateNames(filesToCheck, groupsToCheck, errorGroup));
             }
-            if (formatDef?.IsDefiningTemplates ?? false)
+            if ((depenParams.FormatDef?.IsDefiningTemplates ?? false) && 
+                !(depenParams.Parent != null ? depenParams.Parent.IsRoot() : depenParams.IsRoot.GetValueOrDefault(true)))
             {
-                // exist the ingredients?
+                if (GetIngredientsByName(filesToCheck, depenParams.ItemDef.Name).Count < 1)
+                {
+                    errors.Add(new EcfError(errorGroup, EcfErrors.IngredientItemNotFound, depenParams.ItemDef.Name));
+                }
             }
-            if (formatDef?.IsDefiningBuildBlockGroups ?? false)
+            if ((depenParams.FormatDef?.IsDefiningBuildBlockGroups ?? false) && string.Equals(depenParams.ItemDef.Name, depenParams.ParamKey_Blocks))
             {
-                // exist the blocks in blocks?
+                errors.AddRange(CheckBuildBlockNames(filesToCheck, groupsToCheck, errorGroup));
             }
 
             return errors;
+        }
+        public static List<EcfError> CheckTemplateNames(List<EgsEcfFile> filesToCheck, List<EcfValueGroup> templateNamesToCheck, EcfErrorGroups errorGroup)
+        {
+            return templateNamesToCheck.SelectMany(group => group.Values).Where(value => GetTemplatesByName(filesToCheck, value)
+                .Count < 1).Select(value => new EcfError(errorGroup, EcfErrors.TemplateNotFound, value)).ToList();
+        }
+        public static List<EcfError> CheckBuildBlockNames(List<EgsEcfFile> filesToCheck, List<EcfValueGroup> buildBlockNamesToCheck, EcfErrorGroups errorGroup)
+        {
+            return buildBlockNamesToCheck.SelectMany(group => group.Values).Where(value => GetBuildBlocksByName(filesToCheck, value)
+                .Count < 1).Select(value => new EcfError(errorGroup, EcfErrors.BuildBlockNotFound, value)).ToList();
         }
 
         private static IKeyItemComparer KeyItemComparer { get; } = new IKeyItemComparer();
@@ -995,6 +1013,23 @@ namespace EgsEcfParser
                 }
                 )).ToList();
         }
+        public static List<EcfBlock> GetTemplatesByName(List<EgsEcfFile> files, string templateName)
+        {
+            return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => string.Equals(template.GetName(), templateName))).ToList();
+        }
+        public static List<EcfBlock> GetIngredientsByName(List<EgsEcfFile> files, string ingredientName)
+        {
+            return files.Where(file => file.Definition.IsDefiningItems)
+                .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
+                .Where(block => string.Equals(block.GetName(), ingredientName)).ToList();
+        }
+        public static List<EcfBlock> GetBuildBlocksByName(List<EgsEcfFile> files, string blockName)
+        {
+            return files.Where(file => file.Definition.IsDefiningBuildBlocks)
+                .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
+                .Where(block => string.Equals(block.GetName(), blockName)).ToList();
+        }
         public static List<EcfBlock> GetBlockGroupsByBuildBlock(List<EgsEcfFile> files, string blockParameterName, EcfBlock buildBlock)
         {
             return GetBlockGroupsByBuildBlock(files, blockParameterName, buildBlock.GetName());
@@ -1043,35 +1078,38 @@ namespace EgsEcfParser
             });
             return dependencies;
         }
-        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, 
-            EcfDependencyParameters paramKeys, List<EcfBlock> blocksToCheck)
+        public static List<EcfDependency> FindAttributeInterFileDependencies(EcfDependencyParameters depenParams,
+            List<EgsEcfFile> filesToCheck, List<EcfBlock> blocksToCheck)
         {
-            return blocksToCheck.SelectMany(block => FindAttributeInterFileDependencies(filesToCheck, paramKeys, block)).ToList();
+            return blocksToCheck.SelectMany(block => FindAttributeInterFileDependencies(depenParams, filesToCheck, block)).ToList();
         }
-        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck, 
-            EcfDependencyParameters paramKeys, EcfBlock blockToCheck)
+        public static List<EcfDependency> FindAttributeInterFileDependencies(EcfDependencyParameters depenParams, 
+            List<EgsEcfFile> filesToCheck, EcfBlock blockToCheck)
         {
-            return FindAttributeInterFileDependencies(filesToCheck, paramKeys, blockToCheck?.EcfFile?.Definition, blockToCheck.GetName(), blockToCheck);
+            if (depenParams.FormatDef == null) { depenParams.FormatDef = blockToCheck?.EcfFile?.Definition; }
+            if (depenParams.Parent == null) { depenParams.Parent = blockToCheck.Parent as EcfBlock; }
+            if (depenParams.IsRoot == null) { depenParams.IsRoot = depenParams.Parent?.IsRoot() ?? true; }
+            if (depenParams.Reference == null) { depenParams.Reference = blockToCheck; }
+            return FindAttributeInterFileDependencies(depenParams, filesToCheck, blockToCheck.GetName());
         }
-        public static List<EcfDependency> FindAttributeInterFileDependencies(List<EgsEcfFile> filesToCheck,
-            EcfDependencyParameters paramKeys, FormatDefinition formatDef, string itemName, EcfBlock sourceRef = null)
+        public static List<EcfDependency> FindAttributeInterFileDependencies(EcfDependencyParameters depenParams, List<EgsEcfFile> filesToCheck, string itemName)
         {
             List<EcfDependency> dependencies = new List<EcfDependency>();
 
-            if (formatDef?.IsDefiningItems ?? false)
+            if (depenParams.FormatDef?.IsDefiningItems ?? false)
             {
                 List<EcfBlock> templateList = GetTemplatesByIngredient(filesToCheck, itemName);
-                dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, template)));
+                dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, depenParams.Reference as EcfBlock, template)));
             }
-            if (formatDef?.IsDefiningTemplates ?? false)
+            if (depenParams.FormatDef?.IsDefiningTemplates ?? false)
             {
-                List<EcfBlock> userList = GetUsersByTemplate(filesToCheck, paramKeys.ParamKey_TemplateRoot, itemName);
-                dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, user)));
+                List<EcfBlock> userList = GetUsersByTemplate(filesToCheck, depenParams.ParamKey_TemplateRoot, itemName);
+                dependencies.AddRange(userList.Select(user => new EcfDependency(EcfDependencies.IsUsedWith, depenParams.Reference as EcfBlock, user)));
             }
-            if (formatDef?.IsDefiningBuildBlocks ?? false)
+            if (depenParams.FormatDef?.IsDefiningBuildBlocks ?? false)
             {
-                List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(filesToCheck, paramKeys.ParamKey_Blocks, itemName);
-                dependencies.AddRange(blockGroupList.Select(blockGroup => new EcfDependency(EcfDependencies.IsUsedWith, sourceRef, blockGroup)));
+                List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(filesToCheck, depenParams.ParamKey_Blocks, itemName);
+                dependencies.AddRange(blockGroupList.Select(blockGroup => new EcfDependency(EcfDependencies.IsUsedWith, depenParams.Reference as EcfBlock, blockGroup)));
             }
             return dependencies;
         }
@@ -1183,6 +1221,10 @@ namespace EgsEcfParser
             List<EcfError> errors = new List<EcfError>(StructuralErrors);
             errors.AddRange(ItemList.Where(item => item is EcfStructureItem).Cast<EcfStructureItem>().SelectMany(item => item.GetDeepErrorList(true)));
             return errors;
+        }
+        public List<T> GetItemList<T>() where T : EcfStructureItem
+        {
+            return new List<T>(InternalItemList.Where(item => item is T).Cast<T>());
         }
         public List<T> GetDeepItemList<T>() where T : EcfStructureItem
         {
@@ -2046,6 +2088,11 @@ namespace EgsEcfParser
         ValueNull,
         ValueEmpty,
         ValueContainsProhibitedPhrases,
+
+        // inter file
+        TemplateNotFound,
+        IngredientItemNotFound,
+        BuildBlockNotFound,
     }
     public class EcfError
     {
@@ -2179,6 +2226,13 @@ namespace EgsEcfParser
     }
     public class EcfDependencyParameters
     {
+        public EcfStructureItem Reference { get; set; } = null;
+        public bool? IsRoot { get; set; } = null;
+        public EcfStructureItem Parent { get; set; } = null;
+
+        public FormatDefinition FormatDef { get; set; } = null;
+        public ItemDefinition ItemDef { get; set; } = null;
+
         public string ParamKey_TemplateRoot { get; set; } = null;
         public string ParamKey_Blocks { get; set; } = null;
     }

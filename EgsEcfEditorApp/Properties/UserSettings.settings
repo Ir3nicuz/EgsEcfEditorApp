@@ -71,5 +71,8 @@
     <Setting Name="ItemHandlingSupport_ParameterKey_Blocks" Type="System.String" Scope="User">
       <Value Profile="(Default)">Blocks</Value>
     </Setting>
+    <Setting Name="ItemHandlingSupport_InterFileChecksActive" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

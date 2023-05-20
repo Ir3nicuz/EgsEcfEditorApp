@@ -20,6 +20,8 @@ namespace EcfFileViews
     {
         public EcfStructureItem ResultItem { get; private set; } = null;
         public List<EcfParameter> ResultMatrix { get; private set; } = null;
+        public bool HasAnyBlockRefChanged { get; private set; } = false;
+
         private OperationModes OperationMode { get; set; } = OperationModes.None;
         
         private ItemSelectorDialog ItemSelector { get; set; } = new ItemSelectorDialog()
@@ -179,7 +181,7 @@ namespace EcfFileViews
 
             return ShowDialog(parent);
         }
-        public DialogResult ShowDialog(IWin32Window parent, EgsEcfFile file, OperationModes mode, EcfBlock parentBlock)
+        public DialogResult ShowDialog(IWin32Window parent, List<EgsEcfFile> openedFiles, EgsEcfFile file, OperationModes mode, EcfBlock parentBlock)
         {
             ResultItem = null;
             ResultMatrix = null;
@@ -198,17 +200,17 @@ namespace EcfFileViews
                         break;
                     case OperationModes.Parameter:
                         Text = TitleRecources.EcfItemEditingDialog_Header_AddParameter;
-                        ParameterView.PresetData(null, file, parentBlock);
+                        ParameterView.PresetData(openedFiles, file, parentBlock);
                         ViewPanel.Controls.Add(ParameterView);
                         break;
                     case OperationModes.RootBlock:
                         Text = TitleRecources.EcfItemEditingDialog_Header_AddRootBlock;
-                        BlockView.PresetData(null, file, true, parentBlock);
+                        BlockView.PresetData(openedFiles, file, true, parentBlock);
                         ViewPanel.Controls.Add(BlockView);
                         break;
                     case OperationModes.ChildBlock:
                         Text = TitleRecources.EcfItemEditingDialog_Header_AddChildBlock;
-                        BlockView.PresetData(null, file, false, parentBlock);
+                        BlockView.PresetData(openedFiles, file, false, parentBlock);
                         ViewPanel.Controls.Add(BlockView);
                         break;
                     default:
@@ -261,12 +263,13 @@ namespace EcfFileViews
         }
         private void ComputeResultItem()
         {
+            bool hasRefChanged;
             switch (OperationMode)
             {
                 case OperationModes.Comment: ResultItem = CommentView.ComputeResultData(); break;
                 case OperationModes.Parameter: ResultItem = ParameterView.ComputeResultData(); break;
-                case OperationModes.RootBlock: ResultItem = BlockView.ComputeResultData(); break;
-                case OperationModes.ChildBlock: ResultItem = BlockView.ComputeResultData(); break;
+                case OperationModes.RootBlock: ResultItem = BlockView.ComputeResultData(out hasRefChanged); HasAnyBlockRefChanged = hasRefChanged; break;
+                case OperationModes.ChildBlock: ResultItem = BlockView.ComputeResultData(out hasRefChanged); HasAnyBlockRefChanged = hasRefChanged; break;
                 case OperationModes.ParameterMatrix: ResultMatrix = MatrixView.ComputeResultData(); break;
                 default: break;
             }
@@ -369,7 +372,7 @@ namespace EcfFileViews
             private void Grid_CellClick(object sender, DataGridViewCellEventArgs evt)
             {
                 if (ReferencedBlockList != null && evt.RowIndex > -1 && Grid.Rows[evt.RowIndex] is AttributeRow row
-                    && row.IsReferenceSource && evt.ColumnIndex != ActivationColumn.Index)
+                    && row.IsRefSource && evt.ColumnIndex != ActivationColumn.Index)
                 {
                     if (ItemSelector.ShowDialog(this, ReferencedBlockList.Select(block => new SelectorItem(block, block.BuildRootId())).ToArray()) == DialogResult.OK)
                     {
@@ -386,7 +389,7 @@ namespace EcfFileViews
                 {
                     Grid.EndEdit();
                     bool activ = row.IsActive();
-                    if (row.IsReferenceSource && ReferencedBlockList != null)
+                    if (row.IsRefSource && ReferencedBlockList != null)
                     {
                         if (activ)
                         {
@@ -475,15 +478,15 @@ namespace EcfFileViews
                 {
                     if (row is AttributeRow attrRow)
                     {
-                        EcfAttribute attribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.ItemDef.Name));
-                        EcfValueGroup group = attribute?.ValueGroups.FirstOrDefault();
-                        bool activation = !attrRow.ItemDef.IsOptional || attribute != null;
+                        attrRow.PresetAttribute = presentAttributes?.FirstOrDefault(attr => attr.Key.Equals(attrRow.ItemDef.Name));
+                        EcfValueGroup group = attrRow.PresetAttribute?.ValueGroups.FirstOrDefault();
+                        bool activation = !attrRow.ItemDef.IsOptional || attrRow.PresetAttribute != null;
                         if (activation && attrRow.ItemDef.HasValue && (group?.Values.Count ?? 0) < 1)
                         {
                             group = new EcfValueGroup(string.Empty);
                         }
                         UpdateValueColumns(group);
-                        if (attrRow.IsReferenceSource)
+                        if (attrRow.IsRefSource)
                         {
                             attrRow.InitRow(activation, inheritorBlock);
                         }
@@ -522,7 +525,7 @@ namespace EcfFileViews
                 List<string> errors = new List<string>();
                 if (identifyingBlockList != null)
                 {
-                    AttributeRow idRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsIdentification);
+                    AttributeRow idRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsId);
                     if (idRow != null)
                     {
                         string value = idRow.GetValues().FirstOrDefault();
@@ -538,7 +541,7 @@ namespace EcfFileViews
                 }
                 if (referencedBlockList != null)
                 {
-                    AttributeRow nameRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
+                    AttributeRow nameRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsRefTarget);
                     if (nameRow != null)
                     {
                         string value = nameRow.GetValues().FirstOrDefault();
@@ -562,7 +565,7 @@ namespace EcfFileViews
                 List<string> errors = new List<string>();
                 if (referencingBlockList != null && presetBlock != null)
                 {
-                    AttributeRow targetRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceTarget);
+                    AttributeRow targetRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsRefTarget);
                     if (targetRefRow != null)
                     {
                         string oldTargetValue = presetBlock.GetRefTarget();
@@ -583,7 +586,7 @@ namespace EcfFileViews
                 List<string> errors = new List<string>();
                 if (referencedBlockList != null)
                 {
-                    AttributeRow sourceRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource);
+                    AttributeRow sourceRefRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsRefSource);
                     if (sourceRefRow != null && sourceRefRow.IsActive())
                     {
                         string value = sourceRefRow.GetValues().FirstOrDefault();
@@ -605,7 +608,7 @@ namespace EcfFileViews
             public List<string> ValidateInterFileDependencies(List<EgsEcfFile> filesToCheck, EcfBlock presetBlock)
             {
                 List<string> errors = new List<string>();
-                if (filesToCheck != null && presetBlock != null)
+                if (filesToCheck != null && presetBlock != null && UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
                 {
                     AttributeRow nameRow = Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsName);
                     if (nameRow != null)
@@ -615,31 +618,37 @@ namespace EcfFileViews
                         {
                             EcfDependencyParameters parameters = new EcfDependencyParameters()
                             {
+                                FormatDef = nameRow.FormDef,
                                 ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
                                 ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
                             };
-                            errors.AddRange(FindAttributeInterFileDependencies(filesToCheck, parameters, nameRow.FormDef, oldName).Select(dependency =>
+                            errors.AddRange(FindAttributeInterFileDependencies(parameters, filesToCheck, oldName).Select(dependency =>
                                 string.Format("{0} {1} {2} {3}", presetBlock.DataType, oldName, GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
                         }
                     }
                 }
                 return errors;
             }
-            public List<EcfAttribute> ComputeResultAttributes()
+            public List<EcfAttribute> ComputeResultAttributes(out bool hasRefChanged)
             {
                 List<EcfAttribute> attributes = new List<EcfAttribute>();
+                hasRefChanged = false;
                 foreach (DataGridViewRow row in Grid.Rows)
                 {
-                    if (row is AttributeRow attr && attr.IsActive())
+                    if (row is AttributeRow attrRow)
                     {
-                        attributes.Add(new EcfAttribute(attr.ItemDef.Name, attr.GetValues()));
+                        if (attrRow.IsActive())
+                        {
+                            attributes.Add(new EcfAttribute(attrRow.ItemDef.Name, attrRow.GetValues()));
+                        }
+                        if (attrRow.IsRefChanged()) { hasRefChanged = true; }
                     }
                 }
                 return attributes;
             }
             public EcfBlock GetInheritor()
             {
-                return Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsReferenceSource)?.Inheritor;
+                return Grid.Rows.Cast<AttributeRow>().FirstOrDefault(row => row.IsRefSource)?.Inheritor;
             }
 
             // privates
@@ -749,11 +758,12 @@ namespace EcfFileViews
             {
                 public FormatDefinition FormDef { get; }
                 public ItemDefinition ItemDef { get; }
+                public EcfAttribute PresetAttribute { get; set; } = null;
 
-                public bool IsIdentification { get; } = false;
+                public bool IsId { get; } = false;
                 public bool IsName { get; } = false;
-                public bool IsReferenceSource { get; } = false;
-                public bool IsReferenceTarget { get; } = false;
+                public bool IsRefSource { get; } = false;
+                public bool IsRefTarget { get; } = false;
                 public EcfBlock Inheritor { get; private set; } = null;
 
                 private int PrefixColumnCount { get; } = 0;
@@ -771,10 +781,10 @@ namespace EcfFileViews
                     ItemDef = definition;
                     FormDef = format;
 
-                    IsIdentification = definition.Name.Equals(format.BlockIdAttribute);
+                    IsId = definition.Name.Equals(format.BlockIdAttribute);
                     IsName = definition.Name.Equals(format.BlockNameAttribute);
-                    IsReferenceSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
-                    IsReferenceTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
+                    IsRefSource = definition.Name.Equals(format.BlockReferenceSourceAttribute);
+                    IsRefTarget = definition.Name.Equals(format.BlockReferenceTargetAttribute);
 
                     ActivationCell.ReadOnly = !definition.IsOptional;
                     if (ActivationCell.ReadOnly) { ActivationCell.Style.BackColor = Color.LightGray; }
@@ -854,6 +864,24 @@ namespace EcfFileViews
                         DeactivateCell(cell);
                     }
                 }
+                public bool IsRefChanged()
+                {
+                    if (PresetAttribute == null)
+                    {
+                        return IsId || IsName || IsRefSource || IsRefTarget;
+                    }
+                    else
+                    {
+                        if (IsActive())
+                        {
+                            return !ValueListEquals(PresetAttribute.GetAllValues(), GetValues().AsReadOnly());
+                        }
+                        else 
+                        {
+                            return PresetAttribute.GetAllValues().Count < 1;
+                        }
+                    }
+                }
 
                 // privates
                 private void SetValues(params string[] values)
@@ -876,7 +904,7 @@ namespace EcfFileViews
                 private void ActivateCell(DataGridViewCell cell)
                 {
                     cell.Style.BackColor = Color.White;
-                    cell.ReadOnly = IsReferenceSource;
+                    cell.ReadOnly = IsRefSource;
                     cell.Tag = true;
                 }
                 private void DeactivateCell(DataGridViewCell cell)
@@ -1018,33 +1046,20 @@ namespace EcfFileViews
                     Grid.BeginEdit(true);
                 }
             }
-            public void GenerateParameterMatrix(FormatDefinition definition)
+            public void GenerateParameterMatrix(FormatDefinition definition, bool isParentRoot)
             {
                 if (Mode != ParameterModes.Block) { throw new InvalidOperationException(string.Format("Not allowed in {0} mode", Mode)); }
-                Grid.SuspendLayout();
-                Grid.Rows.Clear();
-                Grid.Columns.Clear();
-                Grid.Columns.Add(ActivationColumn);
-                Grid.Columns.Add(InheritColumn);
-                Grid.Columns.Add(NameColumn);
-                Grid.Columns.Add(InfoColumn);
-                Grid.Columns.Add(CommentColumn);
-                Grid.Rows.AddRange(definition.BlockParameters.Select(paramDef => new ParameterMatrixRow(definition, paramDef)).ToArray());
-                Grid.ResumeLayout();
-                PrefixColumnCount = Grid.Columns.Count;
+                GenerateBlockGrid(definition.BlockParameters.Select(paramDef => new ParameterMatrixRow(definition, paramDef, isParentRoot)).ToArray());
+            }
+            public void GenerateParameterMatrix(FormatDefinition definition, EcfBlock parent)
+            {
+                if (Mode != ParameterModes.Block) { throw new InvalidOperationException(string.Format("Not allowed in {0} mode", Mode)); }
+                GenerateBlockGrid(definition.BlockParameters.Select(paramDef => new ParameterMatrixRow(definition, paramDef, parent)).ToArray());
             }
             public void GenerateParameterMatrix(FormatDefinition definition, List<EcfParameter> parameters)
             {
                 if (Mode != ParameterModes.Matrix) { throw new InvalidOperationException(string.Format("Not allowed in {0} mode", Mode)); }
-                Grid.SuspendLayout();
-                Grid.Rows.Clear();
-                Grid.Columns.Clear();
-                Grid.Columns.Add(NameColumn);
-                Grid.Columns.Add(InfoColumn);
-                Grid.Columns.Add(CommentColumn);
-                Grid.Rows.AddRange(parameters.Select(parameter => new ParameterMatrixRow(definition, parameter)).ToArray());
-                Grid.ResumeLayout();
-                PrefixColumnCount = Grid.Columns.Count;
+                GenerateMatrixGrid(parameters.Select(parameter => new ParameterMatrixRow(definition, parameter)).ToArray());
             }
             public void GenerateParameterValues(ItemDefinition parameterDefinition, EcfParameter presetParameter)
             {
@@ -1154,7 +1169,7 @@ namespace EcfFileViews
                 Grid.AutoResizeColumns();
                 Grid.ResumeLayout();
             }
-            public List<string> ValidateParameterValues(List<EgsEcfFile> filesToCheck, FormatDefinition definition, EcfParameter presetParameter)
+            public List<string> ValidateParameterValues(List<EgsEcfFile> filesToCheck, FormatDefinition definition, EcfBlock parent, EcfParameter presetParameter)
             {
                 List<string> errors = new List<string>();
                 if (ParameterValuesDefinition.HasValue)
@@ -1165,14 +1180,18 @@ namespace EcfFileViews
                         errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, ParameterValuesDefinition.Name,
                             TextRecources.Generic_HasError, GetLocalizedEnum(error.Type)));
                     }
-                    if (filesToCheck != null)
+                    if (filesToCheck != null && UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
                     {
                         EcfDependencyParameters paramKeys = new EcfDependencyParameters()
                         {
+                            FormatDef = definition,
+                            ItemDef = ParameterValuesDefinition,
+                            Parent = parent,
+                            Reference = presetParameter,
                             ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
                             ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
                         };
-                        foreach (EcfError error in CheckParameterInterFileDependencies(filesToCheck, paramKeys, definition, checkGroups, presetParameter))
+                        foreach (EcfError error in CheckParameterInterFileDependencies(paramKeys, filesToCheck, checkGroups, EcfErrorGroups.Editing))
                         {
                             errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, ParameterValuesDefinition.Name,
                                 TextRecources.Generic_HasError, GetLocalizedEnum(error.Type)));
@@ -1184,26 +1203,31 @@ namespace EcfFileViews
             public List<string> ValidateParameterMatrix(List<EgsEcfFile> filesToCheck)
             {
                 List<string> errors = new List<string>();
-                EcfDependencyParameters paramKeys = new EcfDependencyParameters()
+                EcfDependencyParameters depenParams = new EcfDependencyParameters()
                 {
                     ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
                     ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
                 };
                 foreach (DataGridViewRow row in Grid.Rows)
                 {
-                    if (row is ParameterMatrixRow param && param.IsActive() && param.ItemDef.HasValue)
+                    if (row is ParameterMatrixRow paramRow && paramRow.IsActive() && paramRow.ItemDef.HasValue)
                     {
-                        List<EcfValueGroup> checkGroups = new List<EcfValueGroup>() { new EcfValueGroup(param.GetValues()) };
-                        foreach (EcfError error in CheckValuesValid(checkGroups, param.ItemDef, param.FormDef, EcfErrorGroups.Editing))
+                        List<EcfValueGroup> checkGroups = new List<EcfValueGroup>() { new EcfValueGroup(paramRow.GetValues()) };
+                        foreach (EcfError error in CheckValuesValid(checkGroups, paramRow.ItemDef, paramRow.FormDef, EcfErrorGroups.Editing))
                         {
-                            errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, param.ItemDef.Name,
+                            errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, paramRow.ItemDef.Name,
                                 TextRecources.Generic_HasError, GetLocalizedEnum(error.Type)));
                         }
-                        if (filesToCheck != null)
+                        if (filesToCheck != null && UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
                         {
-                            foreach (EcfError error in CheckParameterInterFileDependencies(filesToCheck, paramKeys, param.FormDef, checkGroups, param.PresetParameter))
+                            depenParams.FormatDef = paramRow.FormDef;
+                            depenParams.ItemDef = paramRow.ItemDef;
+                            depenParams.Parent = paramRow.Parent;
+                            depenParams.IsRoot = paramRow.IsParentRoot;
+                            depenParams.Reference = paramRow.PresetParameter;
+                            foreach (EcfError error in CheckParameterInterFileDependencies(depenParams, filesToCheck, checkGroups, EcfErrorGroups.Editing))
                             {
-                                errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, param.ItemDef.Name,
+                                errors.Add(string.Format("{0} '{1}' {2}: {3}", TitleRecources.Generic_Parameter, paramRow.ItemDef.Name,
                                     TextRecources.Generic_HasError, GetLocalizedEnum(error.Type)));
                             }
                         }
@@ -1347,6 +1371,32 @@ namespace EcfFileViews
                 CommentColumn.SortMode = DataGridViewColumnSortMode.Automatic;
 
                 Grid.CellContentClick += Grid_CellContentClick;
+            }
+            private void GenerateBlockGrid(ParameterMatrixRow[] rows)
+            {
+                Grid.SuspendLayout();
+                Grid.Rows.Clear();
+                Grid.Columns.Clear();
+                Grid.Columns.Add(ActivationColumn);
+                Grid.Columns.Add(InheritColumn);
+                Grid.Columns.Add(NameColumn);
+                Grid.Columns.Add(InfoColumn);
+                Grid.Columns.Add(CommentColumn);
+                Grid.Rows.AddRange(rows);
+                Grid.ResumeLayout();
+                PrefixColumnCount = Grid.Columns.Count;
+            }
+            private void GenerateMatrixGrid(ParameterMatrixRow[] rows)
+            {
+                Grid.SuspendLayout();
+                Grid.Rows.Clear();
+                Grid.Columns.Clear();
+                Grid.Columns.Add(NameColumn);
+                Grid.Columns.Add(InfoColumn);
+                Grid.Columns.Add(CommentColumn);
+                Grid.Rows.AddRange(rows);
+                Grid.ResumeLayout();
+                PrefixColumnCount = Grid.Columns.Count;
             }
             private void UpdateValueColumns(EcfValueGroup group, bool columnSortable)
             {
@@ -1645,6 +1695,8 @@ namespace EcfFileViews
             private class ParameterMatrixRow : ParameterRow
             {
                 public FormatDefinition FormDef { get; } = null;
+                public EcfBlock Parent { get; } = null;
+                public bool IsParentRoot { get; } = true;
 
                 private DataGridViewCheckBoxCell ActivationCell { get; } = new DataGridViewCheckBoxCell();
                 private DataGridViewCheckBoxCell InheritedCell { get; } = new DataGridViewCheckBoxCell();
@@ -1660,12 +1712,14 @@ namespace EcfFileViews
                     PrefixColumnCount = Cells.Count;
 
                     FormDef = format;
+                    Parent = presetParameter.Parent as EcfBlock;
+                    IsParentRoot = Parent?.IsRoot() ?? true;
 
                     ActivationCell.Value = true;
                     NameCell.Value = presetParameter.GetFullPath();
                     InfoCell.Value = ItemDef.Info;
                 }
-                public ParameterMatrixRow(FormatDefinition format, ItemDefinition item) : base(item)
+                public ParameterMatrixRow(FormatDefinition format, ItemDefinition item, EcfBlock parent) : base(item)
                 {
                     Cells.Add(ActivationCell);
                     Cells.Add(InheritedCell);
@@ -1675,6 +1729,27 @@ namespace EcfFileViews
                     PrefixColumnCount = Cells.Count;
 
                     FormDef = format;
+                    Parent = parent;
+                    IsParentRoot = parent?.IsRoot() ?? true;
+
+                    ActivationCell.ReadOnly = !item.IsOptional;
+                    if (ActivationCell.ReadOnly) { ActivationCell.Style.BackColor = Color.LightGray; }
+
+                    NameCell.Value = item.Name;
+                    InfoCell.Value = item.Info;
+                }
+                public ParameterMatrixRow(FormatDefinition format, ItemDefinition item, bool isParentRoot) : base(item)
+                {
+                    Cells.Add(ActivationCell);
+                    Cells.Add(InheritedCell);
+                    Cells.Add(NameCell);
+                    Cells.Add(InfoCell);
+                    Cells.Add(CommentCell);
+                    PrefixColumnCount = Cells.Count;
+
+                    FormDef = format;
+                    Parent = null;
+                    IsParentRoot = isParentRoot;
 
                     ActivationCell.ReadOnly = !item.IsOptional;
                     if (ActivationCell.ReadOnly) { ActivationCell.Style.BackColor = Color.LightGray; }
@@ -1718,11 +1793,13 @@ namespace EcfFileViews
         }
         private class BlockPanel : TableLayoutPanel
         {
-            BlockItemPanelModes PanelMode { get; set; } = BlockItemPanelModes.None;
-            private List<EgsEcfFile> Files { get; set; } = null;
             public EgsEcfFile File { get; private set; } = null;
             public EcfBlock ResultBlock { get; private set; } = null;
+            public bool HasRefChanged { get; private set; } = false;
             public EcfBlock ParentBlock { get; private set; } = null;
+
+            private BlockItemPanelModes PanelMode { get; set; } = BlockItemPanelModes.None;
+            private List<EgsEcfFile> Files { get; set; } = null;
             private string PresetBlockCheckedPreMark { get; set; } = null;
             private string PresetBlockCheckedDataType { get; set; } = null;
             private string PresetBlockCheckedPostMark { get; set; } = null;
@@ -1803,7 +1880,7 @@ namespace EcfFileViews
                 PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
                 PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
 
-                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition);
+                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, block);
                 ResetData();
             }
             public void PresetData(List<EgsEcfFile> openedFiles, EgsEcfFile file, bool isRoot, EcfBlock parentBlock)
@@ -1823,7 +1900,7 @@ namespace EcfFileViews
                 PrepareTypeDataComboBox(BlockItemDataTypeComboBox, BlockTypeDefinitions);
                 PrepareTypeDataComboBox(BlockItemPostMarkComboBox, File.Definition.BlockTypePostMarks.ToList());
 
-                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition);
+                BlockItemParametersPanel.GenerateParameterMatrix(File.Definition, isRoot);
                 ResetData();
             }
             public void ResetData()
@@ -1868,9 +1945,10 @@ namespace EcfFileViews
             public EcfBlock ComputeResultData()
             {
                 List<EcfParameter> activeParameters = BlockItemParametersPanel.ComputeResultParameters();
-                List<EcfAttribute> attributes = BlockItemAttributesPanel.ComputeResultAttributes();
+                List<EcfAttribute> attributes = BlockItemAttributesPanel.ComputeResultAttributes(out bool hasRefChanged);
                 if (ResultBlock == null)
                 {
+                    HasRefChanged = true;
                     ResultBlock = new EcfBlock(
                         (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
                         (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
@@ -1879,6 +1957,7 @@ namespace EcfFileViews
                 }
                 else
                 {
+                    HasRefChanged = hasRefChanged;
                     ResultBlock.UpdateTypeData(
                         (BlockItemPreMarkComboBox.SelectedItem as ComboBoxItem)?.Value,
                         (BlockItemDataTypeComboBox.SelectedItem as ComboBoxItem)?.Value,
@@ -2324,14 +2403,14 @@ namespace EcfFileViews
             public List<string> ValidateResultData()
             {
                 List<string> errors = new List<string>();
-                errors.AddRange(ParameterItemValuesPanel.ValidateParameterValues(Files, File.Definition, ResultParameter));
+                errors.AddRange(ParameterItemValuesPanel.ValidateParameterValues(Files, File.Definition, ParentBlock, ResultParameter));
                 errors.AddRange(ParameterItemAttributesPanel.ValidateAttributeValues());
                 return errors;
             }
             public EcfParameter ComputeResultData()
             {
                 List<EcfValueGroup> valueGroups = ParameterItemValuesPanel.ComputeResultValues();
-                List<EcfAttribute> attributes = ParameterItemAttributesPanel.ComputeResultAttributes();
+                List<EcfAttribute> attributes = ParameterItemAttributesPanel.ComputeResultAttributes(out _);
                 if (ResultParameter == null)
                 {
                     ResultParameter = new EcfParameter(Convert.ToString(ParameterItemKeyComboBox.SelectedItem), valueGroups, attributes);
@@ -2585,12 +2664,11 @@ namespace EcfFileViews
                 }
                 return errors;
             }
-            public EcfBlock ComputeResultData()
+            public EcfBlock ComputeResultData(out bool hasRefChanged)
             {
-                foreach (Control tabPage in Controls)
-                {
-                    tabPage.Controls.Cast<BlockPanel>().FirstOrDefault().ComputeResultData();
-                }
+                List<BlockPanel> blockPanels = Controls.Cast<TabPage>().Select(tabPage => tabPage.Controls.Cast<BlockPanel>().FirstOrDefault()).ToList();
+                blockPanels.ForEach(blockPanel => blockPanel.ComputeResultData());
+                hasRefChanged = blockPanels.Any(blockPanel => blockPanel.HasRefChanged);
                 RootPanel.ResultBlock.UpdateStructureData(RootPanel.File, RootPanel.ParentBlock);
                 return RootPanel.ResultBlock;
             }

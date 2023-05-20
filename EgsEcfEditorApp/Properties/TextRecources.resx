@@ -390,8 +390,14 @@
   <data name="EcfSettingsDialog_ToolTip_GameMode" xml:space="preserve">
     <value>Defines the game version which definitions will be used</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_InterFileChecksActive" xml:space="preserve">
+    <value>If activated, the checks for inter file dependencies will be performed at editing items</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>If activated, items with at least one invalid sub item will not be saved</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParameterKeyBlocks" xml:space="preserve">
+    <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
     <value>The name of the parameter key which contains the names of the trees the element belongs to</value>

@@ -298,5 +298,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["ItemHandlingSupport_ParameterKey_Blocks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_InterFileChecksActive {
+            get {
+                return ((bool)(this["ItemHandlingSupport_InterFileChecksActive"]));
+            }
+            set {
+                this["ItemHandlingSupport_InterFileChecksActive"] = value;
+            }
+        }
     }
 }

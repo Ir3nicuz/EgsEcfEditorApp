@@ -89,21 +89,21 @@ namespace EgsEcfEditorApp
             ResetButton.Text = TitleRecources.Generic_Reset;
             AbortButton.Text = TitleRecources.Generic_Abort;
 
-            SettingsPanels.Add(new GeneralSettingsPanel(TitleRecources.EcfSettingsDialog_GeneralPanel_Header, Tip));
-            SettingsPanels.Add(new CreationSettingsPanel(TitleRecources.EcfSettingsDialog_CreationPanel_Header, Tip));
-            SettingsPanels.Add(new TreeFilterSettingsPanel(TitleRecources.EcfSettingsDialog_FilterPanel_Header, Tip));
-            SettingsPanels.Add(new SorterSettingsPanel(TitleRecources.EcfSettingsDialog_SorterPanel_Header, Tip));
-            SettingsPanels.Add(new TechTreeSettingsPanel(TitleRecources.EcfSettingsDialog_TechTreePanel_Header, Tip));
-            SettingsPanels.Add(new ItemHandlingSupportSettingsPanel(TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_Header, Tip));
-            SettingsPanels.Add(new InfoSettingsPanel(TitleRecources.EcfSettingsDialog_InfoPanel_Header));
+            SettingsPanels.Add(new GeneralSettingsPanel(TitleRecources.EcfSettingsDialog_General_Header, Tip));
+            SettingsPanels.Add(new CreationSettingsPanel(TitleRecources.EcfSettingsDialog_Creation_Header, Tip));
+            SettingsPanels.Add(new TreeFilterSettingsPanel(TitleRecources.EcfSettingsDialog_Filter_Header, Tip));
+            SettingsPanels.Add(new SorterSettingsPanel(TitleRecources.EcfSettingsDialog_Sorter_Header, Tip));
+            SettingsPanels.Add(new TechTreeSettingsPanel(TitleRecources.EcfSettingsDialog_TechTree_Header, Tip));
+            SettingsPanels.Add(new ItemHandlingSupportSettingsPanel(TitleRecources.EcfSettingsDialog_ItemHandlingSupport_Header, Tip));
+            SettingsPanels.Add(new InfoPanel(TitleRecources.EcfSettingsDialog_Info_Header));
 
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_GeneralPanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_CreationPanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_FilterPanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_SorterPanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_TechTreePanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_Header);
-            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_InfoPanel_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_General_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_Creation_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_Filter_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_Sorter_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_TechTree_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_ItemHandlingSupport_Header);
+            ChapterSelectorTreeView.Nodes.Add(TitleRecources.EcfSettingsDialog_Info_Header);
 
             ChapterSelectorTreeView.SelectedNode = ChapterSelectorTreeView.Nodes[0];
         }
@@ -130,9 +130,13 @@ namespace EgsEcfEditorApp
             public bool HasUnsavedChanges { get; set; } = false;
             public string IdTag { get; private set; } = null;
 
-            public SettingsPanel(string idTag)
+            private int ItemsCount { get; set; } = 0;
+            private ToolTip ToolTipContainer { get; }
+
+            public SettingsPanel(string idTag, ToolTip toolTipContainer)
             {
                 IdTag = idTag;
+                ToolTipContainer = toolTipContainer;
                 InitControls();
             }
 
@@ -141,7 +145,7 @@ namespace EgsEcfEditorApp
             public abstract void UpdateItems();
 
             // privates
-            private  void InitControls()
+            private void InitControls()
             {
                 SuspendLayout();
 
@@ -151,17 +155,45 @@ namespace EgsEcfEditorApp
                 Dock = DockStyle.Fill;
                 GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
 
-                ResumeLayout(true);
+                ResumeLayout(false);
+            }
+            protected void AddSettingsItem(SettingsItem item, string title, string toolTip, EventHandler onSettingChanged)
+            {
+                item.Text = title;
+                item.SetToolTip(ToolTipContainer, toolTip);
+                item.SettingChanged += onSettingChanged;
+
+                AddSettingsItem(item);
+            }
+            protected void AddSettingsItem(SettingsItem item)
+            {
+                Controls.Add(item, 0, ItemsCount);
+                RowStyles.Add(new RowStyle());
+                ItemsCount++;
+                RowCount = ItemsCount;
+            }
+            protected void AddSpacer(SettingsItem item = null)
+            {
+                if (item != null)
+                {
+                    Controls.Add(item, 0, ItemsCount);
+                    ItemsCount++;
+                }
+                else
+                {
+                    ItemsCount++;
+                }
+                RowCount = ItemsCount;
+                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             }
         }
         private class GeneralSettingsPanel : SettingsPanel
         {
             private ComboBoxSettingItem GameMode { get; } = new ComboBoxSettingItem(); 
 
-            public GeneralSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public GeneralSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
@@ -182,23 +214,15 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(GameMode, 0, 0);
-                RowCount = 2;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                GameMode.Text = TitleRecources.EcfSettingsDialog_GeneralPanel_GameMode;
-                GameMode.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_GameMode);
+                AddSettingsItem(GameMode, TitleRecources.EcfSettingsDialog_General_GameMode,
+                    TextRecources.EcfSettingsDialog_ToolTip_GameMode, GameMode_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                GameMode.SettingChanged += GameMode_SettingChanged;
             }
         }
         private class CreationSettingsPanel : SettingsPanel
@@ -207,10 +231,9 @@ namespace EgsEcfEditorApp
             private CheckBoxSettingItem InvalidateParentsOnError { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem AllowFallbackToParsedData { get; } = new CheckBoxSettingItem();
 
-            public CreationSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public CreationSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
@@ -245,35 +268,19 @@ namespace EgsEcfEditorApp
             }
 
             // private
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(WriteOnlyValidItems, 0, 0);
-                Controls.Add(InvalidateParentsOnError, 0, 1);
-                Controls.Add(AllowFallbackToParsedData, 0, 2);
-                RowCount = 4;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                WriteOnlyValidItems.Text = TitleRecources.EcfSettingsDialog_CreationPanel_WriteOnlyValidItems;
-                WriteOnlyValidItems.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_WriteOnlyValidItems);
-
-                InvalidateParentsOnError.Text = TitleRecources.EcfSettingsDialog_CreationPanel_InvalidateParentOnError;
-                InvalidateParentsOnError.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError);
-
-                AllowFallbackToParsedData.Text = TitleRecources.EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData;
-                AllowFallbackToParsedData.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData);
+                AddSettingsItem(WriteOnlyValidItems, TitleRecources.EcfSettingsDialog_Creation_WriteOnlyValidItems,
+                    TextRecources.EcfSettingsDialog_ToolTip_WriteOnlyValidItems, WriteOnlyValidItems_SettingChanged);
+                AddSettingsItem(InvalidateParentsOnError, TitleRecources.EcfSettingsDialog_Creation_InvalidateParentOnError,
+                    TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError, InvalidateParentsOnError_SettingChanged);
+                AddSettingsItem(AllowFallbackToParsedData, TitleRecources.EcfSettingsDialog_Creation_AllowFallbackToParsedData,
+                    TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData, AllowFallbackToParsedData_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                WriteOnlyValidItems.SettingChanged += WriteOnlyValidItems_SettingChanged;
-                InvalidateParentsOnError.SettingChanged += InvalidateParentsOnError_SettingChanged;
-                AllowFallbackToParsedData.SettingChanged += AllowFallbackToParsedData_SettingChanged;
             }
             private void UpdateAccessability()
             {
@@ -287,10 +294,9 @@ namespace EgsEcfEditorApp
             private CheckBoxSettingItem ParametersInitActive { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DataBlocksInitActive { get; } = new CheckBoxSettingItem();
 
-            public TreeFilterSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public TreeFilterSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
@@ -323,35 +329,19 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(CommentsInitActive, 0, 0);
-                Controls.Add(ParametersInitActive, 0, 1);
-                Controls.Add(DataBlocksInitActive, 0, 2);
-                RowCount = 4;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                CommentsInitActive.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive;
-                CommentsInitActive.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive);
-
-                ParametersInitActive.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive;
-                ParametersInitActive.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive);
-
-                DataBlocksInitActive.Text = TitleRecources.EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive;
-                DataBlocksInitActive.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive);
+                AddSettingsItem(CommentsInitActive, TitleRecources.EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive,
+                    TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive, CommentsInitActive_SettingChanged);
+                AddSettingsItem(ParametersInitActive, TitleRecources.EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive,
+                    TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive, ParametersInitActive_SettingChanged);
+                AddSettingsItem(DataBlocksInitActive, TitleRecources.EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive,
+                    TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive, DataBlocksInitActive_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                CommentsInitActive.SettingChanged += CommentsInitActive_SettingChanged;
-                ParametersInitActive.SettingChanged += ParametersInitActive_SettingChanged;
-                DataBlocksInitActive.SettingChanged += DataBlocksInitActive_SettingChanged;
             }
         }
         private class SorterSettingsPanel : SettingsPanel
@@ -360,10 +350,9 @@ namespace EgsEcfEditorApp
             private ComboBoxSettingItem ParameterViewSorterInitCount { get; } = new ComboBoxSettingItem();
             private ComboBoxSettingItem ErrorViewSorterInitCount { get; } = new ComboBoxSettingItem();
 
-            public SorterSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public SorterSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
@@ -401,35 +390,19 @@ namespace EgsEcfEditorApp
             }
 
             // private 
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(TreeViewSorterInitCount, 0, 0);
-                Controls.Add(ParameterViewSorterInitCount, 0, 1);
-                Controls.Add(ErrorViewSorterInitCount, 0, 2);
-                RowCount = 4;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                TreeViewSorterInitCount.Text = TitleRecources.EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount;
-                TreeViewSorterInitCount.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_TreeViewSorterInitCount);
-
-                ParameterViewSorterInitCount.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount;
-                ParameterViewSorterInitCount.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount);
-
-                ErrorViewSorterInitCount.Text = TitleRecources.EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount;
-                ErrorViewSorterInitCount.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount);
+                AddSettingsItem(TreeViewSorterInitCount, TitleRecources.EcfSettingsDialog_Sorter_TreeViewSorterInitCount,
+                    TextRecources.EcfSettingsDialog_ToolTip_TreeViewSorterInitCount, TreeViewSorterInitCount_SettingChanged);
+                AddSettingsItem(ParameterViewSorterInitCount, TitleRecources.EcfSettingsDialog_Sorter_ParameterViewSorterInitCount,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount, ParameterViewSorterInitCount_SettingChanged);
+                AddSettingsItem(ErrorViewSorterInitCount, TitleRecources.EcfSettingsDialog_Sorter_ErrorViewSorterInitCount,
+                    TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount, ErrorViewSorterInitCount_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                TreeViewSorterInitCount.SettingChanged += TreeViewSorterInitCount_SettingChanged;
-                ParameterViewSorterInitCount.SettingChanged += ParameterViewSorterInitCount_SettingChanged;
-                ErrorViewSorterInitCount.SettingChanged += ErrorViewSorterInitCount_SettingChanged;
             }
         }
         private class TechTreeSettingsPanel : SettingsPanel
@@ -441,10 +414,9 @@ namespace EgsEcfEditorApp
             private TextBoxSettingItem ParameterKeyUnlockCost { get; } = new TextBoxSettingItem();
             private NumericSettingItem DefaultValueUnlockCost { get; } = new NumericSettingItem();
 
-            public TechTreeSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public TechTreeSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
@@ -500,74 +472,57 @@ namespace EgsEcfEditorApp
             }
 
             // private
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(ParameterKeyTechTreeNames, 0, 0);
-                Controls.Add(ParameterKeyTechTreeParentName, 0, 1);
-                Controls.Add(ParameterKeyUnlockLevel, 0, 2);
-                Controls.Add(DefaultValueUnlockLevel, 0, 3);
-                Controls.Add(ParameterKeyUnlockCost, 0, 4);
-                Controls.Add(DefaultValueUnlockCost, 0, 5);
-                RowCount = 7;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                ParameterKeyTechTreeNames.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames;
-                ParameterKeyTechTreeNames.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames);
-
-                ParameterKeyTechTreeParentName.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName;
-                ParameterKeyTechTreeParentName.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName);
-
-                ParameterKeyUnlockLevel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel;
-                ParameterKeyUnlockLevel.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel);
-
-                DefaultValueUnlockLevel.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel;
-                DefaultValueUnlockLevel.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel);
-
-                ParameterKeyUnlockCost.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost;
-                ParameterKeyUnlockCost.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost);
-
-                DefaultValueUnlockCost.Text = TitleRecources.EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost;
-                DefaultValueUnlockCost.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockCost);
+                AddSettingsItem(ParameterKeyTechTreeNames, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames, ParameterKeyTechTreeNames_SettingChanged);
+                AddSettingsItem(ParameterKeyTechTreeParentName, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName, ParameterKeyTechTreeParentName_SettingChanged);
+                AddSettingsItem(ParameterKeyUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel, ParameterKeyUnlockLevel_SettingChanged);
+                AddSettingsItem(DefaultValueUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_DefaultValueUnlockLevel,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel, DefaultValueUnlockLevel_SettingChanged);
+                AddSettingsItem(ParameterKeyUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyUnlockCost,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost, ParameterKeyUnlockCost_SettingChanged);
+                AddSettingsItem(DefaultValueUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_DefaultValueUnlockCost,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockCost, DefaultValueUnlockCost_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                ParameterKeyTechTreeNames.SettingChanged += ParameterKeyTechTreeNames_SettingChanged;
-                ParameterKeyTechTreeParentName.SettingChanged += ParameterKeyTechTreeParentName_SettingChanged;
-                ParameterKeyUnlockLevel.SettingChanged += ParameterKeyUnlockLevel_SettingChanged;
-                DefaultValueUnlockLevel.SettingChanged += DefaultValueUnlockLevel_SettingChanged;
-                ParameterKeyUnlockCost.SettingChanged += ParameterKeyUnlockCost_SettingChanged;
-                DefaultValueUnlockCost.SettingChanged += DefaultValueUnlockCost_SettingChanged;
             }
         }
         private class ItemHandlingSupportSettingsPanel : SettingsPanel
         {
+            private CheckBoxSettingItem InterFileChecksActive { get; } = new CheckBoxSettingItem();
             private TextBoxSettingItem ParameterKeyTemplateRoot { get; } = new TextBoxSettingItem();
+            private TextBoxSettingItem ParameterKeyBlocks { get; } = new TextBoxSettingItem();
             private CheckBoxSettingItem DefaultDefinitionIsOptional { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DefaultDefinitionHasValue { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DefaultDefinitionIsAllowingBlank { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DefaultDefinitionIsForceEscaped { get; } = new CheckBoxSettingItem();
             private TextBoxSettingItem DefaultDefinitionInfo { get; } = new TextBoxSettingItem();
 
-            public ItemHandlingSupportSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag)
+            public ItemHandlingSupportSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
-                InitControls(toolTipContainer);
-                InitEvents();
+                InitControls();
             }
 
             // events
+            private void InterFileChecksActive_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_InterFileChecksActive = InterFileChecksActive.Value;
+                HasUnsavedChanges = true;
+            }
             private void ParameterKeyTemplateRoot_SettingChanged(object sender, EventArgs evt)
             {
                 UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName = ParameterKeyTemplateRoot.Value;
+                HasUnsavedChanges = true;
+            }
+            private void ParameterKeyBlocks_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks = ParameterKeyBlocks.Value;
                 HasUnsavedChanges = true;
             }
             private void DefaultDefinitionIsOptional_SettingChanged(object sender, EventArgs evt)
@@ -603,7 +558,9 @@ namespace EgsEcfEditorApp
             }
             public override void UpdateItems()
             {
+                InterFileChecksActive.Value = UserSettings.Default.ItemHandlingSupport_InterFileChecksActive;
                 ParameterKeyTemplateRoot.Value = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName;
+                ParameterKeyBlocks.Value = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks;
                 DefaultDefinitionIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional;
                 DefaultDefinitionHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue;
                 DefaultDefinitionIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank;
@@ -612,56 +569,32 @@ namespace EgsEcfEditorApp
             }
 
             // privates
-            private void InitControls(ToolTip toolTipContainer)
+            private void InitControls()
             {
                 SuspendLayout();
 
-                Controls.Add(ParameterKeyTemplateRoot, 0, 0);
-                Controls.Add(DefaultDefinitionIsOptional, 0, 1);
-                Controls.Add(DefaultDefinitionHasValue, 0, 2);
-                Controls.Add(DefaultDefinitionIsAllowingBlank, 0, 3);
-                Controls.Add(DefaultDefinitionIsForceEscaped, 0, 4);
-                Controls.Add(DefaultDefinitionInfo, 0, 5);
-                RowCount = 7;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                ParameterKeyTemplateRoot.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot;
-                ParameterKeyTemplateRoot.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot);
-
-                DefaultDefinitionIsOptional.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional;
-                DefaultDefinitionIsOptional.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional);
-
-                DefaultDefinitionHasValue.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue;
-                DefaultDefinitionHasValue.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue);
-
-                DefaultDefinitionIsAllowingBlank.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank;
-                DefaultDefinitionIsAllowingBlank.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank);
-
-                DefaultDefinitionIsForceEscaped.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped;
-                DefaultDefinitionIsForceEscaped.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped);
-
-                DefaultDefinitionInfo.Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo;
-                DefaultDefinitionInfo.SetToolTip(toolTipContainer, TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionInfo);
+                AddSettingsItem(InterFileChecksActive, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive,
+                    TextRecources.EcfSettingsDialog_ToolTip_InterFileChecksActive, InterFileChecksActive_SettingChanged);
+                AddSettingsItem(ParameterKeyTemplateRoot, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot, 
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot, ParameterKeyTemplateRoot_SettingChanged);
+                AddSettingsItem(ParameterKeyBlocks, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyBlocks, ParameterKeyBlocks_SettingChanged);
+                AddSettingsItem(DefaultDefinitionIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional, DefaultDefinitionIsOptional_SettingChanged);
+                AddSettingsItem(DefaultDefinitionHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue, DefaultDefinitionIsAllowingBlank_SettingChanged);
+                AddSettingsItem(DefaultDefinitionIsAllowingBlank, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank, DefaultDefinitionIsAllowingBlank_SettingChanged);
+                AddSettingsItem(DefaultDefinitionIsForceEscaped, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped, DefaultDefinitionIsForceEscaped_SettingChanged);
+                AddSettingsItem(DefaultDefinitionInfo, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionInfo, DefaultDefinitionInfo_SettingChanged);
+                AddSpacer();
 
                 ResumeLayout(true);
             }
-            private void InitEvents()
-            {
-                ParameterKeyTemplateRoot.SettingChanged += ParameterKeyTemplateRoot_SettingChanged;
-                DefaultDefinitionIsOptional.SettingChanged += DefaultDefinitionIsOptional_SettingChanged;
-                DefaultDefinitionHasValue.SettingChanged += DefaultDefinitionHasValue_SettingChanged;
-                DefaultDefinitionIsAllowingBlank.SettingChanged += DefaultDefinitionIsAllowingBlank_SettingChanged;
-                DefaultDefinitionIsForceEscaped.SettingChanged += DefaultDefinitionIsForceEscaped_SettingChanged;
-                DefaultDefinitionInfo.SettingChanged += DefaultDefinitionInfo_SettingChanged;
-            }
         }
-        private class InfoSettingsPanel : SettingsPanel
+        private class InfoPanel : SettingsPanel
         {
             private TitleSettingsItem AppNameItem { get; } = new TitleSettingsItem();
             private LogoSettingsItem LogoItem { get; } = new LogoSettingsItem();
@@ -670,10 +603,9 @@ namespace EgsEcfEditorApp
             private LinkSettingsItem LicenseItem { get; } = new LinkSettingsItem();
             private LinkSettingsItem ReadmeItem { get; } = new LinkSettingsItem();
 
-            public InfoSettingsPanel(string idTag) : base(idTag)
+            public InfoPanel(string idTag) : base(idTag, null)
             {
                 InitControls();
-                InitEvents();
             }
 
             // events
@@ -702,21 +634,7 @@ namespace EgsEcfEditorApp
             private void InitControls()
             {
                 SuspendLayout();
-
-                Controls.Add(AppNameItem, 0, 0);
-                Controls.Add(LogoItem, 0, 1);
-                Controls.Add(AuthorItem, 0, 2);
-                Controls.Add(VersionItem, 0, 3);
-                Controls.Add(LicenseItem, 0, 4);
-                Controls.Add(ReadmeItem, 0, 5);
-                RowCount = 6;
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-                RowStyles.Add(new RowStyle());
-
+                
                 AppNameItem.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)
                     .Cast<AssemblyTitleAttribute>().FirstOrDefault().Title;
                 AppNameItem.TagFont = new Font("Viner Hand ITC", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
@@ -736,24 +654,30 @@ namespace EgsEcfEditorApp
                 LicenseItem.NameTagAlign = ContentAlignment.MiddleRight;
                 LicenseItem.Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)
                     .Cast<AssemblyCopyrightAttribute>().FirstOrDefault().Copyright;
+                LicenseItem.LinkClicked += LicenseItem_LinkClicked;
 
                 ReadmeItem.Text = TitleRecources.Generic_Manual;
                 ReadmeItem.NameTagAlign = ContentAlignment.MiddleRight;
                 ReadmeItem.Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false)
                     .Cast<AssemblyConfigurationAttribute>().FirstOrDefault().Configuration;
+                ReadmeItem.LinkClicked += ReadmeItem_LinkClicked;
+
+                AddSettingsItem(AppNameItem);
+                AddSpacer(LogoItem);
+                AddSettingsItem(AuthorItem);
+                AddSettingsItem(VersionItem);
+                AddSettingsItem(LicenseItem);
+                AddSettingsItem(ReadmeItem);
 
                 ResumeLayout(true);
-            }
-            private void InitEvents()
-            {
-                LicenseItem.LinkClicked += LicenseItem_LinkClicked;
-                ReadmeItem.LinkClicked += ReadmeItem_LinkClicked;
             }
         }
 
         // item classes
         private abstract class SettingsItem : TableLayoutPanel
         {
+            public abstract event EventHandler SettingChanged;
+
             public override string Text
             {
                 get
@@ -836,7 +760,7 @@ namespace EgsEcfEditorApp
         }
         private class TextBoxSettingItem : SettingsItem
         {
-            public event EventHandler SettingChanged;
+            public override event EventHandler SettingChanged;
 
             public override bool IsEnabled
             {
@@ -887,7 +811,7 @@ namespace EgsEcfEditorApp
             // public
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(Setting, toolTip);
+                toolTipContainer?.SetToolTip(Setting, toolTip);
             }
 
             // privates
@@ -935,7 +859,7 @@ namespace EgsEcfEditorApp
         }
         private class ComboBoxSettingItem : SettingsItem
         {
-            public event EventHandler SettingChanged;
+            public override event EventHandler SettingChanged;
 
             public override bool IsEnabled
             {
@@ -984,7 +908,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(Setting, toolTip);
+                toolTipContainer?.SetToolTip(Setting, toolTip);
             }
             public void PresetItem(object[] entries)
             {
@@ -1014,7 +938,7 @@ namespace EgsEcfEditorApp
         }
         private class CheckBoxSettingItem : SettingsItem
         {
-            public event EventHandler SettingChanged;
+            public override event EventHandler SettingChanged;
 
             public override bool IsEnabled
             {
@@ -1060,7 +984,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(Setting, toolTip);
+                toolTipContainer?.SetToolTip(Setting, toolTip);
             }
 
             // privates
@@ -1083,7 +1007,7 @@ namespace EgsEcfEditorApp
         }
         private class NumericSettingItem : SettingsItem
         {
-            public event EventHandler SettingChanged;
+            public override event EventHandler SettingChanged;
 
             public override bool IsEnabled
             {
@@ -1162,7 +1086,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(Setting, toolTip);
+                toolTipContainer?.SetToolTip(Setting, toolTip);
             }
 
             // privates
@@ -1210,6 +1134,8 @@ namespace EgsEcfEditorApp
         }
         private class TitleSettingsItem : SettingsItem
         {
+            public override event EventHandler SettingChanged;
+
             public override bool IsEnabled 
             { 
                 get 
@@ -1233,7 +1159,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(NameTag, toolTip);
+                toolTipContainer?.SetToolTip(NameTag, toolTip);
             }
 
             // privates
@@ -1256,6 +1182,8 @@ namespace EgsEcfEditorApp
         }
         private class LogoSettingsItem : SettingsItem
         {
+            public override event EventHandler SettingChanged;
+
             public override bool IsEnabled
             {
                 get
@@ -1294,7 +1222,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(Logo, toolTip);
+                toolTipContainer?.SetToolTip(Logo, toolTip);
             }
 
             // privates
@@ -1317,6 +1245,8 @@ namespace EgsEcfEditorApp
         }
         private class TextSettingsItem : SettingsItem
         {
+            public override event EventHandler SettingChanged;
+
             public override bool IsEnabled
             {
                 get
@@ -1354,7 +1284,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(DataTag, toolTip);
+                toolTipContainer?.SetToolTip(DataTag, toolTip);
             }
 
             // privates
@@ -1377,6 +1307,7 @@ namespace EgsEcfEditorApp
         }
         private class LinkSettingsItem : SettingsItem
         {
+            public override event EventHandler SettingChanged;
             public event LinkLabelLinkClickedEventHandler LinkClicked;
 
             public override bool IsEnabled
@@ -1423,7 +1354,7 @@ namespace EgsEcfEditorApp
             // publics
             public override void SetToolTip(ToolTip toolTipContainer, string toolTip)
             {
-                toolTipContainer.SetToolTip(DataTag, toolTip);
+                toolTipContainer?.SetToolTip(DataTag, toolTip);
             }
 
             // privates

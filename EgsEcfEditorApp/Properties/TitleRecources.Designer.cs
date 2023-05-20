@@ -639,90 +639,90 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Allow fallback to original data.
         /// </summary>
-        internal static string EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData {
+        internal static string EcfSettingsDialog_Creation_AllowFallbackToParsedData {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Creation_AllowFallbackToParsedData", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to File Creation.
         /// </summary>
-        internal static string EcfSettingsDialog_CreationPanel_Header {
+        internal static string EcfSettingsDialog_Creation_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Creation_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Invalidate parent of invalid item.
         /// </summary>
-        internal static string EcfSettingsDialog_CreationPanel_InvalidateParentOnError {
+        internal static string EcfSettingsDialog_Creation_InvalidateParentOnError {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_InvalidateParentOnError", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Creation_InvalidateParentOnError", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Write only valid items to file.
         /// </summary>
-        internal static string EcfSettingsDialog_CreationPanel_WriteOnlyValidItems {
+        internal static string EcfSettingsDialog_Creation_WriteOnlyValidItems {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_CreationPanel_WriteOnlyValidItems", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Creation_WriteOnlyValidItems", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filtering.
         /// </summary>
-        internal static string EcfSettingsDialog_FilterPanel_Header {
+        internal static string EcfSettingsDialog_Filter_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Filter_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tree view &apos;comments&apos; initially visible.
         /// </summary>
-        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive {
+        internal static string EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tree view &apos;data blocks&apos; initially visible.
         /// </summary>
-        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive {
+        internal static string EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tree view &apos;parameters&apos; initially visible.
         /// </summary>
-        internal static string EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive {
+        internal static string EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Game version.
         /// </summary>
-        internal static string EcfSettingsDialog_GeneralPanel_GameMode {
+        internal static string EcfSettingsDialog_General_GameMode {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_GameMode", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_General_GameMode", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        internal static string EcfSettingsDialog_GeneralPanel_Header {
+        internal static string EcfSettingsDialog_General_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_GeneralPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_General_Header", resourceCulture);
             }
         }
         
@@ -738,171 +738,189 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
-        internal static string EcfSettingsDialog_InfoPanel_Header {
+        internal static string EcfSettingsDialog_Info_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_InfoPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Info_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Definition &apos;Has Value&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Definition &apos;Is Allowing Blank&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Definition &apos;Info&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Definition &apos;Is Force Escaped&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Definition &apos;Is Optional&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Item Handling Support.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_Header {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inter file checks active.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Blocks&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Template Root&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Error view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount {
+        internal static string EcfSettingsDialog_Sorter_ErrorViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Sorter_ErrorViewSorterInitCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sorting.
         /// </summary>
-        internal static string EcfSettingsDialog_SorterPanel_Header {
+        internal static string EcfSettingsDialog_Sorter_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Sorter_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount {
+        internal static string EcfSettingsDialog_Sorter_ParameterViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Sorter_ParameterViewSorterInitCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tree view item count preset.
         /// </summary>
-        internal static string EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount {
+        internal static string EcfSettingsDialog_Sorter_TreeViewSorterInitCount {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_Sorter_TreeViewSorterInitCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Value &apos;Unlock Cost&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost {
+        internal static string EcfSettingsDialog_TechTree_DefaultValueUnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefaultValueUnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Value &apos;Unlock Level&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel {
+        internal static string EcfSettingsDialog_TechTree_DefaultValueUnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefaultValueUnlockLevel", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tech Tree.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_Header {
+        internal static string EcfSettingsDialog_TechTree_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_Header", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames {
+        internal static string EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Parent Name&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName {
+        internal static string EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Unlock Cost&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost {
+        internal static string EcfSettingsDialog_TechTree_ParameterKeyUnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyUnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Unlock Level&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel {
+        internal static string EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel", resourceCulture);
             }
         }
         

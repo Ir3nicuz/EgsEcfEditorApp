@@ -390,6 +390,9 @@
   <data name="EcfSettingsDialog_ToolTip_GameMode" xml:space="preserve">
     <value>Legt die Spiel Version fest, dessen Definitionen verwendet werden sollen </value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_InterFileChecksActive" xml:space="preserve">
+    <value>Wenn aktiviert, werden die Prüfungen für dateiübergreifende Beziehungen ausgeführt sobald ein Element editiert wird</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>Wenn aktiviert, werden auch Elemente mit mindestens einem fehlerhaften Unterelement nicht gespeichert</value>
   </data>

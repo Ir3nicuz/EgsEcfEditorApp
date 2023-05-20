@@ -880,11 +880,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If activated, the checks for inter file dependencies will be performed at item editing.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_InterFileChecksActive {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_InterFileChecksActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If activated, items with at least one invalid sub item will not be saved.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_InvalidateParentsOnError {
             get {
                 return ResourceManager.GetString("EcfSettingsDialog_ToolTip_InvalidateParentsOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the build block name values in the BlockGroups file.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterKeyBlocks {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyBlocks", resourceCulture);
             }
         }
         

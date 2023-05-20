@@ -201,6 +201,12 @@
   <data name="EgsEcfParser.EcfErrors.BlockPreMarkUnknown" xml:space="preserve">
     <value>Element Vorzeichen nicht definiert</value>
   </data>
+  <data name="EgsEcfParser.EcfErrors.BuildBlockNotFound" xml:space="preserve">
+    <value>Baublock nicht gefunden</value>
+  </data>
+  <data name="EgsEcfParser.EcfErrors.IngredientItemNotFound" xml:space="preserve">
+    <value>Zutaten Item nicht gefunden</value>
+  </data>
   <data name="EgsEcfParser.EcfErrors.KeyNullOrEmpty" xml:space="preserve">
     <value>Schlüsselwert null oder leer</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="EgsEcfParser.EcfErrors.ParameterWithoutParent" xml:space="preserve">
     <value>Parameter hat kein Container Element</value>
+  </data>
+  <data name="EgsEcfParser.EcfErrors.TemplateNotFound" xml:space="preserve">
+    <value>Template nicht gefunden</value>
   </data>
   <data name="EgsEcfParser.EcfErrors.Unknown" xml:space="preserve">
     <value>Undefiniert</value>

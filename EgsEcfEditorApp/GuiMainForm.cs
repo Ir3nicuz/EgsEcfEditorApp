@@ -1678,6 +1678,10 @@ namespace EcfFileViews
         }
 
         // private
+        private List<EgsEcfFile> GetOpenedFiles()
+        {
+            return (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+        }
         private void RemoveTreeItem(List<EcfStructureItem> items)
         {
             List<string> errors = new List<string>();
@@ -1732,18 +1736,24 @@ namespace EcfFileViews
         }
         private List<string> CheckInterFileDependencies(List<EcfBlock> blocksToCheck)
         {
-            List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            EcfDependencyParameters parameters = new EcfDependencyParameters()
+            List<string> errors = new List<string>();
+            if (UserSettings.Default.ItemHandlingSupport_InterFileChecksActive)
             {
-                ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
-            };
-            List<EcfDependency> errors = FindAttributeInterFileDependencies(filesToCheck, parameters, blocksToCheck);
-            return errors.Select(error => string.Format("{0} {1} {2}", 
-                error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty, 
-                GetLocalizedEnum(error.Type), 
-                error.TargetItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty
-                )).ToList();
+                List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
+                EcfDependencyParameters parameters = new EcfDependencyParameters()
+                {
+                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
+                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                };
+                List<EcfDependency> dependencies = FindAttributeInterFileDependencies(parameters, filesToCheck, blocksToCheck);
+
+                errors.AddRange(dependencies.Select(error => string.Format("{0} {1} {2}",
+                    error.SourceItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty,
+                    GetLocalizedEnum(error.Type),
+                    error.TargetItem?.BuildRootId() ?? TitleRecources.Generic_Replacement_Empty
+                    )));
+            }
+            return errors;
         }
         private HashSet<EcfBlock> RemoveStructureItems(List<EcfStructureItem> items)
         {
@@ -1787,7 +1797,7 @@ namespace EcfFileViews
             }
             OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item as EcfBlock;
-            if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, selectedItemType, parent) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 if (item == null)
@@ -1799,7 +1809,7 @@ namespace EcfFileViews
                     parent?.AddChild(createdItem, null);
                 }
                 createdItem.Revalidate();
-                if (createdItem is EcfBlock)
+                if (createdItem is EcfBlock && ItemEditor.HasAnyBlockRefChanged)
                 {
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
                     completeBlockList.ForEach(block => block.RevalidateReferenceRepairing(completeBlockList));
@@ -1824,7 +1834,7 @@ namespace EcfFileViews
             }
             OperationModes selectedItemType = (OperationModes)ItemTypeSelectorDialog.SelectedOption.Item;
             EcfBlock parent = item?.Parent as EcfBlock;
-            if (ItemEditor.ShowDialog(this, File, selectedItemType, parent) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, selectedItemType, parent) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 if (item == null || parent == null)
@@ -1836,7 +1846,7 @@ namespace EcfFileViews
                     parent.AddChild(createdItem, item);
                 }
                 createdItem.Revalidate();
-                if (createdItem is EcfBlock)
+                if (createdItem is EcfBlock && ItemEditor.HasAnyBlockRefChanged)
                 {
                     List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
                     completeBlockList.ForEach(block => block.RevalidateReferenceRepairing(completeBlockList));
@@ -1846,7 +1856,7 @@ namespace EcfFileViews
         }
         private void AddParameterItem(EcfBlock parentBlock, EcfStructureItem preceedingItem)
         {
-            if (ItemEditor.ShowDialog(this, File, OperationModes.Parameter, parentBlock) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, OperationModes.Parameter, parentBlock) == DialogResult.OK)
             {
                 EcfStructureItem createdItem = ItemEditor.ResultItem;
                 parentBlock.AddChild(createdItem, preceedingItem);
@@ -1887,7 +1897,6 @@ namespace EcfFileViews
         }
         private bool ChangeTreeItem(EcfStructureItem item)
         {
-            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
             if (item is EcfComment comment)
             {
                 if (ItemEditor.ShowDialog(this, comment) == DialogResult.OK)
@@ -1899,7 +1908,7 @@ namespace EcfFileViews
             }
             else if (item is EcfParameter parameter)
             {
-                if (ItemEditor.ShowDialog(this, openedFiles, File, parameter) == DialogResult.OK)
+                if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, parameter) == DialogResult.OK)
                 {
                     parameter.Revalidate();
                     if (parameter.Parent is EcfBlock block)
@@ -1912,12 +1921,15 @@ namespace EcfFileViews
             }
             else if (item is EcfBlock block)
             {
-                if (ItemEditor.ShowDialog(this, openedFiles, File, block) == DialogResult.OK)
+                if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, block) == DialogResult.OK)
                 {
                     block.Revalidate();
-                    List<EcfBlock> completeBlockList = File.GetDeepItemList<EcfBlock>();
-                    completeBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(completeBlockList));
-                    completeBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(completeBlockList));
+                    if (ItemEditor.HasAnyBlockRefChanged)
+                    {
+                        List<EcfBlock> rootBlockList = File.GetItemList<EcfBlock>();
+                        rootBlockList.ForEach(listedBlock => listedBlock.RevalidateUniqueness(rootBlockList));
+                        rootBlockList.ForEach(listedBlock => listedBlock.RevalidateReferenceRepairing(rootBlockList));
+                    }
                     UpdateAllViews();
                 }
                 return true;
@@ -1926,8 +1938,7 @@ namespace EcfFileViews
         }
         private void ChangeParameterItem(EcfParameter parameter)
         {
-            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            if (ItemEditor.ShowDialog(this, openedFiles, File, parameter) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, parameter) == DialogResult.OK)
             {
                 parameter.Revalidate();
                 if (parameter.Parent is EcfBlock block)
@@ -1939,8 +1950,7 @@ namespace EcfFileViews
         }
         private void ChangeParameterMatrix(List<EcfParameter> parameters)
         {
-            List<EgsEcfFile> openedFiles = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
-            if (ItemEditor.ShowDialog(this, openedFiles, File, parameters) == DialogResult.OK)
+            if (ItemEditor.ShowDialog(this, GetOpenedFiles(), File, parameters) == DialogResult.OK)
             {
                 foreach (EcfParameter parameter in parameters)
                 {

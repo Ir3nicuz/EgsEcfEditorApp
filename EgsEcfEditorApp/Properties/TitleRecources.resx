@@ -309,94 +309,100 @@
   <data name="EcfParameterView_UnnamedParent" xml:space="preserve">
     <value>Unnamed</value>
   </data>
-  <data name="EcfSettingsDialog_CreationPanel_AllowFallbackToParsedData" xml:space="preserve">
+  <data name="EcfSettingsDialog_Creation_AllowFallbackToParsedData" xml:space="preserve">
     <value>Allow fallback to original data</value>
   </data>
-  <data name="EcfSettingsDialog_CreationPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_Creation_Header" xml:space="preserve">
     <value>File Creation</value>
   </data>
-  <data name="EcfSettingsDialog_CreationPanel_InvalidateParentOnError" xml:space="preserve">
+  <data name="EcfSettingsDialog_Creation_InvalidateParentOnError" xml:space="preserve">
     <value>Invalidate parent of invalid item</value>
   </data>
-  <data name="EcfSettingsDialog_CreationPanel_WriteOnlyValidItems" xml:space="preserve">
+  <data name="EcfSettingsDialog_Creation_WriteOnlyValidItems" xml:space="preserve">
     <value>Write only valid items to file</value>
   </data>
-  <data name="EcfSettingsDialog_FilterPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_Filter_Header" xml:space="preserve">
     <value>Filtering</value>
   </data>
-  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterCommentsInitActive" xml:space="preserve">
+  <data name="EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive" xml:space="preserve">
     <value>Tree view 'comments' initially visible</value>
   </data>
-  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+  <data name="EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
     <value>Tree view 'data blocks' initially visible</value>
   </data>
-  <data name="EcfSettingsDialog_FilterPanel_TreeViewFilterParametersInitActive" xml:space="preserve">
+  <data name="EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive" xml:space="preserve">
     <value>Tree view 'parameters' initially visible</value>
   </data>
-  <data name="EcfSettingsDialog_GeneralPanel_GameMode" xml:space="preserve">
+  <data name="EcfSettingsDialog_General_GameMode" xml:space="preserve">
     <value>Game version</value>
   </data>
-  <data name="EcfSettingsDialog_GeneralPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_General_Header" xml:space="preserve">
     <value>General</value>
   </data>
   <data name="EcfSettingsDialog_Header" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="EcfSettingsDialog_InfoPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_Info_Header" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionHasValue" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue" xml:space="preserve">
     <value>Default Definition 'Has Value'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
     <value>Default Definition 'Is Allowing Blank'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionInfo" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo" xml:space="preserve">
     <value>Default Definition 'Info'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped" xml:space="preserve">
     <value>Default Definition 'Is Force Escaped'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_DefaultDefinitionIsOptional" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional" xml:space="preserve">
     <value>Default Definition 'Is Optional'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_Header" xml:space="preserve">
     <value>Item Handling Support</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupportPanel_ParameterKeyTemplateRoot" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive" xml:space="preserve">
+    <value>Inter file checks active</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks" xml:space="preserve">
+    <value>Parameter Key 'Blocks'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot" xml:space="preserve">
     <value>Parameter Key 'Template Root'</value>
   </data>
-  <data name="EcfSettingsDialog_SorterPanel_ErrorViewSorterInitCount" xml:space="preserve">
+  <data name="EcfSettingsDialog_Sorter_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Error view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_SorterPanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_Sorter_Header" xml:space="preserve">
     <value>Sorting</value>
   </data>
-  <data name="EcfSettingsDialog_SorterPanel_ParameterViewSorterInitCount" xml:space="preserve">
+  <data name="EcfSettingsDialog_Sorter_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Parameter view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_SorterPanel_TreeViewSorterInitCount" xml:space="preserve">
+  <data name="EcfSettingsDialog_Sorter_TreeViewSorterInitCount" xml:space="preserve">
     <value>Tree view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_DefaultValueUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_DefaultValueUnlockCost" xml:space="preserve">
     <value>Default Value 'Unlock Cost'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_DefaultValueUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_DefaultValueUnlockLevel" xml:space="preserve">
     <value>Default Value 'Unlock Level'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_Header" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_Header" xml:space="preserve">
     <value>Tech Tree</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeNames" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames" xml:space="preserve">
     <value>Parameter Key 'Tech Tree Names'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyTechTreeParentName" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName" xml:space="preserve">
     <value>Parameter Key 'Tech Tree Parent Name'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParameterKeyUnlockCost" xml:space="preserve">
     <value>Parameter Key 'Unlock Cost'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTreePanel_ParameterKeyUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel" xml:space="preserve">
     <value>Parameter Key 'Unlock Level'</value>
   </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">

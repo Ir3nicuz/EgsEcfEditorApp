@@ -363,6 +363,9 @@
   <data name="EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive" xml:space="preserve">
     <value>Dateiübergreifende Prüfungen ausführen</value>
   </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef" xml:space="preserve">
+    <value>Parameter Schlüssel 'GlobalRef'</value>
+  </data>
   <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks" xml:space="preserve">
     <value>Parameter Schlüssel 'Blocks'</value>
   </data>
@@ -668,6 +671,9 @@
   </data>
   <data name="ItemHandlingSupport_ListBlockUsingBlockGroups" xml:space="preserve">
     <value>Liste verwendende BlockGroups</value>
+  </data>
+  <data name="ItemHandlingSupport_ListGlobalDefUsers" xml:space="preserve">
+    <value>Liste GlobalDef Nutzer</value>
   </data>
   <data name="ItemHandlingSupport_ListItemUsingTemplates" xml:space="preserve">
     <value>Liste verwendende Templates</value>

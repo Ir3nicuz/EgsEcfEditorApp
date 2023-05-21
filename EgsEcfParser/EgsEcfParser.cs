@@ -861,7 +861,7 @@ namespace EgsEcfParser
             if ((depenParams.FormatDef?.IsDefiningTemplates ?? false) && 
                 !(depenParams.Parent != null ? depenParams.Parent.IsRoot() : depenParams.IsRoot.GetValueOrDefault(true)))
             {
-                if (GetIngredientsByName(filesToCheck, depenParams.ItemDef.Name).Count < 1)
+                if (GetBlockListByBlockName(filesToCheck, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems), depenParams.ItemDef.Name).Count < 1)
                 {
                     errors.Add(new EcfError(errorGroup, EcfErrors.IngredientItemNotFound, depenParams.ItemDef.Name));
                 }
@@ -875,13 +875,15 @@ namespace EgsEcfParser
         }
         public static List<EcfError> CheckTemplateNames(List<EgsEcfFile> filesToCheck, List<EcfValueGroup> templateNamesToCheck, EcfErrorGroups errorGroup)
         {
-            return templateNamesToCheck.SelectMany(group => group.Values).Where(value => GetTemplatesByName(filesToCheck, value)
-                .Count < 1).Select(value => new EcfError(errorGroup, EcfErrors.TemplateNotFound, value)).ToList();
+            return templateNamesToCheck.SelectMany(group => group.Values)
+                .Where(value => GetBlockListByBlockName(filesToCheck, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates), value).Count < 1)
+                .Select(value => new EcfError(errorGroup, EcfErrors.TemplateNotFound, value)).ToList();
         }
         public static List<EcfError> CheckBuildBlockNames(List<EgsEcfFile> filesToCheck, List<EcfValueGroup> buildBlockNamesToCheck, EcfErrorGroups errorGroup)
         {
-            return buildBlockNamesToCheck.SelectMany(group => group.Values).Where(value => GetBuildBlocksByName(filesToCheck, value)
-                .Count < 1).Select(value => new EcfError(errorGroup, EcfErrors.BuildBlockNotFound, value)).ToList();
+            return buildBlockNamesToCheck.SelectMany(group => group.Values)
+                .Where(value => GetBlockListByBlockName(filesToCheck, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningBuildBlocks), value).Count < 1)
+                .Select(value => new EcfError(errorGroup, EcfErrors.BuildBlockNotFound, value)).ToList();
         }
 
         private static IKeyItemComparer KeyItemComparer { get; } = new IKeyItemComparer();
@@ -998,22 +1000,60 @@ namespace EgsEcfParser
             }
             return null;
         }
-        
-        public static List<EcfBlock> GetTemplatesByIngredient(List<EgsEcfFile> files, EcfBlock ingredientItem)
+
+        public static List<EcfBlock> GetBlockListByBlockName(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, EcfBlock block)
         {
-            return GetTemplatesByIngredient(files, ingredientItem.GetName());
+            return GetBlockListByBlockName(files, fileFilter, block.GetName());
         }
-        public static List<EcfBlock> GetTemplatesByIngredient(List<EgsEcfFile> files, string itemName)
+        public static List<EcfBlock> GetBlockListByBlockName(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, string blockName)
         {
-            return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
-                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template =>
-                    template.HasParameter(itemName, false, true, out _)
-                )).ToList();
+            return files.Where(fileFilter ?? (result => true)).SelectMany(file => file.GetDeepItemList<EcfBlock>()
+                .Where(block => string.Equals(block.GetName(), blockName))).ToList();
         }
+        public static List<EcfBlock> GetBlockListByParameterKey(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, EcfBlock keyName)
+        {
+            return GetBlockListByParameterKey(files, fileFilter, keyName.GetName());
+        }
+        public static List<EcfBlock> GetBlockListByParameterKey(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, EcfParameter keyName)
+        {
+            return GetBlockListByParameterKey(files, fileFilter, keyName.Key);
+        }
+        public static List<EcfBlock> GetBlockListByParameterKey(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, string keyName)
+        {
+            return files.Where(fileFilter ?? (result => true)).SelectMany(file => file.GetDeepItemList<EcfBlock>()
+                .Where(block => block.HasParameter(keyName, out _))).ToList();
+        }
+        public static List<EcfBlock> GetBlockListByParameterValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, 
+            bool withBlockName, bool withInheritance, EcfBlock parameterValue, params string[] parameterNames)
+        {
+            return GetBlockListByParameterValue(files, fileFilter, withBlockName, withInheritance, parameterValue.GetName(), parameterNames);
+        }
+        public static List<EcfBlock> GetBlockListByParameterValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, 
+            bool withBlockName, bool withInheritance, string parameterValue, params string[] parameterNames)
+        {
+            return files.Where(fileFilter ?? (result => true)).SelectMany(file => file.GetDeepItemList<EcfBlock>())
+                .Where(block => (withBlockName && !string.Equals(block.GetName(), parameterValue)) || 
+                    parameterNames.Any(parameterName => block.HasParameter(parameterName, withInheritance, false, out EcfParameter parameter) && 
+                        parameter.ContainsValue(parameterValue))
+                ).ToList();
+        }
+
+
+
+
+
+
+
+
+
+
+
+        [Obsolete("must be replaced")]
         public static List<EcfBlock> GetUsersByTemplate(List<EgsEcfFile> files, string templateParameterName, EcfBlock template)
         {
             return GetUsersByTemplate(files, templateParameterName, template.GetName());
         }
+        [Obsolete("must be replaced")]
         public static List<EcfBlock> GetUsersByTemplate(List<EgsEcfFile> files, string templateParameterName, string templateName)
         {
             return files.Where(file => file.Definition.IsDefiningItems).SelectMany(file =>
@@ -1022,6 +1062,43 @@ namespace EgsEcfParser
                     (item.HasParameter(templateParameterName, true, false, out EcfParameter parameter) && parameter.ContainsValue(templateName))
                 )).ToList();
         }
+
+
+        [Obsolete("must be replaced")]
+        public static List<EcfBlock> GetBlockGroupsByBuildBlock(List<EgsEcfFile> files, string blockParameterName, EcfBlock buildBlock)
+        {
+            return GetBlockGroupsByBuildBlock(files, blockParameterName, buildBlock.GetName());
+        }
+        [Obsolete("must be replaced")]
+        public static List<EcfBlock> GetBlockGroupsByBuildBlock(List<EgsEcfFile> files, string blockParameterName, string buildBlockName)
+        {
+            return files.Where(file => file.Definition.IsDefiningBuildBlockGroups).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(blockGroup =>
+                    blockGroup.HasParameter(blockParameterName, out EcfParameter parameter) && parameter.ContainsValue(buildBlockName)
+                )).ToList();
+        }
+
+
+        [Obsolete("must be replaced")]
+        public static List<EcfBlock> GetUsersByGlobalDef(List<EgsEcfFile> files, string globalRefParameterNames, EcfBlock globalDef)
+        {
+            return GetUsersByGlobalDef(files, globalRefParameterNames, globalDef.GetName());
+        }
+        [Obsolete("must be replaced")]
+        public static List<EcfBlock> GetUsersByGlobalDef(List<EgsEcfFile> files, string globalRefParameterNames, string globalDefName)
+        {
+            return files.Where(file => file.Definition.IsDefiningGlobalMacroUsers).SelectMany(file =>
+                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(item =>
+                    item.HasParameter(templateParameterName, true, false, out EcfParameter parameter) && parameter.ContainsValue(globalDefName)
+                )).ToList();
+        }
+
+
+
+
+
+
+        [Obsolete("must be replaced")]
         public static List<EcfBlock> GetTemplatesByUser(List<EgsEcfFile> files, string templateParameterName, EcfBlock usingItem)
         {
             string nameValue = usingItem.GetName();
@@ -1034,34 +1111,12 @@ namespace EgsEcfParser
                 }
                 )).ToList();
         }
-        public static List<EcfBlock> GetTemplatesByName(List<EgsEcfFile> files, string templateName)
-        {
-            return files.Where(file => file.Definition.IsDefiningTemplates).SelectMany(file =>
-                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(template => string.Equals(template.GetName(), templateName))).ToList();
-        }
-        public static List<EcfBlock> GetIngredientsByName(List<EgsEcfFile> files, string ingredientName)
-        {
-            return files.Where(file => file.Definition.IsDefiningItems)
-                .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
-                .Where(block => string.Equals(block.GetName(), ingredientName)).ToList();
-        }
-        public static List<EcfBlock> GetBuildBlocksByName(List<EgsEcfFile> files, string blockName)
-        {
-            return files.Where(file => file.Definition.IsDefiningBuildBlocks)
-                .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
-                .Where(block => string.Equals(block.GetName(), blockName)).ToList();
-        }
-        public static List<EcfBlock> GetBlockGroupsByBuildBlock(List<EgsEcfFile> files, string blockParameterName, EcfBlock buildBlock)
-        {
-            return GetBlockGroupsByBuildBlock(files, blockParameterName, buildBlock.GetName());
-        }
-        public static List<EcfBlock> GetBlockGroupsByBuildBlock(List<EgsEcfFile> files, string blockParameterName, string buildBlockName)
-        {
-            return files.Where(file => file.Definition.IsDefiningBuildBlockGroups).SelectMany(file =>
-                file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>().Where(blockGroup =>
-                    blockGroup.HasParameter(blockParameterName, out EcfParameter parameter) && parameter.ContainsValue(buildBlockName)
-                )).ToList();
-        }
+
+
+
+
+
+
 
         public static EcfBaseItem FindRootItem(EcfBaseItem item)
         {
@@ -1119,7 +1174,7 @@ namespace EgsEcfParser
 
             if (depenParams.FormatDef?.IsDefiningItems ?? false)
             {
-                List<EcfBlock> templateList = GetTemplatesByIngredient(filesToCheck, itemName);
+                List<EcfBlock> templateList = GetBlockListByParameterKey(filesToCheck, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates), itemName);
                 dependencies.AddRange(templateList.Select(template => new EcfDependency(EcfDependencies.IsUsedWith, depenParams.Reference as EcfBlock, template)));
             }
             if (depenParams.FormatDef?.IsDefiningTemplates ?? false)

@@ -817,6 +817,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter Keys &apos;GlobalRef&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Templates and ingredients.
         /// </summary>
         internal static string EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header {
@@ -1713,6 +1722,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_ListBlockUsingBlockGroups {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_ListBlockUsingBlockGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List GlobalDef users.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListGlobalDefUsers {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListGlobalDefUsers", resourceCulture);
             }
         }
         

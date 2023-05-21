@@ -372,6 +372,9 @@
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the parameter view</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef" xml:space="preserve">
+    <value>The names of the parameter keys which contains the global macro name value</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ParamKey_Blocks" xml:space="preserve">
     <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
   </data>
@@ -632,6 +635,9 @@
   </data>
   <data name="ItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
     <value>All block groups with build block</value>
+  </data>
+  <data name="ItemHandlingSupport_AllElementsWithGlobalDef" xml:space="preserve">
+    <value>All items with global macro</value>
   </data>
   <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
     <value>All items with template</value>

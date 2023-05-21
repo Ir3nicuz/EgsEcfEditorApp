@@ -880,6 +880,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The names of the parameter keys which contains the global macro name value.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If activated, the initial state of the filter setting for comments will be set to visible.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive {
@@ -1605,6 +1614,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_AllBlockGroupsWithBlock {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_AllBlockGroupsWithBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with global macro.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllElementsWithGlobalDef {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllElementsWithGlobalDef", resourceCulture);
             }
         }
         

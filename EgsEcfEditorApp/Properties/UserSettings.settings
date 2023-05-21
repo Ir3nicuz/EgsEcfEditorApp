@@ -104,5 +104,8 @@
     <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefInfo" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tool-Added</Value>
     </Setting>
+    <Setting Name="ItemHandlingSupport_ParamKeys_GlobalRef" Type="System.String" Scope="User">
+      <Value Profile="(Default)">GlobalRef,GlobalRef_1,GlobalRef_2,GlobalRef_3,GlobalRef_4,GlobalRef_5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

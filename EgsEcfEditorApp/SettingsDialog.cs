@@ -496,6 +496,7 @@ namespace EgsEcfEditorApp
             private CheckBoxSettingItem DefVal_Ingredient_DefIsForceEscaped { get; } = new CheckBoxSettingItem();
             private TextBoxSettingItem DefVal_Ingredient_DefInfo { get; } = new TextBoxSettingItem();
             private TextBoxSettingItem ParamKey_Blocks { get; } = new TextBoxSettingItem();
+            private TextBoxSettingItem ParamKeys_GlobalRef { get; } = new TextBoxSettingItem();
             private CheckBoxSettingItem DefVal_GlobalParam_DefIsOptional { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DefVal_GlobalParam_DefHasValue { get; } = new CheckBoxSettingItem();
             private CheckBoxSettingItem DefVal_GlobalParam_DefIsAllowingBlank { get; } = new CheckBoxSettingItem();
@@ -518,7 +519,7 @@ namespace EgsEcfEditorApp
                 UserSettings.Default.ItemHandlingSupport_InterFileChecksActive = InterFileChecksActive.Value;
                 HasUnsavedChanges = true;
             }
-            private void ParameterKeyTemplateRoot_SettingChanged(object sender, EventArgs evt)
+            private void ParamKey_TemplateRoot_SettingChanged(object sender, EventArgs evt)
             {
                 UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName = ParamKey_TemplateRoot.Value;
                 HasUnsavedChanges = true;
@@ -548,9 +549,14 @@ namespace EgsEcfEditorApp
                 UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo = DefVal_Ingredient_DefInfo.Value;
                 HasUnsavedChanges = true;
             }
-            private void ParameterKeyBlocks_SettingChanged(object sender, EventArgs evt)
+            private void ParamKey_Blocks_SettingChanged(object sender, EventArgs evt)
             {
                 UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks = ParamKey_Blocks.Value;
+                HasUnsavedChanges = true;
+            }
+            private void ParamKeys_GlobalRef_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef = ParamKeys_GlobalRef.Value;
                 HasUnsavedChanges = true;
             }
             private void DefVal_GlobalParam_DefIsOptional_SettingChanged(object sender, EventArgs evt)
@@ -619,6 +625,7 @@ namespace EgsEcfEditorApp
                 DefVal_Ingredient_DefIsForceEscaped.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped;
                 DefVal_Ingredient_DefInfo.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo;
                 ParamKey_Blocks.Value = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks;
+                ParamKeys_GlobalRef.Value = UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef;
                 DefVal_GlobalParam_DefIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional;
                 DefVal_GlobalParam_DefHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefHasValue;
                 DefVal_GlobalParam_DefIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank;
@@ -650,7 +657,7 @@ namespace EgsEcfEditorApp
                     TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
                 });
                 AddSettingsItem(ParamKey_TemplateRoot, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot, 
-                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot, ParameterKeyTemplateRoot_SettingChanged);
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot, ParamKey_TemplateRoot_SettingChanged);
                 AddSettingsItem(DefVal_Ingredient_DefIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional,
                     TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional, DefVal_Ingredient_DefIsOptional_SettingChanged);
                 AddSettingsItem(DefVal_Ingredient_DefHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue,
@@ -668,13 +675,15 @@ namespace EgsEcfEditorApp
                     TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
                 });
                 AddSettingsItem(ParamKey_Blocks, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_Blocks, ParameterKeyBlocks_SettingChanged);
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_Blocks, ParamKey_Blocks_SettingChanged);
 
                 AddSettingsItem(new TitleItem()
                 {
                     Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header,
                     TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
                 });
+                AddSettingsItem(ParamKeys_GlobalRef, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef, ParamKeys_GlobalRef_SettingChanged);
                 AddSettingsItem(DefVal_GlobalParam_DefIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional,
                     TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional, DefVal_GlobalParam_DefIsOptional_SettingChanged);
                 AddSettingsItem(DefVal_GlobalParam_DefHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue,

@@ -372,6 +372,9 @@
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Parameteransicht fest</value>
   </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef" xml:space="preserve">
+    <value>Die Namen der Parameterschlüssel welche den Namen des globalen Makro enthalten</value>
+  </data>
   <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames" xml:space="preserve">
     <value>Der Name des Parameterschlüssels der die Namen der Technologiebäume, zu denen das Element gehört, enthält</value>
   </data>
@@ -629,6 +632,9 @@
   </data>
   <data name="ItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
     <value>Alle BlockGroups mit Bau Block</value>
+  </data>
+  <data name="ItemHandlingSupport_AllElementsWithGlobalDef" xml:space="preserve">
+    <value>All Elemente mit Global Makro</value>
   </data>
   <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
     <value>Alle Elemente mit Template</value>

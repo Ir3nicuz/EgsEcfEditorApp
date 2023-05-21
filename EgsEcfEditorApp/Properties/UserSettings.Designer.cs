@@ -430,5 +430,17 @@ namespace EgsEcfEditorApp.Properties {
                 this["ItemHandlingSupport_DefVal_GlobalAttr_DefInfo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("GlobalRef,GlobalRef_1,GlobalRef_2,GlobalRef_3,GlobalRef_4,GlobalRef_5")]
+        public string ItemHandlingSupport_ParamKeys_GlobalRef {
+            get {
+                return ((string)(this["ItemHandlingSupport_ParamKeys_GlobalRef"]));
+            }
+            set {
+                this["ItemHandlingSupport_ParamKeys_GlobalRef"] = value;
+            }
+        }
     }
 }

@@ -373,6 +373,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_ListBlocks.png" />
+    <None Include="Resources\Icon_AddToDefinition.png" />
     <None Include="Resources\Icon_LinkedFiles.png" />
     <None Include="Resources\Icon_ReplaceDefinition.png" />
     <None Include="Resources\Icon_ListParameters.png" />

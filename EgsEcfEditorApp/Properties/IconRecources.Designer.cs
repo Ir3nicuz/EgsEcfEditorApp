@@ -83,9 +83,9 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icon_AddToTemplateDefinition {
+        internal static System.Drawing.Bitmap Icon_AddToDefinition {
             get {
-                object obj = ResourceManager.GetObject("Icon_AddToTemplateDefinition", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_AddToDefinition", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -266,6 +266,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_LinkedFiles {
             get {
                 object obj = ResourceManager.GetObject("Icon_LinkedFiles", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_ListBlocks {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ListBlocks", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

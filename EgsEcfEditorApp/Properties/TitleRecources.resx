@@ -252,12 +252,6 @@
   <data name="EcfParameterView_Header_OverwritingParameters" xml:space="preserve">
     <value>overwriting</value>
   </data>
-  <data name="EcfParameterView_ListParameterUsers" xml:space="preserve">
-    <value>List parameter using items</value>
-  </data>
-  <data name="EcfParameterView_ListValueUsers" xml:space="preserve">
-    <value>List value using items</value>
-  </data>
   <data name="EcfParameterView_ParameterNameColumn" xml:space="preserve">
     <value>Parameter name</value>
   </data>
@@ -615,6 +609,9 @@
   <data name="ItemHandlingSupport_AddTemplateOptionSelector" xml:space="preserve">
     <value>Select option how to add the template</value>
   </data>
+  <data name="ItemHandlingSupport_AddToGlobalDefinition" xml:space="preserve">
+    <value>Add to GlobalDef Definition</value>
+  </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinition" xml:space="preserve">
     <value>Add to template definition</value>
   </data>
@@ -624,11 +621,20 @@
   <data name="ItemHandlingSupport_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Select existing template to be copied</value>
   </data>
+  <data name="ItemHandlingSupport_ListBlockUsingBlockGroups" xml:space="preserve">
+    <value>List block using block groups</value>
+  </data>
   <data name="ItemHandlingSupport_ListItemUsingTemplates" xml:space="preserve">
     <value>List item using templates</value>
   </data>
+  <data name="ItemHandlingSupport_ListParameterUsers" xml:space="preserve">
+    <value>List parameter using items</value>
+  </data>
   <data name="ItemHandlingSupport_ListTemplateUsers" xml:space="preserve">
     <value>List template users</value>
+  </data>
+  <data name="ItemHandlingSupport_ListValueUsers" xml:space="preserve">
+    <value>List value using items</value>
   </data>
   <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
     <value>Item Handling Suppport</value>

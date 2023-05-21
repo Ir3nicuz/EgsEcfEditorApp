@@ -466,24 +466,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List parameter using items.
-        /// </summary>
-        internal static string EcfParameterView_ListParameterUsers {
-            get {
-                return ResourceManager.GetString("EcfParameterView_ListParameterUsers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List value using items.
-        /// </summary>
-        internal static string EcfParameterView_ListValueUsers {
-            get {
-                return ResourceManager.GetString("EcfParameterView_ListValueUsers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Parameter name.
         /// </summary>
         internal static string EcfParameterView_ParameterNameColumn {
@@ -1555,6 +1537,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to GlobalDef Definition.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToGlobalDefinition {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to template definition.
         /// </summary>
         internal static string ItemHandlingSupport_AddToTemplateDefinition {
@@ -1582,6 +1573,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List block using block groups.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListBlockUsingBlockGroups {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListBlockUsingBlockGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List item using templates.
         /// </summary>
         internal static string ItemHandlingSupport_ListItemUsingTemplates {
@@ -1591,11 +1591,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List parameter using items.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListParameterUsers {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListParameterUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List template users.
         /// </summary>
         internal static string ItemHandlingSupport_ListTemplateUsers {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_ListTemplateUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List value using items.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListValueUsers {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListValueUsers", resourceCulture);
             }
         }
         

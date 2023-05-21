@@ -1546,6 +1546,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select add to GlobalDef definition option.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToGlobalDefinitionOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefinitionOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to template definition.
         /// </summary>
         internal static string ItemHandlingSupport_AddToTemplateDefinition {

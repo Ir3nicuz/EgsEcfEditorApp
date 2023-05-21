@@ -27,6 +27,11 @@ namespace EgsEcfParser
             Cr,
             CrLf,
         }
+        public enum ChangeableDefinitionChapters
+        {
+            BlockParameters,
+            ParameterAttributes,
+        }
 
         // public
         public static void ReloadDefinitions()
@@ -34,9 +39,9 @@ namespace EgsEcfParser
             ActualDefinitionsFolder = null;
             XmlHandling.LoadDefinitionsFromFiles();
         }
-        public static bool SaveBlockParameterToDefinitionFile(FormatDefinition definition, ItemDefinition newBlockParameter)
+        public static bool SaveItemToDefinitionFile(FormatDefinition definition, ChangeableDefinitionChapters chapter, ItemDefinition newBlockParameter)
         {
-            return XmlHandling.SaveBlockParameterToDefinitionFile(definition, newBlockParameter);
+            return XmlHandling.SaveItemToDefinitionFile(definition, chapter, newBlockParameter);
         }
         public static List<string> GetGameModes()
         {
@@ -304,9 +309,16 @@ namespace EgsEcfParser
                     }
                 }
             }
-            public static bool SaveBlockParameterToDefinitionFile(FormatDefinition definition, ItemDefinition parameterItem)
+            public static bool SaveItemToDefinitionFile(FormatDefinition definition, ChangeableDefinitionChapters chapter, ItemDefinition parameterItem)
             {
-                return SaveXmlParameterToDefinitionFile(definition, XmlSettings.XChapterBlockParameters, parameterItem);
+                switch (chapter)
+                {
+                    case ChangeableDefinitionChapters.BlockParameters: 
+                        return SaveItemToDefinitionFile(definition, XmlSettings.XChapterBlockParameters, parameterItem);
+                    case ChangeableDefinitionChapters.ParameterAttributes:
+                        return SaveItemToDefinitionFile(definition, XmlSettings.XChapterParameterAttributes, parameterItem);
+                    default: throw new ArgumentException(string.Format("No SaveItemToDefinitionFile Method attached to {0} .... That shouldn't happen!", chapter.ToString()));
+                }
             }
 
             // private
@@ -410,7 +422,7 @@ namespace EgsEcfParser
             {
                 return xmlString?.Replace("\\t", "\t").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\v", "\v");
             }
-            private static bool SaveXmlParameterToDefinitionFile(FormatDefinition definition, string xChapter, ItemDefinition parameterItem)
+            private static bool SaveItemToDefinitionFile(FormatDefinition definition, string xChapter, ItemDefinition parameterItem)
             {
                 XmlDoc.Load(definition.FilePathAndName);
                 bool somethingCreated = false;

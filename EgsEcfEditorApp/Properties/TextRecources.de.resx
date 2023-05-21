@@ -279,63 +279,6 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Entfernt die selektierte Wert Gruppe</value>
   </data>
-  <data name="EcfItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
-    <value>Hinzufügen des Templates fehlgeschlagen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
-    <value>Hinzufügen zur Template Definition fehlgeschlagen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
-    <value>Alle BlockGroups mit Bau Block</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
-    <value>Alle Elemente mit Template</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
-    <value>Alle Elemente mit Parameter</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
-    <value>Alle Parameter mit Wert</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
-    <value>Alle Templates für Item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
-    <value>Alle Templates mit Item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
-    <value>Das Ersetzen der Definition ist fehlgeschlagen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
-    <value>Das Element hat bereits ein Template</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
-    <value>Keine Template Definitions Datei gefunden</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
-    <value>Es ist keine Template Datei geöffnet</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
-    <value>Keine Templates für Item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
-    <value>Template nur entfernen (Ja) oder komplett löschen (Nein)?</value>
-  </data>
-  <data name="EcfItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
-    <value>Entfernen des Templates fehlgeschlagen</value>
-  </data>
-  <data name="EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
-    <value>Soll die Datei gespeichert werden bevor die Definition ersetzt und die Datei neu geladen wird?</value>
-  </data>
-  <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
-    <value>Die gewählte Datei ist nicht geöffnet!</value>
-  </data>
-  <data name="EcfItemHandlingSupport_StillUsedWith" xml:space="preserve">
-    <value>noch verwendet von</value>
-  </data>
-  <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
-    <value>Soll die Definition der bereits geöffneten Template Dateien aktualisiert werden?</value>
-  </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Markierte Parameter werden in das gewählte Baumelement vererbt</value>
   </data>
@@ -647,6 +590,69 @@
   </data>
   <data name="Generic_RemovedFrom" xml:space="preserve">
     <value>entfernt von</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
+    <value>Hinzufügen des Templates fehlgeschlagen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
+    <value>Hinzufügen zur Template Definition fehlgeschlagen</value>
+  </data>
+  <data name="ItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
+    <value>Alle BlockGroups mit Bau Block</value>
+  </data>
+  <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
+    <value>Alle Elemente mit Template</value>
+  </data>
+  <data name="ItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
+    <value>Alle Elemente mit Parameter</value>
+  </data>
+  <data name="ItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
+    <value>Alle Parameter mit Wert</value>
+  </data>
+  <data name="ItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
+    <value>Alle Templates für Item</value>
+  </data>
+  <data name="ItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
+    <value>Alle Templates mit Item</value>
+  </data>
+  <data name="ItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
+    <value>Das Ersetzen der Definition ist fehlgeschlagen</value>
+  </data>
+  <data name="ItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
+    <value>Das Element hat bereits ein Template</value>
+  </data>
+  <data name="ItemHandlingSupport_NoGlobalDefinitionFileFound" xml:space="preserve">
+    <value>Keine GlobalDef Definitions Datei gefunden</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
+    <value>Keine Template Definitions Datei gefunden</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
+    <value>Es ist keine Template Datei geöffnet</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
+    <value>Keine Templates für Item</value>
+  </data>
+  <data name="ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
+    <value>Template nur entfernen (Ja) oder komplett löschen (Nein)?</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
+    <value>Entfernen des Templates fehlgeschlagen</value>
+  </data>
+  <data name="ItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
+    <value>Soll die Datei gespeichert werden bevor die Definition ersetzt und die Datei neu geladen wird?</value>
+  </data>
+  <data name="ItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
+    <value>Die gewählte Datei ist nicht geöffnet!</value>
+  </data>
+  <data name="ItemHandlingSupport_StillUsedWith" xml:space="preserve">
+    <value>noch verwendet von</value>
+  </data>
+  <data name="ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion" xml:space="preserve">
+    <value>Soll die Definition der bereits geöffneten GlobalDef Dateien aktualisiert werden?</value>
+  </data>
+  <data name="ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
+    <value>Soll die Definition der bereits geöffneten Template Dateien aktualisiert werden?</value>
   </data>
   <data name="ItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like-suche zum Einschränken der Dropdown Liste</value>

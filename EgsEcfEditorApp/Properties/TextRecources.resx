@@ -279,63 +279,6 @@
   <data name="EcfItemEditingDialog_ToolTip_RemoveValueGroup" xml:space="preserve">
     <value>Removes the selected value group row</value>
   </data>
-  <data name="EcfItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
-    <value>Add template failed</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
-    <value>Add to Template definition failed</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
-    <value>All block groups with build block</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
-    <value>All items with template</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
-    <value>All items with parameter</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
-    <value>All Parameters with value</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
-    <value>All templates for item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
-    <value>All templates with item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
-    <value>Replacement of definition failed</value>
-  </data>
-  <data name="EcfItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
-    <value>The item has already a template attached</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
-    <value>No template definition file found</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
-    <value>No template file is opened</value>
-  </data>
-  <data name="EcfItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
-    <value>No templates for item</value>
-  </data>
-  <data name="EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
-    <value>Only remove template (Yes) or delete completely (No)?</value>
-  </data>
-  <data name="EcfItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
-    <value>Remove template failed</value>
-  </data>
-  <data name="EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
-    <value>Save file before the definition is replaced and the file is reloaded?</value>
-  </data>
-  <data name="EcfItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
-    <value>The selected file is not opened!</value>
-  </data>
-  <data name="EcfItemHandlingSupport_StillUsedWith" xml:space="preserve">
-    <value>still used with</value>
-  </data>
-  <data name="EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
-    <value>Shall the definition of the already opened template files be updated?</value>
-  </data>
   <data name="EcfParameterView_ToolTip_InheritedColumn" xml:space="preserve">
     <value>Marked parameters are inherited to the selected tree element</value>
   </data>
@@ -650,6 +593,69 @@
   </data>
   <data name="Generic_RemovedFrom" xml:space="preserve">
     <value>removed from</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
+    <value>Add template failed</value>
+  </data>
+  <data name="ItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
+    <value>Add to Template definition failed</value>
+  </data>
+  <data name="ItemHandlingSupport_AllBlockGroupsWithBlock" xml:space="preserve">
+    <value>All block groups with build block</value>
+  </data>
+  <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
+    <value>All items with template</value>
+  </data>
+  <data name="ItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
+    <value>All items with parameter</value>
+  </data>
+  <data name="ItemHandlingSupport_AllParametersWithValue" xml:space="preserve">
+    <value>All Parameters with value</value>
+  </data>
+  <data name="ItemHandlingSupport_AllTemplatesForItem" xml:space="preserve">
+    <value>All templates for item</value>
+  </data>
+  <data name="ItemHandlingSupport_AllTemplatesWithItem" xml:space="preserve">
+    <value>All templates with item</value>
+  </data>
+  <data name="ItemHandlingSupport_DefinitionReplacementFailed" xml:space="preserve">
+    <value>Replacement of definition failed</value>
+  </data>
+  <data name="ItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
+    <value>The item has already a template attached</value>
+  </data>
+  <data name="ItemHandlingSupport_NoGlobalDefinitionFileFound" xml:space="preserve">
+    <value>No GlobalDef definition file found</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
+    <value>No template definition file found</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplateFileOpened" xml:space="preserve">
+    <value>No template file is opened</value>
+  </data>
+  <data name="ItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
+    <value>No templates for item</value>
+  </data>
+  <data name="ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
+    <value>Only remove template (Yes) or delete completely (No)?</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
+    <value>Remove template failed</value>
+  </data>
+  <data name="ItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion" xml:space="preserve">
+    <value>Save file before the definition is replaced and the file is reloaded?</value>
+  </data>
+  <data name="ItemHandlingSupport_SelectedFileNotOpened" xml:space="preserve">
+    <value>The selected file is not opened!</value>
+  </data>
+  <data name="ItemHandlingSupport_StillUsedWith" xml:space="preserve">
+    <value>still used with</value>
+  </data>
+  <data name="ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion" xml:space="preserve">
+    <value>Shall the definition of the already opened GLobalDef files be updated?</value>
+  </data>
+  <data name="ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
+    <value>Shall the definition of the already opened template files be updated?</value>
   </data>
   <data name="ItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like wise search to reduce the dropdown list</value>

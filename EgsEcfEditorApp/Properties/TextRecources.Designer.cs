@@ -547,177 +547,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add template failed.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AddTemplateFailed {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AddTemplateFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add to Template definition failed.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AddToTemplateDefinitionFailed {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AddToTemplateDefinitionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All block groups with build block.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllBlockGroupsWithBlock {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllBlockGroupsWithBlock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All items with template.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllElementsWithTemplate {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllElementsWithTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All items with parameter.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllItemsWithParameter {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllItemsWithParameter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All Parameters with value.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllParametersWithValue {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllParametersWithValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All templates for item.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllTemplatesForItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllTemplatesForItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All templates with item.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_AllTemplatesWithItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_AllTemplatesWithItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Replacement of definition failed.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_DefinitionReplacementFailed {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_DefinitionReplacementFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The item has already a template attached.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_ElementHasAlreadyTemplate {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_ElementHasAlreadyTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No template definition file found.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_NoTemplateDefinitionFileFound {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplateDefinitionFileFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No template file is opened.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_NoTemplateFileOpened {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplateFileOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No templates for item.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_NoTemplatesForItem {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_NoTemplatesForItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Only remove template (Yes) or delete completely (No)?.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove template failed.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_RemoveTemplateFailed {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_RemoveTemplateFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save file before the definition is replaced and the file is reloaded?.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The selected file is not opened!.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_SelectedFileNotOpened {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_SelectedFileNotOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to still used with.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_StillUsedWith {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_StillUsedWith", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shall the definition of the already opened template files be updated?.
-        /// </summary>
-        internal static string EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion {
-            get {
-                return ResourceManager.GetString("EcfItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Marked parameters are inherited to the selected tree element.
         /// </summary>
         internal static string EcfParameterView_ToolTip_InheritedColumn {
@@ -880,7 +709,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If activated, the checks for inter file dependencies will be performed at item editing.
+        ///   Looks up a localized string similar to If activated, the checks for inter file dependencies will be performed at editing items.
         /// </summary>
         internal static string EcfSettingsDialog_ToolTip_InterFileChecksActive {
             get {
@@ -1659,6 +1488,195 @@ namespace EgsEcfEditorApp.Properties {
         internal static string Generic_RemovedFrom {
             get {
                 return ResourceManager.GetString("Generic_RemovedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add template failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddTemplateFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddTemplateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to Template definition failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToTemplateDefinitionFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToTemplateDefinitionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All block groups with build block.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllBlockGroupsWithBlock {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllBlockGroupsWithBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with template.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllElementsWithTemplate {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllElementsWithTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All items with parameter.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllItemsWithParameter {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllItemsWithParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Parameters with value.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllParametersWithValue {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllParametersWithValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All templates for item.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllTemplatesForItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllTemplatesForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All templates with item.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllTemplatesWithItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllTemplatesWithItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replacement of definition failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_DefinitionReplacementFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_DefinitionReplacementFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The item has already a template attached.
+        /// </summary>
+        internal static string ItemHandlingSupport_ElementHasAlreadyTemplate {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ElementHasAlreadyTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No GlobalDef definition file found.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoGlobalDefinitionFileFound {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefinitionFileFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No template definition file found.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoTemplateDefinitionFileFound {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoTemplateDefinitionFileFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No template file is opened.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoTemplateFileOpened {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoTemplateFileOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No templates for item.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoTemplatesForItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoTemplatesForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only remove template (Yes) or delete completely (No)?.
+        /// </summary>
+        internal static string ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove template failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveTemplateFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveTemplateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file before the definition is replaced and the file is reloaded?.
+        /// </summary>
+        internal static string ItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_SaveFileBeforeDefinitionReloadQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected file is not opened!.
+        /// </summary>
+        internal static string ItemHandlingSupport_SelectedFileNotOpened {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_SelectedFileNotOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to still used with.
+        /// </summary>
+        internal static string ItemHandlingSupport_StillUsedWith {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_StillUsedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shall the definition of the already opened GLobalDef files be updated?.
+        /// </summary>
+        internal static string ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shall the definition of the already opened template files be updated?.
+        /// </summary>
+        internal static string ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion", resourceCulture);
             }
         }
         

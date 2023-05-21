@@ -612,6 +612,9 @@
   <data name="ItemHandlingSupport_AddToGlobalDefinition" xml:space="preserve">
     <value>Add to GlobalDef Definition</value>
   </data>
+  <data name="ItemHandlingSupport_AddToGlobalDefinitionOptionSelector" xml:space="preserve">
+    <value>Select add to GlobalDef definition option</value>
+  </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinition" xml:space="preserve">
     <value>Add to template definition</value>
   </data>

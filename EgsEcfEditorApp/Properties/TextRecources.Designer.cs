@@ -628,65 +628,155 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;hasValue&apos; field.
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;hasValue&apos; field.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;allowBlank&apos; field.
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;info&apos; field.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;info&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;info&apos; field.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionInfo {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionInfo", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;forceEscape&apos; field.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;optional&apos; field.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The default value if an element has no unlock cost value specified.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultValueUnlockCost {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_UnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultValueUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_UnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The default value if an element has no unlock level value specified.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel {
+        internal static string EcfSettingsDialog_ToolTip_DefVal_UnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_UnlockLevel", resourceCulture);
             }
         }
         
@@ -727,65 +817,65 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the parameter view.
+        /// </summary>
+        internal static string EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the build block name values in the BlockGroups file.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyBlocks {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_Blocks {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyBlocks", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_Blocks", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the names of the trees the element belongs to.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the tech tree parent element name.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the template name value in case of template double use.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the unlock cost value.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_UnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_UnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The name of the parameter key which contains the unlock level value.
         /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel {
+        internal static string EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the parameter view.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel", resourceCulture);
             }
         }
         

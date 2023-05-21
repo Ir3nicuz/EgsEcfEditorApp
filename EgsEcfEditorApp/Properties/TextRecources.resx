@@ -306,25 +306,55 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'hasValue' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'info' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'allowBlank' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'forceEscape' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'optional' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'hasValue' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'info' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'allowBlank' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'forceEscape' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'optional' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue" xml:space="preserve">
     <value>The default value at created template definition ingredient items for the 'hasValue' field</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'allowBlank' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionInfo" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo" xml:space="preserve">
     <value>The default value at created template definition ingredient items for the 'info' field</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'allowBlank' field</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
     <value>The default value at created template definition ingredient items for the 'forceEscape' field</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
     <value>The default value at created template definition ingredient items for the 'optional' field</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockCost" xml:space="preserve">
     <value>The default value if an element has no unlock cost value specified</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockLevel" xml:space="preserve">
     <value>The default value if an element has no unlock level value specified</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
@@ -339,26 +369,26 @@
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>If activated, items with at least one invalid sub item will not be saved</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyBlocks" xml:space="preserve">
-    <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
-    <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
-    <value>The name of the parameter key which contains the tech tree parent element name</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot" xml:space="preserve">
-    <value>The name of the parameter key which contains the template name value in case of template double use</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
-    <value>The name of the parameter key which contains the unlock cost value</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel" xml:space="preserve">
-    <value>The name of the parameter key which contains the unlock level value</value>
-  </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Defines the initial value for the visible item count setting of the parameter view</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_Blocks" xml:space="preserve">
+    <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames" xml:space="preserve">
+    <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName" xml:space="preserve">
+    <value>The name of the parameter key which contains the tech tree parent element name</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot" xml:space="preserve">
+    <value>The name of the parameter key which contains the template name value in case of template double use</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockCost" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock cost value</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock level value</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive" xml:space="preserve">
     <value>If activated, the initial state of the filter setting for comments will be set to visible</value>

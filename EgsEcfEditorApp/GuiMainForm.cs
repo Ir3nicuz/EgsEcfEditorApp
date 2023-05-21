@@ -519,7 +519,7 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                EcfDefinitionHandling.ReloadDefinitions();
+                ReloadDefinitions();
                 MessageBox.Show(this, TextRecources.EgsEcfEditorApp_ReloadFileDefinitionsSuccess,
                     TitleRecources.Generic_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -644,7 +644,7 @@ namespace EgsEcfEditorApp
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
             List<EcfBlock> userList = GetUsersByTemplate(GetOpenedFiles(),
-                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceTemplate);
+                UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceTemplate);
             ShowListingView(TextRecources.ItemHandlingSupport_AllElementsWithTemplate, sourceTemplate.BuildRootId(), userList);
         }
         private void ShowItemUsingTemplates(EcfBlock sourceItem)
@@ -675,7 +675,7 @@ namespace EgsEcfEditorApp
         private void ShowBlockUsingBlockGroups(EcfBlock sourceItem)
         {
             List<EcfBlock> blockGroupList = GetBlockGroupsByBuildBlock(GetOpenedFiles(),
-                UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks, sourceItem);
+                UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks, sourceItem);
             ShowListingView(TextRecources.ItemHandlingSupport_AllBlockGroupsWithBlock, sourceItem.BuildRootId(), blockGroupList);
         }
         private void ShowListingView(string searchTitle, string searchValue, List<EcfBlock> results)
@@ -693,7 +693,7 @@ namespace EgsEcfEditorApp
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
             List<EcfBlock> templateList = GetTemplatesByUser(GetOpenedFiles(),
-                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
+                UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
             if (templateList.Count < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
@@ -732,7 +732,7 @@ namespace EgsEcfEditorApp
                 }
 
                 List<EcfBlock> templateList = GetTemplatesByUser(GetOpenedFiles(),
-                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
+                    UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
                 if (templateList.Count < 1)
                 {
                     OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector;
@@ -756,41 +756,51 @@ namespace EgsEcfEditorApp
         }
         private void AddTemplateToItem_SelectFromExisting(EcfBlock sourceItem)
         {
-            SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
-                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
+            if (!AddTemplateToItem_TrySelectTemplate(TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector,
+                out EcfBlock templateToAdd)) { return; }
 
-            ItemsDialog.Text = TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector;
-            if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
-            EcfBlock templateToAdd = ItemsDialog.SelectedItem.Item as EcfBlock;
-            EcfParameter templateRoot = sourceItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
-            templateRoot.ClearValues();
-            templateRoot.AddValue(templateToAdd.GetName());
-            
-            string messageText = string.Format("{2} {0} {3} {4} {1}!", templateToAdd.BuildRootId(), sourceItem.BuildRootId(),
-                TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
-            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
+            AddTemplateToItem_ShowReport(templateToAdd, sourceItem);
             FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(page => page.File == sourceItem.EcfFile)?.UpdateAllViews();
         }
         private void AddTemplateToItem_CreateCopy(EcfBlock sourceItem, SelectorItem[] presentTemplateFiles)
         {
-            SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
-                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
+            if (!AddTemplateToItem_TrySelectTemplate(TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector, 
+                out EcfBlock templateToCopy)) { return; }
 
-            ItemsDialog.Text = TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector;
-            if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { return; }
-            EcfBlock templateToCopy = ItemsDialog.SelectedItem.Item as EcfBlock;
             EcfBlock templateToAdd = new EcfBlock(templateToCopy);
             templateToAdd.SetName(sourceItem.GetName());
-
-            if (!AddTemplateToItem_EditAndAttachTemplate(templateToAdd, presentTemplateFiles)) { return; }
-            AddTemplateToItem_AttachTemplateToItem(templateToAdd, sourceItem);
-
-            string messageText = string.Format("{2} {0} {3} {4} {1}!", templateToAdd.BuildRootId(), sourceItem.BuildRootId(),
-                TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
-            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!AddTemplateToItem_TryEditAndInsertTemplate(templateToAdd, presentTemplateFiles)) { return; }
+            
+            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
+            AddTemplateToItem_ShowReport(templateToAdd, sourceItem);
             FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(page => page.File == sourceItem.EcfFile)?.UpdateAllViews();
         }
         private void AddTemplateToItem_CreateNew(EcfBlock sourceItem, SelectorItem[] presentTemplateFiles)
+        {
+            EcfBlock templateToAdd = AddTemplateToItem_CreateTemplate(sourceItem, presentTemplateFiles);
+
+            if (!AddTemplateToItem_TryEditAndInsertTemplate(templateToAdd, presentTemplateFiles)) { return; }
+            
+            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
+            AddTemplateToItem_ShowReport(templateToAdd, sourceItem);
+            FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(page => page.File == sourceItem.EcfFile)?.UpdateAllViews();
+        }
+        private bool AddTemplateToItem_TrySelectTemplate(string selectorTitle, out EcfBlock selectedTemplate)
+        {
+            selectedTemplate = null;
+
+            SelectorItem[] presentTemplates = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(page => page.File.Definition.IsDefiningTemplates).SelectMany(page =>
+                page.File.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>()).Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
+
+            ItemsDialog.Text = selectorTitle;
+            if (ItemsDialog.ShowDialog(this, presentTemplates) != DialogResult.OK) { 
+                return false;
+            }
+            selectedTemplate = ItemsDialog.SelectedItem.Item as EcfBlock;
+            return true;
+        }
+        private EcfBlock AddTemplateToItem_CreateTemplate(EcfBlock sourceItem, SelectorItem[] presentTemplateFiles)
         {
             EgsEcfFile templateFile = (EgsEcfFile)presentTemplateFiles.FirstOrDefault().Item;
 
@@ -809,16 +819,9 @@ namespace EgsEcfEditorApp
                     templateFile.Definition.BlockTypePostMarks.FirstOrDefault().Value);
             }
             templateToAdd.SetName(sourceItem.GetName());
-
-            if (!AddTemplateToItem_EditAndAttachTemplate(templateToAdd, presentTemplateFiles)) { return; }
-            AddTemplateToItem_AttachTemplateToItem(templateToAdd, sourceItem);
-
-            string messageText = string.Format("{2} {0} {3} {4} {1}!", templateToAdd.BuildRootId(), sourceItem.BuildRootId(),
-                TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
-            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            FileViewPanel.TabPages.Cast<EcfTabPage>().FirstOrDefault(page => page.File == sourceItem.EcfFile)?.UpdateAllViews();
+            return templateToAdd;
         }
-        private bool AddTemplateToItem_EditAndAttachTemplate(EcfBlock templateToAdd, SelectorItem[] presentTemplateFiles)
+        private bool AddTemplateToItem_TryEditAndInsertTemplate(EcfBlock templateToAdd, SelectorItem[] presentTemplateFiles)
         {
             EgsEcfFile targetFile;
             if (presentTemplateFiles.Length > 1)
@@ -836,25 +839,24 @@ namespace EgsEcfEditorApp
             targetFile.AddItem(templateToAdd);
             return true;
         }
-        private void AddTemplateToItem_AttachTemplateToItem(EcfBlock templateToAdd, EcfBlock targetItem)
+        private void AddTemplateToItem_UpdateTemplateRoot(EcfBlock templateToAdd, EcfBlock targetItem)
         {
-            EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+            EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
             templateParameter.ClearValues();
             string templateName = templateToAdd.GetName();
-            if (string.Equals(templateName, targetItem.GetName()))
-            {
-                templateParameter.AddValue(string.Empty);
-            }
-            else
-            {
-                templateParameter.AddValue(templateName);
-            }
+            templateParameter.AddValue(string.Equals(templateName, targetItem.GetName()) ? string.Empty : templateName);
+        }
+        private void AddTemplateToItem_ShowReport(EcfBlock addedTemplate, EcfBlock targetItem)
+        {
+            string messageText = string.Format("{2} {0} {3} {4} {1}!", addedTemplate.BuildRootId(), targetItem.BuildRootId(),
+                TitleRecources.Generic_Template, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
+            MessageBox.Show(this, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void AddItemToTemplateDefinition(EcfBlock sourceItem)
         {
             try
             {
-                if (!TryGetDefinitionFiles(TextRecources.ItemHandlingSupport_NoTemplateDefinitionFileFound,
+                if (!AddItemToDefinition_TryGetFiles(TextRecources.ItemHandlingSupport_NoTemplateDefinitionFileFound,
                     TitleRecources.ItemHandlingSupport_AddToTemplateDefinitionOptionSelector,
                     out List<FormatDefinition> templateDefinitions, new Func<FormatDefinition, bool>(def => def.IsDefiningTemplates)))
                 {
@@ -862,19 +864,19 @@ namespace EgsEcfEditorApp
                 }
 
                 ItemDefinition newParameter = new ItemDefinition(sourceItem.GetName(),
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo);
-                SaveParameterToDefinitionFiles(templateDefinitions,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsOptional,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefHasValue,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo);
+                AddItemToDefinition_SaveToFiles(templateDefinitions,
                     out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
                     newParameter);
 
-                ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
+                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
                     new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningTemplates));
 
-                ShowReloadDefinitionsReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
+                AddItemToDefinition_ShowReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
             }
             catch (Exception ex)
             {
@@ -885,7 +887,7 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                if (!TryGetDefinitionFiles(TextRecources.ItemHandlingSupport_NoGlobalDefinitionFileFound, 
+                if (!AddItemToDefinition_TryGetFiles(TextRecources.ItemHandlingSupport_NoGlobalDefinitionFileFound, 
                     TitleRecources.ItemHandlingSupport_AddToGlobalDefinitionOptionSelector,
                     out List<FormatDefinition> globalDefinitions, new Func<FormatDefinition, bool>(def => def.IsDefiningGlobalMacros)))
                 { 
@@ -893,36 +895,36 @@ namespace EgsEcfEditorApp
                 }
 
                 ItemDefinition newParameter = new ItemDefinition(sourceItem.Key,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped,
-                    UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo);
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefHasValue,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefInfo);
                 ItemDefinition[] newAttributes = sourceItem.Attributes.Select(attribute =>
                 {
                     return new ItemDefinition(attribute.Key,
-                        UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional,
-                        UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue,
-                        UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank,
-                        UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped,
-                        UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo);
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefInfo);
                 }).ToArray();
 
-                SaveParameterToDefinitionFiles(globalDefinitions, 
+                AddItemToDefinition_SaveToFiles(globalDefinitions, 
                     out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
                     newParameter, newAttributes);
 
-                ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion, 
+                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion, 
                     new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningGlobalMacros));
 
-                ShowReloadDefinitionsReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
+                AddItemToDefinition_ShowReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
             }
             catch (Exception ex)
             {
                 ErrorDialog.ShowDialog(this, TextRecources.ItemHandlingSupport_AddToTemplateDefinitionFailed, ex);
             }
         }
-        private bool TryGetDefinitionFiles(string noFileMessage, string optionSelectorTitle, 
+        private bool AddItemToDefinition_TryGetFiles(string noFileMessage, string optionSelectorTitle, 
             out List<FormatDefinition> definitions, Func<FormatDefinition, bool> filter = null)
         {
             definitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(filter ?? (result => true)).ToList();
@@ -949,7 +951,7 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        private void SaveParameterToDefinitionFiles(List<FormatDefinition> definitions, 
+        private void AddItemToDefinition_SaveToFiles(List<FormatDefinition> definitions, 
             out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
             ItemDefinition parameter, params ItemDefinition[] attributes)
         {
@@ -975,11 +977,11 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void ReloadDefinitions(List<FormatDefinition> definitions, string openedPageUpdateQuestion, Func<EcfTabPage, bool> ecfPageFilter = null)
+        private void AddItemToDefinition_ReloadDefinitions(List<FormatDefinition> definitions, string openedPageUpdateQuestion, Func<EcfTabPage, bool> ecfPageFilter = null)
         {
             if (definitions.Count > 0)
             {
-                EcfDefinitionHandling.ReloadDefinitions();
+                ReloadDefinitions();
 
                 List<EcfTabPage> fileTabsToUpdate = FileViewPanel.TabPages.Cast<EcfTabPage>().Where(ecfPageFilter ?? (result => true)).ToList();
                 if (fileTabsToUpdate.Count > 0)
@@ -997,7 +999,7 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void ShowReloadDefinitionsReport(ItemDefinition newParameter, List<FormatDefinition> modifiedDefinitions, List<FormatDefinition> unmodifiedDefinitions)
+        private void AddItemToDefinition_ShowReport(ItemDefinition newParameter, List<FormatDefinition> modifiedDefinitions, List<FormatDefinition> unmodifiedDefinitions)
         {
             StringBuilder messageText = new StringBuilder();
             messageText.AppendLine(string.Format("{0} {1}", TitleRecources.Generic_Parameter, newParameter.Name));
@@ -1023,7 +1025,7 @@ namespace EgsEcfEditorApp
                 List<EgsEcfFile> openedFiles = GetOpenedFiles();
                 // get Templates from open files for the sourceItem
                 List<EcfBlock> templateList = GetTemplatesByUser(openedFiles,
-                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, sourceItem);
+                    UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
                 if (templateList.Count() < 1)
                 {
                     messageText = string.Format("{0}: {1}", TextRecources.ItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());
@@ -1047,7 +1049,7 @@ namespace EgsEcfEditorApp
                     templateToRemove = templateList.FirstOrDefault();
                 }
                 // remove or delete?
-                if (sourceItem.HasParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, out EcfParameter templateParameter) &&
+                if (sourceItem.HasParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, out EcfParameter templateParameter) &&
                     templateParameter.ContainsValue(templateToRemove.GetName()))
                 {
                     if (MessageBox.Show(this, TextRecources.ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion, TitleRecources.Generic_Attention,
@@ -1063,7 +1065,7 @@ namespace EgsEcfEditorApp
                 }
                 // check cross usage of template
                 List<EcfBlock> userList = GetUsersByTemplate(openedFiles,
-                    UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName, templateToRemove);
+                    UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, templateToRemove);
                 if (userList.Count() > 1)
                 {
                     List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,
@@ -1077,7 +1079,7 @@ namespace EgsEcfEditorApp
                 templateToRemove.EcfFile.RemoveItem(templateToRemove);
                 userList.ForEach(user =>
                 {
-                    templateParameter = user.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName);
+                    templateParameter = user.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
                     templateParameter.ClearValues();
                     templateParameter.AddValue(string.Empty);
                 });
@@ -2052,8 +2054,8 @@ namespace EcfFileViews
                 List<EgsEcfFile> filesToCheck = (Parent as EcfTabContainer).TabPages.Cast<EcfTabPage>().Select(page => page.File).ToList();
                 EcfDependencyParameters parameters = new EcfDependencyParameters()
                 {
-                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName,
+                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks,
                 };
                 List<EcfDependency> dependencies = FindAttributeInterFileDependencies(parameters, filesToCheck, blocksToCheck);
 

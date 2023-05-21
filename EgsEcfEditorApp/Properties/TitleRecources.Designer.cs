@@ -619,47 +619,164 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default Definition &apos;Has Value&apos;.
+        ///   Looks up a localized string similar to Build block groups (BlockGroupsConfig).
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default Definition &apos;Is Allowing Blank&apos;.
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Has Value&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default Definition &apos;Info&apos;.
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Info&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default Definition &apos;Is Force Escaped&apos;.
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Allowing Blank&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default Definition &apos;Is Optional&apos;.
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Force Escaped&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_General_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_General_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global macros (GlobalDefsConfig).
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header", resourceCulture);
             }
         }
         
@@ -684,18 +801,27 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Blocks&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Template Root&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot {
+        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates and ingredients.
+        /// </summary>
+        internal static string EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header {
+            get {
+                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header", resourceCulture);
             }
         }
         
@@ -738,18 +864,18 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Default Value &apos;Unlock Cost&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_DefaultValueUnlockCost {
+        internal static string EcfSettingsDialog_TechTree_DefVal_UnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefaultValueUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefVal_UnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Default Value &apos;Unlock Level&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_DefaultValueUnlockLevel {
+        internal static string EcfSettingsDialog_TechTree_DefVal_UnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefaultValueUnlockLevel", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefVal_UnlockLevel", resourceCulture);
             }
         }
         
@@ -765,36 +891,36 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames {
+        internal static string EcfSettingsDialog_TechTree_ParamKey_TechTreeNames {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_TechTreeNames", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Parent Name&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName {
+        internal static string EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Unlock Cost&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParameterKeyUnlockCost {
+        internal static string EcfSettingsDialog_TechTree_ParamKey_UnlockCost {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyUnlockCost", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_UnlockCost", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter Key &apos;Unlock Level&apos;.
         /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel {
+        internal static string EcfSettingsDialog_TechTree_ParamKey_UnlockLevel {
             get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel", resourceCulture);
+                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_UnlockLevel", resourceCulture);
             }
         }
         

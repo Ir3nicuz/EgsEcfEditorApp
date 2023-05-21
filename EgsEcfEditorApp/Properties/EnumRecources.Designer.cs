@@ -115,20 +115,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add to all template Definition files.
+        ///   Looks up a localized string similar to Add to all Definition files.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddToTemplateDefinitionOptions_AllDefinitions {
+        internal static string EgsEcfEditorApp_GuiMainForm_AddToDefinitionOptions_AllDefinitions {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.AllDefinitions", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.AllDefinitions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add to specific template Definition file.
+        ///   Looks up a localized string similar to Add to specific Definition file.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddToTemplateDefinitionOptions_SelectDefinition {
+        internal static string EgsEcfEditorApp_GuiMainForm_AddToDefinitionOptions_SelectDefinition {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.SelectDefinition", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.SelectDefinition", resourceCulture);
             }
         }
         

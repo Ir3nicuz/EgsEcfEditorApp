@@ -12,7 +12,7 @@ namespace EgsEcfEditorApp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
     internal sealed partial class UserSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static UserSettings defaultInstance = ((UserSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new UserSettings())));
@@ -146,156 +146,156 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("UnlockLevel")]
-        public string EcfTechTreeDialog_ParameterKey_UnlockLevel {
+        public string EcfTechTreeDialog_ParamKey_UnlockLevel {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_UnlockLevel"]));
+                return ((string)(this["EcfTechTreeDialog_ParamKey_UnlockLevel"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_UnlockLevel"] = value;
+                this["EcfTechTreeDialog_ParamKey_UnlockLevel"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("UnlockCost")]
-        public string EcfTechTreeDialog_ParameterKey_UnlockCost {
+        public string EcfTechTreeDialog_ParamKey_UnlockCost {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_UnlockCost"]));
+                return ((string)(this["EcfTechTreeDialog_ParamKey_UnlockCost"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_UnlockCost"] = value;
+                this["EcfTechTreeDialog_ParamKey_UnlockCost"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("TechTreeNames")]
-        public string EcfTechTreeDialog_ParameterKey_TechTreeNames {
+        public string EcfTechTreeDialog_ParamKey_TechTreeNames {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeNames"]));
+                return ((string)(this["EcfTechTreeDialog_ParamKey_TechTreeNames"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_TechTreeNames"] = value;
+                this["EcfTechTreeDialog_ParamKey_TechTreeNames"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("TechTreeParent")]
-        public string EcfTechTreeDialog_ParameterKey_TechTreeParentName {
+        public string EcfTechTreeDialog_ParamKey_TechTreeParentName {
             get {
-                return ((string)(this["EcfTechTreeDialog_ParameterKey_TechTreeParentName"]));
+                return ((string)(this["EcfTechTreeDialog_ParamKey_TechTreeParentName"]));
             }
             set {
-                this["EcfTechTreeDialog_ParameterKey_TechTreeParentName"] = value;
+                this["EcfTechTreeDialog_ParamKey_TechTreeParentName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int EcfTechTreeDialog_DefaultValue_UnlockLevel {
+        public int EcfTechTreeDialog_DefVal_UnlockLevel {
             get {
-                return ((int)(this["EcfTechTreeDialog_DefaultValue_UnlockLevel"]));
+                return ((int)(this["EcfTechTreeDialog_DefVal_UnlockLevel"]));
             }
             set {
-                this["EcfTechTreeDialog_DefaultValue_UnlockLevel"] = value;
+                this["EcfTechTreeDialog_DefVal_UnlockLevel"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int EcfTechTreeDialog_DefaultValue_UnlockCost {
+        public int EcfTechTreeDialog_DefVal_UnlockCost {
             get {
-                return ((int)(this["EcfTechTreeDialog_DefaultValue_UnlockCost"]));
+                return ((int)(this["EcfTechTreeDialog_DefVal_UnlockCost"]));
             }
             set {
-                this["EcfTechTreeDialog_DefaultValue_UnlockCost"] = value;
+                this["EcfTechTreeDialog_DefVal_UnlockCost"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("TemplateRoot")]
-        public string ItemHandlingSupport_ParameterKey_TemplateName {
+        public string ItemHandlingSupport_ParamKey_TemplateName {
             get {
-                return ((string)(this["ItemHandlingSupport_ParameterKey_TemplateName"]));
+                return ((string)(this["ItemHandlingSupport_ParamKey_TemplateName"]));
             }
             set {
-                this["ItemHandlingSupport_ParameterKey_TemplateName"] = value;
+                this["ItemHandlingSupport_ParamKey_TemplateName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefaultValue_DefinitionIsOptional {
+        public bool ItemHandlingSupport_DefVal_Ingredient_DefIsOptional {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsOptional"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_Ingredient_DefIsOptional"]));
             }
             set {
-                this["ItemHandlingSupport_DefaultValue_DefinitionIsOptional"] = value;
+                this["ItemHandlingSupport_DefVal_Ingredient_DefIsOptional"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefaultValue_DefinitionHasValue {
+        public bool ItemHandlingSupport_DefVal_Ingredient_DefHasValue {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionHasValue"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_Ingredient_DefHasValue"]));
             }
             set {
-                this["ItemHandlingSupport_DefaultValue_DefinitionHasValue"] = value;
+                this["ItemHandlingSupport_DefVal_Ingredient_DefHasValue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank {
+        public bool ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank"]));
             }
             set {
-                this["ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank"] = value;
+                this["ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped {
+        public bool ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped"]));
             }
             set {
-                this["ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped"] = value;
+                this["ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
-        public string ItemHandlingSupport_DefaultValue_DefinitionInfo {
+        public string ItemHandlingSupport_DefVal_Ingredient_DefInfo {
             get {
-                return ((string)(this["ItemHandlingSupport_DefaultValue_DefinitionInfo"]));
+                return ((string)(this["ItemHandlingSupport_DefVal_Ingredient_DefInfo"]));
             }
             set {
-                this["ItemHandlingSupport_DefaultValue_DefinitionInfo"] = value;
+                this["ItemHandlingSupport_DefVal_Ingredient_DefInfo"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Blocks")]
-        public string ItemHandlingSupport_ParameterKey_Blocks {
+        public string ItemHandlingSupport_ParamKey_Blocks {
             get {
-                return ((string)(this["ItemHandlingSupport_ParameterKey_Blocks"]));
+                return ((string)(this["ItemHandlingSupport_ParamKey_Blocks"]));
             }
             set {
-                this["ItemHandlingSupport_ParameterKey_Blocks"] = value;
+                this["ItemHandlingSupport_ParamKey_Blocks"] = value;
             }
         }
         
@@ -308,6 +308,126 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["ItemHandlingSupport_InterFileChecksActive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalParam_DefHasValue {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefHasValue"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalParam_DefHasValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
+        public string ItemHandlingSupport_DefVal_GlobalParam_DefInfo {
+            get {
+                return ((string)(this["ItemHandlingSupport_DefVal_GlobalParam_DefInfo"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalParam_DefInfo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
+        public string ItemHandlingSupport_DefVal_GlobalAttr_DefInfo {
+            get {
+                return ((string)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefInfo"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_GlobalAttr_DefInfo"] = value;
             }
         }
     }

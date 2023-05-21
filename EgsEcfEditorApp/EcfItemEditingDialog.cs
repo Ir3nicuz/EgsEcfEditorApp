@@ -619,8 +619,8 @@ namespace EcfFileViews
                             EcfDependencyParameters parameters = new EcfDependencyParameters()
                             {
                                 FormatDef = nameRow.FormDef,
-                                ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                                ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                                ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName,
+                                ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks,
                             };
                             errors.AddRange(FindAttributeInterFileDependencies(parameters, filesToCheck, oldName).Select(dependency =>
                                 string.Format("{0} {1} {2} {3}", presetBlock.DataType, oldName, GetLocalizedEnum(dependency.Type), dependency.TargetItem?.BuildRootId())));
@@ -1188,8 +1188,8 @@ namespace EcfFileViews
                             ItemDef = ParameterValuesDefinition,
                             Parent = parent,
                             Reference = presetParameter,
-                            ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                            ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                            ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName,
+                            ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks,
                         };
                         foreach (EcfError error in CheckParameterInterFileDependencies(paramKeys, filesToCheck, checkGroups, EcfErrorGroups.Editing))
                         {
@@ -1205,8 +1205,8 @@ namespace EcfFileViews
                 List<string> errors = new List<string>();
                 EcfDependencyParameters depenParams = new EcfDependencyParameters()
                 {
-                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName,
-                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks,
+                    ParamKey_TemplateRoot = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName,
+                    ParamKey_Blocks = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks,
                 };
                 foreach (DataGridViewRow row in Grid.Rows)
                 {

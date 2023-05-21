@@ -32,47 +32,77 @@
     <Setting Name="EgsEcfEditorApp_FileCreation_AllowFallbackToParsedData" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_ParameterKey_UnlockLevel" Type="System.String" Scope="User">
+    <Setting Name="EcfTechTreeDialog_ParamKey_UnlockLevel" Type="System.String" Scope="User">
       <Value Profile="(Default)">UnlockLevel</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_ParameterKey_UnlockCost" Type="System.String" Scope="User">
+    <Setting Name="EcfTechTreeDialog_ParamKey_UnlockCost" Type="System.String" Scope="User">
       <Value Profile="(Default)">UnlockCost</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeNames" Type="System.String" Scope="User">
+    <Setting Name="EcfTechTreeDialog_ParamKey_TechTreeNames" Type="System.String" Scope="User">
       <Value Profile="(Default)">TechTreeNames</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_ParameterKey_TechTreeParentName" Type="System.String" Scope="User">
+    <Setting Name="EcfTechTreeDialog_ParamKey_TechTreeParentName" Type="System.String" Scope="User">
       <Value Profile="(Default)">TechTreeParent</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_DefaultValue_UnlockLevel" Type="System.Int32" Scope="User">
+    <Setting Name="EcfTechTreeDialog_DefVal_UnlockLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="EcfTechTreeDialog_DefaultValue_UnlockCost" Type="System.Int32" Scope="User">
+    <Setting Name="EcfTechTreeDialog_DefVal_UnlockCost" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_ParameterKey_TemplateName" Type="System.String" Scope="User">
+    <Setting Name="ItemHandlingSupport_ParamKey_TemplateName" Type="System.String" Scope="User">
       <Value Profile="(Default)">TemplateRoot</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsOptional" Type="System.Boolean" Scope="User">
+    <Setting Name="ItemHandlingSupport_DefVal_Ingredient_DefIsOptional" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionHasValue" Type="System.Boolean" Scope="User">
+    <Setting Name="ItemHandlingSupport_DefVal_Ingredient_DefHasValue" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank" Type="System.Boolean" Scope="User">
+    <Setting Name="ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped" Type="System.Boolean" Scope="User">
+    <Setting Name="ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_DefaultValue_DefinitionInfo" Type="System.String" Scope="User">
+    <Setting Name="ItemHandlingSupport_DefVal_Ingredient_DefInfo" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tool-Added</Value>
     </Setting>
-    <Setting Name="ItemHandlingSupport_ParameterKey_Blocks" Type="System.String" Scope="User">
+    <Setting Name="ItemHandlingSupport_ParamKey_Blocks" Type="System.String" Scope="User">
       <Value Profile="(Default)">Blocks</Value>
     </Setting>
     <Setting Name="ItemHandlingSupport_InterFileChecksActive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalParam_DefHasValue" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalParam_DefInfo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tool-Added</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ItemHandlingSupport_DefVal_GlobalAttr_DefInfo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tool-Added</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -135,11 +135,11 @@
   <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting" xml:space="preserve">
     <value>Vorhandenes Template aus Liste wählen</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.AllDefinitions" xml:space="preserve">
-    <value>Zu allen Template Definitions Dateien hinzufügen</value>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.AllDefinitions" xml:space="preserve">
+    <value>Zu allen Definitions Dateien hinzufügen</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddToTemplateDefinitionOptions.SelectDefinition" xml:space="preserve">
-    <value>Zu bestimmter Template Definitions Datei hinzufügen</value>
+  <data name="EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.SelectDefinition" xml:space="preserve">
+    <value>Zu bestimmter Definitions Datei hinzufügen</value>
   </data>
   <data name="EgsEcfParser.EcfDependencies.IsInheritedBy" xml:space="preserve">
     <value>wird importiert von</value>

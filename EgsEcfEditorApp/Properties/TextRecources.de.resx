@@ -306,25 +306,55 @@
   <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
     <value>Wenn aktiviert, werden Elemente versuchen die Originaldaten zu verwenden wenn die Editordaten fehlerhaft sind</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'hasValue' bei erzeugten GlobalDef Attribut Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'info' bei erzeugten GlobalDef Attribut Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'allowBlank' bei erzeugten GlobalDef Attribut Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'forceEscape' bei erzeugten GlobalDef Attribut Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'optional' bei erzeugten GlobalDef Attribut Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'hasValue' bei erzeugten GlobalDef Parameter Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'info' bei erzeugten GlobalDef Parameter Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'allowBlank' bei erzeugten GlobalDef Parameter Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'forceEscape' bei erzeugten GlobalDef Parameter Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'optional' bei erzeugten GlobalDef Parameter Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue" xml:space="preserve">
     <value>Der Standardwert der verwendet wird für das Feld 'hasValue' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
-    <value>Der Standardwert der verwendet wird für das Feld 'allowBlank' bei erzeugten Template Zutaten Definitions Einträgen</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionInfo" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo" xml:space="preserve">
     <value>Der Standardwert der verwendet wird für das Feld 'info' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
+    <value>Der Standardwert der verwendet wird für das Feld 'allowBlank' bei erzeugten Template Zutaten Definitions Einträgen</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
     <value>Der Standardwert der verwendet wird für das Feld 'forceEscape' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
     <value>Der Standardwert der verwendet wird für das Feld 'optional' bei erzeugten Template Zutaten Definitions Einträgen</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockCost" xml:space="preserve">
     <value>Der Standardwert der verwendet wird wenn das Element keinen Freischalt Kosten Wert enthält</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockLevel" xml:space="preserve">
     <value>Der Standardwert der verwendet wird wenn das Element keinen Freischalt Level Wert enthält</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
@@ -339,23 +369,23 @@
   <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
     <value>Wenn aktiviert, werden auch Elemente mit mindestens einem fehlerhaften Unterelement nicht gespeichert</value>
   </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels der die Namen der Technologiebäume, zu denen das Element gehört, enthält</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels der den Namen des übergeordneten Technologiebaum Elementes enthält</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels welcher den Namen des Template Elementes enthält, für den Fall das ein Template wiederverwendet wird</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels der den Freischalt Kosten Wert enthält</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel" xml:space="preserve">
-    <value>Der Name des Parameterschlüssels der den Freischalt Level Wert enthält</value>
-  </data>
   <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
     <value>Legt den Anfangswert für Anzahl der angezeigten Elemente in der Parameteransicht fest</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der die Namen der Technologiebäume, zu denen das Element gehört, enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Namen des übergeordneten Technologiebaum Elementes enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels welcher den Namen des Template Elementes enthält, für den Fall das ein Template wiederverwendet wird</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockCost" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Freischalt Kosten Wert enthält</value>
+  </data>
+  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel" xml:space="preserve">
+    <value>Der Name des Parameterschlüssels der den Freischalt Level Wert enthält</value>
   </data>
   <data name="EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive" xml:space="preserve">
     <value>Wenn aktiviert, wird der Anfangszustand für die Filter Einstellung für Kommentare auf anzeigen gesetzt</value>

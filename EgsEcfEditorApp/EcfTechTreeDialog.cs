@@ -680,8 +680,8 @@ namespace EgsEcfEditorApp
             private void AddNode(TreeNode targetNode)
             {
                 TechTreeDisplayNode targetDisplayNode = targetNode as TechTreeDisplayNode;
-                int unlockLevel = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
-                int unlockCost = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+                int unlockLevel = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockLevel;
+                int unlockCost = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockCost;
                 List<EcfBlock> availableElements = ParentDialog.BuildUnusedElementsList();
 
                 if (ParentDialog.TreeItemEditor.ShowDialog(this, null, availableElements, unlockLevel, unlockCost) == DialogResult.OK)
@@ -786,8 +786,8 @@ namespace EgsEcfEditorApp
             public ReadOnlyCollection<string> TechTreeNames { get; }
             private List<string> InternalTechTreeNames { get; } = new List<string>();
             public string TechTreeParentName { get; private set; } = null;
-            public int UnlockLevel { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
-            public int UnlockCost { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+            public int UnlockLevel { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockLevel;
+            public int UnlockCost { get; private set; } = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockCost;
             public string ToolTip { get; private set; } = null;
 
             public TechTreeNode Parent { get; set; } = null;
@@ -824,17 +824,17 @@ namespace EgsEcfEditorApp
             public void RemoveTechTreeNames()
             {
                 InternalTechTreeNames.Clear();
-                Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, out EcfParameter treeNameParameter);
+                Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, out EcfParameter treeNameParameter);
                 treeNameParameter.ClearValues();
                 treeNameParameter.AddValue(string.Empty);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost);
                 Dialog.ChangedFileTabs.Add(Tab);
             }
             public void RemoveTechTreeName(string treeName)
             {
-                if (Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, out EcfParameter treeNameParameter))
+                if (Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, out EcfParameter treeNameParameter))
                 {
                     InternalTechTreeNames.Remove(treeName);
                     treeNameParameter.RemoveValue(treeName);
@@ -844,9 +844,9 @@ namespace EgsEcfEditorApp
                     }
                     if (IsTechTreeNamesEmpty())
                     {
-                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName);
-                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel);
-                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost);
+                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName);
+                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel);
+                        Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost);
                     }
                     Dialog.ChangedFileTabs.Add(Tab);
                 }
@@ -862,7 +862,7 @@ namespace EgsEcfEditorApp
                 {
                     InternalTechTreeNames.Add(treeName);
                 }
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, InternalTechTreeNames);
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, InternalTechTreeNames);
             }
             public void AddTechTreeNames(List<string> treeNames)
             {
@@ -878,7 +878,7 @@ namespace EgsEcfEditorApp
                 {
                     InternalTechTreeNames.Add(string.Empty);
                 }
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, InternalTechTreeNames);
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, InternalTechTreeNames);
             }
             public void SetTechTreeNames(List<string> treeNames)
             {
@@ -894,29 +894,29 @@ namespace EgsEcfEditorApp
                 {
                     InternalTechTreeNames.Add(string.Empty);
                 }
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, treeNames);
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, treeNames);
             }
             public void SetTechTreeParent(string parentName)
             {
                 TechTreeParentName = parentName;
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName, parentName ?? string.Empty);
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName, parentName ?? string.Empty);
             }
             public void SetUnlockLevel(int level)
             {
                 UnlockLevel = level;
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel, level.ToString());
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel, level.ToString());
             }
             public void SetUnlockCost(int cost)
             {
                 UnlockCost = cost;
-                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost, cost.ToString());
+                SetParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost, cost.ToString());
             }
             public void SwapElement(EcfTabPage tab, EcfBlock element)
             {
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel);
-                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel);
+                Element.RemoveParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost);
                 Dialog.ChangedFileTabs.Add(Tab);
 
                 Tab = tab;
@@ -1000,18 +1000,18 @@ namespace EgsEcfEditorApp
             }
             private void UpdateTechTreeSettings()
             {
-                Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames, true, false, out EcfParameter techTreeNames);
-                string techTreeParentName = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName, true, false);
-                string unlockLevel = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel, true, false);
-                string unlockCost = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost, true, false);
+                Element.HasParameter(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames, true, false, out EcfParameter techTreeNames);
+                string techTreeParentName = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName, true, false);
+                string unlockLevel = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel, true, false);
+                string unlockCost = Element.GetParameterFirstValue(UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost, true, false);
 
                 if (!int.TryParse(unlockLevel, out int unlockLevelValue))
                 {
-                    unlockLevelValue = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
+                    unlockLevelValue = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockLevel;
                 }
                 if (!int.TryParse(unlockCost, out int unlockCostValue))
                 {
-                    unlockCostValue = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+                    unlockCostValue = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockCost;
                 }
 
                 InternalTechTreeNames.Clear();

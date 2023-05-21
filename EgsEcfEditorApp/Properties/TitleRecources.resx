@@ -303,20 +303,59 @@
   <data name="EcfSettingsDialog_Info_Header" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue" xml:space="preserve">
-    <value>Default Definition 'Has Value'</value>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header" xml:space="preserve">
+    <value>Build block groups (BlockGroupsConfig)</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank" xml:space="preserve">
-    <value>Default Definition 'Is Allowing Blank'</value>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue" xml:space="preserve">
+    <value>Attribute Default Value 'Has Value'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo" xml:space="preserve">
-    <value>Default Definition 'Info'</value>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo" xml:space="preserve">
+    <value>Attribute Default Value 'Info'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped" xml:space="preserve">
-    <value>Default Definition 'Is Force Escaped'</value>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank" xml:space="preserve">
+    <value>Attribute Default Value 'Is Allowing Blank'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional" xml:space="preserve">
-    <value>Default Definition 'Is Optional'</value>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped" xml:space="preserve">
+    <value>Attribute Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional" xml:space="preserve">
+    <value>Attribute Default Value 'Is Optional'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue" xml:space="preserve">
+    <value>Parameter Default Value 'Has Value'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo" xml:space="preserve">
+    <value>Parameter Default Value 'Info'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>Parameter Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped" xml:space="preserve">
+    <value>Parameter Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional" xml:space="preserve">
+    <value>Parameter Default Value 'Is Optional'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue" xml:space="preserve">
+    <value>Parameter Default Value 'Has Value'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo" xml:space="preserve">
+    <value>Parameter Default Value 'Info'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
+    <value>Parameter Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
+    <value>Parameter Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
+    <value>Parameter Default Value 'Is Optional'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_General_Header" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header" xml:space="preserve">
+    <value>Global macros (GlobalDefsConfig)</value>
   </data>
   <data name="EcfSettingsDialog_ItemHandlingSupport_Header" xml:space="preserve">
     <value>Item Handling Support</value>
@@ -324,11 +363,14 @@
   <data name="EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive" xml:space="preserve">
     <value>Inter file checks active</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks" xml:space="preserve">
     <value>Parameter Key 'Blocks'</value>
   </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot" xml:space="preserve">
+  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot" xml:space="preserve">
     <value>Parameter Key 'Template Root'</value>
+  </data>
+  <data name="EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header" xml:space="preserve">
+    <value>Templates and ingredients</value>
   </data>
   <data name="EcfSettingsDialog_Sorter_ErrorViewSorterInitCount" xml:space="preserve">
     <value>Error view item count preset</value>
@@ -342,25 +384,25 @@
   <data name="EcfSettingsDialog_Sorter_TreeViewSorterInitCount" xml:space="preserve">
     <value>Tree view item count preset</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_DefaultValueUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_DefVal_UnlockCost" xml:space="preserve">
     <value>Default Value 'Unlock Cost'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_DefaultValueUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_DefVal_UnlockLevel" xml:space="preserve">
     <value>Default Value 'Unlock Level'</value>
   </data>
   <data name="EcfSettingsDialog_TechTree_Header" xml:space="preserve">
     <value>Tech Tree</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParamKey_TechTreeNames" xml:space="preserve">
     <value>Parameter Key 'Tech Tree Names'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName" xml:space="preserve">
     <value>Parameter Key 'Tech Tree Parent Name'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_ParameterKeyUnlockCost" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParamKey_UnlockCost" xml:space="preserve">
     <value>Parameter Key 'Unlock Cost'</value>
   </data>
-  <data name="EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel" xml:space="preserve">
+  <data name="EcfSettingsDialog_TechTree_ParamKey_UnlockLevel" xml:space="preserve">
     <value>Parameter Key 'Unlock Level'</value>
   </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">

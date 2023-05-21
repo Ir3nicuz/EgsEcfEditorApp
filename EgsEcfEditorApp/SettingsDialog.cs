@@ -149,11 +149,15 @@ namespace EgsEcfEditorApp
             {
                 SuspendLayout();
 
+                AutoScroll = true;
                 AutoSize = true;
                 ColumnCount = 1;
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
                 Dock = DockStyle.Fill;
                 GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+                HorizontalScroll.Enabled = false;
+                // hack to give autoscroll a suitable startvalue to calculate scrollbar size correct
+                Size = new Size(1, 1);
 
                 ResumeLayout(false);
             }
@@ -168,21 +172,15 @@ namespace EgsEcfEditorApp
             protected void AddSettingsItem(SettingsTableItem item)
             {
                 Controls.Add(item, 0, ItemsCount);
-                RowStyles.Add(new RowStyle());
+                RowStyles.Add(new RowStyle(SizeType.AutoSize));
                 ItemsCount++;
                 RowCount = ItemsCount;
             }
-            protected void AddSpacer(SettingsTableItem item = null)
+            protected void AddSpacer(SettingsTableItem item)
             {
-                if (item != null)
-                {
-                    Controls.Add(item, 0, ItemsCount);
-                    ItemsCount++;
-                }
-                else
-                {
-                    ItemsCount++;
-                }
+                item.Dock = DockStyle.Fill;
+                Controls.Add(item, 0, ItemsCount);
+                ItemsCount++;
                 RowCount = ItemsCount;
                 RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             }
@@ -220,7 +218,6 @@ namespace EgsEcfEditorApp
 
                 AddSettingsItem(GameMode, TitleRecources.EcfSettingsDialog_General_GameMode,
                     TextRecources.EcfSettingsDialog_ToolTip_GameMode, GameMode_SettingChanged);
-                AddSpacer();
 
                 ResumeLayout(true);
             }
@@ -278,7 +275,6 @@ namespace EgsEcfEditorApp
                     TextRecources.EcfSettingsDialog_ToolTip_InvalidateParentsOnError, InvalidateParentsOnError_SettingChanged);
                 AddSettingsItem(AllowFallbackToParsedData, TitleRecources.EcfSettingsDialog_Creation_AllowFallbackToParsedData,
                     TextRecources.EcfSettingsDialog_ToolTip_AllowFallbackToParsedData, AllowFallbackToParsedData_SettingChanged);
-                AddSpacer();
 
                 ResumeLayout(true);
             }
@@ -339,7 +335,6 @@ namespace EgsEcfEditorApp
                     TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive, ParametersInitActive_SettingChanged);
                 AddSettingsItem(DataBlocksInitActive, TitleRecources.EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive,
                     TextRecources.EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive, DataBlocksInitActive_SettingChanged);
-                AddSpacer();
 
                 ResumeLayout(true);
             }
@@ -400,7 +395,6 @@ namespace EgsEcfEditorApp
                     TextRecources.EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount, ParameterViewSorterInitCount_SettingChanged);
                 AddSettingsItem(ErrorViewSorterInitCount, TitleRecources.EcfSettingsDialog_Sorter_ErrorViewSorterInitCount,
                     TextRecources.EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount, ErrorViewSorterInitCount_SettingChanged);
-                AddSpacer();
 
                 ResumeLayout(true);
             }
@@ -422,32 +416,32 @@ namespace EgsEcfEditorApp
             // events
             private void ParameterKeyTechTreeNames_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames = ParameterKeyTechTreeNames.Value;
+                UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames = ParameterKeyTechTreeNames.Value;
                 HasUnsavedChanges = true;
             }
             private void ParameterKeyTechTreeParentName_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName = ParameterKeyTechTreeParentName.Value;
+                UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName = ParameterKeyTechTreeParentName.Value;
                 HasUnsavedChanges = true;
             }
             private void ParameterKeyUnlockLevel_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel = ParameterKeyUnlockLevel.Value;
+                UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel = ParameterKeyUnlockLevel.Value;
                 HasUnsavedChanges = true;
             }
             private void DefaultValueUnlockLevel_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel = Convert.ToInt32(DefaultValueUnlockLevel.Value);
+                UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockLevel = Convert.ToInt32(DefaultValueUnlockLevel.Value);
                 HasUnsavedChanges = true;
             }
             private void ParameterKeyUnlockCost_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost = ParameterKeyUnlockCost.Value;
+                UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost = ParameterKeyUnlockCost.Value;
                 HasUnsavedChanges = true;
             }
             private void DefaultValueUnlockCost_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost = Convert.ToInt32(DefaultValueUnlockCost.Value);
+                UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockCost = Convert.ToInt32(DefaultValueUnlockCost.Value);
                 HasUnsavedChanges = true;
             }
 
@@ -463,12 +457,12 @@ namespace EgsEcfEditorApp
                 DefaultValueUnlockCost.Minimum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue;
                 DefaultValueUnlockCost.Maximum = InternalSettings.Default.EgsEcfEditorApp_ParameterHandling_UnlockCostMaxValue;
 
-                ParameterKeyTechTreeNames.Value = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeNames;
-                ParameterKeyTechTreeParentName.Value = UserSettings.Default.EcfTechTreeDialog_ParameterKey_TechTreeParentName;
-                ParameterKeyUnlockLevel.Value = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockLevel;
-                DefaultValueUnlockLevel.Value = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockLevel;
-                ParameterKeyUnlockCost.Value = UserSettings.Default.EcfTechTreeDialog_ParameterKey_UnlockCost;
-                DefaultValueUnlockCost.Value = UserSettings.Default.EcfTechTreeDialog_DefaultValue_UnlockCost;
+                ParameterKeyTechTreeNames.Value = UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeNames;
+                ParameterKeyTechTreeParentName.Value = UserSettings.Default.EcfTechTreeDialog_ParamKey_TechTreeParentName;
+                ParameterKeyUnlockLevel.Value = UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockLevel;
+                DefaultValueUnlockLevel.Value = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockLevel;
+                ParameterKeyUnlockCost.Value = UserSettings.Default.EcfTechTreeDialog_ParamKey_UnlockCost;
+                DefaultValueUnlockCost.Value = UserSettings.Default.EcfTechTreeDialog_DefVal_UnlockCost;
             }
 
             // private
@@ -476,19 +470,18 @@ namespace EgsEcfEditorApp
             {
                 SuspendLayout();
 
-                AddSettingsItem(ParameterKeyTechTreeNames, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyTechTreeNames,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeNames, ParameterKeyTechTreeNames_SettingChanged);
-                AddSettingsItem(ParameterKeyTechTreeParentName, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyTechTreeParentName,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTechTreeParentName, ParameterKeyTechTreeParentName_SettingChanged);
-                AddSettingsItem(ParameterKeyUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyUnlockLevel,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockLevel, ParameterKeyUnlockLevel_SettingChanged);
-                AddSettingsItem(DefaultValueUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_DefaultValueUnlockLevel,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockLevel, DefaultValueUnlockLevel_SettingChanged);
-                AddSettingsItem(ParameterKeyUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_ParameterKeyUnlockCost,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyUnlockCost, ParameterKeyUnlockCost_SettingChanged);
-                AddSettingsItem(DefaultValueUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_DefaultValueUnlockCost,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultValueUnlockCost, DefaultValueUnlockCost_SettingChanged);
-                AddSpacer();
+                AddSettingsItem(ParameterKeyTechTreeNames, TitleRecources.EcfSettingsDialog_TechTree_ParamKey_TechTreeNames,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames, ParameterKeyTechTreeNames_SettingChanged);
+                AddSettingsItem(ParameterKeyTechTreeParentName, TitleRecources.EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName, ParameterKeyTechTreeParentName_SettingChanged);
+                AddSettingsItem(ParameterKeyUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_ParamKey_UnlockLevel,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel, ParameterKeyUnlockLevel_SettingChanged);
+                AddSettingsItem(DefaultValueUnlockLevel, TitleRecources.EcfSettingsDialog_TechTree_DefVal_UnlockLevel,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_UnlockLevel, DefaultValueUnlockLevel_SettingChanged);
+                AddSettingsItem(ParameterKeyUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_ParamKey_UnlockCost,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_UnlockCost, ParameterKeyUnlockCost_SettingChanged);
+                AddSettingsItem(DefaultValueUnlockCost, TitleRecources.EcfSettingsDialog_TechTree_DefVal_UnlockCost,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_UnlockCost, DefaultValueUnlockCost_SettingChanged);
 
                 ResumeLayout(true);
             }
@@ -496,13 +489,23 @@ namespace EgsEcfEditorApp
         private class ItemHandlingSupportSettingsPanel : SettingsPanel
         {
             private CheckBoxSettingItem InterFileChecksActive { get; } = new CheckBoxSettingItem();
-            private TextBoxSettingItem ParameterKeyTemplateRoot { get; } = new TextBoxSettingItem();
-            private TextBoxSettingItem ParameterKeyBlocks { get; } = new TextBoxSettingItem();
-            private CheckBoxSettingItem DefaultDefinitionIsOptional { get; } = new CheckBoxSettingItem();
-            private CheckBoxSettingItem DefaultDefinitionHasValue { get; } = new CheckBoxSettingItem();
-            private CheckBoxSettingItem DefaultDefinitionIsAllowingBlank { get; } = new CheckBoxSettingItem();
-            private CheckBoxSettingItem DefaultDefinitionIsForceEscaped { get; } = new CheckBoxSettingItem();
-            private TextBoxSettingItem DefaultDefinitionInfo { get; } = new TextBoxSettingItem();
+            private TextBoxSettingItem ParamKey_TemplateRoot { get; } = new TextBoxSettingItem();
+            private CheckBoxSettingItem DefVal_Ingredient_DefIsOptional { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_Ingredient_DefHasValue { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_Ingredient_DefIsAllowingBlank { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_Ingredient_DefIsForceEscaped { get; } = new CheckBoxSettingItem();
+            private TextBoxSettingItem DefVal_Ingredient_DefInfo { get; } = new TextBoxSettingItem();
+            private TextBoxSettingItem ParamKey_Blocks { get; } = new TextBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalParam_DefIsOptional { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalParam_DefHasValue { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalParam_DefIsAllowingBlank { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalParam_DefIsForceEscaped { get; } = new CheckBoxSettingItem();
+            private TextBoxSettingItem DefVal_GlobalParam_DefInfo { get; } = new TextBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalAttr_DefIsOptional { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalAttr_DefHasValue { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalAttr_DefIsAllowingBlank { get; } = new CheckBoxSettingItem();
+            private CheckBoxSettingItem DefVal_GlobalAttr_DefIsForceEscaped { get; } = new CheckBoxSettingItem();
+            private TextBoxSettingItem DefVal_GlobalAttr_DefInfo { get; } = new TextBoxSettingItem();
 
             public ItemHandlingSupportSettingsPanel(string idTag, ToolTip toolTipContainer) : base(idTag, toolTipContainer)
             {
@@ -517,40 +520,90 @@ namespace EgsEcfEditorApp
             }
             private void ParameterKeyTemplateRoot_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName = ParameterKeyTemplateRoot.Value;
+                UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName = ParamKey_TemplateRoot.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_Ingredient_DefIsOptional_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsOptional = DefVal_Ingredient_DefIsOptional.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_Ingredient_DefHasValue_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefHasValue = DefVal_Ingredient_DefHasValue.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_Ingredient_DefIsAllowingBlank_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank = DefVal_Ingredient_DefIsAllowingBlank.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_Ingredient_DefIsForceEscaped_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped = DefVal_Ingredient_DefIsForceEscaped.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_Ingredient_DefInfo_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo = DefVal_Ingredient_DefInfo.Value;
                 HasUnsavedChanges = true;
             }
             private void ParameterKeyBlocks_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks = ParameterKeyBlocks.Value;
+                UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks = ParamKey_Blocks.Value;
                 HasUnsavedChanges = true;
             }
-            private void DefaultDefinitionIsOptional_SettingChanged(object sender, EventArgs evt)
+            private void DefVal_GlobalParam_DefIsOptional_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional = DefaultDefinitionIsOptional.Value;
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional = DefVal_GlobalParam_DefIsOptional.Value;
                 HasUnsavedChanges = true;
             }
-            private void DefaultDefinitionHasValue_SettingChanged(object sender, EventArgs evt)
+            private void DefVal_GlobalParam_DefHasValue_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue = DefaultDefinitionHasValue.Value;
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefHasValue = DefVal_GlobalParam_DefHasValue.Value;
                 HasUnsavedChanges = true;
             }
-            private void DefaultDefinitionIsAllowingBlank_SettingChanged(object sender, EventArgs evt)
+            private void DefVal_GlobalParam_DefIsAllowingBlank_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank = DefaultDefinitionIsAllowingBlank.Value;
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank = DefVal_GlobalParam_DefIsAllowingBlank.Value;
                 HasUnsavedChanges = true;
             }
-            private void DefaultDefinitionIsForceEscaped_SettingChanged(object sender, EventArgs evt)
+            private void DefVal_GlobalParam_DefIsForceEscaped_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped = DefaultDefinitionIsForceEscaped.Value;
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped = DefVal_GlobalParam_DefIsForceEscaped.Value;
                 HasUnsavedChanges = true;
             }
-            private void DefaultDefinitionInfo_SettingChanged(object sender, EventArgs evt)
+            private void DefVal_GlobalParam_DefInfo_SettingChanged(object sender, EventArgs evt)
             {
-                UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo = DefaultDefinitionInfo.Value;
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefInfo = DefVal_GlobalParam_DefInfo.Value;
                 HasUnsavedChanges = true;
             }
-
+            private void DefVal_GlobalAttr_DefIsOptional_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional = DefVal_GlobalAttr_DefIsOptional.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_GlobalAttr_DefHasValue_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue = DefVal_GlobalAttr_DefHasValue.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_GlobalAttr_DefIsAllowingBlank_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank = DefVal_GlobalAttr_DefIsAllowingBlank.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_GlobalAttr_DefIsForceEscaped_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped = DefVal_GlobalAttr_DefIsForceEscaped.Value;
+                HasUnsavedChanges = true;
+            }
+            private void DefVal_GlobalAttr_DefInfo_SettingChanged(object sender, EventArgs evt)
+            {
+                UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefInfo = DefVal_GlobalAttr_DefInfo.Value;
+                HasUnsavedChanges = true;
+            }
+            
             // public
             public override void PresetItems()
             {
@@ -559,13 +612,23 @@ namespace EgsEcfEditorApp
             public override void UpdateItems()
             {
                 InterFileChecksActive.Value = UserSettings.Default.ItemHandlingSupport_InterFileChecksActive;
-                ParameterKeyTemplateRoot.Value = UserSettings.Default.ItemHandlingSupport_ParameterKey_TemplateName;
-                ParameterKeyBlocks.Value = UserSettings.Default.ItemHandlingSupport_ParameterKey_Blocks;
-                DefaultDefinitionIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsOptional;
-                DefaultDefinitionHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionHasValue;
-                DefaultDefinitionIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsAllowingBlank;
-                DefaultDefinitionIsForceEscaped.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionIsForceEscaped;
-                DefaultDefinitionInfo.Value = UserSettings.Default.ItemHandlingSupport_DefaultValue_DefinitionInfo;
+                ParamKey_TemplateRoot.Value = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName;
+                DefVal_Ingredient_DefIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsOptional;
+                DefVal_Ingredient_DefHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefHasValue;
+                DefVal_Ingredient_DefIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank;
+                DefVal_Ingredient_DefIsForceEscaped.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped;
+                DefVal_Ingredient_DefInfo.Value = UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo;
+                ParamKey_Blocks.Value = UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks;
+                DefVal_GlobalParam_DefIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional;
+                DefVal_GlobalParam_DefHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefHasValue;
+                DefVal_GlobalParam_DefIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank;
+                DefVal_GlobalParam_DefIsForceEscaped.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped;
+                DefVal_GlobalParam_DefInfo.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefInfo;
+                DefVal_GlobalAttr_DefIsOptional.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional;
+                DefVal_GlobalAttr_DefHasValue.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue;
+                DefVal_GlobalAttr_DefIsAllowingBlank.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank;
+                DefVal_GlobalAttr_DefIsForceEscaped.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped;
+                DefVal_GlobalAttr_DefInfo.Value = UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefInfo;
             }
 
             // privates
@@ -573,36 +636,71 @@ namespace EgsEcfEditorApp
             {
                 SuspendLayout();
 
+                AddSettingsItem(new TitleItem()
+                {
+                    Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupport_General_Header,
+                    TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
+                });
                 AddSettingsItem(InterFileChecksActive, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive,
                     TextRecources.EcfSettingsDialog_ToolTip_InterFileChecksActive, InterFileChecksActive_SettingChanged);
-                AddSettingsItem(ParameterKeyTemplateRoot, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParameterKeyTemplateRoot, 
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyTemplateRoot, ParameterKeyTemplateRoot_SettingChanged);
-                AddSettingsItem(ParameterKeyBlocks, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParameterKeyBlocks,
-                    TextRecources.EcfSettingsDialog_ToolTip_ParameterKeyBlocks, ParameterKeyBlocks_SettingChanged);
-                AddSettingsItem(DefaultDefinitionIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsOptional,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsOptional, DefaultDefinitionIsOptional_SettingChanged);
-                AddSettingsItem(DefaultDefinitionHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionHasValue,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionHasValue, DefaultDefinitionIsAllowingBlank_SettingChanged);
-                AddSettingsItem(DefaultDefinitionIsAllowingBlank, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIaAllowingBlank,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIaAllowingBlank, DefaultDefinitionIsAllowingBlank_SettingChanged);
-                AddSettingsItem(DefaultDefinitionIsForceEscaped, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionIsForceEscaped,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionIsForceEscaped, DefaultDefinitionIsForceEscaped_SettingChanged);
-                AddSettingsItem(DefaultDefinitionInfo, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefaultDefinitionInfo,
-                    TextRecources.EcfSettingsDialog_ToolTip_DefaultDefinitionInfo, DefaultDefinitionInfo_SettingChanged);
-                AddSpacer();
+
+                AddSettingsItem(new TitleItem()
+                {
+                    Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header,
+                    TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
+                });
+                AddSettingsItem(ParamKey_TemplateRoot, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot, 
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot, ParameterKeyTemplateRoot_SettingChanged);
+                AddSettingsItem(DefVal_Ingredient_DefIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional, DefVal_Ingredient_DefIsOptional_SettingChanged);
+                AddSettingsItem(DefVal_Ingredient_DefHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue, DefVal_Ingredient_DefHasValue_SettingChanged);
+                AddSettingsItem(DefVal_Ingredient_DefIsAllowingBlank, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank, DefVal_Ingredient_DefIsAllowingBlank_SettingChanged);
+                AddSettingsItem(DefVal_Ingredient_DefIsForceEscaped, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped, DefVal_Ingredient_DefIsForceEscaped_SettingChanged);
+                AddSettingsItem(DefVal_Ingredient_DefInfo, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo, DefVal_Ingredient_DefInfo_SettingChanged);
+
+                AddSettingsItem(new TitleItem()
+                {
+                    Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header,
+                    TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
+                });
+                AddSettingsItem(ParamKey_Blocks, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks,
+                    TextRecources.EcfSettingsDialog_ToolTip_ParamKey_Blocks, ParameterKeyBlocks_SettingChanged);
+
+                AddSettingsItem(new TitleItem()
+                {
+                    Text = TitleRecources.EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header,
+                    TagFont = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
+                });
+                AddSettingsItem(DefVal_GlobalParam_DefIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional, DefVal_GlobalParam_DefIsOptional_SettingChanged);
+                AddSettingsItem(DefVal_GlobalParam_DefHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue, DefVal_GlobalParam_DefHasValue_SettingChanged);
+                AddSettingsItem(DefVal_GlobalParam_DefIsAllowingBlank, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank, DefVal_GlobalParam_DefIsAllowingBlank_SettingChanged);
+                AddSettingsItem(DefVal_GlobalParam_DefIsForceEscaped, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped, DefVal_GlobalParam_DefIsForceEscaped_SettingChanged);
+                AddSettingsItem(DefVal_GlobalParam_DefInfo, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo, DefVal_GlobalParam_DefInfo_SettingChanged);
+                AddSettingsItem(DefVal_GlobalAttr_DefIsOptional, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional, DefVal_GlobalAttr_DefIsOptional_SettingChanged);
+                AddSettingsItem(DefVal_GlobalAttr_DefHasValue, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue, DefVal_GlobalAttr_DefHasValue_SettingChanged);
+                AddSettingsItem(DefVal_GlobalAttr_DefIsAllowingBlank, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank, DefVal_GlobalAttr_DefIsAllowingBlank_SettingChanged);
+                AddSettingsItem(DefVal_GlobalAttr_DefIsForceEscaped, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped, DefVal_GlobalAttr_DefIsForceEscaped_SettingChanged);
+                AddSettingsItem(DefVal_GlobalAttr_DefInfo, TitleRecources.EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo,
+                    TextRecources.EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo, DefVal_GlobalAttr_DefInfo_SettingChanged);
 
                 ResumeLayout(true);
             }
         }
         private class InfoPanel : SettingsPanel
         {
-            private TitleSettingsItem AppNameItem { get; } = new TitleSettingsItem();
-            private LogoSettingsItem LogoItem { get; } = new LogoSettingsItem();
-            private TextSettingsItem AuthorItem { get; } = new TextSettingsItem();
-            private TextSettingsItem VersionItem { get; } = new TextSettingsItem();
-            private LinkSettingsItem LicenseItem { get; } = new LinkSettingsItem();
-            private LinkSettingsItem ReadmeItem { get; } = new LinkSettingsItem();
-
             public InfoPanel(string idTag) : base(idTag, null)
             {
                 InitControls();
@@ -634,40 +732,48 @@ namespace EgsEcfEditorApp
             private void InitControls()
             {
                 SuspendLayout();
-                
-                AppNameItem.Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)
-                    .Cast<AssemblyTitleAttribute>().FirstOrDefault().Title;
-                AppNameItem.TagFont = new Font("Viner Hand ITC", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
 
-                LogoItem.Image = new Icon(IconRecources.Icon_AppBranding, 256, 256).ToBitmap();
-
-                AuthorItem.Text = TitleRecources.Generic_Author;
-                AuthorItem.NameTagAlign = ContentAlignment.MiddleRight;
-                AuthorItem.Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)
-                    .Cast<AssemblyCompanyAttribute>().FirstOrDefault().Company;
-
-                VersionItem.Text = TitleRecources.Generic_Version;
-                VersionItem.NameTagAlign = ContentAlignment.MiddleRight;
-                VersionItem.Value = Assembly.GetExecutingAssembly().GetName().Version.ToString(); ;
-
-                LicenseItem.Text = TitleRecources.Generic_License;
-                LicenseItem.NameTagAlign = ContentAlignment.MiddleRight;
-                LicenseItem.Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)
-                    .Cast<AssemblyCopyrightAttribute>().FirstOrDefault().Copyright;
-                LicenseItem.LinkClicked += LicenseItem_LinkClicked;
-
-                ReadmeItem.Text = TitleRecources.Generic_Manual;
-                ReadmeItem.NameTagAlign = ContentAlignment.MiddleRight;
-                ReadmeItem.Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false)
-                    .Cast<AssemblyConfigurationAttribute>().FirstOrDefault().Configuration;
-                ReadmeItem.LinkClicked += ReadmeItem_LinkClicked;
-
-                AddSettingsItem(AppNameItem);
-                AddSpacer(LogoItem);
-                AddSettingsItem(AuthorItem);
-                AddSettingsItem(VersionItem);
-                AddSettingsItem(LicenseItem);
-                AddSettingsItem(ReadmeItem);
+                AddSettingsItem(new TitleItem()
+                {
+                    Text = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)
+                        .Cast<AssemblyTitleAttribute>().FirstOrDefault().Title,
+                    TagFont = new Font("Viner Hand ITC", 20.25F, FontStyle.Bold, GraphicsUnit.Point),
+                });
+                AddSpacer(new LogoItem()
+                {
+                    Image = new Icon(IconRecources.Icon_AppBranding, 256, 256).ToBitmap(),
+                });
+                AddSettingsItem(new TextItem()
+                {
+                    Text = TitleRecources.Generic_Author,
+                    NameTagAlign = ContentAlignment.MiddleRight,
+                    Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)
+                        .Cast<AssemblyCompanyAttribute>().FirstOrDefault().Company,
+                });
+                AddSettingsItem(new TextItem()
+                {
+                    Text = TitleRecources.Generic_Version,
+                    NameTagAlign = ContentAlignment.MiddleRight,
+                    Value = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                });
+                LinkItem licenseItem = new LinkItem()
+                {
+                    Text = TitleRecources.Generic_License,
+                    NameTagAlign = ContentAlignment.MiddleRight,
+                    Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)
+                        .Cast<AssemblyCopyrightAttribute>().FirstOrDefault().Copyright,
+                };
+                licenseItem.LinkClicked += LicenseItem_LinkClicked;
+                AddSettingsItem(licenseItem);
+                LinkItem readmeItem = new LinkItem()
+                {
+                    Text = TitleRecources.Generic_Manual,
+                    NameTagAlign = ContentAlignment.MiddleRight,
+                    Value = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false)
+                        .Cast<AssemblyConfigurationAttribute>().FirstOrDefault().Configuration,
+                };
+                readmeItem.LinkClicked += ReadmeItem_LinkClicked;
+                AddSettingsItem(readmeItem);
 
                 ResumeLayout(true);
             }
@@ -730,11 +836,12 @@ namespace EgsEcfEditorApp
                 SuspendLayout();
 
                 AutoSize = true;
+                AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 ColumnCount = 2;
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
                 Controls.Add(NameTag, 0, 0);
-                Dock = DockStyle.Fill;
+                Dock = DockStyle.Top;
                 GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
                 RowCount = 1;
                 RowStyles.Add(new RowStyle());
@@ -756,7 +863,7 @@ namespace EgsEcfEditorApp
             protected abstract Font GetFont();
             protected abstract ContentAlignment GetDataTagAlign();
         }
-        private class TitleSettingsItem : SettingsTableItem
+        private class TitleItem : SettingsTableItem
         {
             public override bool IsEnabled
             {
@@ -770,7 +877,7 @@ namespace EgsEcfEditorApp
                 }
             }
 
-            public TitleSettingsItem() : base()
+            public TitleItem() : base()
             {
                 SetColumnSpan(NameTag, 2);
 
@@ -802,7 +909,7 @@ namespace EgsEcfEditorApp
                 return NameTag.TextAlign;
             }
         }
-        private class LogoSettingsItem : SettingsTableItem
+        private class LogoItem : SettingsTableItem
         {
             public override bool IsEnabled
             {
@@ -829,7 +936,7 @@ namespace EgsEcfEditorApp
 
             private PictureBox Logo { get; } = new PictureBox();
 
-            public LogoSettingsItem() : base()
+            public LogoItem() : base()
             {
                 Controls.Remove(NameTag);
 
@@ -863,7 +970,7 @@ namespace EgsEcfEditorApp
                 return NameTag.TextAlign;
             }
         }
-        private class TextSettingsItem : SettingsTableItem
+        private class TextItem : SettingsTableItem
         {
             public override bool IsEnabled
             {
@@ -890,7 +997,7 @@ namespace EgsEcfEditorApp
 
             private Label DataTag { get; } = new Label();
 
-            public TextSettingsItem() : base()
+            public TextItem() : base()
             {
                 Controls.Add(DataTag, 1, 0);
                 DataTag.AutoSize = true;
@@ -923,7 +1030,7 @@ namespace EgsEcfEditorApp
                 return DataTag.TextAlign;
             }
         }
-        private class LinkSettingsItem : SettingsTableItem
+        private class LinkItem : SettingsTableItem
         {
             public event LinkLabelLinkClickedEventHandler LinkClicked;
 
@@ -952,7 +1059,7 @@ namespace EgsEcfEditorApp
 
             private LinkLabel DataTag { get; } = new LinkLabel();
 
-            public LinkSettingsItem() : base()
+            public LinkItem() : base()
             {
                 Controls.Add(DataTag, 1, 0);
                 DataTag.AutoSize = true;
@@ -1375,6 +1482,5 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        
     }
 }

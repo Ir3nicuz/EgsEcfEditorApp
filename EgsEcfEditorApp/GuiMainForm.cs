@@ -700,8 +700,8 @@ namespace EgsEcfEditorApp
         }
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
-            List<EcfBlock> templateList = GetTemplatesByUser(GetOpenedFiles(),
-                UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
+            List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
+                sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
             if (templateList.Count < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
@@ -739,8 +739,8 @@ namespace EgsEcfEditorApp
                     return;
                 }
 
-                List<EcfBlock> templateList = GetTemplatesByUser(GetOpenedFiles(),
-                    UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
+                List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
+                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
                 if (templateList.Count < 1)
                 {
                     OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector;
@@ -1032,8 +1032,8 @@ namespace EgsEcfEditorApp
                 string messageText;
                 List<EgsEcfFile> openedFiles = GetOpenedFiles();
                 // get Templates from open files for the sourceItem
-                List<EcfBlock> templateList = GetTemplatesByUser(openedFiles,
-                    UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName, sourceItem);
+                List<EcfBlock> templateList = GetBlockListByNameOrParamValue(openedFiles, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
+                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
                 if (templateList.Count() < 1)
                 {
                     messageText = string.Format("{0}: {1}", TextRecources.ItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());

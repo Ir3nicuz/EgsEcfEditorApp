@@ -1492,4 +1492,12 @@ namespace EgsEcfEditorApp
             }
         }
     }
+    public static class SettingsConverter
+    {
+        public static IEnumerable<T> ToSeperated<T>(this string multiValueSetting)
+        {
+            return multiValueSetting?.Split(InternalSettings.Default.SettingsDialog_MultiValueSeperator)
+                .Select(value => (T)Convert.ChangeType(value.Trim(), typeof(T)));
+        }
+    }
 }

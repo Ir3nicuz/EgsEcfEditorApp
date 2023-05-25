@@ -80,5 +80,8 @@
     <Setting Name="EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="SettingsDialog_MultiValueSeperator" Type="System.Char" Scope="User">
+      <Value Profile="(Default)">,</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

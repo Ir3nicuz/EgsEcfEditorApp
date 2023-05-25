@@ -645,7 +645,7 @@ namespace EgsEcfEditorApp
         private void ShowTemplateUsers(EcfBlock sourceTemplate)
         {
             List<EcfBlock> userList = GetBlockListByParameterValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems),
-                true, true, sourceTemplate.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+                true, true, sourceTemplate.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
             ShowListingView(TextRecources.ItemHandlingSupport_AllElementsWithTemplate, sourceTemplate.BuildRootId(), userList);
         }
         private void ShowItemUsingTemplates(EcfBlock sourceItem)
@@ -677,13 +677,13 @@ namespace EgsEcfEditorApp
         private void ShowBlockUsingBlockGroups(EcfBlock sourceItem)
         {
             List<EcfBlock> blockGroupList = GetBlockListByParameterValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningBuildBlockGroups),
-                false, false, sourceItem.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks);
+                false, false, sourceItem.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_Blocks.ToSeperated<string>().ToArray());
             ShowListingView(TextRecources.ItemHandlingSupport_AllBlockGroupsWithBlock, sourceItem.BuildRootId(), blockGroupList);
         }
         private void ShowGlobalDefUsers(EcfBlock sourceGlobalDef)
         {
             List<EcfBlock> userList = GetBlockListByParameterValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
-                false, true, sourceGlobalDef.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef);
+                false, true, sourceGlobalDef.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray());
             ShowListingView(TextRecources.ItemHandlingSupport_AllElementsWithGlobalDef, sourceGlobalDef.BuildRootId(), userList);
         }
         private void ShowListingView(string searchTitle, string searchValue, List<EcfBlock> results)
@@ -701,7 +701,7 @@ namespace EgsEcfEditorApp
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
             List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+                sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
             if (templateList.Count < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
@@ -740,7 +740,7 @@ namespace EgsEcfEditorApp
                 }
 
                 List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
                 if (templateList.Count < 1)
                 {
                     OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector;
@@ -1033,7 +1033,7 @@ namespace EgsEcfEditorApp
                 List<EgsEcfFile> openedFiles = GetOpenedFiles();
                 // get Templates from open files for the sourceItem
                 List<EcfBlock> templateList = GetBlockListByNameOrParamValue(openedFiles, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
                 if (templateList.Count() < 1)
                 {
                     messageText = string.Format("{0}: {1}", TextRecources.ItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());
@@ -1073,7 +1073,7 @@ namespace EgsEcfEditorApp
                 }
                 // check cross usage of template
                 List<EcfBlock> userList = GetBlockListByParameterValue(openedFiles, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems),
-                    true, true, templateToRemove.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+                    true, true, templateToRemove.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
                 if (userList.Count() > 1)
                 {
                     List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", TitleRecources.Generic_Template,

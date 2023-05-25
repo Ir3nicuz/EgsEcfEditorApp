@@ -1014,23 +1014,20 @@ namespace EgsEcfParser
         {
             return GetBlockListByParameterKey(files, fileFilter, listRootBlocksOnly, parameter.Key);
         }
-        [Obsolete("users need params preparation")]
         public static List<EcfBlock> GetBlockListByParameterKey(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, bool listRootBlocksOnly, params string[] parameterKeys)
         {
-            return files.Where(fileFilter ?? (result => true)).SelectMany(file => listRootBlocksOnly ? file.GetItemList<EcfBlock>() : file.GetDeepItemList<EcfBlock>()
+            return files.Where(fileFilter ?? (result => true)).SelectMany(file => (listRootBlocksOnly ? file.GetItemList<EcfBlock>() : file.GetDeepItemList<EcfBlock>())
                 .Where(block => parameterKeys?.Any(key => block.HasParameter(key, false, listRootBlocksOnly, out _)) ?? false)).ToList();
         }
-        [Obsolete("users need params preparation")]
         public static List<EcfBlock> GetBlockListByParameterValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, 
             bool withBlockNameCheck, bool withInheritedParams, string parameterValue, params string[] parameterKeys)
         {
             return files.Where(fileFilter ?? (result => true)).SelectMany(file => file.GetDeepItemList<EcfBlock>())
-                .Where(block => (withBlockNameCheck && !string.Equals(block.GetName(), parameterValue)) ||
+                .Where(block => (withBlockNameCheck && string.Equals(block.GetName(), parameterValue)) ||
                     (parameterKeys?.Any(parameterName => block.HasParameter(parameterName, withInheritedParams, false, out EcfParameter parameter) && 
                         parameter.ContainsValue(parameterValue)) ?? false)
                 ).ToList();
         }
-        [Obsolete("users need params preparation")]
         public static List<EcfBlock> GetBlockListByNameOrParamValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, 
             EcfBlock sourceBlock, params string[] parameterKeysInSource)
         {

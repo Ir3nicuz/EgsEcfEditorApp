@@ -12,7 +12,7 @@ namespace EgsEcfEditorApp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
     internal sealed partial class InternalSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static InternalSettings defaultInstance = ((InternalSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new InternalSettings())));
@@ -332,6 +332,18 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["EgsEcfEditorApp_ParameterHandling_UnlockCostMinValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(",")]
+        public char SettingsDialog_MultiValueSeperator {
+            get {
+                return ((char)(this["SettingsDialog_MultiValueSeperator"]));
+            }
+            set {
+                this["SettingsDialog_MultiValueSeperator"] = value;
             }
         }
     }

@@ -1636,6 +1636,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All GlobalDefs inherited in item.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllGlobalDefsInheritedInItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllGlobalDefsInheritedInItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All items with parameter.
         /// </summary>
         internal static string ItemHandlingSupport_AllItemsWithParameter {

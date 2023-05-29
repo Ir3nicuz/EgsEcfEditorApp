@@ -628,6 +628,7 @@ namespace EgsEcfEditorApp
                 case ItemOperations.ListValueUsers: ShowValueUsers(evt.SourceItem as EcfParameter); break;
                 case ItemOperations.ListBlockUsingBlockGroups: ShowBlockUsingBlockGroups(evt.SourceItem as EcfBlock); break;
                 case ItemOperations.ListGlobalDefUsers: ShowGlobalDefUsers(evt.SourceItem as EcfBlock); break;
+                case ItemOperations.ListInheritedGlobalDefs: ShowInheritedGlobalDefs(evt.SourceItem as EcfBlock); break;
 
                 case ItemOperations.ShowLinkedTemplate: ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
                 
@@ -686,6 +687,12 @@ namespace EgsEcfEditorApp
                 false, true, sourceGlobalDef.GetName(), UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray());
             ShowListingView(TextRecources.ItemHandlingSupport_AllElementsWithGlobalDef, sourceGlobalDef.BuildRootId(), userList);
         }
+        private void ShowInheritedGlobalDefs(EcfBlock sourceItem)
+        {
+            List<EcfBlock> globalDefList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacros),
+                false, sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray());
+            ShowListingView(TextRecources.ItemHandlingSupport_AllGlobalDefsInheritedInItem, sourceItem.BuildRootId(), globalDefList);
+        }
         private void ShowListingView(string searchTitle, string searchValue, List<EcfBlock> results)
         {
             EcfItemListingDialog view = new EcfItemListingDialog();
@@ -701,7 +708,7 @@ namespace EgsEcfEditorApp
         private void ShowLinkedTemplate(EcfBlock sourceItem)
         {
             List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
+                true, sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
             if (templateList.Count < 1)
             {
                 MessageBox.Show(this, string.Format("{0}: {1}",
@@ -740,7 +747,7 @@ namespace EgsEcfEditorApp
                 }
 
                 List<EcfBlock> templateList = GetBlockListByNameOrParamValue(GetOpenedFiles(), new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
+                    true, sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
                 if (templateList.Count < 1)
                 {
                     OptionsDialog.Text = TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector;
@@ -1033,7 +1040,7 @@ namespace EgsEcfEditorApp
                 List<EgsEcfFile> openedFiles = GetOpenedFiles();
                 // get Templates from open files for the sourceItem
                 List<EcfBlock> templateList = GetBlockListByNameOrParamValue(openedFiles, new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
+                    true, sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
                 if (templateList.Count() < 1)
                 {
                     messageText = string.Format("{0}: {1}", TextRecources.ItemHandlingSupport_NoTemplatesForItem, sourceItem.BuildRootId());
@@ -1253,6 +1260,7 @@ namespace EcfFileViews
         private ToolStripMenuItem ContextItem_RemoveItem { get; set; } = null;
         private ToolStripSeparator ContextSeperator_ItemHandlingSupport { get; set; } = null;
         private ToolStripMenuItem ContextItem_ItemHandlingSupport { get; set; } = null;
+        private ToolStripSeparator ContextSeperator_TemplateItems { get; set; } = null;
         private ToolStripMenuItem ContextItem_ListTemplateUsers { get; set; } = null;
         private ToolStripMenuItem ContextItem_ListItemUsingTemplates { get; set; } = null;
         private ToolStripMenuItem ContextItem_ShowLinkedTemplate { get; set; } = null;
@@ -1265,6 +1273,7 @@ namespace EcfFileViews
         private ToolStripMenuItem ContextItem_ListValueUsers { get; set; } = null;
         private ToolStripSeparator ContextSeperator_GlobalDef { get; set; } = null;
         private ToolStripMenuItem ContextItem_AddToGlobalDefinition { get; set; } = null;
+        private ToolStripMenuItem ContextItem_ListInheritedGlobalDefs { get; set; } = null;
         private ToolStripMenuItem ContextItem_ListGlobalDefUsers { get; set; } = null;
 
         private ContextMenuStrip ErrorContextMenu { get; } = new ContextMenuStrip();
@@ -1376,6 +1385,7 @@ namespace EcfFileViews
             
             ContextSeperator_ItemHandlingSupport = new ToolStripSeparator();
             ContextItem_ItemHandlingSupport = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_MenuStripItem, IconRecources.Icon_LinkedFiles);
+            ContextSeperator_TemplateItems = new ToolStripSeparator();
             ContextItem_ListTemplateUsers = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListTemplateUsers, 
                 IconRecources.Icon_ListItems, (sender, evt) => ContextItem_ItemHandlingSupport_Clicked(ItemOperations.ListTemplateUsers));
             ContextItem_ListItemUsingTemplates = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListItemUsingTemplates, 
@@ -1391,7 +1401,9 @@ namespace EcfFileViews
             ContextSeperator_BlockGroups = new ToolStripSeparator();
             ContextItem_ListBlockUsingBlockGroups = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListBlockUsingBlockGroups, 
                 IconRecources.Icon_ListBlocks, (sender, evt) => ContextItem_ItemHandlingSupport_Clicked(ItemOperations.ListBlockUsingBlockGroups));
-            
+            ContextItem_ListInheritedGlobalDefs = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListInheritedGlobalDefs,
+                IconRecources.Icon_ListBlocks, (sender, evt) => ContextItem_ItemHandlingSupport_Clicked(ItemOperations.ListInheritedGlobalDefs));
+
             ContextItem_ListParameterUsers = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListParameterUsers, 
                 IconRecources.Icon_ListParameters, (sender, evt) => ContextItem_ItemHandlingSupport_Clicked(ItemOperations.ListParameterUsers));
             ContextItem_ListValueUsers  = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListValueUsers, 
@@ -1411,8 +1423,10 @@ namespace EcfFileViews
             ItemContextMenu.Items.Add(ContextItem_PasteAfter);
             ItemContextMenu.Items.Add(new ToolStripSeparator());
             ItemContextMenu.Items.Add(ContextItem_RemoveItem);
+
             ItemContextMenu.Items.Add(ContextSeperator_ItemHandlingSupport);
             ItemContextMenu.Items.Add(ContextItem_ItemHandlingSupport);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextSeperator_TemplateItems);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListTemplateUsers);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListItemUsingTemplates);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ShowLinkedTemplate);
@@ -1425,8 +1439,8 @@ namespace EcfFileViews
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListValueUsers);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextSeperator_GlobalDef);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_AddToGlobalDefinition);
+            ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListInheritedGlobalDefs);
             ContextItem_ItemHandlingSupport.DropDownItems.Add(ContextItem_ListGlobalDefUsers);
-            
         }
         private void InitErrorContextMenu()
         {
@@ -1636,13 +1650,20 @@ namespace EcfFileViews
             EcfBlock blockItem = item as EcfBlock;
             bool isBlock = blockItem != null;
             bool isRootBlock = isBlock && blockItem.IsRoot();
+            bool isParameter = item is EcfParameter;
+
             bool isTemplateBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningTemplates ?? false);
             bool isItemBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningItems ?? false);
             bool isBuildBlockBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningBuildBlocks ?? false);
             bool isGlobalDefBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningGlobalMacros ?? false);
-            bool isParameter = item is EcfParameter;
-            bool isGlobalParameterUser = isParameter && (item.EcfFile?.Definition?.IsDefiningGlobalMacroUsers ?? false);
-            bool isItemHandlingSupportUser = isTemplateBlock || isItemBlock || isBuildBlockBlock || isGlobalDefBlock || isParameter || isGlobalParameterUser;
+            bool isGlobalParameterUser = isBlock && (item.EcfFile?.Definition?.IsDefiningGlobalMacroUsers ?? false);
+            bool isGlobalParameterParameter = isParameter && (item.EcfFile?.Definition?.IsDefiningGlobalMacroUsers ?? false);
+
+            bool isAnyTemplateItem = isTemplateBlock || isItemBlock;
+            bool isAnyBuildBlockGroup = isBuildBlockBlock;
+            bool isAnyGlobalDef = isGlobalParameterUser || isGlobalDefBlock || isGlobalParameterParameter;
+
+            bool isItemHandlingSupportUser = isParameter || isAnyTemplateItem || isAnyBuildBlockGroup || isAnyGlobalDef;
 
             ContextItem_AddTo.Visible = isBlock;
             ContextItem_PasteTo.Visible = isBlock;
@@ -1650,8 +1671,9 @@ namespace EcfFileViews
             ContextSeperator_ItemHandlingSupport.Visible = isItemHandlingSupportUser;
             ContextItem_ItemHandlingSupport.Visible = isItemHandlingSupportUser;
 
-            ContextSeperator_BlockGroups.Visible = isBuildBlockBlock;
-            ContextSeperator_GlobalDef.Visible = isGlobalParameterUser || isGlobalDefBlock;
+            ContextSeperator_TemplateItems.Visible = isAnyTemplateItem;
+            ContextSeperator_BlockGroups.Visible = isAnyBuildBlockGroup;
+            ContextSeperator_GlobalDef.Visible = isAnyGlobalDef;
 
             ContextItem_ListTemplateUsers.Visible = isTemplateBlock;
             ContextItem_ListItemUsingTemplates.Visible = isItemBlock;
@@ -1663,7 +1685,8 @@ namespace EcfFileViews
             ContextItem_ListGlobalDefUsers.Visible = isGlobalDefBlock;
             ContextItem_ListParameterUsers.Visible = isParameter;
             ContextItem_ListValueUsers.Visible = isParameter;
-            ContextItem_AddToGlobalDefinition.Visible = isGlobalParameterUser;
+            ContextItem_ListInheritedGlobalDefs.Visible = isGlobalParameterUser;
+            ContextItem_AddToGlobalDefinition.Visible = isGlobalParameterParameter;
             
         }
         private void UpdateErrorContextMenu(EcfError error)
@@ -2153,6 +2176,7 @@ namespace EcfFileViews
                 ListValueUsers,
                 ListBlockUsingBlockGroups,
                 ListGlobalDefUsers,
+                ListInheritedGlobalDefs,
 
                 ShowLinkedTemplate,
 

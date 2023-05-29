@@ -642,6 +642,9 @@
   <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
     <value>All items with template</value>
   </data>
+  <data name="ItemHandlingSupport_AllGlobalDefsInheritedInItem" xml:space="preserve">
+    <value>All GlobalDefs inherited in item</value>
+  </data>
   <data name="ItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
     <value>All items with parameter</value>
   </data>

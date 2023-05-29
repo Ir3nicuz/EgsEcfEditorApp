@@ -673,7 +673,10 @@
     <value>List block using block groups</value>
   </data>
   <data name="ItemHandlingSupport_ListGlobalDefUsers" xml:space="preserve">
-    <value>List GlobalDef users</value>
+    <value>List global macro users</value>
+  </data>
+  <data name="ItemHandlingSupport_ListInheritedGlobalDefs" xml:space="preserve">
+    <value>List inherited global macros</value>
   </data>
   <data name="ItemHandlingSupport_ListItemUsingTemplates" xml:space="preserve">
     <value>List item using templates</value>

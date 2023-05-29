@@ -1028,8 +1028,8 @@ namespace EgsEcfParser
                         parameter.ContainsValue(parameterValue)) ?? false)
                 ).ToList();
         }
-        public static List<EcfBlock> GetBlockListByNameOrParamValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter, 
-            EcfBlock sourceBlock, params string[] parameterKeysInSource)
+        public static List<EcfBlock> GetBlockListByNameOrParamValue(List<EgsEcfFile> files, Func<EgsEcfFile, bool> fileFilter,
+            bool withBlockNameCheck, EcfBlock sourceBlock, params string[] parameterKeysInSource)
         {
             string blockName = sourceBlock.GetName();
             List<string> parameterValues = parameterKeysInSource?
@@ -1039,7 +1039,8 @@ namespace EgsEcfParser
                 .Where(listedBlock =>
                 {
                     string listedBlockName = listedBlock.GetName();
-                    return string.Equals(blockName, listedBlockName) || parameterValues.Any(parameterValue => string.Equals(parameterValue, listedBlockName));
+                    return (withBlockNameCheck && string.Equals(blockName, listedBlockName)) || 
+                        parameterValues.Any(parameterValue => string.Equals(parameterValue, listedBlockName));
                 }
                 )).ToList();
         }

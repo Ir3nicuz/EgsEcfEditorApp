@@ -634,10 +634,13 @@
     <value>Alle BlockGroups mit Bau Block</value>
   </data>
   <data name="ItemHandlingSupport_AllElementsWithGlobalDef" xml:space="preserve">
-    <value>All Elemente mit Global Makro</value>
+    <value>Alle Elemente mit Global Makro</value>
   </data>
   <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
     <value>Alle Elemente mit Template</value>
+  </data>
+  <data name="ItemHandlingSupport_AllGlobalDefsInheritedInItem" xml:space="preserve">
+    <value>Alle Global Makros vererbt in Element</value>
   </data>
   <data name="ItemHandlingSupport_AllItemsWithParameter" xml:space="preserve">
     <value>Alle Elemente mit Parameter</value>

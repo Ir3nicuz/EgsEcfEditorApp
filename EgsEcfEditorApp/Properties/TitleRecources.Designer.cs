@@ -1726,11 +1726,20 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List GlobalDef users.
+        ///   Looks up a localized string similar to List global macro users.
         /// </summary>
         internal static string ItemHandlingSupport_ListGlobalDefUsers {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_ListGlobalDefUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List inherited global macros.
+        /// </summary>
+        internal static string ItemHandlingSupport_ListInheritedGlobalDefs {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ListInheritedGlobalDefs", resourceCulture);
             }
         }
         

@@ -1663,6 +1663,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select option how to add the global macro.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddGlobalDefOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddGlobalDefOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add template.
         /// </summary>
         internal static string ItemHandlingSupport_AddTemplate {

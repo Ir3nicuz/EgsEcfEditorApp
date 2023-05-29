@@ -648,6 +648,9 @@
   <data name="ItemHandlingSupport_AddGlobalDef" xml:space="preserve">
     <value>Global Makro hinzufügen</value>
   </data>
+  <data name="ItemHandlingSupport_AddGlobalDefOptionSelector" xml:space="preserve">
+    <value>Option zum Hinzufügen des Global Makro auswählen</value>
+  </data>
   <data name="ItemHandlingSupport_AddTemplate" xml:space="preserve">
     <value>Template hinzufügen</value>
   </data>

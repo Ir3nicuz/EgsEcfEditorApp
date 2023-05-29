@@ -1030,12 +1030,12 @@ namespace EgsEcfParser
                 ).ToList();
         }
         public static List<EcfBlock> GetBlockListByNameOrParamValue(List<EgsEcfFile> files,
-            bool withBlockNameCheck, EcfBlock sourceBlock, params string[] parameterKeysInSource)
+            bool withBlockNameCheck, bool withInheritedParams, bool withSubParams, EcfBlock sourceBlock, params string[] parameterKeysInSource)
         {
             string blockName = sourceBlock.GetName();
             List<string> parameterValues = parameterKeysInSource?
-                .SelectMany(key => sourceBlock.HasParameter(key, true, false, out EcfParameter parameter) ? parameter.GetAllValues().ToList() : new List<string>())
-                .ToList() ?? new List<string>();
+                .SelectMany(key => sourceBlock.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter parameter) ? 
+                parameter.GetAllValues().ToList() : new List<string>()).ToList() ?? new List<string>();
             return files.SelectMany(file => file.GetDeepItemList<EcfBlock>()
                 .Where(listedBlock =>
                 {

@@ -1708,6 +1708,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The item has no global macro slot left.
+        /// </summary>
+        internal static string ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No global macro file is opened.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoGlobalDefFileOpened {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefFileOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No GlobalDef definition file found.
         /// </summary>
         internal static string ItemHandlingSupport_NoGlobalDefinitionFileFound {

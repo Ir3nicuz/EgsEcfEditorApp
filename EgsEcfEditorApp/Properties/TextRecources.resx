@@ -666,6 +666,12 @@
   <data name="ItemHandlingSupport_ElementHasAlreadyTemplate" xml:space="preserve">
     <value>The item has already a template attached</value>
   </data>
+  <data name="ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft" xml:space="preserve">
+    <value>The item has no global macro slot left</value>
+  </data>
+  <data name="ItemHandlingSupport_NoGlobalDefFileOpened" xml:space="preserve">
+    <value>No global macro file is opened</value>
+  </data>
   <data name="ItemHandlingSupport_NoGlobalDefinitionFileFound" xml:space="preserve">
     <value>No GlobalDef definition file found</value>
   </data>

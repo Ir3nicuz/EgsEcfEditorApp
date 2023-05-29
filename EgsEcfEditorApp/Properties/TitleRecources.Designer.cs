@@ -1798,6 +1798,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select option how to remove the template.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveTemplateOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveTemplateOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show linked template.
         /// </summary>
         internal static string ItemHandlingSupport_ShowLinkedTemplate {

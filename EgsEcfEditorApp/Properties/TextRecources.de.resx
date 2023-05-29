@@ -672,9 +672,6 @@
   <data name="ItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
     <value>Keine Templates für Item</value>
   </data>
-  <data name="ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion" xml:space="preserve">
-    <value>Template nur entfernen (Ja) oder komplett löschen (Nein)?</value>
-  </data>
   <data name="ItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
     <value>Entfernen des Templates fehlgeschlagen</value>
   </data>

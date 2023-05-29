@@ -1735,15 +1735,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only remove template (Yes) or delete completely (No)?.
-        /// </summary>
-        internal static string ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion {
-            get {
-                return ResourceManager.GetString("ItemHandlingSupport_OnlyRemoveOrDeleteTemplateQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove template failed.
         /// </summary>
         internal static string ItemHandlingSupport_RemoveTemplateFailed {

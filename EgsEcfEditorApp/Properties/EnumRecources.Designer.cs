@@ -88,47 +88,67 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new template as copy from existing.
+        ///   Looks up a localized string similar to Create new element as copy from existing.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_CreateNewAsCopy {
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_AddDependencyOptions_CreateNewAsCopy {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsCopy", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.CreateNewAsCopy", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new empty template.
+        ///   Looks up a localized string similar to Create new empty element.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_CreateNewAsEmpty {
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_AddDependencyOptions_CreateNewAsEmpty {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsEmpty", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.CreateNewAsEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select existing template from list.
+        ///   Looks up a localized string similar to Select existing element from list.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddTemplateEditOptions_SelectExisting {
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_AddDependencyOptions_SelectExisting {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.SelectExisting", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Add to all Definition files.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddToDefinitionOptions_AllDefinitions {
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_AddToDefinitionOptions_AllDefinitions {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.AllDefinitions", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+AddToDefinitionOptions.AllDefinitions", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Add to specific Definition file.
         /// </summary>
-        internal static string EgsEcfEditorApp_GuiMainForm_AddToDefinitionOptions_SelectDefinition {
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_AddToDefinitionOptions_SelectDefinition {
             get {
-                return ResourceManager.GetString("EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.SelectDefinition", resourceCulture);
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+AddToDefinitionOptions.SelectDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the item completely.
+        /// </summary>
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_RemoveDependencyOptions_DeleteItemComplete {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+RemoveDependencyOptions.DeleteItemComplete" +
+                        "", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove only the link from this item.
+        /// </summary>
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_RemoveDependencyOptions_RemoveLinkToItemOnly {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+RemoveDependencyOptions.RemoveLinkToItemOn" +
+                        "ly", resourceCulture);
             }
         }
         

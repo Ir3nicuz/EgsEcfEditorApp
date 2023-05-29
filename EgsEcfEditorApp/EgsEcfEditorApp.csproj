@@ -89,6 +89,7 @@
     <Compile Include="EcfItemEditingDialog.Designer.cs">
       <DependentUpon>EcfItemEditingDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EcfItemHandlingSupport.cs" />
     <Compile Include="EcfItemListingDialog.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -126,20 +126,26 @@
   <data name="EcfFileViewTools.EcfStructureFilter+SelectableItems.Parameters" xml:space="preserve">
     <value>Parameters</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsCopy" xml:space="preserve">
-    <value>Create new template as copy from existing</value>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.CreateNewAsCopy" xml:space="preserve">
+    <value>Create new element as copy from existing</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.CreateNewAsEmpty" xml:space="preserve">
-    <value>Create new empty template</value>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.CreateNewAsEmpty" xml:space="preserve">
+    <value>Create new empty element</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddTemplateEditOptions.SelectExisting" xml:space="preserve">
-    <value>Select existing template from list</value>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddDependencyOptions.SelectExisting" xml:space="preserve">
+    <value>Select existing element from list</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.AllDefinitions" xml:space="preserve">
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddToDefinitionOptions.AllDefinitions" xml:space="preserve">
     <value>Add to all Definition files</value>
   </data>
-  <data name="EgsEcfEditorApp.GuiMainForm+AddToDefinitionOptions.SelectDefinition" xml:space="preserve">
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddToDefinitionOptions.SelectDefinition" xml:space="preserve">
     <value>Add to specific Definition file</value>
+  </data>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+RemoveDependencyOptions.DeleteItemComplete" xml:space="preserve">
+    <value>Delete the item completely</value>
+  </data>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+RemoveDependencyOptions.RemoveLinkToItemOnly" xml:space="preserve">
+    <value>Remove only the link from this item</value>
   </data>
   <data name="EgsEcfParser.EcfDependencies.IsInheritedBy" xml:space="preserve">
     <value>is inherited by</value>

@@ -1636,6 +1636,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All global macros for item.
+        /// </summary>
+        internal static string ItemHandlingSupport_AllGlobalDefsForItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AllGlobalDefsForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All GlobalDefs inherited in item.
         /// </summary>
         internal static string ItemHandlingSupport_AllGlobalDefsInheritedInItem {
@@ -1708,6 +1717,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No global macros for item.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoGlobalDefsForItem {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefsForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No template definition file found.
         /// </summary>
         internal static string ItemHandlingSupport_NoTemplateDefinitionFileFound {
@@ -1731,6 +1749,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_NoTemplatesForItem {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_NoTemplatesForItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove global macro failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveGlobalDefFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveGlobalDefFailed", resourceCulture);
             }
         }
         

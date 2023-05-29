@@ -209,6 +209,19 @@ namespace EgsEcfEditorApp
                 ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddToTemplateDefinitionFailed, ex);
             }
         }
+        public void AddGlobalDefToItem(EcfBlock sourceItem)
+        {
+            try
+            {
+                
+
+
+            }
+            catch (Exception ex)
+            {
+                ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddTemplateFailed, ex);
+            }
+        }
         public void AddItemToGlobalDefinition(EcfParameter sourceItem)
         {
             try
@@ -269,12 +282,37 @@ namespace EgsEcfEditorApp
                     templateToRemove, true, true, out List <EcfBlock> userList, parameterKeys)) { return; }
 
                 RemoveDependencyFromItem_DeleteItem(templateToRemove, userList, templateParameters);
-                ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
-                RemoveDependencyFromItem_ShowReport(templateToRemove);
+                RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
             {
                 ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_RemoveTemplateFailed, ex);
+            }
+        }
+        public void RemoveGlobalDefFromItem(EcfBlock sourceItem)
+        {
+            try
+            {
+                string[] parameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray();
+
+                if (!RemoveDependencyFromItem_TryFindTargetItems(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacros),
+                    sourceItem, false, TextRecources.ItemHandlingSupport_NoGlobalDefsForItem, out List<EcfBlock> globalDefList, parameterKeys)) { return; }
+
+                if (!RemoveDependencyFromItem_TryGetTargetItem(globalDefList, sourceItem,
+                    TextRecources.ItemHandlingSupport_AllGlobalDefsForItem, out EcfBlock globalDefToRemove)) { return; }
+
+                if (RemoveDependencyFromItem_OnlyRemoveLink(sourceItem, globalDefToRemove, TitleRecources.ItemHandlingSupport_RemoveGlobalDefOptionSelector,
+                    out List<EcfParameter> globalDefParameters, parameterKeys)) { return; }
+
+                if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
+                    globalDefToRemove, false, true, out List<EcfBlock> userList, parameterKeys)) { return; }
+
+                RemoveDependencyFromItem_DeleteItem(globalDefToRemove, userList, globalDefParameters);
+                RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
+            }
+            catch (Exception ex)
+            {
+                ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_RemoveGlobalDefFailed, ex);
             }
         }
 
@@ -352,7 +390,7 @@ namespace EgsEcfEditorApp
             selectedItem = ItemsDialog.SelectedItem.Item as EcfBlock;
             return true;
         }
-        private EcfBlock AddDependencyToItem_CreateEmptyTemplate(EcfBlock sourceItem, SelectorItem[] presentFileItems)
+        private EcfBlock AddDependencyToItem_CreateEmptyTemplate(string newItemName, SelectorItem[] presentFileItems)
         {
             EgsEcfFile templateFile = (EgsEcfFile)presentFileItems.FirstOrDefault().Item;
 
@@ -370,7 +408,7 @@ namespace EgsEcfEditorApp
                     templateFile.Definition.RootBlockTypes.FirstOrDefault().Value,
                     templateFile.Definition.BlockTypePostMarks.FirstOrDefault().Value);
             }
-            itemToAddTemplate.SetName(sourceItem.GetName());
+            itemToAddTemplate.SetName(newItemName);
             return itemToAddTemplate;
         }
         private bool AddDependencyToItem_TryEditAndInsertItem(EcfBlock itemToAdd, SelectorItem[] presentFileItems, string fileSelectorTitle)
@@ -389,6 +427,7 @@ namespace EgsEcfEditorApp
             if (EditItemDialog.ShowDialog(ParentForm, ParentForm.GetOpenedFiles(), targetFile, itemToAdd) != DialogResult.OK) { return false; }
             itemToAdd.Revalidate();
             targetFile.AddItem(itemToAdd);
+            ParentForm.GetTabPage(targetFile)?.UpdateAllViews();
             return true;
         }
         private void AddDependencyToItem_ShowReport(EcfBlock addedItem, EcfBlock targetItem)
@@ -415,13 +454,13 @@ namespace EgsEcfEditorApp
             itemToRemove = null;
             if (itemsToRemove.Count() > 1)
             {
-                EcfItemListingDialog templateSelector = new EcfItemListingDialog();
+                EcfItemListingDialog itemSelector = new EcfItemListingDialog();
                 string messageText = string.Format("{0}: {1}", itemSelectorTitle, sourceItem.BuildRootId());
-                if (templateSelector.ShowDialog(ParentForm, messageText, itemsToRemove) != DialogResult.OK)
+                if (itemSelector.ShowDialog(ParentForm, messageText, itemsToRemove) != DialogResult.OK)
                 {
                     return false;
                 }
-                itemToRemove = templateSelector.SelectedStructureItem as EcfBlock;
+                itemToRemove = itemSelector.SelectedStructureItem as EcfBlock;
             }
             else
             {
@@ -453,10 +492,8 @@ namespace EgsEcfEditorApp
                         parameter.ClearValues();
                         parameter.AddValue(string.Empty);
                     }
-
-                    string messageText = string.Format("{2} {0} {3} {4} {1}!", itemToRemove.GetName(), sourceItem.GetName(),
-                        itemToRemove.DataType, TextRecources.Generic_RemovedFrom, TitleRecources.Generic_Item);
-                    MessageBox.Show(ParentForm, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
+                    RemoveDependencyFromItem_ShowReport(itemToRemove, sourceItem.GetName(), TitleRecources.Generic_Item);
                     return true;
                 }
             }
@@ -479,7 +516,10 @@ namespace EgsEcfEditorApp
         }
         private void RemoveDependencyFromItem_DeleteItem(EcfBlock itemToRemove, List<EcfBlock> userList, List<EcfParameter> parametersWithItem)
         {
+            HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
+
             itemToRemove.EcfFile.RemoveItem(itemToRemove);
+            changedFiles.Add(itemToRemove.EcfFile);
             userList.ForEach(user =>
             {
                 parametersWithItem.ForEach(parameter =>
@@ -488,16 +528,22 @@ namespace EgsEcfEditorApp
                     parameterToRemove.ClearValues();
                     parameterToRemove.AddValue(string.Empty);
                 });
+                changedFiles.Add(user.EcfFile);
             });
+
+            foreach (EgsEcfFile file in changedFiles)
+            {
+                ParentForm.GetTabPage(file)?.UpdateAllViews();
+            }
         }
-        private void RemoveDependencyFromItem_ShowReport(EcfBlock itemToRemove)
+        private void RemoveDependencyFromItem_ShowReport(EcfBlock itemToRemove, string changedItemName, string changedItemType)
         {
-            string messageText = string.Format("{2} {0} {3} {4} {1}!", itemToRemove.GetName(), itemToRemove.EcfFile.FileName,
-                    itemToRemove.DataType, TextRecources.Generic_RemovedFrom, TitleRecources.Generic_File);
+            string messageText = string.Format("{2} {0} {3} {4} {1}!", itemToRemove.GetName(), changedItemName,
+                    itemToRemove.DataType, TextRecources.Generic_RemovedFrom, changedItemType);
             MessageBox.Show(ParentForm, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // privatey for definition handling
+        // privates for definition handling
         private bool AddItemToDefinition_TryGetFiles(string noFileMessage, string optionSelectorTitle,
             out List<FormatDefinition> definitions, Func<FormatDefinition, bool> filter = null)
         {
@@ -609,6 +655,7 @@ namespace EgsEcfEditorApp
 
             EcfBlock templateToAdd = new EcfBlock(templateToCopy);
             templateToAdd.SetName(sourceItem.GetName());
+
             if (!AddDependencyToItem_TryEditAndInsertItem(templateToAdd, presentTemplateFiles, 
                 TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector)) { return; }
 
@@ -618,7 +665,7 @@ namespace EgsEcfEditorApp
         }
         private void AddTemplateToItem_CreateNew(EcfBlock sourceItem, SelectorItem[] presentTemplateFiles)
         {
-            EcfBlock templateToAdd = AddDependencyToItem_CreateEmptyTemplate(sourceItem, presentTemplateFiles);
+            EcfBlock templateToAdd = AddDependencyToItem_CreateEmptyTemplate(sourceItem.GetName(), presentTemplateFiles);
 
             if (!AddDependencyToItem_TryEditAndInsertItem(templateToAdd, presentTemplateFiles, 
                 TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector)) { return; }
@@ -627,6 +674,7 @@ namespace EgsEcfEditorApp
             AddDependencyToItem_ShowReport(templateToAdd, sourceItem);
             ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
         }
+        [Obsolete("genericable?")]
         private void AddTemplateToItem_UpdateTemplateRoot(EcfBlock templateToAdd, EcfBlock targetItem)
         {
             EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);

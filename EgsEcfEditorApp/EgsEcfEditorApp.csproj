@@ -374,6 +374,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon_AppBranding.ico" />
+    <None Include="Resources\Icon_AddGlobalDef.png" />
+    <None Include="Resources\Icon_DeleteGlobalDef.png" />
+    <None Include="Resources\Icon_ListGlobalDefs.png" />
     <None Include="Resources\Icon_ListBlocks.png" />
     <None Include="Resources\Icon_AddToDefinition.png" />
     <None Include="Resources\Icon_LinkedFiles.png" />

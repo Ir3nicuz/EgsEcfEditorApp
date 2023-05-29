@@ -642,6 +642,9 @@
   <data name="ItemHandlingSupport_AllElementsWithTemplate" xml:space="preserve">
     <value>All items with template</value>
   </data>
+  <data name="ItemHandlingSupport_AllGlobalDefsForItem" xml:space="preserve">
+    <value>All global macros for item</value>
+  </data>
   <data name="ItemHandlingSupport_AllGlobalDefsInheritedInItem" xml:space="preserve">
     <value>All GlobalDefs inherited in item</value>
   </data>
@@ -666,6 +669,9 @@
   <data name="ItemHandlingSupport_NoGlobalDefinitionFileFound" xml:space="preserve">
     <value>No GlobalDef definition file found</value>
   </data>
+  <data name="ItemHandlingSupport_NoGlobalDefsForItem" xml:space="preserve">
+    <value>No global macros for item</value>
+  </data>
   <data name="ItemHandlingSupport_NoTemplateDefinitionFileFound" xml:space="preserve">
     <value>No template definition file found</value>
   </data>
@@ -674,6 +680,9 @@
   </data>
   <data name="ItemHandlingSupport_NoTemplatesForItem" xml:space="preserve">
     <value>No templates for item</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveGlobalDefFailed" xml:space="preserve">
+    <value>Remove global macro failed</value>
   </data>
   <data name="ItemHandlingSupport_RemoveTemplateFailed" xml:space="preserve">
     <value>Remove template failed</value>

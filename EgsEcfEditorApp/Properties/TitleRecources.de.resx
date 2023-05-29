@@ -645,6 +645,9 @@
   <data name="ItemHandlingSupport_AddExistingTemplateSelector" xml:space="preserve">
     <value>Vorhandenes Template zum Hinzufügen wählen</value>
   </data>
+  <data name="ItemHandlingSupport_AddGlobalDef" xml:space="preserve">
+    <value>Global Makro hinzufügen</value>
+  </data>
   <data name="ItemHandlingSupport_AddTemplate" xml:space="preserve">
     <value>Template hinzufügen</value>
   </data>
@@ -689,6 +692,12 @@
   </data>
   <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
     <value>Item Handling Suppport</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveGlobalDef" xml:space="preserve">
+    <value>Global Makro entfernen</value>
+  </data>
+  <data name="ItemHandlingSupport_RemoveGlobalDefOptionSelector" xml:space="preserve">
+    <value>Option zum Entfernen des Global Makro auswählen</value>
   </data>
   <data name="ItemHandlingSupport_RemoveTemplate" xml:space="preserve">
     <value>Template entfernen</value>

@@ -73,6 +73,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_AddGlobalDef {
+            get {
+                object obj = ResourceManager.GetObject("Icon_AddGlobalDef", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_AddTemplate {
             get {
                 object obj = ResourceManager.GetObject("Icon_AddTemplate", resourceCulture);
@@ -253,6 +263,16 @@ namespace EgsEcfEditorApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Icon_DeleteGlobalDef {
+            get {
+                object obj = ResourceManager.GetObject("Icon_DeleteGlobalDef", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Icon_DeleteTemplate {
             get {
                 object obj = ResourceManager.GetObject("Icon_DeleteTemplate", resourceCulture);
@@ -276,6 +296,16 @@ namespace EgsEcfEditorApp.Properties {
         internal static System.Drawing.Bitmap Icon_ListBlocks {
             get {
                 object obj = ResourceManager.GetObject("Icon_ListBlocks", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_ListGlobalDefs {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ListGlobalDefs", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1654,6 +1654,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add global macro.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddGlobalDef {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddGlobalDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add template.
         /// </summary>
         internal static string ItemHandlingSupport_AddTemplate {
@@ -1785,6 +1794,24 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_MenuStripItem {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_MenuStripItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove global macro.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveGlobalDef {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveGlobalDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select option how to remove the global macro.
+        /// </summary>
+        internal static string ItemHandlingSupport_RemoveGlobalDefOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveGlobalDefOptionSelector", resourceCulture);
             }
         }
         

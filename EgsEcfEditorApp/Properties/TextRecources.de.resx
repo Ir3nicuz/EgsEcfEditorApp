@@ -624,6 +624,9 @@
   <data name="Generic_RemovedFrom" xml:space="preserve">
     <value>entfernt von</value>
   </data>
+  <data name="ItemHandlingSupport_AddGlobalDefFailed" xml:space="preserve">
+    <value>Hinzufügen des Global Makro fehlgeschlagen</value>
+  </data>
   <data name="ItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
     <value>Hinzufügen des Templates fehlgeschlagen</value>
   </data>

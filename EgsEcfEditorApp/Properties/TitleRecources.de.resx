@@ -642,6 +642,9 @@
   <data name="Generic_Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="ItemHandlingSupport_AddExistingGlobalDefSelector" xml:space="preserve">
+    <value>Vorhandenes Global Makro zum Hinzufügen wählen</value>
+  </data>
   <data name="ItemHandlingSupport_AddExistingTemplateSelector" xml:space="preserve">
     <value>Vorhandenes Template zum Hinzufügen wählen</value>
   </data>
@@ -651,11 +654,17 @@
   <data name="ItemHandlingSupport_AddGlobalDefOptionSelector" xml:space="preserve">
     <value>Option zum Hinzufügen des Global Makro auswählen</value>
   </data>
+  <data name="ItemHandlingSupport_AddGlobalDefParameterSelector" xml:space="preserve">
+    <value>Parameter zum Hinzufügen des Global Makro auswählen</value>
+  </data>
   <data name="ItemHandlingSupport_AddTemplate" xml:space="preserve">
     <value>Template hinzufügen</value>
   </data>
   <data name="ItemHandlingSupport_AddTemplateOptionSelector" xml:space="preserve">
     <value>Option zum Hinzufügen des Template auswählen</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplateParameterSelector" xml:space="preserve">
+    <value>Parameter zum Hinzufügen des Template auswählen</value>
   </data>
   <data name="ItemHandlingSupport_AddToGlobalDefinition" xml:space="preserve">
     <value>Zu GlobalDef Definition hinzufügen</value>
@@ -668,6 +677,9 @@
   </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
     <value>Option zum Hinzufügen zur Template Definition wählen</value>
+  </data>
+  <data name="ItemHandlingSupport_CreateFromCopyGlobalDefSelector" xml:space="preserve">
+    <value>Vorhandenes Global Makro zum Kopieren wählen</value>
   </data>
   <data name="ItemHandlingSupport_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Vorhandenes Template zum Kopieren wählen</value>
@@ -710,6 +722,9 @@
   </data>
   <data name="ItemHandlingSupport_ShowLinkedTemplate" xml:space="preserve">
     <value>Zeige verknüpftes Template</value>
+  </data>
+  <data name="ItemHandlingSupport_TargetGlobalDefFileSelector" xml:space="preserve">
+    <value>Wähle Global Makro Ziel Datei</value>
   </data>
   <data name="ItemHandlingSupport_TargetTemplateFileSelector" xml:space="preserve">
     <value>Wähle Template Ziel Datei </value>

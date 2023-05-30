@@ -1645,6 +1645,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select existing global macro to be attached.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddExistingGlobalDefSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddExistingGlobalDefSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select existing template to be attached.
         /// </summary>
         internal static string ItemHandlingSupport_AddExistingTemplateSelector {
@@ -1672,6 +1681,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select parameter used forglobal macro adding.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddGlobalDefParameterSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddGlobalDefParameterSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add template.
         /// </summary>
         internal static string ItemHandlingSupport_AddTemplate {
@@ -1686,6 +1704,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_AddTemplateOptionSelector {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_AddTemplateOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select parameter used for template adding.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddTemplateParameterSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddTemplateParameterSelector", resourceCulture);
             }
         }
         
@@ -1722,6 +1749,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_AddToTemplateDefinitionOptionSelector {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_AddToTemplateDefinitionOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select existing global macro to be copied.
+        /// </summary>
+        internal static string ItemHandlingSupport_CreateFromCopyGlobalDefSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_CreateFromCopyGlobalDefSelector", resourceCulture);
             }
         }
         
@@ -1848,6 +1884,15 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_ShowLinkedTemplate {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_ShowLinkedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select target global macro file.
+        /// </summary>
+        internal static string ItemHandlingSupport_TargetGlobalDefFileSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_TargetGlobalDefFileSelector", resourceCulture);
             }
         }
         

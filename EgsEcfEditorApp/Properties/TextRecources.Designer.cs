@@ -1591,6 +1591,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add global macro failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddGlobalDefFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddGlobalDefFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add template failed.
         /// </summary>
         internal static string ItemHandlingSupport_AddTemplateFailed {

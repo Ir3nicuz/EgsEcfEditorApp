@@ -158,22 +158,24 @@ namespace EgsEcfEditorApp
             try
             {
                 if (!AddDependencyToItem_TryFindTargetFiles(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    TextRecources.ItemHandlingSupport_NoTemplateFileOpened, out SelectorItem[] presentTemplateFiles)) { return; }
+                    TextRecources.ItemHandlingSupport_NoTemplateFileOpened, out SelectorItem[] useableFileItems)) { return; }
 
                 string[] allParameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray();
-                List <EcfBlock> templateList = GetBlockListByNameOrParamValue(presentTemplateFiles.Select(item => item.Item as EgsEcfFile).ToList(),
-                    true, false, false, sourceItem, allParameterKeys);
-                List<string> useableParameterKeys = AddDependencyToItem_GetUseableParameterKeys(allParameterKeys, false, false, sourceItem);
-                if (templateList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
-                {
-                    AddDependencyToItem_PerformSelectedOption(TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector, 
-                        () => AddTemplateToItem_SelectFromExisting(sourceItem, useableParameterKeys), 
-                        () => AddTemplateToItem_CreateCopy(sourceItem, useableParameterKeys, presentTemplateFiles), 
-                        () => AddTemplateToItem_CreateNew(sourceItem, useableParameterKeys, presentTemplateFiles));
-                    return;
-                }
-                MessageBox.Show(ParentForm, TextRecources.ItemHandlingSupport_ElementHasAlreadyTemplate,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (!AddDependencyToItem_TryPrepareAddOperation(allParameterKeys, true, false, false, sourceItem, useableFileItems, 
+                    out AddDependencyOptions? selectedOption, out string selectedParameterKey,
+                    TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector,
+                    TitleRecources.ItemHandlingSupport_AddTemplateParameterSelector,
+                    TextRecources.ItemHandlingSupport_ElementHasAlreadyTemplate))
+                { return; }
+
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, sourceItem.GetName(), useableFileItems, out EcfBlock itemToAdd,
+                    TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector,
+                    TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector,
+                    TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector))
+                { return; }
+
+                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey);
+                AddDependencyToItem_ShowReport(itemToAdd, sourceItem);
             }
             catch (Exception ex)
             {
@@ -216,26 +218,28 @@ namespace EgsEcfEditorApp
             try
             {
                 if (!AddDependencyToItem_TryFindTargetFiles(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacros),
-                    TextRecources.ItemHandlingSupport_NoGlobalDefFileOpened, out SelectorItem[] presentGlobalDefFiles)) { return; }
+                    TextRecources.ItemHandlingSupport_NoGlobalDefFileOpened, out SelectorItem[] useableFileItems)) { return; }
 
                 string[] allParameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray();
-                List<EcfBlock> globalDefList = GetBlockListByNameOrParamValue(presentGlobalDefFiles.Select(item => item.Item as EgsEcfFile).ToList(),
-                    false, false, false, sourceItem, allParameterKeys);
-                List<string> useableParameterKeys = AddDependencyToItem_GetUseableParameterKeys(allParameterKeys, false, false, sourceItem);
-                if (globalDefList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
-                {
-                    AddDependencyToItem_PerformSelectedOption(TitleRecources.ItemHandlingSupport_AddGlobalDefOptionSelector,
-                        () => AddGlobalDefToItem_SelectFromExisting(sourceItem, useableParameterKeys),
-                        () => AddGlobalDefToItem_CreateCopy(sourceItem, useableParameterKeys, presentGlobalDefFiles),
-                        () => AddGlobalDefToItem_CreateNew(sourceItem, useableParameterKeys, presentGlobalDefFiles));
-                    return;
-                }
-                MessageBox.Show(ParentForm, TextRecources.ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft,
-                    TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (!AddDependencyToItem_TryPrepareAddOperation(allParameterKeys, false, false, false, sourceItem, useableFileItems, 
+                    out AddDependencyOptions? selectedOption, out string selectedParameterKey, 
+                    TitleRecources.ItemHandlingSupport_AddGlobalDefOptionSelector,
+                    TitleRecources.ItemHandlingSupport_AddGlobalDefParameterSelector, 
+                    TextRecources.ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft))
+                { return; }
+
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, "newMacro", useableFileItems, out EcfBlock itemToAdd,
+                    TitleRecources.ItemHandlingSupport_AddExistingGlobalDefSelector,
+                    TitleRecources.ItemHandlingSupport_CreateFromCopyGlobalDefSelector,
+                    TitleRecources.ItemHandlingSupport_TargetGlobalDefFileSelector))
+                { return; }
+
+                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey);
+                AddDependencyToItem_ShowReport(itemToAdd, sourceItem);
             }
             catch (Exception ex)
             {
-                ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddTemplateFailed, ex);
+                ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddGlobalDefFailed, ex);
             }
         }
         public void AddItemToGlobalDefinition(EcfParameter sourceItem)
@@ -382,24 +386,56 @@ namespace EgsEcfEditorApp
            return allParameterKeys.Length < 2 ? allParameterKeys.ToList() :
                 allParameterKeys.Where(key => sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter _)).ToList();
         }
-        private void AddDependencyToItem_PerformSelectedOption(string selectorTitle,
-            Action selectExistingOperation, Action createNewAsCopyOperation, Action createNewAsEmptyOperation)
+        private bool AddDependencyToItem_TryPrepareAddOperation(string[] allParameterKeys, bool withBlockNameCheck, bool withInheritedParams, bool withSubParams, 
+            EcfBlock sourceItem, SelectorItem[] useableFileItems, out AddDependencyOptions? selectedOption, out string selectedParameterKey,
+            string optionSelectorTitle, string parameterSelectorTitle, string addingNotAllowedMessage)
         {
-            OptionsDialog.Text = selectorTitle;
-            if (OptionsDialog.ShowDialog(ParentForm, AddDependencyOptionItems) != DialogResult.OK) { return; }
-            switch ((AddDependencyOptions)OptionsDialog.SelectedOption.Item)
+            selectedOption = null;
+
+            List<EcfBlock> blockList = GetBlockListByNameOrParamValue(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
+                withBlockNameCheck, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
+            List<string> useableParameterKeys = AddDependencyToItem_GetUseableParameterKeys(allParameterKeys, withInheritedParams, withSubParams, sourceItem);
+            
+            if (blockList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
             {
-                case AddDependencyOptions.SelectExisting: selectExistingOperation(); break;
-                case AddDependencyOptions.CreateNewAsCopy: createNewAsCopyOperation(); break;
-                case AddDependencyOptions.CreateNewAsEmpty: createNewAsEmptyOperation(); break;
-                default: break;
+                OptionsDialog.Text = optionSelectorTitle;
+                if (OptionsDialog.ShowDialog(ParentForm, AddDependencyOptionItems) != DialogResult.OK) { return false; }
+                selectedOption = (AddDependencyOptions)OptionsDialog.SelectedOption.Item;
+                return true;
+            }
+            MessageBox.Show(ParentForm, addingNotAllowedMessage, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            return false;
+        }
+        private bool AddDependencyToItem_TryPerformAddOperation(AddDependencyOptions? selectedOption, string newItemDefaultName, 
+            SelectorItem[] useableFileItems, out EcfBlock itemToAdd,
+            string addExistingSeletorTitle, string CreateFromCopySelectorTitle, string targetFileSelectorTitle)
+        {
+            itemToAdd = null;
+            switch (selectedOption)
+            {
+                case AddDependencyOptions.SelectExisting:
+                    if (!AddDependencyToItem_TrySelectItem(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
+                        addExistingSeletorTitle, out itemToAdd)) { return false; }
+                    return true;
+                case AddDependencyOptions.CreateNewAsCopy:
+                    if (!AddDependencyToItem_TrySelectItem(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
+                        CreateFromCopySelectorTitle, out EcfBlock itemToCopy)) { return false; }
+                    itemToAdd = new EcfBlock(itemToCopy);
+                    itemToAdd.SetName(newItemDefaultName);
+                    if (!AddDependencyToItem_TryEditAndInsertItem(itemToAdd, useableFileItems, targetFileSelectorTitle)) { return false; }
+                    return true;
+                case AddDependencyOptions.CreateNewAsEmpty:
+                    itemToAdd = AddDependencyToItem_CreateEmptyTemplate(newItemDefaultName, useableFileItems);
+                    if (!AddDependencyToItem_TryEditAndInsertItem(itemToAdd, useableFileItems, targetFileSelectorTitle)) { return false; }
+                    return true;
+                default: return false;
             }
         }
-        private bool AddDependencyToItem_TrySelectItem(Func<EgsEcfFile, bool> fileFilter, string selectorTitle, out EcfBlock selectedItem)
+        private bool AddDependencyToItem_TrySelectItem(List<EgsEcfFile> targetFiles, string selectorTitle, out EcfBlock selectedItem)
         {
             selectedItem = null;
 
-            SelectorItem[] presentItems = ParentForm.GetOpenedFiles(fileFilter)
+            SelectorItem[] presentItems = targetFiles
                 .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
                 .Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
 
@@ -659,62 +695,15 @@ namespace EgsEcfEditorApp
             MessageBox.Show(ParentForm, messageText.ToString(), TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+
+
+
+
+
         // privates for specific dependency handling
-        private void AddTemplateToItem_SelectFromExisting(EcfBlock sourceItem, List<string> useableParameterKeys)
-        {
-            if (!AddDependencyToItem_TrySelectItem(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates), 
-                TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector, out EcfBlock templateToAdd)) { return; }
-
-            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
-            AddDependencyToItem_ShowReport(templateToAdd, sourceItem);
-        }
-        private void AddTemplateToItem_CreateCopy(EcfBlock sourceItem, List<string> useableParameterKeys, SelectorItem[] presentFiles)
-        {
-            if (!AddDependencyToItem_TrySelectItem(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector, out EcfBlock templateToCopy)) { return; }
-
-            EcfBlock templateToAdd = new EcfBlock(templateToCopy);
-            templateToAdd.SetName(sourceItem.GetName());
-
-            if (!AddDependencyToItem_TryEditAndInsertItem(templateToAdd, presentFiles, 
-                TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector)) { return; }
-
-            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
-            AddDependencyToItem_ShowReport(templateToAdd, sourceItem);
-        }
-        private void AddTemplateToItem_CreateNew(EcfBlock sourceItem, List<string> useableParameterKeys, SelectorItem[] presentFiles)
-        {
-            EcfBlock templateToAdd = AddDependencyToItem_CreateEmptyTemplate(sourceItem.GetName(), presentFiles);
-
-            if (!AddDependencyToItem_TryEditAndInsertItem(templateToAdd, presentFiles, 
-                TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector)) { return; }
-
-            AddTemplateToItem_UpdateTemplateRoot(templateToAdd, sourceItem);
-            AddDependencyToItem_ShowReport(templateToAdd, sourceItem);
-        }
-        private void AddGlobalDefToItem_SelectFromExisting(EcfBlock sourceItem, List<string> useableParameterKeys)
-        {
-            
-
-
-        }
-        private void AddGlobalDefToItem_CreateCopy(EcfBlock sourceItem, List<string> useableParameterKeys, SelectorItem[] presentFiles)
-        {
-            
-
-
-        }
-        private void AddGlobalDefToItem_CreateNew(EcfBlock sourceItem, List<string> useableParameterKeys, SelectorItem[] presentFiles)
-        {
-            
-
-
-        }
-
-
 
         [Obsolete("genericable?")]
-        private void AddTemplateToItem_UpdateTemplateRoot(EcfBlock templateToAdd, EcfBlock targetItem)
+        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock templateToAdd, EcfBlock targetItem, string selectedParameterKey)
         {
             EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
             templateParameter.ClearValues();

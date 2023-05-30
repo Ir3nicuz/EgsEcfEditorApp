@@ -645,6 +645,9 @@
   <data name="Generic_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="ItemHandlingSupport_AddExistingGlobalDefSelector" xml:space="preserve">
+    <value>Select existing global macro to be attached</value>
+  </data>
   <data name="ItemHandlingSupport_AddExistingTemplateSelector" xml:space="preserve">
     <value>Select existing template to be attached</value>
   </data>
@@ -654,11 +657,17 @@
   <data name="ItemHandlingSupport_AddGlobalDefOptionSelector" xml:space="preserve">
     <value>Select option how to add the global macro</value>
   </data>
+  <data name="ItemHandlingSupport_AddGlobalDefParameterSelector" xml:space="preserve">
+    <value>Select parameter used forglobal macro adding</value>
+  </data>
   <data name="ItemHandlingSupport_AddTemplate" xml:space="preserve">
     <value>Add template</value>
   </data>
   <data name="ItemHandlingSupport_AddTemplateOptionSelector" xml:space="preserve">
     <value>Select option how to add the template</value>
+  </data>
+  <data name="ItemHandlingSupport_AddTemplateParameterSelector" xml:space="preserve">
+    <value>Select parameter used for template adding</value>
   </data>
   <data name="ItemHandlingSupport_AddToGlobalDefinition" xml:space="preserve">
     <value>Add to GlobalDef Definition</value>
@@ -671,6 +680,9 @@
   </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinitionOptionSelector" xml:space="preserve">
     <value>Select add to template definition option</value>
+  </data>
+  <data name="ItemHandlingSupport_CreateFromCopyGlobalDefSelector" xml:space="preserve">
+    <value>Select existing global macro to be copied</value>
   </data>
   <data name="ItemHandlingSupport_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Select existing template to be copied</value>
@@ -713,6 +725,9 @@
   </data>
   <data name="ItemHandlingSupport_ShowLinkedTemplate" xml:space="preserve">
     <value>Show linked template</value>
+  </data>
+  <data name="ItemHandlingSupport_TargetGlobalDefFileSelector" xml:space="preserve">
+    <value>Select target global macro file</value>
   </data>
   <data name="ItemHandlingSupport_TargetTemplateFileSelector" xml:space="preserve">
     <value>Select target template file</value>

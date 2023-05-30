@@ -381,23 +381,31 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        private List<string> AddDependencyToItem_GetUseableParameterKeys(string[] allParameterKeys, bool withInheritedParams, bool withSubParams, EcfBlock sourceItem)
-        {
-           return allParameterKeys.Length < 2 ? allParameterKeys.ToList() :
-                allParameterKeys.Where(key => sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter _)).ToList();
-        }
         private bool AddDependencyToItem_TryPrepareAddOperation(string[] allParameterKeys, bool withBlockNameCheck, bool withInheritedParams, bool withSubParams, 
             EcfBlock sourceItem, SelectorItem[] useableFileItems, out AddDependencyOptions? selectedOption, out string selectedParameterKey,
             string optionSelectorTitle, string parameterSelectorTitle, string addingNotAllowedMessage)
         {
             selectedOption = null;
+            selectedParameterKey = null;
 
             List<EcfBlock> blockList = GetBlockListByNameOrParamValue(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
                 withBlockNameCheck, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
-            List<string> useableParameterKeys = AddDependencyToItem_GetUseableParameterKeys(allParameterKeys, withInheritedParams, withSubParams, sourceItem);
+            List<string> useableParameterKeys = allParameterKeys.Length < 2 ? allParameterKeys.ToList() :
+                 allParameterKeys.Where(key => sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter _)).ToList();
             
             if (blockList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
             {
+                if (useableParameterKeys.Count > 1)
+                {
+                    ItemsDialog.Text = parameterSelectorTitle;
+                    if (ItemsDialog.ShowDialog(ParentForm, useableParameterKeys.Select(key => new SelectorItem(key)).ToArray()) != DialogResult.OK) { return false; }
+                    selectedParameterKey = Convert.ToString(ItemsDialog.SelectedItem.Item);
+                }
+                else
+                {
+                    selectedParameterKey = useableParameterKeys.FirstOrDefault();
+                }
+                
                 OptionsDialog.Text = optionSelectorTitle;
                 if (OptionsDialog.ShowDialog(ParentForm, AddDependencyOptionItems) != DialogResult.OK) { return false; }
                 selectedOption = (AddDependencyOptions)OptionsDialog.SelectedOption.Item;
@@ -486,6 +494,28 @@ namespace EgsEcfEditorApp
             targetFile.AddItem(itemToAdd);
             ParentForm.GetTabPage(targetFile)?.UpdateAllViews();
             return true;
+        }
+        [Obsolete("logic complete?")]
+        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock templateToAdd, EcfBlock targetItem, string selectedParameterKey)
+        {
+            EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
+            templateParameter.ClearValues();
+            string templateName = templateToAdd.GetName();
+            templateParameter.AddValue(string.Equals(templateName, targetItem.GetName()) ? string.Empty : templateName);
+            ParentForm.GetTabPage(targetItem.EcfFile)?.UpdateAllViews();
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
         private void AddDependencyToItem_ShowReport(EcfBlock addedItem, EcfBlock targetItem)
         {
@@ -693,23 +723,6 @@ namespace EgsEcfEditorApp
                 messageText.AppendLine(string.Join(Environment.NewLine, unmodifiedDefinitions.Select(def => def.FilePathAndName)));
             }
             MessageBox.Show(ParentForm, messageText.ToString(), TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-
-
-
-
-
-        // privates for specific dependency handling
-
-        [Obsolete("genericable?")]
-        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock templateToAdd, EcfBlock targetItem, string selectedParameterKey)
-        {
-            EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
-            templateParameter.ClearValues();
-            string templateName = templateToAdd.GetName();
-            templateParameter.AddValue(string.Equals(templateName, targetItem.GetName()) ? string.Empty : templateName);
-            ParentForm.GetTabPage(targetItem.EcfFile)?.UpdateAllViews();
         }
     }
 }

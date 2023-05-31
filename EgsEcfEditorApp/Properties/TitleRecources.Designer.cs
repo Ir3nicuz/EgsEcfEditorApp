@@ -1294,6 +1294,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to File Definition.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToFileDefinition {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToFileDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select add to file definition option.
         /// </summary>
         internal static string ItemHandlingSupport_AddToFileDefinitionOptionSelector {

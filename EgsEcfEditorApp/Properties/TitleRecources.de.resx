@@ -525,6 +525,9 @@
   <data name="ItemHandlingSupport_AddTemplateParameterSelector" xml:space="preserve">
     <value>Parameter zum Hinzufügen des Template auswählen</value>
   </data>
+  <data name="ItemHandlingSupport_AddToFileDefinition" xml:space="preserve">
+    <value>Zu Datei Definition hinzufügen</value>
+  </data>
   <data name="ItemHandlingSupport_AddToFileDefinitionOptionSelector" xml:space="preserve">
     <value>Option zum Hinzufügen zur Datei Definition wählen</value>
   </data>

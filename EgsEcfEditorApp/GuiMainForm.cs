@@ -1668,7 +1668,7 @@ namespace EcfFileViews
                     (sender, evt) => BasicItemOperation_Clicked(BasicItemOperations.AddItemTo));
                 ContextItem_AddAfter = new ToolStripMenuItem(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, 
                     (sender, evt) => BasicItemOperation_Clicked(BasicItemOperations.AddItemAfter));
-                ContextItem_AddToFileDefinition = new ToolStripMenuItem(TitleRecources.Generic_Replacement_Empty, IconRecources.Icon_Unknown,
+                ContextItem_AddToFileDefinition = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_AddToFileDefinition, IconRecources.Icon_AddToDefinition,
                     (sender, evt) => ItemHandlingSupport_Clicked(ItemHandlingSupportOperations.AddToFileDefinition));
                 ContextItem_CopyItem = new ToolStripMenuItem(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, 
                     (sender, evt) => CopyPasteOperation_Clicked(CopyPasteOperations.Copy));

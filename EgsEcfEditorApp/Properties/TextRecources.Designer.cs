@@ -610,339 +610,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really reset all settings to default?.
-        /// </summary>
-        internal static string EcfSettingsDialog_ReallyResetAllQuestion {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ReallyResetAllQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, a item will try to use the original parsed data if the data from the editor are invalid.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_AllowFallbackToParsedData {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_AllowFallbackToParsedData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;hasValue&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;info&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;allowBlank&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;forceEscape&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;optional&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;hasValue&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;info&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;allowBlank&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;forceEscape&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;optional&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;hasValue&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;info&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;allowBlank&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;forceEscape&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;optional&apos; field.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value if an element has no unlock cost value specified.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_UnlockCost {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_UnlockCost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default value if an element has no unlock level value specified.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_DefVal_UnlockLevel {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_DefVal_UnlockLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the error view.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Defines the game version which definitions will be used.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_GameMode {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_GameMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, the checks for inter file dependencies will be performed at editing items.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_InterFileChecksActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_InterFileChecksActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, items with at least one invalid sub item will not be saved.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_InvalidateParentsOnError {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_InvalidateParentsOnError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the parameter view.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the build block name values in the BlockGroups file.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_Blocks {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_Blocks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the names of the trees the element belongs to.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the tech tree parent element name.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the template name value in case of template double use.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock cost value.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_UnlockCost {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_UnlockCost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock level value.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The names of the parameter keys which contains the global macro name value.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for comments will be set to visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for data blocks will be set to visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for parameters will be set to visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the tree view.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_TreeViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_TreeViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If activated, at saving the file only valid items will be written.
-        /// </summary>
-        internal static string EcfSettingsDialog_ToolTip_WriteOnlyValidItems {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ToolTip_WriteOnlyValidItems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There are unsaved setting changes. Really close and discards changes?.
-        /// </summary>
-        internal static string EcfSettingsDialog_UnsavedReallyCloseQuestion {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_UnsavedReallyCloseQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Adds an element of the selected type.
         /// </summary>
         internal static string EcfTabPage_ToolTip_Add {
@@ -1609,6 +1276,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to file definition failed.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToFileDefinitionFailed {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToFileDefinitionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to Template definition failed.
         /// </summary>
         internal static string ItemHandlingSupport_AddToTemplateDefinitionFailed {
@@ -1726,20 +1402,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No global macro file is opened.
+        ///   Looks up a localized string similar to No definition file found.
         /// </summary>
-        internal static string ItemHandlingSupport_NoGlobalDefFileOpened {
+        internal static string ItemHandlingSupport_NoDefinitionFileFound {
             get {
-                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefFileOpened", resourceCulture);
+                return ResourceManager.GetString("ItemHandlingSupport_NoDefinitionFileFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to No GlobalDef definition file found.
         /// </summary>
-        internal static string ItemHandlingSupport_NoGlobalDefinitionFileFound {
+        internal static string ItemHandlingSupport_NoGlobalDefDefinitionFileFound {
             get {
-                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefinitionFileFound", resourceCulture);
+                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefDefinitionFileFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No global macro file is opened.
+        /// </summary>
+        internal static string ItemHandlingSupport_NoGlobalDefFileOpened {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_NoGlobalDefFileOpened", resourceCulture);
             }
         }
         
@@ -1825,7 +1510,16 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shall the definition of the already opened GLobalDef files be updated?.
+        ///   Looks up a localized string similar to Shall the definition of the opened file be updated?.
+        /// </summary>
+        internal static string ItemHandlingSupport_UpdateFileDefinitionsQuestion {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_UpdateFileDefinitionsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shall the definition of the already opened GlobalDef files be updated?.
         /// </summary>
         internal static string ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion {
             get {
@@ -1848,6 +1542,384 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemSelectorDialog_ToolTip_SearchInfo {
             get {
                 return ResourceManager.GetString("ItemSelectorDialog_ToolTip_SearchInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really reset all settings to default?.
+        /// </summary>
+        internal static string SettingsDialog_ReallyResetAllQuestion {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ReallyResetAllQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, a item will try to use the original parsed data if the data from the editor are invalid.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_AllowFallbackToParsedData {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_AllowFallbackToParsedData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created definitions for the &apos;hasValue&apos; field of unknown parameters.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_FileParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_FileParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created definitions for the &apos;info&apos; field of unknown parameters.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_FileParam_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_FileParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created definitions for the &apos;allowBlank&apos; field of unknown parameters.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_FileParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_FileParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created definitions for the &apos;forceEscape&apos; field of unknown parameters.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_FileParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_FileParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created definitions for the &apos;optional&apos; field of unknown parameters.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_FileParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_FileParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;info&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition attribute items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;info&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created GlobalDef definition parameter items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;hasValue&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;info&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_Ingredient_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_Ingredient_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;allowBlank&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;forceEscape&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value at created template definition ingredient items for the &apos;optional&apos; field.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value if an element has no unlock cost value specified.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_UnlockCost {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_UnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default value if an element has no unlock level value specified.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_DefVal_UnlockLevel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_DefVal_UnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the error view.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ErrorViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ErrorViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the game version which definitions will be used.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_GameMode {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_GameMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, the checks for inter file dependencies will be performed at editing items.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_InterFileChecksActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_InterFileChecksActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, items with at least one invalid sub item will not be saved.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_InvalidateParentsOnError {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_InvalidateParentsOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the parameter view.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParameterViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParameterViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the build block name values in the BlockGroups file.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_Blocks {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_Blocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the names of the trees the element belongs to.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_TechTreeNames {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_TechTreeNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the tech tree parent element name.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_TechTreeParentName {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_TechTreeParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the template name value in case of template double use.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_TemplateRoot {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_TemplateRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock cost value.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_UnlockCost {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_UnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the parameter key which contains the unlock level value.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKey_UnlockLevel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKey_UnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The names of the parameter keys which contains the global macro name value.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_ParamKeys_GlobalRef {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_ParamKeys_GlobalRef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for comments will be set to visible.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_TreeViewFilterCommentsInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_TreeViewFilterCommentsInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for data blocks will be set to visible.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, the initial state of the filter setting for parameters will be set to visible.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_TreeViewFilterParametersInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_TreeViewFilterParametersInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the initial value for the visible item count setting of the tree view.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_TreeViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_TreeViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If activated, at saving the file only valid items will be written.
+        /// </summary>
+        internal static string SettingsDialog_ToolTip_WriteOnlyValidItems {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ToolTip_WriteOnlyValidItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are unsaved setting changes. Really close and discards changes?.
+        /// </summary>
+        internal static string SettingsDialog_UnsavedReallyCloseQuestion {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UnsavedReallyCloseQuestion", resourceCulture);
             }
         }
     }

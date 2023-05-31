@@ -511,429 +511,6 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow fallback to original data.
-        /// </summary>
-        internal static string EcfSettingsDialog_Creation_AllowFallbackToParsedData {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Creation_AllowFallbackToParsedData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File Creation.
-        /// </summary>
-        internal static string EcfSettingsDialog_Creation_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Creation_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalidate parent of invalid item.
-        /// </summary>
-        internal static string EcfSettingsDialog_Creation_InvalidateParentOnError {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Creation_InvalidateParentOnError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Write only valid items to file.
-        /// </summary>
-        internal static string EcfSettingsDialog_Creation_WriteOnlyValidItems {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Creation_WriteOnlyValidItems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Filtering.
-        /// </summary>
-        internal static string EcfSettingsDialog_Filter_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Filter_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;comments&apos; initially visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;data blocks&apos; initially visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view &apos;parameters&apos; initially visible.
-        /// </summary>
-        internal static string EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Game version.
-        /// </summary>
-        internal static string EcfSettingsDialog_General_GameMode {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_General_GameMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to General.
-        /// </summary>
-        internal static string EcfSettingsDialog_General_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_General_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        internal static string EcfSettingsDialog_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Info.
-        /// </summary>
-        internal static string EcfSettingsDialog_Info_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Info_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Build block groups (BlockGroupsConfig).
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute Default Value &apos;Has Value&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute Default Value &apos;Info&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Allowing Blank&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Force Escaped&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Optional&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to General.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_General_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_General_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Global macros (GlobalDefsConfig).
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Handling Support.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Inter file checks active.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Blocks&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Template Root&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Keys &apos;GlobalRef&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Templates and ingredients.
-        /// </summary>
-        internal static string EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error view item count preset.
-        /// </summary>
-        internal static string EcfSettingsDialog_Sorter_ErrorViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Sorter_ErrorViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sorting.
-        /// </summary>
-        internal static string EcfSettingsDialog_Sorter_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Sorter_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter view item count preset.
-        /// </summary>
-        internal static string EcfSettingsDialog_Sorter_ParameterViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Sorter_ParameterViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tree view item count preset.
-        /// </summary>
-        internal static string EcfSettingsDialog_Sorter_TreeViewSorterInitCount {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_Sorter_TreeViewSorterInitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Default Value &apos;Unlock Cost&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_DefVal_UnlockCost {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefVal_UnlockCost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Default Value &apos;Unlock Level&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_DefVal_UnlockLevel {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_DefVal_UnlockLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tech Tree.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_Header {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParamKey_TechTreeNames {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_TechTreeNames", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Parent Name&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Cost&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParamKey_UnlockCost {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_UnlockCost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Level&apos;.
-        /// </summary>
-        internal static string EcfSettingsDialog_TechTree_ParamKey_UnlockLevel {
-            get {
-                return ResourceManager.GetString("EcfSettingsDialog_TechTree_ParamKey_UnlockLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to TechTree preview and edit.
         /// </summary>
         internal static string EcfTechTreeDialog_Header {
@@ -1717,20 +1294,29 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select add to file definition option.
+        /// </summary>
+        internal static string ItemHandlingSupport_AddToFileDefinitionOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_AddToFileDefinitionOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to GlobalDef Definition.
         /// </summary>
-        internal static string ItemHandlingSupport_AddToGlobalDefinition {
+        internal static string ItemHandlingSupport_AddToGlobalDefDefinition {
             get {
-                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefinition", resourceCulture);
+                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefDefinition", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Select add to GlobalDef definition option.
         /// </summary>
-        internal static string ItemHandlingSupport_AddToGlobalDefinitionOptionSelector {
+        internal static string ItemHandlingSupport_AddToGlobalDefDefinitionOptionSelector {
             get {
-                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefinitionOptionSelector", resourceCulture);
+                return ResourceManager.GetString("ItemHandlingSupport_AddToGlobalDefDefinitionOptionSelector", resourceCulture);
             }
         }
         
@@ -1902,6 +1488,483 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_TargetTemplateFileSelector {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_TargetTemplateFileSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow fallback to original data.
+        /// </summary>
+        internal static string SettingsDialog_Creation_AllowFallbackToParsedData {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Creation_AllowFallbackToParsedData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Creation.
+        /// </summary>
+        internal static string SettingsDialog_Creation_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Creation_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalidate parent of invalid item.
+        /// </summary>
+        internal static string SettingsDialog_Creation_InvalidateParentOnError {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Creation_InvalidateParentOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write only valid items to file.
+        /// </summary>
+        internal static string SettingsDialog_Creation_WriteOnlyValidItems {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Creation_WriteOnlyValidItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtering.
+        /// </summary>
+        internal static string SettingsDialog_Filter_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Filter_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;comments&apos; initially visible.
+        /// </summary>
+        internal static string SettingsDialog_Filter_TreeViewFilterCommentsInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Filter_TreeViewFilterCommentsInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;data blocks&apos; initially visible.
+        /// </summary>
+        internal static string SettingsDialog_Filter_TreeViewFilterDataBlocksInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Filter_TreeViewFilterDataBlocksInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view &apos;parameters&apos; initially visible.
+        /// </summary>
+        internal static string SettingsDialog_Filter_TreeViewFilterParametersInitActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Filter_TreeViewFilterParametersInitActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game version.
+        /// </summary>
+        internal static string SettingsDialog_General_GameMode {
+            get {
+                return ResourceManager.GetString("SettingsDialog_General_GameMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string SettingsDialog_General_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_General_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string SettingsDialog_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string SettingsDialog_Info_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Info_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build block groups (BlockGroupsConfig).
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Has Value&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Info&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Allowing Blank&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Force Escaped&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Default Value &apos;Is Optional&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown Parameter.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_FileParamConfig_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_FileParamConfig_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_General_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_General_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global macros (GlobalDefsConfig).
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_GlobalDefConfig_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_GlobalDefConfig_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Handling Support.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inter file checks active.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_InterFileChecksActive {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_InterFileChecksActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Blocks&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_ParamKey_Blocks {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_ParamKey_Blocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Template Root&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Keys &apos;GlobalRef&apos;.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates and ingredients.
+        /// </summary>
+        internal static string SettingsDialog_ItemHandlingSupport_TemplatesConfig_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ItemHandlingSupport_TemplatesConfig_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error view item count preset.
+        /// </summary>
+        internal static string SettingsDialog_Sorter_ErrorViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Sorter_ErrorViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorting.
+        /// </summary>
+        internal static string SettingsDialog_Sorter_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Sorter_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter view item count preset.
+        /// </summary>
+        internal static string SettingsDialog_Sorter_ParameterViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Sorter_ParameterViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree view item count preset.
+        /// </summary>
+        internal static string SettingsDialog_Sorter_TreeViewSorterInitCount {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Sorter_TreeViewSorterInitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Value &apos;Unlock Cost&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_DefVal_UnlockCost {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_DefVal_UnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Value &apos;Unlock Level&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_DefVal_UnlockLevel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_DefVal_UnlockLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tech Tree.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_Header {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Names&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_ParamKey_TechTreeNames {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_ParamKey_TechTreeNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Tech Tree Parent Name&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_ParamKey_TechTreeParentName {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_ParamKey_TechTreeParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Cost&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_ParamKey_UnlockCost {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_ParamKey_UnlockCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Key &apos;Unlock Level&apos;.
+        /// </summary>
+        internal static string SettingsDialog_TechTree_ParamKey_UnlockLevel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_TechTree_ParamKey_UnlockLevel", resourceCulture);
             }
         }
     }

@@ -300,117 +300,6 @@
   <data name="EcfParameterView_ToolTip_ParameterSorterOriginOrder" xml:space="preserve">
     <value>Sets hierarchical sorting order</value>
   </data>
-  <data name="EcfSettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
-    <value>Really reset all settings to default?</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
-    <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefHasValue" xml:space="preserve">
-    <value>The default value at created GlobalDef definition attribute items for the 'hasValue' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefInfo" xml:space="preserve">
-    <value>The default value at created GlobalDef definition attribute items for the 'info' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsAllowingBlank" xml:space="preserve">
-    <value>The default value at created GlobalDef definition attribute items for the 'allowBlank' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsForceEscaped" xml:space="preserve">
-    <value>The default value at created GlobalDef definition attribute items for the 'forceEscape' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalAttr_DefIsOptional" xml:space="preserve">
-    <value>The default value at created GlobalDef definition attribute items for the 'optional' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefHasValue" xml:space="preserve">
-    <value>The default value at created GlobalDef definition parameter items for the 'hasValue' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefInfo" xml:space="preserve">
-    <value>The default value at created GlobalDef definition parameter items for the 'info' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsAllowingBlank" xml:space="preserve">
-    <value>The default value at created GlobalDef definition parameter items for the 'allowBlank' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsForceEscaped" xml:space="preserve">
-    <value>The default value at created GlobalDef definition parameter items for the 'forceEscape' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_GlobalParam_DefIsOptional" xml:space="preserve">
-    <value>The default value at created GlobalDef definition parameter items for the 'optional' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'hasValue' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefInfo" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'info' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'allowBlank' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'forceEscape' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
-    <value>The default value at created template definition ingredient items for the 'optional' field</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockCost" xml:space="preserve">
-    <value>The default value if an element has no unlock cost value specified</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_DefVal_UnlockLevel" xml:space="preserve">
-    <value>The default value if an element has no unlock level value specified</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
-    <value>Defines the initial value for the visible item count setting of the error view</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_GameMode" xml:space="preserve">
-    <value>Defines the game version which definitions will be used</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_InterFileChecksActive" xml:space="preserve">
-    <value>If activated, the checks for inter file dependencies will be performed at editing items</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
-    <value>If activated, items with at least one invalid sub item will not be saved</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
-    <value>Defines the initial value for the visible item count setting of the parameter view</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKeys_GlobalRef" xml:space="preserve">
-    <value>The names of the parameter keys which contains the global macro name value</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_Blocks" xml:space="preserve">
-    <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeNames" xml:space="preserve">
-    <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_TechTreeParentName" xml:space="preserve">
-    <value>The name of the parameter key which contains the tech tree parent element name</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_TemplateRoot" xml:space="preserve">
-    <value>The name of the parameter key which contains the template name value in case of template double use</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockCost" xml:space="preserve">
-    <value>The name of the parameter key which contains the unlock cost value</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_ParamKey_UnlockLevel" xml:space="preserve">
-    <value>The name of the parameter key which contains the unlock level value</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterCommentsInitActive" xml:space="preserve">
-    <value>If activated, the initial state of the filter setting for comments will be set to visible</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
-    <value>If activated, the initial state of the filter setting for data blocks will be set to visible</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_TreeViewFilterParametersInitActive" xml:space="preserve">
-    <value>If activated, the initial state of the filter setting for parameters will be set to visible</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_TreeViewSorterInitCount" xml:space="preserve">
-    <value>Defines the initial value for the visible item count setting of the tree view</value>
-  </data>
-  <data name="EcfSettingsDialog_ToolTip_WriteOnlyValidItems" xml:space="preserve">
-    <value>If activated, at saving the file only valid items will be written</value>
-  </data>
-  <data name="EcfSettingsDialog_UnsavedReallyCloseQuestion" xml:space="preserve">
-    <value>There are unsaved setting changes. Really close and discards changes?</value>
-  </data>
   <data name="EcfTabPage_ToolTip_Add" xml:space="preserve">
     <value>Adds an element of the selected type</value>
   </data>
@@ -633,6 +522,9 @@
   <data name="ItemHandlingSupport_AddTemplateFailed" xml:space="preserve">
     <value>Add template failed</value>
   </data>
+  <data name="ItemHandlingSupport_AddToFileDefinitionFailed" xml:space="preserve">
+    <value>Add to file definition failed</value>
+  </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinitionFailed" xml:space="preserve">
     <value>Add to Template definition failed</value>
   </data>
@@ -672,11 +564,14 @@
   <data name="ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft" xml:space="preserve">
     <value>The item has no global macro slot left</value>
   </data>
+  <data name="ItemHandlingSupport_NoDefinitionFileFound" xml:space="preserve">
+    <value>No definition file found</value>
+  </data>
+  <data name="ItemHandlingSupport_NoGlobalDefDefinitionFileFound" xml:space="preserve">
+    <value>No GlobalDef definition file found</value>
+  </data>
   <data name="ItemHandlingSupport_NoGlobalDefFileOpened" xml:space="preserve">
     <value>No global macro file is opened</value>
-  </data>
-  <data name="ItemHandlingSupport_NoGlobalDefinitionFileFound" xml:space="preserve">
-    <value>No GlobalDef definition file found</value>
   </data>
   <data name="ItemHandlingSupport_NoGlobalDefsForItem" xml:space="preserve">
     <value>No global macros for item</value>
@@ -705,13 +600,142 @@
   <data name="ItemHandlingSupport_StillUsedWith" xml:space="preserve">
     <value>still used with</value>
   </data>
+  <data name="ItemHandlingSupport_UpdateFileDefinitionsQuestion" xml:space="preserve">
+    <value>Shall the definition of the opened file be updated?</value>
+  </data>
   <data name="ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion" xml:space="preserve">
-    <value>Shall the definition of the already opened GLobalDef files be updated?</value>
+    <value>Shall the definition of the already opened GlobalDef files be updated?</value>
   </data>
   <data name="ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion" xml:space="preserve">
     <value>Shall the definition of the already opened template files be updated?</value>
   </data>
   <data name="ItemSelectorDialog_ToolTip_SearchInfo" xml:space="preserve">
     <value>Like wise search to reduce the dropdown list</value>
+  </data>
+  <data name="SettingsDialog_ReallyResetAllQuestion" xml:space="preserve">
+    <value>Really reset all settings to default?</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_AllowFallbackToParsedData" xml:space="preserve">
+    <value>If activated, a item will try to use the original parsed data if the data from the editor are invalid</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_FileParam_DefHasValue" xml:space="preserve">
+    <value>The default value at created definitions for the 'hasValue' field of unknown parameters</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_FileParam_DefInfo" xml:space="preserve">
+    <value>The default value at created definitions for the 'info' field of unknown parameters</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_FileParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created definitions for the 'allowBlank' field of unknown parameters</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_FileParam_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created definitions for the 'forceEscape' field of unknown parameters</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_FileParam_DefIsOptional" xml:space="preserve">
+    <value>The default value at created definitions for the 'optional' field of unknown parameters</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefHasValue" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'hasValue' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefInfo" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'info' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'allowBlank' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'forceEscape' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefAttr_DefIsOptional" xml:space="preserve">
+    <value>The default value at created GlobalDef definition attribute items for the 'optional' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefHasValue" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'hasValue' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefInfo" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'info' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'allowBlank' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'forceEscape' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_GlobalDefParam_DefIsOptional" xml:space="preserve">
+    <value>The default value at created GlobalDef definition parameter items for the 'optional' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_Ingredient_DefHasValue" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'hasValue' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_Ingredient_DefInfo" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'info' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'allowBlank' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'forceEscape' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
+    <value>The default value at created template definition ingredient items for the 'optional' field</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_UnlockCost" xml:space="preserve">
+    <value>The default value if an element has no unlock cost value specified</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_DefVal_UnlockLevel" xml:space="preserve">
+    <value>The default value if an element has no unlock level value specified</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Defines the initial value for the visible item count setting of the error view</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_GameMode" xml:space="preserve">
+    <value>Defines the game version which definitions will be used</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_InterFileChecksActive" xml:space="preserve">
+    <value>If activated, the checks for inter file dependencies will be performed at editing items</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_InvalidateParentsOnError" xml:space="preserve">
+    <value>If activated, items with at least one invalid sub item will not be saved</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Defines the initial value for the visible item count setting of the parameter view</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKeys_GlobalRef" xml:space="preserve">
+    <value>The names of the parameter keys which contains the global macro name value</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_Blocks" xml:space="preserve">
+    <value>The name of the parameter key which contains the build block name values in the BlockGroups file</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_TechTreeNames" xml:space="preserve">
+    <value>The name of the parameter key which contains the names of the trees the element belongs to</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_TechTreeParentName" xml:space="preserve">
+    <value>The name of the parameter key which contains the tech tree parent element name</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_TemplateRoot" xml:space="preserve">
+    <value>The name of the parameter key which contains the template name value in case of template double use</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_UnlockCost" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock cost value</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_ParamKey_UnlockLevel" xml:space="preserve">
+    <value>The name of the parameter key which contains the unlock level value</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>If activated, the initial state of the filter setting for comments will be set to visible</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>If activated, the initial state of the filter setting for data blocks will be set to visible</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>If activated, the initial state of the filter setting for parameters will be set to visible</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_TreeViewSorterInitCount" xml:space="preserve">
+    <value>Defines the initial value for the visible item count setting of the tree view</value>
+  </data>
+  <data name="SettingsDialog_ToolTip_WriteOnlyValidItems" xml:space="preserve">
+    <value>If activated, at saving the file only valid items will be written</value>
+  </data>
+  <data name="SettingsDialog_UnsavedReallyCloseQuestion" xml:space="preserve">
+    <value>There are unsaved setting changes. Really close and discards changes?</value>
   </data>
 </root>

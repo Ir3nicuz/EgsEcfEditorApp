@@ -267,147 +267,6 @@
   <data name="EcfParameterView_UnnamedParent" xml:space="preserve">
     <value>Unnamed</value>
   </data>
-  <data name="EcfSettingsDialog_Creation_AllowFallbackToParsedData" xml:space="preserve">
-    <value>Allow fallback to original data</value>
-  </data>
-  <data name="EcfSettingsDialog_Creation_Header" xml:space="preserve">
-    <value>File Creation</value>
-  </data>
-  <data name="EcfSettingsDialog_Creation_InvalidateParentOnError" xml:space="preserve">
-    <value>Invalidate parent of invalid item</value>
-  </data>
-  <data name="EcfSettingsDialog_Creation_WriteOnlyValidItems" xml:space="preserve">
-    <value>Write only valid items to file</value>
-  </data>
-  <data name="EcfSettingsDialog_Filter_Header" xml:space="preserve">
-    <value>Filtering</value>
-  </data>
-  <data name="EcfSettingsDialog_Filter_TreeViewFilterCommentsInitActive" xml:space="preserve">
-    <value>Tree view 'comments' initially visible</value>
-  </data>
-  <data name="EcfSettingsDialog_Filter_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
-    <value>Tree view 'data blocks' initially visible</value>
-  </data>
-  <data name="EcfSettingsDialog_Filter_TreeViewFilterParametersInitActive" xml:space="preserve">
-    <value>Tree view 'parameters' initially visible</value>
-  </data>
-  <data name="EcfSettingsDialog_General_GameMode" xml:space="preserve">
-    <value>Game version</value>
-  </data>
-  <data name="EcfSettingsDialog_General_Header" xml:space="preserve">
-    <value>General</value>
-  </data>
-  <data name="EcfSettingsDialog_Header" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="EcfSettingsDialog_Info_Header" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header" xml:space="preserve">
-    <value>Build block groups (BlockGroupsConfig)</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue" xml:space="preserve">
-    <value>Attribute Default Value 'Has Value'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefInfo" xml:space="preserve">
-    <value>Attribute Default Value 'Info'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank" xml:space="preserve">
-    <value>Attribute Default Value 'Is Allowing Blank'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped" xml:space="preserve">
-    <value>Attribute Default Value 'Is Force Escaped'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional" xml:space="preserve">
-    <value>Attribute Default Value 'Is Optional'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefHasValue" xml:space="preserve">
-    <value>Parameter Default Value 'Has Value'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefInfo" xml:space="preserve">
-    <value>Parameter Default Value 'Info'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank" xml:space="preserve">
-    <value>Parameter Default Value 'Is Allowing Blank'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped" xml:space="preserve">
-    <value>Parameter Default Value 'Is Force Escaped'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional" xml:space="preserve">
-    <value>Parameter Default Value 'Is Optional'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue" xml:space="preserve">
-    <value>Parameter Default Value 'Has Value'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo" xml:space="preserve">
-    <value>Parameter Default Value 'Info'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
-    <value>Parameter Default Value 'Is Allowing Blank'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
-    <value>Parameter Default Value 'Is Force Escaped'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
-    <value>Parameter Default Value 'Is Optional'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_General_Header" xml:space="preserve">
-    <value>General</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_GlobalDefsConfig_Header" xml:space="preserve">
-    <value>Global macros (GlobalDefsConfig)</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_Header" xml:space="preserve">
-    <value>Item Handling Support</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_InterFileChecksActive" xml:space="preserve">
-    <value>Inter file checks active</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef" xml:space="preserve">
-    <value>Parameter Keys 'GlobalRef'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKey_Blocks" xml:space="preserve">
-    <value>Parameter Key 'Blocks'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot" xml:space="preserve">
-    <value>Parameter Key 'Template Root'</value>
-  </data>
-  <data name="EcfSettingsDialog_ItemHandlingSupport_TemplatesConfig_Header" xml:space="preserve">
-    <value>Templates and ingredients</value>
-  </data>
-  <data name="EcfSettingsDialog_Sorter_ErrorViewSorterInitCount" xml:space="preserve">
-    <value>Error view item count preset</value>
-  </data>
-  <data name="EcfSettingsDialog_Sorter_Header" xml:space="preserve">
-    <value>Sorting</value>
-  </data>
-  <data name="EcfSettingsDialog_Sorter_ParameterViewSorterInitCount" xml:space="preserve">
-    <value>Parameter view item count preset</value>
-  </data>
-  <data name="EcfSettingsDialog_Sorter_TreeViewSorterInitCount" xml:space="preserve">
-    <value>Tree view item count preset</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_DefVal_UnlockCost" xml:space="preserve">
-    <value>Default Value 'Unlock Cost'</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_DefVal_UnlockLevel" xml:space="preserve">
-    <value>Default Value 'Unlock Level'</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_Header" xml:space="preserve">
-    <value>Tech Tree</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_ParamKey_TechTreeNames" xml:space="preserve">
-    <value>Parameter Key 'Tech Tree Names'</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_ParamKey_TechTreeParentName" xml:space="preserve">
-    <value>Parameter Key 'Tech Tree Parent Name'</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_ParamKey_UnlockCost" xml:space="preserve">
-    <value>Parameter Key 'Unlock Cost'</value>
-  </data>
-  <data name="EcfSettingsDialog_TechTree_ParamKey_UnlockLevel" xml:space="preserve">
-    <value>Parameter Key 'Unlock Level'</value>
-  </data>
   <data name="EcfTechTreeDialog_Header" xml:space="preserve">
     <value>TechTree preview and edit</value>
   </data>
@@ -669,10 +528,13 @@
   <data name="ItemHandlingSupport_AddTemplateParameterSelector" xml:space="preserve">
     <value>Select parameter used for template adding</value>
   </data>
-  <data name="ItemHandlingSupport_AddToGlobalDefinition" xml:space="preserve">
+  <data name="ItemHandlingSupport_AddToFileDefinitionOptionSelector" xml:space="preserve">
+    <value>Select add to file definition option</value>
+  </data>
+  <data name="ItemHandlingSupport_AddToGlobalDefDefinition" xml:space="preserve">
     <value>Add to GlobalDef Definition</value>
   </data>
-  <data name="ItemHandlingSupport_AddToGlobalDefinitionOptionSelector" xml:space="preserve">
+  <data name="ItemHandlingSupport_AddToGlobalDefDefinitionOptionSelector" xml:space="preserve">
     <value>Select add to GlobalDef definition option</value>
   </data>
   <data name="ItemHandlingSupport_AddToTemplateDefinition" xml:space="preserve">
@@ -731,5 +593,164 @@
   </data>
   <data name="ItemHandlingSupport_TargetTemplateFileSelector" xml:space="preserve">
     <value>Select target template file</value>
+  </data>
+  <data name="SettingsDialog_Creation_AllowFallbackToParsedData" xml:space="preserve">
+    <value>Allow fallback to original data</value>
+  </data>
+  <data name="SettingsDialog_Creation_Header" xml:space="preserve">
+    <value>File Creation</value>
+  </data>
+  <data name="SettingsDialog_Creation_InvalidateParentOnError" xml:space="preserve">
+    <value>Invalidate parent of invalid item</value>
+  </data>
+  <data name="SettingsDialog_Creation_WriteOnlyValidItems" xml:space="preserve">
+    <value>Write only valid items to file</value>
+  </data>
+  <data name="SettingsDialog_Filter_Header" xml:space="preserve">
+    <value>Filtering</value>
+  </data>
+  <data name="SettingsDialog_Filter_TreeViewFilterCommentsInitActive" xml:space="preserve">
+    <value>Tree view 'comments' initially visible</value>
+  </data>
+  <data name="SettingsDialog_Filter_TreeViewFilterDataBlocksInitActive" xml:space="preserve">
+    <value>Tree view 'data blocks' initially visible</value>
+  </data>
+  <data name="SettingsDialog_Filter_TreeViewFilterParametersInitActive" xml:space="preserve">
+    <value>Tree view 'parameters' initially visible</value>
+  </data>
+  <data name="SettingsDialog_General_GameMode" xml:space="preserve">
+    <value>Game version</value>
+  </data>
+  <data name="SettingsDialog_General_Header" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="SettingsDialog_Header" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsDialog_Info_Header" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_BlockGroupsConfig_Header" xml:space="preserve">
+    <value>Build block groups (BlockGroupsConfig)</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefHasValue" xml:space="preserve">
+    <value>Parameter Default Value 'Has Value'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefInfo" xml:space="preserve">
+    <value>Parameter Default Value 'Info'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>Parameter Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped" xml:space="preserve">
+    <value>Parameter Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_FileParam_DefIsOptional" xml:space="preserve">
+    <value>Parameter Default Value 'Is Optional'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue" xml:space="preserve">
+    <value>Attribute Default Value 'Has Value'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo" xml:space="preserve">
+    <value>Attribute Default Value 'Info'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank" xml:space="preserve">
+    <value>Attribute Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped" xml:space="preserve">
+    <value>Attribute Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional" xml:space="preserve">
+    <value>Attribute Default Value 'Is Optional'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue" xml:space="preserve">
+    <value>Parameter Default Value 'Has Value'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo" xml:space="preserve">
+    <value>Parameter Default Value 'Info'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank" xml:space="preserve">
+    <value>Parameter Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped" xml:space="preserve">
+    <value>Parameter Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional" xml:space="preserve">
+    <value>Parameter Default Value 'Is Optional'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefHasValue" xml:space="preserve">
+    <value>Parameter Default Value 'Has Value'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefInfo" xml:space="preserve">
+    <value>Parameter Default Value 'Info'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank" xml:space="preserve">
+    <value>Parameter Default Value 'Is Allowing Blank'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped" xml:space="preserve">
+    <value>Parameter Default Value 'Is Force Escaped'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_DefVal_Ingredient_DefIsOptional" xml:space="preserve">
+    <value>Parameter Default Value 'Is Optional'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_FileParamConfig_Header" xml:space="preserve">
+    <value>Unknown Parameter</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_General_Header" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_GlobalDefConfig_Header" xml:space="preserve">
+    <value>Global macros (GlobalDefsConfig)</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_Header" xml:space="preserve">
+    <value>Item Handling Support</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_InterFileChecksActive" xml:space="preserve">
+    <value>Inter file checks active</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_ParamKeys_GlobalRef" xml:space="preserve">
+    <value>Parameter Keys 'GlobalRef'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_ParamKey_Blocks" xml:space="preserve">
+    <value>Parameter Key 'Blocks'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_ParamKey_TemplateRoot" xml:space="preserve">
+    <value>Parameter Key 'Template Root'</value>
+  </data>
+  <data name="SettingsDialog_ItemHandlingSupport_TemplatesConfig_Header" xml:space="preserve">
+    <value>Templates and ingredients</value>
+  </data>
+  <data name="SettingsDialog_Sorter_ErrorViewSorterInitCount" xml:space="preserve">
+    <value>Error view item count preset</value>
+  </data>
+  <data name="SettingsDialog_Sorter_Header" xml:space="preserve">
+    <value>Sorting</value>
+  </data>
+  <data name="SettingsDialog_Sorter_ParameterViewSorterInitCount" xml:space="preserve">
+    <value>Parameter view item count preset</value>
+  </data>
+  <data name="SettingsDialog_Sorter_TreeViewSorterInitCount" xml:space="preserve">
+    <value>Tree view item count preset</value>
+  </data>
+  <data name="SettingsDialog_TechTree_DefVal_UnlockCost" xml:space="preserve">
+    <value>Default Value 'Unlock Cost'</value>
+  </data>
+  <data name="SettingsDialog_TechTree_DefVal_UnlockLevel" xml:space="preserve">
+    <value>Default Value 'Unlock Level'</value>
+  </data>
+  <data name="SettingsDialog_TechTree_Header" xml:space="preserve">
+    <value>Tech Tree</value>
+  </data>
+  <data name="SettingsDialog_TechTree_ParamKey_TechTreeNames" xml:space="preserve">
+    <value>Parameter Key 'Tech Tree Names'</value>
+  </data>
+  <data name="SettingsDialog_TechTree_ParamKey_TechTreeParentName" xml:space="preserve">
+    <value>Parameter Key 'Tech Tree Parent Name'</value>
+  </data>
+  <data name="SettingsDialog_TechTree_ParamKey_UnlockCost" xml:space="preserve">
+    <value>Parameter Key 'Unlock Cost'</value>
+  </data>
+  <data name="SettingsDialog_TechTree_ParamKey_UnlockLevel" xml:space="preserve">
+    <value>Parameter Key 'Unlock Level'</value>
   </data>
 </root>

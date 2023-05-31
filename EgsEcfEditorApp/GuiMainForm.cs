@@ -591,7 +591,8 @@ namespace EgsEcfEditorApp
                 case ItemHandlingSupportOperations.ListGlobalDefUsers: ItemHandlingSupport.ShowGlobalDefUsers(evt.SourceItem as EcfBlock); break;
                 case ItemHandlingSupportOperations.ListInheritedGlobalDefs: ItemHandlingSupport.ShowInheritedGlobalDefs(evt.SourceItem as EcfBlock); break;
                 case ItemHandlingSupportOperations.ShowLinkedTemplate: ItemHandlingSupport.ShowLinkedTemplate(evt.SourceItem as EcfBlock); break;
-                
+
+                case ItemHandlingSupportOperations.AddToFileDefinition: ItemHandlingSupport.AddItemToFileDefinition(evt.SourceItem as EcfParameter); break;
                 case ItemHandlingSupportOperations.AddTemplate: ItemHandlingSupport.AddTemplateToItem(evt.SourceItem as EcfBlock); break;
                 case ItemHandlingSupportOperations.AddToTemplateDefinition: ItemHandlingSupport.AddItemToTemplateDefinition(evt.SourceItem as EcfBlock); break;
                 case ItemHandlingSupportOperations.AddGlobalDef: ItemHandlingSupport.AddGlobalDefToItem(evt.SourceItem as EcfBlock); break;
@@ -1587,6 +1588,7 @@ namespace EcfFileViews
 
                 ShowLinkedTemplate,
 
+                AddToFileDefinition,
                 AddTemplate,
                 AddToTemplateDefinition,
                 AddGlobalDef,
@@ -1626,6 +1628,7 @@ namespace EcfFileViews
             private ToolStripMenuItem ContextItem_ChangeItem { get; set; } = null;
             private ToolStripMenuItem ContextItem_AddTo { get; set; } = null;
             private ToolStripMenuItem ContextItem_AddAfter { get; set; } = null;
+            private ToolStripMenuItem ContextItem_AddToFileDefinition { get; set; } = null;
             private ToolStripMenuItem ContextItem_CopyItem { get; set; } = null;
             private ToolStripMenuItem ContextItem_PasteTo { get; set; } = null;
             private ToolStripMenuItem ContextItem_PasteAfter { get; set; } = null;
@@ -1665,6 +1668,8 @@ namespace EcfFileViews
                     (sender, evt) => BasicItemOperation_Clicked(BasicItemOperations.AddItemTo));
                 ContextItem_AddAfter = new ToolStripMenuItem(TitleRecources.Generic_AddAfter, IconRecources.Icon_Add, 
                     (sender, evt) => BasicItemOperation_Clicked(BasicItemOperations.AddItemAfter));
+                ContextItem_AddToFileDefinition = new ToolStripMenuItem(TitleRecources.Generic_Replacement_Empty, IconRecources.Icon_Unknown,
+                    (sender, evt) => ItemHandlingSupport_Clicked(ItemHandlingSupportOperations.AddToFileDefinition));
                 ContextItem_CopyItem = new ToolStripMenuItem(TitleRecources.Generic_Copying, IconRecources.Icon_Copy, 
                     (sender, evt) => CopyPasteOperation_Clicked(CopyPasteOperations.Copy));
                 ContextItem_PasteTo = new ToolStripMenuItem(TitleRecources.Generic_PasteTo, IconRecources.Icon_Paste, 
@@ -1704,7 +1709,7 @@ namespace EcfFileViews
                     IconRecources.Icon_AddGlobalDef, (sender, evt) => ItemHandlingSupport_Clicked(ItemHandlingSupportOperations.AddGlobalDef));
                 ContextItem_RemoveGlobalDef = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_RemoveGlobalDef,
                     IconRecources.Icon_DeleteGlobalDef, (sender, evt) => ItemHandlingSupport_Clicked(ItemHandlingSupportOperations.RemoveGlobalDef));
-                ContextItem_AddToGlobalDefinition = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_AddToGlobalDefinition,
+                ContextItem_AddToGlobalDefinition = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_AddToGlobalDefDefinition,
                     IconRecources.Icon_AddToDefinition, (sender, evt) => ItemHandlingSupport_Clicked(ItemHandlingSupportOperations.AddToGlobalDefinition));
 
                 ContextItem_ListParameterUsers = new ToolStripMenuItem(TitleRecources.ItemHandlingSupport_ListParameterUsers,
@@ -1717,6 +1722,7 @@ namespace EcfFileViews
                 Items.Add(ContextItem_ChangeItem);
                 Items.Add(ContextItem_AddTo);
                 Items.Add(ContextItem_AddAfter);
+                Items.Add(ContextItem_AddToFileDefinition); 
                 Items.Add(new ToolStripSeparator());
                 Items.Add(ContextItem_CopyItem);
                 Items.Add(ContextItem_PasteTo);
@@ -1770,10 +1776,13 @@ namespace EcfFileViews
             // privates
             private void UpdateContextMenu(EcfStructureItem item)
             {
-                EcfBlock blockItem = item as EcfBlock;
-                bool isBlock = blockItem != null;
-                bool isRootBlock = isBlock && blockItem.IsRoot();
-                bool isParameter = item is EcfParameter;
+                EcfBlock block = item as EcfBlock;
+                EcfParameter parameter = item as EcfParameter;
+                
+                bool isBlock = block != null;
+                bool isRootBlock = isBlock && block.IsRoot();
+                bool isParameter = parameter != null;
+                bool isUnknownParameter = isParameter && parameter.ContainsError(EcfErrors.ParameterUnknown);
 
                 bool isTemplateBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningTemplates ?? false);
                 bool isItemBlock = isRootBlock && (item.EcfFile?.Definition?.IsDefiningItems ?? false);
@@ -1813,6 +1822,7 @@ namespace EcfFileViews
                 ContextItem_RemoveGlobalDef.Visible = isGlobalParameterUser;
                 ContextItem_AddToGlobalDefinition.Visible = isGlobalParameterParameter;
 
+                ContextItem_AddToFileDefinition.Visible = isUnknownParameter;
                 ContextItem_ListParameterUsers.Visible = isParameter;
                 ContextItem_ListValueUsers.Visible = isParameter;
             }

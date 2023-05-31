@@ -1210,13 +1210,8 @@ namespace EgsEcfParser
                 HasUnsavedData = true;
             }
         }
-        public void ReplaceDefinition(FormatDefinition definition)
+        public void ReplaceDefinition(FormatDefinition definition, IProgress<int> lineProgress = null)
         {
-            ReplaceDefinition(definition, null);
-        }
-        public void ReplaceDefinition(FormatDefinition definition, IProgress<int> lineProgress)
-        {
-            if (HasUnsavedData) { throw new InvalidOperationException("Definition replacement not allowed with unsaved data"); }
             Definition = new FormatDefinition(definition);
             Load(lineProgress);
         }

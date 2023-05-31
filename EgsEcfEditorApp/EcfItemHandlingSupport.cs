@@ -153,6 +153,36 @@ namespace EgsEcfEditorApp
                 true, true, false, sourceItem, UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray());
             ShowLinkedBlocks(templateList, sourceItem, TextRecources.ItemHandlingSupport_NoTemplatesForItem, TextRecources.ItemHandlingSupport_AllTemplatesForItem);
         }
+        public void AddItemToFileDefinition(EcfParameter sourceItem)
+        {
+            try
+            {
+                if (!AddItemToDefinition_TryGetFiles(new Func<FormatDefinition, bool>(def => string.Equals(def.FileType, sourceItem.EcfFile.Definition.FileType)), 
+                    out List<FormatDefinition> definitions,
+                    TextRecources.ItemHandlingSupport_NoDefinitionFileFound,
+                    TitleRecources.ItemHandlingSupport_AddToFileDefinitionOptionSelector))
+                { return; }
+
+                ItemDefinition newParameter = new ItemDefinition(sourceItem.Key,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_FileParam_DefIsOptional,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_FileParam_DefHasValue,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_FileParam_DefInfo);
+
+                AddItemToDefinition_SaveToFiles(definitions, newParameter, null,
+                    out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions);
+
+                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, new Func<EcfTabPage, bool>(page => page.File == sourceItem.EcfFile), 
+                    TextRecources.ItemHandlingSupport_UpdateFileDefinitionsQuestion);
+
+                AddItemToDefinition_ShowReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
+            }
+            catch (Exception ex)
+            {
+                ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddToFileDefinitionFailed, ex);
+            }
+        }
         public void AddTemplateToItem(EcfBlock sourceItem)
         {
             try
@@ -186,12 +216,10 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                if (!AddItemToDefinition_TryGetFiles(TextRecources.ItemHandlingSupport_NoTemplateDefinitionFileFound,
-                    TitleRecources.ItemHandlingSupport_AddToTemplateDefinitionOptionSelector,
-                    out List<FormatDefinition> templateDefinitions, new Func<FormatDefinition, bool>(def => def.IsDefiningTemplates)))
-                {
-                    return;
-                }
+                if (!AddItemToDefinition_TryGetFiles(new Func<FormatDefinition, bool>(def => def.IsDefiningTemplates), out List<FormatDefinition> templateDefinitions,
+                    TextRecources.ItemHandlingSupport_NoTemplateDefinitionFileFound,
+                    TitleRecources.ItemHandlingSupport_AddToTemplateDefinitionOptionSelector))
+                { return; }
 
                 ItemDefinition newParameter = new ItemDefinition(sourceItem.GetName(),
                     UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsOptional,
@@ -199,12 +227,11 @@ namespace EgsEcfEditorApp
                     UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsAllowingBlank,
                     UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefIsForceEscaped,
                     UserSettings.Default.ItemHandlingSupport_DefVal_Ingredient_DefInfo);
-                AddItemToDefinition_SaveToFiles(templateDefinitions,
-                    out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
-                    newParameter);
+                AddItemToDefinition_SaveToFiles(templateDefinitions, newParameter, null,
+                    out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions);
 
-                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion,
-                    new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningTemplates));
+                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningTemplates), 
+                    TextRecources.ItemHandlingSupport_UpdateTemplateFileDefinitionsQuestion);
 
                 AddItemToDefinition_ShowReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
             }
@@ -246,35 +273,32 @@ namespace EgsEcfEditorApp
         {
             try
             {
-                if (!AddItemToDefinition_TryGetFiles(TextRecources.ItemHandlingSupport_NoGlobalDefinitionFileFound,
-                    TitleRecources.ItemHandlingSupport_AddToGlobalDefinitionOptionSelector,
-                    out List<FormatDefinition> globalDefinitions, new Func<FormatDefinition, bool>(def => def.IsDefiningGlobalMacros)))
-                {
-                    return;
-                }
+                if (!AddItemToDefinition_TryGetFiles(new Func<FormatDefinition, bool>(def => def.IsDefiningGlobalMacros), out List<FormatDefinition> globalDefinitions,
+                    TextRecources.ItemHandlingSupport_NoGlobalDefDefinitionFileFound,
+                    TitleRecources.ItemHandlingSupport_AddToGlobalDefDefinitionOptionSelector))
+                { return; }
 
                 ItemDefinition newParameter = new ItemDefinition(sourceItem.Key,
-                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional,
-                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefHasValue,
-                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank,
-                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped,
-                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalParam_DefInfo);
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped,
+                    UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo);
                 ItemDefinition[] newAttributes = sourceItem.Attributes.Select(attribute =>
                 {
                     return new ItemDefinition(attribute.Key,
-                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional,
-                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue,
-                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank,
-                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped,
-                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalAttr_DefInfo);
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped,
+                        UserSettings.Default.ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo);
                 }).ToArray();
 
-                AddItemToDefinition_SaveToFiles(globalDefinitions,
-                    out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
-                    newParameter, newAttributes);
+                AddItemToDefinition_SaveToFiles(globalDefinitions, newParameter, newAttributes,
+                    out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions);
 
-                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, TextRecources.ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion,
-                    new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningGlobalMacros));
+                AddItemToDefinition_ReloadDefinitions(modifiedDefinitions, new Func<EcfTabPage, bool>(page => page.File.Definition.IsDefiningGlobalMacros),
+                    TextRecources.ItemHandlingSupport_UpdateGlobalDefFileDefinitionsQuestion);
 
                 AddItemToDefinition_ShowReport(newParameter, modifiedDefinitions, unmodifiedDefinitions);
             }
@@ -631,8 +655,8 @@ namespace EgsEcfEditorApp
         }
 
         // privates for definition handling
-        private bool AddItemToDefinition_TryGetFiles(string noFileMessage, string optionSelectorTitle,
-            out List<FormatDefinition> definitions, Func<FormatDefinition, bool> filter = null)
+        private bool AddItemToDefinition_TryGetFiles(Func<FormatDefinition, bool> filter, out List<FormatDefinition> definitions,
+            string noFileMessage, string optionSelectorTitle)
         {
             definitions = GetSupportedFileTypes(UserSettings.Default.EgsEcfEditorApp_ActiveGameMode).Where(filter ?? (result => true)).ToList();
             if (definitions.Count < 1)
@@ -658,9 +682,8 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        private void AddItemToDefinition_SaveToFiles(List<FormatDefinition> definitions,
-            out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions,
-            ItemDefinition parameter, params ItemDefinition[] attributes)
+        private void AddItemToDefinition_SaveToFiles(List<FormatDefinition> definitions, ItemDefinition parameter, ItemDefinition[] attributes,
+            out List<FormatDefinition> modifiedDefinitions, out List<FormatDefinition> unmodifiedDefinitions)
         {
             modifiedDefinitions = new List<FormatDefinition>();
             unmodifiedDefinitions = new List<FormatDefinition>();
@@ -684,7 +707,7 @@ namespace EgsEcfEditorApp
                 }
             }
         }
-        private void AddItemToDefinition_ReloadDefinitions(List<FormatDefinition> definitions, string openedPageUpdateQuestion, Func<EcfTabPage, bool> ecfPageFilter = null)
+        private void AddItemToDefinition_ReloadDefinitions(List<FormatDefinition> definitions, Func<EcfTabPage, bool> ecfPageFilter, string openedPageUpdateQuestion)
         {
             if (definitions.Count > 0)
             {

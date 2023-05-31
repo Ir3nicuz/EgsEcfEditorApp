@@ -314,120 +314,120 @@ namespace EgsEcfEditorApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional {
+        public bool ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsOptional"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsOptional"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalParam_DefHasValue {
+        public bool ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefHasValue"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalParam_DefHasValue"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefParam_DefHasValue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank {
+        public bool ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsAllowingBlank"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsAllowingBlank"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped {
+        public bool ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalParam_DefIsForceEscaped"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefParam_DefIsForceEscaped"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
-        public string ItemHandlingSupport_DefVal_GlobalParam_DefInfo {
+        public string ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo {
             get {
-                return ((string)(this["ItemHandlingSupport_DefVal_GlobalParam_DefInfo"]));
+                return ((string)(this["ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalParam_DefInfo"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefParam_DefInfo"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional {
+        public bool ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsOptional"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsOptional"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue {
+        public bool ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalAttr_DefHasValue"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefHasValue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank {
+        public bool ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsAllowingBlank"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsAllowingBlank"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped {
+        public bool ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped {
             get {
-                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped"]));
+                return ((bool)(this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalAttr_DefIsForceEscaped"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefIsForceEscaped"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
-        public string ItemHandlingSupport_DefVal_GlobalAttr_DefInfo {
+        public string ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo {
             get {
-                return ((string)(this["ItemHandlingSupport_DefVal_GlobalAttr_DefInfo"]));
+                return ((string)(this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo"]));
             }
             set {
-                this["ItemHandlingSupport_DefVal_GlobalAttr_DefInfo"] = value;
+                this["ItemHandlingSupport_DefVal_GlobalDefAttr_DefInfo"] = value;
             }
         }
         
@@ -440,6 +440,66 @@ namespace EgsEcfEditorApp.Properties {
             }
             set {
                 this["ItemHandlingSupport_ParamKeys_GlobalRef"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_FileParam_DefIsOptional {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_FileParam_DefIsOptional"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_FileParam_DefIsOptional"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ItemHandlingSupport_DefVal_FileParam_DefHasValue {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_FileParam_DefHasValue"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_FileParam_DefHasValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_FileParam_DefIsAllowingBlank"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped {
+            get {
+                return ((bool)(this["ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_FileParam_DefIsForceEscaped"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tool-Added")]
+        public string ItemHandlingSupport_DefVal_FileParam_DefInfo {
+            get {
+                return ((string)(this["ItemHandlingSupport_DefVal_FileParam_DefInfo"]));
+            }
+            set {
+                this["ItemHandlingSupport_DefVal_FileParam_DefInfo"] = value;
             }
         }
     }

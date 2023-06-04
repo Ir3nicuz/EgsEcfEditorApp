@@ -2489,6 +2489,10 @@ namespace EgsEcfParser
         {
             return InternalValueGroups.Count(group => group.Values.Count > 0) > 1;
         }
+        public bool IsEmpty()
+        {
+            return !InternalValueGroups.Any(group => group.Values.Any(value => !string.IsNullOrEmpty(value))); 
+        }
         public bool HasValue()
         {
             return (InternalValueGroups.FirstOrDefault()?.Values.Count ?? 0) > 0;

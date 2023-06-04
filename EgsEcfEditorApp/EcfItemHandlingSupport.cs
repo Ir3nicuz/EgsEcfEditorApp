@@ -204,7 +204,7 @@ namespace EgsEcfEditorApp
                     TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector))
                 { return; }
 
-                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey);
+                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey, true);
                 AddDependencyToItem_ShowReport(itemToAdd, sourceItem);
             }
             catch (Exception ex)
@@ -240,6 +240,7 @@ namespace EgsEcfEditorApp
                 ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddToTemplateDefinitionFailed, ex);
             }
         }
+        [Obsolete("name of macro?")]
         public void AddGlobalDefToItem(EcfBlock sourceItem)
         {
             try
@@ -261,7 +262,7 @@ namespace EgsEcfEditorApp
                     TitleRecources.ItemHandlingSupport_TargetGlobalDefFileSelector))
                 { return; }
 
-                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey);
+                AddDependencyToItem_UpdateLinkParameter(itemToAdd, sourceItem, selectedParameterKey, false);
                 AddDependencyToItem_ShowReport(itemToAdd, sourceItem);
             }
             catch (Exception ex)
@@ -415,7 +416,8 @@ namespace EgsEcfEditorApp
             List<EcfBlock> blockList = GetBlockListByNameOrParamValue(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
                 withBlockNameCheck, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
             List<string> useableParameterKeys = allParameterKeys.Length < 2 ? allParameterKeys.ToList() :
-                 allParameterKeys.Where(key => sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter _)).ToList();
+                 allParameterKeys.Where(key => !sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter parameter) ||
+                 parameter.IsEmpty()).ToList();
             
             if (blockList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
             {
@@ -463,6 +465,7 @@ namespace EgsEcfEditorApp
                 default: return false;
             }
         }
+        [Obsolete("selectable items must skip alerady added items?")]
         private bool AddDependencyToItem_TrySelectItem(List<EgsEcfFile> targetFiles, string selectorTitle, out EcfBlock selectedItem)
         {
             selectedItem = null;
@@ -514,32 +517,19 @@ namespace EgsEcfEditorApp
                 targetFile = (EgsEcfFile)presentFileItems.FirstOrDefault().Item;
             }
             if (EditItemDialog.ShowDialog(ParentForm, ParentForm.GetOpenedFiles(), targetFile, itemToAdd) != DialogResult.OK) { return false; }
-            itemToAdd.Revalidate();
             targetFile.AddItem(itemToAdd);
+            itemToAdd.Revalidate();
             ParentForm.GetTabPage(targetFile)?.UpdateAllViews();
             return true;
         }
-        [Obsolete("logic complete?")]
-        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock templateToAdd, EcfBlock targetItem, string selectedParameterKey)
+        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string selectedParameterKey, bool usesNameLogic)
         {
-            EcfParameter templateParameter = targetItem.FindOrCreateParameter(UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName);
-            templateParameter.ClearValues();
-            string templateName = templateToAdd.GetName();
-            templateParameter.AddValue(string.Equals(templateName, targetItem.GetName()) ? string.Empty : templateName);
-            ParentForm.GetTabPage(targetItem.EcfFile)?.UpdateAllViews();
-
-
-
-
-
-
-
-
-
-
-
-
-
+            EcfParameter newItemParameter = parentItem.FindOrCreateParameter(selectedParameterKey);
+            newItemParameter.ClearValues();
+            string itemName = itemToAdd.GetName();
+            newItemParameter.AddValue(!usesNameLogic ? itemName : (!string.Equals(itemName, parentItem.GetName()) ? itemName : string.Empty));
+            parentItem.Revalidate();
+            ParentForm.GetTabPage(parentItem.EcfFile)?.UpdateAllViews();
         }
         private void AddDependencyToItem_ShowReport(EcfBlock addedItem, EcfBlock targetItem)
         {
@@ -603,6 +593,7 @@ namespace EgsEcfEditorApp
                         parameter.ClearValues();
                         parameter.AddValue(string.Empty);
                     }
+                    sourceItem.Revalidate();
                     ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
                     RemoveDependencyFromItem_ShowReport(itemToRemove, sourceItem.GetName(), TitleRecources.Generic_Item);
                     return true;
@@ -644,6 +635,7 @@ namespace EgsEcfEditorApp
 
             foreach (EgsEcfFile file in changedFiles)
             {
+                file.Revalidate();
                 ParentForm.GetTabPage(file)?.UpdateAllViews();
             }
         }

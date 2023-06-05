@@ -549,6 +549,9 @@
   <data name="ItemHandlingSupport_CreateFromCopyTemplateSelector" xml:space="preserve">
     <value>Vorhandenes Template zum Kopieren wählen</value>
   </data>
+  <data name="ItemHandlingSupport_GlobalDefDefaultMacroName" xml:space="preserve">
+    <value>NeuesMakro</value>
+  </data>
   <data name="ItemHandlingSupport_ListBlockUsingBlockGroups" xml:space="preserve">
     <value>Liste verwendende BlockGroups</value>
   </data>

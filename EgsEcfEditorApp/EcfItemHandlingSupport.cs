@@ -198,7 +198,7 @@ namespace EgsEcfEditorApp
                     TextRecources.ItemHandlingSupport_ElementHasAlreadyTemplate))
                 { return; }
 
-                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, sourceItem.GetName(), useableFileItems, out EcfBlock itemToAdd,
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, out EcfBlock itemToAdd, sourceItem.GetName(),
                     TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector,
                     TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector,
                     TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector))
@@ -240,7 +240,6 @@ namespace EgsEcfEditorApp
                 ErrorDialog.ShowDialog(ParentForm, TextRecources.ItemHandlingSupport_AddToTemplateDefinitionFailed, ex);
             }
         }
-        [Obsolete("name of macro?")]
         public void AddGlobalDefToItem(EcfBlock sourceItem)
         {
             try
@@ -256,7 +255,8 @@ namespace EgsEcfEditorApp
                     TextRecources.ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft))
                 { return; }
 
-                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, "newMacro", useableFileItems, out EcfBlock itemToAdd,
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, out EcfBlock itemToAdd,
+                    TitleRecources.ItemHandlingSupport_GlobalDefDefaultMacroName,
                     TitleRecources.ItemHandlingSupport_AddExistingGlobalDefSelector,
                     TitleRecources.ItemHandlingSupport_CreateFromCopyGlobalDefSelector,
                     TitleRecources.ItemHandlingSupport_TargetGlobalDefFileSelector))
@@ -440,9 +440,8 @@ namespace EgsEcfEditorApp
             MessageBox.Show(ParentForm, addingNotAllowedMessage, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             return false;
         }
-        private bool AddDependencyToItem_TryPerformAddOperation(AddDependencyOptions? selectedOption, string newItemDefaultName, 
-            SelectorItem[] useableFileItems, out EcfBlock itemToAdd,
-            string addExistingSeletorTitle, string CreateFromCopySelectorTitle, string targetFileSelectorTitle)
+        private bool AddDependencyToItem_TryPerformAddOperation(AddDependencyOptions? selectedOption, SelectorItem[] useableFileItems, out EcfBlock itemToAdd,
+            string newItemDefaultName, string addExistingSeletorTitle, string CreateFromCopySelectorTitle, string targetFileSelectorTitle)
         {
             itemToAdd = null;
             switch (selectedOption)
@@ -522,14 +521,37 @@ namespace EgsEcfEditorApp
             ParentForm.GetTabPage(targetFile)?.UpdateAllViews();
             return true;
         }
-        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string selectedParameterKey, bool usesNameLogic)
+        [Obsolete("overrule or inherit?")]
+        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string selectedParameterKey, bool usesNameToNameLink)
         {
             EcfParameter newItemParameter = parentItem.FindOrCreateParameter(selectedParameterKey);
             newItemParameter.ClearValues();
             string itemName = itemToAdd.GetName();
-            newItemParameter.AddValue(!usesNameLogic ? itemName : (!string.Equals(itemName, parentItem.GetName()) ? itemName : string.Empty));
+            newItemParameter.AddValue(!usesNameToNameLink ? itemName : (!string.Equals(itemName, parentItem.GetName()) ? itemName : string.Empty));
             parentItem.Revalidate();
             ParentForm.GetTabPage(parentItem.EcfFile)?.UpdateAllViews();
+
+
+            /*
+             * Restore or overrule possible inheritance Popup Question:
+	Restore: remove parameter
+	Overrule: set parameter empty
+
+At Remove Workflow:
+What happened at UsesNameToNameLink:
+o	False: pop-up question
+o	True: What happened at NameToNameLink recognized?
+	True: remove parameter (restore)
+	False: pop-up question
+
+At Add Workflow:
+            What happened at UsesNameToNameLink?
+o	False: fill to parameter value
+o	True: What happened at NameToNameLink recognized?
+	True: remove parameter (restore)
+	False: fill to parameter value
+
+            */
         }
         private void AddDependencyToItem_ShowReport(EcfBlock addedItem, EcfBlock targetItem)
         {

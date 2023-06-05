@@ -1366,6 +1366,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NewMacro.
+        /// </summary>
+        internal static string ItemHandlingSupport_GlobalDefDefaultMacroName {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_GlobalDefDefaultMacroName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List block using block groups.
         /// </summary>
         internal static string ItemHandlingSupport_ListBlockUsingBlockGroups {

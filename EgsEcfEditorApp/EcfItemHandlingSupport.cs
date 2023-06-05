@@ -191,14 +191,15 @@ namespace EgsEcfEditorApp
                     TextRecources.ItemHandlingSupport_NoTemplateFileOpened, out SelectorItem[] useableFileItems)) { return; }
 
                 string[] allParameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray();
-                if (!AddDependencyToItem_TryPrepareAddOperation(allParameterKeys, true, false, false, sourceItem, useableFileItems, 
-                    out AddDependencyOptions? selectedOption, out string selectedParameterKey,
+                if (!AddDependencyToItem_TryPrepareAddOperation(allParameterKeys, true, false, false, sourceItem, useableFileItems,
+                    out AddDependencyOptions? selectedOption, out string selectedParameterKey, out List<EcfBlock> addableItems,
                     TitleRecources.ItemHandlingSupport_AddTemplateOptionSelector,
                     TitleRecources.ItemHandlingSupport_AddTemplateParameterSelector,
                     TextRecources.ItemHandlingSupport_ElementHasAlreadyTemplate))
                 { return; }
 
-                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, out EcfBlock itemToAdd, sourceItem.GetName(),
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, addableItems, out EcfBlock itemToAdd, 
+                    sourceItem.GetName(),
                     TitleRecources.ItemHandlingSupport_AddExistingTemplateSelector,
                     TitleRecources.ItemHandlingSupport_CreateFromCopyTemplateSelector,
                     TitleRecources.ItemHandlingSupport_TargetTemplateFileSelector))
@@ -249,13 +250,13 @@ namespace EgsEcfEditorApp
 
                 string[] allParameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray();
                 if (!AddDependencyToItem_TryPrepareAddOperation(allParameterKeys, false, false, false, sourceItem, useableFileItems, 
-                    out AddDependencyOptions? selectedOption, out string selectedParameterKey, 
+                    out AddDependencyOptions? selectedOption, out string selectedParameterKey, out List<EcfBlock> addableItems, 
                     TitleRecources.ItemHandlingSupport_AddGlobalDefOptionSelector,
                     TitleRecources.ItemHandlingSupport_AddGlobalDefParameterSelector, 
                     TextRecources.ItemHandlingSupport_ElementHasNoGlobalDefSlotLeft))
                 { return; }
 
-                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, out EcfBlock itemToAdd,
+                if (!AddDependencyToItem_TryPerformAddOperation(selectedOption, useableFileItems, addableItems, out EcfBlock itemToAdd,
                     TitleRecources.ItemHandlingSupport_GlobalDefDefaultMacroName,
                     TitleRecources.ItemHandlingSupport_AddExistingGlobalDefSelector,
                     TitleRecources.ItemHandlingSupport_CreateFromCopyGlobalDefSelector,
@@ -396,7 +397,8 @@ namespace EgsEcfEditorApp
         }
         
         // privates for generic dependency handling
-        private bool AddDependencyToItem_TryFindTargetFiles(Func<EgsEcfFile, bool> fileFilter, string nothingFoundText, out SelectorItem[] targetFiles)
+        private bool AddDependencyToItem_TryFindTargetFiles(Func<EgsEcfFile, bool> fileFilter, string nothingFoundText, 
+            out SelectorItem[] targetFiles)
         {
             targetFiles = ParentForm.GetOpenedFiles(fileFilter).Select(file => new SelectorItem(file, file.FileName)).ToArray();
             if (targetFiles.Length < 1)
@@ -407,19 +409,32 @@ namespace EgsEcfEditorApp
             return true;
         }
         private bool AddDependencyToItem_TryPrepareAddOperation(string[] allParameterKeys, bool withBlockNameCheck, bool withInheritedParams, bool withSubParams, 
-            EcfBlock sourceItem, SelectorItem[] useableFileItems, out AddDependencyOptions? selectedOption, out string selectedParameterKey,
+            EcfBlock sourceItem, SelectorItem[] useableFileItems, out AddDependencyOptions? selectedOption, out string selectedParameterKey, out List<EcfBlock> addableItems,
             string optionSelectorTitle, string parameterSelectorTitle, string addingNotAllowedMessage)
         {
             selectedOption = null;
             selectedParameterKey = null;
 
-            List<EcfBlock> blockList = GetBlockListByNameOrParamValue(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
+            List<EgsEcfFile> useableFiles = useableFileItems.Select(item => item.Item as EgsEcfFile).ToList();
+            List<EcfBlock> referencedItemList = GetBlockListByNameOrParamValue(useableFiles,
                 withBlockNameCheck, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
-            List<string> useableParameterKeys = allParameterKeys.Length < 2 ? allParameterKeys.ToList() :
-                 allParameterKeys.Where(key => !sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter parameter) ||
-                 parameter.IsEmpty()).ToList();
-            
-            if (blockList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
+            List<EcfParameter> usedParameters = new List<EcfParameter>();
+            List<string> useableParameterKeys = new List<string>();
+            foreach (string key in allParameterKeys)
+            {
+                if (sourceItem.HasParameter(key, withInheritedParams, withSubParams, out EcfParameter parameter) && !parameter.IsEmpty())
+                {
+                    usedParameters.Add(parameter);
+                }
+                else
+                {
+                    useableParameterKeys.Add(key);
+                }
+            }
+            addableItems = useableFiles.SelectMany(file => file.GetItemList<EcfBlock>()
+                .Where(item => !usedParameters.Any(parameter => parameter.ContainsValue(item.GetName())))).ToList();
+
+            if (referencedItemList.Count < allParameterKeys.Length && useableParameterKeys.Count > 0)
             {
                 if (useableParameterKeys.Count > 1)
                 {
@@ -440,19 +455,18 @@ namespace EgsEcfEditorApp
             MessageBox.Show(ParentForm, addingNotAllowedMessage, TitleRecources.Generic_Attention, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             return false;
         }
-        private bool AddDependencyToItem_TryPerformAddOperation(AddDependencyOptions? selectedOption, SelectorItem[] useableFileItems, out EcfBlock itemToAdd,
+        private bool AddDependencyToItem_TryPerformAddOperation(AddDependencyOptions? selectedOption, 
+            SelectorItem[] useableFileItems, List<EcfBlock> addableItems, out EcfBlock itemToAdd,
             string newItemDefaultName, string addExistingSeletorTitle, string CreateFromCopySelectorTitle, string targetFileSelectorTitle)
         {
             itemToAdd = null;
             switch (selectedOption)
             {
                 case AddDependencyOptions.SelectExisting:
-                    if (!AddDependencyToItem_TrySelectItem(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
-                        addExistingSeletorTitle, out itemToAdd)) { return false; }
+                    if (!AddDependencyToItem_TrySelectItem(addableItems, addExistingSeletorTitle, out itemToAdd)) { return false; }
                     return true;
                 case AddDependencyOptions.CreateNewAsCopy:
-                    if (!AddDependencyToItem_TrySelectItem(useableFileItems.Select(item => item.Item as EgsEcfFile).ToList(),
-                        CreateFromCopySelectorTitle, out EcfBlock itemToCopy)) { return false; }
+                    if (!AddDependencyToItem_TrySelectItem(addableItems, CreateFromCopySelectorTitle, out EcfBlock itemToCopy)) { return false; }
                     itemToAdd = new EcfBlock(itemToCopy);
                     itemToAdd.SetName(newItemDefaultName);
                     if (!AddDependencyToItem_TryEditAndInsertItem(itemToAdd, useableFileItems, targetFileSelectorTitle)) { return false; }
@@ -464,17 +478,13 @@ namespace EgsEcfEditorApp
                 default: return false;
             }
         }
-        [Obsolete("selectable items must skip alerady added items?")]
-        private bool AddDependencyToItem_TrySelectItem(List<EgsEcfFile> targetFiles, string selectorTitle, out EcfBlock selectedItem)
+        private bool AddDependencyToItem_TrySelectItem(List<EcfBlock> addableItems, string selectorTitle, out EcfBlock selectedItem)
         {
             selectedItem = null;
 
-            SelectorItem[] presentItems = targetFiles
-                .SelectMany(file => file.ItemList.Where(item => item is EcfBlock).Cast<EcfBlock>())
-                .Select(template => new SelectorItem(template, template.BuildRootId())).ToArray();
-
+            SelectorItem[] addableItemItems = addableItems.Select(addableItem => new SelectorItem(addableItem, addableItem.BuildRootId())).ToArray();
             ItemsDialog.Text = selectorTitle;
-            if (ItemsDialog.ShowDialog(ParentForm, presentItems) != DialogResult.OK)
+            if (ItemsDialog.ShowDialog(ParentForm, addableItemItems) != DialogResult.OK)
             {
                 return false;
             }

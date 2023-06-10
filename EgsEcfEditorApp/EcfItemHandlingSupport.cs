@@ -532,20 +532,49 @@ namespace EgsEcfEditorApp
             return true;
         }
         [Obsolete("overrule or inherit?")]
-        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string selectedParameterKey, bool usesNameToNameLink)
+        private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string linkParameterKey, bool usesNameToNameLink)
         {
-            EcfParameter newItemParameter = parentItem.FindOrAddParameter(selectedParameterKey);
-            newItemParameter.ClearValues();
+            EcfParameter linkParameter = parentItem.FindOrAddParameter(linkParameterKey);
+            
             string itemName = itemToAdd.GetName();
             newItemParameter.AddValue(!usesNameToNameLink ? itemName : (!string.Equals(itemName, parentItem.GetName()) ? itemName : string.Empty));
+
+
+
             parentItem.Revalidate();
             ParentForm.GetTabPage(parentItem.EcfFile)?.UpdateAllViews();
 
 
+
+
+
+            if (usesNameToNameLink && string.Equals(itemName, parentItem.GetName()))
+            {
+                parentItem.RemoveChild(linkParameter);
+            }
+            else
+            {
+                linkParameter.ClearValues();.ClearValues();
+                newItemParameter.AddValue(itemName);
+            }
             /*
+             * 
+             * 
+             * At Add Workflow:
+            What happened at UsesNameToNameLink?
+o	False: fill to parameter value
+o	True: What happened at NameToNameLink recognized?
+	True: remove parameter (restore)
+	False: fill to parameter value
+             * 
+             * 
+             * 
              * Restore or overrule possible inheritance Popup Question:
 	Restore: remove parameter
 	Overrule: set parameter empty
+
+
+
 
 At Remove Workflow:
 What happened at UsesNameToNameLink:
@@ -554,12 +583,7 @@ o	True: What happened at NameToNameLink recognized?
 	True: remove parameter (restore)
 	False: pop-up question
 
-At Add Workflow:
-            What happened at UsesNameToNameLink?
-o	False: fill to parameter value
-o	True: What happened at NameToNameLink recognized?
-	True: remove parameter (restore)
-	False: fill to parameter value
+
 
             */
         }

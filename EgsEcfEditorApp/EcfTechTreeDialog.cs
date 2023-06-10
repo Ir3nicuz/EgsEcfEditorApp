@@ -980,14 +980,14 @@ namespace EgsEcfEditorApp
             }
             private void SetParameter(string paramKey, string value)
             {
-                EcfParameter parameter = Element.FindOrCreateParameter(paramKey);
+                EcfParameter parameter = Element.FindOrAddParameter(paramKey);
                 parameter.ClearValues();
                 parameter.AddValue(value);
                 Dialog.ChangedFileTabs.Add(Tab);
             }
             private void SetParameter(string paramKey, List<string> values)
             {
-                EcfParameter parameter = Element.FindOrCreateParameter(paramKey);
+                EcfParameter parameter = Element.FindOrAddParameter(paramKey);
                 parameter.ClearValues();
                 parameter.AddValue(values);
                 Dialog.ChangedFileTabs.Add(Tab);

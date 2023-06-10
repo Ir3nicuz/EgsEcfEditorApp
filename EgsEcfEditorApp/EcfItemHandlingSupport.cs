@@ -534,7 +534,7 @@ namespace EgsEcfEditorApp
         [Obsolete("overrule or inherit?")]
         private void AddDependencyToItem_UpdateLinkParameter(EcfBlock itemToAdd, EcfBlock parentItem, string selectedParameterKey, bool usesNameToNameLink)
         {
-            EcfParameter newItemParameter = parentItem.FindOrCreateParameter(selectedParameterKey);
+            EcfParameter newItemParameter = parentItem.FindOrAddParameter(selectedParameterKey);
             newItemParameter.ClearValues();
             string itemName = itemToAdd.GetName();
             newItemParameter.AddValue(!usesNameToNameLink ? itemName : (!string.Equals(itemName, parentItem.GetName()) ? itemName : string.Empty));
@@ -658,7 +658,7 @@ o	True: What happened at NameToNameLink recognized?
             {
                 parametersWithItem.ForEach(parameter =>
                 {
-                    EcfParameter parameterToRemove = user.FindOrCreateParameter(parameter.Key);
+                    EcfParameter parameterToRemove = user.FindOrAddParameter(parameter.Key);
                     parameterToRemove.ClearValues();
                     parameterToRemove.AddValue(string.Empty);
                 });

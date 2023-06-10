@@ -3395,7 +3395,7 @@ namespace EgsEcfParser
             }
             return parameter != null;
         }
-        public EcfParameter FindOrCreateParameter(string key)
+        public EcfParameter FindOrAddParameter(string key)
         {
             if (!HasParameter(key, out EcfParameter parameter))
             {

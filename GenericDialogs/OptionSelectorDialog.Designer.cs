@@ -44,15 +44,15 @@ namespace EgsEcfEditorApp
             this.ButtonPanel.Controls.Add(this.OkButton);
             this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.ButtonPanel.Location = new System.Drawing.Point(0, 132);
+            this.ButtonPanel.Location = new System.Drawing.Point(0, 182);
             this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(384, 29);
+            this.ButtonPanel.Size = new System.Drawing.Size(484, 29);
             this.ButtonPanel.TabIndex = 0;
             // 
             // AbortButton
             // 
             this.AbortButton.AutoSize = true;
-            this.AbortButton.Location = new System.Drawing.Point(306, 3);
+            this.AbortButton.Location = new System.Drawing.Point(406, 3);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 0;
@@ -63,7 +63,7 @@ namespace EgsEcfEditorApp
             // OkButton
             // 
             this.OkButton.AutoSize = true;
-            this.OkButton.Location = new System.Drawing.Point(225, 3);
+            this.OkButton.Location = new System.Drawing.Point(325, 3);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 1;
@@ -81,14 +81,14 @@ namespace EgsEcfEditorApp
             this.OptionPanel.Name = "OptionPanel";
             this.OptionPanel.RowCount = 1;
             this.OptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.OptionPanel.Size = new System.Drawing.Size(384, 132);
+            this.OptionPanel.Size = new System.Drawing.Size(484, 182);
             this.OptionPanel.TabIndex = 1;
             // 
             // OptionSelectorDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 161);
+            this.ClientSize = new System.Drawing.Size(484, 211);
             this.Controls.Add(this.OptionPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

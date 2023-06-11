@@ -50,14 +50,14 @@ namespace EcfFileViews
             this.ButtonPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.ButtonPanel.Location = new System.Drawing.Point(0, 52);
             this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(434, 29);
+            this.ButtonPanel.Size = new System.Drawing.Size(484, 29);
             this.ButtonPanel.TabIndex = 0;
             // 
             // AbortButton
             // 
             this.AbortButton.AutoSize = true;
             this.AbortButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.AbortButton.Location = new System.Drawing.Point(356, 3);
+            this.AbortButton.Location = new System.Drawing.Point(406, 3);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 0;
@@ -68,7 +68,7 @@ namespace EcfFileViews
             // OkButton
             // 
             this.OkButton.AutoSize = true;
-            this.OkButton.Location = new System.Drawing.Point(275, 3);
+            this.OkButton.Location = new System.Drawing.Point(325, 3);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 1;
@@ -83,7 +83,7 @@ namespace EcfFileViews
             this.ItemSelectorComboBox.FormattingEnabled = true;
             this.ItemSelectorComboBox.Location = new System.Drawing.Point(3, 29);
             this.ItemSelectorComboBox.Name = "ItemSelectorComboBox";
-            this.ItemSelectorComboBox.Size = new System.Drawing.Size(428, 21);
+            this.ItemSelectorComboBox.Size = new System.Drawing.Size(478, 21);
             this.ItemSelectorComboBox.Sorted = true;
             this.ItemSelectorComboBox.TabIndex = 1;
             this.ItemSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.ItemSelectorComboBox_SelectedIndexChanged);
@@ -103,7 +103,7 @@ namespace EcfFileViews
             this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SelectionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SelectionPanel.Size = new System.Drawing.Size(434, 52);
+            this.SelectionPanel.Size = new System.Drawing.Size(484, 52);
             this.SelectionPanel.TabIndex = 2;
             // 
             // SearchTextBox
@@ -111,7 +111,7 @@ namespace EcfFileViews
             this.SearchTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SearchTextBox.Location = new System.Drawing.Point(3, 3);
             this.SearchTextBox.Name = "SearchTextBox";
-            this.SearchTextBox.Size = new System.Drawing.Size(428, 20);
+            this.SearchTextBox.Size = new System.Drawing.Size(478, 20);
             this.SearchTextBox.TabIndex = 2;
             this.SearchTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchTextBox_KeyPress);
             this.SearchTextBox.MouseHover += new System.EventHandler(this.SearchTextBox_MouseHover);
@@ -120,7 +120,7 @@ namespace EcfFileViews
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 81);
+            this.ClientSize = new System.Drawing.Size(484, 81);
             this.Controls.Add(this.SelectionPanel);
             this.Controls.Add(this.ButtonPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

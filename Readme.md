@@ -279,6 +279,10 @@ After bigger patches of [Empyrion Galactic Survival](https://empyriongame.com/) 
 ### Xml File Content
 The definition uses often the terminology `Block`. Don't missinterprete this with an `Empyrion ingame block`. In Xml-speaking `Block` stands for a `.ecf data block`.
 
+The `ContentLinking` chapter of the `.xml` files provides settings for the file content in relation to other `.ecf` files and for referencing within the file.
+
+<img src="images/ContentLinking.png" title="XML ECF ContentLinking Chapter"/>
+
 The `formatting` chapter of the `.xml` files provides settings for the basic `.ecf` syntax. This chapter should mostly be similar for all `.ecf` files.
 
 <img src="images/xml_formatting.png" title="XML ECF Formatting"/>

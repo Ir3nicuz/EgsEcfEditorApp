@@ -313,10 +313,11 @@ namespace EgsEcfEditorApp
         {
             try
             {
+                bool usesNameToNameLink = true;
                 string[] parameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKey_TemplateName.ToSeperated<string>().ToArray();
 
                 if (!RemoveDependencyFromItem_TryFindTargetItems(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningTemplates),
-                    sourceItem, true, parameterKeys, TextRecources.ItemHandlingSupport_NoTemplatesForItem, out List<EcfBlock> templateList)) { return; }
+                    sourceItem, usesNameToNameLink, parameterKeys, TextRecources.ItemHandlingSupport_NoTemplatesForItem, out List<EcfBlock> templateList)) { return; }
 
                 if (!RemoveDependencyFromItem_TryGetTargetItem(templateList, sourceItem, 
                     TextRecources.ItemHandlingSupport_AllTemplatesForItem, out EcfBlock templateToRemove)) { return; }
@@ -327,7 +328,7 @@ namespace EgsEcfEditorApp
 
                 if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, templateParameters);
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, usesNameToNameLink, templateParameters);
                     RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
@@ -335,7 +336,7 @@ namespace EgsEcfEditorApp
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems), 
                     templateToRemove, true, true, parameterKeys, out List <EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(templateToRemove, userList, templateParameters);
+                RemoveDependencyFromItem_RemoveItem(templateToRemove, usesNameToNameLink, templateParameters, userList);
                 RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -347,10 +348,11 @@ namespace EgsEcfEditorApp
         {
             try
             {
+                bool usesNameToNameLink = false;
                 string[] parameterKeys = UserSettings.Default.ItemHandlingSupport_ParamKeys_GlobalRef.ToSeperated<string>().ToArray();
 
                 if (!RemoveDependencyFromItem_TryFindTargetItems(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacros),
-                    sourceItem, false, parameterKeys, TextRecources.ItemHandlingSupport_NoGlobalDefsForItem, out List<EcfBlock> globalDefList)) { return; }
+                    sourceItem, usesNameToNameLink, parameterKeys, TextRecources.ItemHandlingSupport_NoGlobalDefsForItem, out List<EcfBlock> globalDefList)) { return; }
 
                 if (!RemoveDependencyFromItem_TryGetTargetItem(globalDefList, sourceItem,
                     TextRecources.ItemHandlingSupport_AllGlobalDefsForItem, out EcfBlock globalDefToRemove)) { return; }
@@ -361,7 +363,7 @@ namespace EgsEcfEditorApp
 
                 if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefParameters);
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, usesNameToNameLink, globalDefParameters);
                     RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
@@ -369,7 +371,7 @@ namespace EgsEcfEditorApp
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
                     globalDefToRemove, false, true, parameterKeys, out List<EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(globalDefToRemove, userList, globalDefParameters);
+                RemoveDependencyFromItem_RemoveItem(globalDefToRemove, usesNameToNameLink, globalDefParameters, userList);
                 RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -424,7 +426,7 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        private bool AddDependencyToItem_TryPrepareAddOperation(string[] allParameterKeys, bool withBlockNameCheck, bool withInheritedParams, bool withSubParams, 
+        private bool AddDependencyToItem_TryPrepareAddOperation(string[] allParameterKeys, bool usesNameToNameLink, bool withInheritedParams, bool withSubParams, 
             EcfBlock sourceItem, SelectorItem[] useableFileItems, out AddDependencyOptions? selectedOption, out string selectedParameterKey, out List<EcfBlock> addableItems,
             string optionSelectorTitle, string parameterSelectorTitle, string addingNotAllowedMessage)
         {
@@ -433,7 +435,7 @@ namespace EgsEcfEditorApp
 
             List<EgsEcfFile> useableFiles = useableFileItems.Select(item => item.Item as EgsEcfFile).ToList();
             List<EcfBlock> referencedItemList = GetBlockListByNameOrParamValue(useableFiles,
-                withBlockNameCheck, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
+                usesNameToNameLink, withInheritedParams, withSubParams, sourceItem, allParameterKeys);
             List<EcfParameter> usedParameters = new List<EcfParameter>();
             List<string> useableParameterKeys = new List<string>();
             foreach (string key in allParameterKeys)
@@ -569,10 +571,10 @@ namespace EgsEcfEditorApp
                 addedItem.DataType, TextRecources.Generic_AddedTo, TitleRecources.Generic_Item);
             MessageBox.Show(ParentForm, messageText, TitleRecources.Generic_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        private bool RemoveDependencyFromItem_TryFindTargetItems(Func<EgsEcfFile, bool> fileFilter, EcfBlock sourceItem, bool withBlockNameCheck,
+        private bool RemoveDependencyFromItem_TryFindTargetItems(Func<EgsEcfFile, bool> fileFilter, EcfBlock sourceItem, bool usesNameToNameLink,
             string[] parameterKeys, string noItemMessage, out List<EcfBlock> targetItems)
         {
-            targetItems = GetBlockListByNameOrParamValue(ParentForm.GetOpenedFiles(fileFilter), withBlockNameCheck, false, false, sourceItem, parameterKeys);
+            targetItems = GetBlockListByNameOrParamValue(ParentForm.GetOpenedFiles(fileFilter), usesNameToNameLink, false, false, sourceItem, parameterKeys);
             if (targetItems.Count() < 1)
             {
                 string messageText = string.Format("{0}: {1}", noItemMessage, sourceItem.BuildRootId());
@@ -626,9 +628,9 @@ namespace EgsEcfEditorApp
             return false;
         }
         private bool RemoveDependencyFromItem_CrossUsageCheck(Func<EgsEcfFile, bool> fileFilter, EcfBlock itemToRemove, 
-            bool withBlockNameCheck, bool withInheritedParams, string[] parameterKeys, out List<EcfBlock> userList)
+            bool usesNameToNameLink, bool withInheritedParams, string[] parameterKeys, out List<EcfBlock> userList)
         {
-            userList = GetBlockListByParameterValue(ParentForm.GetOpenedFiles(fileFilter), withBlockNameCheck, withInheritedParams, itemToRemove.GetName(), parameterKeys);
+            userList = GetBlockListByParameterValue(ParentForm.GetOpenedFiles(fileFilter), usesNameToNameLink, withInheritedParams, itemToRemove.GetName(), parameterKeys);
             if (userList.Count() > 1)
             {
                 List<string> errors = userList.Select(user => string.Format("{0} {1}: {2}", itemToRemove.DataType,
@@ -641,8 +643,11 @@ namespace EgsEcfEditorApp
             return false;
         }
         [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, List<EcfParameter> sourceContainingParameters)
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, bool usesNameToNameLink, List<EcfParameter> sourceContainingParameters)
         {
+            
+            
+            
             foreach (EcfParameter parameter in sourceContainingParameters)
             {
                 parameter.ClearValues();
@@ -668,7 +673,8 @@ o	True: What happened at NameToNameLink recognized?
 
         }
         [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock itemToRemove, List<EcfBlock> userList, List<EcfParameter> sourceContainingParameters)
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock itemToRemove, bool usesNameToNameLink, 
+            List<EcfParameter> sourceContainingParameters, List<EcfBlock> userList)
         {
             HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
 

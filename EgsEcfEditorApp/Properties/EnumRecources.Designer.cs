@@ -133,6 +133,24 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add empty parameter (override inheritance).
+        /// </summary>
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_PreserveInheritanceOptions_Override {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+PreserveInheritanceOptions.Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove parameter (restore inheritance).
+        /// </summary>
+        internal static string EgsEcfEditorApp_EcfItemHandlingSupport_PreserveInheritanceOptions_Restore {
+            get {
+                return ResourceManager.GetString("EgsEcfEditorApp.EcfItemHandlingSupport+PreserveInheritanceOptions.Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete the item completely.
         /// </summary>
         internal static string EgsEcfEditorApp_EcfItemHandlingSupport_RemoveDependencyOptions_DeleteItemComplete {

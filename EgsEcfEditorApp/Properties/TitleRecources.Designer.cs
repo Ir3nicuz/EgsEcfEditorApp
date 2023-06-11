@@ -1447,6 +1447,15 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the type of handling possible inheritance.
+        /// </summary>
+        internal static string ItemHandlingSupport_PreserveOptionSelector {
+            get {
+                return ResourceManager.GetString("ItemHandlingSupport_PreserveOptionSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove global macro.
         /// </summary>
         internal static string ItemHandlingSupport_RemoveGlobalDef {
@@ -1456,11 +1465,11 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select option how to remove the global macro.
+        ///   Looks up a localized string similar to Select the type of removing.
         /// </summary>
-        internal static string ItemHandlingSupport_RemoveGlobalDefOptionSelector {
+        internal static string ItemHandlingSupport_RemoveOptionSelector {
             get {
-                return ResourceManager.GetString("ItemHandlingSupport_RemoveGlobalDefOptionSelector", resourceCulture);
+                return ResourceManager.GetString("ItemHandlingSupport_RemoveOptionSelector", resourceCulture);
             }
         }
         
@@ -1470,15 +1479,6 @@ namespace EgsEcfEditorApp.Properties {
         internal static string ItemHandlingSupport_RemoveTemplate {
             get {
                 return ResourceManager.GetString("ItemHandlingSupport_RemoveTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select option how to remove the template.
-        /// </summary>
-        internal static string ItemHandlingSupport_RemoveTemplateOptionSelector {
-            get {
-                return ResourceManager.GetString("ItemHandlingSupport_RemoveTemplateOptionSelector", resourceCulture);
             }
         }
         

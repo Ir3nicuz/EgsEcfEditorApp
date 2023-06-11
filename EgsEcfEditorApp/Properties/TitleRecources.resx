@@ -579,17 +579,17 @@
   <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
     <value>Item Handling Suppport</value>
   </data>
+  <data name="ItemHandlingSupport_PreserveOptionSelector" xml:space="preserve">
+    <value>Select the type of handling possible inheritance</value>
+  </data>
   <data name="ItemHandlingSupport_RemoveGlobalDef" xml:space="preserve">
     <value>Remove global macro</value>
   </data>
-  <data name="ItemHandlingSupport_RemoveGlobalDefOptionSelector" xml:space="preserve">
-    <value>Select option how to remove the global macro</value>
+  <data name="ItemHandlingSupport_RemoveOptionSelector" xml:space="preserve">
+    <value>Select the type of removing</value>
   </data>
   <data name="ItemHandlingSupport_RemoveTemplate" xml:space="preserve">
     <value>Remove template</value>
-  </data>
-  <data name="ItemHandlingSupport_RemoveTemplateOptionSelector" xml:space="preserve">
-    <value>Select option how to remove the template</value>
   </data>
   <data name="ItemHandlingSupport_ShowLinkedTemplate" xml:space="preserve">
     <value>Show linked template</value>

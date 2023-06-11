@@ -43,6 +43,11 @@ namespace EgsEcfEditorApp
             new OptionItem(RemoveDependencyOptions.RemoveLinkToItemOnly, EnumLocalisation.GetLocalizedEnum(RemoveDependencyOptions.RemoveLinkToItemOnly)),
             new OptionItem(RemoveDependencyOptions.DeleteItemComplete, EnumLocalisation.GetLocalizedEnum(RemoveDependencyOptions.DeleteItemComplete)),
         };
+        private OptionItem[] PreserveInheritanceOptionItems { get; } = new OptionItem[]
+        {
+            new OptionItem(PreserveInheritanceOptions.Restore, EnumLocalisation.GetLocalizedEnum(PreserveInheritanceOptions.Restore)),
+            new OptionItem(PreserveInheritanceOptions.Override, EnumLocalisation.GetLocalizedEnum(PreserveInheritanceOptions.Override)),
+        };
         private ItemSelectorDialog ItemsDialog { get; } = new ItemSelectorDialog()
         {
             Icon = IconRecources.Icon_AppBranding,
@@ -74,6 +79,11 @@ namespace EgsEcfEditorApp
         {
             RemoveLinkToItemOnly,
             DeleteItemComplete,
+        }
+        private enum PreserveInheritanceOptions
+        {
+            Restore,
+            Override,
         }
 
         public EcfItemHandlingSupport(GuiMainForm parentForm)
@@ -322,13 +332,15 @@ namespace EgsEcfEditorApp
                 if (!RemoveDependencyFromItem_TryGetTargetItem(templateList, sourceItem, 
                     TextRecources.ItemHandlingSupport_AllTemplatesForItem, out EcfBlock templateToRemove)) { return; }
 
-                if (!RemoveDependencyFromItem_TryGetRemoveOption(sourceItem, templateToRemove, parameterKeys, 
-                    TitleRecources.ItemHandlingSupport_RemoveTemplateOptionSelector, out List <EcfParameter> templateParameters, 
-                    out RemoveDependencyOptions? selectedOption)) { return; }
+                if (!RemoveDependencyFromItem_TryGetRemoveOption(sourceItem, templateToRemove, parameterKeys,
+                    out List <EcfParameter> templateParameters, out RemoveDependencyOptions? selectedRemoveOption)) { return; }
 
-                if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
+                if (!RemoveDependencyFromItem_TryGetPreserveOption(sourceItem, templateToRemove, usesNameToNameLink, 
+                    out PreserveInheritanceOptions selectedPreserveOption)) { return; };
+
+                if (selectedRemoveOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, templateToRemove, usesNameToNameLink, templateParameters);
+                    RemoveDependencyFromItem_RemoveItem(templateParameters, selectedPreserveOption, sourceItem);
                     RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
@@ -336,7 +348,7 @@ namespace EgsEcfEditorApp
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems), 
                     templateToRemove, usesNameToNameLink, true, parameterKeys, out List <EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(sourceItem, templateToRemove, usesNameToNameLink, templateParameters, userList);
+                RemoveDependencyFromItem_RemoveItem(templateParameters, selectedPreserveOption, templateToRemove, userList);
                 RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -358,12 +370,14 @@ namespace EgsEcfEditorApp
                     TextRecources.ItemHandlingSupport_AllGlobalDefsForItem, out EcfBlock globalDefToRemove)) { return; }
 
                 if (!RemoveDependencyFromItem_TryGetRemoveOption(sourceItem, globalDefToRemove, parameterKeys, 
-                    TitleRecources.ItemHandlingSupport_RemoveGlobalDefOptionSelector, out List<EcfParameter> globalDefParameters,
-                    out RemoveDependencyOptions ? selectedOption)) { return; }
+                    out List<EcfParameter> globalDefParameters, out RemoveDependencyOptions? selectedRemoveOption)) { return; }
 
-                if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
+                if (!RemoveDependencyFromItem_TryGetPreserveOption(sourceItem, globalDefToRemove, usesNameToNameLink,
+                    out PreserveInheritanceOptions selectedPreserveOption)) { return; };
+
+                if (selectedRemoveOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefToRemove, usesNameToNameLink, globalDefParameters);
+                    RemoveDependencyFromItem_RemoveItem(globalDefParameters, selectedPreserveOption, sourceItem);
                     RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
@@ -371,7 +385,7 @@ namespace EgsEcfEditorApp
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
                     globalDefToRemove, usesNameToNameLink, true, parameterKeys, out List<EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefToRemove, usesNameToNameLink, globalDefParameters, userList);
+                RemoveDependencyFromItem_RemoveItem(globalDefParameters, selectedPreserveOption, globalDefToRemove, userList);
                 RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -584,13 +598,13 @@ namespace EgsEcfEditorApp
             return true;
         }
         private bool RemoveDependencyFromItem_TryGetTargetItem(List<EcfBlock> itemsToRemove, EcfBlock sourceItem,
-            string itemSelectorTitle, out EcfBlock itemToRemove)
+            string selectorTitle, out EcfBlock itemToRemove)
         {
             itemToRemove = null;
             if (itemsToRemove.Count() > 1)
             {
                 EcfItemListingDialog itemSelector = new EcfItemListingDialog();
-                string messageText = string.Format("{0}: {1}", itemSelectorTitle, sourceItem.BuildRootId());
+                string messageText = string.Format("{0}: {1}", selectorTitle, sourceItem.BuildRootId());
                 if (itemSelector.ShowDialog(ParentForm, messageText, itemsToRemove) != DialogResult.OK)
                 {
                     return false;
@@ -603,12 +617,12 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        private bool RemoveDependencyFromItem_TryGetRemoveOption(EcfBlock sourceItem, EcfBlock itemToRemove, string[] parameterKeys, string selectorTitle,
-            out List<EcfParameter> sourceContainingParameters, out RemoveDependencyOptions? option)
+        private bool RemoveDependencyFromItem_TryGetRemoveOption(EcfBlock sourceItem, EcfBlock itemToRemove, string[] parameterKeys,
+            out List<EcfParameter> sourceContainingParameters, out RemoveDependencyOptions? selectedOption)
         {
             string itemToRemoveName = itemToRemove.GetName();
             sourceContainingParameters = new List<EcfParameter>();
-            option = null;
+            selectedOption = null;
 
             foreach (string key in parameterKeys)
             {
@@ -620,12 +634,25 @@ namespace EgsEcfEditorApp
 
             if (sourceContainingParameters.Count > 0)
             {
-                OptionsDialog.Text = selectorTitle;
+                OptionsDialog.Text = TitleRecources.ItemHandlingSupport_RemoveOptionSelector;
                 if (OptionsDialog.ShowDialog(ParentForm, RemoveDependencyOptionItems) != DialogResult.OK) { return false; }
-                option = (RemoveDependencyOptions)OptionsDialog.SelectedOption.Item;
+                selectedOption = (RemoveDependencyOptions)OptionsDialog.SelectedOption.Item;
                 return true;
             }
             return false;
+        }
+        private bool RemoveDependencyFromItem_TryGetPreserveOption(EcfBlock sourceItem, EcfBlock itemToRemove,
+            bool usesNameToNameLink, out PreserveInheritanceOptions selectedOption)
+        {
+            selectedOption = PreserveInheritanceOptions.Restore;
+            if (!usesNameToNameLink || !string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
+            {
+                OptionsDialog.Text = TitleRecources.ItemHandlingSupport_PreserveOptionSelector;
+                if (OptionsDialog.ShowDialog(ParentForm, PreserveInheritanceOptionItems) != DialogResult.OK) { return false; }
+                selectedOption = (PreserveInheritanceOptions)OptionsDialog.SelectedOption.Item;
+                return true;
+            }
+            return true;
         }
         private bool RemoveDependencyFromItem_CrossUsageCheck(Func<EgsEcfFile, bool> fileFilter, EcfBlock itemToRemove, 
             bool usesNameToNameLink, bool withInheritedParams, string[] parameterKeys, out List<EcfBlock> userList)
@@ -642,78 +669,55 @@ namespace EgsEcfEditorApp
             }
             return false;
         }
-        [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, 
-            bool usesNameToNameLink, List<EcfParameter> sourceContainingParameters)
+        private void RemoveDependencyFromItem_RemoveItem(List<EcfParameter> sourceContainingParameters, PreserveInheritanceOptions selectedOption, EcfBlock sourceItem)
         {
-            bool restoreInheritance = true;
-            if (!usesNameToNameLink || !string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
-            {
-
-
-
-
-
-
-
-                //restoreInheritance;
-
-            }
-
             foreach (EcfParameter parameter in sourceContainingParameters)
             {
-                if (restoreInheritance)
+                switch(selectedOption)
                 {
-                    sourceItem.RemoveChild(parameter);
-                }
-                else
-                {
-                    parameter.ClearValues();
-                    parameter.AddValue(string.Empty);
+                    case PreserveInheritanceOptions.Restore: 
+                        sourceItem.RemoveChild(parameter); 
+                        break;
+                    case PreserveInheritanceOptions.Override:
+                        parameter.ClearValues();
+                        parameter.AddValue(string.Empty);
+                        break;
+                    default: 
+                        return;
                 }
             }
             sourceItem.Revalidate();
             ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
         }
-        [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, bool usesNameToNameLink, 
-            List<EcfParameter> sourceContainingParameters, List<EcfBlock> userList)
+        private void RemoveDependencyFromItem_RemoveItem(List<EcfParameter> sourceContainingParameters, PreserveInheritanceOptions selectedOption, 
+            EcfBlock itemToRemove, List<EcfBlock> userList)
         {
-            bool restoreInheritance = true;
-            if (!usesNameToNameLink || !string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
-            {
-
-
-
-
-
-
-                //restoreInheritance;
-
-            }
-
             HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
-            itemToRemove.EcfFile.RemoveItem(itemToRemove);
-            changedFiles.Add(itemToRemove.EcfFile);
-
+            
             userList.ForEach(user =>
             {
                 sourceContainingParameters.ForEach(parameter =>
                 {
                     EcfParameter parameterToRemove = user.FindOrAddParameter(parameter.Key);
-                    if (restoreInheritance)
+                    switch (selectedOption)
                     {
-                        user.RemoveChild(parameterToRemove);
-                    }
-                    else
-                    {
-                        parameterToRemove.ClearValues();
-                        parameterToRemove.AddValue(string.Empty);
+                        case PreserveInheritanceOptions.Restore:
+                            user.RemoveChild(parameterToRemove);
+                            break;
+                        case PreserveInheritanceOptions.Override:
+                            parameterToRemove.ClearValues();
+                            parameterToRemove.AddValue(string.Empty);
+                            break;
+                        default:
+                            return;
                     }
                     
                 });
                 changedFiles.Add(user.EcfFile);
             });
+
+            itemToRemove.EcfFile.RemoveItem(itemToRemove);
+            changedFiles.Add(itemToRemove.EcfFile);
 
             foreach (EgsEcfFile file in changedFiles)
             {

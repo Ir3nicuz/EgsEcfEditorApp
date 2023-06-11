@@ -141,6 +141,12 @@
   <data name="EgsEcfEditorApp.EcfItemHandlingSupport+AddToDefinitionOptions.SelectDefinition" xml:space="preserve">
     <value>Add to specific Definition file</value>
   </data>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+PreserveInheritanceOptions.Override" xml:space="preserve">
+    <value>Add empty parameter (override inheritance)</value>
+  </data>
+  <data name="EgsEcfEditorApp.EcfItemHandlingSupport+PreserveInheritanceOptions.Restore" xml:space="preserve">
+    <value>Remove parameter (restore inheritance)</value>
+  </data>
   <data name="EgsEcfEditorApp.EcfItemHandlingSupport+RemoveDependencyOptions.DeleteItemComplete" xml:space="preserve">
     <value>Delete the item completely</value>
   </data>

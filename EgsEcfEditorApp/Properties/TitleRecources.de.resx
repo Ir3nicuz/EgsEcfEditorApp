@@ -576,17 +576,17 @@
   <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
     <value>Item Handling Suppport</value>
   </data>
+  <data name="ItemHandlingSupport_PreserveOptionSelector" xml:space="preserve">
+    <value>Variante zum Umgang mit möglichen Vererbungen auswählen</value>
+  </data>
   <data name="ItemHandlingSupport_RemoveGlobalDef" xml:space="preserve">
     <value>Global Makro entfernen</value>
   </data>
-  <data name="ItemHandlingSupport_RemoveGlobalDefOptionSelector" xml:space="preserve">
-    <value>Option zum Entfernen des Global Makro auswählen</value>
+  <data name="ItemHandlingSupport_RemoveOptionSelector" xml:space="preserve">
+    <value>Variante des Entfernen auswählen</value>
   </data>
   <data name="ItemHandlingSupport_RemoveTemplate" xml:space="preserve">
     <value>Template entfernen</value>
-  </data>
-  <data name="ItemHandlingSupport_RemoveTemplateOptionSelector" xml:space="preserve">
-    <value>Option zum Entfernen des Template auswählen</value>
   </data>
   <data name="ItemHandlingSupport_ShowLinkedTemplate" xml:space="preserve">
     <value>Zeige verknüpftes Template</value>

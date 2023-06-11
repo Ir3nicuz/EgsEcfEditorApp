@@ -160,16 +160,16 @@ All changes done in the Tech Tree Editor will directly effect the corresponding 
 <img src="images/TechTreeEditorTeaser.png" title="Tech Tree Editor Dialog"/>
 
 ### Using Item Handling Support
-Item Handling Support provides functions to manipulate (add, remove, list, show) elements across the border of `.ecf` files. The function will be shown context sensitive for elements and files for which a specific function is valid. All support functions check and report warnings for possible dependency breaks before a specific function is performed. If the warning is confirmed the function will be performed anyway. The possibly resulting error will `not` be listed in the error view since the tool cannot determime if an error is logically located in the source file or linked file. Additionally the dependency checks are integrated in the generic remove and change function.
+Item Handling Support provides functions to manipulate elements across the border of `.ecf` files. The function will be shown context sensitive for elements and files for which a specific function is valid. All remove functions check and report warnings for possible dependency breaks before a specific function is performed. If the warning is confirmed the function will be performed anyway. The possibly resulting error will `not` be listed in the error view since the tool cannot determime if an error is logically located in the source file or linked file. The dependency checks are integrated in the generic remove and change function too.
 
-The support functions only consider `.ecf` files which are opened in the tool. If a function reports that nothing could be found first check if the corresponding file is opened. For the first approach this contextual dependencies are implemented for:
+The support functions only consider `.ecf` files which are opened in the tool. If a function reports that nothing could be found first check if the corresponding file is opened. Available are generic 'list' functions like 'list parameter user' or 'list parameter value user' and type specific functions like 'list template', 'show template', 'add template' or 'remove template'. For the first approach of this contextual dependencies the functions are implemented for:
 - `BlockGroupsConfig.ecf`
 - `GlobalDefsConfig.ecf`
 - `Templates.ecf`
 
-The settings menu has a new page for the item handling support functions options. Along with several options for parameter keys and presettings the dependency check in the generic item operations can be disabled. 
+The settings menu has a new page for the item handling support functions options. Along with several options for parameter keys and presettings the dependency check for generic item operations (change, remove) can be disabled.
 
-With the Item Handling Support the definition file handling is extended too. A parameter can be added to a definition from within the tool. This can be the own definition (missing definition error) or the definition of another 'ecf' file (needed for dependency) if the context requires it. The 'online' changeability of definitions comes together with the function to reinterprete (reload) already opened files with the changed definition. After adding a parameter to a definition the tool asks to reinterprete corresponding files. The reinterpretaretation can be performed manually too. For example after changing the game mode.
+With the Item Handling Support the definition file handling is extended too. A item can be added to a definition from within the tool. This can be the own definition (missing definition error) or the definition of another 'ecf' file (needed for dependency) if the context requires it. The 'online' changeability of definitions comes together with the function to reinterprete (reload) already opened files with the changed definition. After adding a parameter to a definition the tool asks to reinterprete corresponding files. The reinterpretation can be performed manually too. For example after changing the game mode.
 
 <img src="images/ItemHandlingSupport.png" title="Item Handling Support Context Menu Example"/>
 

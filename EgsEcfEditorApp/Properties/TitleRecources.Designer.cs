@@ -1438,7 +1438,7 @@ namespace EgsEcfEditorApp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item Handling Suppport.
+        ///   Looks up a localized string similar to Item Handling Support.
         /// </summary>
         internal static string ItemHandlingSupport_MenuStripItem {
             get {

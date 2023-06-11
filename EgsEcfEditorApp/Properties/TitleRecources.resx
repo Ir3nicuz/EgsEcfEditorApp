@@ -577,7 +577,7 @@
     <value>List value using items</value>
   </data>
   <data name="ItemHandlingSupport_MenuStripItem" xml:space="preserve">
-    <value>Item Handling Suppport</value>
+    <value>Item Handling Support</value>
   </data>
   <data name="ItemHandlingSupport_PreserveOptionSelector" xml:space="preserve">
     <value>Select the type of handling possible inheritance</value>

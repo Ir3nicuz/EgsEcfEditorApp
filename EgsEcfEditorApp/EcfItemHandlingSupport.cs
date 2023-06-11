@@ -328,15 +328,15 @@ namespace EgsEcfEditorApp
 
                 if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, usesNameToNameLink, templateParameters);
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, templateToRemove, usesNameToNameLink, templateParameters);
                     RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
 
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems), 
-                    templateToRemove, true, true, parameterKeys, out List <EcfBlock> userList)) { return; }
+                    templateToRemove, usesNameToNameLink, true, parameterKeys, out List <EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(templateToRemove, usesNameToNameLink, templateParameters, userList);
+                RemoveDependencyFromItem_RemoveItem(sourceItem, templateToRemove, usesNameToNameLink, templateParameters, userList);
                 RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -363,15 +363,15 @@ namespace EgsEcfEditorApp
 
                 if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
                 {
-                    RemoveDependencyFromItem_RemoveItem(sourceItem, usesNameToNameLink, globalDefParameters);
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefToRemove, usesNameToNameLink, globalDefParameters);
                     RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
                     return;
                 }
 
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
-                    globalDefToRemove, false, true, parameterKeys, out List<EcfBlock> userList)) { return; }
+                    globalDefToRemove, usesNameToNameLink, true, parameterKeys, out List<EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_RemoveItem(globalDefToRemove, usesNameToNameLink, globalDefParameters, userList);
+                RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefToRemove, usesNameToNameLink, globalDefParameters, userList);
                 RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -643,11 +643,21 @@ namespace EgsEcfEditorApp
             return false;
         }
         [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, bool usesNameToNameLink, List<EcfParameter> sourceContainingParameters)
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, 
+            bool usesNameToNameLink, List<EcfParameter> sourceContainingParameters)
         {
+            if (usesNameToNameLink && string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
+            {
+
+            }
+            else
+            {
+
+            }
             
-            
-            
+
+
+
             foreach (EcfParameter parameter in sourceContainingParameters)
             {
                 parameter.ClearValues();
@@ -673,7 +683,7 @@ o	True: What happened at NameToNameLink recognized?
 
         }
         [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_RemoveItem(EcfBlock itemToRemove, bool usesNameToNameLink, 
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, bool usesNameToNameLink, 
             List<EcfParameter> sourceContainingParameters, List<EcfBlock> userList)
         {
             HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();

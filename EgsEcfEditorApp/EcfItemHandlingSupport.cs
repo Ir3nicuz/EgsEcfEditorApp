@@ -321,13 +321,21 @@ namespace EgsEcfEditorApp
                 if (!RemoveDependencyFromItem_TryGetTargetItem(templateList, sourceItem, 
                     TextRecources.ItemHandlingSupport_AllTemplatesForItem, out EcfBlock templateToRemove)) { return; }
 
-                if (RemoveDependencyFromItem_OnlyRemoveLink(sourceItem, templateToRemove, parameterKeys, 
-                    TitleRecources.ItemHandlingSupport_RemoveTemplateOptionSelector, out List <EcfParameter> templateParameters)) { return; }
+                if (!RemoveDependencyFromItem_TryGetRemoveOption(sourceItem, templateToRemove, parameterKeys, 
+                    TitleRecources.ItemHandlingSupport_RemoveTemplateOptionSelector, out List <EcfParameter> templateParameters, 
+                    out RemoveDependencyOptions? selectedOption)) { return; }
+
+                if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
+                {
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, templateParameters);
+                    RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
+                    return;
+                }
 
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningItems), 
                     templateToRemove, true, true, parameterKeys, out List <EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_DeleteItem(templateToRemove, userList, templateParameters);
+                RemoveDependencyFromItem_RemoveItem(templateToRemove, userList, templateParameters);
                 RemoveDependencyFromItem_ShowReport(templateToRemove, templateToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -347,13 +355,21 @@ namespace EgsEcfEditorApp
                 if (!RemoveDependencyFromItem_TryGetTargetItem(globalDefList, sourceItem,
                     TextRecources.ItemHandlingSupport_AllGlobalDefsForItem, out EcfBlock globalDefToRemove)) { return; }
 
-                if (RemoveDependencyFromItem_OnlyRemoveLink(sourceItem, globalDefToRemove, parameterKeys, 
-                    TitleRecources.ItemHandlingSupport_RemoveGlobalDefOptionSelector, out List<EcfParameter> globalDefParameters)) { return; }
+                if (!RemoveDependencyFromItem_TryGetRemoveOption(sourceItem, globalDefToRemove, parameterKeys, 
+                    TitleRecources.ItemHandlingSupport_RemoveGlobalDefOptionSelector, out List<EcfParameter> globalDefParameters,
+                    out RemoveDependencyOptions ? selectedOption)) { return; }
+
+                if (selectedOption == RemoveDependencyOptions.RemoveLinkToItemOnly)
+                {
+                    RemoveDependencyFromItem_RemoveItem(sourceItem, globalDefParameters);
+                    RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
+                    return;
+                }
 
                 if (RemoveDependencyFromItem_CrossUsageCheck(new Func<EgsEcfFile, bool>(file => file.Definition.IsDefiningGlobalMacroUsers),
                     globalDefToRemove, false, true, parameterKeys, out List<EcfBlock> userList)) { return; }
 
-                RemoveDependencyFromItem_DeleteItem(globalDefToRemove, userList, globalDefParameters);
+                RemoveDependencyFromItem_RemoveItem(globalDefToRemove, userList, globalDefParameters);
                 RemoveDependencyFromItem_ShowReport(globalDefToRemove, globalDefToRemove.EcfFile.FileName, TitleRecources.Generic_File);
             }
             catch (Exception ex)
@@ -585,58 +601,29 @@ namespace EgsEcfEditorApp
             }
             return true;
         }
-        [Obsolete("overrule or inherit?")]
-        private bool RemoveDependencyFromItem_OnlyRemoveLink(EcfBlock sourceItem, EcfBlock itemToRemove, string[] parameterKeys, string selectorTitle,
-            out List<EcfParameter> parametersWithItem)
+        private bool RemoveDependencyFromItem_TryGetRemoveOption(EcfBlock sourceItem, EcfBlock itemToRemove, string[] parameterKeys, string selectorTitle,
+            out List<EcfParameter> sourceContainingParameters, out RemoveDependencyOptions? option)
         {
             string itemToRemoveName = itemToRemove.GetName();
-            parametersWithItem = new List<EcfParameter>();
+            sourceContainingParameters = new List<EcfParameter>();
+            option = null;
+
             foreach (string key in parameterKeys)
             {
                 if (sourceItem.HasParameter(key, out EcfParameter parameter) && parameter.ContainsValue(itemToRemoveName))
                 {
-                    parametersWithItem.Add(parameter);
+                    sourceContainingParameters.Add(parameter);
                 }
             }
 
-            if (parametersWithItem.Count > 0)
+            if (sourceContainingParameters.Count > 0)
             {
                 OptionsDialog.Text = selectorTitle;
-                if (OptionsDialog.ShowDialog(ParentForm, RemoveDependencyOptionItems) != DialogResult.OK) { return true; }
-                if ((RemoveDependencyOptions)OptionsDialog.SelectedOption.Item == RemoveDependencyOptions.RemoveLinkToItemOnly)
-                {
-                    foreach (EcfParameter parameter in parametersWithItem)
-                    {
-                        parameter.ClearValues();
-                        parameter.AddValue(string.Empty);
-                    }
-                    sourceItem.Revalidate();
-                    ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
-                    RemoveDependencyFromItem_ShowReport(itemToRemove, sourceItem.GetName(), TitleRecources.Generic_Item);
-                    return true;
-                }
+                if (OptionsDialog.ShowDialog(ParentForm, RemoveDependencyOptionItems) != DialogResult.OK) { return false; }
+                option = (RemoveDependencyOptions)OptionsDialog.SelectedOption.Item;
+                return true;
             }
             return false;
-
-
-            /*
-             * 
-             * Restore or overrule possible inheritance Popup Question:
-	Restore: remove parameter
-	Overrule: set parameter empty
-
-At Remove Workflow:
-What happened at UsesNameToNameLink:
-o	False: pop-up question
-o	True: What happened at NameToNameLink recognized?
-	True: remove parameter (restore)
-	False: pop-up question
-
-
-
-            */
-
-
         }
         private bool RemoveDependencyFromItem_CrossUsageCheck(Func<EgsEcfFile, bool> fileFilter, EcfBlock itemToRemove, 
             bool withBlockNameCheck, bool withInheritedParams, string[] parameterKeys, out List<EcfBlock> userList)
@@ -654,15 +641,43 @@ o	True: What happened at NameToNameLink recognized?
             return false;
         }
         [Obsolete("overrule or inherit?")]
-        private void RemoveDependencyFromItem_DeleteItem(EcfBlock itemToRemove, List<EcfBlock> userList, List<EcfParameter> parametersWithItem)
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, List<EcfParameter> sourceContainingParameters)
+        {
+            foreach (EcfParameter parameter in sourceContainingParameters)
+            {
+                parameter.ClearValues();
+                parameter.AddValue(string.Empty);
+            }
+            sourceItem.Revalidate();
+            ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
+
+            /*
+             * 
+             * Restore or overrule possible inheritance Popup Question:
+	Restore: remove parameter
+	Overrule: set parameter empty
+
+At Remove Workflow:
+What happened at UsesNameToNameLink:
+o	False: pop-up question
+o	True: What happened at NameToNameLink recognized?
+	True: remove parameter (restore)
+	False: pop-up question
+            */
+
+
+        }
+        [Obsolete("overrule or inherit?")]
+        private void RemoveDependencyFromItem_RemoveItem(EcfBlock itemToRemove, List<EcfBlock> userList, List<EcfParameter> sourceContainingParameters)
         {
             HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
 
             itemToRemove.EcfFile.RemoveItem(itemToRemove);
             changedFiles.Add(itemToRemove.EcfFile);
+
             userList.ForEach(user =>
             {
-                parametersWithItem.ForEach(parameter =>
+                sourceContainingParameters.ForEach(parameter =>
                 {
                     EcfParameter parameterToRemove = user.FindOrAddParameter(parameter.Key);
                     parameterToRemove.ClearValues();
@@ -676,6 +691,22 @@ o	True: What happened at NameToNameLink recognized?
                 file.Revalidate();
                 ParentForm.GetTabPage(file)?.UpdateAllViews();
             }
+
+            /*
+             * 
+             * Restore or overrule possible inheritance Popup Question:
+	Restore: remove parameter
+	Overrule: set parameter empty
+
+At Remove Workflow:
+What happened at UsesNameToNameLink:
+o	False: pop-up question
+o	True: What happened at NameToNameLink recognized?
+	True: remove parameter (restore)
+	False: pop-up question
+            */
+
+
         }
         private void RemoveDependencyFromItem_ShowReport(EcfBlock itemToRemove, string changedItemName, string changedItemType)
         {

@@ -256,6 +256,13 @@ The three listing views [Tree View Area](#tree-view-area), [Parameter View Area]
 - <img src="EgsEcfEditorApp\Resources\Icon_MoveRight.png" title="icon" width="16" height="16"/> process all checked items to the opposite file
 - <img src="EgsEcfEditorApp\Resources\Icon_MoveUp.png" title="icon" width="16" height="16"/> switch displayed page
 
+#### Item Handling Support
+- <img src="EgsEcfEditorApp\Resources\Icon_ListTemplates.png" title="icon" width="16" height="16"/> list linked items (for example templates)
+- <img src="EgsEcfEditorApp\Resources\Icon_ShowTemplate.png" title="icon" width="16" height="16"/> show linked item (for example template)
+- <img src="EgsEcfEditorApp\Resources\Icon_AddTemplate.png" title="icon" width="16" height="16"/> add item of linked type (for example template)
+- <img src="EgsEcfEditorApp\Resources\Icon_DeleteTemplate.png" title="icon" width="16" height="16"/> remove item of linked type (for example template)
+- <img src="EgsEcfEditorApp\Resources\Icon_AddToDefinition.png" title="icon" width="16" height="16"/> add item to linked definition (for example template)
+
 ## File Content Definition
 The file content definition is the basic information for the tool which content is viable in the loaded `.ecf` file and which is not. To achive the design goal to be reliable able to load and interprete `.ecf` files from any source (default files, text editor tool files, manually edited files and so on) the definition provides several options. 
 

@@ -646,48 +646,53 @@ namespace EgsEcfEditorApp
         private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, 
             bool usesNameToNameLink, List<EcfParameter> sourceContainingParameters)
         {
-            if (usesNameToNameLink && string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
+            bool restoreInheritance = true;
+            if (!usesNameToNameLink || !string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
             {
 
-            }
-            else
-            {
+
+
+
+
+
+
+                //restoreInheritance;
 
             }
-            
-
-
 
             foreach (EcfParameter parameter in sourceContainingParameters)
             {
-                parameter.ClearValues();
-                parameter.AddValue(string.Empty);
+                if (restoreInheritance)
+                {
+                    sourceItem.RemoveChild(parameter);
+                }
+                else
+                {
+                    parameter.ClearValues();
+                    parameter.AddValue(string.Empty);
+                }
             }
             sourceItem.Revalidate();
             ParentForm.GetTabPage(sourceItem.EcfFile)?.UpdateAllViews();
-
-            /*
-             * 
-             * Restore or overrule possible inheritance Popup Question:
-	Restore: remove parameter
-	Overrule: set parameter empty
-
-At Remove Workflow:
-What happened at UsesNameToNameLink:
-o	False: pop-up question
-o	True: What happened at NameToNameLink recognized?
-	True: remove parameter (restore)
-	False: pop-up question
-            */
-
-
         }
         [Obsolete("overrule or inherit?")]
         private void RemoveDependencyFromItem_RemoveItem(EcfBlock sourceItem, EcfBlock itemToRemove, bool usesNameToNameLink, 
             List<EcfParameter> sourceContainingParameters, List<EcfBlock> userList)
         {
-            HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
+            bool restoreInheritance = true;
+            if (!usesNameToNameLink || !string.Equals(sourceItem.GetName(), itemToRemove.GetName()))
+            {
 
+
+
+
+
+
+                //restoreInheritance;
+
+            }
+
+            HashSet<EgsEcfFile> changedFiles = new HashSet<EgsEcfFile>();
             itemToRemove.EcfFile.RemoveItem(itemToRemove);
             changedFiles.Add(itemToRemove.EcfFile);
 
@@ -696,8 +701,16 @@ o	True: What happened at NameToNameLink recognized?
                 sourceContainingParameters.ForEach(parameter =>
                 {
                     EcfParameter parameterToRemove = user.FindOrAddParameter(parameter.Key);
-                    parameterToRemove.ClearValues();
-                    parameterToRemove.AddValue(string.Empty);
+                    if (restoreInheritance)
+                    {
+                        user.RemoveChild(parameterToRemove);
+                    }
+                    else
+                    {
+                        parameterToRemove.ClearValues();
+                        parameterToRemove.AddValue(string.Empty);
+                    }
+                    
                 });
                 changedFiles.Add(user.EcfFile);
             });
@@ -707,22 +720,6 @@ o	True: What happened at NameToNameLink recognized?
                 file.Revalidate();
                 ParentForm.GetTabPage(file)?.UpdateAllViews();
             }
-
-            /*
-             * 
-             * Restore or overrule possible inheritance Popup Question:
-	Restore: remove parameter
-	Overrule: set parameter empty
-
-At Remove Workflow:
-What happened at UsesNameToNameLink:
-o	False: pop-up question
-o	True: What happened at NameToNameLink recognized?
-	True: remove parameter (restore)
-	False: pop-up question
-            */
-
-
         }
         private void RemoveDependencyFromItem_ShowReport(EcfBlock itemToRemove, string changedItemName, string changedItemType)
         {

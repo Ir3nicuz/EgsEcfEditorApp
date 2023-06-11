@@ -33,6 +33,7 @@ Just download the latest release and unzip the content wherever you might need t
 ## Feature Overview
 ### Content Definition
 For each `.ecf` file the tool needs a definition. These definitions are located in `.xml` files in the `EcfFileDefinitions` sub folder of the zip package. For creating or adjusting the definitions yourself refer to [File Content Definition](#file-content-definition). After loading a `.ecf` file the definition is attached to it. To reinterprete a `.ecf` file with a different or changed definition the `.ecf` file must be closed and reopened. The actual version of the tool is shipped with definitions for:
+- `BlockGroupsConfig.ecf` (Vanilla and Reforged Eden)
 - `BlocksConfig.ecf` (Vanilla and Reforged Eden)
 - `BlockShapeWindow.ecf` (Vanilla)
 - `Containers.ecf` (Vanilla and Reforged Eden)
@@ -42,6 +43,7 @@ For each `.ecf` file the tool needs a definition. These definitions are located 
 - `Factions.ecf` (Vanilla and Reforged Eden)
 - `FactionWarfare.ecf` (Vanilla and Reforged Eden)
 - `GalaxyConfig.ecf` (Vanilla and Reforged Eden)
+- `GlobalDefsConfig.ecf` (Vanilla and Reforged Eden)
 - `ItemsConfig.ecf` (Vanilla and Reforged Eden)
 - `LootGroups.ecf` (Vanilla and Reforged Eden)
 - `MaterialConfig.ecf` (Vanilla and Reforged Eden)
@@ -76,7 +78,7 @@ The tool is capable of comparing two `.ecf` files, listing the differences and o
 The tool is capable of editing the "TechTree" which is based on several properties spreaded over different files and file elements.
 
 ### Item Handling Support
-:wrench: Not implemented yet :wrench:
+The context menu provides several functions like adding, removing or listing linked elements of corresponding `.ecf` files depending on which element is clicked and to which file type the item belongs to.
 
 ## Tool Overview
 
@@ -156,6 +158,18 @@ New elements can only be added if they are not already used in a Tech Tree. Elem
 All changes done in the Tech Tree Editor will directly effect the corresponding opened files. After closing the Tech Tree Editor window the files need just to be saved.
 
 <img src="images/TechTreeEditorTeaser.png" title="Tech Tree Editor Dialog"/>
+
+### Using Item Handling Support
+Item Handling Support provides functions to manipulate (add, remove, list, show) elements across the border of `.ecf` files. The function will be shown context sensitive for elements and files for which a specific function is valid. All support functions check and report warnings for possible dependency breaks before a specific function is performed. If the warning is confirmed the function will be performed anyway. The possibly resulting error will `not` be listed in the error view since the tool cannot determime if an error is logically located in the source file or linked file. Additionally the dependency checks are integrated in the generic remove and change function. 
+
+The support functions only consider `.ecf` files which are opened in the tool. If a function reports that nothing could be found first check if the corresponding file is opened. For the first approach this contextual dependencies are implemented for:
+- `BlockGroupsConfig.ecf`
+- `GlobalDefsConfig.ecf`
+- `Templates.ecf`
+
+The settings menu has a new page for the item handling support functions options. Along with several options for parameter keys and presettings the dependency check in the generic item operations can be disabled. 
+
+With the Item Handling Support the definition file handling is extended too. A parameter can be added to a definition from within the tool. This can be the own definition (missing definition error) or the definition of another 'ecf' file (needed for dependency) if the context requires it. The 'online' changeability of definitions comes together with the function to reinterprete (reload) already opened files with the changed definition. After adding a parameter to a definition the tool asks to reinterprete corresponding files. The reinterpretaretation can be performed manually too. For example after changing the game mode.
 
 ## Shortcuts and Functions
 ### Shortcuts

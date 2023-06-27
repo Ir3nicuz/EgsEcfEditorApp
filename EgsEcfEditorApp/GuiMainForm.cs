@@ -504,7 +504,7 @@ namespace EgsEcfEditorApp
                 {
                     ReplaceDefinitionInFile(ecfPage.File, UserSettings.Default.EgsEcfEditorApp_ActiveGameMode);
                     ecfPage.UpdateDefinitionPresets();
-                    ecfPage.UpdateErrorView();
+                    ecfPage.UpdateAllViews();
                 }
                 catch (Exception ex)
                 {
@@ -945,26 +945,35 @@ namespace EcfFileViews
         // public
         public void ShowSpecificItem(EcfStructureItem item)
         {
-            if (!IsUpdating)
+            if (FindRootItem(item) is EcfBlock rootBlock) { item = rootBlock; }
+            List<EcfStructureItem> presentItems = File.GetItemList<EcfStructureItem>();
+            if (!presentItems.Contains(item))
             {
-                IsUpdating = true;
-                TryBringToFront();
-                FilterControl.SetSpecificItem(item);
-                if (FindRootItem(item) is EcfBlock block) { item = block; }
-                TreeView.ShowSpecificItem(item);
-                ParameterView.ShowSpecificItem(item);
-                InfoView.ShowSpecificItem(item);
-                ErrorView.UpdateView();
-                IsUpdating = false;
+                item = presentItems.FirstOrDefault(presentItem => presentItem.IdEquals(item));
+            }
+            if (item != null)
+            {
+                if (!IsUpdating)
+                {
+                    IsUpdating = true;
+                    TryBringToFront();
+                    FilterControl.SetSpecificItem(item);
+                    TreeView.ShowSpecificItem(item);
+                    ParameterView.ShowSpecificItem(item);
+                    InfoView.ShowSpecificItem(item);
+                    ErrorView.UpdateView();
+                    IsUpdating = false;
+                }
+            }
+            else
+            {
+                FilterControl.SetSpecificItem(null);
+                ShowAllItems();
             }
         }
-        public void UpdateAllViews()
+        public void ShowAllItems()
         {
-            if (FilterControl.SpecificItem != null)
-            {
-                ShowSpecificItem(FilterControl.SpecificItem);
-            }
-            else if (!IsUpdating)
+            if (!IsUpdating)
             {
                 IsUpdating = true;
                 TreeView.UpdateView(FilterControl, TreeFilter, ParameterFilter);
@@ -974,6 +983,17 @@ namespace EcfFileViews
                 ErrorView.UpdateView();
                 UpdateTabDescription();
                 IsUpdating = false;
+            }
+        }
+        public void UpdateAllViews()
+        {
+            if (FilterControl.SpecificItem != null)
+            {
+                ShowSpecificItem(FilterControl.SpecificItem);
+            }
+            else 
+            {
+                ShowAllItems();
             }
         }
         public void UpdateParameterView()

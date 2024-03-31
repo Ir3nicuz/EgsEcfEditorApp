@@ -33,7 +33,7 @@ Just download the latest release and unzip the content wherever you might need t
 ## Feature Overview
 ### Content Definition
 For each `.ecf` file the tool needs a definition. These definitions are located in `.xml` files in the `EcfFileDefinitions` sub folder of the zip package. For creating or adjusting the definitions yourself refer to [File Content Definition](#file-content-definition). After loading a `.ecf` file the definition is attached to it. To reinterprete a `.ecf` file with a different or changed definition the `.ecf` file must be closed and reopened. The actual version of the tool is shipped with definitions for:
-- `BlockGroupsConfig.ecf` (Vanilla and Reforged Eden)
+- `BlockGroupsConfig.ecf` (Vanilla, Dark Faction and Reforged Eden)
 - `BlocksConfig.ecf` (Vanilla, Dark Faction and Reforged Eden)
 - `BlockShapeWindow.ecf` (Vanilla, Dark Faction)
 - `Containers.ecf` (Vanilla, Dark Faction and Reforged Eden)
